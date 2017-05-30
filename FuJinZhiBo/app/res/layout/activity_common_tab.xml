@@ -71,7 +71,7 @@
             android:id="@+id/tl_4"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="#F6CE59"
+            android:background="#F6CF20"
             tl:tl_iconVisible="false"
             tl:tl_indicator_width="10dp"
             tl:tl_textBold="SELECT"

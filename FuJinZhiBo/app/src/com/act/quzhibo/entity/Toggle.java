@@ -1,5 +1,7 @@
 package com.act.quzhibo.entity;
 
+import com.google.gson.JsonObject;
+
 import cn.bmob.v3.BmobObject;
 
 /**

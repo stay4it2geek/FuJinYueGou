@@ -1,12 +1,14 @@
 package com.act.quzhibo.entity;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
 /**
  * Created by asus-pc on 2017/5/30.
  */
 
-public class PlateCatagory extends BmobObject {
+public class PlateCatagory implements Serializable{
     private String position;
     private String titleName;
     private String titleId;

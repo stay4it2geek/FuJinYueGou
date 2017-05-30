@@ -23,7 +23,7 @@
         android:layout_marginTop="180dp" />
 
     <TextView
-        android:id="@+id/show"
+        android:id="@+id/hasNotshow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -39,6 +39,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/show"
-        android:layout_toRightOf="@+id/show" />
+        android:layout_toEndOf="@+id/hasNotshow"
+        android:layout_toRightOf="@+id/hasNotshow" />
 </RelativeLayout>
