@@ -1,4 +1,4 @@
-package com.act.quzhibo;
+package com.act.quzhibo.util;
 
 import android.util.SparseArray;
 import android.view.View;

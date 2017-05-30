@@ -19,7 +19,7 @@ import com.act.quzhibo.view.MyVideoView;
 import java.util.ArrayList;
 
 
-public class NEVideoPlayerActivity extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
+public class VideoPlayerActivity extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
     private ViewPager vp;
     private ArrayList<Fragment> fragments;
     private ChatFragment chatFragment;

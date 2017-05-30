@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import com.act.quzhibo.R;
 
 //设置启动欢迎页
-public class NEWelcomeActivity extends Activity {
+public class WelcomeActivity extends Activity {
     @SuppressWarnings("unused")
     private ImageView mNEWelcomeImage;
 
@@ -26,7 +26,7 @@ public class NEWelcomeActivity extends Activity {
     Runnable r = new Runnable() {
         public void run() {
             Intent intent = new Intent();
-            intent.setClass(NEWelcomeActivity.this, MainActivity.class);
+            intent.setClass(WelcomeActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }

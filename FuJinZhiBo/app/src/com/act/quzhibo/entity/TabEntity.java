@@ -1,4 +1,4 @@
-package com.act.quzhibo;
+package com.act.quzhibo.entity;
 
 import com.flyco.tablayout.listener.CustomTabEntity;
 
