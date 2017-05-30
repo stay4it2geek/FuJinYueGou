@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wether_bg"
+    android:orientation="vertical">
+
+     <com.act.quzhibo.view.MyVideoView
+         android:id="@+id/video"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:layout_alignParentEnd="true"
+         android:layout_alignParentLeft="true"
+         android:layout_alignParentRight="true"
+         android:layout_alignParentStart="true" />
+
+    <ProgressBar
+        android:id="@+id/bar"
+        style="@android:style/Widget.ProgressBar.Large"
+        android:layout_centerHorizontal="true"
+        android:layout_width="50dp"
+        android:layout_marginTop="180dp"
+        android:layout_height="50dp" />
+    <TextView
+        android:id="@+id/show"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="180dp"
+        android:visibility="gone"
+        android:textSize="22dp"
+        android:textColor="@android:color/white"
+        android:gravity="center_horizontal"
+        android:text="哦哦，该房间没有直播了哦！"
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/show"
+        android:layout_toEndOf="@+id/show" />
+</RelativeLayout>
