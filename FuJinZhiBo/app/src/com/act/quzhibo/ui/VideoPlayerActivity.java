@@ -1,6 +1,7 @@
 package com.act.quzhibo.ui;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -8,18 +9,20 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MainFragmentPageAdapter;
+import com.act.quzhibo.entity.Member;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.MyVideoView;
 
 import java.util.ArrayList;
 
 public class VideoPlayerActivity extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
-    private ViewPager vp;
+    private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
     private ChatFragment chatFragment;
     private NoFragment noFragment;
@@ -34,8 +37,8 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void initView() {
-
-        vp = (ViewPager) findViewById(R.id.view_pager);
+        videoView = (MyVideoView) findViewById(R.id.video);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
         // 设置viewPager的适配器
         fragments = new ArrayList<>();
         chatFragment = new ChatFragment();
@@ -45,12 +48,11 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         final ProgressBar bar = (ProgressBar) findViewById(R.id.bar);
         bar.requestFocus();
         MainFragmentPageAdapter myFragmentPagerAdapter = new MainFragmentPageAdapter(getSupportFragmentManager(), fragments);
-        vp.setAdapter(myFragmentPagerAdapter);
-        vp.setCurrentItem(1);
-        vp.addOnPageChangeListener(new MyOnPageChangeListener());
-        videoView = (MyVideoView) findViewById(R.id.video);
-        final String uri = ("http://pull.kktv8.com/livekktv/102950202.flv");
-        videoView.setVideoURI(Uri.parse(uri));
+        viewPager.setAdapter(myFragmentPagerAdapter);
+        viewPager.setCurrentItem(1);
+        viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
+        final Uri uri=Uri.parse(getIntent().getStringExtra("videoPath"));
+        videoView.setVideoURI(uri);
         videoView.start();
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -62,23 +64,28 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                videoView.setVideoURI(Uri.parse(uri));
+                videoView.setVideoURI(uri);
                 videoView.start();
             }
         });
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 bar.setVisibility(View.GONE);
-                videoView.setVisibility(View.GONE);
-                findViewById(R.id.show).setVisibility(View.VISIBLE);
                 chatFragment.setViewVisily(false);
                 return true;
             }
         });
     }
 
+    private void showDialog() {
+        new AlertDialog.Builder(this).setMessage("").setPositiveButton("", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).show();
+    }
     @Override
     public void finishVideo() {
         videoView.stopPlayback();

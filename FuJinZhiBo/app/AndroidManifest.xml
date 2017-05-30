@@ -33,6 +33,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".MyApplicaition"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         <activity
@@ -43,9 +44,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.act.quzhibo.ui.Square2Activity"
+            android:name="com.act.quzhibo.ui.KonwlegeActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
@@ -55,7 +55,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
         <activity
-            android:name="com.act.quzhibo.ui.MainActivity"
+            android:name="com.act.quzhibo.ui.TabMainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
@@ -64,8 +64,7 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
-
-               <activity
+        <activity
             android:name="com.act.quzhibo.ui.SegmentTabActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"

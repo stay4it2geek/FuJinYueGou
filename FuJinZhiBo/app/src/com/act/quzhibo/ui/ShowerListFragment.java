@@ -13,12 +13,12 @@ import com.act.quzhibo.R;
 
 
 @SuppressLint("ValidFragment")
-public class SimpleCardFragment extends Fragment {
+public class ShowerListFragment extends Fragment {
     private String mTitle;
     OnCallShowViewListner onCallShowViewListner;
 
-    public static SimpleCardFragment getInstance(String title) {
-        SimpleCardFragment sf = new SimpleCardFragment();
+    public static ShowerListFragment getInstance(String title) {
+        ShowerListFragment sf = new ShowerListFragment();
         sf.mTitle = title;
         return sf;
     }
@@ -48,7 +48,7 @@ public class SimpleCardFragment extends Fragment {
         card_title_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onCallShowViewListner.onShowVideo("http://pull.kktv8.com/livekktv/102950202.flv");
+                onCallShowViewListner.onShowVideo("http://pull.kktv8.com/livekktv/95202888.flv");
             }
         });
         return v;

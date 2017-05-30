@@ -32,11 +32,11 @@ public class SegmentTabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_segment_tab);
 
         for (String title : mTitles_3) {
-            mFragments.add(SimpleCardFragment.getInstance("Switch ViewPager " + title));
+            mFragments.add(ShowerListFragment.getInstance("Switch ViewPager " + title));
         }
 
         for (String title : mTitles_2) {
-            mFragments2.add(SimpleCardFragment.getInstance("Switch Fragment " + title));
+            mFragments2.add(ShowerListFragment.getInstance("Switch Fragment " + title));
         }
 
         mDecorView = getWindow().getDecorView();

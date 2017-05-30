@@ -66,15 +66,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
     }
 
     protected void setViewVisily(boolean flag) {
-        if (!flag) {
+        if (flag) {
+            listview.setVisibility(View.VISIBLE);
+            messageList.setVisibility(View.VISIBLE);
+        }else{
             listview.setVisibility(View.GONE);
             messageList.setVisibility(View.GONE);
             ((TextView)view.findViewById(R.id.renshu)).setText("--");
-        } else {
-            listview.setVisibility(View.VISIBLE);
-            messageList.setVisibility(View.VISIBLE);
         }
-
     }
 
     private void initView(View view) {

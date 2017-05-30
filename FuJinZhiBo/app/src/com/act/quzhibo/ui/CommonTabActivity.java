@@ -52,8 +52,8 @@ public class CommonTabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_common_tab);
 
         for (String title : mTitles) {
-            mFragments.add(SimpleCardFragment.getInstance("Switch ViewPager " + title));
-            mFragments2.add(SimpleCardFragment.getInstance("Switch Fragment " + title));
+            mFragments.add(ShowerListFragment.getInstance("Switch ViewPager " + title));
+            mFragments2.add(ShowerListFragment.getInstance("Switch Fragment " + title));
         }
 
 
