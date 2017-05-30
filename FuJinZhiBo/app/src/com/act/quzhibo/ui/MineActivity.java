@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by asus-pc on 2017/5/30.
+ * 我的个人中心
  */
 
 public class MineActivity extends AppCompatActivity {

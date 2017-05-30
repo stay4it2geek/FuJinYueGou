@@ -71,7 +71,7 @@ public class Square2Activity extends AppCompatActivity {
         /**   6.0权限申请     **/
         bPermission = checkPublishPermission();
         setContentView(R.layout.activity_list);
-        Intent intent = new Intent(Square2Activity.this, NEVideoPlayerActivity.class);
+        Intent intent = new Intent(Square2Activity.this, VideoPlayerActivity.class);
 
         String url = "http://pull.kktv8.com/livekktv/120785724.flv";
         if (!bPermission) {

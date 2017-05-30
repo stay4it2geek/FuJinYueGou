@@ -11,7 +11,6 @@ import java.util.List;
 
 /**
  *  通用基础adapter
- * Created by WZH on 2016/12/25.
  */
 public class BaseListAdapter<T> extends BaseAdapter {
   protected Context ctx;

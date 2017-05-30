@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.ViewFindUtils;
+import com.act.quzhibo.util.ViewFindUtils;
 import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.flyco.tablayout.widget.MsgView;
@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class SegmentTabActivity extends AppCompatActivity {
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private ArrayList<Fragment> mFragments2 = new ArrayList<>();
-
     private String[] mTitles = {"首页", "消息"};
     private String[] mTitles_2 = {"首页", "消息", "联系人"};
     private String[] mTitles_3 = {"首页", "消息", "联系人", "更多"};

@@ -10,16 +10,12 @@ import com.act.quzhibo.R;
 
 //设置启动欢迎页
 public class WelcomeActivity extends Activity {
-    @SuppressWarnings("unused")
-    private ImageView mNEWelcomeImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
-        mNEWelcomeImage = (ImageView) findViewById(R.id.welcome_image);
-
+        ImageView mWelcomeImage = (ImageView) findViewById(R.id.welcome_image);
         new Handler().postDelayed(r, 2000); //设置2秒钟后切换到下个Activity
     }
 

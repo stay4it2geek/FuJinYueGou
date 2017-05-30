@@ -9,12 +9,6 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 
-
-/**
- * author：Administrator on 2016/12/26 09:35
- * description:文件说明
- * version:版本
- */
 public class NoFragment extends Fragment {
     @Nullable
     @Override

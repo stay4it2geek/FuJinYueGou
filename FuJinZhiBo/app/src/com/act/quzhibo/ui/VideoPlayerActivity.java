@@ -18,7 +18,6 @@ import com.act.quzhibo.view.MyVideoView;
 
 import java.util.ArrayList;
 
-
 public class VideoPlayerActivity extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
     private ViewPager vp;
     private ArrayList<Fragment> fragments;
@@ -67,26 +66,17 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
                 videoView.start();
             }
         });
-        videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                Log.e("fdsfsd",what+""+"----"+extra);
-                return false;
-            }
-        });
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
 
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 bar.setVisibility(View.GONE);
-                Log.e("onError",what+""+"----"+extra);
                 videoView.setVisibility(View.GONE);
                 findViewById(R.id.show).setVisibility(View.VISIBLE);
                 chatFragment.setViewVisily(false);
                 return true;
             }
         });
-
     }
 
     @Override

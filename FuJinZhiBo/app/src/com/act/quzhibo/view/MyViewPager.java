@@ -5,11 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * author：Administrator on 2016/12/26 17:32
- * description:文件说明
- * version:版本
- */
 public class MyViewPager extends ViewPager {
     public MyViewPager(Context context) {
         super(context);
@@ -18,6 +13,7 @@ public class MyViewPager extends ViewPager {
     public MyViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height = 0;
@@ -30,8 +26,9 @@ public class MyViewPager extends ViewPager {
             if (h > height) //采用最大的view的高度。
                 height = h;
         }
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height*2,
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2,
                 MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
 }

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--must have android:id/tabhost-->
+<?xml version="1.0" encoding="utf-8"?><!--must have android:id/tabhost-->
 <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:id="@android:id/tabhost"

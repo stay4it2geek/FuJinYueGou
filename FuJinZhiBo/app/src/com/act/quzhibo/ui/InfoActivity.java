@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
  * Created by asus-pc on 2017/5/30.
  */
 
+/**
+ * 个人档案
+ */
 public class InfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

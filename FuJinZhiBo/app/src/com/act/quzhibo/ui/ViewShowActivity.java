@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.ViewFindUtils;
+import com.act.quzhibo.util.ViewFindUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
@@ -67,7 +67,7 @@ public class ViewShowActivity extends AppCompatActivity implements OnTabSelectLi
 
     @Override
     public void onShowVideo(String url) {
-        Intent intent = new Intent(ViewShowActivity.this, NEVideoPlayerActivity.class);
+        Intent intent = new Intent(ViewShowActivity.this, VideoPlayerActivity.class);
         intent.putExtra("media_type", "livestream");
         intent.putExtra("decode_type", "software");
         intent.putExtra("videoPath", url);

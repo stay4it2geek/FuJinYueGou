@@ -20,30 +20,24 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.entity.Gift;
 import com.bumptech.glide.Glide;
 
-
-/**
- * author：Administrator on 2016/12/27 09:34
- * description:文件说明
- * version:版本
- */
 public class GiftItemView extends LinearLayout {
 
-    private ImageView avatar ;
-    private TextView name ;
-    private TextView giftName ;
-    private TextView giftNumTv ;
-    private ImageView giftIv ;
-    private Gift gift ;
+    private ImageView avatar;
+    private TextView name;
+    private TextView giftName;
+    private TextView giftNumTv;
+    private ImageView giftIv;
+    private Gift gift;
 
-    private int giftNum = 1 ;
-    private boolean isShow = false ;
+    private int giftNum = 1;
+    private boolean isShow = false;
 
     public GiftItemView(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public GiftItemView(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public GiftItemView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -56,7 +50,7 @@ public class GiftItemView extends LinearLayout {
         setVisibility(INVISIBLE);
         LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         setLayoutParams(lp);
-        View convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_gift_message,null,false);
+        View convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_gift_message, null, false);
         avatar = (ImageView) convertView.findViewById(R.id.avatar);
         giftIv = (ImageView) convertView.findViewById(R.id.gift_type);
         name = (TextView) convertView.findViewById(R.id.name);
@@ -72,10 +66,11 @@ public class GiftItemView extends LinearLayout {
 
     /**
      * 设置礼物数量放大和复原的View
+     *
      * @param view
      * @param duration
      */
-    public void scaleView(View view, long duration){
+    public void scaleView(View view, long duration) {
         AnimatorSet animatorSet = new AnimatorSet();//组合动画
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 2f, 1f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 2f, 1f);
@@ -87,7 +82,7 @@ public class GiftItemView extends LinearLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                if (onAnimatorListener!=null){
+                if (onAnimatorListener != null) {
                     onAnimatorListener.onAnimationEnd(gift);
                 }
             }
@@ -95,7 +90,7 @@ public class GiftItemView extends LinearLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
-                if (onAnimatorListener!=null){
+                if (onAnimatorListener != null) {
                     onAnimatorListener.onAnimationStart(animation);
                 }
             }
@@ -105,42 +100,44 @@ public class GiftItemView extends LinearLayout {
     /**
      * 刷新view
      */
-    public void refreshView(){
-        if (gift==null){
+    public void refreshView() {
+        if (gift == null) {
             return;
         }
-        giftNum = gift.num ;
-        if (!TextUtils.isEmpty(gift.img)){
+        giftNum = gift.num;
+        if (!TextUtils.isEmpty(gift.img)) {
             Glide.with(getContext()).load(gift.img).placeholder(R.drawable.default_head).into(avatar);
-        }else {
+        } else {
             avatar.setImageResource(R.drawable.default_head);
         }
         name.setText(gift.name);
         giftName.setText(gift.giftName);
-        giftNumTv.setText("x"+gift.num);
+        giftNumTv.setText("x" + gift.num);
         giftIv.setImageResource(gift.giftType);
-        scaleView(giftNumTv,200);
+        scaleView(giftNumTv, 200);
     }
 
     /**
      * 连续点击送礼物的时候数字缩放效果
+     *
      * @param num
      */
-    public void addNum(int num){
-        giftNum += num ;
-        giftNumTv.setText("x"+giftNum);
-        scaleView(giftNumTv,200);
+    public void addNum(int num) {
+        giftNum += num;
+        giftNumTv.setText("x" + giftNum);
+        scaleView(giftNumTv, 200);
         handler.removeCallbacks(runnable);
-        if (!isShow()){
+        if (!isShow()) {
             show();
         }
         handler.postDelayed(runnable, 3000);
     }
-    Handler handler=new Handler();
-    Runnable runnable=new Runnable() {
+
+    Handler handler = new Handler();
+    Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            isShow = false ;
+            isShow = false;
             giftNum = 0;
             setVisibility(INVISIBLE);
         }
@@ -149,8 +146,8 @@ public class GiftItemView extends LinearLayout {
     /**
      * 显示view，并开启定时器
      */
-    public void show(){
-        isShow = true ;
+    public void show() {
+        isShow = true;
         setVisibility(VISIBLE);
         handler.postDelayed(runnable, 3000);
     }
@@ -159,14 +156,15 @@ public class GiftItemView extends LinearLayout {
         return isShow;
     }
 
-    private OnAnimatorListener onAnimatorListener ;
+    private OnAnimatorListener onAnimatorListener;
 
     public void setOnAnimatorListener(OnAnimatorListener onAnimatorListener) {
         this.onAnimatorListener = onAnimatorListener;
     }
 
-    public interface OnAnimatorListener{
+    public interface OnAnimatorListener {
         public void onAnimationEnd(Gift gift);
+
         public void onAnimationStart(Animator animation);
     }
 }

@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.TabEntity;
-import com.act.quzhibo.ViewFindUtils;
+import com.act.quzhibo.entity.TabEntity;
+import com.act.quzhibo.util.ViewFindUtils;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;

@@ -24,20 +24,17 @@ import com.act.quzhibo.entity.Gift;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * author：Administrator on 2016/12/19 14:02
- * description:文件说明
- * version:版本
- */
+
 public class FragmentGiftDialog extends DialogFragment {
-    private Dialog dialog ;
-    private ViewPager vp ;
+    private Dialog dialog;
+    private ViewPager vp;
     private List<View> gridViews;
     private LayoutInflater layoutInflater;
     private ArrayList<Gift> catogarys;
     private String[] catogary_names;
     private int[] catogary_resourceIds;
-    private RadioGroup radio_group ;
+    private RadioGroup radio_group;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,9 +45,10 @@ public class FragmentGiftDialog extends DialogFragment {
         return dialog;
 
     }
+
     private void initView(View rootView) {
-        Bundle args=getArguments();
-        if(args==null)
+        Bundle args = getArguments();
+        if (args == null)
             return;
         catogary_names = getResources().getStringArray(R.array.catogary_names);
         TypedArray typedArray = getResources().obtainTypedArray(R.array.catogary_resourceIds);
@@ -61,7 +59,7 @@ public class FragmentGiftDialog extends DialogFragment {
         layoutInflater = getActivity().getLayoutInflater();
         vp = (ViewPager) rootView.findViewById(R.id.view_pager);
         radio_group = (RadioGroup) rootView.findViewById(R.id.radio_group);
-        RadioButton radioButton = (RadioButton)radio_group.getChildAt(0);
+        RadioButton radioButton = (RadioButton) radio_group.getChildAt(0);
         radioButton.setChecked(true);
         catogarys = new ArrayList<Gift>();
         for (int i = 0; i < catogary_names.length; i++) {
@@ -72,18 +70,19 @@ public class FragmentGiftDialog extends DialogFragment {
         }
         initViewPager();
     }
+
     public void initViewPager() {
         gridViews = new ArrayList<View>();
         ///定义第一个GridView
         GridView gridView1 =
                 (GridView) layoutInflater.inflate(R.layout.grid_fragment_home, null);
-        GiftGridViewAdapter myGridViewAdapter1 = new GiftGridViewAdapter(getActivity(),0, 8);
+        GiftGridViewAdapter myGridViewAdapter1 = new GiftGridViewAdapter(getActivity(), 0, 8);
         gridView1.setAdapter(myGridViewAdapter1);
         myGridViewAdapter1.setGifts(catogarys);
         myGridViewAdapter1.setOnGridViewClickListener(new GiftGridViewAdapter.OnGridViewClickListener() {
             @Override
             public void click(Gift gift) {
-                if (onGridViewClickListener!=null){
+                if (onGridViewClickListener != null) {
                     onGridViewClickListener.click(gift);
                 }
             }
@@ -91,13 +90,13 @@ public class FragmentGiftDialog extends DialogFragment {
         ///定义第二个GridView
         GridView gridView2 = (GridView)
                 layoutInflater.inflate(R.layout.grid_fragment_home, null);
-        GiftGridViewAdapter myGridViewAdapter2 = new GiftGridViewAdapter(getActivity(),1, 8);
+        GiftGridViewAdapter myGridViewAdapter2 = new GiftGridViewAdapter(getActivity(), 1, 8);
         gridView2.setAdapter(myGridViewAdapter2);
         myGridViewAdapter2.setGifts(catogarys);
         myGridViewAdapter2.setOnGridViewClickListener(new GiftGridViewAdapter.OnGridViewClickListener() {
             @Override
             public void click(Gift gift) {
-                if (onGridViewClickListener!=null){
+                if (onGridViewClickListener != null) {
                     onGridViewClickListener.click(gift);
                 }
             }
@@ -105,13 +104,13 @@ public class FragmentGiftDialog extends DialogFragment {
         ///定义第三个GridView
         GridView gridView3 = (GridView)
                 layoutInflater.inflate(R.layout.grid_fragment_home, null);
-        GiftGridViewAdapter myGridViewAdapter3 = new GiftGridViewAdapter(getActivity(),2, 8);
+        GiftGridViewAdapter myGridViewAdapter3 = new GiftGridViewAdapter(getActivity(), 2, 8);
         gridView3.setAdapter(myGridViewAdapter3);
         myGridViewAdapter3.setGifts(catogarys);
         myGridViewAdapter3.setOnGridViewClickListener(new GiftGridViewAdapter.OnGridViewClickListener() {
             @Override
             public void click(Gift gift) {
-                if (onGridViewClickListener!=null){
+                if (onGridViewClickListener != null) {
                     onGridViewClickListener.click(gift);
                 }
             }
@@ -127,11 +126,13 @@ public class FragmentGiftDialog extends DialogFragment {
                 // TODO Auto-generated method stub
                 return arg0 == arg1;
             }
+
             @Override
             public int getCount() {
                 // TODO Auto-generated method stub
                 return gridViews.size();
             }
+
             @Override
             public void destroyItem(ViewGroup container, int position,
                                     Object object) {
@@ -139,6 +140,7 @@ public class FragmentGiftDialog extends DialogFragment {
                 container.removeView(gridViews.get(position));
                 //super.destroyItem(container, position, object);
             }
+
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 // TODO Auto-generated method stub
@@ -169,22 +171,25 @@ public class FragmentGiftDialog extends DialogFragment {
             }
         });
     }
-    public static final FragmentGiftDialog newInstance(){
+
+    public static final FragmentGiftDialog newInstance() {
         FragmentGiftDialog fragment = new FragmentGiftDialog();
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
         return fragment;
     }
-    public  OnGridViewClickListener onGridViewClickListener ;
+
+    public OnGridViewClickListener onGridViewClickListener;
 
     public FragmentGiftDialog setOnGridViewClickListener(OnGridViewClickListener onGridViewClickListener) {
         this.onGridViewClickListener = onGridViewClickListener;
-        return this ;
+        return this;
     }
 
-    public interface OnGridViewClickListener{
+    public interface OnGridViewClickListener {
         void click(Gift gift);
     }
+
     private void initDialogStyle(View view) {
         dialog = new Dialog(getActivity(), R.style.CustomGiftDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // 设置Content前设定

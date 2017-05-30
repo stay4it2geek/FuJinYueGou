@@ -3,18 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <com.act.quzhibo.view.GiftItemView
         android:id="@+id/gift_item_first"
-        android:layout_marginTop="10dp"
-        android:clipChildren="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.act.quzhibo.view.GiftItemView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clipChildren="true"/>
+
     <com.act.quzhibo.view.GiftItemView
         android:id="@+id/gift_item_second"
-        android:layout_marginTop="10dp"
-        android:clipChildren="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.act.quzhibo.view.GiftItemView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clipChildren="true"/>
 </LinearLayout>

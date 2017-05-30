@@ -17,59 +17,55 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 
 
-/**
- * author：Administrator on 2016/12/19 14:02
- * description:文件说明
- * version:版本
- */
 public class FragmentDialog extends DialogFragment {
     /**
      * 显示的图片
      */
-    private ImageView imageIv ;
+    private ImageView imageIv;
 
     /**
      * 显示的标题
      */
-    private TextView titleTv ;
+    private TextView titleTv;
 
     /**
      * 显示的消息
      */
-    private TextView messageTv ;
+    private TextView messageTv;
 
     /**
      * 确认和取消按钮
      */
-    private Button negtiveBn ,positiveBn;
+    private Button negtiveBn, positiveBn;
 
     /**
      * 按钮之间的分割线
      */
-    private View columnLineView ;
+    private View columnLineView;
 
     /**
      * 都是内容数据
      */
     private String message;
     private String title;
-    private String positive,negtive ;
-    private int imageResId = -1 ;
+    private String positive, negtive;
+    private int imageResId = -1;
 
     /**
      * 底部是否只有一个按钮
      */
     private boolean isSingle = false;
 
-    private Dialog dialog ;
+    private Dialog dialog;
+
     private void initView(View rootView) {
-        Bundle args=getArguments();
-        if(args==null)
+        Bundle args = getArguments();
+        if (args == null)
             return;
-        title=args.getString("title");
+        title = args.getString("title");
         positive = args.getString("positive");
         negtive = args.getString("negtive");
-        message=args.getString("message");
+        message = args.getString("message");
         imageResId = args.getInt("imageResId");
         isSingle = args.getBoolean("isSingle");
 
@@ -81,7 +77,8 @@ public class FragmentDialog extends DialogFragment {
         columnLineView = rootView.findViewById(R.id.column_line);
 
     }
-    public static final FragmentDialog newInstance(String title, String message, String positive, String negtive, int imageResId , boolean isSingle , OnClickBottomListener onClickBottomListener){
+
+    public static final FragmentDialog newInstance(String title, String message, String positive, String negtive, int imageResId, boolean isSingle, OnClickBottomListener onClickBottomListener) {
         FragmentDialog fragment = new FragmentDialog();
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
@@ -89,11 +86,12 @@ public class FragmentDialog extends DialogFragment {
         bundle.putString("positive", positive);
         bundle.putString("negtive", negtive);
         bundle.putInt("imageResId", imageResId);
-        bundle.putBoolean("isSingle",isSingle);
-        fragment.onClickBottomListener = onClickBottomListener ;
+        bundle.putBoolean("isSingle", isSingle);
+        fragment.onClickBottomListener = onClickBottomListener;
         fragment.setArguments(bundle);
         return fragment;
     }
+
     /**
      * 初始化界面的确定和取消监听器
      */
@@ -103,7 +101,7 @@ public class FragmentDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if ( onClickBottomListener!= null) {
+                if (onClickBottomListener != null) {
                     onClickBottomListener.onPositiveClick();
                 }
             }
@@ -113,7 +111,7 @@ public class FragmentDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if ( onClickBottomListener!= null) {
+                if (onClickBottomListener != null) {
                     onClickBottomListener.onNegtiveClick();
                 }
             }
@@ -128,7 +126,7 @@ public class FragmentDialog extends DialogFragment {
         if (!TextUtils.isEmpty(title)) {
             titleTv.setText(title);
             titleTv.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             titleTv.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(message)) {
@@ -137,50 +135,55 @@ public class FragmentDialog extends DialogFragment {
         //如果设置按钮的文字
         if (!TextUtils.isEmpty(positive)) {
             positiveBn.setText(positive);
-        }else {
+        } else {
             positiveBn.setText("确定");
         }
         if (!TextUtils.isEmpty(negtive)) {
             negtiveBn.setText(negtive);
-        }else {
+        } else {
             negtiveBn.setText("取消");
         }
 
-        if (imageResId!=-1){
+        if (imageResId != -1) {
             imageIv.setImageResource(imageResId);
             imageIv.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             imageIv.setVisibility(View.GONE);
         }
         /**
          * 只显示一个按钮的时候隐藏取消按钮，回掉只执行确定的事件
          */
-        if (isSingle){
+        if (isSingle) {
             columnLineView.setVisibility(View.GONE);
             negtiveBn.setVisibility(View.GONE);
-        }else {
+        } else {
             negtiveBn.setVisibility(View.VISIBLE);
             columnLineView.setVisibility(View.VISIBLE);
         }
     }
+
     /**
      * 设置确定取消按钮的回调
      */
     public OnClickBottomListener onClickBottomListener;
+
     public FragmentDialog setOnClickBottomListener(OnClickBottomListener onClickBottomListener) {
         this.onClickBottomListener = onClickBottomListener;
         return this;
     }
-    public interface OnClickBottomListener{
+
+    public interface OnClickBottomListener {
         /**
          * 点击确定按钮事件
          */
         public void onPositiveClick();
+
         /**
          * 点击取消按钮事件
          */
         public void onNegtiveClick();
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

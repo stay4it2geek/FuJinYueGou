@@ -12,11 +12,6 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.Message;
 
-
-/**
- * Created by WZH on 2016/12/25.
- */
-
 public class MessageAdapter extends BaseListAdapter<Message> {
     public MessageAdapter(Context ctx) {
         super(ctx);

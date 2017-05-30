@@ -15,14 +15,13 @@ import com.act.quzhibo.R;
 @SuppressLint("ValidFragment")
 public class SimpleCardFragment extends Fragment {
     private String mTitle;
+    OnCallShowViewListner onCallShowViewListner;
 
     public static SimpleCardFragment getInstance(String title) {
         SimpleCardFragment sf = new SimpleCardFragment();
         sf.mTitle = title;
         return sf;
     }
-
-    OnCallShowViewListner onCallShowViewListner;
 
     @Override
     public void onAttach(Context context) {

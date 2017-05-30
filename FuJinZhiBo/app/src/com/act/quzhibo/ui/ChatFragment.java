@@ -33,12 +33,6 @@ import java.util.Timer;
 
 import tyrantgit.widget.HeartLayout;
 
-
-/**
- * author：Administrator on 2016/12/26 09:35
- * description:文件说明
- * version:版本
- */
 public class ChatFragment extends Fragment implements View.OnClickListener, View.OnLayoutChangeListener {
     private HorizontialListView listview;
     private ListView messageList;
@@ -136,14 +130,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
             if (messages != null) {
                 Message m = new Message();
                 m.img = "http://v1.qzone.cc/avatar/201503/06/18/27/54f981200879b698.jpg%21200x200.jpg";
-                m.name = "--";
+                m.name = "- -";
                 m.level = (int) (Math.random() * 100 + 1);
                 m.message = "网络加载异常";
                 messages.add(m);
                 messageAdapter.notifyDataSetChanged();
                 messageList.setSelection(messageAdapter.getCount() - 1);
             }
-            handler.postDelayed(this, 2000);
+            handler.postDelayed(this, (long) (Math.random() * 5)*1000);
         }
     };
     Handler heartHandler = new Handler();
@@ -169,7 +163,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onResume() {
         super.onResume();
-        heartHandler.postDelayed(heartRunnable, 2000);
+        heartHandler.postDelayed(heartRunnable, 1000);
     }
 
     private int randomColor() {
@@ -220,7 +214,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
             menuView.setVisibility(View.GONE);
             topView.setVisibility(View.GONE);
             sendEditText.requestFocus();
-
             inputManager.showSoftInput(sendEditText, 0);
         } else if (id == R.id.gift) {
             FragmentGiftDialog.newInstance().setOnGridViewClickListener(new FragmentGiftDialog.OnGridViewClickListener() {
@@ -244,7 +237,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        if (activity instanceof NEVideoPlayerActivity) {
+        if (activity instanceof VideoPlayerActivity) {
             onFinishVideoCallbak = (OnFinishVideoCallbak) activity;
         }
     }
@@ -254,7 +247,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
     public interface OnFinishVideoCallbak {
         void finishVideo();
     }
-
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         //现在认为只要控件将Activity向上推的高度超过了1/3屏幕高，就认为软键盘弹起

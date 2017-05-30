@@ -7,5 +7,4 @@
     android:scrollbars="vertical"
     android:scrollbarStyle="insideOverlay"
     android:stretchMode="columnWidth"
-    android:layout_height="wrap_content">
-</GridView>
+    android:layout_height="wrap_content"/>
