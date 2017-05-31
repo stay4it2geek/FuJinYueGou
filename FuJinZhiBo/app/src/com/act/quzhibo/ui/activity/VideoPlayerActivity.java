@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.MainFragmentPageAdapter;
+import com.act.quzhibo.adapter.ViewPlayerPageAdapter;
 import com.act.quzhibo.ui.fragment.ChatFragment;
 import com.act.quzhibo.ui.fragment.NoFragment;
 import com.act.quzhibo.view.MyVideoView;
@@ -48,7 +48,7 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         fragments.add(chatFragment);
         final ProgressBar bar = (ProgressBar) findViewById(R.id.bar);
         bar.requestFocus();
-        MainFragmentPageAdapter myFragmentPagerAdapter = new MainFragmentPageAdapter(getSupportFragmentManager(), fragments);
+        ViewPlayerPageAdapter myFragmentPagerAdapter = new ViewPlayerPageAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
         viewPager.setCurrentItem(1);
         viewPager.addOnPageChangeListener(new MyOnPageChangeListener());

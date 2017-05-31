@@ -2,24 +2,15 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.TabActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
 
-import com.act.quzhibo.CommonTabActivity;
 import com.act.quzhibo.R;
-import com.act.quzhibo.SegmentTabActivity;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.PlateCatagory;
 import com.act.quzhibo.entity.TabEntity;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 import com.flyco.tablayout.CommonTabLayout;
@@ -27,9 +18,6 @@ import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
 
 
 @SuppressWarnings("ALL")
@@ -86,7 +74,7 @@ public class TabMainActivity extends TabActivity {
             }
         }
         mDecorView = getWindow().getDecorView();
-        mTabLayout = ViewFindUtils.find(mDecorView, R.id.tl_1);
+        mTabLayout = ViewFindUtils.find(mDecorView, R.id.tabMain);
         mTabLayout.setTabData(mTabEntities);
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override

@@ -50,11 +50,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.act.quzhibo.CommonTabActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            />
-        <activity
             android:name="com.act.quzhibo.ui.activity.MultipleMeideaActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"

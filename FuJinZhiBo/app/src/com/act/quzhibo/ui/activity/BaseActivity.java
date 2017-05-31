@@ -23,13 +23,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected ArrayList<Fragment> mFragments = new ArrayList<>();
     protected MyPagerAdapter mAdapter;
     protected View decorView;
-    protected String[] mTitles;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_tab_common);
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        CommonUtil.initView(getTitles(),mFragments,decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
+
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -44,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mTitles[position];
+            return getTitles()[position];
         }
 
         @Override
@@ -54,6 +55,5 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected abstract String[] getTitles();
-    protected abstract void setBarColor();
 
 }

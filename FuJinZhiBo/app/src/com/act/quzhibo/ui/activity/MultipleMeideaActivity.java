@@ -20,21 +20,13 @@ import java.util.ArrayList;
  */
 
 public class MultipleMeideaActivity extends BaseActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CommonUtil.initView(getTitles(),mFragments,decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
     }
-
     @Override
     protected String[] getTitles() {
         return new String[]{"阅读", "视听"};
-    }
-
-    @Override
-    protected void setBarColor() {
-
     }
 
 }

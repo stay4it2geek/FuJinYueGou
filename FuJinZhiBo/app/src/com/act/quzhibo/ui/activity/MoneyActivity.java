@@ -15,16 +15,10 @@ public class MoneyActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CommonUtil.initView(getTitles(),mFragments,decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
     }
-
     @Override
     protected String[] getTitles() {
         return new String[]{"资源", "随笔", "项目"};
     }
 
-    @Override
-    protected void setBarColor() {
-
-    }
 }

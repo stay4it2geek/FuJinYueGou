@@ -14,6 +14,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.ui.activity.MultipleMeideaActivity;
+import com.act.quzhibo.ui.fragment.CommonFragment;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
@@ -103,7 +104,7 @@ public class CommonUtil {
 
     public static void initView(String[] mTitles, ArrayList<Fragment> mFragments, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter) {
         for (String title : mTitles) {
-            mFragments.add(ShowerListFragment.getInstance(title));
+            mFragments.add(CommonFragment.getInstance(title));
         }
 
         viewPager.setAdapter(mAdapter);

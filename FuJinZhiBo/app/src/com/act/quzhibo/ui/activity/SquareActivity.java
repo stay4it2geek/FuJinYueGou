@@ -27,18 +27,10 @@ public class SquareActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CommonUtil.initView(getTitles(),mFragments,decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
     }
 
     @Override
     protected String[] getTitles() {
         return new String[]{"情趣板块", "附近达人"};
     }
-
-    @Override
-    protected void setBarColor() {
-
-    }
-
-
 }

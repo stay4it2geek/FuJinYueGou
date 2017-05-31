@@ -18,7 +18,7 @@ public class MyApplicaition extends Application {
                 //设置appkey
                 .setApplicationId("227399ddef86ccfa859443473306c43a")
                 //请求超时时间（单位为秒）：默认15s
-                .setConnectTimeout(30)
+                .setConnectTimeout(20)
                 //文件分片上传时每片的大小（单位字节），默认512*1024
                 .setUploadBlockSize(1024 * 1024)
                 //文件的过期时间(单位为秒)：默认1800s

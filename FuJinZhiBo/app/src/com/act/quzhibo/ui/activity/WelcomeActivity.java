@@ -7,17 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
+import android.view.View;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
-
-
 import java.util.List;
-
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -30,12 +27,10 @@ import okhttp3.Call;
 public class WelcomeActivity extends Activity {
 
     private String plateListStr;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
         BmobQuery<Toggle> query = new BmobQuery<>();
         query.findObjects(new FindListener<Toggle>() {
             @Override
@@ -46,20 +41,19 @@ public class WelcomeActivity extends Activity {
                     String liststr = CommonUtil.SceneList2String(Toggles);
                     edit.putString(Constants.TOGGLES, liststr);
                     edit.commit();
+                    getPlateList();
                 } else {
                     return;
                 }
             }
         });
-        getPlateList();
-    }
 
+    }
     private void getPlateList() {
         OkHttpUtils.get().url(CommonUtil.getToggle(this, "tabCatagory").getToggleObject()).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
             }
-
             @Override
             public void onResponse(String response, int id) {
                 plateListStr = response;
@@ -82,6 +76,7 @@ public class WelcomeActivity extends Activity {
 
     Runnable runnable = new Runnable() {
         public void run() {
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
             Intent intent = new Intent();
             intent.setClass(WelcomeActivity.this, TabMainActivity.class);
             intent.putExtra(Constants.TAB_PLATE_LIST,plateListStr);

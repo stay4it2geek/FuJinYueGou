@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <com.flyco.tablayout.CommonTabLayout
-            android:id="@+id/tl_1"
+            android:id="@+id/tabMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"

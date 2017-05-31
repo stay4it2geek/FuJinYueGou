@@ -58,7 +58,6 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
         setContentView(R.layout.activity_sliding_tab_video);
         initView();
     }
-
     private void initView() {
         PlateList plates = CommonUtil.parseJsonWithGson(getIntent().getStringExtra(Constants.TAB_PLATE_LIST), PlateList.class);
         ArrayList<String> tabTitles = new ArrayList<>();
@@ -68,15 +67,32 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
         for (PlateCatagory plateCatagory : plates.plateList) {
             if (!TextUtils.equals("VR直播", plateCatagory.getTitleName()) && !TextUtils.equals("vr直播", plateCatagory.getTitleName())) {
                 tabTitles.add(plateCatagory.getTitleName());
-                mFragments.add(ShowerListFragment.getInstance(plateCatagory.getTitleId()));
+                ShowerListFragment fragment=new ShowerListFragment();
+                Bundle bundle=new Bundle();
+                bundle.putString("cataId",plateCatagory.getTitleId());
+                fragment.setArguments(bundle);
+                mFragments.add(fragment);
             }
         }
         View decorView = getWindow().getDecorView();
         ViewPager pager = ViewFindUtils.find(decorView, R.id.viewpager);
         mAdapter = new MyPagerAdapter(getSupportFragmentManager(), tabTitles.toArray(new String[tabTitles.size()]));
         pager.setAdapter(mAdapter);
-        SlidingTabLayout tabLayout = ViewFindUtils.find(decorView, R.id.showerListLayout);
+        final SlidingTabLayout tabLayout = ViewFindUtils.find(decorView, R.id.showerListLayout);
         tabLayout.setViewPager(pager, tabTitles.toArray(new String[tabTitles.size()]), this, mFragments);
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.setCurrentTab(position);
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+        pager.setCurrentItem(0);
     }
 
     @Override
@@ -87,9 +103,7 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
-
         private String[] tabTitles;
-
         public MyPagerAdapter(FragmentManager fm, String[] tabTitles) {
             super(fm);
             this.tabTitles = tabTitles;
