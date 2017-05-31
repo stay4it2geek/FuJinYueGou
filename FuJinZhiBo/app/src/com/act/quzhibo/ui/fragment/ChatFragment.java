@@ -1,18 +1,15 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,6 +89,15 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
         mRandom = new Random();
         ImageView zhuboAvatar = (ImageView) view.findViewById(R.id.zhuboAvatar);
         Glide.with(getActivity()).load(getArguments().getString("pathPrefix") + room.poster_path_1280).into(zhuboAvatar);//加载网络图片
+
+        int startValue = mRandom.nextInt(10);
+        if (startValue == 0) {
+            startValue = 2;
+        }
+        int value = mRandom.nextInt(100);
+        String finalValue = startValue+"" + value * 2560;
+        ((TextView) view.findViewById(R.id.starValue)).setText("🌟："+finalValue);
+        ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.onlineCount)).setText(room.onlineCount + "人在线");
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         horizontialListView = (HorizontialListView) view.findViewById(R.id.list);

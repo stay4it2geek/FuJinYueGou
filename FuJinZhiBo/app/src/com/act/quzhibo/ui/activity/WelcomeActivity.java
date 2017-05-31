@@ -7,11 +7,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.okhttp.OkHttpUtils;
+import com.act.quzhibo.okhttp.callback.Callback;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import java.util.List;
@@ -19,6 +23,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import okhttp3.Call;
+import okhttp3.Response;
 
 
 /**
@@ -43,6 +48,7 @@ public class WelcomeActivity extends Activity {
                     edit.commit();
                     getPlateList();
                 } else {
+
                     return;
                 }
             }
@@ -50,16 +56,28 @@ public class WelcomeActivity extends Activity {
 
     }
     private void getPlateList() {
-        OkHttpUtils.get().url(CommonUtil.getToggle(this, "tabCatagory").getToggleObject()).build().execute(new StringCallback() {
+        OkHttpUtils.get().url(CommonUtil.getToggle(this, "tabCatagory").getToggleObject()).build().execute(new Callback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),"请求超时,请检查网络后重试",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                getPlateList();
             }
             @Override
-            public void onResponse(String response, int id) {
-                plateListStr = response;
+            public void onResponse(Object response, int id) {
+            }
+
+            @Override
+            public Object parseNetworkResponse(Response response, int id) throws Exception {
+                plateListStr = response.body().string();
                 Message message = handler.obtainMessage();
                 message.obj = plateListStr;
                 handler.sendMessage(message);
+                return null;
             }
         });
     }

@@ -120,7 +120,6 @@ public class ShowerListFragment extends Fragment implements PullLoadMoreRecycler
                                 }else {
                                     getExtrance(position, "1", roomList.pathPrefix);
                                 }
-
                             }
                         });
                         pullloadmorerecyclerview.setAdapter(adapter);
@@ -131,7 +130,7 @@ public class ShowerListFragment extends Fragment implements PullLoadMoreRecycler
                     pullloadmorerecyclerview.setHasMore(false);
                 }
             } else {
-                pullloadmorerecyclerview.setFooterViewText("加载失败!");
+                getData(cataId,"1",0);
             }
         }
     };
@@ -143,7 +142,7 @@ public class ShowerListFragment extends Fragment implements PullLoadMoreRecycler
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putSerializable("room", rooms.get(position));
-            intent.putExtra("roomBundle", bundle);
+            intent.putExtra(Constants.ROOM_BUNDLE, bundle);
             startActivity(new Intent(getActivity(), ShowerInfoActivity.class));
         }
     }

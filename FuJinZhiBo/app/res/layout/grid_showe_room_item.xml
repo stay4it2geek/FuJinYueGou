@@ -14,11 +14,11 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/background_card">
 
-        <ImageView
-            android:id="@+id/showerAvtar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
+            <ImageView
+                android:id="@+id/showerAvtar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         <RelativeLayout
 
@@ -36,8 +36,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:padding="2dp"
-                android:textColor="#000"
                 android:text="TextView"
+                android:textColor="#000"
                 android:textSize="11sp" />
 
             <TextView
@@ -47,8 +47,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:padding="2dp"
-                android:text="TextView"
+                android:text=""
                 android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/isRelax"
                 android:layout_width="wrap_content"
@@ -56,9 +57,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:padding="2dp"
-                android:visibility="gone"
                 android:text=""
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 

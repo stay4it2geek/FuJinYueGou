@@ -3,6 +3,7 @@ package com.act.quzhibo.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,6 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //根据item类别加载不同ViewHolder
         View view = LayoutInflater.from(mContext).inflate(R.layout.grid_showe_room_item, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
@@ -60,16 +60,30 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            if (TextUtils.equals("手机达人", cataTitle)) {
-                ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2-20), RelativeLayout.LayoutParams.WRAP_CONTENT));
-                if(datas.get(position).liveType.equals("1")){
+            if (!TextUtils.equals("手机达人", cataTitle)) {
+                ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                if (datas.get(position).liveType.equals("1")) {
+                    ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
+                    ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
+                    ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+                } else {
                     ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
                     ((MyViewHolder) holder).isRelax.setText("休息中");
                     ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
                 }
-
+            } else {
+                ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                if (datas.get(position).liveType.equals("2")) {
+                    ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
+                    ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
+                    ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+                } else {
+                    ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
+                    ((MyViewHolder) holder).isRelax.setText("休息中");
+                    ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
+                }
             }
-            ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+
             ((MyViewHolder) holder).showerAvtar.setAdjustViewBounds(true);
             ((MyViewHolder) holder).showerAvtar.setScaleType(ImageView.ScaleType.FIT_XY);
             Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.default_head).into(((MyViewHolder) holder).showerAvtar);//加载网络图片

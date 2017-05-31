@@ -12,4 +12,5 @@ public class Constants {
     public static final String COMMON_TAB_DETAIL ="common_tab_detail" ;
     public static final String CATAID = "cataId";
     public static final String CATATITLE = "catatitle";
+    public static final String ROOM_BUNDLE = "roomBundle";
 }

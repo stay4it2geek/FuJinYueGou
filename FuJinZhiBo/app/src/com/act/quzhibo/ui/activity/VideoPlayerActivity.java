@@ -1,7 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -67,19 +65,12 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
                 chatFragment.setViewVisily(true);
             }
         });
-        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                videoView.setVideoURI(uri);
-                videoView.start();
-            }
-        });
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 bar.setVisibility(View.GONE);
-                findViewById(R.id.hasNotshow).setVisibility(View.VISIBLE);
                 chatFragment.setViewVisily(false);
+                findViewById(R.id.hasNotshow).setVisibility(View.VISIBLE);
                 return true;
             }
         });
@@ -89,6 +80,7 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         viewPager.setCurrentItem(0);
         viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
     }
+
 
     @Override
     public void finishVideo() {
