@@ -1,6 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -8,11 +9,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ViewPlayerPageAdapter;
+import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.fragment.ChatFragment;
 import com.act.quzhibo.ui.fragment.NoFragment;
 import com.act.quzhibo.view.MyVideoView;
@@ -28,6 +31,7 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
     private ChatFragment chatFragment;
     private NoFragment noFragment;
     private MyVideoView videoView;
+    private Room room;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +46,18 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         // 设置viewPager的适配器
         fragments = new ArrayList<>();
+        room = (Room) getIntent().getSerializableExtra("room");
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("room", room);
+        bundle.putString("pathPrefix", getIntent().getStringExtra("pathPrefix"));
         chatFragment = new ChatFragment();
+        chatFragment.setArguments(bundle);
         noFragment = new NoFragment();
-        fragments.add(noFragment);
         fragments.add(chatFragment);
+        fragments.add(noFragment);
         final ProgressBar bar = (ProgressBar) findViewById(R.id.bar);
         bar.requestFocus();
-        ViewPlayerPageAdapter myFragmentPagerAdapter = new ViewPlayerPageAdapter(getSupportFragmentManager(), fragments);
-        viewPager.setAdapter(myFragmentPagerAdapter);
-        viewPager.setCurrentItem(1);
-        viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
-        final Uri uri=Uri.parse(getIntent().getStringExtra("videoPath"));
+        final Uri uri = Uri.parse(room.liveStream);
         videoView.setVideoURI(uri);
         videoView.start();
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -78,16 +83,13 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
                 return true;
             }
         });
+
+        ViewPlayerPageAdapter myFragmentPagerAdapter = new ViewPlayerPageAdapter(getSupportFragmentManager(), fragments);
+        viewPager.setAdapter(myFragmentPagerAdapter);
+        viewPager.setCurrentItem(0);
+        viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
     }
-//
-//    private void showDialog() {
-//        new AlertDialog.Builder(this).setMessage("").setPositiveButton("", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        }).show();
-//    }
+
     @Override
     public void finishVideo() {
         videoView.stopPlayback();

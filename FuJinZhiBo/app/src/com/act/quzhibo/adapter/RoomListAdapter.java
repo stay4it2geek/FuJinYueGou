@@ -2,19 +2,17 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.OkHttpDownloader;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -24,13 +22,15 @@ import java.util.ArrayList;
 
 public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final String cataTitle;
+    private int screenWidth;
     private Context mContext;
     private String pathPrefix;
     private ArrayList<Room> datas;//数据
 
     //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view,int position);
+        void onItemClick(View view, int position);
     }
 
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -40,10 +40,13 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     //适配器初始化
-    public RoomListAdapter(Context context, ArrayList<Room> datas,String pathPrefix) {
+    public RoomListAdapter(Context context, ArrayList<Room> datas, String pathPrefix, int screenWidth, String cataTitle) {
         mContext = context;
         this.pathPrefix = pathPrefix;
+        this.cataTitle = cataTitle;
+
         this.datas = datas;
+        this.screenWidth = screenWidth;
     }
 
     @Override
@@ -57,16 +60,29 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            Glide.with(mContext).load(pathPrefix+datas.get(position).portrait_path_original).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+            if (TextUtils.equals("手机达人", cataTitle)) {
+                ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2-20), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                if(datas.get(position).liveType.equals("1")){
+                    ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
+                    ((MyViewHolder) holder).isRelax.setText("休息中");
+                    ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
+                }
+
+            }
+            ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+            ((MyViewHolder) holder).showerAvtar.setAdjustViewBounds(true);
+            ((MyViewHolder) holder).showerAvtar.setScaleType(ImageView.ScaleType.FIT_XY);
+            Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.default_head).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
         }
+
         ((MyViewHolder) holder).nickName.setText(datas.get(position).nickname);
-        ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount+"人在线");
         ((MyViewHolder) holder).showerAvtar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.onItemClick(v,position);
+                mOnItemClickListener.onItemClick(v, position);
             }
         });
+
     }
 
     @Override
@@ -77,6 +93,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     //自定义ViewHolder，用于加载图片
     class MyViewHolder extends RecyclerView.ViewHolder {
+        private TextView isRelax;
         private ImageView showerAvtar;
         private TextView nickName;
         private TextView onlineCount;
@@ -86,7 +103,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             showerAvtar = (ImageView) view.findViewById(R.id.showerAvtar);
             nickName = (TextView) view.findViewById(R.id.nickName);
             onlineCount = (TextView) view.findViewById(R.id.onlineCount);
-
+            isRelax = (TextView) view.findViewById(R.id.isRelax);
         }
     }
 

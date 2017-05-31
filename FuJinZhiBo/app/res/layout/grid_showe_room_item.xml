@@ -8,19 +8,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/background_card">
 
         <ImageView
             android:id="@+id/showerAvtar"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:scaleType="fitXY" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
         <RelativeLayout
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_alignLeft="@+id/showerAvtar"
             android:layout_alignRight="@+id/showerAvtar"
             android:layout_below="@+id/showerAvtar"
@@ -31,17 +34,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:padding="2dp"
+                android:textColor="#000"
                 android:text="TextView"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/onlineCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:padding="2dp"
                 android:text="TextView"
+                android:textSize="10sp" />
+            <TextView
+                android:id="@+id/isRelax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="2dp"
+                android:visibility="gone"
+                android:text=""
                 android:textSize="10sp" />
         </RelativeLayout>
     </RelativeLayout>

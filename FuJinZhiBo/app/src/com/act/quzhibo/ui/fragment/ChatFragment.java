@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,11 +25,13 @@ import com.act.quzhibo.adapter.MessageAdapter;
 import com.act.quzhibo.entity.Gift;
 import com.act.quzhibo.entity.Member;
 import com.act.quzhibo.entity.Message;
+import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.FragmentGiftDialog;
 import com.act.quzhibo.view.GiftItemView;
 import com.act.quzhibo.view.HorizontialListView;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,7 +40,7 @@ import java.util.Timer;
 import tyrantgit.widget.HeartLayout;
 
 public class ChatFragment extends Fragment implements View.OnClickListener, View.OnLayoutChangeListener {
-    private HorizontialListView listview;
+    private HorizontialListView horizontialListView;
     private ListView messageList;
     private GiftItemView giftView;
     private MemberAdapter mAdapter;
@@ -54,35 +59,45 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
     private int keyHeight = 0;
     private View rootView;
     private View view;
+    private Room room;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_chat, null, false);
-        initView(view);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_chat, null, false);
+        room = (Room) getArguments().getSerializable("room");
+        initView();
         initData();
+        Log.e("onCreateView", "onCreateView");
         return view;
     }
 
     public void setViewVisily(boolean flag) {
-        if (flag) {
-            listview.setVisibility(View.VISIBLE);
-            messageList.setVisibility(View.VISIBLE);
-        }else{
-            listview.setVisibility(View.GONE);
-            messageList.setVisibility(View.GONE);
-            ((TextView)view.findViewById(R.id.renshu)).setText("--");
+        if (view != null) {
+            if (flag) {
+                horizontialListView.setVisibility(View.VISIBLE);
+                messageList.setVisibility(View.VISIBLE);
+            } else {
+                messageList.setVisibility(View.GONE);
+                horizontialListView.setVisibility(View.GONE);
+                ((TextView) view.findViewById(R.id.onlineCount)).setText("- -");
+            }
         }
     }
 
-    private void initView(View view) {
+
+    private void initView() {
         mRandom = new Random();
-        listview = (HorizontialListView) view.findViewById(R.id.list);
+        ImageView zhuboAvatar = (ImageView) view.findViewById(R.id.zhuboAvatar);
+        Glide.with(getActivity()).load(getArguments().getString("pathPrefix") + room.poster_path_1280).into(zhuboAvatar);//加载网络图片
+        ((TextView) view.findViewById(R.id.onlineCount)).setText(room.onlineCount + "人在线");
+        ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
+        horizontialListView = (HorizontialListView) view.findViewById(R.id.list);
         mAdapter = new MemberAdapter(getActivity());
-        listview.setAdapter(mAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        horizontialListView.setAdapter(mAdapter);
+        horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 showDialog(mAdapter.datas.get(i));
@@ -137,7 +152,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
                 messageAdapter.notifyDataSetChanged();
                 messageList.setSelection(messageAdapter.getCount() - 1);
             }
-            handler.postDelayed(this, (long) (Math.random() * 5)*1000);
+            handler.postDelayed(this, (long) (Math.random() * 5) * 1000);
         }
     };
     Handler heartHandler = new Handler();
@@ -174,6 +189,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
      * 添加一些数据
      */
     private void initData() {
+        gifts = new ArrayList<>();
         members = new ArrayList<>();
         for (int i = 0; i < 18; i++) {
             Member m = new Member();
@@ -194,7 +210,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
         }
         messageAdapter.setDatas(messages);
 
-        gifts = new ArrayList<>();
+
     }
 
     @Override
@@ -207,19 +223,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        InputMethodManager inputManager =
-                (InputMethodManager) sendEditText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (id == R.id.send_message) {
-            sendView.setVisibility(View.VISIBLE);
-            menuView.setVisibility(View.GONE);
-            topView.setVisibility(View.GONE);
-            sendEditText.requestFocus();
-            inputManager.showSoftInput(sendEditText, 0);
-        } else if (id == R.id.gift) {
+        if (id == R.id.gift) {
             FragmentGiftDialog.newInstance().setOnGridViewClickListener(new FragmentGiftDialog.OnGridViewClickListener() {
                 @Override
                 public void click(Gift gift) {
-                    gift.name = "你";
+                    gift.name = "免费开放礼物一周，你";
                     gift.giftName = "送出小礼物";
                     if (!gifts.contains(gift)) {
                         gifts.add(gift);
@@ -247,6 +255,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
     public interface OnFinishVideoCallbak {
         void finishVideo();
     }
+
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         //现在认为只要控件将Activity向上推的高度超过了1/3屏幕高，就认为软键盘弹起

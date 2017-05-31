@@ -1,10 +1,12 @@
 package com.act.quzhibo.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by asus-pc on 2017/5/31.
  */
 
-public class Room {
+public class Room implements Serializable{
     public String roomId;
     public String userId;
     public String screenType;

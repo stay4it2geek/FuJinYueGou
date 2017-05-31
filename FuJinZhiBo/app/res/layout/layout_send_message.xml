@@ -5,8 +5,8 @@
     android:layout_height="48dp"
     android:layout_alignParentBottom="true"
     android:background="#f5f5f5"
-    android:orientation="horizontal"
-    android:visibility="gone">
+    android:visibility="gone"
+    android:orientation="horizontal">
 
     <EditText
         android:id="@+id/send_edit"
@@ -38,5 +38,5 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:text="发送"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@android:color/holo_blue_dark" />
 </LinearLayout>

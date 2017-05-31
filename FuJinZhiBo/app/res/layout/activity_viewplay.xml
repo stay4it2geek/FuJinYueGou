@@ -29,7 +29,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="180dp"
         android:gravity="center_horizontal"
-        android:text="哦哦，该房间没有直播了哦！"
+        android:text="哦哦，可能网络太差了哦！"
         android:textColor="@android:color/white"
         android:textSize="22dp"
         android:visibility="gone" />

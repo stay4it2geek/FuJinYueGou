@@ -22,6 +22,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.PlateCatagory;
 import com.act.quzhibo.entity.PlateList;
+import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
@@ -69,7 +70,8 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
                 tabTitles.add(plateCatagory.getTitleName());
                 ShowerListFragment fragment=new ShowerListFragment();
                 Bundle bundle=new Bundle();
-                bundle.putString("cataId",plateCatagory.getTitleId());
+                bundle.putString(Constants.CATAID,plateCatagory.getTitleId());
+                bundle.putString(Constants.CATATITLE,plateCatagory.getTitleName());
                 fragment.setArguments(bundle);
                 mFragments.add(fragment);
             }
@@ -95,10 +97,15 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
         pager.setCurrentItem(0);
     }
 
+
+
     @Override
-    public void onShowVideo(String url) {
+    public void onShowVideo(Room room,String pathPrefix) {
         Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
-        intent.putExtra("videoPath", url);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("room", room);
+        bundle.putString("pathPrefix",pathPrefix);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
