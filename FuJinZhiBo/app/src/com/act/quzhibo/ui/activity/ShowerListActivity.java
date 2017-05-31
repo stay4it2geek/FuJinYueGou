@@ -31,6 +31,7 @@ import com.act.quzhibo.util.ViewFindUtils;
 import com.flyco.tablayout.SlidingTabLayout;
 
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,19 +60,22 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
         setContentView(R.layout.activity_sliding_tab_video);
         initView();
     }
+
     private void initView() {
         PlateList plates = CommonUtil.parseJsonWithGson(getIntent().getStringExtra(Constants.TAB_PLATE_LIST), PlateList.class);
         ArrayList<String> tabTitles = new ArrayList<>();
-        if(plates==null){
+        final ArrayList<String> tabTitleIds = new ArrayList<>();
+        if (plates == null) {
             return;
         }
         for (PlateCatagory plateCatagory : plates.plateList) {
             if (!TextUtils.equals("VR直播", plateCatagory.getTitleName()) && !TextUtils.equals("vr直播", plateCatagory.getTitleName())) {
                 tabTitles.add(plateCatagory.getTitleName());
-                ShowerListFragment fragment=new ShowerListFragment();
-                Bundle bundle=new Bundle();
-                bundle.putString(Constants.CATAID,plateCatagory.getTitleId());
-                bundle.putString(Constants.CATATITLE,plateCatagory.getTitleName());
+                tabTitleIds.add(plateCatagory.getTitleId());
+                ShowerListFragment fragment = new ShowerListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.CATAID, plateCatagory.getTitleId());
+                bundle.putString(Constants.CATATITLE, plateCatagory.getTitleName());
                 fragment.setArguments(bundle);
                 mFragments.add(fragment);
             }
@@ -86,10 +90,12 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 tabLayout.setCurrentTab(position);
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -98,19 +104,19 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
     }
 
 
-
     @Override
-    public void onShowVideo(Room room,String pathPrefix) {
+    public void onShowVideo(Room room, String pathPrefix) {
         Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("room", room);
-        bundle.putString("pathPrefix",pathPrefix);
+        bundle.putString("pathPrefix", pathPrefix);
         intent.putExtras(bundle);
         startActivity(intent);
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
         private String[] tabTitles;
+
         public MyPagerAdapter(FragmentManager fm, String[] tabTitles) {
             super(fm);
             this.tabTitles = tabTitles;

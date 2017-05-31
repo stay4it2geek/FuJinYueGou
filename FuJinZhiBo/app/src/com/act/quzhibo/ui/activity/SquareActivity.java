@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.TabEntity;
+import com.act.quzhibo.ui.fragment.FunnyPersonFragment;
+import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
@@ -32,5 +34,13 @@ public class SquareActivity extends BaseActivity {
     @Override
     protected String[] getTitles() {
         return new String[]{"情趣板块", "附近达人"};
+    }
+
+    @Override
+    protected ArrayList<Fragment> getFragments() {
+    ArrayList<Fragment> fragments=new ArrayList<>();
+        fragments.add(new InterestPlatesFragment());
+        fragments.add(new FunnyPersonFragment());
+        return fragments;
     }
 }

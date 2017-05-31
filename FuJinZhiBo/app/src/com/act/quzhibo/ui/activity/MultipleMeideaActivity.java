@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.ui.fragment.FunnyPersonFragment;
+import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 
@@ -27,6 +29,14 @@ public class MultipleMeideaActivity extends BaseActivity {
     @Override
     protected String[] getTitles() {
         return new String[]{"阅读", "视听"};
+    }
+
+    @Override
+    protected ArrayList<Fragment> getFragments() {
+        ArrayList<Fragment> fragments=new ArrayList<>();
+        fragments.add(new InterestPlatesFragment());
+        fragments.add(new FunnyPersonFragment());
+        return fragments;
     }
 
 }

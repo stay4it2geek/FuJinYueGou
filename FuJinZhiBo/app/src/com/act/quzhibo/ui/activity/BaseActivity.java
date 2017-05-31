@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected ArrayList<Fragment> mFragments = new ArrayList<>();
+
     protected MyPagerAdapter mAdapter;
     protected View decorView;
     @Override
@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_common_tab_common);
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(),mFragments,decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
+        CommonUtil.initView(getTitles(),getFragments(),decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
 
     }
 
@@ -40,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return mFragments.size();
+            return getFragments().size();
         }
 
         @Override
@@ -50,10 +50,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            return mFragments.get(position);
+            return getFragments().get(position);
         }
     }
 
     protected abstract String[] getTitles();
-
+    protected abstract ArrayList<Fragment> getFragments();
 }

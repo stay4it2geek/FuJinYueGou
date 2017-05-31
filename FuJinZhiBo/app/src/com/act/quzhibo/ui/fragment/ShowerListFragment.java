@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.RoomListAdapter;
@@ -23,14 +21,12 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.RecyclerViewListener;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 
 import okhttp3.Call;
 
-import static android.R.transition.move;
 
 public class ShowerListFragment extends Fragment implements PullLoadMoreRecyclerView.PullLoadMoreListener {
     private String cataId;
@@ -43,14 +39,13 @@ public class ShowerListFragment extends Fragment implements PullLoadMoreRecycler
     private String offset;
     private String cataTitle;
 
-    private void getData(String cataId, String startPage, final int what) {
+    public void getData(String cataId, String startPage, final int what) {
         String url = CommonUtil.getToggle(getActivity(), Constants.COMMON_TAB_DETAIL).getToggleObject().replace("CATAID", cataId).replace("NUM", String.valueOf(startPage)).replace("OFFSET", offset);
         Log.e("url", url);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 handler.sendEmptyMessage(2);
-                Log.e("onError", "onError");
             }
 
             @Override
@@ -59,7 +54,6 @@ public class ShowerListFragment extends Fragment implements PullLoadMoreRecycler
                 message.obj = response;
                 message.what = what;
                 handler.sendMessage(message);
-                Log.e("response", response + "----");
             }
         });
     }
