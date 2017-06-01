@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * 直播播放
  */
-public class VideoPlayerActivity extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
+public class VideoPlayerActivityLanscape extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
     private ChatFragment chatFragment;
@@ -34,7 +34,7 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_viewplay);
+        setContentView(R.layout.activity_viewplay_land);
         initView();
     }
 

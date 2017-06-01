@@ -131,7 +131,7 @@ public class ShowerListFragment extends Fragment implements PullLoadMoreRecycler
 
     private void getExtrance(int position, String other, String pathPrefix) {
         if (rooms.get(position).liveType.equals(other)) {
-            onCallShowViewListner.onShowVideo(rooms.get(position), pathPrefix);
+            onCallShowViewListner.onShowVideo(rooms.get(position), pathPrefix,rooms.get(position).screenType);
         } else {
             Intent intent = new Intent();
             Bundle bundle = new Bundle();
@@ -142,7 +142,7 @@ public class ShowerListFragment extends Fragment implements PullLoadMoreRecycler
     }
 
     public interface OnCallShowViewListner {
-        void onShowVideo(Room room, String pathPrefix);
+        void onShowVideo(Room room, String pathPrefix,String screenType);
     }
 
     @Override

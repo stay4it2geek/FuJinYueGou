@@ -81,7 +81,11 @@
             />
         <activity
             android:name="com.act.quzhibo.ui.activity.VideoPlayerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.VideoPlayerActivityLanscape"
+            android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
             />
         <activity

@@ -75,10 +75,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener, View
         if (view != null) {
             if (flag) {
                 horizontialListView.setVisibility(View.VISIBLE);
-                messageList.setVisibility(View.VISIBLE);
             } else {
-                messageList.setVisibility(View.GONE);
                 horizontialListView.setVisibility(View.GONE);
+                view.findViewById(R.id.hasNotshow).setVisibility(View.VISIBLE);
                 ((TextView) view.findViewById(R.id.onlineCount)).setText("- -");
             }
         }

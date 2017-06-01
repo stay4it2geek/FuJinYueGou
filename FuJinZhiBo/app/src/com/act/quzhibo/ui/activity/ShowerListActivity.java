@@ -105,13 +105,22 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
 
 
     @Override
-    public void onShowVideo(Room room, String pathPrefix) {
-        Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("room", room);
-        bundle.putString("pathPrefix", pathPrefix);
-        intent.putExtras(bundle);
-        startActivity(intent);
+    public void onShowVideo(Room room, String pathPrefix,String screenType) {
+       if(screenType.equals("2")){
+           Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
+           Bundle bundle = new Bundle();
+           bundle.putSerializable("room", room);
+           bundle.putString("pathPrefix", pathPrefix);
+           intent.putExtras(bundle);
+           startActivity(intent);
+       }else{
+           Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivityLanscape.class);
+           Bundle bundle = new Bundle();
+           bundle.putSerializable("room", room);
+           bundle.putString("pathPrefix", pathPrefix);
+           intent.putExtras(bundle);
+           startActivity(intent);
+       }
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {

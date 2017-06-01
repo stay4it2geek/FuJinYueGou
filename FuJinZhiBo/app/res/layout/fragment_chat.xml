@@ -3,8 +3,21 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <include layout="@layout/layout_float" />
-
     <include layout="@layout/layout_send_message" />
+
+
+    <TextView
+        android:id="@+id/hasNotshow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="180dp"
+        android:gravity="center_horizontal"
+        android:text="哦哦，可能网络太差了哦！"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:textSize="22dp"
+    />
+
+    <include layout="@layout/layout_float"/>
 </RelativeLayout>
