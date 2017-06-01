@@ -28,7 +28,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
     private ArrayList<Fragment> fragments;
     private ChatFragment chatFragment;
     private NoFragment noFragment;
-    private VideoView videoView;
+    private com.universalvideoview.UniversalVideoView videoView;
     private Room room;
 
     @Override
@@ -40,7 +40,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void initView() {
-        videoView = (VideoView) findViewById(R.id.video);
+        videoView = (com.universalvideoview.UniversalVideoView) findViewById(R.id.video);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         // 设置viewPager的适配器
         fragments = new ArrayList<>();

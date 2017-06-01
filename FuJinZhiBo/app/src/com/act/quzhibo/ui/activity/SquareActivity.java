@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -43,4 +44,5 @@ public class SquareActivity extends BaseActivity {
         fragments.add(new FunnyPersonFragment());
         return fragments;
     }
+
 }

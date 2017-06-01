@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 dependencies {
     provided fileTree(include: '*.jar', dir: 'libs')
+    //noinspection GradleCompatible
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.wuxiaolong.pullloadmorerecyclerview:library:1.0.4'
@@ -21,7 +22,8 @@ dependencies {
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     //如果你想应用能够兼容Android6.0，请添加此依赖(org.apache.http.legacy.jar)
     compile 'cn.bmob.android:http-legacy:1.0'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.linsea:universalvideoview:1.1.0@aar'
+    compile 'com.yanzhenjie:recyclerview-swipe:1.0.4'
 }
 
 android {
