@@ -7,15 +7,6 @@
 
     <include layout="@layout/layout_top_member" />
 
-    <com.act.quzhibo.view.GiftItemView
-        android:id="@+id/gift_item_first"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="250dp"
-        android:layout_marginLeft="10dp"
-        android:clipChildren="true" />
-
     <TextView
         android:id="@+id/saytext"
         android:layout_width="wrap_content"
@@ -29,18 +20,6 @@
         android:textColor="#00CD00"
         android:textSize="18sp" />
 
-    <ListView
-        android:id="@+id/list_message"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:divider="@null"
-        android:dividerHeight="2dp"
-        android:scrollbars="none"
-        android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll"
-        android:visibility="gone" />
 
     <tyrantgit.widget.HeartLayout
         android:id="@+id/heart_layout"
@@ -50,5 +29,15 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="60dp" />
 
-    <include layout="@layout/layout_bottom_menu" />
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/bg_circle_black30"
+        android:padding="5dp"
+        android:src="@drawable/icon_close" />
 </RelativeLayout>
