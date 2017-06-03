@@ -9,9 +9,6 @@ import java.util.ArrayList;
 
 public class ViewPlayerPageAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> fragments;
-    public ViewPlayerPageAdapter(FragmentManager fm) {
-        super(fm);
-    }
     public ViewPlayerPageAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
         super(fm);
         this.fragments = fragments;

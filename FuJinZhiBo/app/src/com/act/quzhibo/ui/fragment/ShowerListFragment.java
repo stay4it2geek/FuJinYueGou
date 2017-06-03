@@ -125,8 +125,7 @@ public class ShowerListFragment extends Fragment {
                     page = 20;
                     rooms.clear();
                     mCurrentCounter = 0;
-//                    roomTotal = Integer.parseInt(roomList.roomTotal);
-                    roomTotal = 160;
+                    roomTotal = Integer.parseInt(roomList.roomTotal);
                     mLastRequstRoomListSize = 0;
                 } else if (msg.what == Constants.LOADMORE) {
                     page = page * 2;

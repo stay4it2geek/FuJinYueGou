@@ -7,16 +7,7 @@ import android.view.View;
 public class ViewFindUtils
 {
 	/**
-	 * ViewHolder简洁写法,避免适配器中重复定义ViewHolder,减少代码量 用法:
-	 * 
-	 *
-	 * if (convertView == null)
-	 * {
-	 * 	convertView = View.inflate(context, R.layout.ad_demo, null);
-	 * }
-	 * TextView tv_demo = ViewHolderUtils.get(convertView, R.id.tv_demo);
-	 * ImageView iv_demo = ViewHolderUtils.get(convertView, R.id.iv_demo);
-	 *
+	 * ViewHolder简洁写法,避免适配器中重复定义ViewHolder,减少代码量
 	 */
 	public static <T extends View> T hold(View view, int id)
 	{
