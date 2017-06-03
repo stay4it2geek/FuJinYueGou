@@ -44,5 +44,4 @@ public class SquareActivity extends BaseActivity {
         fragments.add(new FunnyPersonFragment());
         return fragments;
     }
-
 }

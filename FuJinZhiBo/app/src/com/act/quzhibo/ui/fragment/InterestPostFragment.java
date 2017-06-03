@@ -29,4 +29,5 @@ public class InterestPostFragment extends Fragment {
         textView.setText(getArguments().getString(Constants.PID));
         return view;
     }
+
 }

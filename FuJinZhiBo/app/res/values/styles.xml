@@ -36,4 +36,8 @@
 		<!--是否模糊-->
 		<item name="android:backgroundDimEnabled">false</item>
 	</style>
+	<style name="Small" parent="android:Widget.ProgressBar">
+		<item name="android:layout_height">16dip</item>
+		<item name="android:layout_width">16dip</item>
+	</style>
 </resources>

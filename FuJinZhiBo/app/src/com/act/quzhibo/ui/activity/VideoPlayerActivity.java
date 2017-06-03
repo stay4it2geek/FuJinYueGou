@@ -28,7 +28,7 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
     private ArrayList<Fragment> fragments;
     private ChatFragment chatFragment;
     private NoFragment noFragment;
-    private com.universalvideoview.UniversalVideoView videoView;
+    private VideoView videoView;
     private Room room;
 
     @Override
@@ -38,9 +38,8 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         initView();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void initView() {
-        videoView = (com.universalvideoview.UniversalVideoView) findViewById(R.id.video);
+        videoView = (VideoView) findViewById(R.id.video);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         // 设置viewPager的适配器
         fragments = new ArrayList<>();
@@ -73,7 +72,6 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
                 return true;
             }
         });
-
         ViewPlayerPageAdapter myFragmentPagerAdapter = new ViewPlayerPageAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
         viewPager.setCurrentItem(0);
