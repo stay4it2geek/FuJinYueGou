@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorbg">
 
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/recycler_view"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
