@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
-    private String[] mTitles = {"多媒体", "直播", "广场", "赚钱", "我的"};
+    private String[] mTitles = {"多媒体", "直播", "广场", "财富", "我的"};
     private String[] mTitlesSpecial = {"多媒体", "直播", "我的"};
     private int[] mIconUnselectIds = {R.drawable.home, R.drawable.zhibo, R.drawable.square, R.drawable.money, R.drawable.mine};
     private int[] mIconUnselectIdsSpecial = {R.drawable.home, R.drawable.zhibo, R.drawable.mine};

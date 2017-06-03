@@ -45,7 +45,6 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mContext = context;
         this.pathPrefix = pathPrefix;
         this.cataTitle = cataTitle;
-
         this.datas = datas;
         this.screenWidth = screenWidth;
     }
