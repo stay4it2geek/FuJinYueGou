@@ -55,7 +55,6 @@ public class ShowerListFragment extends Fragment {
             onCallShowViewListner = (OnCallShowViewListner) context;
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.showlist_fragment, null);

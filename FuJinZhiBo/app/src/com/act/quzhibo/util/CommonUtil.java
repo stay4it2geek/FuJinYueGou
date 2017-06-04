@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.view.View;
@@ -14,7 +16,9 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.ui.activity.MultipleMeideaActivity;
+import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.ui.fragment.CommonFragment;
+import com.act.quzhibo.ui.fragment.InterestPostFragment;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
@@ -35,6 +39,15 @@ import java.util.List;
  */
 
 public class CommonUtil {
+
+    public static void switchFragment(Fragment fragment, int layoutId, FragmentActivity activity) {
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        transaction.add(layoutId, fragment);
+        transaction.addToBackStack(null);
+        transaction.commitAllowingStateLoss();
+    }
+
+
 
     public static String SceneList2String(List SceneList) {
         String SceneListString = "";
