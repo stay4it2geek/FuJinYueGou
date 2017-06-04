@@ -21,13 +21,14 @@ public class SquareActivity extends BaseActivity implements BackHandledFragment.
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"情趣板块", "附近达人"};
+        return new String[]{"情趣", "视频","附近"};
     }
 
     @Override
     protected ArrayList<Fragment> getFragments() {
     ArrayList<Fragment> fragments=new ArrayList<>();
         fragments.add(new InterestPlatesFragment());
+        fragments.add(new FunnyPersonFragment());
         fragments.add(new FunnyPersonFragment());
         return fragments;
     }

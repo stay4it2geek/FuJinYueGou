@@ -1,35 +1,32 @@
 package com.act.quzhibo.entity;
 
+import java.util.ArrayList;
+
 /**
  * Created by asus-pc on 2017/6/4.
  */
 
 public class InterestPost {
-//
-//    {
-//     public String   postId    //592a690a0cf2faf25876ae67",
-//            "title    //高冷的美女，就不适合谈恋爱嘛？",
-//            "absText    //很伤啊，可能现在的感情都暧昧，终究还是找不到真爱，很伤。。。。,
-//            "images": [
-//        "http://image.91xunai.com/1495951658306-small200Pweb,
-//                "http://image.91xunai.com/1495951658780-small200Pweb
-//        ]
-//        "totalImages// 2,
-//     public   InterstUser      user;
-//        "elite": false,
-//            "top": false,
-//            "ctime": 1495951626640,
-//            "htime": 1495951989507,
-//            "sName    //老司机互助答疑",
-//            "totalComments": 2,
-//       public InterestItemModel     itemModel;
-//
-//      public String  plateId  ;  //56dd5191d4c6bbfe55f2828b",
-//        public StringpageView": 59,
-//        public Stringrewards": 0,
-//            "type": 0,
-//            "heat": 0,
-//            "hot": 41,
-//            "hasbuy": false
-//    },
+
+    public String postId;   //592a690a0cf2faf25876ae67 public String   ,
+    public String title;
+    public String absText;  //很伤啊。。。。,
+    public ArrayList<String> images;
+    public int totalImages;// 2,
+    public InterstUser user;
+    public String elite;//false,
+    public String top;//false,
+    public String ctime;//1495951626640,
+    public String htime;//1495951989507,
+    public String sName;  //老司机互助答疑 public String   ,
+    public String totalComments;//2,
+    public InterestItemModel itemModel;
+    public String plateId;  //56dd5191d4c6bbfe55f2828b public String   ,
+    public String pageView;//59,
+    public String rewards;//0,
+    public String type;//0,
+    public String heat;//0,
+    public String hot;//41,
+    public String hasbuy;//false
+
 }

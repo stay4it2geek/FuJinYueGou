@@ -1,22 +1,24 @@
 package com.act.quzhibo.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by asus-pc on 2017/6/4.
  */
 
-public class InterstUser {
-//    "userId": 10087,
-//            "photoUrl": "http://image.91xunai.com/FmW8AwevcuEnos-T01y0P2wxMyAa",
-//            "nick": "暮雪花",
-//            "disMariState": "单身",
-//            "disPurpose": "短期交往",
-//            "proCode": 14,
-//            "cityCode": 280,
-//            "areaCode": 2458,
-//            "vipLevel": 1,
-//            "hxNick": "s10087",
-//            "birth": 740203200000,
-//            "sex": 2,
-//            "official": false,
-//            "exp": 1258
+public class InterstUser implements Serializable{
+    public String userId;//10087,
+    public String photoUrl;//http://image.91xunai.com/1495951658306-small200Pweb,
+    public String nick;//暮雪花public String   ,
+    public String disMariState;//,
+    public String disPurpose;//短期public String   ,
+    public String proCode;//14,
+    public String cityCode;//280,
+    public String areaCode;//2458,
+    public String vipLevel;//1,
+    public String hxNick;//s10087public String   ,
+    public String birth;//740203200000,
+    public String sex;//2,
+    public String official;//false,
+    public String exp;//1258
 }

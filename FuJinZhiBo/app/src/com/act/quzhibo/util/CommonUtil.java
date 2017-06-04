@@ -31,7 +31,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,7 +50,6 @@ public class CommonUtil {
         transaction.addToBackStack(null);
         transaction.commitAllowingStateLoss();
     }
-
 
 
     public static String SceneList2String(List SceneList) {
@@ -155,4 +158,48 @@ public class CommonUtil {
         });
         viewPager.setCurrentItem(0);
     }
+
+
+    /*
+       * 将时间转换为时间戳
+       */
+    public static String dateToStamp(String s) {
+        String res = null;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(s);
+            long ts = date.getTime();
+            res = String.valueOf(ts);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    /**
+     * 获取第某前天的时间
+     */
+
+    public static String getDataString(int num) {
+
+        Date dNow = new Date();   //当前时间
+        Date dBefore;
+
+        Calendar calendar = Calendar.getInstance(); //得到日历
+        calendar.setTime(dNow);//把当前时间赋给日历
+        calendar.add(Calendar.DAY_OF_MONTH, -num);  //设置为前n天
+        dBefore = calendar.getTime();   //得到前第n天的时间
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
+        String defaultStartDate = sdf.format(dBefore);    //格式化前一天
+        String defaultEndDate = sdf.format(dNow); //格式化当前时间
+
+        System.out.println("前n天的时间是：" + defaultStartDate);
+        System.out.println("生成的时间是：" + defaultEndDate);
+
+        return defaultStartDate;
+    }
+
 }

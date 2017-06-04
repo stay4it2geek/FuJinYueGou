@@ -8,6 +8,6 @@ import java.util.ArrayList;
 
 public class InterestPlatesResult {
     public ArrayList<String> cats;
-    public ArrayList<InterestPlatesDetail> plates;
+    public ArrayList<InterestPlates> plates;
 
 }

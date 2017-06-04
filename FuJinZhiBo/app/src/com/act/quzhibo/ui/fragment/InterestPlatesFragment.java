@@ -6,15 +6,16 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.InterestListAdapter;
+import com.act.quzhibo.adapter.InterestPlatesListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPlatesParentData;
-import com.act.quzhibo.entity.InterestPlatesDetail;
+import com.act.quzhibo.entity.InterestPlates;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.SquareActivity;
@@ -30,9 +31,9 @@ import okhttp3.Call;
  */
 public class InterestPlatesFragment extends Fragment {
     private XRecyclerView recyclerview;
-    private ArrayList<InterestPlatesDetail> interestPlatesDetails = new ArrayList<>();
-    private InterestListAdapter adapter;
-    private ArrayList<InterestPlatesDetail> details = new ArrayList<>();
+    private ArrayList<InterestPlates> interestPlates = new ArrayList<>();
+    private InterestPlatesListAdapter adapter;
+    private ArrayList<InterestPlates> details = new ArrayList<>();
 
     @Nullable
     @Override
@@ -59,9 +60,9 @@ public class InterestPlatesFragment extends Fragment {
             @Override
             public void onResponse(String response, int id) {
                 InterestPlatesParentData interestPlatesParentData = CommonUtil.parseJsonWithGson(response, InterestPlatesParentData.class);
-                interestPlatesDetails.addAll(interestPlatesParentData.result.plates);
+                interestPlates.addAll(interestPlatesParentData.result.plates);
                 Message message = handler.obtainMessage();
-                message.obj = interestPlatesDetails;
+                message.obj = interestPlates;
                 message.what = what;
                 handler.sendMessage(message);
             }
@@ -73,9 +74,9 @@ public class InterestPlatesFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            details.addAll((ArrayList<InterestPlatesDetail>) msg.obj);
-            adapter = new InterestListAdapter(getContext(), details);
-            adapter.setOnItemClickListener(new InterestListAdapter.OnRecyclerViewItemClickListener() {
+            details.addAll((ArrayList<InterestPlates>) msg.obj);
+            adapter = new InterestPlatesListAdapter(getContext(), details);
+            adapter.setOnItemClickListener(new InterestPlatesListAdapter.OnRecyclerViewItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position, String pid) {
                     ((SquareActivity)getActivity()).setPid(pid);

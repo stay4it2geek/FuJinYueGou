@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:id="@+id/postlayout"
+    android:background="@drawable/background_card"
+    android:orientation="vertical">
+
+
+    <com.act.quzhibo.view.CircleImageView
+        android:id="@+id/photoImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/nick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="27dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/photoImg"
+        android:layout_toRightOf="@+id/photoImg"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/disMariState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/nick"
+        android:layout_centerHorizontal="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/vipLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/disMariState"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_toEndOf="@+id/disMariState"
+        android:layout_toRightOf="@+id/disMariState"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/vipLevel"
+        android:text="TextView" />
+
+    <io.github.rockerhieu.emojicon.EmojiconTextView
+        android:id="@+id/absText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="TextView"
+        android:layout_below="@+id/title"
+        android:layout_alignLeft="@+id/imgGridView"
+        android:layout_alignStart="@+id/imgGridView" />
+
+    <GridView
+        android:id="@+id/imgGridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/absText"
+        android:layout_marginEnd="23dp"
+        android:focusable="false"
+        android:scrollbars="none"
+        android:horizontalSpacing="2dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:textColor="#000"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/absText"
+        android:layout_alignStart="@+id/absText"
+        android:layout_below="@+id/photoImg"
+        android:layout_marginTop="10dp"
+        android:text="TextView" />
+</RelativeLayout>

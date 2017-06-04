@@ -7,5 +7,5 @@ import java.util.ArrayList;
  */
 
 public class InterstPostResult {
-    ArrayList<InterestPost> result;
+   public  ArrayList<InterestPost> result;
 }
