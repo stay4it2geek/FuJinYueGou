@@ -36,7 +36,12 @@ public class WelcomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        request();
+    }
+
+    private void request(){
         BmobQuery<Toggle> query = new BmobQuery<>();
+
         query.findObjects(new FindListener<Toggle>() {
             @Override
             public void done(List<Toggle> Toggles, BmobException bmobException) {
@@ -48,11 +53,17 @@ public class WelcomeActivity extends Activity {
                     edit.commit();
                     getPlateList();
                 } else {
-
-                    return;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),"请求超时,正在重试",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                   request();
                 }
             }
         });
+
 
     }
     private void getPlateList() {
@@ -62,7 +73,7 @@ public class WelcomeActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(getApplicationContext(),"请求超时,请检查网络后重试",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"请求超时,正在重试",Toast.LENGTH_SHORT).show();
                     }
                 });
                 getPlateList();
