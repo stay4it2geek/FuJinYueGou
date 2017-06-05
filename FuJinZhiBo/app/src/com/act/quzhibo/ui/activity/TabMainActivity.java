@@ -1,8 +1,11 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
@@ -35,6 +38,29 @@ public class TabMainActivity extends TabActivity {
     private StringBuffer catagory;
     private PlateCatagory plateCatagory;
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("你确定退出吗？")
+                    .setCancelable(false)
+                    .setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    dialog.dismiss();
+                                    TabMainActivity.this.finish();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

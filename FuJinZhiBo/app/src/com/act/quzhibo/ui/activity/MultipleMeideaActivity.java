@@ -7,11 +7,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.ui.fragment.FunnyPersonFragment;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.ui.fragment.NoFragment;
+import com.act.quzhibo.ui.fragment.ReadFragment;
+import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 public class MultipleMeideaActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
     }
     @Override
@@ -34,8 +38,9 @@ public class MultipleMeideaActivity extends BaseActivity {
 
     @Override
     protected ArrayList<Fragment> getFragments() {
+
         ArrayList<Fragment> fragments=new ArrayList<>();
-        fragments.add(new NoFragment());
+        fragments.add(new ReadFragment());
         fragments.add(new NoFragment());
         return fragments;
     }
