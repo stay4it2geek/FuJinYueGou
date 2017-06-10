@@ -69,7 +69,7 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
             return;
         }
         for (PlateCatagory plateCatagory : plates.plateList) {
-            if (!TextUtils.equals("VR直播", plateCatagory.getTitleName()) && !TextUtils.equals("vr直播", plateCatagory.getTitleName())) {
+            if (!plateCatagory.getTitleName().contains("VR")&&!plateCatagory.getTitleName().contains("游戏")) {
                 tabTitles.add(plateCatagory.getTitleName());
                 tabTitleIds.add(plateCatagory.getTitleId());
                 ShowerListFragment fragment = new ShowerListFragment();

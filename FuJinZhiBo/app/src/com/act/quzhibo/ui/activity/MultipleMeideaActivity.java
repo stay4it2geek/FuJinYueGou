@@ -11,6 +11,7 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.ui.fragment.FunnyPersonFragment;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
+import com.act.quzhibo.ui.fragment.NoFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 
@@ -34,8 +35,8 @@ public class MultipleMeideaActivity extends BaseActivity {
     @Override
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments=new ArrayList<>();
-        fragments.add(new InterestPlatesFragment());
-        fragments.add(new FunnyPersonFragment());
+        fragments.add(new NoFragment());
+        fragments.add(new NoFragment());
         return fragments;
     }
 

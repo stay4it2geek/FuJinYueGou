@@ -38,7 +38,6 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         initView();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void initView() {
         videoView = (VideoView) findViewById(R.id.video);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -73,7 +72,6 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
                 return true;
             }
         });
-
         ViewPlayerPageAdapter myFragmentPagerAdapter = new ViewPlayerPageAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
         viewPager.setCurrentItem(0);

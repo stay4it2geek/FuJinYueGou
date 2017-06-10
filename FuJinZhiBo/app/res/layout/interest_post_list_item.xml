@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/postlayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:background="@drawable/background_card"
+    android:orientation="vertical">
+
+    <com.act.quzhibo.view.CircleImageView
+        android:id="@+id/photoImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp" />
+
+    <TextView
+        android:id="@+id/nick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/photoImg"
+        android:layout_toRightOf="@+id/photoImg"
+        android:background="@drawable/bg_round_black30"
+        android:padding="3dp"
+        android:text="TextView"
+        android:textColor="#000"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/disMariState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/nick"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_toRightOf="@+id/nick"
+        android:background="@drawable/bg_round_black30"
+        android:padding="3dp"
+        android:text="TextView"
+        android:textColor="@color/colorAccent"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/photoImg"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="3dp"
+        android:text="TextView"
+        android:textColor="#000" />
+
+    <io.github.rockerhieu.emojicon.EmojiconTextView
+        android:id="@+id/absText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:text="TextView" />
+
+    <RelativeLayout
+        android:id="@+id/grivdlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/absText"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:paddingBottom="10dp">
+
+        <FrameLayout
+            android:id="@+id/frlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgVideo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:adjustViewBounds="false"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <GridView
+                android:id="@+id/imgGridview"
+                android:layout_width="wrap_content"
+                android:layout_height="110dp"
+                android:focusable="false"
+                android:horizontalSpacing="10dp"
+                android:numColumns="3"
+                android:scrollbars="none" />
+
+            <TextView
+                android:id="@+id/imgtotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:background="@color/colorAccent"
+                android:padding="3dp"
+                android:textColor="#fff"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/frlayout"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="10dp">
+
+            <TextView
+                android:id="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="浏览" />
+
+            <TextView
+                android:id="@+id/viewNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/view"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/view"
+                android:text="200" />
+
+            <TextView
+                android:id="@+id/pinglun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/viewNum"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/viewNum"
+                android:text="评论" />
+
+            <TextView
+                android:id="@+id/pinglunNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/pinglun"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/pinglun"
+                android:text="20" />
+
+            <TextView
+                android:id="@+id/dashang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/pinglunNum"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/pinglunNum"
+                android:text="打赏" />
+
+            <TextView
+                android:id="@+id/dashangNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/dashang"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/dashang"
+                android:text="9" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

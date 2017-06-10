@@ -9,15 +9,17 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 
+
 /**
- *  附近达人
+ * qingqudaren
  */
 public class FunnyPersonFragment extends Fragment {
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_square_common,null,false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_square_funnyperson, null, false);
         return view;
     }
+
 }
