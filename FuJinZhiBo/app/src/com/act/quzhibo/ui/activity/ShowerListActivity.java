@@ -3,10 +3,13 @@ package com.act.quzhibo.ui.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -43,20 +47,11 @@ import okhttp3.Call;
 public class ShowerListActivity extends AppCompatActivity implements ShowerListFragment.OnCallShowViewListner {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    //6.0权限处理
-    private boolean bPermission = false;
-    private final int WRITE_PERMISSION_REQ_CODE = 100;
     private MyPagerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bPermission = checkPublishPermission();
-        if (!bPermission) {
-            Toast.makeText(getApplication(), "请先允许app所需要的权限", Toast.LENGTH_LONG).show();
-            bPermission = checkPublishPermission();
-            return;
-        }
         setContentView(R.layout.activity_sliding_tab_video);
         initView();
     }
@@ -69,7 +64,7 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
             return;
         }
         for (PlateCatagory plateCatagory : plates.plateList) {
-            if (!plateCatagory.getTitleName().contains("VR")&&!plateCatagory.getTitleName().contains("游戏")) {
+            if (!plateCatagory.getTitleName().contains("VR") && !plateCatagory.getTitleName().contains("游戏")) {
                 tabTitles.add(plateCatagory.getTitleName());
                 tabTitleIds.add(plateCatagory.getTitleId());
                 ShowerListFragment fragment = new ShowerListFragment();
@@ -105,22 +100,22 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
 
 
     @Override
-    public void onShowVideo(Room room, String pathPrefix,String screenType) {
-       if(screenType.equals("2")){
-           Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
-           Bundle bundle = new Bundle();
-           bundle.putSerializable("room", room);
-           bundle.putString("pathPrefix", pathPrefix);
-           intent.putExtras(bundle);
-           startActivity(intent);
-       }else{
-           Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivityLanscape.class);
-           Bundle bundle = new Bundle();
-           bundle.putSerializable("room", room);
-           bundle.putString("pathPrefix", pathPrefix);
-           intent.putExtras(bundle);
-           startActivity(intent);
-       }
+    public void onShowVideo(Room room, String pathPrefix, String screenType) {
+        if (screenType.equals("2")) {
+            Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("room", room);
+            bundle.putString("pathPrefix", pathPrefix);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivityLanscape.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("room", room);
+            bundle.putString("pathPrefix", pathPrefix);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -147,43 +142,4 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
         }
     }
 
-
-    private boolean checkPublishPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            List<String> permissions = new ArrayList<>();
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(ShowerListActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(ShowerListActivity.this, Manifest.permission.CAMERA)) {
-                permissions.add(Manifest.permission.CAMERA);
-            }
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(ShowerListActivity.this, Manifest.permission.READ_PHONE_STATE)) {
-                permissions.add(Manifest.permission.READ_PHONE_STATE);
-            }
-            if (permissions.size() != 0) {
-                ActivityCompat.requestPermissions(ShowerListActivity.this,
-                        (String[]) permissions.toArray(new String[0]),
-                        WRITE_PERMISSION_REQ_CODE);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case WRITE_PERMISSION_REQ_CODE:
-                for (int ret : grantResults) {
-                    if (ret != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                }
-                bPermission = true;
-                break;
-            default:
-                break;
-        }
-    }
 }
