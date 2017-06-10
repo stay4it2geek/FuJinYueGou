@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/main_frame_layout"
+        android:id="@+id/square_near_person_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

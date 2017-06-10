@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.InterestPlatesDetail;
+import com.act.quzhibo.entity.InterestPlates;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -20,9 +20,9 @@ import java.util.ArrayList;
  * Created by asus-pc on 2017/5/31.
  */
 
-public class InterestListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class InterestPlatesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private ArrayList<InterestPlatesDetail> datas;//数据
+    private ArrayList<InterestPlates> datas;//数据
 
     //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
@@ -36,7 +36,7 @@ public class InterestListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     //适配器初始化
-    public InterestListAdapter(Context context, ArrayList<InterestPlatesDetail> datas) {
+    public InterestPlatesListAdapter(Context context, ArrayList<InterestPlates> datas) {
         mContext = context;
         this.datas = datas;
     }

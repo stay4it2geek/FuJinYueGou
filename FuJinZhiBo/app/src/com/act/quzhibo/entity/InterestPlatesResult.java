@@ -6,9 +6,8 @@ import java.util.ArrayList;
  * Created by weiminglin on 17/6/1.
  */
 
-public class InterestResult {
-
+public class InterestPlatesResult {
     public ArrayList<String> cats;
-    public ArrayList<InterestPlatesDetail> plates;
+    public ArrayList<InterestPlates> plates;
 
 }

@@ -17,9 +17,9 @@ public class Constants {
     public static final String CATATITLE = "catatitle";
     public static final String ROOM_BUNDLE = "roomBundle";
     public static final String SQUARE_INTERES_TAB = "squareInterestTab";
-    public static final String PID = "pid";
+    public static final String SQUARE_INTERES_POST= "squareInterestPost";
     public static final int LOADMORE =0;
     public static final int REFRESH =1;
-    public static final int TheEnd=2;
     public static final int NetWorkError=3;
+    public static final String POST_USER = "post_user";
 }

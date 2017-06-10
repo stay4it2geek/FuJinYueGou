@@ -2,6 +2,7 @@ package com.act.quzhibo.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,9 +19,7 @@ import java.util.ArrayList;
  * Created by weiminglin on 17/5/30.
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
-
-
+public abstract class BaseActivity extends FragmentActivity {
     protected MyPagerAdapter mAdapter;
     protected View decorView;
     @Override

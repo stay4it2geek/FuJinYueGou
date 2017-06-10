@@ -106,7 +106,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     heartLayout.addHeart(randomColor());
                 }
             });
-            heartHandler.postDelayed(this, 500);
+            heartHandler.postDelayed(this, 600);
         }
     };
 
@@ -119,7 +119,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        heartHandler.postDelayed(heartRunnable, 500);
+        heartHandler.postDelayed(heartRunnable, 600);
     }
 
     private int randomColor() {
