@@ -2,6 +2,7 @@ package com.act.quzhibo.ui.activity;
 
 import android.Manifest;
 import android.app.TabActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
@@ -26,7 +29,6 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 @SuppressWarnings("ALL")
 public class TabMainActivity extends TabActivity {
@@ -46,6 +48,29 @@ public class TabMainActivity extends TabActivity {
     //6.0权限处理
     private boolean bPermission = false;
     private final int WRITE_PERMISSION_REQ_CODE = 100;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("你确定退出吗？")
+                    .setCancelable(false)
+                    .setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                    TabMainActivity.this.finish();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +138,6 @@ public class TabMainActivity extends TabActivity {
             }
         });
     }
-
-
-
 
     private boolean checkPublishPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
