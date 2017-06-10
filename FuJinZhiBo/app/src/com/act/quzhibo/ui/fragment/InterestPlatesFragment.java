@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +12,8 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPlatesListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.InterestPlatesParentData;
 import com.act.quzhibo.entity.InterestPlates;
+import com.act.quzhibo.entity.InterestPlatesParentData;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.SquareActivity;
@@ -29,7 +27,7 @@ import okhttp3.Call;
 /**
  * 情趣板块
  */
-public class InterestPlatesFragment extends Fragment {
+public class InterestPlatesFragment extends BackHandledFragment {
     private XRecyclerView recyclerview;
     private ArrayList<InterestPlates> interestPlates = new ArrayList<>();
     private InterestPlatesListAdapter adapter;
@@ -56,11 +54,14 @@ public class InterestPlatesFragment extends Fragment {
             @Override
             public void onError(Call call, Exception e, int id) {
             }
-
             @Override
             public void onResponse(String response, int id) {
                 InterestPlatesParentData interestPlatesParentData = CommonUtil.parseJsonWithGson(response, InterestPlatesParentData.class);
-                interestPlates.addAll(interestPlatesParentData.result.plates);
+                for (InterestPlates plate : interestPlatesParentData.result.plates ) {
+                    if (!plate.pName.contains("视频")){
+                        interestPlates.add(plate);
+                    }
+                }
                 Message message = handler.obtainMessage();
                 message.obj = interestPlates;
                 message.what = what;
@@ -68,7 +69,6 @@ public class InterestPlatesFragment extends Fragment {
             }
         });
     }
-
 
     Handler handler = new Handler() {
         @Override
@@ -79,8 +79,9 @@ public class InterestPlatesFragment extends Fragment {
             adapter.setOnItemClickListener(new InterestPlatesListAdapter.OnRecyclerViewItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position, String pid) {
-                    ((SquareActivity)getActivity()).setPid(pid);
-                   CommonUtil.switchFragment(new InterestPostFragment(),R.id.square_interest_plates_layout,getActivity());
+                    ((SquareActivity) getActivity()).setPid(pid);
+                    CommonUtil.switchFragment(new InterestPostFragment(), R.id.square_interest_plates_layout, getActivity());
+                    getActivity().getSupportFragmentManager().beginTransaction().hide(InterestPlatesFragment.this);
                 }
             });
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -89,5 +90,11 @@ public class InterestPlatesFragment extends Fragment {
             recyclerview.setAdapter(adapter);
         }
     };
+
+    @Override
+    public boolean onBackPressed() {
+        getActivity().getSupportFragmentManager().beginTransaction().show(InterestPlatesFragment.this);
+        return false;
+    }
 
 }

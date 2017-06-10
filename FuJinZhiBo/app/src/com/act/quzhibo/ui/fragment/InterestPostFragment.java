@@ -1,12 +1,19 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +31,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import okhttp3.Call;
 
@@ -33,7 +41,6 @@ import okhttp3.Call;
  */
 
 public class InterestPostFragment extends BackHandledFragment {
-
     private XRecyclerView recyclerView;
     private ArrayList<InterestPost> posts = new ArrayList<>();
     private int interestPostSize;
@@ -65,7 +72,6 @@ public class InterestPostFragment extends BackHandledFragment {
                     }
                 }, 1000);
             }
-
             @Override
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
@@ -82,7 +88,6 @@ public class InterestPostFragment extends BackHandledFragment {
                         } else {
                             recyclerView.setNoMore(true);
                         }
-
                     }
                 }, 1000);
             }
@@ -94,7 +99,6 @@ public class InterestPostFragment extends BackHandledFragment {
         return view;
     }
 
-
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -105,7 +109,7 @@ public class InterestPostFragment extends BackHandledFragment {
                     posts.clear();
                     num = 1;
                 } else if (msg.what == Constants.LOADMORE) {
-                    num++;
+                    num += 1;
                 }
                 interestPostSize = interstPostResult.result.size();
                 if (posts != null && interstPostResult.result.size() > 0) {
@@ -114,12 +118,13 @@ public class InterestPostFragment extends BackHandledFragment {
                         adapter = new InterestPostListAdapter(getActivity(), posts);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
-                            public void onItemClick(View view, int position, InterstUser user) {
+                            public void onItemClick(InterestPost post) {
                                 PostDetailFragment fragment = new PostDetailFragment();
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable(Constants.POST_USER, user);
+                                bundle.putSerializable(Constants.POST_USER, post);
                                 fragment.setArguments(bundle);
                                 CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
+                                getActivity().getSupportFragmentManager().beginTransaction().hide(InterestPostFragment.this);
                             }
                         });
                         recyclerView.setAdapter(adapter);
@@ -134,6 +139,7 @@ public class InterestPostFragment extends BackHandledFragment {
             }
         }
     };
+
 
     public void getData(String pid, int num, final int what) {
         String htime = CommonUtil.dateToStamp(CommonUtil.getDataString(num));
@@ -156,6 +162,7 @@ public class InterestPostFragment extends BackHandledFragment {
 
     @Override
     public boolean onBackPressed() {
+        getActivity().getSupportFragmentManager().beginTransaction().show(InterestPostFragment.this);
         return false;
     }
 }
