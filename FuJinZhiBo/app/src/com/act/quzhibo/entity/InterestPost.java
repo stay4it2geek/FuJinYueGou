@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * Created by asus-pc on 2017/6/4.
+ * 列表的单个帖子数据
  */
 
 public class InterestPost implements Serializable{

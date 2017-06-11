@@ -32,9 +32,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!-- 配置一个程序用于调试 -->
     <uses-permission android:name="android.permission.SET_DEBUG_APP" />
-    <!--允许开启摄像头-->
-    <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"

@@ -36,7 +36,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     defaultConfig {
-
         minSdkVersion 16
         targetSdkVersion 24
         multiDexEnabled true
@@ -44,7 +43,6 @@ android {
             abiFilters "x86", "armeabi-v7a"
         }
     }
-
 
     repositories {  //本地aar方式
         flatDir {
@@ -66,4 +64,5 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
 }

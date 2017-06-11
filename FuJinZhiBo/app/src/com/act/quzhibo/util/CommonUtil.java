@@ -9,21 +9,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.entity.Toggle;
-import com.act.quzhibo.ui.activity.MultipleMeideaActivity;
-import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.ui.fragment.CommonFragment;
-import com.act.quzhibo.ui.fragment.InterestPostFragment;
-import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.google.gson.Gson;
+import com.netease.neliveplayer.util.string.StringUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -31,6 +29,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.text.DateFormat;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,6 +130,7 @@ public class CommonUtil {
             mTabEntities.add(new TabEntity(mTitles[i], 0, 0));
         }
         tabLayout.setTabData(mTabEntities);
+
         tabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
@@ -177,6 +178,11 @@ public class CommonUtil {
         return res;
     }
 
+    public static  String getDateTransforTamp(Long timeTamp){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String sd = sdf.format(new Date(timeTamp));
+        return sd;
+    }
     /**
      * 获取第某前天的时间
      */
@@ -190,10 +196,8 @@ public class CommonUtil {
         calendar.setTime(dNow);//把当前时间赋给日历
         calendar.add(Calendar.DAY_OF_MONTH, -num);  //设置为前n天
         dBefore = calendar.getTime();   //得到前第n天的时间
-
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
-        String defaultStartDate = sdf.format(dBefore);    //格式化前一天
+        String defaultStartDate = sdf.format(dBefore);    //格式化前n天
         String defaultEndDate = sdf.format(dNow); //格式化当前时间
 
         System.out.println("前n天的时间是：" + defaultStartDate);
@@ -201,5 +205,6 @@ public class CommonUtil {
 
         return defaultStartDate;
     }
+
 
 }

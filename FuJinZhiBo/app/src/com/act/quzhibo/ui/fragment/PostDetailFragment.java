@@ -1,60 +1,88 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.adapter.InteretstPostPageAdapter;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.InterestPost;
+import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
+import com.act.quzhibo.entity.InterestPostPageParentData;
+import com.act.quzhibo.okhttp.OkHttpUtils;
+import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.util.CommonUtil;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
-import java.util.HashMap;
+import okhttp3.Call;
 
 /**
  * Created by weiminglin on 17/6/4.
  */
 
-public class PostDetailFragment extends Fragment {
+public class PostDetailFragment extends BackHandledFragment {
+    private InteretstPostPageAdapter adapter;
+    private XRecyclerView recyclerview;
+    private InterestPost post;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_postdetail,null,false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_postdetail, null, false);
+        recyclerview = (XRecyclerView) view.findViewById(R.id.postRecyleview);
+        recyclerview.setHasFixedSize(true);
+        recyclerview.setPullRefreshEnabled(false);
+        recyclerview.setLoadingMoreEnabled(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerview.setLayoutManager(linearLayoutManager);
+        if (getArguments() != null) {
+            post = (InterestPost)getArguments().getSerializable(Constants.POST_ID);
+        }
+        getData();
         return view;
     }
 
-    public Bitmap createBitmapFromVideoPath(String url) {
-        Bitmap bitmap = null;
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        int kind = MediaStore.Video.Thumbnails.MINI_KIND;
-        try {
-            if (Build.VERSION.SDK_INT >= 12) {
-                retriever.setDataSource(url, new HashMap<String, String>());
-            } else {
-                retriever.setDataSource(url);
+    private void getData() {
+        OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.POST_ID).getToggleObject().replace(Constants.POST_ID, post.postId)).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
             }
-            bitmap = retriever.getFrameAtTime();
-        } catch (IllegalArgumentException ex) {
-            // Assume this is a corrupt video file
-        } catch (RuntimeException ex) {
-            // Assume this is a corrupt video file.
-        } finally {
-            try {
-                retriever.release();
-            } catch (RuntimeException ex) {
-                // Ignore failures while cleaning up.
+
+            @Override
+            public void onResponse(String response, int id) {
+                InterestPostPageParentData interestPostPageParentData =
+                        CommonUtil.parseJsonWithGson(response, InterestPostPageParentData.class);
+                Message message = handler.obtainMessage();
+                message.obj = interestPostPageParentData;
+                handler.sendMessage(message);
             }
+        });
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
+            adapter = new InteretstPostPageAdapter(post,getContext(), data.result);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerview.setLayoutManager(linearLayoutManager);
+            recyclerview.setAdapter(adapter);
         }
-        if (kind == MediaStore.Images.Thumbnails.MICRO_KIND && bitmap != null) {
-            bitmap = ThumbnailUtils.extractThumbnail(bitmap, 160, 160,
-                    ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
-        }
-        return bitmap;
+    };
+
+    @Override
+    public boolean onBackPressed() {
+        getActivity().getSupportFragmentManager().beginTransaction().show(PostDetailFragment.this);
+        return false;
     }
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <com.act.quzhibo.view.CircleImageView
+            android:id="@+id/userImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:id="@+id/nickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/userImage"
+            android:text="nickName"
+            android:textColor="#000"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/sexAndAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/nickName"
+            android:background="@color/colorAccent"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="♂♀22"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/createTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/nickName"
+            android:layout_alignStart="@+id/nickName"
+            android:layout_below="@+id/nickName"
+            android:layout_marginTop="10dp"
+            android:text="若干小时前" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="15dp"
+            android:layout_height="17dp"
+            android:layout_alignTop="@+id/createTime"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/createTime"
+            android:background="@drawable/location" />
+
+        <TextView
+            android:id="@+id/arealocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/createTime"
+            android:layout_alignTop="@+id/createTime"
+            android:layout_below="@+id/sexAndAge"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:text="区域" />
+    </RelativeLayout>
+
+    <io.github.rockerhieu.emojicon.EmojiconTextView
+        android:id="@+id/re_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:text="TextViewssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
+        android:textSize="15sp" />
+
+</RelativeLayout>
