@@ -3,6 +3,7 @@ package com.act.quzhibo.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,6 +13,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
+import com.act.quzhibo.LocationData;
+import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.TabEntity;
@@ -23,9 +26,11 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.google.gson.Gson;
 import com.netease.neliveplayer.util.string.StringUtil;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
@@ -165,6 +170,7 @@ public class CommonUtil {
        * 将时间转换为时间戳
        */
     public static String dateToStamp(String s) {
+
         String res = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
@@ -178,11 +184,12 @@ public class CommonUtil {
         return res;
     }
 
-    public static  String getDateTransforTamp(Long timeTamp){
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static String getDateTransforTamp(Long timeTamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String sd = sdf.format(new Date(timeTamp));
         return sd;
     }
+
     /**
      * 获取第某前天的时间
      */
@@ -206,5 +213,27 @@ public class CommonUtil {
         return defaultStartDate;
     }
 
+    public static String getJson(String fileName, Context context) {
+        //将json数据变成字符串
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            //获取assets资源管理器
+            AssetManager assetManager = context.getAssets();
+            //通过管理器打开文件并读取
+            BufferedReader bf = new BufferedReader(new InputStreamReader(
+                    assetManager.open(fileName)));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
 
+    public static LocationData parseLocation(Context context) {
+        LocationData data = parseJsonWithGson(getJson("json.txt", context), LocationData.class);
+        return data;
+    }
 }

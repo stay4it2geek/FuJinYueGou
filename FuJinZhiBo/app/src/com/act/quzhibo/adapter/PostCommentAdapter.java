@@ -1,6 +1,9 @@
 package com.act.quzhibo.adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.InterestPostPageCommentDetail;
+import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -44,7 +49,7 @@ public class PostCommentAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(final int position, View view, ViewGroup parent) {
         final ViewHolder viewHolder;
         if (view == null) {
             viewHolder = new ViewHolder();
@@ -72,6 +77,30 @@ public class PostCommentAdapter extends BaseAdapter {
         viewHolder.createTime.setText(hour + "小时"+min+"分钟前");
         viewHolder.nickName.setText(commentDetails.get(position).user.nick);
         viewHolder.content.setText(commentDetails.get(position).message+"");
+       new AsyncTask<Void, Void, String>() {
+           @Override
+           protected String doInBackground(Void... params) {
+               ArrayList<ProvinceAndCityEntify> datas = CommonUtil.parseLocation(context).data;
+               if (null != datas) {
+                   for(ProvinceAndCityEntify entify:datas){
+                       if (TextUtils.equals(commentDetails.get(position).user.proCode,entify.proId + "")) {
+                           for (ProvinceAndCityEntify.CitySub citySub :entify.citySub){
+                               if (TextUtils.equals(commentDetails.get(position).user.cityCode, citySub.cityId + "")) {
+                                  return !TextUtils.equals("",entify.name+citySub.name+"")?entify.name + citySub.name + "":"----";
+                               }
+                           }
+                       }
+                   }
+               }
+               return "----";
+           }
+
+           @Override
+           protected void onPostExecute(String text) {
+               super.onPostExecute(text);
+               viewHolder.arealocation.setText(text);
+           }
+       }.execute();
         return view;
     }
 

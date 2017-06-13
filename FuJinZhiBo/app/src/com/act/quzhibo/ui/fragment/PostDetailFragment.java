@@ -30,12 +30,13 @@ public class PostDetailFragment extends BackHandledFragment {
     private InteretstPostPageAdapter adapter;
     private XRecyclerView recyclerview;
     private InterestPost post;
+    private View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_postdetail, null, false);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_postdetail, null, false);
         recyclerview = (XRecyclerView) view.findViewById(R.id.postRecyleview);
         recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
@@ -72,7 +73,7 @@ public class PostDetailFragment extends BackHandledFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
-            adapter = new InteretstPostPageAdapter(post,getContext(), data.result);
+            adapter = new InteretstPostPageAdapter(post, getContext(), data.result);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerview.setLayoutManager(linearLayoutManager);
@@ -82,7 +83,6 @@ public class PostDetailFragment extends BackHandledFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getSupportFragmentManager().beginTransaction().show(PostDetailFragment.this);
         return false;
     }
 }

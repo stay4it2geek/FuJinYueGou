@@ -80,7 +80,6 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 public void onItemClick(View view, int position, String pid) {
                     ((SquareActivity) getActivity()).setPid(pid);
                     CommonUtil.switchFragment(new InterestPostListFragment(), R.id.square_interest_plates_layout, getActivity());
-                    getActivity().getSupportFragmentManager().beginTransaction().hide(InterestPlatesFragment.this);
                 }
             });
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -92,7 +91,6 @@ public class InterestPlatesFragment extends BackHandledFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getSupportFragmentManager().beginTransaction().show(InterestPlatesFragment.this);
         return false;
     }
 

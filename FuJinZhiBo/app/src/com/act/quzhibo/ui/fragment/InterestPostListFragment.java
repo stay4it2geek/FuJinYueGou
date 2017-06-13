@@ -115,7 +115,6 @@ public class InterestPostListFragment extends BackHandledFragment {
                                 bundle.putSerializable(Constants.POST_ID, post);
                                 fragment.setArguments(bundle);
                                 CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
-                                getActivity().getSupportFragmentManager().beginTransaction().hide(InterestPostListFragment.this);
                             }
                         });
                         recyclerView.setAdapter(adapter);
@@ -154,7 +153,6 @@ public class InterestPostListFragment extends BackHandledFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getSupportFragmentManager().beginTransaction().show(InterestPostListFragment.this);
         return false;
     }
 }

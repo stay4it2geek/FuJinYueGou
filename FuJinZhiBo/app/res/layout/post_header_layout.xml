@@ -26,7 +26,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/userImage"
-            android:text="nickName"
+            android:text=""
             android:textColor="#000"
             android:textSize="17sp" />
 
@@ -36,12 +36,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:layout_toRightOf="@+id/nickName"
             android:background="@color/colorAccent"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:text="♂♀22"
+            android:text=""
             android:textColor="#fff"
             android:textSize="14sp" />
 
@@ -53,14 +53,15 @@
             android:layout_alignStart="@+id/nickName"
             android:layout_below="@+id/nickName"
             android:layout_marginTop="10dp"
-            android:text="若干小时前" />
+            android:text="" />
 
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="15dp"
             android:layout_height="17dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_alignTop="@+id/createTime"
             android:layout_toRightOf="@+id/createTime"
             android:background="@drawable/location" />
@@ -75,7 +76,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/imageView"
-            android:text="区域" />
+            android:text="" />
 
 
     </RelativeLayout>
@@ -92,7 +93,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="TextView333333333333333333333333333333333333333333"
+            android:text=""
             android:textColor="#000"
             android:textSize="16sp" />
 
@@ -105,20 +106,20 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:text="TextViewssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
+            android:text=""
             android:textSize="15sp" />
 
         <FrameLayout
             android:visibility="gone"
             android:id="@+id/videoFr"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="485dp"
             android:layout_below="@+id/content">
 
             <VideoView
                 android:id="@+id/videoView"
                 android:layout_width="match_parent"
-                android:layout_height="350dp" />
+                android:layout_height="485dp" />
 
             <ImageView
                 android:id="@+id/coverUser"

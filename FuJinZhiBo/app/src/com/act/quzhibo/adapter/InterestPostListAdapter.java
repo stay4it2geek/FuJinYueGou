@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterstUser;
@@ -65,25 +66,27 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             final InterstUser user = datas.get(position).user;
             final InterestPost post = datas.get(position);
             ((MyViewHolder) holder).nickName.setText(user.nick);
-            long l=System.currentTimeMillis()-Long.parseLong(datas.get(position).ctime);
-            long day=l/(24*60*60*1000);
-            long hour=(l/(60*60*1000)-day*24);
-            long min=((l/(60*1000))-day*24*60-hour*60);
-            if(!datas.get(position).user.sex.equals("2")){
+
+            long l = System.currentTimeMillis() - Long.parseLong(datas.get(position).ctime);
+            long day = l / (24 * 60 * 60 * 1000);
+            long hour = (l / (60 * 60 * 1000) - day * 24);
+            long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+            if (!datas.get(position).user.sex.equals("2")) {
                 ((MyViewHolder) holder).sexAndAge.setBackgroundColor(mContext.getResources().getColor(R.color.blue));
             }
-            ((MyViewHolder) holder).sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女": "男");
-            ((MyViewHolder) holder).createTime.setText(hour + "小时"+min+"分钟前");
+            ((MyViewHolder) holder).sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
+            ((MyViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
             ((MyViewHolder) holder).title.setText(datas.get(position).title);
             ((MyViewHolder) holder).absText.setText(datas.get(position).absText);
             ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView);
             ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments);
             ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards);
+
             if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
@@ -111,6 +114,32 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
             Glide.with(mContext).load(user.photoUrl).placeholder(R.drawable.ic_launcher).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((MyViewHolder) holder).photoImg);//加载网络图片
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    ArrayList<ProvinceAndCityEntify> data_ = CommonUtil.parseLocation(mContext).data;
+                    if (null != datas) {
+                        for (ProvinceAndCityEntify entify : data_) {
+                            if (TextUtils.equals(datas.get(position).user.proCode + "", entify.proId + "")) {
+                                for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
+                                    if (TextUtils.equals(datas.get(position).user.cityCode, citySub.cityId + "")) {
+                                        return !TextUtils.equals("",entify.name + citySub.name + "")?entify.name + citySub.name + "":"----";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return "";
+                }
+
+                @Override
+                protected void onPostExecute(String text) {
+                    super.onPostExecute(text);
+                    ((MyViewHolder) holder).arealocation.setText(text);
+                }
+            }.execute();
+
+
         }
     }
 

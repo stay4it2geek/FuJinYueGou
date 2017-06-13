@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -26,10 +27,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.act.quzhibo.LocationData;
+import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -58,6 +62,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
         this.mContext = context;
         this.post = post;
         mLayoutInflater = LayoutInflater.from(context);
+
     }
 
     @Override
@@ -96,21 +101,22 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
         if (holder instanceof Item1ViewHolder) {
-            ((Item1ViewHolder) holder).arealocation.setText("fffflocaion");
+
             Glide.with(mContext).load(data.detail.user.photoUrl).placeholder(R.drawable.ic_launcher).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((Item1ViewHolder) holder).userImage);//加载网络图片
-            ((Item1ViewHolder) holder).createTime.setText("TIMEEE");
+
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex);
-            long l=System.currentTimeMillis()-data.detail.ctime;
-            long day=l/(24*60*60*1000);
-            long hour=(l/(60*60*1000)-day*24);
-            long min=((l/(60*1000))-day*24*60-hour*60);
-            if(!data.detail.user.sex.equals("2")){
+            long l = System.currentTimeMillis() - data.detail.ctime;
+            long day = l / (24 * 60 * 60 * 1000);
+            long hour = (l / (60 * 60 * 1000) - day * 24);
+            long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+            if (!data.detail.user.sex.equals("2")) {
                 ((Item1ViewHolder) holder).sexAndAge.setBackgroundColor(mContext.getResources().getColor(R.color.blue));
             }
-            ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女": "男");
-            ((Item1ViewHolder) holder).createTime.setText(hour + "小时"+min+"分钟前");
+            ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
+            ((Item1ViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
             ((Item1ViewHolder) holder).nickName.setText(data.detail.user.nick);
             ((Item1ViewHolder) holder).title.setText(data.detail.title);
+
             StringBuffer sb = new StringBuffer();
             for (String s : contentList) {
                 sb.append(s);
@@ -132,6 +138,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                         ((Item1ViewHolder) holder).coverplay.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                ((Item1ViewHolder) holder).coverUser.setVisibility(View.GONE);
                                 ((Item1ViewHolder) holder).coverplay.setVisibility(View.GONE);
                                 ((Item1ViewHolder) holder).bar.setVisibility(View.VISIBLE);
                                 Uri uri = Uri.parse(post.vedioUrl);
@@ -149,10 +156,40 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 }.execute();
             }
 
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    ArrayList<ProvinceAndCityEntify> datas = CommonUtil.parseLocation(mContext).data;
+                    if (null != datas) {
+                        for (ProvinceAndCityEntify entify : datas) {
+                            if (TextUtils.equals(data.detail.user.proCode, entify.proId + "")) {
+                                for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
+                                    if (TextUtils.equals(data.detail.user.cityCode, citySub.cityId + "")) {
+                                        return !TextUtils.equals("",entify.name + citySub.name + "")?entify.name + citySub.name + "":"----";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return "";
+                }
+
+                @Override
+                protected void onPostExecute(String text) {
+                    super.onPostExecute(text);
+                    ((Item1ViewHolder) holder).arealocation.setText(text);
+                }
+            }.execute();
         } else if (holder instanceof Item2ViewHolder) {
             ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(mContext, pageImgeList, 1));
         } else {
             ((Item3ViewHolder) holder).commentsList.setAdapter(new PostCommentAdapter(mContext, data.comments));
+            ((Item3ViewHolder) holder).button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
 
         }
 
@@ -210,12 +247,15 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
 
     class Item3ViewHolder extends RecyclerView.ViewHolder {
         private MyListView commentsList;
+        private Button button;
 
         public Item3ViewHolder(View view) {
             super(view);
+            button = (Button) view.findViewById(R.id.dashang);
             commentsList = (MyListView) view.findViewById(R.id.comments_lv);
         }
     }
+
 
     public Bitmap createBitmapFromVideoPath(String url) {
         Bitmap bitmap = null;
