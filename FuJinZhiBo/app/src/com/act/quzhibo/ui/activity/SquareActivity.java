@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * 广场
  */
-public class SquareActivity extends BaseActivity implements BackHandledFragment.BackHandledInterface {
+public class SquareActivity extends TabSlideBaseActivity implements BackHandledFragment.BackHandledInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +33,7 @@ public class SquareActivity extends BaseActivity implements BackHandledFragment.
         return fragments;
     }
 
-    private BackHandledFragment mBackHandedFragment;
 
-    @Override
-    public void setSelectedFragment(BackHandledFragment selectedFragment) {
-        this.mBackHandedFragment = selectedFragment;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if(mBackHandedFragment == null||!mBackHandedFragment.onBackPressed()){
-            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
-                super.onBackPressed();
-            }else{
-                getSupportFragmentManager().popBackStack();
-            }
-        }
-    }
 
     public String pid;
     public String getPid() {

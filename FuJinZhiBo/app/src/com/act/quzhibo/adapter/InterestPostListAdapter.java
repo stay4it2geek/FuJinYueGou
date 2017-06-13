@@ -1,39 +1,33 @@
 package com.act.quzhibo.adapter;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.provider.MediaStore;
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterstUser;
+import com.act.quzhibo.ui.activity.UserInfoActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by asus-pc on 2017/5/31.
  */
 
 public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
+    private Activity activity;
     private ArrayList<InterestPost> datas;//数据
 
     //自定义监听事件
@@ -48,14 +42,14 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     //适配器初始化
-    public InterestPostListAdapter(Context context, ArrayList<InterestPost> datas) {
-        mContext = context;
+        public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas) {
+        activity = context;
         this.datas = datas;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.interest_post_list_item, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(activity).inflate(R.layout.interest_post_list_item, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -77,7 +71,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(mContext, datas.get(position).images, datas.get(position).images.size()));
+                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, datas.get(position).images.size()));
                 ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
             } else {
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
@@ -97,7 +91,16 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     mOnItemClickListener.onItemClick(post);
                 }
             });
-            Glide.with(mContext).load(user.photoUrl).placeholder(R.drawable.ic_launcher).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((MyViewHolder) holder).photoImg);//加载网络图片
+            ((MyViewHolder) holder).photoImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent();
+                    intent.putExtra(Constants.POST_USER,post.user);
+                    intent.setClass(activity, UserInfoActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+            Glide.with(activity).load(user.photoUrl).placeholder(R.drawable.ic_launcher).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((MyViewHolder) holder).photoImg);//加载网络图片
         }
     }
 

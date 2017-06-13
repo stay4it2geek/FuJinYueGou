@@ -22,4 +22,8 @@ public class Constants {
     public static final int REFRESH =1;
     public static final int NetWorkError=3;
     public static final String POST_USER = "post_user";
+    public static final String TEXT_IMG_POST = "text_img_post";
+    public static final String VIDEO_POST = "video_post";
+    public static final int VIDEO =0;
+    public static final int TEXT_IMG =1;
 }

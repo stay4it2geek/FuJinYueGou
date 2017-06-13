@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 
@@ -19,13 +19,13 @@ import java.util.ArrayList;
  * Created by weiminglin on 17/5/30.
  */
 
-public abstract class BaseActivity extends FragmentActivity {
+public abstract class TabSlideBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface{
     protected MyPagerAdapter mAdapter;
     protected View decorView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common_tab_common);
+        setContentView(R.layout.activity_common_tab);
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
         CommonUtil.initView(getTitles(),getFragments(),decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
@@ -52,7 +52,23 @@ public abstract class BaseActivity extends FragmentActivity {
             return getFragments().get(position);
         }
     }
+    private BackHandledFragment mBackHandedFragment;
 
+    @Override
+    public void setSelectedFragment(BackHandledFragment selectedFragment) {
+        this.mBackHandedFragment = selectedFragment;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mBackHandedFragment == null||!mBackHandedFragment.onBackPressed()){
+            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+                super.onBackPressed();
+            }else{
+                getSupportFragmentManager().popBackStack();
+            }
+        }
+    }
     protected abstract String[] getTitles();
     protected abstract ArrayList<Fragment> getFragments();
 }
