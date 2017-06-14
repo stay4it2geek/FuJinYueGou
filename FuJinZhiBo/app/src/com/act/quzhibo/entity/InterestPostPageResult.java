@@ -1,5 +1,6 @@
 package com.act.quzhibo.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,6 +8,6 @@ import java.util.ArrayList;
  * 帖子页面父数据
  */
 
-public class InterestPostPageResult {
+public class InterestPostPageResult implements Serializable {
    public  ArrayList<InterestPostPageDetailAndComments> result;
 }

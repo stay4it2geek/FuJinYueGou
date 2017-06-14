@@ -14,12 +14,14 @@
             android:orientation="vertical">
 
             <FrameLayout
+                android:background="#fff"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.act.quzhibo.view.CircleImageView
+                <ImageView
                     android:id="@+id/userImage"
                     android:layout_width="250dp"
+                    android:src="@drawable/layerlist_circle_mask"
                     android:layout_height="250dp"
                     android:layout_gravity="center" />
 

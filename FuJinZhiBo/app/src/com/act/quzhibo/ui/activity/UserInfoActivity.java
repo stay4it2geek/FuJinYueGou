@@ -1,6 +1,9 @@
 package com.act.quzhibo.ui.activity;
 
+import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
+import com.act.quzhibo.adapter.InteretstPostPageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPostListInfoParentData;
 import com.act.quzhibo.entity.InterstPostListInfoResult;
@@ -26,6 +30,8 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.FullyLinearLayoutManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import okhttp3.Call;
 
@@ -60,7 +66,30 @@ public class UserInfoActivity extends AppCompatActivity {
         textlist.setLayoutManager(linearLayoutManager);
         videolist.setNestedScrollingEnabled(false);
         videolist.setLayoutManager(linearLayoutManager2);
-        Glide.with(this).load(user.photoUrl).into((ImageView) findViewById(R.id.userImage));
+        if (user.sex.equals("2")) {
+            Glide.with(this).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
+                }
+
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);                    }
+            });
+        } else {
+            Glide.with(this).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
+                }
+
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);                    }
+            });
+
+        }
         ((TextView) findViewById(R.id.sex)).setText(user.sex.equals("2") ? "女" : "男");
         ((TextView) findViewById(R.id.purpose)).setText(user.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(user.disMariState);
@@ -87,7 +116,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void getTextAndImageData(final int what) {
         String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", user.userId);
-        Log.e("fdsfdsf23345678323afds",url+"");
+
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {

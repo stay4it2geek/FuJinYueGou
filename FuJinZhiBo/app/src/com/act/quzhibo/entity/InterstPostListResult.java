@@ -1,5 +1,6 @@
 package com.act.quzhibo.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * 帖子列表数据
  */
 
-public class InterstPostListResult {
+public class InterstPostListResult implements Serializable {
    public String totalPages;
    public String totalNums;
    public  ArrayList<InterestPost> result;

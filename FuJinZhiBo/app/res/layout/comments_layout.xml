@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
         <Button
             android:layout_margin="15dp"
-            android:text="我来打赏她！"
+            android:text="我来打赏！"
             android:textStyle="normal"
             android:textColor="@color/colorAccent"
             android:layout_width="match_parent"

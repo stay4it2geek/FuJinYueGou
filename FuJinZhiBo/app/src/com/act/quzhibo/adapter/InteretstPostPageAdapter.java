@@ -3,6 +3,8 @@ package com.act.quzhibo.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
@@ -34,6 +36,8 @@ import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,19 +102,36 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
         if (holder instanceof Item1ViewHolder) {
-            if(post.user.sex.equals("2")) {
+            if (post.user.sex.equals("2")) {
+                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
 
-                Glide.with(activity).load(data.detail.user.photoUrl).placeholder(R.drawable.women).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((Item1ViewHolder) holder).userImage);//加载网络图片
-            }else {
-                Glide.with(activity).load(data.detail.user.photoUrl).placeholder(R.drawable.man).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((Item1ViewHolder) holder).userImage);//加载网络图片
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);                    }
+                });
+            } else {
+                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);                    }
+                });
 
             }
 
             ((Item1ViewHolder) holder).userImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent();
-                    intent.putExtra(Constants.POST_USER,post.user);
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.POST_USER, post.user);
                     intent.setClass(activity, UserInfoActivity.class);
                     activity.startActivity(intent);
                 }
@@ -177,7 +198,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                             if (TextUtils.equals(data.detail.user.proCode, entify.proId + "")) {
                                 for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
                                     if (TextUtils.equals(data.detail.user.cityCode, citySub.cityId + "")) {
-                                        return !TextUtils.equals("",entify.name + citySub.name + "")?entify.name + citySub.name + "":"----";
+                                        return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
                                     }
                                 }
                             }

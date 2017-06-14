@@ -2,9 +2,13 @@ package com.act.quzhibo.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +28,9 @@ import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 
@@ -86,7 +93,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, datas.get(position).images.size()));
+                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0));
 
                 ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
             } else {
@@ -121,11 +128,29 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             });
 
             if(post.user.sex.equals("2")){
-                Glide.with(activity).load(user.photoUrl).placeholder(R.drawable.women).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((MyViewHolder) holder).photoImg);//加载网络图片
+                Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                    }
+                });
 
             }else{
-                Glide.with(activity).load(user.photoUrl).placeholder(R.drawable.man).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((MyViewHolder) holder).photoImg);//加载网络图片
+                Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
 
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);                    }
+                });
             }
             new AsyncTask<Void, Void, String>() {
                 @Override
