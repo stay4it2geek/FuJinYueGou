@@ -45,11 +45,11 @@ public class InterestPlatesFragment extends BackHandledFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
-        getData(Constants.REFRESH);
+        getData();
         return view;
     }
 
-    private void getData(final int what) {
+    private void getData() {
         OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_TAB).getToggleObject()).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -64,7 +64,6 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 }
                 Message message = handler.obtainMessage();
                 message.obj = interestPlates;
-                message.what = what;
                 handler.sendMessage(message);
             }
         });
@@ -80,8 +79,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 @Override
                 public void onItemClick(View view, int position, String pid) {
                     ((SquareActivity) getActivity()).setPid(pid);
-                    CommonUtil.switchFragment(new InterestPostFragment(), R.id.square_interest_plates_layout, getActivity());
-                    getActivity().getSupportFragmentManager().beginTransaction().hide(InterestPlatesFragment.this);
+                    CommonUtil.switchFragment(new InterestPostListFragment(), R.id.square_interest_plates_layout, getActivity());
                 }
             });
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -93,7 +91,6 @@ public class InterestPlatesFragment extends BackHandledFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getSupportFragmentManager().beginTransaction().show(InterestPlatesFragment.this);
         return false;
     }
 

@@ -29,6 +29,7 @@ import com.act.quzhibo.entity.PlateList;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
@@ -44,10 +45,11 @@ import okhttp3.Call;
 /**
  * 主播列表画面
  */
-public class ShowerListActivity extends AppCompatActivity implements ShowerListFragment.OnCallShowViewListner {
+public class ShowerListActivity extends AppCompatActivity implements ShowerListFragment.OnCallShowViewListner , BackHandledFragment.BackHandledInterface {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private MyPagerAdapter mAdapter;
+    private BackHandledFragment mBackHandedFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,23 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
             intent.putExtras(bundle);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mBackHandedFragment == null||!mBackHandedFragment.onBackPressed()){
+            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
+                super.onBackPressed();
+            }else{
+                getSupportFragmentManager().popBackStack();
+            }
+        }
+    }
+
+
+    @Override
+    public void setSelectedFragment(BackHandledFragment selectedFragment) {
+        this.mBackHandedFragment = selectedFragment;
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {

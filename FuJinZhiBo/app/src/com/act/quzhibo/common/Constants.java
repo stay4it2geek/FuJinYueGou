@@ -22,4 +22,6 @@ public class Constants {
     public static final int REFRESH =1;
     public static final int NetWorkError=3;
     public static final String POST_USER = "post_user";
+    public static final String POST_ID = "post_id";
+
 }

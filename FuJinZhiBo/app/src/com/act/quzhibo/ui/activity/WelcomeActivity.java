@@ -56,7 +56,7 @@ public class WelcomeActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),"请求超时,正在重试",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"请求分类超时,正在重试",Toast.LENGTH_SHORT).show();
                         }
                     });
                    request();
@@ -70,12 +70,6 @@ public class WelcomeActivity extends Activity {
         OkHttpUtils.get().url(CommonUtil.getToggle(this, "tabCatagory").getToggleObject()).build().execute(new Callback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),"请求超时,正在重试",Toast.LENGTH_SHORT).show();
-                    }
-                });
                 getPlateList();
             }
             @Override

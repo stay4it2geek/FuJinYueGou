@@ -1,18 +1,11 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.graphics.Bitmap;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +15,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.entity.InterstPostResult;
-import com.act.quzhibo.entity.InterstUser;
+import com.act.quzhibo.entity.InterstPostListResult;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.SquareActivity;
@@ -31,7 +23,6 @@ import com.act.quzhibo.util.CommonUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import okhttp3.Call;
 
@@ -40,7 +31,7 @@ import okhttp3.Call;
  * 情趣帖子
  */
 
-public class InterestPostFragment extends BackHandledFragment {
+public class InterestPostListFragment extends BackHandledFragment {
     private XRecyclerView recyclerView;
     private ArrayList<InterestPost> posts = new ArrayList<>();
     private int interestPostSize;
@@ -103,7 +94,7 @@ public class InterestPostFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            final InterstPostResult interstPostResult = CommonUtil.parseJsonWithGson((String) msg.obj, InterstPostResult.class);
+            final InterstPostListResult interstPostListResult = CommonUtil.parseJsonWithGson((String) msg.obj, InterstPostListResult.class);
             if (msg.what != Constants.NetWorkError) {
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
@@ -111,9 +102,9 @@ public class InterestPostFragment extends BackHandledFragment {
                 } else if (msg.what == Constants.LOADMORE) {
                     num += 1;
                 }
-                interestPostSize = interstPostResult.result.size();
-                if (posts != null && interstPostResult.result.size() > 0) {
-                    posts.addAll(interstPostResult.result);
+                interestPostSize = interstPostListResult.result.size();
+                if (posts != null && interstPostListResult.result.size() > 0) {
+                    posts.addAll(interstPostListResult.result);
                     if (adapter == null) {
                         adapter = new InterestPostListAdapter(getActivity(), posts);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
@@ -121,17 +112,16 @@ public class InterestPostFragment extends BackHandledFragment {
                             public void onItemClick(InterestPost post) {
                                 PostDetailFragment fragment = new PostDetailFragment();
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable(Constants.POST_USER, post);
+                                bundle.putSerializable(Constants.POST_ID, post);
                                 fragment.setArguments(bundle);
                                 CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
-                                getActivity().getSupportFragmentManager().beginTransaction().hide(InterestPostFragment.this);
                             }
                         });
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.notifyDataSetChanged();
                     }
-                } else if (interstPostResult.result.size() == 0) {
+                } else if (interstPostListResult.result.size() == 0) {
                     recyclerView.setNoMore(true);
                 }
             } else {
@@ -143,6 +133,7 @@ public class InterestPostFragment extends BackHandledFragment {
 
     public void getData(String pid, int num, final int what) {
         String htime = CommonUtil.dateToStamp(CommonUtil.getDataString(num));
+        Log.e("htmo3",htime);
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
@@ -162,7 +153,6 @@ public class InterestPostFragment extends BackHandledFragment {
 
     @Override
     public boolean onBackPressed() {
-        getActivity().getSupportFragmentManager().beginTransaction().show(InterestPostFragment.this);
         return false;
     }
 }
