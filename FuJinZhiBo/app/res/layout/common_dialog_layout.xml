@@ -46,10 +46,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:gravity="center|left"
+            android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:lineSpacingMultiplier="1.2"
-            android:textColor="#999999"
+            android:textColor="@color/colorAccent"
             android:textSize="14dp"
             tools:text="" />
 
@@ -96,7 +96,7 @@
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
                 android:singleLine="true"
-                android:textColor="#38ADFF"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 tools:text="Yes" />
         </LinearLayout>

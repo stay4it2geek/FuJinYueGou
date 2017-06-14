@@ -6,12 +6,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
+import com.act.quzhibo.view.FragmentDialog;
+import com.flyco.tablayout.CommonTabLayout;
 
 import java.util.ArrayList;
 
@@ -22,6 +25,8 @@ import java.util.ArrayList;
 public abstract class TabSlideBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface{
     protected MyPagerAdapter mAdapter;
     protected View decorView;
+    private BackHandledFragment mBackHandedFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +57,6 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
             return getFragments().get(position);
         }
     }
-    private BackHandledFragment mBackHandedFragment;
 
     @Override
     public void setSelectedFragment(BackHandledFragment selectedFragment) {
@@ -63,7 +67,15 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
     public void onBackPressed() {
         if(mBackHandedFragment == null||!mBackHandedFragment.onBackPressed()){
             if(getSupportFragmentManager().getBackStackEntryCount() == 0){
-                super.onBackPressed();
+                FragmentDialog.newInstance("","客官再看一会儿呗", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick() {
+                    }
+                    @Override
+                    public void onNegtiveClick() {
+                        TabSlideBaseActivity.super.onBackPressed();
+                    }
+                }).show(getSupportFragmentManager(), "dialog");
             }else{
                 getSupportFragmentManager().popBackStack();
             }

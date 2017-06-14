@@ -162,18 +162,19 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/relativeLayout"
+        android:id="@+id/focuslayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:background="#eee"
         android:orientation="horizontal">
 
-        <TextView
+        <RadioButton
             android:id="@+id/talk"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:button="@null"
             android:gravity="center"
             android:text="私聊她／他"
             android:textSize="16sp" />
@@ -183,11 +184,12 @@
             android:layout_height="match_parent"
             android:background="#aaa" />
 
-        <TextView
+        <RadioButton
             android:id="@+id/focus"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:button="@null"
             android:gravity="center"
             android:text="关注她／他"
             android:textSize="16sp" />

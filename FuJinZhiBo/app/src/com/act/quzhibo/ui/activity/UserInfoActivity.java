@@ -13,17 +13,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
-import com.act.quzhibo.adapter.InteretstPostPageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPostListInfoParentData;
-import com.act.quzhibo.entity.InterstPostListInfoResult;
 import com.act.quzhibo.entity.InterstUser;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;

@@ -23,6 +23,7 @@ import com.act.quzhibo.entity.PlateCatagory;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
+import com.act.quzhibo.view.FragmentDialog;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;

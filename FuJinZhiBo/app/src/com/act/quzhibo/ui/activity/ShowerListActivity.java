@@ -33,6 +33,7 @@ import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
+import com.act.quzhibo.view.FragmentDialog;
 import com.flyco.tablayout.SlidingTabLayout;
 
 
@@ -45,7 +46,7 @@ import okhttp3.Call;
 /**
  * 主播列表画面
  */
-public class ShowerListActivity extends AppCompatActivity implements ShowerListFragment.OnCallShowViewListner , BackHandledFragment.BackHandledInterface {
+public class ShowerListActivity extends AppCompatActivity implements ShowerListFragment.OnCallShowViewListner, BackHandledFragment.BackHandledInterface {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private MyPagerAdapter mAdapter;
@@ -122,11 +123,22 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
 
     @Override
     public void onBackPressed() {
-        if(mBackHandedFragment == null||!mBackHandedFragment.onBackPressed()){
-            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
-                super.onBackPressed();
-            }else{
-                getSupportFragmentManager().popBackStack();
+        if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    FragmentDialog.newInstance("", "客官再看一会儿呗", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        @Override
+                        public void onPositiveClick() {
+                        }
+
+                        @Override
+                        public void onNegtiveClick() {
+                            ShowerListActivity.super.onBackPressed();
+                        }
+                    }).show(getSupportFragmentManager(), "dialog");
+                } else {
+                    getSupportFragmentManager().popBackStack();
+                }
             }
         }
     }

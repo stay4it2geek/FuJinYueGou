@@ -160,6 +160,7 @@ public class FragmentDialog extends DialogFragment {
             negtiveBn.setVisibility(View.VISIBLE);
             columnLineView.setVisibility(View.VISIBLE);
         }
+        dialog.show();
     }
 
     /**
