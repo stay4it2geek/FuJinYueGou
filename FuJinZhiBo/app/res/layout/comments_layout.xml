@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
-        android:background="@color/colorbg"
+        android:background="#fde"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:layout_margin="15dp"
+            android:layout_margin="50dp"
             android:text="我来打赏！"
+            android:textSize="22sp"
             android:textStyle="normal"
             android:textColor="@color/colorAccent"
             android:layout_width="match_parent"
@@ -29,4 +31,39 @@
         android:layout_width="match_parent"
         android:id="@+id/comments_lv"
         android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/pinglunlayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="#eee"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/talk"
+            style="@android:style/TextAppearance.Widget.EditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:hint="点击这里评论她／他"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/pinglun"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_card"
+            android:gravity="center"
+            android:text="评论"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
 </LinearLayout>

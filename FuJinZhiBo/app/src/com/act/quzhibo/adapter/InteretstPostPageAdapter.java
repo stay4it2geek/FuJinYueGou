@@ -18,10 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.act.quzhibo.ProvinceAndCityEntify;
@@ -217,12 +220,22 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1));
         } else {
             ((Item3ViewHolder) holder).commentsList.setAdapter(new PostCommentAdapter(activity, data.comments));
-            ((Item3ViewHolder) holder).button.setOnClickListener(new View.OnClickListener() {
+            ((Item3ViewHolder) holder).pinglunlayout.setVisibility(View.VISIBLE);
+            ((Item3ViewHolder) holder).pinglun.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Toast.makeText(activity,"ping",Toast.LENGTH_SHORT).show();
 
                 }
             });
+            ((Item3ViewHolder) holder).button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(activity,"shang",Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
 
         }
 
@@ -234,6 +247,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     class Item1ViewHolder extends RecyclerView.ViewHolder {
+
         private ProgressBar bar;
         private ImageView coverplay;
         private ImageView coverUser;
@@ -261,6 +275,8 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             userImage = (ImageView) view.findViewById(R.id.userImage);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             nickName = (TextView) view.findViewById(R.id.nickName);
+
+
             title = (TextView) view.findViewById(R.id.title);
             content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.content);
         }
@@ -279,14 +295,21 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     class Item3ViewHolder extends RecyclerView.ViewHolder {
+        private LinearLayout pinglunlayout;
         private MyListView commentsList;
         private Button button;
-
+        private  EditText talk;
+        private  TextView pinglun;
         public Item3ViewHolder(View view) {
             super(view);
             button = (Button) view.findViewById(R.id.dashang);
+            pinglunlayout = (LinearLayout) view.findViewById(R.id.pinglunlayout);
+            talk = (EditText) view.findViewById(R.id.talk);
+            pinglun = (TextView) view.findViewById(R.id.pinglun);
             commentsList = (MyListView) view.findViewById(R.id.comments_lv);
         }
+
+
     }
 
 

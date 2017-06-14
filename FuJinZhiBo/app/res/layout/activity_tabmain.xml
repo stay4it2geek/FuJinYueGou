@@ -37,7 +37,7 @@
             <com.flyco.tablayout.CommonTabLayout
                 android:id="@+id/tabMain"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:background="#e6e6e3"
                 android:paddingBottom="2dp"
                 android:paddingTop="3dp"

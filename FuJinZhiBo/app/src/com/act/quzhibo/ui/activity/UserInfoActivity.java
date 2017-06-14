@@ -75,7 +75,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
                 @Override
                 public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);                    }
+                    super.onLoadStarted(placeholder);
+                }
             });
         } else {
             Glide.with(this).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
@@ -86,7 +87,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
                 @Override
                 public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);                    }
+                    super.onLoadStarted(placeholder);
+                }
             });
 
         }
@@ -100,12 +102,12 @@ public class UserInfoActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.textpost:
-                       findViewById(R.id.textlistlayout).setVisibility(View.VISIBLE);
-                        findViewById(R.id.videolistlayout) .setVisibility(View.GONE);
+                        findViewById(R.id.textlistlayout).setVisibility(View.VISIBLE);
+                        findViewById(R.id.videolistlayout).setVisibility(View.GONE);
                         break;
                     case R.id.videopost:
                         findViewById(R.id.textlistlayout).setVisibility(View.GONE);
-                        findViewById(R.id.videolistlayout) .setVisibility(View.VISIBLE);
+                        findViewById(R.id.videolistlayout).setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -127,7 +129,7 @@ public class UserInfoActivity extends AppCompatActivity {
             public void onResponse(String response, int id) {
                 Message message = handler.obtainMessage();
                 message.obj = response;
-                Log.e("fdsafds",response+"");
+                Log.e("fdsafds", response + "");
                 message.what = what;
                 handler.sendMessage(message);
             }
@@ -136,7 +138,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void getVideoData(final int what) {
         String url = CommonUtil.getToggle(this, Constants.VIDEO_POST).getToggleObject().replace("USERID", user.userId);
-        Log.e("fdsfdsf323afds",url+"");
+        Log.e("fdsfdsf323afds", url + "");
 
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
@@ -149,7 +151,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 Message message = handler.obtainMessage();
                 message.obj = response;
                 message.what = what;
-                Log.e("fdsfdsf323afds",response+"");
+                Log.e("fdsfdsf323afds", response + "");
 
                 handler.sendMessage(message);
             }
@@ -199,10 +201,9 @@ public class UserInfoActivity extends AppCompatActivity {
                         }
                         break;
                 }
-
             } else {
                 //todo error
-                Log.e("fdsafds","error");
+                Log.e("fdsafds", "error");
 
             }
         }

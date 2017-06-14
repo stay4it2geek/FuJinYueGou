@@ -5,7 +5,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -48,6 +51,13 @@ public class PostDetailFragment extends BackHandledFragment {
             post = (InterestPost)getArguments().getSerializable(Constants.POST_ID);
         }
         getData();
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;     //截断事件的传递
+            }
+        });
+
         return view;
     }
 
