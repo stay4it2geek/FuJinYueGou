@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/colorbg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_margin="15dp"
+            android:text="我来打赏她！"
+            android:textStyle="normal"
+            android:textColor="@color/colorAccent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dashang"
+            android:background="@drawable/background_card"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="@color/colorAccent"
+        android:text="最新回复"
+        android:id="@+id/textView" />
+    <com.act.quzhibo.view.MyListView
+        android:layout_width="match_parent"
+        android:id="@+id/comments_lv"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

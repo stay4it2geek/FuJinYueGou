@@ -1,7 +1,11 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by asus-pc on 2017/6/3.
@@ -21,10 +25,10 @@ public abstract class BackHandledFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!(getActivity() instanceof BackHandledInterface)){
+        if (!(getActivity() instanceof BackHandledInterface)) {
             throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
-        }else{
-            this.mBackHandledInterface = (BackHandledInterface)getActivity();
+        } else {
+            this.mBackHandledInterface = (BackHandledInterface) getActivity();
         }
     }
 
@@ -34,6 +38,7 @@ public abstract class BackHandledFragment extends Fragment {
         //告诉FragmentActivity，当前Fragment在栈顶
         mBackHandledInterface.setSelectedFragment(this);
     }
+
     public interface BackHandledInterface {
         void setSelectedFragment(BackHandledFragment selectedFragment);
     }

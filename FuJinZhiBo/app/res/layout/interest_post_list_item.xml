@@ -9,70 +9,107 @@
     android:layout_marginTop="5dp"
     android:background="@drawable/background_card"
     android:orientation="vertical">
-
-    <com.act.quzhibo.view.CircleImageView
-        android:id="@+id/photoImg"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="10dp" />
-
-    <TextView
-        android:id="@+id/nick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_toEndOf="@+id/photoImg"
-        android:layout_toRightOf="@+id/photoImg"
-        android:background="@drawable/bg_round_black30"
-        android:padding="3dp"
-        android:text="TextView"
-        android:textColor="#000"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/disMariState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/nick"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_toRightOf="@+id/nick"
-        android:background="@drawable/bg_round_black30"
-        android:padding="3dp"
-        android:text="TextView"
-        android:textColor="@color/colorAccent"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/title"
+    <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/photoImg"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="3dp"
-        android:text="TextView"
-        android:textColor="#000" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
-    <io.github.rockerhieu.emojicon.EmojiconTextView
-        android:id="@+id/absText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
+        <ImageView
+            android:id="@+id/photoImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp" />
+
+        <TextView
+            android:id="@+id/nick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/photoImg"
+            android:text="nickName"
+            android:textColor="#000"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/sexAndAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@+id/nick"
+            android:background="@color/colorAccent"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="eeee"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/createTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/nick"
+            android:layout_alignStart="@+id/nick"
+            android:layout_below="@+id/nick"
+            android:layout_marginTop="10dp"
+            android:text="" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="15dp"
+            android:layout_height="17dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignTop="@+id/createTime"
+            android:layout_toRightOf="@+id/createTime"
+            android:background="@drawable/location" />
+
+        <TextView
+            android:id="@+id/arealocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/createTime"
+            android:layout_alignTop="@+id/createTime"
+            android:layout_below="@+id/sexAndAge"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/photoImg"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"
+            android:text=""
+            android:textColor="#000" />
+
+        <io.github.rockerhieu.emojicon.EmojiconTextView
+            android:id="@+id/absText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:text="" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/grivdlayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/absText"
+        android:layout_below="@+id/header"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:paddingBottom="10dp">

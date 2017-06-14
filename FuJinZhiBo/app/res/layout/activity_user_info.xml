@@ -15,19 +15,19 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <ImageView
+                <com.act.quzhibo.view.CircleImageView
                     android:id="@+id/userImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="@drawable/default_head" />
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:layout_gravity="center" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background=" #33000000"
+                    android:background="#33000000"
                     android:padding="10dp">
 
                     <TextView
@@ -89,32 +89,70 @@
                     android:paddingTop="10dp">
 
                     <RadioButton
-                        android:id="@+id/radioButton"
+                        android:id="@+id/textpost"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/colorbg"
                         android:button="@null"
-                        android:text="RadioButton" />
+                        android:checked="true"
+                        android:gravity="center"
+                        android:paddingRight="1dp"
+                        android:text="图文动态"
+                        android:textColor="@drawable/seletor" />
 
                     <RadioButton
-                        android:id="@+id/radioButton2"
+                        android:id="@+id/videopost"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/colorAccent"
                         android:button="@null"
-                        android:text="RadioButton" />
+                        android:gravity="center"
+                        android:text="视频动态"
+                        android:textColor="@drawable/seletor" />
 
                 </RadioGroup>
 
-                <ListView
-                    android:id="@+id/list"
+                <FrameLayout
+                    android:id="@+id/layout"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp" />
+                    android:layout_height="600dp">
 
+                    <RelativeLayout
+                        android:id="@+id/textlistlayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/textlist"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/videolistlayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:descendantFocusability="blocksDescendants">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/videolist"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/layer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#44000000"
+                        android:gravity="center"
+                        android:text="需要阅读过才能解锁更多哦！"
+                        android:textColor="#fff"
+                        android:textSize="22sp" />
+                </FrameLayout>
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -38,18 +38,19 @@ import java.util.UUID;
 
 public class PostImageAdapter extends BaseAdapter {
 
+    private int type;
     private Context context;
     private ArrayList<String> imgs;
-    private int size;
 
-    public PostImageAdapter(Context context, ArrayList<String> imgs, int size) {
+    public PostImageAdapter(Context context, ArrayList<String> imgs, int type) {
         this.context = context;
-        this.size = size;
         this.imgs = imgs;
+        this.type = type;
+
     }
 
     public int getCount() {
-        return size;
+        return imgs.size();
     }
 
     public Object getItem(int item) {
@@ -66,14 +67,18 @@ public class PostImageAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_post_img, parent, false);
+            if (type == 0) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_post_img, parent, false);
+            } else {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_post_page_img, parent, false);
+            }
             viewHolder.avatar = (ImageView) convertView.findViewById(R.id.postimg);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (imgs != null && imgs.size() > 0) {
-            Glide.with(context).load(imgs.get(position)).placeholder(R.drawable.ic_launcher).into(viewHolder.avatar);//加载网络图片
+            Glide.with(context).load(imgs.get(position)).placeholder(R.drawable.xiangjiao).into(viewHolder.avatar);//加载网络图片
         }
         return convertView;
     }

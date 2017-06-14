@@ -145,7 +145,15 @@ public class TabMainActivity extends TabActivity {
             if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(TabMainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
-
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(TabMainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(TabMainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(TabMainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                permissions.add(Manifest.permission.CAMERA);
+            }
             if (permissions.size() != 0) {
                 return false;
             }
@@ -156,24 +164,6 @@ public class TabMainActivity extends TabActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (!bPermission) {
-            findViewById(R.id.snack).setVisibility(View.VISIBLE);
-            Snackbar.make(findViewById(R.id.snack), "请允许全部权限", Snackbar.LENGTH_INDEFINITE).setAction("确定", new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    intent.setData(uri);
-                    startActivityForResult(intent, REQUEST_PERMISSION_SEETING);
-                }
-            }).show();
-            return;
-        } else {
-            findViewById(R.id.snack).setVisibility(View.VISIBLE);
-            Snackbar.make(findViewById(R.id.snack), "权限设置成功", Snackbar.LENGTH_SHORT).show();
-        }
     }
 
 

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import okhttp3.Call;
 
 
-public class ShowerListFragment extends Fragment {
+public class ShowerListFragment extends BackHandledFragment {
     private String cataId;
     private OnCallShowViewListner onCallShowViewListner;
     private XRecyclerView recyclerView;
@@ -188,6 +188,11 @@ public class ShowerListFragment extends Fragment {
             intent.putExtra(Constants.ROOM_BUNDLE, bundle);
             startActivity(new Intent(getActivity(), ShowerInfoActivity.class));
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 
     public interface OnCallShowViewListner {

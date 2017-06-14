@@ -85,7 +85,12 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ((MyViewHolder) holder).showerAvtar.setAdjustViewBounds(true);
             ((MyViewHolder) holder).showerAvtar.setScaleType(ImageView.ScaleType.FIT_XY);
-            Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.default_head).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+            if (datas.get(position).gender.equals("0")) {
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+            } else {
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+
+            }
         }
 
         ((MyViewHolder) holder).nickName.setText(datas.get(position).nickname);
