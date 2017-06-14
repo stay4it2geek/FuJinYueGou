@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +20,18 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterstUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by asus-pc on 2017/5/31.
@@ -61,29 +66,40 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             final InterstUser user = datas.get(position).user;
             final InterestPost post = datas.get(position);
-            int size = datas.get(position).totalImages != null ? Integer.parseInt(datas.get(position).totalImages) : 0;
             ((MyViewHolder) holder).nickName.setText(user.nick);
-            ((MyViewHolder) holder).disMariState.setText(user.disMariState);
+
+            long l = System.currentTimeMillis() - Long.parseLong(datas.get(position).ctime);
+            long day = l / (24 * 60 * 60 * 1000);
+            long hour = (l / (60 * 60 * 1000) - day * 24);
+            long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+            if (!datas.get(position).user.sex.equals("2")) {
+                ((MyViewHolder) holder).sexAndAge.setBackgroundColor(mContext.getResources().getColor(R.color.blue));
+            }
+            ((MyViewHolder) holder).sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
+            ((MyViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
             ((MyViewHolder) holder).title.setText(datas.get(position).title);
             ((MyViewHolder) holder).absText.setText(datas.get(position).absText);
             ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView);
             ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments);
             ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards);
-            if (size>0) {
+
+            if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(mContext, datas.get(position).images, datas.get(position).images.size()));
+                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(mContext, datas.get(position).images, 0));
                 ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
             } else {
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.GONE);
-                ((MyViewHolder) holder).imgVideo.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgVideo.setImageResource(R.drawable.video);
+                if (!TextUtils.isEmpty(post.vedioUrl)) {
+                    ((MyViewHolder) holder).imgVideo.setVisibility(View.VISIBLE);
+                    ((MyViewHolder) holder).imgVideo.setImageResource(R.drawable.video);
+                }
             }
             ((MyViewHolder) holder).imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -98,6 +114,32 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
             });
             Glide.with(mContext).load(user.photoUrl).placeholder(R.drawable.ic_launcher).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((MyViewHolder) holder).photoImg);//加载网络图片
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    ArrayList<ProvinceAndCityEntify> data_ = CommonUtil.parseLocation(mContext).data;
+                    if (null != datas) {
+                        for (ProvinceAndCityEntify entify : data_) {
+                            if (TextUtils.equals(datas.get(position).user.proCode + "", entify.proId + "")) {
+                                for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
+                                    if (TextUtils.equals(datas.get(position).user.cityCode, citySub.cityId + "")) {
+                                        return !TextUtils.equals("",entify.name + citySub.name + "")?entify.name + citySub.name + "":"----";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return "";
+                }
+
+                @Override
+                protected void onPostExecute(String text) {
+                    super.onPostExecute(text);
+                    ((MyViewHolder) holder).arealocation.setText(text);
+                }
+            }.execute();
+
+
         }
     }
 
@@ -107,12 +149,11 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         return datas.size();
     }
 
-     class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         private GridView imgGridview;
         private TextView viewNum;
         private TextView pinglunNum;
         private TextView dashangNum;
-        private TextView disMariState;
         private TextView nickName;
         private TextView title;
         private ImageView photoImg;
@@ -120,6 +161,9 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         private TextView absText;
         private TextView imgtotal;
         private ImageView imgVideo;
+        private TextView arealocation;
+        private TextView createTime;
+        private TextView sexAndAge;
 
         public MyViewHolder(View view) {
             super(view);
@@ -127,7 +171,9 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             nickName = (TextView) view.findViewById(R.id.nick);
             title = (TextView) view.findViewById(R.id.title);
             absText = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.absText);
-            disMariState = (TextView) view.findViewById(R.id.disMariState);
+            createTime = (TextView) view.findViewById(R.id.createTime);
+            arealocation = (TextView) view.findViewById(R.id.arealocation);
+            sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             viewNum = (TextView) view.findViewById(R.id.viewNum);
             pinglunNum = (TextView) view.findViewById(R.id.pinglunNum);
             dashangNum = (TextView) view.findViewById(R.id.dashangNum);
