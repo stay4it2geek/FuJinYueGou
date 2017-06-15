@@ -32,4 +32,8 @@ public class MoneyActivity extends TabSlideBaseActivity {
         return fragments;
     }
 
+    @Override
+    public boolean getActivityType() {
+        return false;
+    }
 }

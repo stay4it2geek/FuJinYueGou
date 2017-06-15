@@ -123,20 +123,26 @@ public class CommonUtil {
         return result;
     }
 
-    public static void initView(String[] mTitles, ArrayList<Fragment> mFragments, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter) {
+    public static void initView(String[] mTitles, ArrayList<Fragment> mFragments, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter, boolean activityType) {
         for (String title : mTitles) {
             mFragments.add(CommonFragment.getInstance(title));
         }
-
+        final CommonTabLayout commonTabLayout;
         viewPager.setAdapter(mAdapter);
-        final CommonTabLayout tabLayout = ViewFindUtils.find(decorView, R.id.layout);
+        if (activityType) {
+            commonTabLayout = ViewFindUtils.find(decorView, R.id.layout_mine);
+        } else {
+            commonTabLayout = ViewFindUtils.find(decorView, R.id.layout);
+
+        }
+        commonTabLayout.setVisibility(View.VISIBLE);
         ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
             mTabEntities.add(new TabEntity(mTitles[i], 0, 0));
         }
-        tabLayout.setTabData(mTabEntities);
+        commonTabLayout.setTabData(mTabEntities);
 
-        tabLayout.setOnTabSelectListener(new OnTabSelectListener() {
+        commonTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
                 viewPager.setCurrentItem(position);
@@ -147,6 +153,7 @@ public class CommonUtil {
             }
         });
 
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -155,7 +162,7 @@ public class CommonUtil {
 
             @Override
             public void onPageSelected(int position) {
-                tabLayout.setCurrentTab(position);
+                commonTabLayout.setCurrentTab(position);
             }
 
             @Override

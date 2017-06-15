@@ -36,5 +36,8 @@ public class MineActivity extends TabSlideBaseActivity {
         return fragments;
     }
 
-
+    @Override
+    public boolean getActivityType() {
+        return true;
+    }
 }

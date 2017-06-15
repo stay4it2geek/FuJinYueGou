@@ -171,7 +171,7 @@ public class UserInfoActivity extends AppCompatActivity {
                             }
                             if (data.result.posts != null && data.result.posts.size() > 0) {
                                 if (adapterText == null) {
-                                    adapterText = new InterestPostListAdapter(UserInfoActivity.this, data.result.posts);
+                                    adapterText = new InterestPostListAdapter(UserInfoActivity.this, data.result.posts,true);
                                     textlist.setAdapter(adapterText);
                                 } else {
                                     adapterText.notifyDataSetChanged();
@@ -188,7 +188,7 @@ public class UserInfoActivity extends AppCompatActivity {
                             }
                             if (data2.result.posts != null && data2.result.posts.size() > 0) {
                                 if (adapterVideo == null) {
-                                    adapterVideo = new InterestPostListAdapter(UserInfoActivity.this, data2.result.posts);
+                                    adapterVideo = new InterestPostListAdapter(UserInfoActivity.this, data2.result.posts,true);
                                     videolist.setAdapter(adapterVideo);
                                 } else {
                                     adapterVideo.notifyDataSetChanged();

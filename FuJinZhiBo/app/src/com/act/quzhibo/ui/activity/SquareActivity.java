@@ -35,6 +35,10 @@ public class SquareActivity extends TabSlideBaseActivity {
         return fragments;
     }
 
+    @Override
+    public boolean getActivityType() {
+       return  false;
+    }
 
     public String pid;
 

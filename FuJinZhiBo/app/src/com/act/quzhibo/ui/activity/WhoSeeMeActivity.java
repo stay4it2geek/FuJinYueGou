@@ -1,26 +1,21 @@
-package com.act.quzhibo.ui.fragment;
+package com.act.quzhibo.ui.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterstPostListResult;
-
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
-import com.act.quzhibo.ui.activity.SquareActivity;
+import com.act.quzhibo.ui.fragment.PostDetailFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -29,26 +24,17 @@ import java.util.ArrayList;
 import okhttp3.Call;
 
 /**
- * Created by weiminglin on 17/6/1.
- * 情趣帖子
+ * Created by weiminglin on 17/6/15.
  */
 
-public class InterestPostListFragment extends BackHandledFragment {
-    private XRecyclerView recyclerView;
-    private ArrayList<InterestPost> posts = new ArrayList<>();
-    private int interestPostSize;
-    private InterestPostListAdapter adapter;
-    private View view;
-    private String pid;
-    private int num;
+public class WhoSeeMeActivity extends AppCompatActivity {
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_interest_post, null, false);
-        pid = ((SquareActivity) getActivity()).getPid();
-        recyclerView = (XRecyclerView) view.findViewById(R.id.interest_post_list);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_who_see_me);
+        pid ="56dd5198d4c6bbfe55f28290"; 
+        recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -86,18 +72,19 @@ public class InterestPostListFragment extends BackHandledFragment {
                 }, 1000);
             }
         });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         getData(pid, 0, Constants.REFRESH);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;     //截断事件的传递
-            }
-        });
-        return view;
     }
+
+    private XRecyclerView recyclerView;
+    private ArrayList<InterestPost> posts = new ArrayList<>();
+    private int interestPostSize;
+    private InterestPostListAdapter adapter;
+    private String pid;
+    private int num;
+
 
     Handler handler = new Handler() {
         @Override
@@ -116,7 +103,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                 if (posts != null && interstPostListResult.result.size() > 0) {
                     posts.addAll(interstPostListResult.result);
                     if (adapter == null) {
-                        adapter = new InterestPostListAdapter(getActivity(), posts,true);
+                        adapter = new InterestPostListAdapter(WhoSeeMeActivity.this, posts,false);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {
@@ -124,7 +111,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable(Constants.POST_ID, post);
                                 fragment.setArguments(bundle);
-                                CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
+                                CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, WhoSeeMeActivity.this);
                             }
                         });
                         recyclerView.setAdapter(adapter);
@@ -144,7 +131,7 @@ public class InterestPostListFragment extends BackHandledFragment {
     public void getData(String pid, int num, final int what) {
         String htime = CommonUtil.dateToStamp(CommonUtil.getDataString(num));
         Log.e("htmo3", htime);       Log.e("pid",pid);
-        String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
+        String url = CommonUtil.getToggle(WhoSeeMeActivity.this, Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -161,8 +148,4 @@ public class InterestPostListFragment extends BackHandledFragment {
         });
     }
 
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
 }

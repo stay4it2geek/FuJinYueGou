@@ -37,4 +37,8 @@ public class MultipleMeideaActivity extends TabSlideBaseActivity {
         return fragments;
     }
 
+    @Override
+    public boolean getActivityType() {
+        return false;
+    }
 }
