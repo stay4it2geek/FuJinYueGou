@@ -10,6 +10,5 @@
         android:layout_width="@dimen/avatar_size36"
         android:layout_height="@dimen/avatar_size36"
         android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:src="@drawable/default_head" />
+        android:layout_marginRight="2dp"/>
 </LinearLayout>

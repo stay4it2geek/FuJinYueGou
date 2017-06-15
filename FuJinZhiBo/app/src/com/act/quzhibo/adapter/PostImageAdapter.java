@@ -78,7 +78,7 @@ public class PostImageAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (imgs != null && imgs.size() > 0) {
-            Glide.with(context).load(imgs.get(position)).placeholder(R.drawable.ic_launcher).into(viewHolder.avatar);//加载网络图片
+            Glide.with(context).load(imgs.get(position)).placeholder(R.drawable.xiangjiao).into(viewHolder.avatar);//加载网络图片
         }
         return convertView;
     }

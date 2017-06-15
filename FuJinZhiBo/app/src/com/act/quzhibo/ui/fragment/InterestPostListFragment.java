@@ -16,6 +16,7 @@ import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterstPostListResult;
+
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.SquareActivity;
@@ -63,6 +64,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     }
                 }, 1000);
             }
+
             @Override
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
@@ -102,7 +104,8 @@ public class InterestPostListFragment extends BackHandledFragment {
                 } else if (msg.what == Constants.LOADMORE) {
                     num += 1;
                 }
-                interestPostSize = interstPostListResult.result.size();
+                if (interstPostListResult.result != null)
+                    interestPostSize = interstPostListResult.result.size();
                 if (posts != null && interstPostListResult.result.size() > 0) {
                     posts.addAll(interstPostListResult.result);
                     if (adapter == null) {
@@ -133,7 +136,7 @@ public class InterestPostListFragment extends BackHandledFragment {
 
     public void getData(String pid, int num, final int what) {
         String htime = CommonUtil.dateToStamp(CommonUtil.getDataString(num));
-        Log.e("htmo3",htime);
+        Log.e("htmo3", htime);
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override

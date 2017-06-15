@@ -1,7 +1,10 @@
 package com.act.quzhibo.adapter;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
@@ -11,32 +14,30 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-import com.act.quzhibo.LocationData;
 import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
+import com.act.quzhibo.ui.activity.UserInfoActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     private final LayoutInflater mLayoutInflater;
     private final InterestPost post;
     private InterestPostPageDetailAndComments data;//数据
-    private Context mContext;
+    private Activity activity;
 
     public enum ITEM_TYPE {
         ITEM1,
@@ -57,9 +58,9 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     //适配器初始化
-    public InteretstPostPageAdapter(InterestPost post, Context context, InterestPostPageDetailAndComments data) {
+    public InteretstPostPageAdapter(InterestPost post, Activity context, InterestPostPageDetailAndComments data) {
         this.data = data;
-        this.mContext = context;
+        this.activity = context;
         this.post = post;
         mLayoutInflater = LayoutInflater.from(context);
 
@@ -101,8 +102,40 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
         if (holder instanceof Item1ViewHolder) {
+            if (post.user.sex.equals("2")) {
+                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
 
-            Glide.with(mContext).load(data.detail.user.photoUrl).placeholder(R.drawable.ic_launcher).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((Item1ViewHolder) holder).userImage);//加载网络图片
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);                    }
+                });
+            } else {
+                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);                    }
+                });
+
+            }
+
+            ((Item1ViewHolder) holder).userImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.POST_USER, post.user);
+                    intent.setClass(activity, UserInfoActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
 
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex);
             long l = System.currentTimeMillis() - data.detail.ctime;
@@ -110,7 +143,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
             if (!data.detail.user.sex.equals("2")) {
-                ((Item1ViewHolder) holder).sexAndAge.setBackgroundColor(mContext.getResources().getColor(R.color.blue));
+                ((Item1ViewHolder) holder).sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
             }
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
             ((Item1ViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
@@ -159,13 +192,13 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             new AsyncTask<Void, Void, String>() {
                 @Override
                 protected String doInBackground(Void... params) {
-                    ArrayList<ProvinceAndCityEntify> datas = CommonUtil.parseLocation(mContext).data;
+                    ArrayList<ProvinceAndCityEntify> datas = CommonUtil.parseLocation(activity).data;
                     if (null != datas) {
                         for (ProvinceAndCityEntify entify : datas) {
                             if (TextUtils.equals(data.detail.user.proCode, entify.proId + "")) {
                                 for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
                                     if (TextUtils.equals(data.detail.user.cityCode, citySub.cityId + "")) {
-                                        return !TextUtils.equals("",entify.name + citySub.name + "")?entify.name + citySub.name + "":"----";
+                                        return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
                                     }
                                 }
                             }
@@ -181,9 +214,9 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
             }.execute();
         } else if (holder instanceof Item2ViewHolder) {
-            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(mContext, pageImgeList, 1));
+            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1));
         } else {
-            ((Item3ViewHolder) holder).commentsList.setAdapter(new PostCommentAdapter(mContext, data.comments));
+            ((Item3ViewHolder) holder).commentsList.setAdapter(new PostCommentAdapter(activity, data.comments));
             ((Item3ViewHolder) holder).button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

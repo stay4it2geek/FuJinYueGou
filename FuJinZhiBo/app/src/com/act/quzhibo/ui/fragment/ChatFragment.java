@@ -17,6 +17,7 @@ import com.act.quzhibo.adapter.MemberAdapter;
 import com.act.quzhibo.entity.Member;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
+import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.HorizontialListView;
 import com.bumptech.glide.Glide;
@@ -58,9 +59,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
     private void initView() {
         mRandom = new Random();
-        ImageView zhuboAvatar = (ImageView) view.findViewById(R.id.zhuboAvatar);
-        Glide.with(getActivity()).load(getArguments().getString("pathPrefix") + room.poster_path_1280).into(zhuboAvatar);//加载网络图片
-        int startValue = mRandom.nextInt(10);
+        CircleImageView zhuboAvatar = (CircleImageView) view.findViewById(R.id.zhuboAvatar);
+        if(room.gender.equals("0")) {
+            Glide.with(getActivity()).load(getArguments().getString("pathPrefix") + room.poster_path_1280).placeholder(R.drawable.women).into(zhuboAvatar);//加载网络图片
+        }else {
+            Glide.with(getActivity()).load(getArguments().getString("pathPrefix") + room.poster_path_1280).placeholder(R.drawable.man).into(zhuboAvatar);//加载网络图片
+
+        }  int startValue = mRandom.nextInt(10);
         if (startValue == 0) {
             startValue = 2;
         }

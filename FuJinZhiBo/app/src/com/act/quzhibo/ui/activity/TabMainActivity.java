@@ -164,8 +164,6 @@ public class TabMainActivity extends TabActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
 

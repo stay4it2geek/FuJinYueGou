@@ -2,21 +2,15 @@ package com.act.quzhibo.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 
-import com.act.quzhibo.R;
-import com.act.quzhibo.ui.fragment.FunnyPersonFragment;
-import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.ui.fragment.NoFragment;
-import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ViewFindUtils;
 
 import java.util.ArrayList;
 
 /**
- * 赚钱
+ * 财富
  */
-public class MoneyActivity extends BaseActivity {
+public class MoneyActivity extends TabSlideBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

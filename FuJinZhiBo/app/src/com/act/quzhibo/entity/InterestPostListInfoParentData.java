@@ -5,10 +5,10 @@ package com.act.quzhibo.entity;
  * 帖子列表父数据
  */
 
-public class InterestPostListParentData {
+public class InterestPostListInfoParentData {
     public boolean ok;
     public boolean relogin;
     public boolean needRegister;
     public boolean applePayRetry;
-    public InterstPostListResult result;
+    public InterstPostListInfoResult result;
 }

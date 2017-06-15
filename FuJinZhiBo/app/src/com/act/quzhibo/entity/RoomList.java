@@ -1,12 +1,13 @@
 package com.act.quzhibo.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by asus-pc on 2017/5/31.
  */
 
-public class RoomList {
+public class RoomList implements Serializable {
    public String isdownload;
     public String titleName;
     public String liveTotal;

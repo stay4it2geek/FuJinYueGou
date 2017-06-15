@@ -8,9 +8,8 @@ import java.util.ArrayList;
  * 帖子列表数据
  */
 
-public class InterstPostListResult implements Serializable {
+public class InterstPostListInfoResult implements Serializable {
    public String totalPages;
    public String totalNums;
-   public  ArrayList<InterestPost> result;
    public  ArrayList<InterestPost> posts;
 }

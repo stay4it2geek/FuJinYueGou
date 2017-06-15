@@ -73,7 +73,7 @@ public class PostDetailFragment extends BackHandledFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
-            adapter = new InteretstPostPageAdapter(post, getContext(), data.result);
+            adapter = new InteretstPostPageAdapter(post, getActivity(), data.result);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerview.setLayoutManager(linearLayoutManager);
