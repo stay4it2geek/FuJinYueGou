@@ -72,13 +72,8 @@ public class InterestPostListFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (interestPostSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getData(pid, num, Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            getData(pid, num, Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -116,7 +111,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                 if (posts != null && interstPostListResult.result.size() > 0) {
                     posts.addAll(interstPostListResult.result);
                     if (adapter == null) {
-                        adapter = new InterestPostListAdapter(getActivity(), posts,true);
+                        adapter = new InterestPostListAdapter(getActivity(), posts);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {
@@ -143,7 +138,8 @@ public class InterestPostListFragment extends BackHandledFragment {
 
     public void getData(String pid, int num, final int what) {
         String htime = CommonUtil.dateToStamp(CommonUtil.getDataString(num));
-        Log.e("htmo3", htime);       Log.e("pid",pid);
+        Log.e("htmo3", htime);
+        Log.e("pid", pid);
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override

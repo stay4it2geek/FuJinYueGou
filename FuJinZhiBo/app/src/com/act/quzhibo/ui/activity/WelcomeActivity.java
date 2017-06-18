@@ -41,7 +41,6 @@ public class WelcomeActivity extends Activity {
 
     private void request(){
         BmobQuery<Toggle> query = new BmobQuery<>();
-
         query.findObjects(new FindListener<Toggle>() {
             @Override
             public void done(List<Toggle> Toggles, BmobException bmobException) {

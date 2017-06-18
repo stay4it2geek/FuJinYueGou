@@ -15,6 +15,10 @@ import java.util.ArrayList;
 public class MoneyActivity extends TabSlideBaseActivity {
 
     @Override
+    protected boolean isNeedShowBackDialog() {
+        return true;
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }

@@ -24,6 +24,10 @@ public class MultipleMeideaActivity extends TabSlideBaseActivity {
     }
 
     @Override
+    protected boolean isNeedShowBackDialog() {
+        return true;
+    }
+    @Override
     protected String[] getTitles() {
         return new String[]{"阅读", "视听"};
     }

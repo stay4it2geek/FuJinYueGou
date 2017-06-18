@@ -33,12 +33,12 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
         setContentView(R.layout.activity_common_tab);
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(), getFragments(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter,getActivityType());
+        CommonUtil.initView(getTitles(), getFragments(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter, getActivityType());
 
     }
 
 
-    public abstract boolean getActivityType() ;
+    public abstract boolean getActivityType();
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
         public MyPagerAdapter(FragmentManager fm) {
@@ -70,21 +70,27 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
     public void onBackPressed() {
         if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                FragmentDialog.newInstance("", "客官再看一会儿呗", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
-                    @Override
-                    public void onPositiveClick() {
-                    }
+                if (isNeedShowBackDialog()) {
+                    FragmentDialog.newInstance("", "客官再看一会儿呗", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        @Override
+                        public void onPositiveClick() {
+                        }
 
-                    @Override
-                    public void onNegtiveClick() {
-                        TabSlideBaseActivity.super.onBackPressed();
-                    }
-                }).show(getSupportFragmentManager(), "dialog");
+                        @Override
+                        public void onNegtiveClick() {
+                            TabSlideBaseActivity.super.onBackPressed();
+                        }
+                    }).show(getSupportFragmentManager(), "dialog");
+                } else {
+                    TabSlideBaseActivity.super.onBackPressed();
+                }
             } else {
                 getSupportFragmentManager().popBackStack();
             }
         }
     }
+
+    protected abstract boolean isNeedShowBackDialog();
 
     protected abstract String[] getTitles();
 

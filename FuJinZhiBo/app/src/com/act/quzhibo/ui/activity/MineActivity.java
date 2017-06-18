@@ -40,4 +40,9 @@ public class MineActivity extends TabSlideBaseActivity {
     public boolean getActivityType() {
         return true;
     }
+
+    @Override
+    protected boolean isNeedShowBackDialog() {
+        return true;
+    }
 }

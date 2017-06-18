@@ -40,7 +40,6 @@ import java.util.ArrayList;
  */
 
 public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private boolean gridViewIsVisiable;
     private Activity activity;
     private ArrayList<InterestPost> datas;//数据
 
@@ -56,10 +55,9 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     //适配器初始化
-    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas, boolean gridViewIsVisiable) {
+    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas) {
         activity = context;
         this.datas = datas;
-        this.gridViewIsVisiable = gridViewIsVisiable;
     }
 
     @Override
@@ -88,102 +86,102 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((MyViewHolder) holder).title.setText(datas.get(position).title);
             ((MyViewHolder) holder).absText.setText(datas.get(position).absText);
 
-            if (gridViewIsVisiable) {
-                ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView);
-                ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments);
-                ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards);
+            ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView);
+            ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments);
+            ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards);
 
-                if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
-                    ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
-                    ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
-                    ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
-                    ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0));
+            if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
+                ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
+                ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
+                ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
+                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0));
 
-                    ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
-                } else {
-                    ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
-                    ((MyViewHolder) holder).imgGridview.setVisibility(View.GONE);
-                    if (!TextUtils.isEmpty(post.vedioUrl)) {
-                        ((MyViewHolder) holder).imgVideo.setVisibility(View.VISIBLE);
-                        ((MyViewHolder) holder).imgVideo.setImageResource(R.drawable.video);
-                    }
+                ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
+            } else {
+                ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
+                ((MyViewHolder) holder).imgGridview.setVisibility(View.GONE);
+                if (!TextUtils.isEmpty(post.vedioUrl)) {
+                    ((MyViewHolder) holder).imgVideo.setVisibility(View.VISIBLE);
+                    ((MyViewHolder) holder).imgVideo.setImageResource(R.drawable.video);
                 }
-                ((MyViewHolder) holder).imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int gridPosition, long id) {
-                        mOnItemClickListener.onItemClick(post);
-                    }
-                });
-                ((MyViewHolder) holder).postlayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mOnItemClickListener.onItemClick(post);
-                    }
-                });
-
-                ((MyViewHolder) holder).photoImg.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.putExtra(Constants.POST_USER, post.user);
-                        intent.setClass(activity, UserInfoActivity.class);
-                        activity.startActivity(intent);
-                    }
-                });
-
-                if (post.user.sex.equals("2")) {
-                    Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                        }
-
-                        @Override
-                        public void onLoadStarted(Drawable placeholder) {
-                            super.onLoadStarted(placeholder);
-                        }
-                    });
-
-                } else {
-                    Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                        }
-
-                        @Override
-                        public void onLoadStarted(Drawable placeholder) {
-                            super.onLoadStarted(placeholder);
-                        }
-                    });
+            }
+            ((MyViewHolder) holder).imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int gridPosition, long id) {
+                    mOnItemClickListener.onItemClick(post);
                 }
-                new AsyncTask<Void, Void, String>() {
+            });
+            ((MyViewHolder) holder).postlayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(post);
+                }
+            });
+
+            ((MyViewHolder) holder).photoImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.POST_USER, post.user);
+                    intent.putExtra(Constants.LIST_FLAG, Constants.LIST_FLAG);
+                    intent.setClass(activity, UserInfoActivity.class);
+                    activity.startActivity(intent);
+                }
+            });
+
+            if (post.user.sex.equals("2")) {
+                Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                     @Override
-                    protected String doInBackground(Void... params) {
-                        ArrayList<ProvinceAndCityEntify> data_ = CommonUtil.parseLocation(activity).data;
-                        if (null != datas) {
-                            for (ProvinceAndCityEntify entify : data_) {
-                                if (TextUtils.equals(datas.get(position).user.proCode + "", entify.proId + "")) {
-                                    for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
-                                        if (TextUtils.equals(datas.get(position).user.cityCode, citySub.cityId + "")) {
-                                            return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
-                                        }
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                    }
+                });
+
+            } else {
+                Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                    }
+                });
+            }
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... params) {
+                    ArrayList<ProvinceAndCityEntify> data_ = CommonUtil.parseLocation(activity).data;
+                    if (null != datas) {
+                        for (ProvinceAndCityEntify entify : data_) {
+                            if (TextUtils.equals(datas.get(position).user.proCode + "", entify.proId + "")) {
+                                for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
+                                    if (TextUtils.equals(datas.get(position).user.cityCode, citySub.cityId + "")) {
+                                        return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
                                     }
                                 }
                             }
                         }
-                        return "";
                     }
+                    return "";
+                }
 
-                    @Override
-                    protected void onPostExecute(String text) {
-                        super.onPostExecute(text);
-                        ((MyViewHolder) holder).arealocation.setText(text);
-                    }
-                }.execute();
+                @Override
+                protected void onPostExecute(String text) {
+                    super.onPostExecute(text);
+                    ((MyViewHolder) holder).arealocation.setText(text);
+                }
+            }.execute();
 
-            }
         }
+
     }
 
 

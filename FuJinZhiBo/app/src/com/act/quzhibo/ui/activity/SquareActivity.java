@@ -7,6 +7,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.FunnyPersonFragment;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
+import com.act.quzhibo.ui.fragment.NearFragment;
 import com.flyco.tablayout.CommonTabLayout;
 
 import java.util.ArrayList;
@@ -31,10 +32,14 @@ public class SquareActivity extends TabSlideBaseActivity {
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new InterestPlatesFragment());
         fragments.add(new FunnyPersonFragment());
-        fragments.add(new FunnyPersonFragment());
+        fragments.add(new NearFragment());
         return fragments;
     }
 
+    @Override
+    protected boolean isNeedShowBackDialog() {
+        return true;
+    }
     @Override
     public boolean getActivityType() {
        return  false;

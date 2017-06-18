@@ -23,6 +23,8 @@ public class BuyPowerExpandableListAdapter implements ExpandableListAdapter {
             R.drawable.default_head,
             R.drawable.default_head,
             R.drawable.default_head,
+            R.drawable.default_head,
+            R.drawable.default_head,
             R.drawable.default_head
     };
     private String[] armTypes = new String[]{
@@ -34,6 +36,8 @@ public class BuyPowerExpandableListAdapter implements ExpandableListAdapter {
             {"收发邮件", "管理邮箱", "登录登出", "注册绑定"},
             {"演示编辑", "演示排版", "演示处理", "演示打印"},
             {"演示编辑", "演示排版", "演示处理", "演示打印"},
+            {"演示编辑", "演示排版", "演示处理", "演示打印"}
+
     };
 
     Activity activity;

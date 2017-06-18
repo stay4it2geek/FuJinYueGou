@@ -113,6 +113,7 @@ public class PostCommentAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra(Constants.POST_USER, commentDetails.get(position).user);
+                intent.putExtra(Constants.LIST_FLAG, Constants.LIST_FLAG);
                 intent.setClass(activity, UserInfoActivity.class);
                 activity.startActivity(intent);
             }

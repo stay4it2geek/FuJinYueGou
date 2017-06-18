@@ -2,11 +2,12 @@ package com.act.quzhibo.entity;
 
 import java.io.Serializable;
 
-/**
- * Created by asus-pc on 2017/6/4.
- */
+import cn.bmob.v3.BmobObject;
 
-public class InterstUser implements Serializable{
+/**
+ * Created by asus-pc on 2017/6/16.
+ */
+public class CommonSeePerson extends BmobObject implements Serializable{
     public String userId;//10087,
     public String photoUrl;//http://image.91xunai.com/1495951658306-small200Pweb,
     public String nick;//暮雪花public String   ,

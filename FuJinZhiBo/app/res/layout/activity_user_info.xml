@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,16 +15,16 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:background="#fff"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#fff">
 
                 <ImageView
                     android:id="@+id/userImage"
                     android:layout_width="250dp"
-                    android:src="@drawable/layerlist_circle_mask"
                     android:layout_height="250dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:src="@drawable/layerlist_circle_mask" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -117,7 +118,7 @@
                 <FrameLayout
                     android:id="@+id/layout"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp">
+                    android:layout_height="700dp">
 
                     <RelativeLayout
                         android:id="@+id/textlistlayout"
@@ -144,22 +145,21 @@
                             android:visibility="gone" />
                     </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/layer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#44000000"
-                        android:gravity="center"
-                        android:text="需要阅读过才能解锁更多哦！"
-                        android:textColor="#fff"
-                        android:textSize="22sp" />
-
-
+                        <TextView
+                            android:id="@+id/layer"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="#44000000"
+                            android:gravity="center"
+                            android:text="需要阅读过才能解锁更多哦！"
+                            android:textColor="#fff"
+                            android:textSize="22sp" />
 
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 
     <LinearLayout
         android:id="@+id/focuslayout"
@@ -193,6 +193,5 @@
             android:gravity="center"
             android:text="关注她／他"
             android:textSize="16sp" />
-
     </LinearLayout>
 </FrameLayout>

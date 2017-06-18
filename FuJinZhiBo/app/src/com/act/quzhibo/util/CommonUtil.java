@@ -128,6 +128,7 @@ public class CommonUtil {
             mFragments.add(CommonFragment.getInstance(title));
         }
         final CommonTabLayout commonTabLayout;
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(mAdapter);
         if (activityType) {
             commonTabLayout = ViewFindUtils.find(decorView, R.id.layout_mine);

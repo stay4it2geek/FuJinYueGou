@@ -27,4 +27,9 @@ public class Constants {
     public static final int TEXT_IMG =1;
     public static final String POST_ID = "post_id";
     public static final String POST_USER = "post_user";
+    public static final String PAGE_FLAG = "WHO_SEE_ME";
+    public static final String LIST_FLAG = "NO_WHO_SEE_ME";
+
+    public static final String POST_USER_WHO_SEE_ME = "POST_USER_WHO_SEE_ME";
+    public static final int NO_MORE = 5;
 }

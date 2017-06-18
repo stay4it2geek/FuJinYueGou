@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,6 +23,7 @@ import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPostListInfoParentData;
 import com.act.quzhibo.entity.InterstUser;
+import com.act.quzhibo.entity.CommonSeePerson;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
@@ -39,6 +41,7 @@ import okhttp3.Call;
 
 public class UserInfoActivity extends AppCompatActivity {
     private InterstUser user;
+    private CommonSeePerson user2;
     private RecyclerView textlist;
     private RecyclerView videolist;
     private InterestPostListAdapter adapterText;
@@ -48,9 +51,7 @@ public class UserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        if (getIntent() != null) {
-            user = (InterstUser) getIntent().getSerializableExtra(Constants.POST_USER);
-        }
+
         Display display = this.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -63,50 +64,109 @@ public class UserInfoActivity extends AppCompatActivity {
         textlist.setLayoutManager(linearLayoutManager);
         videolist.setNestedScrollingEnabled(false);
         videolist.setLayoutManager(linearLayoutManager2);
-        if (user.sex.equals("2")) {
-            Glide.with(this).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
-                }
+        if (getIntent() != null) {
+            if (getIntent().getStringExtra(Constants.LIST_FLAG).equals(Constants.LIST_FLAG)) {
+                user = (InterstUser) getIntent().getSerializableExtra(Constants.POST_USER);
+                if (user.sex.equals("2")) {
+                    Glide.with(this).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
+                        }
 
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                }
-            });
-        } else {
-            Glide.with(this).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
-                }
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            super.onLoadStarted(placeholder);
+                        }
+                    });
+                } else {
+                    Glide.with(this).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
+                        }
 
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                }
-            });
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            super.onLoadStarted(placeholder);
+                        }
+                    });
 
+                }
+                ((TextView) findViewById(R.id.sex)).setText(user.sex.equals("2") ? "女" : "男");
+                ((TextView) findViewById(R.id.purpose)).setText(user.disPurpose);
+                ((TextView) findViewById(R.id.disMariState)).setText(user.disMariState);
+                getTextAndImageData(0);
+                getVideoData(1);
+                ((RadioGroup) findViewById(R.id.radiogroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            case R.id.textpost:
+                                findViewById(R.id.textlistlayout).setVisibility(View.VISIBLE);
+                                findViewById(R.id.videolistlayout).setVisibility(View.GONE);
+                                break;
+                            case R.id.videopost:
+                                findViewById(R.id.textlistlayout).setVisibility(View.GONE);
+                                findViewById(R.id.videolistlayout).setVisibility(View.VISIBLE);
+                                break;
+                        }
+                    }
+                });
+            } else {
+                user2 = (CommonSeePerson) getIntent().getSerializableExtra(Constants.POST_USER_WHO_SEE_ME);
+                if (user2.sex.equals("2")) {
+                    Glide.with(this).load(user2.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
+                        }
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            super.onLoadStarted(placeholder);
+                        }
+                    });
+                } else {
+                    Glide.with(this).load(user2.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            (findViewById(R.id.userImage)).setBackgroundDrawable(new BitmapDrawable(resource));
+                        }
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            super.onLoadStarted(placeholder);
+                        }
+                    });
+
+                }
+                ((TextView) findViewById(R.id.sex)).setText(user2.sex.equals("2") ? "女" : "男");
+                ((TextView) findViewById(R.id.purpose)).setText(user2.disPurpose);
+                ((TextView) findViewById(R.id.disMariState)).setText(user2.disMariState);
+                getTextAndImageData(0);
+                getVideoData(1);
+                ((RadioGroup) findViewById(R.id.radiogroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        switch (checkedId) {
+                            case R.id.textpost:
+                                findViewById(R.id.textlistlayout).setVisibility(View.VISIBLE);
+                                findViewById(R.id.videolistlayout).setVisibility(View.GONE);
+                                break;
+                            case R.id.videopost:
+                                findViewById(R.id.textlistlayout).setVisibility(View.GONE);
+                                findViewById(R.id.videolistlayout).setVisibility(View.VISIBLE);
+                                break;
+                        }
+                    }
+                });
+            }
         }
-        ((TextView) findViewById(R.id.sex)).setText(user.sex.equals("2") ? "女" : "男");
-        ((TextView) findViewById(R.id.purpose)).setText(user.disPurpose);
-        ((TextView) findViewById(R.id.disMariState)).setText(user.disMariState);
-        getTextAndImageData(0);
-        getVideoData(1);
-        ((RadioGroup) findViewById(R.id.radiogroup)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        findViewById(R.id.layer).setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.textpost:
-                        findViewById(R.id.textlistlayout).setVisibility(View.VISIBLE);
-                        findViewById(R.id.videolistlayout).setVisibility(View.GONE);
-                        break;
-                    case R.id.videopost:
-                        findViewById(R.id.textlistlayout).setVisibility(View.GONE);
-                        findViewById(R.id.videolistlayout).setVisibility(View.VISIBLE);
-                        break;
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
             }
         });
         ((RadioButton) findViewById(R.id.textpost)).setChecked(true);
@@ -114,8 +174,13 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void getTextAndImageData(final int what) {
-        String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", user.userId);
+        String url = "";
+        if (getIntent().getStringExtra(Constants.LIST_FLAG).equals(Constants.LIST_FLAG)) {
+            url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", user.userId);
+        } else {
+            url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", user2.userId);
 
+        }
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -126,7 +191,6 @@ public class UserInfoActivity extends AppCompatActivity {
             public void onResponse(String response, int id) {
                 Message message = handler.obtainMessage();
                 message.obj = response;
-                Log.e("fdsafds", response + "");
                 message.what = what;
                 handler.sendMessage(message);
             }
@@ -134,8 +198,13 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void getVideoData(final int what) {
-        String url = CommonUtil.getToggle(this, Constants.VIDEO_POST).getToggleObject().replace("USERID", user.userId);
-        Log.e("fdsfdsf323afds", url + "");
+        String url = "";
+        if (getIntent().getStringExtra(Constants.LIST_FLAG).equals(Constants.LIST_FLAG)) {
+            url = CommonUtil.getToggle(this, Constants.VIDEO_POST).getToggleObject().replace("USERID", user.userId);
+        } else {
+            url = CommonUtil.getToggle(this, Constants.VIDEO_POST).getToggleObject().replace("USERID", user2.userId);
+
+        }
 
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
@@ -171,7 +240,7 @@ public class UserInfoActivity extends AppCompatActivity {
                             }
                             if (data.result.posts != null && data.result.posts.size() > 0) {
                                 if (adapterText == null) {
-                                    adapterText = new InterestPostListAdapter(UserInfoActivity.this, data.result.posts,true);
+                                    adapterText = new InterestPostListAdapter(UserInfoActivity.this, data.result.posts);
                                     textlist.setAdapter(adapterText);
                                 } else {
                                     adapterText.notifyDataSetChanged();
@@ -188,7 +257,7 @@ public class UserInfoActivity extends AppCompatActivity {
                             }
                             if (data2.result.posts != null && data2.result.posts.size() > 0) {
                                 if (adapterVideo == null) {
-                                    adapterVideo = new InterestPostListAdapter(UserInfoActivity.this, data2.result.posts,true);
+                                    adapterVideo = new InterestPostListAdapter(UserInfoActivity.this, data2.result.posts);
                                     videolist.setAdapter(adapterVideo);
                                 } else {
                                     adapterVideo.notifyDataSetChanged();
@@ -200,7 +269,6 @@ public class UserInfoActivity extends AppCompatActivity {
                 }
             } else {
                 //todo error
-                Log.e("fdsafds", "error");
 
             }
         }
