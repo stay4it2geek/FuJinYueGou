@@ -18,39 +18,39 @@
 	    android:numColumns="3"
 	    android:scrollbars="none"
 	    android:verticalSpacing="20dp" />
-	
-   <SlidingDrawer  
-        android:id="@+id/sliding"  
-        android:layout_width="fill_parent"  
-        android:layout_height="fill_parent"  
-        android:content="@+id/allApps"  
-        android:handle="@+id/imageViewIcon"  
-        android:orientation="vertical" >  
-        
-	       
-        <Button  
-            android:id="@+id/imageViewIcon"  
-            android:layout_width="wrap_content"  
-            android:layout_height="wrap_content"  
-            android:text="本地"
+
+   <SlidingDrawer
+        android:id="@+id/sliding"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:content="@+id/allApps"
+        android:handle="@+id/imageViewIcon"
+        android:orientation="vertical" >
+
+
+        <Button
+            android:id="@+id/imageViewIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已下载"
             android:textSize="18dp"
-            android:background="@drawable/btn_local" /> 
-             
-        <GridView  
-            android:id="@+id/allApps"  
-            android:layout_width="wrap_content"  
-            android:layout_height="wrap_content"  
-            android:background="@drawable/file_list_bg"  
-            android:columnWidth="60dp"  
-            android:gravity="center"  
-            android:horizontalSpacing="10dp"  
-            android:numColumns="auto_fit"  
-            android:padding="10dp"  
-            android:stretchMode="columnWidth"  
+            android:background="@drawable/btn_local" />
+
+        <GridView
+            android:id="@+id/allApps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/file_list_bg"
+            android:columnWidth="60dp"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
+            android:padding="10dp"
+            android:stretchMode="columnWidth"
             android:verticalSpacing="10dp" />
 
 
 
-    </SlidingDrawer>  
-  
+    </SlidingDrawer>
+
 </RelativeLayout>

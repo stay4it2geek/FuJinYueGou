@@ -20,7 +20,7 @@ import com.act.quzhibo.R;
 public class BuyPowerExpandableListAdapter implements ExpandableListAdapter {
 
     int[] logos = new int[]{
-            R.drawable.default_head,
+            R.drawable.bmob_update_btn_check_off_focused_holo_light,
             R.drawable.default_head,
             R.drawable.default_head,
             R.drawable.default_head,

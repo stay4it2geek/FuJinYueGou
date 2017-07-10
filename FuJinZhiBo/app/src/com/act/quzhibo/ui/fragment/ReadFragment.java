@@ -81,7 +81,7 @@ public class ReadFragment extends Fragment {
         sd.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
             @Override
             public void onDrawerClosed() {
-                iv.setText("本地");
+                iv.setText("已下载");
                 iv.setBackgroundResource(R.drawable.btn_local);
             }
         });
@@ -163,7 +163,7 @@ public class ReadFragment extends Fragment {
             if (convertView == null) {
                 imageView = new ImageView(getActivity());
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageView.setLayoutParams(new GridView.LayoutParams(50, 50));
+                imageView.setLayoutParams(new GridView.LayoutParams(100, 100));
             } else {
                 imageView = (ImageView) convertView;
             }

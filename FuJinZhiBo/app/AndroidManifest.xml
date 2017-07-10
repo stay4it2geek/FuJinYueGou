@@ -70,10 +70,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.BuyerPowerActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.act.quzhibo.ui.activity.ShowerInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
@@ -96,10 +92,6 @@
             android:name="com.act.quzhibo.ui.activity.VideoPlayerActivityLanscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
-        <activity
-            android:name="com.act.quzhibo.ui.activity.MineActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.UserInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
