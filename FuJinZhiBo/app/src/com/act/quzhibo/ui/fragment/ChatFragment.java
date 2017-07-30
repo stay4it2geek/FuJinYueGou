@@ -2,7 +2,6 @@ package com.act.quzhibo.ui.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,31 +13,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MemberAdapter;
-import com.act.quzhibo.adapter.MessageAdapter;
-import com.act.quzhibo.adapter.RoomListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.Gift;
 import com.act.quzhibo.entity.Member;
-import com.act.quzhibo.entity.MessageSend;
 import com.act.quzhibo.entity.NearPerson;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.activity.ShowerInfoActivity;
+import com.act.quzhibo.ui.activity.ShowerInfoActivityLandscape;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
-import com.act.quzhibo.util.CharUtils;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
-
 import com.act.quzhibo.view.HorizontialListView;
 import com.bumptech.glide.Glide;
 
@@ -88,13 +78,16 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         zhuboAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (room.liveType.equals("2")) {
                     Intent intent = new Intent();
                     intent.putExtra(Constants.ROOM_BUNDLE, room);
-                    intent.setClass(getActivity(), ShowerInfoActivity.class);
+                    if (getArguments().getString("type").equals("landscape")) {
+                        intent.setClass(getActivity(), ShowerInfoActivityLandscape.class);
+                    } else {
+                        intent.setClass(getActivity(), ShowerInfoActivity.class);
+                    }
                     startActivity(intent);
                 }
-            }
+
         });
 
         int startValue = mRandom.nextInt(10);

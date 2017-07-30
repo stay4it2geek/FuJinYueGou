@@ -74,6 +74,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" />
         <activity
+            android:name="com.act.quzhibo.ui.activity.ShowerInfoActivityLandscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.TabMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
@@ -123,10 +128,6 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Soundplayer" />
-        <activity
-            android:name="com.act.quzhibo.ui.activity.UserInfoActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

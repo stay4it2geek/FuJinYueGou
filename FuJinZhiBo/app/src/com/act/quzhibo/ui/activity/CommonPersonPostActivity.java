@@ -100,16 +100,21 @@ public class CommonPersonPostActivity extends AppCompatActivity {
                     posts.addAll(data.result.posts);
                     Collections.sort(posts, new ComparatorValues());
                     if (adapter == null) {
-                        adapter = new InterestPostListAdapter(CommonPersonPostActivity.this, posts);
-                        adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(InterestPost post) {
-                                Intent intent = new Intent();
-                                intent.putExtra(Constants.POST_ID, post);
-                                intent.setClass(CommonPersonPostActivity.this, PostDetailActivity.class);
-                                startActivity(intent);
-                            }
-                        });
+                        adapter = new InterestPostListAdapter(CommonPersonPostActivity.this, posts,0);
+
+                            adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
+                                @Override
+                                public void onItemClick(InterestPost post) {
+                                    if(false){
+                                    Intent intent = new Intent();
+                                    intent.putExtra(Constants.POST_ID, post);
+                                    intent.setClass(CommonPersonPostActivity.this, PostDetailActivity.class);
+                                    startActivity(intent);
+                                    }
+                                }
+                            });
+
+
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.notifyDataSetChanged();

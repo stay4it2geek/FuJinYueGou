@@ -2,6 +2,8 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.stackblur.StackBlurManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -24,15 +27,16 @@ import java.util.ArrayList;
 
 public class PostImageAdapter extends BaseAdapter {
 
+    private final int isBlurType;
     private int type;
     private Context context;
     private ArrayList<String> imgs;
 
-    public PostImageAdapter(Context context, ArrayList<String> imgs, int type) {
+    public PostImageAdapter(Context context, ArrayList<String> imgs, int type,int isBlurType) {
         this.context = context;
         this.imgs = imgs;
         this.type = type;
-
+        this.isBlurType = isBlurType;
     }
 
     public int getCount() {
@@ -66,7 +70,26 @@ public class PostImageAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (imgs != null && imgs.size() > 0) {
-            Glide.with(context).load(imgs.get(position)).placeholder(R.drawable.xiangjiao).into(viewHolder.avatar);//加载网络图片
+            if (isBlurType == 0) {
+                Glide.with(context).load(imgs.get(position)).asBitmap().placeholder(R.drawable.xiangjiao).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        StackBlurManager stackBlurManager = new StackBlurManager(context, resource);
+                        viewHolder.avatar.setImageBitmap( stackBlurManager.process(10) );
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                        viewHolder.avatar.setBackgroundDrawable(placeholder);
+                    }
+                });
+            }else{
+                Glide.with(context).load(imgs.get(position)).placeholder(R.drawable.xiangjiao).into(viewHolder.avatar);//加载网络图片
+
+            }
+
+
         }
         return convertView;
     }

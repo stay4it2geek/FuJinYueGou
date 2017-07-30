@@ -1,15 +1,19 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.ui.activity.BuyerPowerActivity;
+import com.act.quzhibo.ui.activity.TabMainActivity;
+import com.act.quzhibo.ui.activity.VideoPlayerActivity;
 import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
@@ -78,7 +82,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.vip_buy:
-                getActivity().startActivity(new Intent(getActivity(), BuyerPowerActivity.class));
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View dialog = inflater.inflate(R.layout.activity_buypower, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(dialog);
+                builder.show();
                 break;
             case R.id.who_see_me:
                 getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
@@ -124,4 +132,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
         }
     }
+
+
+
 }

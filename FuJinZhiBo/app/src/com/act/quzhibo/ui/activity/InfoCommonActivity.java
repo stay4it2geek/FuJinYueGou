@@ -157,7 +157,7 @@ public class InfoCommonActivity extends AppCompatActivity {
                         }
                     }
                     if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                        gridView.setAdapter(new PostImageAdapter(InfoCommonActivity.this, imgs, 2));
+                        gridView.setAdapter(new PostImageAdapter(InfoCommonActivity.this, imgs, 2,0));
                         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

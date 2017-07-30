@@ -36,6 +36,7 @@ import java.util.ArrayList;
  */
 
 public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final int isBlurType;
     private ArrayList<InterestPost> datas;//数据
     private Activity activity;
 
@@ -51,9 +52,11 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     //适配器初始化
-    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas) {
+    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas,int isBlurType) {
         activity = context;
         this.datas = datas;
+        this.isBlurType = isBlurType;
+
     }
 
     @Override
@@ -92,7 +95,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0));
+                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0,isBlurType));
                 ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
             } else {
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);

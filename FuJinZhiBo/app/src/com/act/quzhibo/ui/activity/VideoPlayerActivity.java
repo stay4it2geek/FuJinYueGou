@@ -47,6 +47,7 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         Bundle bundle = new Bundle();
         bundle.putSerializable("room", room);
         bundle.putString("pathPrefix", getIntent().getStringExtra("pathPrefix"));
+        bundle.putString("type", "portrait");
         chatFragment = new ChatFragment();
         chatFragment.setArguments(bundle);
         noFragment = new NoFragment();

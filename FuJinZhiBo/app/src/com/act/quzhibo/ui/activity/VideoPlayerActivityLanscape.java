@@ -45,6 +45,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
         Bundle bundle = new Bundle();
         bundle.putSerializable("room", room);
         bundle.putString("pathPrefix", getIntent().getStringExtra("pathPrefix"));
+        bundle.putString("type", "landscape");
         chatFragment = new ChatFragment();
         chatFragment.setArguments(bundle);
         noFragment = new NoFragment();

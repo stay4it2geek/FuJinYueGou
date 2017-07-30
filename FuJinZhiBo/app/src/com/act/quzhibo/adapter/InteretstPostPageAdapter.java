@@ -218,7 +218,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
             }.execute();
         } else if (holder instanceof Item2ViewHolder) {
-            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1));
+            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1,1));
         } else {
             ((Item3ViewHolder) holder).commentsList.setAdapter(new PostCommentAdapter(activity, data.comments));
             ((Item3ViewHolder) holder).pinglunlayout.setVisibility(View.VISIBLE);

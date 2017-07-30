@@ -38,7 +38,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 24
         multiDexEnabled true
         ndk {
