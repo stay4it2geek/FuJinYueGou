@@ -6,11 +6,10 @@
     <LinearLayout
         android:layout_marginTop="20dp"
         android:orientation="vertical"
-        android:background="#fde"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:layout_margin="50dp"
+            android:layout_margin="20dp"
             android:text="我来打赏！"
             android:textSize="22sp"
             android:textStyle="normal"

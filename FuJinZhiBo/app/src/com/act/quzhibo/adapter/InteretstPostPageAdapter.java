@@ -30,7 +30,9 @@ import android.widget.VideoView;
 import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.CommonPerson;
 import com.act.quzhibo.entity.InterestPost;
+import com.act.quzhibo.entity.InterestPostPageCommentDetail;
 import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
 import com.act.quzhibo.ui.activity.InfoCommonActivity;
@@ -113,7 +115,8 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);                    }
+                        super.onLoadStarted(placeholder);
+                    }
                 });
             } else {
                 Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
@@ -124,7 +127,8 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
 
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);                    }
+                        super.onLoadStarted(placeholder);
+                    }
                 });
 
             }
@@ -220,12 +224,16 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
         } else if (holder instanceof Item2ViewHolder) {
             ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1,1));
         } else {
-            ((Item3ViewHolder) holder).commentsList.setAdapter(new PostCommentAdapter(activity, data.comments));
+            PostCommentAdapter  adapter=new PostCommentAdapter(activity, data.comments);
+            ((Item3ViewHolder) holder).commentsList.setAdapter(adapter);
             ((Item3ViewHolder) holder).pinglunlayout.setVisibility(View.VISIBLE);
             ((Item3ViewHolder) holder).pinglun.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(activity,"ping",Toast.LENGTH_SHORT).show();
+                    InterestPostPageCommentDetail newComment=new InterestPostPageCommentDetail();
+                    newComment.user=new CommonPerson();
+                    data.comments.add(newComment);
+
 
                 }
             });
