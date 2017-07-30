@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,9 +74,21 @@ public class PostImageAdapter extends BaseAdapter {
             if (isBlurType == 0) {
                 Glide.with(context).load(imgs.get(position)).asBitmap().placeholder(R.drawable.xiangjiao).into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        StackBlurManager stackBlurManager = new StackBlurManager(context, resource);
-                        viewHolder.avatar.setImageBitmap( stackBlurManager.process(10) );
+                    public void onResourceReady(final Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        new AsyncTask<Void, Void, StackBlurManager>() {
+                            @Override
+                            protected StackBlurManager doInBackground(Void... params) {
+                                StackBlurManager stackBlurManager = new StackBlurManager(context, resource);
+                                return stackBlurManager;
+                            }
+
+                            @Override
+                            protected void onPostExecute(StackBlurManager stackBlurManager) {
+                                super.onPostExecute(stackBlurManager);
+                                viewHolder.avatar.setImageBitmap( stackBlurManager.process(10) );
+
+                            }
+                        }.execute();
                     }
 
                     @Override

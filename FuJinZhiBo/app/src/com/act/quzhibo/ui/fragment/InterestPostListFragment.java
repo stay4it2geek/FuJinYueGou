@@ -78,7 +78,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    getData(pid, htime, Constants.LOADMORE);
+                                    getData(pid, ctime, Constants.LOADMORE);
                                     recyclerView.loadMoreComplete();
                                 }
                             }, 1000);
@@ -97,6 +97,21 @@ public class InterestPostListFragment extends BackHandledFragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;     //截断事件的传递
+            }
+        });
+
+        view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(posts,new  ComparatorValues());
+                if(adapter!=null){
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         });
         return view;
@@ -120,7 +135,7 @@ public class InterestPostListFragment extends BackHandledFragment {
 
     }
 
-    private String htime;
+    private String ctime;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -129,23 +144,19 @@ public class InterestPostListFragment extends BackHandledFragment {
             if (msg.what != Constants.NetWorkError) {
                 final InterestPostListInfoParentData data =
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoParentData.class);
-
-                if (data.result!= null && data.result.size() > 0) {
-                    interestPostSize = data.result.size();
-                    htime = data.result.get(interestPostSize - 1).htime;
-                }
-                if (data.result.size() > 0) {
-                    htime = data.result.get(data.result.size() - 1).htime;
-                }
-                if (msg.what == Constants.REFRESH) {
-                    posts.clear();
-                }
                 if (data.result!= null) {
                     interestPostSize = data.result.size();
                 }
-                if (posts != null && data.result.size() > 0) {
+                if (interestPostSize> 0) {
+                    ctime = data.result.get(interestPostSize - 1).ctime;
+                    Log.e("htime",ctime);
+                }
+
+                if (msg.what == Constants.REFRESH) {
+                    posts.clear();
+                }
+                if (data.result!= null && interestPostSize > 0) {
                     posts.addAll(data.result);
-                    Collections.sort(posts, new ComparatorValues());
                     if (adapter == null) {
                         adapter = new InterestPostListAdapter(getActivity(), posts,1);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
@@ -162,7 +173,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     } else {
                         adapter.notifyDataSetChanged();
                     }
-                } else if (data.result.size() == 0) {
+                } else if (interestPostSize == 0) {
                     recyclerView.setNoMore(true);
                 }
             } else {

@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -16,6 +17,7 @@ import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.ui.fragment.InterestPostListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -40,9 +42,9 @@ public class CommonPersonPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common_post);
+        setContentView(R.layout.fragment_interest_post);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
-        recyclerView = (XRecyclerView) findViewById(R.id.common_post_list);
+        recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -79,6 +81,20 @@ public class CommonPersonPostActivity extends AppCompatActivity {
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         getData("0", Constants.REFRESH);
+        findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(posts, new ComparatorValues());
+                if (adapter != null) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     Handler handler = new Handler() {
@@ -88,31 +104,31 @@ public class CommonPersonPostActivity extends AppCompatActivity {
             if (msg.what != Constants.NetWorkError) {
                 final InterestPostListInfoPersonParentData data =
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
-
-                if (data.result.posts != null && data.result.posts.size() > 0) {
+                if (data.result != null) {
                     interestPostSize = data.result.posts.size();
-                    ctime = data.result.posts.get(interestPostSize - 1).htime;
+                }
+                if (data.result.posts != null && interestPostSize > 0) {
+                    ctime = data.result.posts.get(interestPostSize - 1).ctime;
+                    Log.e("htime2",ctime);
                 }
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
                 }
                 if (posts != null && interestPostSize > 0) {
                     posts.addAll(data.result.posts);
-                    Collections.sort(posts, new ComparatorValues());
                     if (adapter == null) {
-                        adapter = new InterestPostListAdapter(CommonPersonPostActivity.this, posts,0);
-
-                            adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
-                                @Override
-                                public void onItemClick(InterestPost post) {
-                                    if(false){
+                        adapter = new InterestPostListAdapter(CommonPersonPostActivity.this, posts, 0);
+                        adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
+                            @Override
+                            public void onItemClick(InterestPost post) {
+                                if (false) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.POST_ID, post);
                                     intent.setClass(CommonPersonPostActivity.this, PostDetailActivity.class);
                                     startActivity(intent);
-                                    }
                                 }
-                            });
+                            }
+                        });
 
 
                         recyclerView.setAdapter(adapter);
@@ -125,6 +141,8 @@ public class CommonPersonPostActivity extends AppCompatActivity {
             } else {
                 //todo error
             }
+
+
         }
     };
 
@@ -133,8 +151,8 @@ public class CommonPersonPostActivity extends AppCompatActivity {
 
         @Override
         public int compare(InterestPost post1, InterestPost post2) {
-            long m1 = Long.parseLong(post1.htime != null ? post1.htime : "0l");
-            long m2 = Long.parseLong(post2.htime != null ? post2.htime : "0l");
+            long m1 = Long.parseLong(post1.ctime != null ? post1.ctime : "0l");
+            long m2 = Long.parseLong(post2.ctime != null ? post2.ctime : "0l");
             int result = 0;
             if (m1 > m2) {
                 result = -1;
@@ -149,6 +167,7 @@ public class CommonPersonPostActivity extends AppCompatActivity {
 
     public void getData(String ctime, final int what) {
         String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", userId).replace("CTIME", ctime);
+        Log.e("url", url);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {

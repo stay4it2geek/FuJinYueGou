@@ -82,8 +82,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((MyViewHolder) holder).sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
             if (day < 365) {
                 ((MyViewHolder) holder).createTime.setText(day + "天" + hour + "时" + min + "分钟前");
-            } else {
-                ((MyViewHolder) holder).createTime.setText("天" + hour + "时" + min + "分钟前");
             }
             ((MyViewHolder) holder).title.setText(datas.get(position).title);
             ((MyViewHolder) holder).absText.setText(datas.get(position).absText);

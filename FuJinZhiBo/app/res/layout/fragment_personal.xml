@@ -250,7 +250,37 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
 
+                <ImageView
+                    android:id="@+id/post"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/posttext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/post"
+                    android:text="我要发帖" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/myfocus_shower"
                 android:layout_width="match_parent"
