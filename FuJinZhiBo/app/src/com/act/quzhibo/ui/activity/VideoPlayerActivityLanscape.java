@@ -1,9 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
-import android.annotation.TargetApi;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -34,11 +32,10 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_viewplay_land);
+        setContentView(R.layout.activity_viewplay);
         initView();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void initView() {
         videoView = (VideoView) findViewById(R.id.video);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -62,22 +59,19 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
             @Override
             public void onPrepared(MediaPlayer mp) {
                 bar.setVisibility(View.GONE);
-                chatFragment.setViewVisily(true);
             }
         });
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 bar.setVisibility(View.GONE);
-                chatFragment.setViewVisily(false);
+                findViewById(R.id.hasNotshow).setVisibility(View.VISIBLE);
                 return true;
             }
         });
-
         ViewPlayerPageAdapter myFragmentPagerAdapter = new ViewPlayerPageAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
         viewPager.setCurrentItem(0);
-        viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
     }
 
 
@@ -97,20 +91,6 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
     protected void onResume() {
         super.onResume();
         videoView.start();
-    }
-
-    class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-        }
-
-        @Override
-        public void onPageSelected(int arg0) {
-        }
     }
 
     @Override

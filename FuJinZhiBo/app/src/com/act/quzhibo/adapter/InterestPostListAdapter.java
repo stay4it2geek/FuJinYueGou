@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +20,11 @@ import android.widget.TextView;
 import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.CommonPerson;
 import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.entity.InterstUser;
-import com.act.quzhibo.ui.activity.UserInfoActivity;
+import com.act.quzhibo.ui.activity.InfoCommonActivity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
@@ -40,8 +36,8 @@ import java.util.ArrayList;
  */
 
 public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Activity activity;
     private ArrayList<InterestPost> datas;//数据
+    private Activity activity;
 
     //自定义监听事件
     public interface OnInterestPostRecyclerViewItemClickListener {
@@ -55,7 +51,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     //适配器初始化
-        public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas) {
+    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas) {
         activity = context;
         this.datas = datas;
     }
@@ -67,10 +63,12 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         return holder;
     }
 
+    int count = 0;
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            final InterstUser user = datas.get(position).user;
+            final CommonPerson user = datas.get(position).user;
             final InterestPost post = datas.get(position);
             ((MyViewHolder) holder).nickName.setText(user.nick);
 
@@ -78,11 +76,12 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            if (!datas.get(position).user.sex.equals("2")) {
-                ((MyViewHolder) holder).sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
-            }
             ((MyViewHolder) holder).sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
-            ((MyViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
+            if (day < 365) {
+                ((MyViewHolder) holder).createTime.setText(day + "天" + hour + "时" + min + "分钟前");
+            } else {
+                ((MyViewHolder) holder).createTime.setText("天" + hour + "时" + min + "分钟前");
+            }
             ((MyViewHolder) holder).title.setText(datas.get(position).title);
             ((MyViewHolder) holder).absText.setText(datas.get(position).absText);
             ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView);
@@ -94,7 +93,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0));
-
                 ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
             } else {
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
@@ -104,15 +102,16 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((MyViewHolder) holder).imgVideo.setImageResource(R.drawable.video);
                 }
             }
-            ((MyViewHolder) holder).imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int gridPosition, long id) {
-                    mOnItemClickListener.onItemClick(post);
-                }
-            });
+
             ((MyViewHolder) holder).postlayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mOnItemClickListener.onItemClick(post);
+                }
+            });
+            ((MyViewHolder) holder).imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int gridPosition, long id) {
                     mOnItemClickListener.onItemClick(post);
                 }
             });
@@ -120,14 +119,17 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((MyViewHolder) holder).photoImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent=new Intent();
-                    intent.putExtra(Constants.POST_USER,post.user);
-                    intent.setClass(activity, UserInfoActivity.class);
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.POST, post);
+                    intent.putExtra("count", count);
+                    intent.setClass(activity, InfoCommonActivity.class);
                     activity.startActivity(intent);
+                    count++;
                 }
             });
 
-            if(post.user.sex.equals("2")){
+
+            if (post.user.sex.equals("2")) {
                 Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -140,7 +142,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     }
                 });
 
-            }else{
+            } else {
                 Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -149,7 +151,8 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);                    }
+                        super.onLoadStarted(placeholder);
+                    }
                 });
             }
             new AsyncTask<Void, Void, String>() {
@@ -161,7 +164,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                             if (TextUtils.equals(datas.get(position).user.proCode + "", entify.proId + "")) {
                                 for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
                                     if (TextUtils.equals(datas.get(position).user.cityCode, citySub.cityId + "")) {
-                                        return !TextUtils.equals("",entify.name + citySub.name + "")?entify.name + citySub.name + "":"----";
+                                        return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
                                     }
                                 }
                             }

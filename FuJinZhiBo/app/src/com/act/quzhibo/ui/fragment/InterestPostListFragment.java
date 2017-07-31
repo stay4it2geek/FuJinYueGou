@@ -16,15 +16,19 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
+import com.act.quzhibo.entity.InterestPostListInfoParentData;
 import com.act.quzhibo.entity.InterstPostListResult;
 
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.ui.activity.CommonPersonPostActivity;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import okhttp3.Call;
 
@@ -40,7 +44,6 @@ public class InterestPostListFragment extends BackHandledFragment {
     private InterestPostListAdapter adapter;
     private View view;
     private String pid;
-    private int num;
 
     @Nullable
     @Override
@@ -60,7 +63,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     public void run() {
                         recyclerView.setNoMore(false);
                         recyclerView.setLoadingMoreEnabled(true);
-                        getData(pid, 0, Constants.REFRESH);
+                        getData(pid, "0", Constants.REFRESH);
                         recyclerView.refreshComplete();
                     }
                 }, 1000);
@@ -75,7 +78,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    getData(pid, num, Constants.LOADMORE);
+                                    getData(pid, htime, Constants.LOADMORE);
                                     recyclerView.loadMoreComplete();
                                 }
                             }, 1000);
@@ -89,7 +92,7 @@ public class InterestPostListFragment extends BackHandledFragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        getData(pid, 0, Constants.REFRESH);
+        getData(pid, "0", Constants.REFRESH);
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -99,22 +102,50 @@ public class InterestPostListFragment extends BackHandledFragment {
         return view;
     }
 
+    public static final class ComparatorValues implements Comparator<InterestPost> {
+
+        @Override
+        public int compare(InterestPost post1, InterestPost post2) {
+            long m1 = Long.parseLong(post1.ctime != null ? post1.ctime : "0l");
+            long m2= Long.parseLong(post2.ctime != null ? post2.ctime : "0l");
+            int result = 0;
+            if (m1 > m2) {
+                result = -1;
+            }
+            if (m1 < m2) {
+                result = 1;
+            }
+            return result;
+        }
+
+    }
+
+    private String htime;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            final InterstPostListResult interstPostListResult = CommonUtil.parseJsonWithGson((String) msg.obj, InterstPostListResult.class);
+
             if (msg.what != Constants.NetWorkError) {
+                final InterestPostListInfoParentData data =
+                        CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoParentData.class);
+
+                if (data.result!= null && data.result.size() > 0) {
+                    interestPostSize = data.result.size();
+                    htime = data.result.get(interestPostSize - 1).htime;
+                }
+                if (data.result.size() > 0) {
+                    htime = data.result.get(data.result.size() - 1).htime;
+                }
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
-                    num = 1;
-                } else if (msg.what == Constants.LOADMORE) {
-                    num += 1;
                 }
-                if (interstPostListResult.result != null)
-                    interestPostSize = interstPostListResult.result.size();
-                if (posts != null && interstPostListResult.result.size() > 0) {
-                    posts.addAll(interstPostListResult.result);
+                if (data.result!= null) {
+                    interestPostSize = data.result.size();
+                }
+                if (posts != null && data.result.size() > 0) {
+                    posts.addAll(data.result);
+                    Collections.sort(posts, new ComparatorValues());
                     if (adapter == null) {
                         adapter = new InterestPostListAdapter(getActivity(), posts);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
@@ -131,7 +162,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     } else {
                         adapter.notifyDataSetChanged();
                     }
-                } else if (interstPostListResult.result.size() == 0) {
+                } else if (data.result.size() == 0) {
                     recyclerView.setNoMore(true);
                 }
             } else {
@@ -141,10 +172,9 @@ public class InterestPostListFragment extends BackHandledFragment {
     };
 
 
-    public void getData(String pid, int num, final int what) {
-        String htime = CommonUtil.dateToStamp(CommonUtil.getDataString(num));
-        Log.e("htmo3", htime);
+    public void getData(String pid, String htime, final int what) {
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
+      Log.e("url",url);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {

@@ -18,6 +18,17 @@ public class MoneyActivity extends TabSlideBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public boolean getActivityType() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedShowBackDialog() {
+        return true;
+    }
+
     @Override
     protected String[] getTitles() {
         return new String[]{"资源", "随笔", "项目"};

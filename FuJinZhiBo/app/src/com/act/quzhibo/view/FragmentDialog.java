@@ -102,7 +102,7 @@ public class FragmentDialog extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 if (onClickBottomListener != null) {
-                    onClickBottomListener.onPositiveClick();
+                    onClickBottomListener.onPositiveClick(dialog);
                 }
             }
         });
@@ -112,7 +112,7 @@ public class FragmentDialog extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 if (onClickBottomListener != null) {
-                    onClickBottomListener.onNegtiveClick();
+                    onClickBottomListener.onNegtiveClick(dialog);
                 }
             }
         });
@@ -177,12 +177,12 @@ public class FragmentDialog extends DialogFragment {
         /**
          * 点击确定按钮事件
          */
-        public void onPositiveClick();
+        public void onPositiveClick(Dialog dialog);
 
         /**
          * 点击取消按钮事件
          */
-        public void onNegtiveClick();
+        public void onNegtiveClick(Dialog dialog);
     }
 
     @NonNull

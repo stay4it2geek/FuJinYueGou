@@ -61,21 +61,19 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
             @Override
             public void onPrepared(MediaPlayer mp) {
                 bar.setVisibility(View.GONE);
-                chatFragment.setViewVisily(true);
             }
         });
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
                 bar.setVisibility(View.GONE);
-                chatFragment.setViewVisily(false);
+                findViewById(R.id.hasNotshow).setVisibility(View.VISIBLE);
                 return true;
             }
         });
         ViewPlayerPageAdapter myFragmentPagerAdapter = new ViewPlayerPageAdapter(getSupportFragmentManager(), fragments);
         viewPager.setAdapter(myFragmentPagerAdapter);
         viewPager.setCurrentItem(0);
-        viewPager.addOnPageChangeListener(new MyOnPageChangeListener());
     }
 
 
@@ -95,20 +93,6 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
     protected void onResume() {
         super.onResume();
         videoView.start();
-    }
-
-    class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-        }
-
-        @Override
-        public void onPageSelected(int arg0) {
-        }
     }
 
     @Override

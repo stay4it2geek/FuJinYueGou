@@ -24,6 +24,8 @@ import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.netease.neliveplayer.util.string.StringUtil;
 
 import java.io.BufferedReader;
@@ -34,11 +36,13 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -122,21 +126,39 @@ public class CommonUtil {
         T result = gson.fromJson(jsonData, type);
         return result;
     }
+    public static <T> ArrayList<T> jsonToArrayList(String json, Class<T> clazz)
+    {
+        Type type = new TypeToken<ArrayList<JsonObject>>()
+        {}.getType();
+        ArrayList<JsonObject> jsonObjects = new Gson().fromJson(json, type);
 
-    public static void initView(String[] mTitles, ArrayList<Fragment> mFragments, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter) {
+        ArrayList<T> arrayList = new ArrayList<>();
+        for (JsonObject jsonObject : jsonObjects)
+        {
+            arrayList.add(new Gson().fromJson(jsonObject, clazz));
+        }
+        return arrayList;
+    }
+    public static void initView(String[] mTitles, ArrayList<Fragment> mFragments, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter, boolean activityType) {
         for (String title : mTitles) {
             mFragments.add(CommonFragment.getInstance(title));
         }
-
+        final CommonTabLayout commonTabLayout;
         viewPager.setAdapter(mAdapter);
-        final CommonTabLayout tabLayout = ViewFindUtils.find(decorView, R.id.layout);
+        if (activityType) {
+            commonTabLayout = ViewFindUtils.find(decorView, R.id.layout_mine);
+        } else {
+            commonTabLayout = ViewFindUtils.find(decorView, R.id.layout);
+
+        }
+        commonTabLayout.setVisibility(View.VISIBLE);
         ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
             mTabEntities.add(new TabEntity(mTitles[i], 0, 0));
         }
-        tabLayout.setTabData(mTabEntities);
+        commonTabLayout.setTabData(mTabEntities);
 
-        tabLayout.setOnTabSelectListener(new OnTabSelectListener() {
+        commonTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
                 viewPager.setCurrentItem(position);
@@ -147,6 +169,7 @@ public class CommonUtil {
             }
         });
 
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -155,13 +178,14 @@ public class CommonUtil {
 
             @Override
             public void onPageSelected(int position) {
-                tabLayout.setCurrentTab(position);
+                commonTabLayout.setCurrentTab(position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
             }
         });
+        viewPager.setOffscreenPageLimit(mTabEntities.size());
         viewPager.setCurrentItem(0);
     }
 
@@ -236,4 +260,17 @@ public class CommonUtil {
         LocationData data = parseJsonWithGson(getJson("json.txt", context), LocationData.class);
         return data;
     }
+
+    public static void saveData(Context context,int value,String key){
+        SharedPreferences sp = context.getSharedPreferences("config",Context.MODE_PRIVATE );
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+    public static int loadData(Context context,String key) {
+        SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+        return sp.getInt(key,0);
+    }
+
 }

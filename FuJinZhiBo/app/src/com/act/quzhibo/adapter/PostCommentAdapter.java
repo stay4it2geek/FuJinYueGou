@@ -1,8 +1,6 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,11 +15,8 @@ import android.widget.TextView;
 
 import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPostPageCommentDetail;
-import com.act.quzhibo.ui.activity.UserInfoActivity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -72,51 +67,51 @@ public class PostCommentAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        if (commentDetails.get(position).user.sex.equals("2")) {
-            Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    viewHolder.userImage.setBackground(new BitmapDrawable(resource));
-                }
+        if (viewHolder.userImage.getTag() == null || ((String) viewHolder.userImage.getTag()).equals(commentDetails.get(position).user.photoUrl)) {
 
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                }
-            });
-        } else {
-            Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    viewHolder.userImage.setBackground(new BitmapDrawable(resource));
-                }
+            if (commentDetails.get(position).user.sex.equals("2")) {
+                viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
+                Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        viewHolder.userImage.setBackground(new BitmapDrawable(resource));
+                        viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
+                    }
 
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                }
-            });
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                        viewHolder.userImage.setBackgroundDrawable(placeholder);
+
+                    }
+                });
+            } else {
+                Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        viewHolder.userImage.setBackground(new BitmapDrawable(resource));
+                        viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
+
+                    }
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        super.onLoadStarted(placeholder);
+                        viewHolder.userImage.setBackgroundDrawable(placeholder);
+
+                    }
+                });
+            }
         }
         long l = System.currentTimeMillis() - commentDetails.get(position).ctime;
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        if (!commentDetails.get(position).user.sex.equals("2")) {
-            viewHolder.sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
-        }
         viewHolder.sexAndAge.setText(commentDetails.get(position).user.sex.equals("2") ? "女" : "男");
         viewHolder.createTime.setText(hour + "小时" + min + "分钟前");
         viewHolder.nickName.setText(commentDetails.get(position).user.nick);
         viewHolder.content.setText(commentDetails.get(position).message + "");
-        viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(Constants.POST_USER, commentDetails.get(position).user);
-                intent.setClass(activity, UserInfoActivity.class);
-                activity.startActivity(intent);
-            }
-        });
+
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {

@@ -10,5 +10,5 @@ import java.util.ArrayList;
 public class RewardUsers implements Serializable {
    public long totalPages;
     public long  totalNums;
-    ArrayList<InterstUser> users;
+    ArrayList<CommonPerson> users;
 }

@@ -22,6 +22,16 @@ public class SquareActivity extends TabSlideBaseActivity {
     }
 
     @Override
+    public boolean getActivityType() {
+        return false;
+    }
+
+    @Override
+    protected boolean isNeedShowBackDialog() {
+        return true;
+    }
+
+    @Override
     protected String[] getTitles() {
         return new String[]{"情趣", "视频", "附近"};
     }

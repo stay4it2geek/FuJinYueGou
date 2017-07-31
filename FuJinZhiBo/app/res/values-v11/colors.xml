@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF6765</color>
+    <color name="colorAccent">#Ff0765</color>
     <color name="blue">#7A67EE</color>
       <color name="tabline">#f6dd3e</color>
     <color name="colorbg">#eeeeee</color>

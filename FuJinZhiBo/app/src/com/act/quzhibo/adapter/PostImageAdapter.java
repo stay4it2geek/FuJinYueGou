@@ -2,35 +2,21 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
-import android.media.ThumbnailUtils;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.util.Log;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.MyApplicaition;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+
+
 
 /**
  * Created by weiminglin on 17/6/4.
@@ -69,8 +55,10 @@ public class PostImageAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             if (type == 0) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_post_img, parent, false);
-            } else {
+            } else if (type == 1) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_post_page_img, parent, false);
+            } else {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_info_post_img, parent, false);
             }
             viewHolder.avatar = (ImageView) convertView.findViewById(R.id.postimg);
             convertView.setTag(viewHolder);

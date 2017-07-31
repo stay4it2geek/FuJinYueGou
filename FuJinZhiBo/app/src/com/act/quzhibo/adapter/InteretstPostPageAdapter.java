@@ -33,12 +33,10 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
-import com.act.quzhibo.ui.activity.UserInfoActivity;
+import com.act.quzhibo.ui.activity.InfoCommonActivity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
@@ -53,6 +51,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     private final InterestPost post;
     private InterestPostPageDetailAndComments data;//数据
     private Activity activity;
+    private int count;
 
     public enum ITEM_TYPE {
         ITEM1,
@@ -134,9 +133,11 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.putExtra(Constants.POST_USER, post.user);
-                    intent.setClass(activity, UserInfoActivity.class);
+                    intent.putExtra(Constants.POST, post);
+                    intent.putExtra("count", count);
+                    intent.setClass(activity, InfoCommonActivity.class);
                     activity.startActivity(intent);
+                    count++;
                 }
             });
 

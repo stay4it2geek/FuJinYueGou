@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.youth.banner.Banner
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom"
+                    android:background="#33000000">
+
+                    <com.act.quzhibo.view.CircleImageView
+                        android:id="@+id/userImage"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/audio_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/brocast"
+                            android:layout_width="40dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="75dp"
+                            android:background="@drawable/brocast" />
+
+                        <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="13dp"
+                            android:text="偷听TA"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignEnd="@+id/textView4"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignRight="@+id/textView4"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginRight="10dp"
+                            android:text="18秒"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="15sp" />
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/nickName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toEndOf="@+id/userImage"
+                        android:layout_toRightOf="@+id/userImage"
+                        android:text="昵称"
+                        android:textColor="#fff"
+                        android:textSize="19sp" />
+
+
+                    <TextView
+                        android:id="@+id/level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/nickName"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignStart="@+id/nickName"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/bg_circle_orange30"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="2dp"
+                        android:text="LV9"
+                        android:textColor="#fff"
+                        android:textSize="15sp" />
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/online_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="70dp"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginRight="15dp"
+                    android:text="" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/talk_accese_tv"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="解锁私聊权限" />
+
+                    <TextView
+                        android:id="@+id/talk_accese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_toRightOf="@+id/talk_accese_tv"
+                        android:gravity="center"
+                        android:text="订购书籍，视频，音频任一即可" />
+
+                    <View
+                        android:layout_width="12dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/rightarr" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/txtImg_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/textpost"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="图文动态" />
+
+
+                        <GridView
+                            android:id="@+id/txt_img_gridview"
+                            android:numColumns="3"
+                            android:layout_width="300dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_toRightOf="@+id/textpost"/>
+
+                    <View
+                        android:layout_width="12dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/rightarr" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/rl_zipai_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/pictruelibs"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="自拍图片库" />
+
+                    <View
+                        android:layout_width="12dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/rightarr" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/rl_zipai_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/video_list"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="自拍视频库" />
+
+                    <View
+                        android:layout_width="12dp"
+                        android:layout_height="22dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/rightarr" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/spirit"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="情感状态" />
+
+                    <TextView
+                        android:id="@+id/disMariState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="45dp"
+                        android:layout_toRightOf="@+id/spirit"
+                        android:gravity="center"
+                        android:text="" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/disPurpose_tv"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="交友想法" />
+
+                    <TextView
+                        android:id="@+id/disPurpose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="45dp"
+                        android:layout_toRightOf="@+id/disPurpose_tv"
+                        android:gravity="center"
+                        android:text="" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:id="@+id/last_see_20_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/who_see_her"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="最近查看过他的20人" />
+
+                    <com.act.quzhibo.view.HorizontialListView
+                        android:id="@+id/who_see_her_imglist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_toRightOf="@+id/who_see_her" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eee" />
+
+                    <TextView
+                        android:id="@+id/isCanDate_tv"
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="是否可约" />
+
+                    <TextView
+                        android:id="@+id/isCanDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_toRightOf="@+id/isCanDate_tv"
+                        android:gravity="left|center_vertical"
+                        android:text="一起吃饭、聊天、泡茶、做爱做的事" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#fff"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/focuslayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="#eee"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/talk"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/background_card"
+            android:button="@null"
+            android:gravity="center"
+            android:text="私聊TA"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="#aaa" />
+
+        <RadioButton
+            android:id="@+id/focus"
+            android:layout_width="0dp"
+            android:background="@drawable/background_card"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="关注TA"
+            android:textSize="16sp" />
+    </LinearLayout>
+</FrameLayout>

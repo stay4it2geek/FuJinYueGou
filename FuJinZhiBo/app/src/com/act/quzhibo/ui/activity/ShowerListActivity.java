@@ -1,6 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -46,7 +48,7 @@ import okhttp3.Call;
 /**
  * 主播列表画面
  */
-public class ShowerListActivity extends AppCompatActivity implements ShowerListFragment.OnCallShowViewListner, BackHandledFragment.BackHandledInterface {
+public class ShowerListActivity extends FragmentActivity implements ShowerListFragment.OnCallShowViewListner, BackHandledFragment.BackHandledInterface {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private MyPagerAdapter mAdapter;
@@ -67,7 +69,10 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
             return;
         }
         for (PlateCatagory plateCatagory : plates.plateList) {
-            if (!plateCatagory.getTitleName().contains("VR") && !plateCatagory.getTitleName().contains("游戏")) {
+            if (plateCatagory.getTitleName().contains("VR") || plateCatagory.getTitleName().contains("游戏") ||
+                    plateCatagory.getTitleName().contains("交友") || plateCatagory.getTitleName().contains("非遗")) {
+               continue;
+            } else {
                 tabTitles.add(plateCatagory.getTitleName());
                 tabTitleIds.add(plateCatagory.getTitleId());
                 ShowerListFragment fragment = new ShowerListFragment();
@@ -128,11 +133,13 @@ public class ShowerListActivity extends AppCompatActivity implements ShowerListF
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     FragmentDialog.newInstance("", "客官再看一会儿呗", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
                         @Override
-                        public void onPositiveClick() {
+                        public void onPositiveClick(Dialog dialog) {
+                            dialog.dismiss();
                         }
 
                         @Override
-                        public void onNegtiveClick() {
+                        public void onNegtiveClick(Dialog dialog) {
+                            dialog.dismiss();
                             ShowerListActivity.super.onBackPressed();
                         }
                     }).show(getSupportFragmentManager(), "dialog");

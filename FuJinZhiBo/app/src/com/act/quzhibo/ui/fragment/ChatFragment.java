@@ -1,39 +1,70 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MemberAdapter;
+import com.act.quzhibo.adapter.MessageAdapter;
+import com.act.quzhibo.adapter.RoomListAdapter;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.Gift;
 import com.act.quzhibo.entity.Member;
+import com.act.quzhibo.entity.MessageSend;
+import com.act.quzhibo.entity.NearPerson;
 import com.act.quzhibo.entity.Room;
+import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
+import com.act.quzhibo.util.CharUtils;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
+
 import com.act.quzhibo.view.HorizontialListView;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Timer;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import tyrantgit.widget.HeartLayout;
 
+/**
+ * author：Administrator on 2016/12/26 09:35
+ * description:文件说明
+ * version:版本
+ */
 public class ChatFragment extends Fragment implements View.OnClickListener {
-    private HorizontialListView horizontialListView;
+    HorizontialListView listview;
     private MemberAdapter mAdapter;
     private HeartLayout heartLayout;
     private Random mRandom;
-    private View view;
+    private Timer mTimer = new Timer();
     private Room room;
-
+    View view;
 
     @Nullable
     @Override
@@ -45,60 +76,123 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    public void setViewVisily(boolean flag) {
-        if (view != null) {
-            if (flag) {
-                horizontialListView.setVisibility(View.VISIBLE);
-            } else {
-                horizontialListView.setVisibility(View.GONE);
-                view.findViewById(R.id.hasNotshow).setVisibility(View.VISIBLE);
-                ((TextView) view.findViewById(R.id.onlineCount)).setText("- -");
-            }
-        }
-    }
-
     private void initView() {
         mRandom = new Random();
         CircleImageView zhuboAvatar = (CircleImageView) view.findViewById(R.id.zhuboAvatar);
-        if(room.gender.equals("0")) {
-            Glide.with(getActivity()).load(getArguments().getString("pathPrefix") + room.poster_path_1280).placeholder(R.drawable.women).into(zhuboAvatar);//加载网络图片
-        }else {
-            Glide.with(getActivity()).load(getArguments().getString("pathPrefix") + room.poster_path_1280).placeholder(R.drawable.man).into(zhuboAvatar);//加载网络图片
+        String photoUrl = getArguments().getString("pathPrefix") + room.poster_path_1280;
+        if (room.roomGender.equals("0")) {
+            Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
+        } else {
+            Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
+        }
+        zhuboAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (room.liveType.equals("2")) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.ROOM_BUNDLE, room);
+                    intent.setClass(getActivity(), ShowerInfoActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
-        }  int startValue = mRandom.nextInt(10);
+        int startValue = mRandom.nextInt(10);
         if (startValue == 0) {
             startValue = 2;
         }
         int value = mRandom.nextInt(100);
-        String finalValue = startValue+"" + value * 2560;
-        ((TextView) view.findViewById(R.id.starValue)).setText("🌟："+finalValue);
+        String finalValue = startValue + "" + value * 2560;
+        ((TextView) view.findViewById(R.id.onlineCount)).setText(room.onlineCount + "人");
+        ((TextView) view.findViewById(R.id.starValue)).setText("⭐：" + finalValue);
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
-        ((TextView) view.findViewById(R.id.onlineCount)).setText(room.onlineCount + "人在线");
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);
-        horizontialListView = (HorizontialListView) view.findViewById(R.id.list);
-//        mAdapter = new MemberAdapter(getActivity(),datas);
-//        horizontialListView.setAdapter(mAdapter);
-//        horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                showDialog(mAdapter.datas.get(i));
-//            }
-//        });
+        listview = (HorizontialListView) view.findViewById(R.id.list);
+        queryData();
         heartLayout = (HeartLayout) view.findViewById(R.id.heart_layout);
+        view.findViewById(R.id.send_message).setOnClickListener(this);
+        view.findViewById(R.id.gift).setOnClickListener(this);
+        view.findViewById(R.id.message).setOnClickListener(this);
+        view.findViewById(R.id.addherat).setOnClickListener(this);
+        view.findViewById(R.id.retrylayout).setOnClickListener(this);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                view.findViewById(R.id.connetFaillayout).setVisibility(View.GONE);
+                view.findViewById(R.id.retrylayout).setVisibility(View.VISIBLE);
+            }
+        }, 5000);
     }
 
-    private void showDialog(Member m) {
-        FragmentDialog.newInstance(m.name, m.sig, "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
-            @Override
-            public void onPositiveClick() {
-            }
-            @Override
-            public void onNegtiveClick() {
+    private void queryData() {
+        final BmobQuery<NearPerson> query = new BmobQuery<>();
+        query.setLimit(20);
+        // 如果是加载更多
+        query.order("-updatedAt");
+        query.findObjects(new FindListener<NearPerson>() {
 
+            @Override
+            public void done(List<NearPerson> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() > 0) {
+                        nearPersonArrayList.clear();
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                        nearPersonArrayList.addAll(list);
+                        Message message = new Message();
+                        message.obj = nearPersonArrayList;
+                        memberHandler.sendMessage(message);
+                    } else {
+                        memberHandler.sendEmptyMessage(Constants.NO_MORE);
+                    }
+                }
+            }
+        });
+    }
+
+    ArrayList<NearPerson> nearPersonArrayList = new ArrayList<>();
+    public String lastTime;
+
+
+    private HorizontialListView horizontialListView;
+    Handler memberHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            ArrayList<NearPerson> nearPersonArrayList = (ArrayList<NearPerson>) msg.obj;
+            ArrayList<String> views = new ArrayList<>();
+            if (msg.what != Constants.NetWorkError) {
+                for (NearPerson person : nearPersonArrayList) {
+                    views.add(person.viewUsers);
+                }
+            }
+            int max = views.size();
+            final ArrayList<Member> members = CommonUtil.jsonToArrayList(views.get(new Random().nextInt(max - 1)), Member.class);
+            horizontialListView = (HorizontialListView) view.findViewById(R.id.list);
+            mAdapter = new MemberAdapter(getContext(), members);
+            mAdapter.setDatas(members);
+            horizontialListView.setAdapter(mAdapter);
+            horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    showDialog(members.get(i));
+                }
+            });
+        }
+    };
+
+    private void showDialog(Member m) {
+        FragmentDialog.newInstance(m.nickname, "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick(Dialog dialog) {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onNegtiveClick(Dialog dialog) {
+                dialog.dismiss();
             }
         }).show(getChildFragmentManager(), "dialog");
-
     }
 
     Handler heartHandler = new Handler();
@@ -111,7 +205,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     heartLayout.addHeart(randomColor());
                 }
             });
-            heartHandler.postDelayed(this, 600);
+            heartHandler.postDelayed(this, 1000);
         }
     };
 
@@ -124,29 +218,47 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        heartHandler.postDelayed(heartRunnable, 600);
+        heartHandler.postDelayed(heartRunnable, 1000);
     }
 
     private int randomColor() {
         return Color.rgb(mRandom.nextInt(255), mRandom.nextInt(255), mRandom.nextInt(255));
     }
 
-
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-        heartHandler.removeCallbacks(heartRunnable);
+        mTimer.cancel();
     }
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
-       if (id == R.id.close) {
+        if (R.id.close == v.getId()) {
             onFinishVideoCallbak.finishVideo();
+        } else if (R.id.addherat == v.getId()) {
+            heartLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    heartLayout.addHeart(randomColor());
+                }
+            });
+        } else if (R.id.retrylayout == v.getId()) {
+            view.findViewById(R.id.connetFaillayout).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.retrylayout).setVisibility(View.GONE);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    view.findViewById(R.id.connetFaillayout).setVisibility(View.GONE);
+                    view.findViewById(R.id.retrylayout).setVisibility(View.VISIBLE);
+                }
+            }, 5000);
+
+        } else {
+            Toast.makeText(getActivity(), "消息加载异常，暂时无法操作该功能", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -161,6 +273,5 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     public interface OnFinishVideoCallbak {
         void finishVideo();
     }
-
 
 }

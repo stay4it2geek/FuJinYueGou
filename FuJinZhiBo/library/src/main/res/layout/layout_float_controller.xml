@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/background_color"
+    android:layout_height="match_parent">
+    <com.devlin_n.videoplayer.widget.PlayProgressButton
+        android:id="@+id/play_progress_btn"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+    <ProgressBar
+        android:id="@+id/probar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="right"
+        android:layout_margin="4dp"
+        android:src="@drawable/ic_action_close" />
+
+    <ImageView
+        android:id="@+id/btn_backto_live"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="left"
+        android:layout_margin="4dp"
+        android:textColor="#fff"
+        android:src="@drawable/ic_action_arrow_back" />
+
+</FrameLayout>

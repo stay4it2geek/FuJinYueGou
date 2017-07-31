@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -33,7 +34,7 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
         setContentView(R.layout.activity_common_tab);
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(),getFragments(),decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter);
+        CommonUtil.initView(getTitles(),getFragments(),decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter,getActivityType());
 
     }
 
@@ -65,22 +66,31 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
 
     @Override
     public void onBackPressed() {
-        if(mBackHandedFragment == null||!mBackHandedFragment.onBackPressed()){
-            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
-                FragmentDialog.newInstance("","客官再看一会儿呗", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
-                    @Override
-                    public void onPositiveClick() {
-                    }
-                    @Override
-                    public void onNegtiveClick() {
-                        TabSlideBaseActivity.super.onBackPressed();
-                    }
-                }).show(getSupportFragmentManager(), "dialog");
-            }else{
+        if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                if (isNeedShowBackDialog()) {
+                    FragmentDialog.newInstance("", "客官再看一会儿呗", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        @Override
+                        public void onPositiveClick(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+
+                        @Override
+                        public void onNegtiveClick(Dialog dialog) {
+                            dialog.dismiss();
+                            TabSlideBaseActivity.super.onBackPressed();
+                        }
+                    }).show(getSupportFragmentManager(), "dialog");
+                } else {
+                    TabSlideBaseActivity.super.onBackPressed();
+                }
+            } else {
                 getSupportFragmentManager().popBackStack();
             }
         }
     }
+    public abstract boolean getActivityType();
+    protected abstract boolean isNeedShowBackDialog();
     protected abstract String[] getTitles();
     protected abstract ArrayList<Fragment> getFragments();
 }

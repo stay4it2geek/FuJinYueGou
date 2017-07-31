@@ -53,7 +53,6 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 return true;     //截断事件的传递
             }
         });
-
         return view;
     }
 

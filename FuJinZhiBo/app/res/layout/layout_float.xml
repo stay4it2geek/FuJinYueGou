@@ -7,19 +7,67 @@
 
     <include layout="@layout/layout_top_member" />
 
+
     <TextView
         android:id="@+id/saytext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="90dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="90dp"
+        android:layout_marginRight="70dp"
         android:divider="@null"
         android:text="大舞台，正能量，希望大家共同守护我们的网络家园，共创一个干净的直播平台"
         android:textColor="#00CD00"
         android:textSize="18sp" />
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="65dp">
+
+        <LinearLayout
+            android:id="@+id/connetFaillayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/gonggaotext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:text="消息连接异常，正在重试连接"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+            <ProgressBar
+                style="@android:style/Widget.ProgressBar.Small.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/retrylayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="消息连接超时失败，点击这里重试！"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </FrameLayout>
 
     <tyrantgit.widget.HeartLayout
         android:id="@+id/heart_layout"
@@ -29,15 +77,5 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="60dp" />
 
-    <ImageView
-        android:id="@+id/close"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/bg_circle_black30"
-        android:padding="5dp"
-        android:src="@drawable/icon_close" />
+    <include layout="@layout/layout_bottom_menu" />
 </RelativeLayout>

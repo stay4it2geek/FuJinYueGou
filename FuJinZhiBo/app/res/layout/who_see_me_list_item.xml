@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/who_see_me_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/background_card"
+    >
+
+    <ImageView
+        android:id="@+id/photoImg"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/layerlist_circle_mask_postlist" />
+
+    <TextView
+        android:id="@+id/nick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/photoImg"
+        android:text=""
+        android:textColor="#000"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/sexAndAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@+id/nick"
+        android:background="@color/colorAccent"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:text=""
+        android:textColor="#fff"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/disMariState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@+id/sexAndAge"
+
+        android:textColor="#aaa"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/createTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/nick"
+        android:layout_alignStart="@+id/nick"
+        android:layout_below="@+id/nick"
+        android:layout_marginTop="10dp"
+        android:text="" />
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="15dp"
+        android:layout_height="12dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/nick"
+        android:layout_toRightOf="@+id/createTime"
+        android:layout_alignBottom="@+id/createTime"
+        android:background="@drawable/location" />
+
+    <TextView
+        android:id="@+id/arealocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/createTime"
+        android:layout_alignTop="@+id/createTime"
+        android:layout_below="@+id/sexAndAge"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/imageView"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/introduce"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/createTime"
+        android:layout_alignStart="@+id/createTime"
+        android:layout_below="@+id/imageView"
+        android:layout_marginBottom="10dp"
+        android:text=""
+        android:visibility="gone"   />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/introduce"
+        android:layout_marginTop="2dp"
+        android:background="@color/colorbg"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/photoImg"
+        android:layout_marginTop="2dp"
+        android:background="@color/colorbg" />
+</RelativeLayout>

@@ -15,7 +15,7 @@ public class InterestPost implements Serializable{
     public String absText;  //很伤啊。。。。,
     public ArrayList<String> images;
     public String totalImages;// 2,
-    public InterstUser user;
+    public CommonPerson user;
     public String elite;//false,
     public String top;//false,
     public String ctime;//1495951626640,

@@ -28,6 +28,8 @@ import com.act.quzhibo.util.CommonUtil;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import okhttp3.Call;
 
@@ -133,6 +135,7 @@ public class ShowerListFragment extends BackHandledFragment {
                 }
                 if (roomList != null && roomList.roomList.size() > 0) {
                     rooms.addAll(roomList.roomList);
+                    Collections.sort(rooms, new ComparatorValues());
                     if (adapter == null) {
                         Display display = getActivity().getWindowManager().getDefaultDisplay();
                         Point size = new Point();
@@ -160,6 +163,25 @@ public class ShowerListFragment extends BackHandledFragment {
         }
     };
 
+    public static final class ComparatorValues implements Comparator<Room> {
+
+        @Override
+        public int compare(Room room1, Room room2) {
+            int m1=Integer.parseInt(room1.onlineCount!=null?room1.onlineCount:"0");
+            int m2=Integer.parseInt(room2.onlineCount!=null?room2.onlineCount:"0");
+            int result=0;
+            if(m1>m2)
+            {
+                result=-1;
+            }
+            if(m1<m2)
+            {
+                result=1;
+            }
+            return result;
+        }
+
+    }
     public void getData(String cataId, String startPage, final int what) {
         String url = CommonUtil.getToggle(getActivity(), Constants.COMMON_TAB_DETAIL).getToggleObject().replace("CATAID", cataId).replace("NUM", String.valueOf(startPage)).replace("OFFSET", offset);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
@@ -183,10 +205,9 @@ public class ShowerListFragment extends BackHandledFragment {
             onCallShowViewListner.onShowVideo(rooms.get(position), pathPrefix, rooms.get(position).screenType);
         } else {
             Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("room", rooms.get(position));
-            intent.putExtra(Constants.ROOM_BUNDLE, bundle);
-            startActivity(new Intent(getActivity(), ShowerInfoActivity.class));
+            intent.putExtra(Constants.ROOM_BUNDLE, rooms.get(position));
+            intent.setClass(getActivity(), ShowerInfoActivity.class);
+            startActivity(intent);
         }
     }
 

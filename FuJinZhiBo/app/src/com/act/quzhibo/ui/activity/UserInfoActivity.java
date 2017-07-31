@@ -21,6 +21,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPostListInfoParentData;
+import com.act.quzhibo.entity.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.entity.InterstUser;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
@@ -163,8 +164,8 @@ public class UserInfoActivity extends AppCompatActivity {
             if (msg.what != Constants.NetWorkError) {
                 switch (msg.what) {
                     case 0:
-                        InterestPostListInfoParentData data =
-                                CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoParentData.class);
+                        InterestPostListInfoPersonParentData data =
+                                CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
                         if (data.result != null) {
                             if (!TextUtils.isEmpty(data.result.totalNums)) {
                                 ((RadioButton) findViewById(R.id.textpost)).setText("图文动态(" + data.result.totalNums + ")");
@@ -180,8 +181,8 @@ public class UserInfoActivity extends AppCompatActivity {
                             break;
                         }
                     case 1:
-                        InterestPostListInfoParentData data2 =
-                                CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoParentData.class);
+                        InterestPostListInfoPersonParentData data2 =
+                                CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
                         if (data2.result != null) {
                             if (!TextUtils.isEmpty(data2.result.totalNums)) {
                                 ((RadioButton) findViewById(R.id.videopost)).setText("视频动态(" + data2.result.totalNums + ")");

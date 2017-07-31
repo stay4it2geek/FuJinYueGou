@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical">
 
     <RelativeLayout
@@ -15,7 +14,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="10dp"
-            android:background="@drawable/default_head"
+            android:background="@drawable/man"
             android:src="@drawable/layerlist_circle_mask_personnal" />
 
         <TextView
@@ -29,7 +28,7 @@
             android:layout_toEndOf="@+id/imageView2"
             android:layout_toRightOf="@+id/imageView2"
             android:text="TextView"
-            android:textColor="#fff"
+            android:textColor="#000"
             android:textSize="16sp" />
 
         <TextView
@@ -40,17 +39,29 @@
             android:layout_alignLeft="@+id/nickName"
             android:layout_alignStart="@+id/nickName"
             android:text="TextView"
-            android:textColor="#fff"
+            android:textColor="#4A4A4A"
             android:textSize="16sp" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
+        <View
+            android:layout_width="12dp"
+            android:layout_height="22dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="29dp"
-            android:layout_marginRight="29dp" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rightarr" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_toEndOf="@+id/nickName"
+            android:layout_toRightOf="@+id/nickName"
+            android:text="已登录"
+            android:textColor="#000"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <ScrollView
@@ -58,14 +69,15 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#eee">
+            android:background="#eee"
+            android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/vip_buy"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/dingdanheight"
                 android:background="#fff">
 
                 <ImageView
@@ -82,7 +94,15 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/vipimage"
-                    android:text="VIP" />
+                    android:text="订购者特权" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
             </RelativeLayout>
 
             <View
@@ -91,8 +111,10 @@
                 android:background="@color/colorbg" />
 
             <RelativeLayout
+                android:id="@+id/who_see_me"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
                 android:background="#fff">
 
                 <ImageView
@@ -104,21 +126,351 @@
                     android:background="@drawable/default_head" />
 
                 <TextView
-                    style="@style/textStyle"
                     android:id="@+id/whoseenum"
+                    style="@style/textStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:layout_toRightOf="@+id/whoseeimage"
+                    android:text="谁看过我(0)" />
+
+                <com.act.quzhibo.view.HorizontialListView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_toRightOf="@+id/whoseenum" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/has_buy_order"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="10dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/dingyue"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/dingyuenum"
+                    style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/whoseeimage"
-                    android:text="谁看过我(45)" />
-                <com.act.quzhibo.view.HorizontialListView
-                    android:layout_width="wrap_content"
+                    android:layout_toRightOf="@+id/dingyue"
+                    android:text="已订阅订单(0)" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginLeft="40dp"
-                    android:layout_toRightOf="@+id/whoseenum"
-                    android:layout_height="match_parent"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/wait_pay_order"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/waitpay"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/wait_pay_num"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/waitpay"
+                    android:text="等待付款订单(0)" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/system_message"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/message"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/messagenum"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/message"
+                    android:text="消息通知(0)" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/myfocus_shower"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="10dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/focusimg"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/focusshower"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/focusimg"
+                    android:text="我关注的主播(0)" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/myfocus_person"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/focus_person_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/focus_person_num"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/focus_person_img"
+                    android:text="我关注的情趣达人(0)" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/myVideo_history_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/myVideo_history_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/myVideo_history_num"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/myVideo_history_img"
+                    android:text="我观看的视频历史" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/myVideo_download_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/myVideo_download_img"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/myVideo_download_num"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/myVideo_download_img"
+                    android:text="我下载的视频" />
+
+                <View
+                    android:layout_width="12dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/secretlayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="10dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/secret"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/secrettxt"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/secret"
+                    android:text="隐私密码" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/logout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dingdanheight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/setting"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/default_head" />
+
+                <TextView
+                    android:id="@+id/settingtxt"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_toEndOf="@+id/setting"
+                    android:layout_toRightOf="@+id/setting"
+                    android:text="退出登录" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:background="@color/tabline"
+        android:onClick="onLogin"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/usetImg"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/man"
+            android:src="@drawable/layerlist_circle_mask_personnal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/usetImg"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:text="点击头像登录"
+            android:textColor="#000"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
 </LinearLayout>

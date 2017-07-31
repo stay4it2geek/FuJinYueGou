@@ -10,10 +10,15 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.entity.Member;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 
-public class MemberAdapter extends BaseListAdapter<Member> {
-    public MemberAdapter(Context ctx) {
+
+public class MemberAdapter extends BaseListAdapter{
+    ArrayList<Member> members;
+
+    public MemberAdapter(Context ctx,  ArrayList<Member> members) {
         super(ctx);
+        this.members=members;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -26,11 +31,9 @@ public class MemberAdapter extends BaseListAdapter<Member> {
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Member member = datas.get(position);
-        if (!TextUtils.isEmpty(member.img)) {
-            Glide.with(ctx).load(member.img).placeholder(R.drawable.default_head).into(viewHolder.avatar);
-        }else {
-            viewHolder.avatar.setImageResource(R.drawable.default_head);
+
+        if (!TextUtils.isEmpty(members.get(position).headUrl)) {
+            Glide.with(ctx).load(members.get(position).headUrl).into(viewHolder.avatar);
         }
         return  convertView ;
     }

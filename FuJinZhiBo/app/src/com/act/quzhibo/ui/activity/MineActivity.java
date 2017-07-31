@@ -25,6 +25,16 @@ public class MineActivity extends TabSlideBaseActivity {
     }
 
     @Override
+    public boolean getActivityType() {
+        return true;
+    }
+
+    @Override
+    protected boolean isNeedShowBackDialog() {
+        return true;
+    }
+
+    @Override
     protected String[] getTitles() {
         return new String[]{"个人中心"};
     }

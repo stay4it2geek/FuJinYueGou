@@ -11,7 +11,7 @@ public class InterestPostPageContentDetail implements Serializable {
     public String postId;
     public String title;
     public ArrayList<PostContentAndImageDesc> desc;
-    public InterstUser user;
+    public CommonPerson user;
     public long ctime;
     public boolean elite;// false,
     public boolean top;//false,
