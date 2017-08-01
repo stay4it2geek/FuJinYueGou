@@ -22,9 +22,6 @@ public class Constants {
     public static final int REFRESH =1;
     public static final int NetWorkError=3;
     public static final String TEXT_IMG_POST = "text_img_post";
-    public static final String VIDEO_POST = "video_post";
-    public static final int VIDEO =0;
-    public static final int TEXT_IMG =1;
     public static final String POST_ID = "post_id";
     public static final String POST_USER = "post_user";
     public static final String PAGE_FLAG = "WHO_SEE_ME";
@@ -37,8 +34,7 @@ public class Constants {
     public static final String NEAR_USER_FLAG = "near_user_FLAG";
     public static final String AUDIO = "AUDIO";
     public static final String POST = "POST";
-    public static final String POST_LIST = "POST_LIST";
-    public static final String POST_DATA = "POST_DATA";
     public static final String COMMON_USER_ID = "COMMON_USER_ID";
-    public static final int LOAD = 1;
+    public static final int LOAD = 11;
+    public static final int RELOAD = 12;
 }

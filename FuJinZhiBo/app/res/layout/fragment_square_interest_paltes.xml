@@ -3,14 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <FrameLayout
         android:id="@+id/square_interest_plates_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <com.act.quzhibo.view.LoadNetView
+            android:id="@+id/loadview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff" />
+
     </FrameLayout>
+
 
 </RelativeLayout>

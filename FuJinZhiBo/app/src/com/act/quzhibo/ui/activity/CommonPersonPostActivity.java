@@ -19,6 +19,7 @@ import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.fragment.InterestPostListFragment;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -38,11 +39,13 @@ public class CommonPersonPostActivity extends AppCompatActivity {
     private InterestPostListAdapter adapter;
     String userId;
     private String ctime = "0";
-
+    private LoadNetView loadNetView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_interest_post);
+        findViewById(R.id.tile_layout).setVisibility(View.VISIBLE);
+        loadNetView= (LoadNetView) findViewById(R.id.loadview);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
         recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);
@@ -95,6 +98,15 @@ public class CommonPersonPostActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData("0", Constants.REFRESH);
+            }
+        });
     }
 
     Handler handler = new Handler() {
@@ -104,7 +116,7 @@ public class CommonPersonPostActivity extends AppCompatActivity {
             if (msg.what != Constants.NetWorkError) {
                 final InterestPostListInfoPersonParentData data =
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
-                if (data.result != null) {
+                if (data!=null&&data.result != null) {
                     interestPostSize = data.result.posts.size();
                 }
                 if (data.result.posts != null && interestPostSize > 0) {
@@ -129,8 +141,6 @@ public class CommonPersonPostActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
-
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.notifyDataSetChanged();
@@ -138,8 +148,10 @@ public class CommonPersonPostActivity extends AppCompatActivity {
                 } else if (interestPostSize == 0) {
                     recyclerView.setNoMore(true);
                 }
+                loadNetView.setVisibility(View.GONE);
             } else {
-                //todo error
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
 
 
@@ -166,6 +178,11 @@ public class CommonPersonPostActivity extends AppCompatActivity {
     }
 
     public void getData(String ctime, final int what) {
+
+        if(userId==null){
+            handler.sendEmptyMessage(Constants.NetWorkError);
+            return;
+        }
         String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", userId).replace("CTIME", ctime);
         Log.e("url", url);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {

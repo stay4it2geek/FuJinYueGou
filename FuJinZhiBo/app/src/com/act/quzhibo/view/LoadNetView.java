@@ -2,6 +2,7 @@ package com.act.quzhibo.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -45,7 +46,7 @@ public class LoadNetView extends LinearLayout {
         if (loadType == Constants.LOAD) {
             reloadlayout.setVisibility(View.GONE);
             loadlayout.setVisibility(View.VISIBLE);
-        } else {
+        } else if(loadType == Constants.RELOAD){
             reloadlayout.setVisibility(View.VISIBLE);
             loadlayout.setVisibility(View.GONE);
         }

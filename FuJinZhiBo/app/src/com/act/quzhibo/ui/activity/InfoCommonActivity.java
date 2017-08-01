@@ -34,6 +34,7 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.HorizontialListView;
+import com.act.quzhibo.view.LoadNetView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -55,16 +56,25 @@ public class InfoCommonActivity extends AppCompatActivity {
     GridView gridView;
     private Banner banner;
     private int second;
+    private LoadNetView loadNetView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_common_layout);
         initView();
+
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                initView();
+            }
+        });
     }
 
     private void initView() {
-
+        loadNetView= (LoadNetView) findViewById(R.id.loadview);
         Display display = this.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -118,6 +128,7 @@ public class InfoCommonActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.disMariState)).setText(post.user.disMariState);
         ((TextView) findViewById(R.id.nickName)).setText(post.user.nick);
         getTextAndImageData();
+
     }
 
 
@@ -144,7 +155,7 @@ public class InfoCommonActivity extends AppCompatActivity {
             super.handleMessage(msg);
             final InterestPostListInfoPersonParentData data =
                     CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
-            if (data.result != null) {
+            if (data!=null&&data.result != null) {
                 if (!TextUtils.isEmpty(data.result.totalNums)) {
                     ((TextView) findViewById(R.id.textpost)).setText("图文动态(" + data.result.totalNums + ")");
                 }
@@ -168,11 +179,11 @@ public class InfoCommonActivity extends AppCompatActivity {
                             }
                         });
                     }
-
-
+                    loadNetView.setVisibility(View.GONE);
+                } else {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.RELOAD);
                 }
-
-                //todo error
 
             }
         }

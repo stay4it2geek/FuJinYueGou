@@ -24,6 +24,7 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.CommonPersonPostActivity;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -44,12 +45,15 @@ public class InterestPostListFragment extends BackHandledFragment {
     private InterestPostListAdapter adapter;
     private View view;
     private String pid;
+    private LoadNetView loadNetView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_interest_post, null, false);
+        loadNetView= (LoadNetView) view.findViewById(R.id.loadview);
+
         pid = ((SquareActivity) getActivity()).getPid();
         recyclerView = (XRecyclerView) view.findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);
@@ -114,6 +118,14 @@ public class InterestPostListFragment extends BackHandledFragment {
                 }
             }
         });
+
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData(pid, "0", Constants.REFRESH);
+            }
+        });
         return view;
     }
 
@@ -155,6 +167,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
                 }
+
                 if (data.result!= null && interestPostSize > 0) {
                     posts.addAll(data.result);
                     if (adapter == null) {
@@ -173,17 +186,25 @@ public class InterestPostListFragment extends BackHandledFragment {
                     } else {
                         adapter.notifyDataSetChanged();
                     }
+
                 } else if (interestPostSize == 0) {
                     recyclerView.setNoMore(true);
                 }
+
+                loadNetView.setVisibility(View.GONE);
             } else {
-                //todo error
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };
 
 
     public void getData(String pid, String htime, final int what) {
+        if(pid==null){
+            handler.sendEmptyMessage(Constants.NetWorkError);
+            return;
+        }
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
       Log.e("url",url);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {

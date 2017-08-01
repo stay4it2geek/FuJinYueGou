@@ -25,6 +25,7 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class ShowerListFragment extends BackHandledFragment {
     private String offset;
     private String cataTitle;
 
+    View view;
+    private LoadNetView loadNetView;
 
     @Override
     public void onAttach(Context context) {
@@ -57,10 +60,12 @@ public class ShowerListFragment extends BackHandledFragment {
             onCallShowViewListner = (OnCallShowViewListner) context;
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.showlist_fragment, null);
-        recyclerView = (XRecyclerView) v.findViewById(R.id.recycler_view);
+        view = inflater.inflate(R.layout.showlist_fragment, null);
+        loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -113,7 +118,30 @@ public class ShowerListFragment extends BackHandledFragment {
             recyclerView.setLayoutManager(gridLayoutManager);
         }
         getData(cataId, "0", Constants.REFRESH);
-        return v;
+
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData(cataId, "0", Constants.REFRESH);
+            }
+        });
+
+        view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(rooms,new ComparatorValues());
+                if(adapter!=null){
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
+        return view;
     }
 
     Handler handler = new Handler() {
@@ -135,7 +163,7 @@ public class ShowerListFragment extends BackHandledFragment {
                 }
                 if (roomList != null && roomList.roomList.size() > 0) {
                     rooms.addAll(roomList.roomList);
-                    Collections.sort(rooms, new ComparatorValues());
+
                     if (adapter == null) {
                         Display display = getActivity().getWindowManager().getDefaultDisplay();
                         Point size = new Point();
@@ -157,9 +185,13 @@ public class ShowerListFragment extends BackHandledFragment {
                         adapter.notifyDataSetChanged();
                     }
                 }
+
+                loadNetView.setVisibility(View.GONE);
             } else {
-                getData(cataId, "1", 0);
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
+
         }
     };
 
@@ -167,21 +199,20 @@ public class ShowerListFragment extends BackHandledFragment {
 
         @Override
         public int compare(Room room1, Room room2) {
-            int m1=Integer.parseInt(room1.onlineCount!=null?room1.onlineCount:"0");
-            int m2=Integer.parseInt(room2.onlineCount!=null?room2.onlineCount:"0");
-            int result=0;
-            if(m1>m2)
-            {
-                result=-1;
+            int m1 = Integer.parseInt(room1.onlineCount != null ? room1.onlineCount : "0");
+            int m2 = Integer.parseInt(room2.onlineCount != null ? room2.onlineCount : "0");
+            int result = 0;
+            if (m1 > m2) {
+                result = -1;
             }
-            if(m1<m2)
-            {
-                result=1;
+            if (m1 < m2) {
+                result = 1;
             }
             return result;
         }
 
     }
+
     public void getData(String cataId, String startPage, final int what) {
         String url = CommonUtil.getToggle(getActivity(), Constants.COMMON_TAB_DETAIL).getToggleObject().replace("CATAID", cataId).replace("NUM", String.valueOf(startPage)).replace("OFFSET", offset);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
@@ -219,5 +250,5 @@ public class ShowerListFragment extends BackHandledFragment {
     public interface OnCallShowViewListner {
         void onShowVideo(Room room, String pathPrefix, String screenType);
     }
-    
+
 }

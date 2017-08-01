@@ -52,10 +52,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private MemberAdapter mAdapter;
     private HeartLayout heartLayout;
     private Random mRandom;
-    private Timer mTimer = new Timer();
     private Room room;
     View view;
-
+    int onlineCount=0;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,7 +95,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         }
         int value = mRandom.nextInt(100);
         String finalValue = startValue + "" + value * 2560;
-        ((TextView) view.findViewById(R.id.onlineCount)).setText(room.onlineCount + "人");
+        onlineCount=Integer.parseInt(room.onlineCount);
+        ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
         ((TextView) view.findViewById(R.id.starValue)).setText("⭐：" + finalValue);
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
@@ -196,22 +196,41 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void run() {
                     heartLayout.addHeart(randomColor());
+                    Random random = new Random();
                 }
             });
             heartHandler.postDelayed(this, 1000);
         }
     };
-
+    Handler countHandler = new Handler();
+    Runnable countRunnable = new Runnable() {
+        @Override
+        public void run() {
+            countHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Random random = new Random();
+                    onlineCount=onlineCount+random.nextInt(4);
+                    ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount+ "人");
+                }
+            });
+            countHandler.postDelayed(this, 10000);
+        }
+    };
     @Override
     public void onPause() {
         super.onPause();
+        countHandler.removeCallbacks(countRunnable);
         heartHandler.removeCallbacks(heartRunnable);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        countHandler.postDelayed(countRunnable, 10000);
         heartHandler.postDelayed(heartRunnable, 1000);
+
     }
 
     private int randomColor() {
@@ -221,7 +240,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mTimer.cancel();
     }
 
     @Override

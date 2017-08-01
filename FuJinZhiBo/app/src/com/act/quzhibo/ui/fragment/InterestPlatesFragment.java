@@ -19,6 +19,7 @@ import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
     private ArrayList<InterestPlates> interestPlates = new ArrayList<>();
     private InterestPlatesListAdapter adapter;
     private ArrayList<InterestPlates> details = new ArrayList<>();
+    private LoadNetView loadNetView;
 
     @Nullable
     @Override
@@ -40,6 +42,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_square_interest_paltes, null, false);
         recyclerview = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        loadNetView= (LoadNetView) view.findViewById(R.id.loadview);
         recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
@@ -53,6 +56,14 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 return true;     //截断事件的传递
             }
         });
+
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData();
+            }
+        });
         return view;
     }
 
@@ -60,6 +71,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
         OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_TAB).getToggleObject()).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                handler.sendEmptyMessage(Constants.NetWorkError);
             }
             @Override
             public void onResponse(String response, int id) {
@@ -71,6 +83,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 }
                 Message message = handler.obtainMessage();
                 message.obj = interestPlates;
+                message.what = 0;
                 handler.sendMessage(message);
             }
         });
@@ -80,6 +93,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (msg.what != Constants.NetWorkError) {
             details.addAll((ArrayList<InterestPlates>) msg.obj);
             adapter = new InterestPlatesListAdapter(getContext(), details);
             adapter.setOnItemClickListener(new InterestPlatesListAdapter.OnRecyclerViewItemClickListener() {
@@ -93,6 +107,11 @@ public class InterestPlatesFragment extends BackHandledFragment {
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerview.setLayoutManager(linearLayoutManager);
             recyclerview.setAdapter(adapter);
+            loadNetView.setVisibility(View.GONE);
+        } else {
+            loadNetView.setVisibility(View.VISIBLE);
+            loadNetView.setlayoutVisily(Constants.RELOAD);
+        }
         }
     };
 

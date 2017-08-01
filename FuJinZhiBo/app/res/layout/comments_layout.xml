@@ -9,12 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:layout_margin="20dp"
+            android:layout_margin="25dp"
+            android:padding="20sp"
             android:text="我来打赏！"
             android:textSize="22sp"
             android:textStyle="normal"
+            android:layout_gravity="center"
             android:textColor="@color/colorAccent"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dashang"
             android:background="@drawable/background_card"/>
@@ -29,6 +31,7 @@
     <com.act.quzhibo.view.MyListView
         android:layout_width="match_parent"
         android:id="@+id/comments_lv"
+        android:listSelector="@android:color/transparent"
         android:layout_height="wrap_content"/>
 
     <LinearLayout
