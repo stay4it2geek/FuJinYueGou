@@ -5,31 +5,35 @@
     android:background="#eeeeee"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/tile_layout"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:visibility="gone">
-
         <TextView
-            android:id="@+id/layout"
+            android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="center_horizontal"
             android:background="#f6dd3e"
             android:gravity="center"
             android:paddingLeft="5dp"
+            android:visibility="gone"
             android:paddingRight="5dp"
             android:text="TA的情趣状态"
             android:textColor="#231F20"
             android:textSize="18sp" />
+    
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/interest_post_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:id="@+id/sort"
             android:layout_width="50dp"
             android:layout_height="60dp"
             android:layout_gravity="right"
-
             android:orientation="vertical">
 
             <View
@@ -48,19 +52,6 @@
                 android:textSize="10sp" />
 
         </LinearLayout>
-    </FrameLayout>
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <com.jcodecraeer.xrecyclerview.XRecyclerView
-            android:id="@+id/interest_post_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
 
         <com.act.quzhibo.view.LoadNetView
             android:id="@+id/loadview"

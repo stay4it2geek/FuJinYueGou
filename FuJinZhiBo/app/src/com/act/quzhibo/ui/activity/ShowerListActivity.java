@@ -85,7 +85,7 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
             }
 
         }
-        tabTitles.add("深夜福利");
+        tabTitles.add(1,"深夜福利");
         mFragments.add(1,new FuliFragement());
         View decorView = getWindow().getDecorView();
         ViewPager pager = ViewFindUtils.find(decorView, R.id.viewpager);

@@ -91,7 +91,7 @@ public class TabMainActivity extends TabActivity {
         tabHost.addTab(tabHost.newTabSpec("广场")
                 .setIndicator(null, null)
                 .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("赚钱")
+        tabHost.addTab(tabHost.newTabSpec("财富")
                 .setIndicator(null, null)
                 .setContent(new Intent(TabMainActivity.this, MoneyActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("我的")

@@ -44,7 +44,7 @@ public class CommonPersonPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_interest_post);
-        findViewById(R.id.tile_layout).setVisibility(View.VISIBLE);
+        findViewById(R.id.title_layout).setVisibility(View.VISIBLE);
         loadNetView= (LoadNetView) findViewById(R.id.loadview);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
         recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
