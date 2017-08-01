@@ -6,10 +6,10 @@
     android:orientation="vertical">
 
     <FrameLayout
-         android:id="@+id/tile_layout"
-        android:visibility="gone"
+        android:id="@+id/tile_layout"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/layout"
@@ -52,7 +52,6 @@
 
 
     <FrameLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

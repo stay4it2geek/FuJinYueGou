@@ -133,12 +133,12 @@ public class CommonPersonPostActivity extends AppCompatActivity {
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {
-                                if (false) {
+//                                if (false) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.POST_ID, post);
                                     intent.setClass(CommonPersonPostActivity.this, PostDetailActivity.class);
                                     startActivity(intent);
-                                }
+//                                }
                             }
                         });
                         recyclerView.setAdapter(adapter);

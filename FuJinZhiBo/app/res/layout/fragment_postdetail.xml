@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    android:background="#eeeeee">
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/postRecyleview"
         android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.act.quzhibo.view.LoadNetView
+        android:id="@+id/loadview"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="10dp" />
-</RelativeLayout>
+        android:background="#fff" />
+
+</FrameLayout>

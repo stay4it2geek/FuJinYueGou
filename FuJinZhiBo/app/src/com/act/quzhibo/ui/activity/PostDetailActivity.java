@@ -6,6 +6,7 @@ import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InteretstPostPageAdapter;
@@ -15,6 +16,7 @@ import com.act.quzhibo.entity.InterestPostPageParentData;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import okhttp3.Call;
@@ -27,10 +29,12 @@ public class PostDetailActivity extends AppCompatActivity {
     private InteretstPostPageAdapter adapter;
     private XRecyclerView recyclerview;
     private InterestPost post;
+    private LoadNetView loadNetView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.fragment_postdetail);
         recyclerview = (XRecyclerView) findViewById(R.id.postRecyleview);
         recyclerview.setHasFixedSize(true);
@@ -40,15 +44,26 @@ public class PostDetailActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         if (getIntent() != null) {
-            post = (InterestPost)getIntent().getSerializableExtra(Constants.POST_ID);
+            post = (InterestPost) getIntent().getSerializableExtra(Constants.POST_ID);
         }
         getData();
+
+        loadNetView = (LoadNetView) findViewById(R.id.loadview);
+
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData();
+            }
+        });
     }
 
     private void getData() {
         OkHttpUtils.get().url(CommonUtil.getToggle(this, Constants.POST_ID).getToggleObject().replace(Constants.POST_ID, post.postId)).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                handler.sendEmptyMessage(Constants.NetWorkError);
             }
 
             @Override
@@ -66,12 +81,18 @@ public class PostDetailActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
-            adapter = new InteretstPostPageAdapter(post, PostDetailActivity.this, data.result);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PostDetailActivity.this);
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerview.setLayoutManager(linearLayoutManager);
-            recyclerview.setAdapter(adapter);
+            if (msg.what != Constants.NetWorkError) {
+                InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
+                adapter = new InteretstPostPageAdapter(post, PostDetailActivity.this, data.result);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PostDetailActivity.this);
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerview.setLayoutManager(linearLayoutManager);
+                recyclerview.setAdapter(adapter);
+
+            } else {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
+            }
         }
     };
 

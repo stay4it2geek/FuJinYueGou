@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.TabMainActivity;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
 import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
@@ -102,7 +103,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.myfocus_shower:
-                getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));
 
                 break;
             case R.id.myfocus_person:

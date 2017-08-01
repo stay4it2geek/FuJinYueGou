@@ -21,6 +21,7 @@ import com.act.quzhibo.entity.InterestPostPageParentData;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import okhttp3.Call;
@@ -34,6 +35,7 @@ public class PostDetailFragment extends BackHandledFragment {
     private XRecyclerView recyclerview;
     private InterestPost post;
     private View view;
+    private LoadNetView loadNetView;
 
     @Nullable
     @Override
@@ -48,7 +50,7 @@ public class PostDetailFragment extends BackHandledFragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         if (getArguments() != null) {
-            post = (InterestPost)getArguments().getSerializable(Constants.POST_ID);
+            post = (InterestPost) getArguments().getSerializable(Constants.POST_ID);
         }
         getData();
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -57,7 +59,15 @@ public class PostDetailFragment extends BackHandledFragment {
                 return true;     //截断事件的传递
             }
         });
+        loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
 
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData();
+            }
+        });
         return view;
     }
 
@@ -65,6 +75,7 @@ public class PostDetailFragment extends BackHandledFragment {
         OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.POST_ID).getToggleObject().replace(Constants.POST_ID, post.postId)).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
+                handler.sendEmptyMessage(Constants.NetWorkError);
             }
 
             @Override
@@ -82,12 +93,18 @@ public class PostDetailFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
-            adapter = new InteretstPostPageAdapter(post, getActivity(), data.result);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerview.setLayoutManager(linearLayoutManager);
-            recyclerview.setAdapter(adapter);
+            if (msg.what != Constants.NetWorkError) {
+                InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
+                adapter = new InteretstPostPageAdapter(post, getActivity(), data.result);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerview.setLayoutManager(linearLayoutManager);
+                recyclerview.setAdapter(adapter);
+                loadNetView.setVisibility(View.GONE);
+            } else {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
+            }
         }
     };
 

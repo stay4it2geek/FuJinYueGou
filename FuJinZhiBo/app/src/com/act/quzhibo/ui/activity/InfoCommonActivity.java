@@ -74,7 +74,7 @@ public class InfoCommonActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        loadNetView= (LoadNetView) findViewById(R.id.loadview);
+        loadNetView = (LoadNetView) findViewById(R.id.loadview);
         Display display = this.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -155,29 +155,31 @@ public class InfoCommonActivity extends AppCompatActivity {
             super.handleMessage(msg);
             final InterestPostListInfoPersonParentData data =
                     CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
-            if (data!=null&&data.result != null) {
-                if (!TextUtils.isEmpty(data.result.totalNums)) {
-                    ((TextView) findViewById(R.id.textpost)).setText("图文动态(" + data.result.totalNums + ")");
-                }
-                if (data.result.posts != null && data.result.posts.size() > 0) {
-                    gridView = (GridView) findViewById(R.id.txt_img_gridview);
-                    ArrayList<String> imgs = new ArrayList<>();
-                    for (InterestPost post : data.result.posts) {
-                        if (post.images != null && post.images.size() > 0) {
-                            imgs.addAll(post.images);
-                        }
+            if (msg.what != Constants.NetWorkError) {
+                if (data != null && data.result != null) {
+                    if (!TextUtils.isEmpty(data.result.totalNums)) {
+                        ((TextView) findViewById(R.id.textpost)).setText("图文动态(" + data.result.totalNums + ")");
                     }
-                    if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                        gridView.setAdapter(new PostImageAdapter(InfoCommonActivity.this, imgs, 2,0));
-                        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                Intent intent = new Intent();
-                                intent.putExtra(Constants.COMMON_USER_ID, post.user.userId);
-                                intent.setClass(InfoCommonActivity.this, CommonPersonPostActivity.class);
-                                startActivity(intent);
+                    if (data.result.posts != null && data.result.posts.size() > 0) {
+                        gridView = (GridView) findViewById(R.id.txt_img_gridview);
+                        ArrayList<String> imgs = new ArrayList<>();
+                        for (InterestPost post : data.result.posts) {
+                            if (post.images != null && post.images.size() > 0) {
+                                imgs.addAll(post.images);
                             }
-                        });
+                        }
+                        if (data.result.posts.size() > 0 && imgs.size() > 0) {
+                            gridView.setAdapter(new PostImageAdapter(InfoCommonActivity.this, imgs, 2, 0));
+                            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    Intent intent = new Intent();
+                                    intent.putExtra(Constants.COMMON_USER_ID, post.user.userId);
+                                    intent.setClass(InfoCommonActivity.this, CommonPersonPostActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                        }
                     }
                     loadNetView.setVisibility(View.GONE);
                 } else {

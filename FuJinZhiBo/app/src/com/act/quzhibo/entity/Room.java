@@ -2,11 +2,13 @@ package com.act.quzhibo.entity;
 
 import java.io.Serializable;
 
+import cn.bmob.v3.BmobObject;
+
 /**
  * Created by asus-pc on 2017/5/31.
  */
 
-public class Room implements Serializable{
+public class Room extends BmobObject implements Serializable{
     public String roomId;
     public String userId;
     public String screenType;
