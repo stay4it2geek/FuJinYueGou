@@ -1,25 +1,197 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.adapter.CommonSeeAdapter;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.CommonPerson;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by weiminglin on 17/7/30.
  */
 
-public class FuliFragement extends Fragment {
+public class FuliFragement extends BackHandledFragment {
+
+    private XRecyclerView recyclerView;
+    private CommonSeeAdapter commonSeeAdapter;
+    private  View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_fuli,null,false);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_common, null, false);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView.setPullRefreshEnabled(true);
+        recyclerView.setLoadingMoreEnabled(true);
+        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.setNoMore(false);
+                        recyclerView.setLoadingMoreEnabled(true);
+                        queryData(Constants.REFRESH);
+                        recyclerView.refreshComplete();
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onLoadMore() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        queryData(Constants.LOADMORE);
+                        recyclerView.loadMoreComplete();
+                    }
+                }, 1000);
+            }
+        });
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        queryData(Constants.REFRESH);
+
         return view;
     }
+
+
+
+    private int limit = 10; // 每页的数据是10条
+    String lastTime = "";
+    ArrayList<CommonPerson> commonPersons = new ArrayList<>();
+
+    /**
+     * 分页获取数据
+     *
+     * @param actionType
+     */
+    private void queryData(final int actionType) {
+        final BmobQuery<CommonPerson> query = new BmobQuery<>();
+        query.setLimit(limit);
+        // 如果是加载更多
+        if (actionType == Constants.LOADMORE) {
+            // 只查询小于最后一个item发表时间的数据
+            Date date = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                date = sdf.parse(lastTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
+        }
+        query.order("-updatedAt");
+        query.findObjects(new FindListener<CommonPerson>() {
+            @Override
+            public void done(List<CommonPerson> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() > 0) {
+                        if (actionType == Constants.REFRESH) {
+                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
+                            commonPersons.clear();
+                            lastTime = list.get(list.size() - 1).getCreatedAt();
+                            commonPersons.addAll(list);
+                        } else if (actionType == Constants.LOADMORE) {
+                            commonPersons.addAll(list);
+                            lastTime = list.get(list.size() - 1).getCreatedAt();
+                        }
+                        Message message = new Message();
+                        message.obj = commonPersons;
+                        message.what = actionType;
+                        handler.sendMessage(message);
+                    } else {
+                        handler.sendEmptyMessage(Constants.NO_MORE);
+                    }
+                }
+            }
+        });
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(commonSeeAdapter!=null){
+            commonSeeAdapter.setCount();
+        }
+    }
+    public static final class ComparatorValues implements Comparator<CommonPerson> {
+
+        @Override
+        public int compare(CommonPerson post1, CommonPerson post2) {
+            int m1=Integer.parseInt(post1.viewTime!=null?post1.viewTime:"0");
+            int m2=Integer.parseInt(post2.viewTime!=null?post2.viewTime:"0");
+            int result=0;
+            if(m1>m2)
+            {
+                result=1;
+            }
+            if(m1<m2)
+            {
+                result=-1;
+            }
+            return result;
+        }
+
+    }
+    private int seeMeSize;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            ArrayList<CommonPerson> commonPersons = (ArrayList<CommonPerson>) msg.obj;
+            if (msg.what != Constants.NetWorkError) {
+                if (msg.what != Constants.NO_MORE) {
+                    if (commonPersons != null) {
+                        seeMeSize = commonPersons.size();
+                    }
+                    Collections.sort(commonPersons, new CommonSeeFragment.ComparatorValues());
+                    if (seeMeSize > 0) {
+                        if (commonSeeAdapter == null) {
+                            commonSeeAdapter = new CommonSeeAdapter(getActivity(), commonPersons);
+                            recyclerView.setAdapter(commonSeeAdapter);
+                        } else {
+                            commonSeeAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    recyclerView.setHasFixedSize(true);
+                } else {
+                    recyclerView.setNoMore(true);
+                }
+            } else {
+
+            }
+        }
+    };
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+
 }

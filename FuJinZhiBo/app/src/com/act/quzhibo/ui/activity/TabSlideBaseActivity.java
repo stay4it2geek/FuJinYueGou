@@ -34,7 +34,7 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
         setContentView(R.layout.activity_common_tab);
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(),getFragments(),decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter,getActivityType());
+        CommonUtil.initView(getTitles(),decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter,getActivityType());
 
     }
 

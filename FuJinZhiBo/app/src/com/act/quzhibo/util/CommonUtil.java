@@ -10,23 +10,19 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 
 import com.act.quzhibo.LocationData;
-import com.act.quzhibo.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.entity.Toggle;
-import com.act.quzhibo.ui.fragment.CommonFragment;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.netease.neliveplayer.util.string.StringUtil;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -37,12 +33,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -139,10 +132,7 @@ public class CommonUtil {
         }
         return arrayList;
     }
-    public static void initView(String[] mTitles, ArrayList<Fragment> mFragments, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter, boolean activityType) {
-        for (String title : mTitles) {
-            mFragments.add(CommonFragment.getInstance(title));
-        }
+    public static void initView(String[] mTitles,View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter, boolean activityType) {
         final CommonTabLayout commonTabLayout;
         viewPager.setAdapter(mAdapter);
         if (activityType) {

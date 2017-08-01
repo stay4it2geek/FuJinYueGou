@@ -40,4 +40,5 @@ public class Constants {
     public static final String POST_LIST = "POST_LIST";
     public static final String POST_DATA = "POST_DATA";
     public static final String COMMON_USER_ID = "COMMON_USER_ID";
+    public static final int LOAD = 1;
 }
