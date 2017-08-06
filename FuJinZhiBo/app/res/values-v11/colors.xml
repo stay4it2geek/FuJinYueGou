@@ -7,6 +7,6 @@
       <color name="tabline">#f6dd3e</color>
     <color name="colorbg">#eeeeee</color>
     <color name="linetabcolor">#231F20</color>
-
+    <color name="gray"> #B8B8B8</color>
 
 </resources>

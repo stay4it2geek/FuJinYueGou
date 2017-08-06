@@ -5,8 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.ArrayList;
-
-
 public class ViewPlayerPageAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> fragments;
     public ViewPlayerPageAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {

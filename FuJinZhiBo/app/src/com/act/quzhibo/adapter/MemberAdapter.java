@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 public class MemberAdapter extends BaseListAdapter{
     ArrayList<Member> members;
-
     public MemberAdapter(Context ctx,  ArrayList<Member> members) {
         super(ctx);
         this.members=members;
@@ -31,7 +30,6 @@ public class MemberAdapter extends BaseListAdapter{
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
         if (!TextUtils.isEmpty(members.get(position).headUrl)) {
             Glide.with(ctx).load(members.get(position).headUrl).into(viewHolder.avatar);
         }

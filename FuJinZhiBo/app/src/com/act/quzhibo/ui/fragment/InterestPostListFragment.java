@@ -17,11 +17,8 @@ import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostListInfoParentData;
-import com.act.quzhibo.entity.InterstPostListResult;
-
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
-import com.act.quzhibo.ui.activity.CommonPersonPostActivity;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
@@ -32,11 +29,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import okhttp3.Call;
-
-/**
- * Created by weiminglin on 17/6/1.
- * 情趣帖子
- */
 
 public class InterestPostListFragment extends BackHandledFragment {
     private XRecyclerView recyclerView;
@@ -129,6 +121,11 @@ public class InterestPostListFragment extends BackHandledFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     public static final class ComparatorValues implements Comparator<InterestPost> {
 
         @Override
@@ -193,6 +190,7 @@ public class InterestPostListFragment extends BackHandledFragment {
 
                 loadNetView.setVisibility(View.GONE);
             } else {
+                Log.e("tests","fdsfdsf");
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }

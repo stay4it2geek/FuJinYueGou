@@ -1,6 +1,7 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,12 +12,14 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -44,6 +47,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.act.quzhibo.R.id.view;
 
 /**
  * Created by asus-pc on 2017/6/11.
@@ -154,7 +159,9 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 ((Item1ViewHolder) holder).sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
             }
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
-            ((Item1ViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
+            if (day < 365) {
+                ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
+            }
             ((Item1ViewHolder) holder).nickName.setText(data.detail.user.nick);
             ((Item1ViewHolder) holder).title.setText(data.detail.title);
 
@@ -222,30 +229,29 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
             }.execute();
         } else if (holder instanceof Item2ViewHolder) {
-            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1,1));
+            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1, 1));
         } else {
-            PostCommentAdapter  adapter=new PostCommentAdapter(activity, data.comments);
+            PostCommentAdapter adapter = new PostCommentAdapter(activity, data.comments);
             ((Item3ViewHolder) holder).commentsList.setAdapter(adapter);
             ((Item3ViewHolder) holder).pinglunlayout.setVisibility(View.VISIBLE);
             ((Item3ViewHolder) holder).pinglun.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InterestPostPageCommentDetail newComment=new InterestPostPageCommentDetail();
-                    newComment.user=new CommonPerson();
-                    data.comments.add(newComment);
-
-
+                    if (((Item3ViewHolder) holder).talk.getText().equals("点击这里评论她/他") || ((Item3ViewHolder) holder).talk.getText().length()== 0) {
+                        Toast.makeText(activity, "您是否忘记了评论内容?", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(activity, "正在评论...", Toast.LENGTH_SHORT).show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, "评论异常，请稍后重试！", Toast.LENGTH_SHORT).show();
+                                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(((Item3ViewHolder) holder).pinglun.getWindowToken(), 0);
+                            }
+                        }, 1000);
+                    }
                 }
             });
-            ((Item3ViewHolder) holder).button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(activity,"shang",Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
-
         }
 
     }
@@ -306,12 +312,11 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     class Item3ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout pinglunlayout;
         private MyListView commentsList;
-        private Button button;
-        private  EditText talk;
-        private  TextView pinglun;
+        private EditText talk;
+        private TextView pinglun;
+
         public Item3ViewHolder(View view) {
             super(view);
-            button = (Button) view.findViewById(R.id.dashang);
             pinglunlayout = (LinearLayout) view.findViewById(R.id.pinglunlayout);
             talk = (EditText) view.findViewById(R.id.talk);
             pinglun = (TextView) view.findViewById(R.id.pinglun);

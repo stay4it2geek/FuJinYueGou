@@ -9,9 +9,6 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *  通用基础adapter
- */
 public class BaseListAdapter<T> extends BaseAdapter {
   protected Context ctx;
   protected LayoutInflater inflater;

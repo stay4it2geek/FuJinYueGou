@@ -3,31 +3,18 @@ package com.act.quzhibo.ui.activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.InteretstPostPageAdapter;
-import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.GlideImageLoader;
-import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.entity.InterestPostListInfoParentData;
 import com.act.quzhibo.entity.NearPerson;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
-import com.act.quzhibo.view.HorizontialListView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
 
@@ -35,12 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import okhttp3.Call;
-
-/**
- * Created by asus-pc on 2017/5/30.
- * fujin用户档案界面
- */
 
 public class NearInfoCommonActivity extends AppCompatActivity {
 

@@ -28,13 +28,6 @@ import java.util.List;
 
 import okhttp3.Call;
 
-/**
- * Created by asus-pc on 2017/5/30.
- */
-
-/**
- * 主播个人档案
- */
 public class ShowerInfoActivityLandscape extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +79,7 @@ public class ShowerInfoActivityLandscape extends Activity {
                         findViewById(R.id.isShowing).setVisibility(View.VISIBLE);
                         ((TextView) findViewById(R.id.isShowing)).setText("直播中");
                     }
-                    if (introduce != null&&!introduce.equals("")) {
+                    if (introduce != null && !introduce.equals("")) {
                         findViewById(R.id.introduce).setVisibility(View.VISIBLE);
                         ((TextView) findViewById(R.id.introduce)).setText(introduce != null ? introduce : "");
                     }
@@ -95,8 +88,8 @@ public class ShowerInfoActivityLandscape extends Activity {
                     List<String> urls = new ArrayList<>();
                     if (photos != null && photos.length() > 0) {
                         for (int i = 0; i < photos.length(); i++) {
-                            JSONObject jsonObject2=photos.getJSONObject(i);
-                            String url= (String) jsonObject2.get("photo_path_original");
+                            JSONObject jsonObject2 = photos.getJSONObject(i);
+                            String url = (String) jsonObject2.get("photo_path_original");
                             urls.add(url);
                         }
                     } else {
@@ -113,7 +106,9 @@ public class ShowerInfoActivityLandscape extends Activity {
                     }
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+
+            } catch (Exception e) {
+
             }
         }
     };

@@ -5,9 +5,6 @@ import com.act.quzhibo.okhttp.request.RequestCall;
 
 import okhttp3.RequestBody;
 
-/**
- * DELETE、PUT、PATCH等其他方法
- */
 public class OtherRequestBuilder extends OkHttpRequestBuilder<OtherRequestBuilder>
 {
     private RequestBody requestBody;

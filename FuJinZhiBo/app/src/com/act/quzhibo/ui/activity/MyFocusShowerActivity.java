@@ -29,9 +29,6 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-/**
- * Created by weiminglin on 17/8/1.
- */
 
 public class MyFocusShowerActivity extends AppCompatActivity {
 

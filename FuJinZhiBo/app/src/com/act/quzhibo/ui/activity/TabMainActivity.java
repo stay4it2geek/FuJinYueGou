@@ -2,17 +2,11 @@ package com.act.quzhibo.ui.activity;
 
 import android.Manifest;
 import android.app.TabActivity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
@@ -23,7 +17,6 @@ import com.act.quzhibo.entity.PlateCatagory;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
-import com.act.quzhibo.view.FragmentDialog;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -35,12 +28,12 @@ import java.util.List;
 public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
-    private String[] mTitles = {"多媒体", "直播", "广场", "财富", "我的"};
-    private String[] mTitlesSpecial = {"多媒体", "直播", "我的"};
+    private String[] mTitles = {"课堂", "直播", "广场", "财富", "我的"};
+    private String[] mTitlesSpecial = {"直播", "我的"};
     private int[] mIconUnselectIds = {R.drawable.home, R.drawable.zhibo, R.drawable.square, R.drawable.money, R.drawable.mine};
-    private int[] mIconUnselectIdsSpecial = {R.drawable.home, R.drawable.zhibo, R.drawable.mine};
+    private int[] mIconUnselectIdsSpecial = {R.drawable.zhibo, R.drawable.mine};
     private int[] mIconSelectIds = {R.drawable.home_s, R.drawable.zhibo_s, R.drawable.square_s, R.drawable.money_s, R.drawable.mine_s};
-    private int[] mIconSelectIdsSpecial = {R.drawable.home_s, R.drawable.zhibo_s, R.drawable.mine_s};
+    private int[] mIconSelectIdsSpecial = {R.drawable.zhibo_s, R.drawable.mine_s};
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
     private StringBuffer catagory;
@@ -51,29 +44,6 @@ public class TabMainActivity extends TabActivity {
     private final int WRITE_PERMISSION_REQ_CODE = 100;
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // TODO Auto-generated method stub
-
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("你确定退出吗？")
-                    .setCancelable(false)
-                    .setPositiveButton("确定",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                    TabMainActivity.this.finish();
-                                }
-                            });
-            AlertDialog alert = builder.create();
-            alert.show();
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
@@ -82,7 +52,7 @@ public class TabMainActivity extends TabActivity {
         tabHost = TabMainActivity.this.getTabHost();
         Intent showListIntent = new Intent(TabMainActivity.this, ShowerListActivity.class);
         showListIntent.putExtra(Constants.TAB_PLATE_LIST, getIntent().getStringExtra(Constants.TAB_PLATE_LIST));
-        tabHost.addTab(tabHost.newTabSpec("多媒体")
+        tabHost.addTab(tabHost.newTabSpec("课堂")
                 .setIndicator(null, null)
                 .setContent(new Intent(TabMainActivity.this, MultipleMeideaActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("直播")
@@ -98,18 +68,18 @@ public class TabMainActivity extends TabActivity {
                 .setIndicator(null, null)
                 .setContent(new Intent(TabMainActivity.this, MineActivity.class)));
         bPermission = checkPublishPermission();
-        if (!bPermission) {
-            Snackbar.make(findViewById(R.id.snack), "请设置权限", Snackbar.LENGTH_INDEFINITE).setAction("确定", new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    intent.setData(uri);
-                    startActivityForResult(intent, REQUEST_PERMISSION_SEETING);
-                }
-            }).show();
-        }
+//        if (!bPermission) {
+//            Snackbar.make(findViewById(R.id.snack), "请设置权限", Snackbar.LENGTH_INDEFINITE).setAction("确定", new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+//                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+//                    intent.setData(uri);
+//                    startActivityForResult(intent, REQUEST_PERMISSION_SEETING);
+//                }
+//            }).show();
+//        }
         SetIndexButton();
         tabHost.setCurrentTab(0);
     }

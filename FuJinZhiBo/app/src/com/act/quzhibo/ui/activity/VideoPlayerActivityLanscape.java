@@ -18,9 +18,6 @@ import com.act.quzhibo.ui.fragment.NoFragment;
 
 import java.util.ArrayList;
 
-/**
- * 直播播放
- */
 public class VideoPlayerActivityLanscape extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;

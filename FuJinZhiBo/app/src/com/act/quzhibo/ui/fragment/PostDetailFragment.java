@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +14,6 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InteretstPostPageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.InterestPostPageParentData;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
@@ -26,9 +23,6 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import okhttp3.Call;
 
-/**
- * Created by weiminglin on 17/6/4.
- */
 
 public class PostDetailFragment extends BackHandledFragment {
     private InteretstPostPageAdapter adapter;

@@ -6,9 +6,7 @@ import android.view.View;
 @SuppressWarnings({ "unchecked" })
 public class ViewFindUtils
 {
-	/**
-	 * ViewHolder简洁写法,避免适配器中重复定义ViewHolder,减少代码量
-	 */
+
 	public static <T extends View> T hold(View view, int id)
 	{
 		SparseArray<View> viewHolder = (SparseArray<View>) view.getTag();

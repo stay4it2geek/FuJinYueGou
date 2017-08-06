@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -15,13 +14,9 @@ import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 import com.act.quzhibo.view.FragmentDialog;
-import com.flyco.tablayout.CommonTabLayout;
 
 import java.util.ArrayList;
 
-/**
- * Created by weiminglin on 17/5/30.
- */
 
 public abstract class TabSlideBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface{
     protected MyPagerAdapter mAdapter;

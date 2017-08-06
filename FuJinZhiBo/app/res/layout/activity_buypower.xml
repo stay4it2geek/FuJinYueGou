@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/img3"
-            android:text="无限次阅读秘笈教程" />
+            android:text="无限次查看帖子" />
 
     </RelativeLayout>
 
@@ -205,7 +205,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/img7"
-            android:text="解锁福利秀场直播"
+            android:text="解锁深夜秀场直播"
             android:textColor="@color/colorAccent" />
 
 

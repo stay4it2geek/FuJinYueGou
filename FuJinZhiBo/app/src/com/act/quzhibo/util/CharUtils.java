@@ -2,11 +2,6 @@ package com.act.quzhibo.util;
 
 import java.util.Random;
 
-/**
- * author：Administrator on 2016/12/26 10:32
- * description:文件说明
- * version:版本
- */
 public class CharUtils {
     public static String getRandomString(int length){
         Random random=new Random();

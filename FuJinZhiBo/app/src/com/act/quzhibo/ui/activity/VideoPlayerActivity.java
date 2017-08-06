@@ -1,9 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
-import android.annotation.TargetApi;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,9 +18,7 @@ import com.act.quzhibo.ui.fragment.NoFragment;
 
 import java.util.ArrayList;
 
-/**
- * 直播播放
- */
+
 public class VideoPlayerActivity extends FragmentActivity implements ChatFragment.OnFinishVideoCallbak {
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;

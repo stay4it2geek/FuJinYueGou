@@ -34,23 +34,19 @@ import java.util.Comparator;
 
 import okhttp3.Call;
 
-
 public class ShowerListFragment extends BackHandledFragment {
     private String cataId;
     private OnCallShowViewListner onCallShowViewListner;
     private XRecyclerView recyclerView;
     private ArrayList<Room> rooms = new ArrayList<>();
-
     private int roomTotal = 0;
     private int mCurrentCounter = 0;
     private int mLastRequstRoomListSize;
-
     private RoomListAdapter adapter;
     private int page;
     private String offset;
     private String cataTitle;
-
-    View view;
+    private View view;
     private LoadNetView loadNetView;
 
     @Override
@@ -99,7 +95,6 @@ public class ShowerListFragment extends BackHandledFragment {
                         } else {
                             recyclerView.setNoMore(true);
                         }
-
                     }
                 }, 1000);
             }
@@ -118,7 +113,6 @@ public class ShowerListFragment extends BackHandledFragment {
             recyclerView.setLayoutManager(gridLayoutManager);
         }
         getData(cataId, "0", Constants.REFRESH);
-
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,12 +120,11 @@ public class ShowerListFragment extends BackHandledFragment {
                 getData(cataId, "0", Constants.REFRESH);
             }
         });
-
         view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collections.sort(rooms,new ComparatorValues());
-                if(adapter!=null){
+                Collections.sort(rooms, new ComparatorValues());
+                if (adapter != null) {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -163,7 +156,6 @@ public class ShowerListFragment extends BackHandledFragment {
                 }
                 if (roomList != null && roomList.roomList.size() > 0) {
                     rooms.addAll(roomList.roomList);
-
                     if (adapter == null) {
                         Display display = getActivity().getWindowManager().getDefaultDisplay();
                         Point size = new Point();
@@ -185,7 +177,6 @@ public class ShowerListFragment extends BackHandledFragment {
                         adapter.notifyDataSetChanged();
                     }
                 }
-
                 loadNetView.setVisibility(View.GONE);
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
@@ -196,7 +187,6 @@ public class ShowerListFragment extends BackHandledFragment {
     };
 
     public static final class ComparatorValues implements Comparator<Room> {
-
         @Override
         public int compare(Room room1, Room room2) {
             int m1 = Integer.parseInt(room1.onlineCount != null ? room1.onlineCount : "0");
@@ -210,7 +200,6 @@ public class ShowerListFragment extends BackHandledFragment {
             }
             return result;
         }
-
     }
 
     public void getData(String cataId, String startPage, final int what) {
@@ -220,7 +209,6 @@ public class ShowerListFragment extends BackHandledFragment {
             public void onError(Call call, Exception e, int id) {
                 handler.sendEmptyMessage(Constants.NetWorkError);
             }
-
             @Override
             public void onResponse(String response, int id) {
                 Message message = handler.obtainMessage();

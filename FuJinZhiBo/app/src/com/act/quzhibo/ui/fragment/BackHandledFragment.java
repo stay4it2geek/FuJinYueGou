@@ -1,15 +1,9 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
-/**
- * Created by asus-pc on 2017/6/3.
- */
 
 public abstract class BackHandledFragment extends Fragment {
 

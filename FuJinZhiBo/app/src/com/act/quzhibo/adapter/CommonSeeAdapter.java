@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +27,10 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-
-/**
- * Created by asus-pc on 2017/5/31.
- */
 
 public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity activity;
-    private List<CommonPerson> datas;//数据
-
-    //适配器初始化
+    private List<CommonPerson> datas;
     public CommonSeeAdapter(Activity context, List<CommonPerson> datas) {
         activity = context;
         this.datas = datas;

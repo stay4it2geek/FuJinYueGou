@@ -1,12 +1,9 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">0dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="avatar_size36">36dp</dimen>
     <dimen name="dingdanheight">45dp</dimen>
 
-    <!-- 飘星 -->
     <dimen name="heart_anim_bezier_x_rand">50.0dp</dimen>
     <dimen name="heart_anim_init_x">50.0dp</dimen>
     <dimen name="heart_anim_init_y">25.0dp</dimen>

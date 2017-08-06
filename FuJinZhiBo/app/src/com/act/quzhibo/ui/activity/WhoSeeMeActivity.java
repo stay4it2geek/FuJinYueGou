@@ -8,10 +8,6 @@ import com.act.quzhibo.ui.fragment.NearFragment;
 
 import java.util.ArrayList;
 
-/**
- * Created by weiminglin on 17/6/15.
- */
-
 public class WhoSeeMeActivity extends TabSlideBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

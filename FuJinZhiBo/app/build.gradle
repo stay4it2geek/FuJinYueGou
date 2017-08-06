@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 dependencies {
     provided fileTree(include: '*.jar', dir: 'libs')
-    //noinspection GradleCompatible
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.wuxiaolong.pullloadmorerecyclerview:library:1.0.4'
@@ -46,9 +45,9 @@ android {
         }
     }
 
-    repositories {  //本地aar方式
+    repositories {
         flatDir {
-            dirs 'libs' //this way we can find the .aar file in libs folder
+            dirs 'libs'
         }
     }
 

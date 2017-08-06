@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 import cn.bmob.v3.BmobObject;
 
-/**
- * Created by asus-pc on 2017/6/16.
- */
 public class NearSeePerson extends BmobObject implements Serializable{
     public String disMariState;//,
     public String disPurpose;//短期public String   ,

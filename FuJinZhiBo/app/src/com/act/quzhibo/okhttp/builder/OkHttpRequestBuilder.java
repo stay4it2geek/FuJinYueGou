@@ -5,7 +5,6 @@ import com.act.quzhibo.okhttp.request.RequestCall;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder>
 {
     protected String url;

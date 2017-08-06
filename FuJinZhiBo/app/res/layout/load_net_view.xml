@@ -1,47 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
 
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/reloadlayout"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
 
         <ImageView
             android:layout_width="115dp"
+            android:layout_height="140dp"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="100dp"
-            android:layout_centerHorizontal="true"
-            android:layout_height="140dp"
-            android:background="@drawable/cover"/>
+            android:background="@drawable/cover" />
 
         <TextView
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_margin="20dp"
-            android:textSize="16sp"
             android:layout_height="wrap_content"
-            android:text="网络飞走了呀"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            android:text="网络飞走了呀"
+            android:textSize="16sp" />
+
         <Button
 
             android:id="@+id/relaodbutton"
             android:layout_width="wrap_content"
-            android:paddingLeft="40dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="40dp"
-            android:textSize="16sp"
-            android:text="重新加载"
-            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:background="@color/tabline"/>
+            android:layout_gravity="center_horizontal"
+            android:background="@color/tabline"
+            android:paddingBottom="10dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="10dp"
+            android:text="重新加载"
+            android:textSize="16sp" />
 
     </LinearLayout>
+
     <LinearLayout
 
         android:id="@+id/loadlayout"
@@ -53,16 +57,16 @@
         <ProgressBar
             style="@android:style/Widget.Holo.Light.ProgressBar"
             android:layout_width="30dp"
-            android:layout_margin="10dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
-            android:layout_height="30dp" />
+            android:layout_margin="5dp" />
 
         <TextView
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="center"
             android:text="加载中......" />
     </LinearLayout>
 

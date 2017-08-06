@@ -11,7 +11,6 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -26,16 +25,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
-
-/**
- * Created by asus-pc on 2017/5/31.
- */
-
 public class NearAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity activity;
     private List<NearPerson> datas;//数据
-
-    //适配器初始化
     public NearAdapter(Activity context, List<NearPerson> datas) {
         activity = context;
         this.datas = datas;
@@ -84,7 +76,6 @@ public class NearAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
                         ((MyViewHolder) holder).photoImg.setBackgroundDrawable(placeholder);
-
                     }
                 });
 
@@ -99,7 +90,6 @@ public class NearAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
                         ((MyViewHolder) holder).photoImg.setBackgroundDrawable(placeholder);
-
                     }
                 });
             }
@@ -127,8 +117,6 @@ public class NearAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             arealocation = (TextView) view.findViewById(R.id.arealocation);
             near_layout = (RelativeLayout) view.findViewById(R.id.near_layout);
             introduce = (TextView) view.findViewById(R.id.introduce);
-
         }
     }
-
 }

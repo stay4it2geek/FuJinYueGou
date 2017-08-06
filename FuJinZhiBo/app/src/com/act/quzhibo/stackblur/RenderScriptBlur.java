@@ -8,9 +8,6 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
 
-/**
- * Created by jiatao on 2016/8/3.
- */
 public class RenderScriptBlur implements BlurProcess{
     /**
      * 图片缩放比例

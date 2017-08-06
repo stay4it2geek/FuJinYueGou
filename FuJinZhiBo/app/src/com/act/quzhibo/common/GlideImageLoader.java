@@ -5,16 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.youth.banner.loader.ImageLoader;
-
-/**
- * Created by asus-pc on 2017/6/25.
- */
-
 public class GlideImageLoader extends ImageLoader {
         int drawableId;
         public GlideImageLoader(int drawableId) {

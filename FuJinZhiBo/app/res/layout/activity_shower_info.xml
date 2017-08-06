@@ -4,162 +4,165 @@
     android:layout_height="match_parent"
     android:background="#fff">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_gravity="bottom">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <com.act.quzhibo.view.CircleImageView
-                android:id="@+id/userImage"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="bottom">
+
+                <com.act.quzhibo.view.CircleImageView
+                    android:id="@+id/userImage"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp" />
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/userImage"
+                    android:layout_toRightOf="@+id/userImage"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/fansCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/nickName"
+                    android:layout_below="@+id/nickName"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/bg_circle_orange30"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="2dp"
+                    android:text="粉丝 0"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="7dp"
+                android:background="@color/colorbg" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="150dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:text="上下滑动查看更多"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="14sp" />
+
+                <com.youth.banner.Banner
+                    android:id="@+id/banner"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp" />
+
+                <TextView
+                    android:id="@+id/isShowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/bg_circle_orange30"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:paddingTop="10dp"
+                    android:text=""
+                    android:textColor="#fff"
+                    android:textSize="15sp"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/colorbg" />
 
             <TextView
-                android:id="@+id/nickName"
-                android:layout_width="wrap_content"
+                android:id="@+id/introduce"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_toEndOf="@+id/userImage"
-                android:layout_toRightOf="@+id/userImage"
-                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:gravity="left"
+                android:padding="20dp"
                 android:text=""
+                android:textColor="#000"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/colorbg" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/focuslayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/talk"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/background_card"
+                android:button="@null"
+                android:gravity="center"
+                android:text="私聊TA"
                 android:textColor="#000"
                 android:textSize="16sp" />
 
-            <TextView
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="#aaa" />
+
+            <RadioButton
+                android:id="@+id/focus"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/background_card"
+                android:button="@null"
+                android:gravity="center"
+                android:text="关注TA"
                 android:textColor="#000"
-                android:id="@+id/fansCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/nickName"
-                android:layout_below="@+id/nickName"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/bg_circle_orange30"
-                android:paddingBottom="2dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="2dp"
-                android:text="粉丝 0"
-                android:textSize="15sp" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="7dp"
-            android:background="@color/colorbg" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="30dp"
-                android:gravity="center_vertical"
-                android:text="上下滑动查看更多"
-                android:textSize="14sp"
-                android:textColor="@color/colorAccent"
-                android:layout_marginLeft="20dp"
-                android:layout_height="150dp" />
-            <com.youth.banner.Banner
-                android:layout_margin="10dp"
-                android:id="@+id/banner"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/isShowing"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_margin="20dp"
-                android:background="@drawable/bg_circle_orange30"
-                android:paddingBottom="10dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:paddingTop="10dp"
-                android:text=""
-                android:textColor="#fff"
-                android:textSize="15sp"
-                android:visibility="gone" />
-        </FrameLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/colorbg" />
-
-        <TextView
-            android:id="@+id/introduce"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:gravity="left"
-            android:padding="20dp"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="15sp"
-            android:visibility="gone" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/colorbg" />
+                android:textSize="16sp" />
+        </LinearLayout>
     </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/focuslayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/talk"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/background_card"
-            android:button="@null"
-            android:textColor="#000"
-            android:gravity="center"
-            android:text="私聊TA"
-            android:textSize="16sp" />
-
-        <View
-            android:layout_width="0.5dp"
-            android:layout_height="match_parent"
-            android:background="#aaa" />
-        <RadioButton
-            android:id="@+id/focus"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/background_card"
-            android:button="@null"
-            android:gravity="center"
-            android:text="关注TA"
-            android:textColor="#000"
-            android:textSize="16sp" />
-    </LinearLayout>
-</LinearLayout>
 </ScrollView>

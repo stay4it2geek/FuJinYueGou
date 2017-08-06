@@ -26,9 +26,6 @@ import java.util.ArrayList;
 
 import okhttp3.Call;
 
-/**
- * 情趣板块
- */
 public class InterestPlatesFragment extends BackHandledFragment {
     private XRecyclerView recyclerview;
     private ArrayList<InterestPlates> interestPlates = new ArrayList<>();

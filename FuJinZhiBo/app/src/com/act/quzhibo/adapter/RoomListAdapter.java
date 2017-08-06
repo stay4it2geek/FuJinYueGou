@@ -1,6 +1,5 @@
 package com.act.quzhibo.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -17,11 +16,6 @@ import com.act.quzhibo.entity.Room;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-
-/**
- * Created by asus-pc on 2017/5/31.
- */
 
 public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -53,7 +47,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_showe_room_item, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_shower_room_item, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }

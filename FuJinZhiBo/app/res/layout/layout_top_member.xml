@@ -96,7 +96,7 @@
                 android:paddingRight="10dp"
                 android:paddingTop="5dp"
                 android:text="关注"
-                android:textColor="@color/colorAccent"
+                android:textColor="#000"
                 android:textSize="13sp" />
         </LinearLayout>
 

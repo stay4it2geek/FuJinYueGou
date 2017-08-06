@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="160dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_height="180dp"
-        android:background="@drawable/cover"/>
+        <com.act.quzhibo.view.MarqueeTextView
+            android:id="@+id/martext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/background_card"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:text="半年福利授权98元，一年福利授权198元，终身福利授权只需298元，所有福利资源一网打尽，每天更新！涨姿势，有内涵，有节操，有态度，你还在犹豫什么?赶紧加入！享受不一样的快感！"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp" />
 
-<TextView
-    android:layout_gravity="center_horizontal"
-    android:layout_width="wrap_content"
-    android:layout_margin="20dp"
-    android:textSize="20sp"
-    android:layout_height="wrap_content"
-    android:text="网络飞走了呀"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:textSize="20sp"
-        android:text="重新加载"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="wrap_content"
-        android:background="@color/tabline"/>
+        <ExpandableListView
+            android:id="@+id/expendlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/martext">
+        </ExpandableListView>
+    </RelativeLayout>
 
-</LinearLayout>
-
-
-</LinearLayout>
+    <com.act.quzhibo.view.LoadNetView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:background="#fff"
+        android:layout_height="match_parent" />
+</FrameLayout>

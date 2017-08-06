@@ -1,13 +1,8 @@
 package com.act.quzhibo.common;
 
 import android.app.Application;
-
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
-
-/**
- * Created by asus-pc on 2017/5/30.
- */
 
 public class MyApplicaition extends Application {
 

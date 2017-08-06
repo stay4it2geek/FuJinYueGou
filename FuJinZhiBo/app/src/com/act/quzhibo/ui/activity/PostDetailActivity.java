@@ -3,7 +3,6 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -21,9 +20,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import okhttp3.Call;
 
-/**
- * Created by weiminglin on 17/6/4.
- */
+
 
 public class PostDetailActivity extends AppCompatActivity {
     private InteretstPostPageAdapter adapter;
@@ -34,9 +31,9 @@ public class PostDetailActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.fragment_postdetail);
         recyclerview = (XRecyclerView) findViewById(R.id.postRecyleview);
+       findViewById(R.id.layout).setVisibility(View.VISIBLE);
         recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
@@ -47,9 +44,7 @@ public class PostDetailActivity extends AppCompatActivity {
             post = (InterestPost) getIntent().getSerializableExtra(Constants.POST_ID);
         }
         getData();
-
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +83,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerview.setLayoutManager(linearLayoutManager);
                 recyclerview.setAdapter(adapter);
-
+                loadNetView.setVisibility(View.GONE);
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);

@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,18 +34,13 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import tyrantgit.widget.HeartLayout;
 
-/**
- * author：Administrator on 2016/12/26 09:35
- * description:文件说明
- * version:版本
- */
+
 public class ChatFragment extends Fragment implements View.OnClickListener {
     HorizontialListView listview;
     private MemberAdapter mAdapter;

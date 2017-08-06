@@ -29,18 +29,11 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
-
-
-/**
- * Created by asus-pc on 2017/5/31.
- */
-
 public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int isBlurType;
-    private ArrayList<InterestPost> datas;//数据
+    private ArrayList<InterestPost> datas;
     private Activity activity;
-
-    //自定义监听事件
+    int count = 0;
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
     }
@@ -56,7 +49,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         activity = context;
         this.datas = datas;
         this.isBlurType = isBlurType;
-
     }
 
     @Override
@@ -65,9 +57,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
-
-    int count = 0;
-
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
@@ -103,7 +92,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((MyViewHolder) holder).imgVideo.setImageResource(R.drawable.video);
                 }
             }
-
             ((MyViewHolder) holder).postlayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,8 +116,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     count++;
                 }
             });
-
-
             if (post.user.sex.equals("2")) {
                 Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -142,14 +128,12 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                         super.onLoadStarted(placeholder);
                     }
                 });
-
             } else {
                 Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
                     }
-
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
@@ -180,7 +164,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     ((MyViewHolder) holder).arealocation.setText(text);
                 }
             }.execute();
-
         }
     }
 
@@ -224,5 +207,4 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             imgVideo = (ImageView) view.findViewById(R.id.imgVideo);
         }
     }
-
 }

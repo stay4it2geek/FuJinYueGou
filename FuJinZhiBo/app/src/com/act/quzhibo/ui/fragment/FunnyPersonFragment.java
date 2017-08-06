@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 
 
-/**
- * qingqudaren
- */
 public class FunnyPersonFragment extends Fragment {
 
     @Override

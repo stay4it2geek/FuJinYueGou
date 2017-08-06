@@ -196,6 +196,7 @@
 
             <TextView
                 android:id="@+id/dashang"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/pinglunNum"
@@ -204,6 +205,7 @@
                 android:text="打赏" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/dashangNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

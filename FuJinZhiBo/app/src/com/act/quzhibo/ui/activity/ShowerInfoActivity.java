@@ -1,28 +1,19 @@
 package com.act.quzhibo.ui.activity;
 
 import android.app.Activity;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.RoomListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.GlideImageLoader;
 import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.entity.RoomList;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
-import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
@@ -33,18 +24,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import okhttp3.Call;
 
-/**
- * Created by asus-pc on 2017/5/30.
- */
 
-/**
- * 主播个人档案
- */
 public class ShowerInfoActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,7 +106,9 @@ public class ShowerInfoActivity extends Activity {
                     }
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+
+            }catch (Exception e) {
+
             }
         }
     };

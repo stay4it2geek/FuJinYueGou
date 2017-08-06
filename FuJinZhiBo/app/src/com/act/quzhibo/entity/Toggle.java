@@ -1,13 +1,8 @@
 package com.act.quzhibo.entity;
 
-import com.google.gson.JsonObject;
-
 import cn.bmob.v3.BmobObject;
 
-/**
- * Created by asus-pc on 2017/5/30.
- */
-public class Toggle extends BmobObject{
+public class Toggle extends BmobObject {
     private String ToggleObject;
     private String objectKey;
     private String isOpen;

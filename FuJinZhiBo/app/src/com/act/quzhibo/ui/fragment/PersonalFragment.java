@@ -1,7 +1,5 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,8 +11,6 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
-import com.act.quzhibo.ui.activity.TabMainActivity;
-import com.act.quzhibo.ui.activity.VideoPlayerActivity;
 import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {

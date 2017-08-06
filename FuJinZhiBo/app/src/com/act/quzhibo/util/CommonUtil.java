@@ -40,10 +40,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by weiminglin on 17/5/30.
- */
-
 public class CommonUtil {
 
     public static void switchFragment(Fragment fragment, int layoutId, FragmentActivity activity) {

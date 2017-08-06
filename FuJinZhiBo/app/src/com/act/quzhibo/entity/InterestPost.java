@@ -3,11 +3,6 @@ package com.act.quzhibo.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by asus-pc on 2017/6/4.
- * 列表的单个帖子数据
- */
-
 public class InterestPost implements Serializable{
 
     public String postId;   //592a690a0cf2faf25876ae67 public String   ,

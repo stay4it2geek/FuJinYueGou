@@ -1,36 +1,20 @@
 package com.act.quzhibo.ui.activity;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.PlateCatagory;
 import com.act.quzhibo.entity.PlateList;
 import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.FuliFragement;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
@@ -39,16 +23,8 @@ import com.act.quzhibo.util.ViewFindUtils;
 import com.act.quzhibo.view.FragmentDialog;
 import com.flyco.tablayout.SlidingTabLayout;
 
-
-import java.util.AbstractCollection;
 import java.util.ArrayList;
-import java.util.List;
 
-import okhttp3.Call;
-
-/**
- * 主播列表画面
- */
 public class ShowerListActivity extends FragmentActivity implements ShowerListFragment.OnCallShowViewListner, BackHandledFragment.BackHandledInterface {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
@@ -85,7 +61,7 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
             }
 
         }
-        tabTitles.add(1,"深夜福利");
+        tabTitles.add(1,"深夜秀场");
         mFragments.add(1,new FuliFragement());
         View decorView = getWindow().getDecorView();
         ViewPager pager = ViewFindUtils.find(decorView, R.id.viewpager);

@@ -8,8 +8,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,9 +17,6 @@ import android.widget.SeekBar;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 
-/**
- * Created by asus-pc on 2017/6/21.
- */
 
 public class AudioPlayActivity extends Activity implements OnClickListener, SeekBar.OnSeekBarChangeListener {
     private MediaPlayer mMediaPlayer = null;//媒体播放器

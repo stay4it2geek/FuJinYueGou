@@ -6,8 +6,6 @@ import com.act.quzhibo.okhttp.request.RequestCall;
 import java.io.File;
 
 import okhttp3.MediaType;
-
-
 public class PostFileBuilder extends OkHttpRequestBuilder<PostFileBuilder>
 {
     private File file;

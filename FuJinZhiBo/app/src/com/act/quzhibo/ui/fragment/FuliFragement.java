@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,11 +11,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.CommonSeeAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.CommonPerson;
+import com.act.quzhibo.view.MarqueeTextView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -35,159 +41,221 @@ import cn.bmob.v3.listener.FindListener;
  */
 
 public class FuliFragement extends BackHandledFragment {
-
-    private XRecyclerView recyclerView;
-    private CommonSeeAdapter commonSeeAdapter;
-    private  View view;
+    private ExpandableListView expandableListView;
+    private List<String> group_list;
+    private List<List<String>> item_list;
+    private List<List<Integer>> item_list2;
+    View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_common, null, false);
-        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
-            }
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_fuli, null, false);
 
-            @Override
-            public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        queryData(Constants.LOADMORE);
-                        recyclerView.loadMoreComplete();
-                    }
-                }, 1000);
-            }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        queryData(Constants.REFRESH);
+        //随便一堆测试数据
+        group_list = new ArrayList<>();
+        group_list.add("免费福利区,游客可浏览");
+        group_list.add("综合资源区，本区资源全部在线观看");
+        group_list.add("网盘资源分享");
+        group_list.add("直播资源分享");
+        ArrayList<String> freeList = new ArrayList<>();
+        ArrayList<String> allList = new ArrayList<>();
+        ArrayList<String> netDiskList = new ArrayList<>();
+        ArrayList<String> showList = new ArrayList<>();
+
+        freeList.add("『在线福利视频分享』");
+        freeList.add("『性感美女图片分享』");
+        freeList.add("『bt高清电影下载分享』");
+
+        allList.add("『beautyleg』");
+        allList.add("『3AGirl』");
+        allList.add("『4k-STAR』");
+        allList.add("『RQ-STAR』");
+        allList.add("『经典写真』");
+        allList.add("『Rosimm』");
+        allList.add("『Siyamm』");
+        allList.add("『ru1mm』");
+        allList.add("『Showgirl』");
+        allList.add("『Pantyhose』");
+        allList.add("『丽柜ligui』");
+        allList.add("『细高跟』");
+        allList.add("『微拍福利』");
+        allList.add("『学院派私拍』");
+        allList.add("『性感车模』");
+        allList.add("『PANS写真』");
+        allList.add("『动感小站』");
+        allList.add("『锦尚天舞』");
+        allList.add("『国产私拍』");
+        allList.add("『韩国饭拍』");
+        allList.add("『街拍美女』");
+        allList.add("『爱丝RISS』");
+        allList.add("『推女郎』");
+
+        netDiskList.add("写真视频");
+        netDiskList.add("网络红人");
+        netDiskList.add("美女视频");
+        netDiskList.add("美女视讯");
+
+        showList.add("YOLO资源区");
+        showList.add("其他主播资源区");
+
+        item_list = new ArrayList<>();
+        item_list.add(freeList);
+        item_list.add(allList);
+        item_list.add(netDiskList);
+        item_list.add(showList);
+
+        List<Integer> oneList = new ArrayList<>();
+        List<Integer> secondList = new ArrayList<>();
+        List<Integer> thirdList = new ArrayList<>();
+        List<Integer> fourid = new ArrayList<>();
+
+        oneList.add(R.drawable.icon);
+        oneList.add(R.drawable.icon);
+        oneList.add(R.drawable.icon);
+
+
+        secondList.add(R.drawable.beautyleg);
+        secondList.add(R.drawable.threeagirl);
+        secondList.add(R.drawable.fourk);
+        secondList.add(R.drawable.rq_star);
+        secondList.add(R.drawable.jingdianxiezhen);
+        secondList.add(R.drawable.rosimm);
+        secondList.add(R.drawable.siyamm);
+        secondList.add(R.drawable.ru1mm);
+        secondList.add(R.drawable.showgirl);
+        secondList.add(R.drawable.pantyhose);
+        secondList.add(R.drawable.ligui);
+        secondList.add(R.drawable.xigaogen);
+        secondList.add(R.drawable.weipai);
+        secondList.add(R.drawable.xueyuansipai);
+        secondList.add(R.drawable.xingganchemo);
+        secondList.add(R.drawable.pansixiezhen);
+        secondList.add(R.drawable.dongganxiaozhan);
+        secondList.add(R.drawable.jinshangtianwu);
+        secondList.add(R.drawable.guochanshipai);
+        secondList.add(R.drawable.fanpai);
+        secondList.add(R.drawable.jiepaimeinv);
+        secondList.add(R.drawable.riss);
+        secondList.add(R.drawable.tuinvlang);
+
+        thirdList.add(R.drawable.icon);
+        thirdList.add(R.drawable.icon);
+        thirdList.add(R.drawable.icon);
+        thirdList.add(R.drawable.icon);
+
+        fourid.add(R.drawable.icon);
+        fourid.add(R.drawable.icon);
+
+        item_list2 = new ArrayList<>();
+        item_list2.add(oneList);
+        item_list2.add(secondList);
+        item_list2.add(thirdList);
+        item_list2.add(fourid);
+
+        expandableListView = (ExpandableListView) view.findViewById(R.id.expendlist);
+        expandableListView.setAdapter(new MyExpandableListViewAdapter(getActivity()));
 
         return view;
     }
 
+    class MyExpandableListViewAdapter extends BaseExpandableListAdapter {
 
+        private Context context;
 
-    private int limit = 10; // 每页的数据是10条
-    String lastTime = "";
-    ArrayList<CommonPerson> commonPersons = new ArrayList<>();
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
-    private void queryData(final int actionType) {
-        final BmobQuery<CommonPerson> query = new BmobQuery<>();
-        query.setLimit(limit);
-        // 如果是加载更多
-        if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
-            Date date = null;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            try {
-                date = sdf.parse(lastTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
+        public MyExpandableListViewAdapter(Context context) {
+            this.context = context;
         }
-        query.order("-updatedAt");
-        query.findObjects(new FindListener<CommonPerson>() {
-            @Override
-            public void done(List<CommonPerson> list, BmobException e) {
-                if (e == null) {
-                    if (list.size() > 0) {
-                        if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
-                            commonPersons.clear();
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
-                            commonPersons.addAll(list);
-                        } else if (actionType == Constants.LOADMORE) {
-                            commonPersons.addAll(list);
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
-                        }
-                        Message message = new Message();
-                        message.obj = commonPersons;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
-                    }
-                }
-            }
-        });
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(commonSeeAdapter!=null){
-            commonSeeAdapter.setCount();
-        }
-    }
-    public static final class ComparatorValues implements Comparator<CommonPerson> {
 
         @Override
-        public int compare(CommonPerson post1, CommonPerson post2) {
-            int m1=Integer.parseInt(post1.viewTime!=null?post1.viewTime:"0");
-            int m2=Integer.parseInt(post2.viewTime!=null?post2.viewTime:"0");
-            int result=0;
-            if(m1>m2)
-            {
-                result=1;
-            }
-            if(m1<m2)
-            {
-                result=-1;
-            }
-            return result;
+        public int getGroupCount() {
+            return group_list.size();
         }
 
-    }
-    private int seeMeSize;
-    Handler handler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            ArrayList<CommonPerson> commonPersons = (ArrayList<CommonPerson>) msg.obj;
-            if (msg.what != Constants.NetWorkError) {
-                if (msg.what != Constants.NO_MORE) {
-                    if (commonPersons != null) {
-                        seeMeSize = commonPersons.size();
-                    }
-                    Collections.sort(commonPersons, new CommonSeeFragment.ComparatorValues());
-                    if (seeMeSize > 0) {
-                        if (commonSeeAdapter == null) {
-                            commonSeeAdapter = new CommonSeeAdapter(getActivity(), commonPersons);
-                            recyclerView.setAdapter(commonSeeAdapter);
-                        } else {
-                            commonSeeAdapter.notifyDataSetChanged();
-                        }
-                    }
-                    recyclerView.setHasFixedSize(true);
-                } else {
-                    recyclerView.setNoMore(true);
-                }
+        public int getChildrenCount(int groupPosition) {
+            return item_list.get(groupPosition).size();
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return group_list.get(groupPosition);
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return item_list.get(groupPosition).get(childPosition);
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded,
+                                 View convertView, ViewGroup parent) {
+            GroupHolder groupHolder = null;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(
+                        R.layout.expanlist_parent_item, null);
+                groupHolder = new GroupHolder();
+                groupHolder.txt = (TextView) convertView.findViewById(R.id.txt);
+                convertView.setTag(groupHolder);
             } else {
-
+                groupHolder = (GroupHolder) convertView.getTag();
             }
+            groupHolder.txt.setText(group_list.get(groupPosition));
+            return convertView;
         }
-    };
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition,
+                                 boolean isLastChild, View convertView, ViewGroup parent) {
+            ItemHolder itemHolder ;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(
+                        R.layout.expanlist_child_item, null);
+                itemHolder = new ItemHolder();
+                itemHolder.txt = (TextView) convertView.findViewById(R.id.txt);
+                itemHolder.img = (ImageView) convertView.findViewById(R.id.img);
+                convertView.setTag(itemHolder);
+            } else {
+                itemHolder = (ItemHolder) convertView.getTag();
+            }
+            itemHolder.txt.setText(item_list.get(groupPosition).get(
+                    childPosition));
+            itemHolder.img.setBackgroundResource(item_list2.get(groupPosition).get(
+                    childPosition));
+            return convertView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
+
+    }
+
+    class GroupHolder {
+        public TextView txt;
+        public ImageView img;
+    }
+
+    class ItemHolder {
+        public ImageView img;
+        public TextView txt;
+    }
 
     @Override
     public boolean onBackPressed() {

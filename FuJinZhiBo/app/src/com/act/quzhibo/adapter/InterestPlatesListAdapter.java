@@ -15,27 +15,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
-
-/**
- * Created by asus-pc on 2017/5/31.
- */
-
 public class InterestPlatesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private ArrayList<InterestPlates> datas;//数据
-
-    //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position,String plateId);
     }
-
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         mOnItemClickListener = listener;
     }
-
-    //适配器初始化
     public InterestPlatesListAdapter(Context context, ArrayList<InterestPlates> datas) {
         mContext = context;
         this.datas = datas;
@@ -65,17 +55,12 @@ public class InterestPlatesListAdapter extends RecyclerView.Adapter<RecyclerView
         }else {
 
         }
-
-
     }
 
     @Override
     public int getItemCount() {
         return datas.size();
     }
-
-
-    //自定义ViewHolder
     class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView plateImg;
         private TextView pAbstract;
@@ -91,5 +76,4 @@ public class InterestPlatesListAdapter extends RecyclerView.Adapter<RecyclerView
 
         }
     }
-
 }

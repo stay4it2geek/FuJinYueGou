@@ -27,9 +27,6 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-/**
- * Created by asus-pc on 2017/6/18.需要推广或者阅读才能看
- */
 
 public class NearFragment extends BackHandledFragment {
     @Override

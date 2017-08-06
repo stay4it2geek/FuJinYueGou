@@ -85,7 +85,7 @@ public class PostImageAdapter extends BaseAdapter {
                             @Override
                             protected void onPostExecute(StackBlurManager stackBlurManager) {
                                 super.onPostExecute(stackBlurManager);
-                                viewHolder.avatar.setImageBitmap( stackBlurManager.process(10) );
+                                viewHolder.avatar.setImageBitmap( stackBlurManager.process(15) );
 
                             }
                         }.execute();

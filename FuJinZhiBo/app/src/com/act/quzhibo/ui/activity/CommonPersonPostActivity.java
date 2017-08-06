@@ -28,16 +28,14 @@ import java.util.Comparator;
 
 import okhttp3.Call;
 
-/**
- * Created by asus-pc on 2017/7/1.
- */
+
 public class CommonPersonPostActivity extends AppCompatActivity {
 
     private XRecyclerView recyclerView;
     private ArrayList<InterestPost> posts = new ArrayList<>();
     private int interestPostSize;
     private InterestPostListAdapter adapter;
-    String userId;
+    private String userId;
     private String ctime = "0";
     private LoadNetView loadNetView;
     @Override
@@ -133,12 +131,12 @@ public class CommonPersonPostActivity extends AppCompatActivity {
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {
-//                                if (false) {
+                                if (false) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.POST_ID, post);
                                     intent.setClass(CommonPersonPostActivity.this, PostDetailActivity.class);
                                     startActivity(intent);
-//                                }
+                                }
                             }
                         });
                         recyclerView.setAdapter(adapter);

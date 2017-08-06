@@ -14,8 +14,6 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.CommonSeeAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.CommonPerson;
-import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.ui.activity.CommonPersonPostActivity;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -31,9 +29,6 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-/**
- * Created by asus-pc on 2017/6/18.
- */
 
 public class CommonSeeFragment extends BackHandledFragment {
 
