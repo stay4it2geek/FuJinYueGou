@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Window;
 
-import com.act.quzhibo.ui.fragment.NoFragment;
-import com.act.quzhibo.ui.fragment.ReadFragment;
+import com.act.quzhibo.ui.fragment.ManSoureceFragment;
+import com.act.quzhibo.ui.fragment.WomenSoureceFragment;
 
 import java.util.ArrayList;
 
@@ -30,15 +30,15 @@ public class MultipleMeideaActivity extends TabSlideBaseActivity {
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"图文课程", "影音课程"};
+        return new String[]{"男性VIP专属秘笈","女性VIP专属秘笈"};
     }
 
     @Override
     protected ArrayList<Fragment> getFragments() {
 
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new ReadFragment());
-        fragments.add(new NoFragment());
+        fragments.add(new ManSoureceFragment());
+        fragments.add(new WomenSoureceFragment());
         return fragments;
     }
 

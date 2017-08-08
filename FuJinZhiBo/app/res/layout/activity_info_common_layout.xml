@@ -429,13 +429,14 @@
         android:id="@+id/focuslayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_gravity="bottom"
         android:background="#eee"
+        android:layout_marginBottom="-5dp"
+        android:layout_gravity="bottom"
         android:orientation="horizontal">
 
         <RadioButton
-            android:layout_marginTop="1dp"
             android:id="@+id/talk"
+            android:layout_margin="0.5dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -445,17 +446,14 @@
             android:text="私聊TA"
             android:textSize="16sp" />
 
-        <View
-            android:layout_width="0.5dp"
-            android:layout_height="match_parent"
-            android:background="#aaa" />
+
 
         <RadioButton
-            android:layout_marginTop="1dp"
             android:id="@+id/focus"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_margin="0.5dp"
             android:background="@drawable/background_card"
             android:button="@null"
             android:gravity="center"

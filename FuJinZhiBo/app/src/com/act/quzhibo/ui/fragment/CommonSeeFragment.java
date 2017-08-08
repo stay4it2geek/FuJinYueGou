@@ -29,7 +29,6 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-
 public class CommonSeeFragment extends BackHandledFragment {
 
     private XRecyclerView recyclerView;

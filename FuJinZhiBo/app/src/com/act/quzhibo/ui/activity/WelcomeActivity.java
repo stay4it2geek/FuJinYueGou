@@ -25,10 +25,6 @@ import cn.bmob.v3.listener.FindListener;
 import okhttp3.Call;
 import okhttp3.Response;
 
-
-/**
- * 欢迎页
- */
 public class WelcomeActivity extends Activity {
 
     private String plateListStr;

@@ -2,9 +2,7 @@ package com.act.quzhibo.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
 import com.act.quzhibo.ui.fragment.PersonalFragment;
-
 import java.util.ArrayList;
 
 

@@ -12,7 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.view.View;
 
-import com.act.quzhibo.LocationData;
+import com.act.quzhibo.entity.LocationData;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.TabEntity;

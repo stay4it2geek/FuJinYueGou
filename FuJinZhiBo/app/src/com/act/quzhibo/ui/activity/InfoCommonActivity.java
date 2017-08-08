@@ -67,8 +67,6 @@ public class InfoCommonActivity extends AppCompatActivity {
         banner.setLayoutParams(new FrameLayout.LayoutParams(size.x - 10, size.x - 10));
         if (getIntent() != null) {
             int count = getIntent().getIntExtra("count", 0);
-            Log.e("cccc", count + "");
-
             post = (InterestPost) getIntent().getSerializableExtra(Constants.POST);
             if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
                 int max = 400;
@@ -104,9 +102,11 @@ public class InfoCommonActivity extends AppCompatActivity {
             }
         }
         if (post.user.vipLevel.equals("1")) {
-            ((TextView) findViewById(R.id.level)).setText("VIP");
-        } else {
-            ((TextView) findViewById(R.id.level)).setText("普通");
+            ((TextView) findViewById(R.id.level)).setText("初级VIP");
+        } else if(post.user.vipLevel.equals("2")){
+            ((TextView) findViewById(R.id.level)).setText("中级VIP");
+        }else if(post.user.vipLevel.equals("3")){
+            ((TextView) findViewById(R.id.level)).setText("超级VIP");
         }
         ((TextView) findViewById(R.id.disPurpose)).setText(post.user.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(post.user.disMariState);

@@ -3,8 +3,6 @@ package com.act.quzhibo.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-
-
 public abstract class BackHandledFragment extends Fragment {
 
     public BackHandledInterface mBackHandledInterface;

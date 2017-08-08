@@ -31,13 +31,14 @@ public class SquareActivity extends TabSlideBaseActivity {
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"情趣", "福利", "附近"};
+        return new String[]{"达人", "专辑","视频", "附近"};
     }
 
     @Override
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new InterestPlatesFragment());
+        fragments.add(new FuliFragement());
         fragments.add(new FuliFragement());
         fragments.add(new NearFragment());
         return fragments;

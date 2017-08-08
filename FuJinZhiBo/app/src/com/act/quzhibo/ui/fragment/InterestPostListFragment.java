@@ -158,7 +158,6 @@ public class InterestPostListFragment extends BackHandledFragment {
                 }
                 if (interestPostSize> 0) {
                     ctime = data.result.get(interestPostSize - 1).ctime;
-                    Log.e("htime",ctime);
                 }
 
                 if (msg.what == Constants.REFRESH) {
@@ -190,7 +189,6 @@ public class InterestPostListFragment extends BackHandledFragment {
 
                 loadNetView.setVisibility(View.GONE);
             } else {
-                Log.e("tests","fdsfdsf");
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
@@ -204,7 +202,6 @@ public class InterestPostListFragment extends BackHandledFragment {
             return;
         }
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
-      Log.e("url",url);
         OkHttpUtils.get().url(url).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {

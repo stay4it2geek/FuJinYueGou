@@ -15,6 +15,7 @@ import com.act.quzhibo.common.GlideImageLoader;
 import com.act.quzhibo.entity.NearPerson;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
+import com.act.quzhibo.view.LoadNetView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
 
@@ -28,17 +29,25 @@ public class NearInfoCommonActivity extends AppCompatActivity {
     private Banner banner;
     private NearPerson user;
     int second;
-
+    private LoadNetView loadNetView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_common_layout);
         initView();
+
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                initView();
+            }
+        });
     }
 
 
     private void initView() {
-
+        loadNetView = (LoadNetView) findViewById(R.id.loadview);
         user = (NearPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
         findViewById(R.id.audio_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_zipai_img).setVisibility(View.VISIBLE);
@@ -129,6 +138,7 @@ public class NearInfoCommonActivity extends AppCompatActivity {
                 }
 
             }
+            loadNetView.setVisibility(View.GONE);
         }
     }
 }

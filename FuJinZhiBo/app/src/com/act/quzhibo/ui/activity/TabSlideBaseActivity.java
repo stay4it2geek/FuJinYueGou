@@ -17,7 +17,6 @@ import com.act.quzhibo.view.FragmentDialog;
 
 import java.util.ArrayList;
 
-
 public abstract class TabSlideBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface{
     protected MyPagerAdapter mAdapter;
     protected View decorView;

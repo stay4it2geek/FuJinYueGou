@@ -40,7 +40,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import tyrantgit.widget.HeartLayout;
 
-
 public class ChatFragment extends Fragment implements View.OnClickListener {
     HorizontialListView listview;
     private MemberAdapter mAdapter;

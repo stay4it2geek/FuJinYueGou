@@ -1,4 +1,5 @@
 package com.act.quzhibo.view;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import com.act.quzhibo.R;
  * updateShaderMatrix保证图片损失度最小和始终绘制图片正中央的那部分
  * 思路是画圆用渲染器位图填充，而不是把Bitmap重绘切割成一个圆形图片。
  */
+@SuppressLint("AppCompatCustomView")
 public class CircleImageView extends ImageView {
     //缩放类型
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;

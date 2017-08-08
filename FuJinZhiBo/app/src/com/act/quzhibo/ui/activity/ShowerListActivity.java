@@ -17,6 +17,7 @@ import com.act.quzhibo.entity.PlateList;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.FuliFragement;
+import com.act.quzhibo.ui.fragment.MiBoFragement;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
@@ -61,8 +62,8 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
             }
 
         }
-        tabTitles.add(1,"深夜秀场");
-        mFragments.add(1,new FuliFragement());
+        tabTitles.add(2,"秘播");
+        mFragments.add(2,new MiBoFragement());
         View decorView = getWindow().getDecorView();
         ViewPager pager = ViewFindUtils.find(decorView, R.id.viewpager);
         mAdapter = new MyPagerAdapter(getSupportFragmentManager(), tabTitles.toArray(new String[tabTitles.size()]));
