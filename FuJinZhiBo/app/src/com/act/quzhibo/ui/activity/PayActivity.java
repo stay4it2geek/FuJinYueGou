@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,8 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import c.b.BP;
 import c.b.PListener;
@@ -63,6 +66,7 @@ public class PayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pay);
         ListView listView = (ListView) findViewById(R.id.viplist);
         listView.setChoiceMode(CHOICE_MODE_SINGLE);
+        listView.setAdapter(new MyAdapter(this));
         initData();
         // 初始化BmobPay对象,可以在支付时再初始化
         BP.init(APPID);
@@ -75,18 +79,50 @@ public class PayActivity extends AppCompatActivity {
     }
 
     class MyAdapter extends BaseAdapter {
-        private Context context;
-        private LayoutInflater inflater;
+         Context context;
+         LayoutInflater inflater;
+        ArrayList<String> titles = new ArrayList<>();
+        ArrayList<Integer> imgs = new ArrayList<>();
+        ArrayList<String> prices = new ArrayList<>();
+        ArrayList<String> prices_maket = new ArrayList<>();
 
         public MyAdapter(Context context) {
             super();
             this.context = context;
             inflater = LayoutInflater.from(context);
+            titles.add("超级VIP");
+            titles.add("特级VIP");
+            titles.add("初级VIP");
+            titles.add("初级升级到超级");
+            titles.add("特级升级到超级");
+            titles.add("初级升级到特级");
+
+            prices_maket.add("498元");
+            prices_maket.add("398元");
+            prices_maket.add("198元");
+            prices_maket.add("300元");
+            prices_maket.add("200元");
+            prices_maket.add("200元");
+
+
+            prices.add("298元");
+            prices.add("198元");
+            prices.add("98元");
+            prices.add("200元");
+            prices.add("100元");
+            prices.add("100元");
+
+            imgs.add(R.drawable.supervip);
+            imgs.add(R.drawable.midvip);
+            imgs.add(R.drawable.chuvip);
+            imgs.add(R.drawable.up);
+            imgs.add(R.drawable.up);
+            imgs.add(R.drawable.up);
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return imgs.size();
         }
 
         @Override
@@ -103,7 +139,21 @@ public class PayActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             convertView = inflater.inflate(R.layout.item_buyvip, null, false);
-            convertView.findViewById(R.id.avatar).setBackground(null);
+
+            TextView title = (TextView) convertView.findViewById(R.id.title_vip);
+            title.setText(titles.get(position));
+
+            TextView price_vip = (TextView) convertView.findViewById(R.id.price_vip);
+            price_vip.setText(prices.get(position));
+
+            TextView price_vip_market = (TextView) convertView.findViewById(R.id.price_vip_maket);
+            price_vip_market.setText(prices_maket.get(position));
+
+            ((TextView) convertView.findViewById(R.id.price_vip_maket)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+
+            ImageView vip_img = (ImageView) convertView.findViewById(R.id.vip_img);
+
+            vip_img.setBackgroundResource(imgs.get(position));
 
             return convertView;
         }

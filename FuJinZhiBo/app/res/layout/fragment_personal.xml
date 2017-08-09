@@ -105,10 +105,6 @@
                     android:background="@drawable/rightarr" />
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorbg" />
 
             <RelativeLayout
                 android:id="@+id/who_see_me"

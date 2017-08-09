@@ -8,19 +8,44 @@
     <ImageView
         android:id="@+id/vip_img"
         android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
         android:layout_margin="10dp"
-        android:background="@drawable/supervip"
-        android:layout_centerVertical="true"
-        android:layout_height="30dp" />
-    
+        android:background="@drawable/supervip" />
+
     <TextView
-        android:layout_toRightOf="@+id/vip_img"
-        android:layout_marginLeft="10dp"
-        android:text="超级VIP"
-        android:textColor="@color/colorAccent"
-        android:layout_centerVertical="true"
-        android:textSize="17sp"
+        android:id="@+id/title_vip"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/vip_img"
+        android:text=""
+        android:textColor="@color/colorAccent"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/price_vip_maket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="80dp"
+        android:gravity="right"
+        android:textColor="#aaa"
+        android:text=""
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/price_vip"
+        android:textColor="#000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:gravity="right"
+        android:text=""
+        android:textSize="17sp" />
 
 </RelativeLayout>
