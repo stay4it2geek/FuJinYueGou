@@ -3,7 +3,8 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.act.quzhibo.ui.fragment.FuliFragement;
+import com.act.quzhibo.ui.fragment.FuliPicsFragement;
+import com.act.quzhibo.ui.fragment.FuliVideoFragement;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.ui.fragment.NearFragment;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 /**
  * 广场
  */
-public class SquareActivity extends TabSlideBaseActivity {
+public class SquareActivity extends TabSlideBaseActivity implements InterestPlatesFragment.OnNearByListner {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +32,15 @@ public class SquareActivity extends TabSlideBaseActivity {
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"达人", "专辑","视频", "附近"};
+        return new String[]{"达人", "专辑", "视频", "附近"};
     }
 
     @Override
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new InterestPlatesFragment());
-        fragments.add(new FuliFragement());
-        fragments.add(new FuliFragement());
+        fragments.add(new FuliPicsFragement());
+        fragments.add(new FuliVideoFragement());
         fragments.add(new NearFragment());
         return fragments;
     }
@@ -53,5 +54,10 @@ public class SquareActivity extends TabSlideBaseActivity {
 
     public void setPid(String pid) {
         this.pid = pid;
+    }
+
+    @Override
+    public void onNear() {
+        setPage(3);
     }
 }

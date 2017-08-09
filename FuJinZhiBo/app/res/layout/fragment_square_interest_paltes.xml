@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/square_interest_plates_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <FrameLayout
-        android:id="@+id/square_interest_plates_layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/nearby_extran_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/img_nearby_entrance" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.7dp"
+            android:background="@color/colorbg"/>
 
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+    </LinearLayout>
 
-        <com.act.quzhibo.view.LoadNetView
-            android:id="@+id/loadview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff" />
+    <com.act.quzhibo.view.LoadNetView
+        android:id="@+id/loadview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff" />
 
-    </FrameLayout>
+</FrameLayout>
 
-
-</RelativeLayout>

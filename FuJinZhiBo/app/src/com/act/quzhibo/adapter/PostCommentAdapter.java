@@ -13,7 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.act.quzhibo.ProvinceAndCityEntify;
+import com.act.quzhibo.entity.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.InterestPostPageCommentDetail;
 import com.act.quzhibo.util.CommonUtil;

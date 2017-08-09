@@ -9,11 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="#f6dd3e"
-        android:textColor="#231F20"
         android:gravity="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="特权说明(划线的是不能享受的)"
+        android:textColor="#231F20"
         android:textSize="18sp"
         android:textStyle="normal" />
 
@@ -33,11 +33,11 @@
 
                 <ImageView
                     android:id="@+id/supervip_img"
-                    android:layout_width="25dp"
+                    android:layout_width="30dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:background="@drawable/default_head" />
+                    android:background="@drawable/supervip" />
 
                 <TextView
                     android:id="@+id/supertext"
@@ -50,8 +50,9 @@
                     android:textColor="@color/colorAccent" />
 
                 <TextView
-                    style="@style/textStyle"
                     android:id="@+id/tv_getAccese"
+                    style="@style/textStyle"
+                    android:padding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -67,6 +68,42 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  下载阅读VIP专属课程无限制" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  阅读财富版块内容无限制" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -115,6 +152,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorbg" />
+
                 <TextView
                     style="@style/textStyle"
                     android:layout_width="wrap_content"
@@ -141,41 +179,6 @@
                     android:text="◉  浏览深夜福利秘播无限制" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/shuomingheight"
-                android:background="#fff">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorbg" />
-
-                <TextView
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="◉  可以下载阅读VIP专属课程" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/shuomingheight"
-                android:background="#fff">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorbg" />
-
-                <TextView
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="◉  阅读财富版块内容无限制" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -230,7 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="◉  可以不限次数评论帖子" />
+                    android:text="◉  评论情趣状态无限制" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -248,7 +251,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="◉  可以不限次数查看帖子" />
+                    android:text="◉  查看情趣状态无限制" />
             </RelativeLayout>
 
 
@@ -259,11 +262,11 @@
 
                 <ImageView
                     android:id="@+id/misvip_img"
-                    android:layout_width="25dp"
+                    android:layout_width="30dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:background="@drawable/default_head" />
+                    android:background="@drawable/midvip" />
 
                 <TextView
                     android:id="@+id/imdtext"
@@ -276,14 +279,15 @@
                     android:textColor="@color/colorAccent" />
 
                 <TextView
-                    style="@style/textStyle"
                     android:id="@+id/tv_getAccese2"
+                    style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="30dp"
                     android:text="立刻获取授权"
+                    android:padding="10dp"
                     android:textColor="@android:color/holo_orange_dark" />
 
                 <View
@@ -293,6 +297,44 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    android:id="@+id/mid_xiazaivip"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  下载阅读VIP专属课程无限制" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    style="@style/textStyle"
+                    android:id="@+id/mid_caifuvip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  阅读财富版块内容无限制" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -373,42 +415,6 @@
                     android:text="◉  浏览深夜福利秘播无限制" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/shuomingheight"
-                android:background="#fff">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorbg" />
-
-                <TextView
-                    android:id="@+id/mid_xiazaivip"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="◉  可以下载阅读VIP专属课程" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/shuomingheight"
-                android:background="#fff">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorbg" />
-
-                <TextView
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="◉  阅读财富版块内容无限制" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -463,7 +469,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="◉  可以不限次数评论帖子" />
+                    android:text="◉  评论情趣状态无限制" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -481,7 +487,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="◉  可以不限次数查看帖子" />
+                    android:text="◉  查看情趣状态无限制" />
             </RelativeLayout>
 
 
@@ -496,7 +502,7 @@
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:background="@drawable/default_head" />
+                    android:background="@drawable/chuvip" />
 
                 <TextView
                     android:id="@+id/chutext"
@@ -509,14 +515,15 @@
                     android:textColor="@color/colorAccent" />
 
                 <TextView
+                    android:id="@+id/tv_getAccese3"
                     style="@style/textStyle"
+                    android:padding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="30dp"
                     android:text="立刻获取授权"
-                    android:id="@+id/tv_getAccese3"
                     android:textColor="@android:color/holo_orange_dark" />
 
                 <View
@@ -526,6 +533,44 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    android:id="@+id/chu_xiazaivip"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  下载阅读VIP专属课程无限制" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    android:id="@+id/chu_caifuvip"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  阅读财富版块内容无限制" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -606,43 +651,6 @@
                     android:text="◉  浏览深夜福利秘播无限制" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/shuomingheight"
-                android:background="#fff">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorbg" />
-
-                <TextView
-                    android:id="@+id/chu_xiazaivip"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="◉  可以下载阅读VIP专属课程" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/shuomingheight"
-                android:background="#fff">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorbg" />
-
-                <TextView
-                    android:id="@+id/chu_caifuvip"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="◉  阅读财富版块内容无限制" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -697,13 +705,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="◉  可以不限次数评论帖子" />
+                    android:text="◉  评论情趣状态无限制" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_marginBottom="5dp"
                 android:layout_height="@dimen/shuomingheight"
+                android:layout_marginBottom="5dp"
                 android:background="#fff">
 
                 <View
@@ -716,7 +724,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="◉  可以不限次数查看帖子" />
+                    android:text="◉  查看情趣状态无限制" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

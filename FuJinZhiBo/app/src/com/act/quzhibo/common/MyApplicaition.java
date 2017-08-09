@@ -1,6 +1,8 @@
 package com.act.quzhibo.common;
 
 import android.app.Application;
+
+import c.b.BP;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 
@@ -20,6 +22,7 @@ public class MyApplicaition extends Application {
                 .setFileExpiration(2500)
                 .build();
         Bmob.initialize(config);
+        BP.init("e37264d2646046d9158d3800afd548f3");
     }
 
 }

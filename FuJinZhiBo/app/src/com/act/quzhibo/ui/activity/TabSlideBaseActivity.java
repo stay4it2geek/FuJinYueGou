@@ -17,7 +17,7 @@ import com.act.quzhibo.view.FragmentDialog;
 
 import java.util.ArrayList;
 
-public abstract class TabSlideBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface{
+public abstract class TabSlideBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface {
     protected MyPagerAdapter mAdapter;
     protected View decorView;
     private BackHandledFragment mBackHandedFragment;
@@ -28,8 +28,12 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
         setContentView(R.layout.activity_common_tab);
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(),decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager),mAdapter,getActivityType());
+        CommonUtil.initView(getTitles(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter, getActivityType());
 
+    }
+
+    protected void setPage(int positon) {
+        ((ViewPager) ViewFindUtils.find(decorView, R.id.viewpager)).setCurrentItem(positon);
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -83,8 +87,12 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
             }
         }
     }
+
     public abstract boolean getActivityType();
+
     protected abstract boolean isNeedShowBackDialog();
+
     protected abstract String[] getTitles();
+
     protected abstract ArrayList<Fragment> getFragments();
 }

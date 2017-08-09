@@ -96,14 +96,14 @@
                         android:id="@+id/nickName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_toEndOf="@+id/userImage"
                         android:layout_toRightOf="@+id/userImage"
                         android:text="昵称"
                         android:textColor="#fff"
-                        android:textSize="19sp" />
+                        android:textSize="18sp" />
 
 
                     <TextView
@@ -119,7 +119,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:paddingTop="2dp"
-                        android:text="LV9"
+                        android:text=""
                         android:textColor="#fff"
                         android:textSize="15sp" />
 
@@ -158,7 +158,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="解锁私聊权限" />
+                        android:text="想和ta私聊" />
 
                     <TextView
                         android:id="@+id/talk_accese"
@@ -169,7 +169,7 @@
                         android:layout_marginRight="15dp"
                         android:layout_toRightOf="@+id/talk_accese_tv"
                         android:gravity="center"
-                        android:text="订购多媒体秘笈获取授权" />
+                        android:text="立刻获取授权" />
 
                     <View
                         android:layout_width="12dp"

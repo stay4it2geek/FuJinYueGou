@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.act.quzhibo.ProvinceAndCityEntify;
+import com.act.quzhibo.entity.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.CommonPerson;

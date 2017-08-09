@@ -23,6 +23,7 @@ public class BuyerPowerActivity extends AppCompatActivity implements View.OnClic
         ((TextView) findViewById(R.id.mid_shiliaofujin)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         ((TextView) findViewById(R.id.mid_shiliaoqingqu)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         ((TextView) findViewById(R.id.mid_xiazaivip)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+        ((TextView) findViewById(R.id.mid_caifuvip)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         ((TextView) findViewById(R.id.chu_chakanfujin)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         ((TextView) findViewById(R.id.chu_liulanmibo)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
         ((TextView) findViewById(R.id.chu_shiliaofujin)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
@@ -41,8 +42,7 @@ public class BuyerPowerActivity extends AppCompatActivity implements View.OnClic
             case R.id.tv_getAccese:
             case R.id.tv_getAccese2:
             case R.id.tv_getAccese3:
-               startActivity(new Intent(this, BuyVipActivity.class));
-
+               startActivity(new Intent(this, PayActivity.class));
                 break;
         }
     }

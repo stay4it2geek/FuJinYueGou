@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -30,12 +29,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.act.quzhibo.ProvinceAndCityEntify;
+import com.act.quzhibo.entity.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CommonPerson;
 import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.entity.InterestPostPageCommentDetail;
 import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
 import com.act.quzhibo.ui.activity.InfoCommonActivity;
@@ -47,8 +44,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static com.act.quzhibo.R.id.view;
 
 /**
  * Created by asus-pc on 2017/6/11.

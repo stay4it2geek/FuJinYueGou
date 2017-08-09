@@ -133,6 +133,15 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Soundplayer" />
+
+        <activity android:name="cn.bmob.pay.v3.act.PayAct" />
+        <activity android:name=".ui.activity.PayActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.PAY" />
+
+                <category android:name="android.intent.category.PAY" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

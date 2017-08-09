@@ -54,6 +54,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.vip_buy:
+                getActivity().startActivity(new Intent(getActivity(), BuyerPowerActivity.class));
                 break;
             case R.id.who_see_me:
                 getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));

@@ -1,7 +1,5 @@
 package com.act.quzhibo.entity;
 
-import com.act.quzhibo.ProvinceAndCityEntify;
-
 import java.util.ArrayList;
 
 

@@ -16,7 +16,6 @@ import com.act.quzhibo.entity.PlateCatagory;
 import com.act.quzhibo.entity.PlateList;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
-import com.act.quzhibo.ui.fragment.FuliFragement;
 import com.act.quzhibo.ui.fragment.MiBoFragement;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;

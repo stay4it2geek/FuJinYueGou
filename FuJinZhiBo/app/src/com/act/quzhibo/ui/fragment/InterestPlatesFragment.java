@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,8 +16,10 @@ import com.act.quzhibo.adapter.InterestPlatesListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPlates;
 import com.act.quzhibo.entity.InterestPlatesParentData;
+import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
@@ -40,6 +43,12 @@ public class InterestPlatesFragment extends BackHandledFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_square_interest_paltes, null, false);
         recyclerview = (XRecyclerView) view.findViewById(R.id.recycler_view);
         loadNetView= (LoadNetView) view.findViewById(R.id.loadview);
+        view.findViewById(R.id.nearby_extran_img).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback.onNear();
+            }
+        });
         recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
@@ -62,6 +71,17 @@ public class InterestPlatesFragment extends BackHandledFragment {
             }
         });
         return view;
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof SquareActivity) {
+            callback = (OnNearByListner) context;
+        }
+    }
+    OnNearByListner callback;
+    public interface OnNearByListner {
+        void onNear();
     }
 
     private void getData() {
