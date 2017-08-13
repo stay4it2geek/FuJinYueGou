@@ -161,12 +161,12 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.LoginWithCodeActivity"
+                android:name="com.act.quzhibo.ui.activity.RegisterActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-                android:name="com.act.quzhibo.ui.activity.RegisterActivity"
+                android:name="com.act.quzhibo.ui.activity.LoginWithSmsCodeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

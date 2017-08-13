@@ -2,7 +2,9 @@
     <dimen name="activity_horizontal_margin">0dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
     <dimen name="avatar_size36">36dp</dimen>
-    <dimen name="dingdanheight">45dp</dimen>
+    <dimen name="commonViewHeight">45dp</dimen>
+    <dimen name="buttonheight">40dp</dimen>
+
     <dimen name="shuomingheight">38dp</dimen>
     <dimen name="heart_anim_bezier_x_rand">50.0dp</dimen>
     <dimen name="heart_anim_init_x">50.0dp</dimen>

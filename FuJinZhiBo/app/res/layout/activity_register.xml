@@ -2,27 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/navigationbar"
+    <com.act.quzhibo.view.TitleBarView
+        android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
-
-        <TextView
-            android:id="@+id/layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_gravity="center_horizontal"
-            android:background="#f6dd3e"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text=""
-            android:textColor="@color/commontextcolor"
-            android:textSize="18sp" />
-    </RelativeLayout>
+        android:layout_height="@dimen/commonViewHeight"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +21,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dingdanheight">
+            android:layout_height="@dimen/commonViewHeight">
 
             <ImageView
                 android:id="@+id/imageView1"
@@ -74,7 +59,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dingdanheight">
+            android:layout_height="@dimen/commonViewHeight">
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -100,14 +85,12 @@
                 android:text=""
                 android:textColor="@color/black" />
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="20dp"
-                android:layout_height="10dp"
+            <CheckBox
+                android:id="@+id/isSetPswVisi"
+                android:layout_width="38dp"
+                android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/addheart" />
+                android:checked="false" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -115,8 +98,8 @@
     <Button
         android:id="@+id/btn_register"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dingdanheight"
-        android:layout_margin="15dp"
+        android:layout_height="@dimen/buttonheight"
+        android:textSize="18sp"        android:layout_margin="15dp"
         android:background="@drawable/button_common_selector"
         android:button="@null"
         android:gravity="center"
@@ -124,7 +107,7 @@
         android:textColor="@drawable/textcolor_selector" />
 
     <TextView
-        android:id="@+id/tv_login_phone"
+        android:id="@+id/tv_register_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"

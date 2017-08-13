@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navigationbar"
+    android:layout_width="match_parent"
+    android:layout_height="45dp">
+
+    <Button
+        android:layout_width="38dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="8dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/backbutton"
+        android:background="@drawable/back" />
+
+    <TextView
+        android:id="@+id/barTitle"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#f6dd3e"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="标题"
+        android:textColor="@color/commontextcolor"
+        android:textSize="18sp" />
+
+</FrameLayout>

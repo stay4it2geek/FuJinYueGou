@@ -38,7 +38,7 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         request();
-
+//        BmobUser.getCurrentUser(RootUser.class).logOut();
     }
 
     private void request() {

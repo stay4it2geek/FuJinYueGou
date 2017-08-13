@@ -3,25 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/navigationbar"
+    <com.act.quzhibo.view.TitleBarView
+        android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
-
-        <TextView
-            android:id="@+id/layout"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_gravity="center_horizontal"
-            android:background="#f6dd3e"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text=""
-            android:textColor="@color/commontextcolor"
-            android:textSize="18sp" />
-    </RelativeLayout>
+        android:layout_height="@dimen/commonViewHeight" />
 
 
     <LinearLayout
@@ -30,52 +15,53 @@
         android:layout_marginTop="15dp">
 
         <EditText
-            android:id="@+id/et_password"
+            android:id="@+id/et_userPhonenumber"
             android:layout_width="180dp"
-            android:layout_height="@dimen/dingdanheight"
+            android:layout_height="@dimen/commonViewHeight"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/shape"
-            android:drawablePadding="10dp"
+            android:background="@drawable/yellowshape"
             android:ems="10"
-            android:hint=" 请输入手机号码"
+            android:hint="请输入手机号码"
             android:inputType="phone"
+            android:paddingLeft="10dp"
             android:textSize="14sp" />
 
         <Button
             android:id="@+id/getCode_btn"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dingdanheight"
+            android:layout_height="@dimen/buttonheight"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="25dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="1"
+            android:paddingTop="-2dp"
             android:background="@drawable/button_common_selector"
             android:gravity="center"
-            android:padding="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:text="点击获取验证码 "
             android:textColor="@drawable/textcolor_selector"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <EditText
-        android:id="@+id/vertify_code"
+        android:id="@+id/et_sms_code"
         android:layout_width="180dp"
-        android:layout_height="@dimen/dingdanheight"
+        android:layout_height="@dimen/buttonheight"
         android:layout_margin="15dp"
-        android:background="@drawable/shape"
-        android:drawablePadding="10dp"
+        android:background="@drawable/yellowshape"
         android:ems="10"
-        android:hint="  请输入短信验证码"
+        android:hint="请输入短信验证码"
         android:inputType="numberDecimal"
+        android:paddingLeft="10dp"
         android:textSize="14sp">
 
         <requestFocus />
     </EditText>
 
     <Button
-        android:id="@+id/rb_shareSubmitbtn"
+        android:id="@+id/btn_verify_login"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dingdanheight"
+        android:layout_height="@dimen/buttonheight"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="20dp"

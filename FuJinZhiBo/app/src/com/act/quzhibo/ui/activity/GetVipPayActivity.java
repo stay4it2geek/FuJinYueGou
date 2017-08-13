@@ -41,27 +41,26 @@ import static android.widget.AbsListView.CHOICE_MODE_SINGLE;
 
 
 public class GetVipPayActivity extends FragmentActivity {
-    String APPID = "e37264d2646046d9158d3800afd548f3";
     private TextView alipay;
     ProgressDialog dialog;
     private static final int REQUESTPERMISSION = 101;
     private String mGoodsDescription;
     ArrayList<String> titles = new ArrayList<>();
     ArrayList<Integer> imgs = new ArrayList<>();
-    ArrayList<Integer> types = new ArrayList<>();
+    ArrayList<String> types = new ArrayList<>();
     ArrayList<String> prices = new ArrayList<>();
     ArrayList<String> prices_maket = new ArrayList<>();
     private double mPayMoney = 0.01;
     private TextView userSelectText;
     VipOrders vipOrders;
-    private int orderType;
+    private String orderType;
     private ListView listView;
     MyAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pay);
+        setContentView(R.layout.activity_get_vip_pay);
         //解决Android 7.0 FileUriExposedException url异常
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -74,8 +73,6 @@ public class GetVipPayActivity extends FragmentActivity {
         listView.setAdapter(mAdapter = new MyAdapter(this));
         vipOrders = new VipOrders();
         vipOrders.user = BmobUser.getCurrentUser(RootUser.class);
-
-        BP.init(APPID);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
@@ -109,12 +106,12 @@ public class GetVipPayActivity extends FragmentActivity {
             titles.add("特级升级到超级");
             titles.add("初级升级到特级");
 
-            types.add(0);
-            types.add(1);
-            types.add(2);
-            types.add(3);
-            types.add(4);
-            types.add(5);
+            types.add("0");
+            types.add("1");
+            types.add("2");
+            types.add("3");
+            types.add("4");
+            types.add("5");
 
             prices_maket.add("499");
             prices_maket.add("399");
@@ -225,6 +222,7 @@ public class GetVipPayActivity extends FragmentActivity {
                 });
                 RootUser user = new RootUser();
                 user.vipType = orderType;
+                user.vipTypeName = mGoodsDescription;
                 user.update(vipOrders.user.getObjectId(), new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
