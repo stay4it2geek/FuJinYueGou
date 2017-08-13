@@ -14,11 +14,13 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NearAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.NearPerson;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class NearFragment extends BackHandledFragment {
         return false;
     }
 
+    private LoadNetView loadNetView;
+
     View view;
 
     @Nullable
@@ -41,6 +45,7 @@ public class NearFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_common, null, false);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -73,6 +78,27 @@ public class NearFragment extends BackHandledFragment {
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         queryData(Constants.REFRESH);
+//        view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Collections.sort(posts,ComparatorValues());
+//                if(adapter!=null){
+//                    handler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            adapter.notifyDataSetChanged();
+//                        }
+//                    });
+//                }
+//            }
+//        });
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
         return view;
     }
 
@@ -81,6 +107,7 @@ public class NearFragment extends BackHandledFragment {
     private int limit = 10; // 每页的数据是10条
     ArrayList<NearPerson> nearPersonArrayList = new ArrayList<>();
     public String lastTime;
+
     /**
      * 分页获取数据
      *
@@ -93,18 +120,18 @@ public class NearFragment extends BackHandledFragment {
         query.setLimit(limit);
         // 如果是加载更多
 
-            // 如果是加载更多
-            if (actionType == Constants.LOADMORE) {
-                // 只查询小于最后一个item发表时间的数据
-                Date date = null;
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                try {
-                    date = sdf.parse(lastTime);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
+        // 如果是加载更多
+        if (actionType == Constants.LOADMORE) {
+            // 只查询小于最后一个item发表时间的数据
+            Date date = null;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                date = sdf.parse(lastTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
+        }
 
         query.order("-updatedAt");
         query.findObjects(new FindListener<NearPerson>() {
@@ -156,8 +183,12 @@ public class NearFragment extends BackHandledFragment {
                 } else {
                     recyclerView.setNoMore(true);
                 }
-            } else {
 
+
+                loadNetView.setVisibility(View.GONE);
+            } else {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };

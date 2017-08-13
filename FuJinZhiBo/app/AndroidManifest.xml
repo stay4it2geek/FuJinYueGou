@@ -54,53 +54,71 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.act.quzhibo.ui.activity.VipOrdersActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.MultipleMeideaActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShowerListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.WhoSeeMeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.BuyerPowerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShowerInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShowerInfoActivityLandscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" />
         <activity
             android:name="com.act.quzhibo.ui.activity.TabMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MoneyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.SquareActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.VideoPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.VideoPlayerActivityLanscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MineActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.NearInfoCommonActivity"
@@ -133,6 +151,32 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.act.quzhibo.ui.activity.ModifyPasswordActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.ModifyPhoneNumActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.LoginWithCodeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+                android:name="com.act.quzhibo.ui.activity.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name="com.act.quzhibo.ui.activity.AudioPlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
@@ -140,10 +184,9 @@
             android:theme="@style/Theme.Soundplayer" />
 
         <activity android:name="cn.bmob.pay.v3.act.PayAct" />
-        <activity android:name=".ui.activity.PayActivity">
+        <activity android:name=".ui.activity.GetVipPayActivity">
             <intent-filter>
                 <action android:name="android.intent.action.PAY" />
-
                 <category android:name="android.intent.category.PAY" />
             </intent-filter>
         </activity>

@@ -5,10 +5,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-/**
- * Created by asus-pc on 2017/8/5.
- */
-
 @SuppressLint("AppCompatCustomView")
 public class MarqueeTextView extends TextView {
 

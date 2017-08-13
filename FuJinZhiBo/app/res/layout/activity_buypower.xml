@@ -13,7 +13,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="特权说明(划线的是不能享受的)"
-        android:textColor="#231F20"
+        android:textColor="@color/commontextcolor"
         android:textSize="18sp"
         android:textStyle="normal" />
 
@@ -51,13 +51,12 @@
 
                 <TextView
                     android:id="@+id/tv_getAccese"
-                    style="@style/textStyle"
                     android:padding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginRight="15dp"
                     android:text="立刻获取授权"
                     android:textColor="@android:color/holo_orange_dark" />
 
@@ -105,7 +104,23 @@
                     android:layout_centerVertical="true"
                     android:text="◉  阅读财富版块内容无限制" />
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  查看谁对我感兴趣无限制" />
+            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/shuomingheight"
@@ -280,12 +295,11 @@
 
                 <TextView
                     android:id="@+id/tv_getAccese2"
-                    style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginRight="15dp"
                     android:text="立刻获取授权"
                     android:padding="10dp"
                     android:textColor="@android:color/holo_orange_dark" />
@@ -335,6 +349,24 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="◉  阅读财富版块内容无限制" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    style="@style/textStyle"
+                    android:id="@+id/mid_whoseeme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  查看谁对我感兴趣无限制" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -516,13 +548,12 @@
 
                 <TextView
                     android:id="@+id/tv_getAccese3"
-                    style="@style/textStyle"
                     android:padding="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginRight="15dp"
                     android:text="立刻获取授权"
                     android:textColor="@android:color/holo_orange_dark" />
 
@@ -572,7 +603,24 @@
                     android:layout_centerVertical="true"
                     android:text="◉  阅读财富版块内容无限制" />
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/shuomingheight"
+                android:background="#fff">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorbg" />
+
+                <TextView
+                    android:id="@+id/chu_whoseeme"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="◉  查看谁对我感兴趣无限制" />
+            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/shuomingheight"

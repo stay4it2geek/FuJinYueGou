@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.Callback;
@@ -20,22 +21,27 @@ import com.act.quzhibo.util.CommonUtil;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 import okhttp3.Response;
 
 public class WelcomeActivity extends Activity {
 
     private String plateListStr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         request();
+
     }
 
-    private void request(){
+    private void request() {
         BmobQuery<Toggle> query = new BmobQuery<>();
 
         query.findObjects(new FindListener<Toggle>() {
@@ -52,22 +58,24 @@ public class WelcomeActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),"请求分类超时,正在重试",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "请求超时,正在重试", Toast.LENGTH_SHORT).show();
                         }
                     });
-                   request();
+                    request();
                 }
             }
         });
 
 
     }
+
     private void getPlateList() {
         OkHttpUtils.get().url(CommonUtil.getToggle(this, "tabCatagory").getToggleObject()).build().execute(new Callback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 getPlateList();
             }
+
             @Override
             public void onResponse(Object response, int id) {
             }
@@ -98,7 +106,7 @@ public class WelcomeActivity extends Activity {
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             Intent intent = new Intent();
             intent.setClass(WelcomeActivity.this, TabMainActivity.class);
-            intent.putExtra(Constants.TAB_PLATE_LIST,plateListStr);
+            intent.putExtra(Constants.TAB_PLATE_LIST, plateListStr);
             startActivity(intent);
             finish();
         }

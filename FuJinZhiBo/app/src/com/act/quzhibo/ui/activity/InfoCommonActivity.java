@@ -69,8 +69,8 @@ public class InfoCommonActivity extends AppCompatActivity {
             int count = getIntent().getIntExtra("count", 0);
             post = (InterestPost) getIntent().getSerializableExtra(Constants.POST);
             if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
-                int max = 400;
-                int min = 50;
+                int max = 2000;
+                int min = 200;
                 Random random = new Random();
                 second = random.nextInt(max) % (max - min + 4) + min;
                 CommonUtil.saveData(this, second, "time");

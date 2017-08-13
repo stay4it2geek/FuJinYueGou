@@ -15,7 +15,7 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="状态详情"
-        android:textColor="#231F20"
+        android:textColor="@color/commontextcolor"
         android:textSize="18sp" />
    <FrameLayout
        android:layout_width="match_parent"

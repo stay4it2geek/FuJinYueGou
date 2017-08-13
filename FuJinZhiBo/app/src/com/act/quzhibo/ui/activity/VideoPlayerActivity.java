@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
-
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ViewPlayerPageAdapter;
 import com.act.quzhibo.entity.Room;

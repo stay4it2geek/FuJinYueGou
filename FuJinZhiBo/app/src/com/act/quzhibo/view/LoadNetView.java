@@ -2,12 +2,10 @@ package com.act.quzhibo.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -18,8 +16,9 @@ import com.act.quzhibo.common.Constants;
 
 public class LoadNetView extends LinearLayout {
 
-
-    private Button relaodbutton;
+    private  LinearLayout vipNulllayout;
+    private Button reloadbutton;
+    private Button buybutton;
     private LinearLayout loadlayout;
     private LinearLayout reloadlayout;
 
@@ -32,15 +31,22 @@ public class LoadNetView extends LinearLayout {
         // 获取控件
         reloadlayout = (LinearLayout) findViewById(R.id.reloadlayout);
         reloadlayout = (LinearLayout) findViewById(R.id.reloadlayout);
-        relaodbutton = (Button) findViewById(R.id.relaodbutton);
+        reloadbutton = (Button) findViewById(R.id.relaodbutton);
+        buybutton = (Button) findViewById(R.id.buybutton);
+
         loadlayout = (LinearLayout) findViewById(R.id.loadlayout);
+        vipNulllayout = (LinearLayout) findViewById(R.id.VipNulllayout);
+
     }
 
     // 为左侧返回按钮添加自定义点击事件
     public void setReloadButtonListener(OnClickListener listener) {
-        relaodbutton.setOnClickListener(listener);
+        reloadbutton.setOnClickListener(listener);
     }
-
+    // 为左侧返回按钮添加自定义点击事件
+    public void setBuyButtonListener(OnClickListener listener) {
+        buybutton.setOnClickListener(listener);
+    }
 
     public void setlayoutVisily(int loadType) {
         if (loadType == Constants.LOAD) {
@@ -49,6 +55,10 @@ public class LoadNetView extends LinearLayout {
         } else if(loadType == Constants.RELOAD){
             reloadlayout.setVisibility(View.VISIBLE);
             loadlayout.setVisibility(View.GONE);
+        }else if(loadType == Constants.BUY_VIP){
+            reloadlayout.setVisibility(View.GONE);
+            loadlayout.setVisibility(View.GONE);
+            vipNulllayout.setVisibility(View.VISIBLE);
         }
     }
 

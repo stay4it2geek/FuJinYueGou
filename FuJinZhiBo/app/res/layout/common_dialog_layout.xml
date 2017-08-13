@@ -26,7 +26,7 @@
             android:textColor="#333333"
             android:textSize="18sp"
             android:visibility="visible"
-            tools:text="消息提示" />
+            tools:text="" />
 
         <ImageView
             android:id="@+id/image"
@@ -45,19 +45,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="30dp"
             android:gravity="center"
             android:lineSpacingExtra="3dp"
             android:lineSpacingMultiplier="1.2"
-            android:textColor="@color/colorAccent"
-            android:textSize="14dp"
-            tools:text="" />
+            android:textSize="17dp"
+            android:text=""/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginTop="16dp"
-            android:background="#E4E4E4" />
+            android:background="#aaa" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,14 +75,14 @@
                 android:paddingTop="16dp"
                 android:singleLine="true"
                 android:textColor="#999999"
-                android:textSize="16sp"
-                tools:text="No" />
+                android:textSize="17sp"
+                tools:text="" />
 
             <View
                 android:id="@+id/column_line"
                 android:layout_width="1px"
                 android:layout_height="match_parent"
-                android:background="#E4E4E4" />
+                android:background="#aaa" />
 
             <Button
                 android:id="@+id/positive"
@@ -96,9 +95,9 @@
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
                 android:singleLine="true"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp"
-                tools:text="Yes" />
+                android:textColor="#ffff8000"
+                android:textSize="17sp"
+                tools:text="" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

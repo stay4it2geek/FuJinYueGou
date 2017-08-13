@@ -159,11 +159,9 @@ public class InterestPostListFragment extends BackHandledFragment {
                 if (interestPostSize> 0) {
                     ctime = data.result.get(interestPostSize - 1).ctime;
                 }
-
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
                 }
-
                 if (data.result!= null && interestPostSize > 0) {
                     posts.addAll(data.result);
                     if (adapter == null) {
@@ -183,7 +181,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                         adapter.notifyDataSetChanged();
                     }
 
-                } else if (interestPostSize == 0) {
+                } else {
                     recyclerView.setNoMore(true);
                 }
 

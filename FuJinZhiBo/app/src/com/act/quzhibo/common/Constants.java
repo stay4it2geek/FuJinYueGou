@@ -32,4 +32,7 @@ public class Constants {
     public static final String COMMON_USER_ID = "COMMON_USER_ID";
     public static final int LOAD = 11;
     public static final int RELOAD = 12;
+    public static final int BUY_VIP = 13;
+    public static final int LOGIN = 14;
+    public static final int LOGIN_OK = 15;
 }
