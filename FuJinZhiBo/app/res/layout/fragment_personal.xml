@@ -120,8 +120,8 @@
 
                 <ImageView
                     android:id="@+id/orderslist_img"
-                    android:layout_width="30dp"
-                    android:layout_height="26dp"
+                    android:layout_width="28dp"
+                    android:layout_height="27dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:background="@drawable/orderlist" />
@@ -153,8 +153,8 @@
 
                 <ImageView
                     android:id="@+id/orderstatus"
-                    android:layout_width="30dp"
-                    android:layout_height="26dp"
+                    android:layout_width="27dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:background="@drawable/getvip" />
@@ -187,8 +187,8 @@
 
                 <ImageView
                     android:id="@+id/whoseeimage"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:background="@drawable/ganxingqu" />
@@ -230,8 +230,8 @@
 
                 <ImageView
                     android:id="@+id/focusimg"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:background="@drawable/zhuboguanzhu" />
@@ -265,8 +265,8 @@
 
                 <ImageView
                     android:id="@+id/focus_person_img"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:background="@drawable/qingqu" />
@@ -333,8 +333,8 @@
 
                 <ImageView
                     android:id="@+id/myIMG_download_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:background="@drawable/tupian" />
@@ -393,7 +393,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/myDetailayout"
+                android:id="@+id/settingDetailayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
                 android:layout_marginTop="1dp"
@@ -415,7 +415,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/detail_img"
                     android:paddingTop="3dp"
-                    android:text="我的资料" />
+                    android:text="设置我的资料" />
 
                 <View
                     android:layout_width="10dp"
@@ -425,6 +425,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
             </RelativeLayout>
+
 
             <RelativeLayout
                 android:id="@+id/secretlayout"

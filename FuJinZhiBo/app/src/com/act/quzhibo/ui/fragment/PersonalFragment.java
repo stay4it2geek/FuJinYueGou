@@ -6,16 +6,20 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.ui.activity.VipPloicyActivity;
+import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
+import com.act.quzhibo.ui.activity.NoResActivity;
+import com.act.quzhibo.ui.activity.PicsDownLoadHistoryActivity;
+import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
+import com.act.quzhibo.ui.activity.VideoDownLoadHistoryActivty;
+import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
@@ -23,8 +27,6 @@ import com.act.quzhibo.ui.activity.VipOrdersActivity;
 import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.LogInListener;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
 
@@ -44,7 +46,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.myfocus_shower).setOnClickListener(this);
         view.findViewById(R.id.myfocus_person).setOnClickListener(this);
         view.findViewById(R.id.myfocus_shower).setOnClickListener(this);
-        view.findViewById(R.id.myDetailayout).setOnClickListener(this);
+        view.findViewById(R.id.settingDetailayout).setOnClickListener(this);
         view.findViewById(R.id.noReslayout).setOnClickListener(this);
         view.findViewById(R.id.secretlayout).setOnClickListener(this);
         view.findViewById(R.id.myVideo_download_layout).setOnClickListener(this);
@@ -79,19 +81,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 view.setBackgroundColor(getResources().getColor(R.color.white));
-
                 if (rootUser == null) {
                     if (view.getId() == R.id.vip_policy) {
-                        getActivity().startActivity(new Intent(getActivity(), VipPloicyActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
                     } else if (view.getId() == R.id.get_vip) {
                         getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
-
                     } else if (view.getId() == R.id.noReslayout) {
-                        getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
-
-                    } else if (view.getId() == R.id.secretlayout) {
-                        getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
-
+                        getActivity().startActivity(new Intent(getActivity(), NoResActivity.class));
                     } else {
                         getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                     }
@@ -99,7 +95,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 }
                 switch (view.getId()) {
                     case R.id.vip_policy:
-                        getActivity().startActivity(new Intent(getActivity(), VipPloicyActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
                         break;
                     case R.id.vip_order_listlayout:
                         getActivity().startActivity(new Intent(getActivity(), VipOrdersActivity.class));
@@ -114,29 +110,26 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));
                         break;
                     case R.id.myfocus_person:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), MyFocusPersonActivity.class));
                         break;
                     case R.id.myVideo_download_layout:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), VideoDownLoadHistoryActivty.class));
                         break;
                     case R.id.myIMG_download_layout:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), PicsDownLoadHistoryActivity.class));
                         break;
-                    case R.id.myDetailayout:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                    case R.id.settingDetailayout:
+                        getActivity().startActivity(new Intent(getActivity(), SettingMineInfoActivity.class));
                         break;
                     case R.id.myPostlayout:
                         getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
                         break;
-                    case R.id.secretlayout:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
-                        break;
                     case R.id.noReslayout:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), NoResActivity.class));
                         break;
                     case R.id.logout:
                         rootUser.logOut();
-                        getActivity().startActivityForResult(new Intent(getActivity(), LoginActivity.class), Constants.LOGIN);
+                        getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                         break;
                     default:
                         break;
@@ -149,6 +142,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         rootUser = BmobUser.getCurrentUser(RootUser.class);
+        Log.e("roo",rootUser+"pppppp");
         if (rootUser != null) {
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("已登录");
@@ -156,6 +150,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.vip_type)).setText(rootUser.vipTypeName != null ? rootUser.vipTypeName : "您还不是VIP哦");
             String sexAndAge = (rootUser.sex != null && rootUser.sex ? "男" : "女") + "/" + (TextUtils.isEmpty(rootUser.age) ? "未知" : (rootUser.age + ""));
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
+        }else{
+            view.findViewById(R.id.logout).setVisibility(View.GONE);
+            ((TextView) view.findViewById(R.id.isLogin)).setText("未登录");
+            ((TextView) view.findViewById(R.id.nickName)).setText( "未设置昵称");
+            ((TextView) view.findViewById(R.id.vip_type)).setText("您还不是VIP哦");
+            ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }
     }
 }

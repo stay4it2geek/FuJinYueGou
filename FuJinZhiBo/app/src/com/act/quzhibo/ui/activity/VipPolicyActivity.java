@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 
-public class VipPloicyActivity extends AppCompatActivity implements View.OnClickListener{
+public class VipPolicyActivity extends AppCompatActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eee"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/modifyPhonelayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff">
+
+        <ImageView
+            android:id="@+id/modifyPhone_img"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="11dp"
+            android:background="@drawable/phone" />
+
+        <TextView
+            android:id="@+id/modifyPhone_txt"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/modifyPhone_img"
+            android:paddingTop="3dp"
+            android:text="修改手机号码" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rightarr" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/modifyPSWlayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff">
+
+        <ImageView
+            android:id="@+id/modifyPSW_img"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="11dp"
+            android:background="@drawable/password" />
+
+        <TextView
+            android:id="@+id/modifyPSW_txt"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/modifyPSW_img"
+            android:paddingTop="3dp"
+            android:text="修改密码" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="18dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rightarr" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff">
+
+        <ImageView
+            android:id="@+id/openSecret_img"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/yinsi" />
+
+        <TextView
+            android:id="@+id/openSecret_txt"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/openSecret_img"
+            android:paddingTop="3dp"
+            android:text="开启私密模式" />
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <org.angmarch.views.NiceSpinner
+            android:id="@+id/sex_Spinner"
+            style="@style/textStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1"
+            android:paddingTop="3dp"
+            android:text="性别" />
+
+        <org.angmarch.views.NiceSpinner
+            android:id="@+id/age_txt"
+            style="@style/textStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/sex_txt"
+            android:layout_weight="1"
+            android:paddingTop="3dp"
+            android:text="年龄" />
+    </LinearLayout>
+
+    <org.angmarch.views.NiceSpinner
+        android:id="@+id/province_city_txt"
+        style="@style/textStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:text="福建省会按时央行区" />
+
+</LinearLayout>
