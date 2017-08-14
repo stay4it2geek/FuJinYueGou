@@ -64,9 +64,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/orderPrice"
         android:layout_alignEnd="@+id/orderStatus"
-        android:background="@drawable/bg_circle_green30"
-        android:padding="12dp"
-        android:layout_margin="10dp"
+        android:background="@drawable/bg_circle_orange"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:text="删除订单"
         android:textColor="#fff" />
 

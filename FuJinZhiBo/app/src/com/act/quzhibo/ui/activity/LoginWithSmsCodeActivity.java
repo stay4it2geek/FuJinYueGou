@@ -72,18 +72,18 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
         }
 
         BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
-                "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>(){
+                "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>() {
 
-            @Override
-            public void done(Integer o, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(LoginWithSmsCodeActivity.this, "短信验证码已经发送,序列号是："+o, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(LoginWithSmsCodeActivity.this, "短信验证码发送失败，原因是" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void done(Integer o, BmobException e) {
+                        if (e == null) {
+                            Toast.makeText(LoginWithSmsCodeActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginWithSmsCodeActivity.this, "短信验证码发送失败，原因是" + e.getMessage(), Toast.LENGTH_SHORT).show();
 
-                }
-            }
-        });
+                        }
+                    }
+                });
 
 
     }
@@ -113,6 +113,8 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
             public void done(BmobException e) {
                 if (e == null) {
                     RootUser rootUser = new RootUser();
+                    rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+                    rootUser.setMobilePhoneNumberVerified(true);
                     Toast.makeText(LoginWithSmsCodeActivity.this, "验证成功，自动登录中......", Toast.LENGTH_SHORT).show();
 
                     rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString(), new LogInListener<RootUser>() {
@@ -122,7 +124,6 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
                             if (rootUser != null) {
                                 LoginWithSmsCodeActivity.this.finish();
                                 Toast.makeText(LoginWithSmsCodeActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-
                             } else {
                                 Toast.makeText(LoginWithSmsCodeActivity.this, "登录失败，原因是：" + e.getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -130,8 +131,8 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
                         }
 
                     });
-                }else {
-                    Toast.makeText(LoginWithSmsCodeActivity.this, "验证失败，原因是："+e.getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginWithSmsCodeActivity.this, "验证失败，原因是：" + e.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             }

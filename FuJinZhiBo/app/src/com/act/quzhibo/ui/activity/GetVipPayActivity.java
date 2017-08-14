@@ -220,14 +220,14 @@ public class GetVipPayActivity extends FragmentActivity {
                         }
                     }
                 });
-                RootUser user = new RootUser();
+                final RootUser user = new RootUser();
                 user.vipType = orderType;
                 user.vipTypeName = mGoodsDescription;
-                user.update(vipOrders.user.getObjectId(), new UpdateListener() {
+                user.update(BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功"+user.vipTypeName+"kkkkk"+mGoodsDescription,Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功，原因是:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }

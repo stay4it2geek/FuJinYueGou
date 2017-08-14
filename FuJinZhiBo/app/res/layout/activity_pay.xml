@@ -90,7 +90,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_circle_green30"
+            android:background="@drawable/bg_circle_orange"
             android:gravity="center"
             android:text="使用支付宝购买"
             android:textColor="#fff"

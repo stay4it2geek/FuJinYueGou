@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
@@ -97,9 +98,14 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void done(RootUser rootUser, BmobException e) {
                 if (e == null) {
-                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(RegisterActivity.this, SettingMineInfoActivity.class));
-                    RegisterActivity.this.finish();
+                    rootUser.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RegisterActivity.this, SettingMineInfoActivity.class));
+                            RegisterActivity.this.finish();
+                        }
+                    });
                 } else {
                     Toast.makeText(RegisterActivity.this, "注册失败，原因是：" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }

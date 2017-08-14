@@ -2,24 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@color/colorbg"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#EEEEEE">
+        android:layout_height="40dp">
 
         <TextView
             android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:gravity="center"
             android:layout_centerVertical="true"
             android:layout_marginLeft="17dp"
+            android:gravity="center"
             android:text="取消"
-            android:textSize="18sp"
             android:textColor="@android:color/holo_orange_dark"
-             />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_finish"
@@ -38,12 +38,13 @@
     <LinearLayout
         android:id="@+id/optionspicker"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:background="@android:color/white"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_round_black30"
         android:orientation="horizontal">
 
         <com.bigkoo.pickerview.lib.WheelView
             android:id="@+id/options1"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />

@@ -168,11 +168,6 @@ public class FragmentDialog extends DialogFragment {
      */
     public OnClickBottomListener onClickBottomListener;
 
-    public FragmentDialog setOnClickBottomListener(OnClickBottomListener onClickBottomListener) {
-        this.onClickBottomListener = onClickBottomListener;
-        return this;
-    }
-
     public interface OnClickBottomListener {
         /**
          * 点击确定按钮事件

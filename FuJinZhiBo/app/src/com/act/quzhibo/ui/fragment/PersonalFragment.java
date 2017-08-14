@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
@@ -27,6 +28,8 @@ import com.act.quzhibo.ui.activity.VipOrdersActivity;
 import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
 
@@ -62,17 +65,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private void queryMyFocusShower() {
 
-    }
-
-    private void queryMyFocusPersons() {
-
-    }
-
-    private void Logout() {
-
-    }
 
     @Override
     public void onClick(final View view) {
@@ -141,14 +134,28 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
+            @Override
+            public void done(RootUser user, BmobException e) {
+           if(e==null){
+               Toast.makeText(getActivity(), "ttt"+BmobUser.getCurrentUser(RootUser.class).secretScan, Toast.LENGTH_SHORT).show();
+
+           }
+           else{
+               Toast.makeText(getActivity(), "wrong", Toast.LENGTH_SHORT).show();
+
+           }
+
+
+            }
+        });
         rootUser = BmobUser.getCurrentUser(RootUser.class);
-        Log.e("roo",rootUser+"pppppp");
         if (rootUser != null) {
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("已登录");
             ((TextView) view.findViewById(R.id.nickName)).setText(rootUser.getUsername() != null ? rootUser.getUsername() : "未设置昵称");
             ((TextView) view.findViewById(R.id.vip_type)).setText(rootUser.vipTypeName != null ? rootUser.vipTypeName : "您还不是VIP哦");
-            String sexAndAge = (rootUser.sex != null && rootUser.sex ? "男" : "女") + "/" + (TextUtils.isEmpty(rootUser.age) ? "未知" : (rootUser.age + ""));
+            String sexAndAge = (rootUser.sex ? "男" : "女") + "/" + (TextUtils.isEmpty(rootUser.age) ? "未知" : (rootUser.age + "岁"));
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
         }else{
             view.findViewById(R.id.logout).setVisibility(View.GONE);

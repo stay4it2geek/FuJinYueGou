@@ -9,33 +9,16 @@ import com.bigkoo.pickerview.model.IPickerViewData;
  */
 
 public class CardBean implements IPickerViewData {
-    int id;
-    String cardNo;
+    String ageStr;
 
-    public CardBean(int id, String cardNo) {
-        this.id = id;
-        this.cardNo = cardNo;
+    public CardBean(String ageStr) {
+        this.ageStr = ageStr;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCardNo() {
-        return cardNo;
-    }
-
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
-    }
 
     @Override
     public String getPickerViewText() {
-        return cardNo;
+        return ageStr;
     }
 
 }

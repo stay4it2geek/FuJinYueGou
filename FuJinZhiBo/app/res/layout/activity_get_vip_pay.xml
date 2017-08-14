@@ -18,19 +18,16 @@
         android:textSize="18sp"
         android:textStyle="normal" />
 
-    <com.act.quzhibo.view.MarqueeTextView
+    <TextView
         android:id="@+id/tips"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:background="#afedae"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:gravity="center"
         android:singleLine="true"
-        android:text="温馨提示您:下单后请及时支付哦!没有支付的订单将会被自动删除!"
-        android:textColor="#000"
-        android:textSize="16sp" />
+        android:text="下单后请及时支付哦!未支付订单将自动删除!"
+        android:textColor="@color/darkorange"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,6 +45,11 @@
             android:scrollbars="none" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,8 +91,8 @@
             android:layout_height="55dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/bg_circle_green30"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_circle_orange"
             android:gravity="center"
             android:text="使用支付宝购买"
             android:textColor="#fff"
@@ -99,7 +101,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="45dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp">
 
             <ImageView
                 android:id="@+id/zhifubao"

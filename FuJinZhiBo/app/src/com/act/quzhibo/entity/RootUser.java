@@ -8,7 +8,11 @@ import cn.bmob.v3.BmobUser;
 
 public class RootUser extends BmobUser {
     public String vipType;
-    public Boolean sex;
+    public boolean sex;
     public String age;
     public String vipTypeName;
+    public String provinceAndcity;
+    public boolean secretScan;
+    public boolean hasSetPsw;
+
 }

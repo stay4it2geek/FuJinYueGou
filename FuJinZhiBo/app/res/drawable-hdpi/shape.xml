@@ -9,7 +9,7 @@
     <corners android:radius="4dip" />
 
     <stroke
-        android:width="0.05dp"
+        android:width="0.1dp"
         android:color="#aaa" />
     <!-- 边框宽度和颜色 -->
 

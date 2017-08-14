@@ -17,6 +17,7 @@ import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.Callback;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.PsdInputView;
 
 import java.util.List;
 
@@ -32,13 +33,13 @@ import okhttp3.Response;
 public class WelcomeActivity extends Activity {
 
     private String plateListStr;
+    private PsdInputView passwordInputView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         request();
-//        BmobUser.getCurrentUser(RootUser.class).logOut();
     }
 
     private void request() {
