@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText et_userPhonenumber;
     private EditText et_sms_code;
     private EditText et_password;
+    private CheckBox check_agree;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
         et_sms_code = (EditText) findViewById(R.id.et_sms_code);
+        check_agree = (CheckBox) findViewById(R.id.check_agree);
+
         et_password = (EditText) findViewById(R.id.et_password);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("手 机 注 册");
@@ -63,7 +68,12 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
+        findViewById(R.id.termofuse).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(RegisterActivity.this,TermOfUseActivity.class));
+            }
+        });
         et_password.setSingleLine(true);
         et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
         ((CheckBox) findViewById(R.id.isSetPswVisi)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -115,7 +125,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void verifyAndLogin() {
-
+        if (!check_agree.isChecked()) {
+            Toast.makeText(this, "请先同意用户协议", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (et_sms_code.getText().toString().equals("请输入短信验证码") || et_sms_code.getText().toString().equals("")) {
             Toast.makeText(this, "请输入短信验证码", Toast.LENGTH_SHORT).show();
             return;
