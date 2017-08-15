@@ -137,16 +137,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(getActivity(), "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        fecth();
         rootUser = BmobUser.getCurrentUser(RootUser.class);
         if (rootUser != null) {
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
@@ -162,5 +153,18 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.vip_type)).setText("您还不是VIP哦");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }
+    }
+
+    private void fecth() {
+        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
+            @Override
+            public void done(RootUser user, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(getActivity(), "缓存同步成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }

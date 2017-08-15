@@ -43,10 +43,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.tv_loginWithPhone).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_frgetPsw).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, ReSetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
                 LoginActivity.this.finish();
 
             }

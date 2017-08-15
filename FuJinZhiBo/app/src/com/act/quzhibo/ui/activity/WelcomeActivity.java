@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
@@ -24,6 +25,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -33,12 +35,50 @@ import okhttp3.Response;
 public class WelcomeActivity extends Activity {
 
     private String plateListStr;
+    RootUser user;
+    PsdInputView psdInputView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        request();
+        psdInputView = (PsdInputView) findViewById(R.id.psdInputView);
+        user = BmobUser.getCurrentUser(RootUser.class);
+        if (user != null&&user.secretScan) {
+            fecth();
+
+                findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
+                psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
+                    @Override
+                    public void onSettingMode(String text) {
+                        if (text.equals(user.secretPassword)) {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                            }
+                            findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
+                            request();
+                        }
+                    }
+                });
+        } else {
+            findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
+            request();
+        }
+
+    }
+
+    private void fecth() {
+        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
+            @Override
+            public void done(RootUser user, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(WelcomeActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(WelcomeActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void request() {

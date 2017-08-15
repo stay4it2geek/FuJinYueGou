@@ -25,6 +25,7 @@ dependencies {
     compile 'com.youth.banner:banner:1.4.9'
     compile 'com.github.arcadefire:nice-spinner:1.2'
     compile 'com.contrarywind:Android-PickerView:3.2.6'
+    compile 'com.baoyz.swipemenulistview:library:1.3.0'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
     compile files('libs/okhttp-3.8.1.jar')
 }

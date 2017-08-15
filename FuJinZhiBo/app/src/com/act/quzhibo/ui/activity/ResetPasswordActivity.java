@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -29,7 +30,7 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 import static android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
 
 
-public class ModifyPasswordActivity extends AppCompatActivity {
+public class ResetPasswordActivity extends AppCompatActivity {
     EditText et_newpsw;
     EditText et_c_newpsw;
     EditText et_sms_code;
@@ -38,7 +39,8 @@ public class ModifyPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modifypassword);
+        setContentView(R.layout.activity_resetpassword);
+        fecth();
         et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
 
         et_newpsw = (EditText) findViewById(R.id.et_newpsw);
@@ -50,7 +52,7 @@ public class ModifyPasswordActivity extends AppCompatActivity {
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ModifyPasswordActivity.this.finish();
+                ResetPasswordActivity.this.finish();
             }
         });
 
@@ -92,16 +94,32 @@ public class ModifyPasswordActivity extends AppCompatActivity {
 
     private void resetPasswordBySMSCodeBtn() {
 
-        BmobUser.getCurrentUser(RootUser.class).resetPasswordBySMSCode(et_sms_code.getText().toString(), et_c_newpsw.getText().toString(), new UpdateListener() {
+        BmobUser.getCurrentUser(RootUser.class).resetPasswordBySMSCode(et_sms_code.getText().toString().trim(), et_c_newpsw.getText().toString(), new UpdateListener() {
 
             @Override
             public void done(BmobException ex) {
                 if (ex == null) {
-                    ModifyPasswordActivity.this.finish();
-                    Toast.makeText(ModifyPasswordActivity.this, "密码重置成功", Toast.LENGTH_SHORT).show();
+                    fecth();
+                    Toast.makeText(ResetPasswordActivity.this, "密码重置成功", Toast.LENGTH_SHORT).show();
+                    ResetPasswordActivity.this.finish();
                 } else {
-                    Toast.makeText(ModifyPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage()+ ex.getErrorCode(), Toast.LENGTH_SHORT).show();
 
+                }
+
+            }
+        });
+
+    }
+
+    private void fecth() {
+        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
+            @Override
+            public void done(RootUser user, BmobException e) {
+                if (e == null) {
+                    Toast.makeText(ResetPasswordActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ResetPasswordActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -132,16 +150,19 @@ public class ModifyPasswordActivity extends AppCompatActivity {
             }
 
         }
-
+        if (!et_userPhonenumber.getText().toString().equals(BmobUser.getCurrentUser(RootUser.class).getMobilePhoneNumber()) ) {
+            Toast.makeText(this, "旧手机号不匹配", Toast.LENGTH_SHORT).show();
+            return;
+        }
         BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
                 "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>() {
 
                     @Override
                     public void done(Integer o, BmobException e) {
                         if (e == null) {
-                            Toast.makeText(ModifyPasswordActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ResetPasswordActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(ModifyPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ResetPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -160,10 +181,10 @@ public class ModifyPasswordActivity extends AppCompatActivity {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(ModifyPasswordActivity.this, "验证成功，正在重置密码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPasswordActivity.this, "验证成功，正在重置密码", Toast.LENGTH_SHORT).show();
                     resetPasswordBySMSCodeBtn();
                 } else {
-                    Toast.makeText(ModifyPasswordActivity.this, "验证失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPasswordActivity.this, "验证失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             }

@@ -13,6 +13,6 @@ public class RootUser extends BmobUser {
     public String vipTypeName;
     public String provinceAndcity;
     public boolean secretScan;
-    public boolean hasSetPsw;
+    public String secretPassword;
 
 }
