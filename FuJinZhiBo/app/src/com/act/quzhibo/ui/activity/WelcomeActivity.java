@@ -33,7 +33,6 @@ import okhttp3.Response;
 public class WelcomeActivity extends Activity {
 
     private String plateListStr;
-    private PsdInputView passwordInputView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

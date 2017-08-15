@@ -7,12 +7,11 @@
     <com.act.quzhibo.view.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"/>
+        android:layout_height="@dimen/commonViewHeight" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="30dp"
@@ -26,7 +25,7 @@
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
@@ -40,7 +39,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/imageView1"
                 android:background="@null"
-                android:ems="20"
+                android:ems="11"
+                android:gravity="center_vertical"
                 android:hint="手机号"
                 android:inputType="number"
                 android:text=""
@@ -64,7 +64,7 @@
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="45dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
@@ -80,6 +80,7 @@
                 android:layout_toRightOf="@+id/imageView2"
                 android:background="@null"
                 android:ems="20"
+                android:gravity="center_vertical"
                 android:hint="密码"
                 android:inputType="textPassword"
                 android:text=""
@@ -88,31 +89,61 @@
             <CheckBox
                 android:id="@+id/isSetPswVisi"
                 android:layout_width="38dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:checked="false" />
         </RelativeLayout>
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_sms_code"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/buttonheight"
+            android:layout_margin="15dp"
+            android:background="@drawable/yellowshape"
+            android:ems="10"
+            android:hint="请输入短信验证码"
+            android:inputType="numberDecimal"
+            android:paddingLeft="10dp"
+            android:textSize="14sp">
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/getCode_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/buttonheight"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/button_common_selector"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="点击获取验证码 "
+            android:textColor="@drawable/textcolor_selector"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
 
     <Button
-        android:id="@+id/btn_register"
+        android:id="@+id/btn_verify_login"
         android:layout_width="match_parent"
         android:layout_height="@dimen/buttonheight"
-        android:textSize="18sp"        android:layout_margin="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/button_common_selector"
         android:button="@null"
         android:gravity="center"
-        android:text="注   册"
-        android:textColor="@drawable/textcolor_selector" />
+        android:text="验   证"
+        android:textColor="@drawable/textcolor_selector"
+        android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/tv_register_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="15dp"
-        android:padding="10dp"
-        android:text="使用手机号码快速注册"
-        android:textSize="16sp" />
 </LinearLayout>

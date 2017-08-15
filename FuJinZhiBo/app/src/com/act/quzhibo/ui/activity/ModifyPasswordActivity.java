@@ -84,6 +84,8 @@ public class ModifyPasswordActivity extends AppCompatActivity {
                 } else {
                     editText.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
                 }
+                editText.setSelection(editText.getText().length());
+
             }
         });
     }
@@ -95,9 +97,10 @@ public class ModifyPasswordActivity extends AppCompatActivity {
             @Override
             public void done(BmobException ex) {
                 if (ex == null) {
-                    Toast.makeText(ModifyPasswordActivity.this, "密码设置成功", Toast.LENGTH_SHORT).show();
+                    ModifyPasswordActivity.this.finish();
+                    Toast.makeText(ModifyPasswordActivity.this, "密码重置成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ModifyPasswordActivity.this, "密码设置失败：" + "原因是：" + ex.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ModifyPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -138,7 +141,7 @@ public class ModifyPasswordActivity extends AppCompatActivity {
                         if (e == null) {
                             Toast.makeText(ModifyPasswordActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(ModifyPasswordActivity.this, "短信验证码发送失败，原因是" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ModifyPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
                         }
                     }
@@ -157,10 +160,10 @@ public class ModifyPasswordActivity extends AppCompatActivity {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(ModifyPasswordActivity.this, "验证成功，正在设置密码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ModifyPasswordActivity.this, "验证成功，正在重置密码", Toast.LENGTH_SHORT).show();
                     resetPasswordBySMSCodeBtn();
                 } else {
-                    Toast.makeText(ModifyPasswordActivity.this, "验证失败，原因是：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ModifyPasswordActivity.this, "验证失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
                 }
             }

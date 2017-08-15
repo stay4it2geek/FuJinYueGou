@@ -25,15 +25,11 @@ public class PsdInputView extends EditText {
      */
     private float startX;
     private float startY;
-
-
     private float cX;
-
-
     /**
      * 实心圆的半径
      */
-    private int radius = 10;
+    private int radius = 20;
     /**
      * view的高度
      */
@@ -79,7 +75,7 @@ public class PsdInputView extends EditText {
      * 竖直分割线的颜色
      */
     private int divideLineColor = Color.GRAY;
-    private int focusedColor = Color.BLUE;
+    private int focusedColor = Color.RED;
     private RectF rectF = new RectF();
     private RectF focusedRecF = new RectF();
     private int psdType = 0;

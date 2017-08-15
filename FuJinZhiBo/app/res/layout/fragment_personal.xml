@@ -42,10 +42,23 @@
             android:textColor="#4A4A4A"
             android:textSize="16sp" />
 
+        <Button
+            android:id="@+id/isLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/nickName"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/button_common_selector"
+            android:text="去登录"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+
         <TextView
             android:id="@+id/vip_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/isLogin"
             android:layout_alignBottom="@+id/userAvtar"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
@@ -55,18 +68,6 @@
             android:textSize="16sp" />
 
 
-        <TextView
-            android:id="@+id/isLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/nickName"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/bg_circle_orange"
-            android:padding="5dp"
-            android:text="未登录"
-            android:textColor="#fff"
-            android:textSize="16sp" />
     </RelativeLayout>
 
     <ScrollView
@@ -416,42 +417,6 @@
                     android:layout_toRightOf="@+id/detail_img"
                     android:paddingTop="3dp"
                     android:text="设置我的资料" />
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/secretlayout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="1dp"
-                android:background="#fff">
-
-                <ImageView
-                    android:id="@+id/secret"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/yinsi" />
-
-                <TextView
-                    android:id="@+id/secrettxt"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/secret"
-                    android:paddingTop="1dp"
-                    android:text="隐私密码" />
-
 
                 <View
                     android:layout_width="10dp"

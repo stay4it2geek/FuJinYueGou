@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FetchUserInfoListener;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
-
     RootUser rootUser;
     View view;
 
@@ -41,7 +41,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
-
+        view.findViewById(R.id.isLogin).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
         view.findViewById(R.id.vip_order_listlayout).setOnClickListener(this);
@@ -51,7 +51,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.myfocus_shower).setOnClickListener(this);
         view.findViewById(R.id.settingDetailayout).setOnClickListener(this);
         view.findViewById(R.id.noReslayout).setOnClickListener(this);
-        view.findViewById(R.id.secretlayout).setOnClickListener(this);
         view.findViewById(R.id.myVideo_download_layout).setOnClickListener(this);
         view.findViewById(R.id.myIMG_download_layout).setOnClickListener(this);
         view.findViewById(R.id.myPostlayout).setOnClickListener(this);
@@ -60,19 +59,23 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-
     private void queryWhoSeeMe() {
     }
 
-
-
-
     @Override
     public void onClick(final View view) {
+        if (view.getId() == R.id.isLogin) {
+            if (rootUser == null) {
+                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+            return;
+        }
+        //点击效果
         view.setBackgroundColor(getResources().getColor(R.color.colorbg));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                //还原
                 view.setBackgroundColor(getResources().getColor(R.color.white));
                 if (rootUser == null) {
                     if (view.getId() == R.id.vip_policy) {
@@ -137,16 +140,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
             @Override
             public void done(RootUser user, BmobException e) {
-           if(e==null){
-               Toast.makeText(getActivity(), "ttt"+BmobUser.getCurrentUser(RootUser.class).secretScan, Toast.LENGTH_SHORT).show();
-
-           }
-           else{
-               Toast.makeText(getActivity(), "wrong", Toast.LENGTH_SHORT).show();
-
-           }
-
-
+                if (e == null) {
+                    Toast.makeText(getActivity(), "缓存同步成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         rootUser = BmobUser.getCurrentUser(RootUser.class);
@@ -157,10 +155,10 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.vip_type)).setText(rootUser.vipTypeName != null ? rootUser.vipTypeName : "您还不是VIP哦");
             String sexAndAge = (rootUser.sex ? "男" : "女") + "/" + (TextUtils.isEmpty(rootUser.age) ? "未知" : (rootUser.age + "岁"));
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
-        }else{
+        } else {
             view.findViewById(R.id.logout).setVisibility(View.GONE);
-            ((TextView) view.findViewById(R.id.isLogin)).setText("未登录");
-            ((TextView) view.findViewById(R.id.nickName)).setText( "未设置昵称");
+            ((TextView) view.findViewById(R.id.isLogin)).setText("去登录");
+            ((TextView) view.findViewById(R.id.nickName)).setText("未设置昵称");
             ((TextView) view.findViewById(R.id.vip_type)).setText("您还不是VIP哦");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }

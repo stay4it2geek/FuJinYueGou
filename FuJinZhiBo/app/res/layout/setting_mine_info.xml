@@ -33,7 +33,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/modifyPhone_img"
             android:paddingTop="3dp"
-            android:text="修改手机号码" />
+            android:text="重置手机号码" />
 
         <View
             android:layout_width="10dp"
@@ -67,7 +67,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/modifyPSW_img"
             android:paddingTop="3dp"
-            android:text="设置密码" />
+            android:text="重置密码" />
 
         <View
             android:layout_width="10dp"
@@ -92,28 +92,24 @@
             android:layout_marginLeft="15dp"
             android:background="@drawable/yinsi" />
 
-        <FrameLayout
+        <TextView
+            android:id="@+id/openSecret_txt"
+            style="@style/textStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/openSecret_img"
-            android:paddingTop="3dp">
+            android:gravity="center_vertical"
+            android:paddingTop="3dp"
+            android:text="是否开启私密模式" />
 
-            <TextView
-                android:id="@+id/openSecret_txt"
-                style="@style/textStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="是否开启私密模式" />
-
-            <Switch
-                android:id="@+id/openSecret_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp" />
-        </FrameLayout>
+        <Switch
+            android:id="@+id/openSecret_switch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp" />
     </RelativeLayout>
 
     <RelativeLayout

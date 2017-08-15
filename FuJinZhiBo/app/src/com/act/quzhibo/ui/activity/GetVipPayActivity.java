@@ -135,18 +135,22 @@ public class GetVipPayActivity extends FragmentActivity {
             imgs.add(R.drawable.up);
             imgs.add(R.drawable.up);
         }
+
         @Override
         public int getCount() {
             return imgs.size();
         }
+
         @Override
         public Object getItem(int position) {
             return null;
         }
+
         @Override
         public long getItemId(int position) {
             return position;
         }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             convertView = inflater.inflate(R.layout.item_buyvip, null, false);
@@ -186,6 +190,11 @@ public class GetVipPayActivity extends FragmentActivity {
     }
 
     private void alipay() {
+        if (BmobUser.getCurrentUser(RootUser.class) == null) {
+            Toast.makeText(GetVipPayActivity.this, "您还没有登录或注册哦!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(GetVipPayActivity.this,LoginActivity.class));
+            return;
+        }
         if (TextUtils.isEmpty(userSelectText.getText())) {
             Toast.makeText(GetVipPayActivity.this, "您还没有选择VIP种类哦!", Toast.LENGTH_SHORT).show();
             return;
@@ -216,7 +225,7 @@ public class GetVipPayActivity extends FragmentActivity {
                         if (e == null) {
                             Toast.makeText(GetVipPayActivity.this, "VIP支付信息更新成功", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(GetVipPayActivity.this, "VIP支付信息更新失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GetVipPayActivity.this, "VIP支付信息更新失败：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -227,9 +236,9 @@ public class GetVipPayActivity extends FragmentActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功"+user.vipTypeName+"kkkkk"+mGoodsDescription,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功" + user.vipTypeName + "kkkkk" + mGoodsDescription, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功，原因是:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功，原因是:" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -248,7 +257,7 @@ public class GetVipPayActivity extends FragmentActivity {
                         if (e == null) {
                             showDialog("生成订单成功!请等待跳转到支付页面");
                         } else {
-                            Toast.makeText(GetVipPayActivity.this, "添加订单数据失败：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GetVipPayActivity.this, "添加订单数据失败：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

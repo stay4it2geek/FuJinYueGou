@@ -141,11 +141,6 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.BuyVipActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.act.quzhibo.ui.activity.InfoCommonActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
@@ -166,7 +161,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.LoginWithSmsCodeActivity"
+            android:name="com.act.quzhibo.ui.activity.ReSetPasswordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

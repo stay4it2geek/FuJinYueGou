@@ -21,7 +21,7 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 
-public class LoginWithSmsCodeActivity extends AppCompatActivity {
+public class ReSetPasswordActivity extends AppCompatActivity {
 
     private EditText et_userPhonenumber;
     private EditText et_sms_code;
@@ -29,17 +29,17 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_with_smscode);
-
+        setContentView(R.layout.activity_register);
         et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
         et_sms_code = (EditText) findViewById(R.id.et_sms_code);
+        et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
 
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-        titlebar.setBarTitle("手 机 注 册/登  录");
+        titlebar.setBarTitle("");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginWithSmsCodeActivity.this.finish();
+                ReSetPasswordActivity.this.finish();
             }
         });
         findViewById(R.id.getCode_btn).setOnClickListener(new View.OnClickListener() {
@@ -60,6 +60,9 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
         if (et_userPhonenumber.getText().toString().equals("请输入手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
             Toast.makeText(this, "请输入正确位数的手机号码", Toast.LENGTH_SHORT).show();
             return;
+        } else if (et_userPhonenumber.getText().toString().equals("请输入手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
+            Toast.makeText(this, "请输入正确位数的手机号码", Toast.LENGTH_SHORT).show();
+            return;
         } else {
             String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
             Pattern p = Pattern.compile(regex);
@@ -77,10 +80,9 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
                     @Override
                     public void done(Integer o, BmobException e) {
                         if (e == null) {
-                            Toast.makeText(LoginWithSmsCodeActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReSetPasswordActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(LoginWithSmsCodeActivity.this, "短信验证码发送失败，原因是" + e.getMessage(), Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(ReSetPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -115,25 +117,23 @@ public class LoginWithSmsCodeActivity extends AppCompatActivity {
                     RootUser rootUser = new RootUser();
                     rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
                     rootUser.setMobilePhoneNumberVerified(true);
-                    Toast.makeText(LoginWithSmsCodeActivity.this, "验证成功，自动登录中......", Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(ReSetPasswordActivity.this, "验证成功，重置密码中......", Toast.LENGTH_SHORT).show();
                     rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString(), new LogInListener<RootUser>() {
 
                         @Override
                         public void done(RootUser rootUser, BmobException e) {
                             if (rootUser != null) {
-                                LoginWithSmsCodeActivity.this.finish();
-                                Toast.makeText(LoginWithSmsCodeActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                                ReSetPasswordActivity.this.finish();
+                                Toast.makeText(ReSetPasswordActivity.this, "重置成功", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(LoginWithSmsCodeActivity.this, "登录失败，原因是：" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ReSetPasswordActivity.this, "重置失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
                             }
                         }
 
                     });
                 } else {
-                    Toast.makeText(LoginWithSmsCodeActivity.this, "验证失败，原因是：" + e.getMessage(), Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(ReSetPasswordActivity.this, "验证失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

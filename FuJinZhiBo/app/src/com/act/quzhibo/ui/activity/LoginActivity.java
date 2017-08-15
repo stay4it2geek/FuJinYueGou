@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         findViewById(R.id.tv_loginWithPhone).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, LoginWithSmsCodeActivity.class));
+                startActivity(new Intent(LoginActivity.this, ReSetPasswordActivity.class));
                 LoginActivity.this.finish();
 
             }
@@ -78,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
                 }
+                et_password.setSelection(et_password.getText().length());
             }
         });
     }
@@ -107,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_LONG).show();
                     LoginActivity.this.finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "登录失败,原因是：" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, "登录失败,原因是：" + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
                 }
 
