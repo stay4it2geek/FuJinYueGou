@@ -450,7 +450,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/noRes"
                     android:paddingTop="1dp"
-                    android:text="免责声明" />
+                    android:text="用户协议" />
 
 
                 <View

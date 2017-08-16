@@ -12,7 +12,7 @@
         android:gravity="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="特权说明(划线的是不能享受的)"
+        android:text="授权说明"
         android:textColor="@color/commontextcolor"
         android:textSize="18sp"
         android:textStyle="normal" />

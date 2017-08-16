@@ -20,6 +20,7 @@ import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.NoResActivity;
 import com.act.quzhibo.ui.activity.PicsDownLoadHistoryActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
+import com.act.quzhibo.ui.activity.TermOfUseActivity;
 import com.act.quzhibo.ui.activity.VideoDownLoadHistoryActivty;
 import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
@@ -83,7 +84,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     } else if (view.getId() == R.id.get_vip) {
                         getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
                     } else if (view.getId() == R.id.noReslayout) {
-                        getActivity().startActivity(new Intent(getActivity(), NoResActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));
                     } else {
                         getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                     }
@@ -121,7 +122,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
                         break;
                     case R.id.noReslayout:
-                        getActivity().startActivity(new Intent(getActivity(), NoResActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));
                         break;
                     case R.id.logout:
                         rootUser.logOut();

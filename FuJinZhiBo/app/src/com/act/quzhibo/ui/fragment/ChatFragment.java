@@ -155,7 +155,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             int max = views.size();
             final ArrayList<Member> members = CommonUtil.jsonToArrayList(views.get(new Random().nextInt(max - 1)), Member.class);
             horizontialListView = (HorizontialListView) view.findViewById(R.id.list);
-            mAdapter = new MemberAdapter(getContext(), members);
+            mAdapter = new MemberAdapter(getActivity(), members);
             mAdapter.setDatas(members);
             horizontialListView.setAdapter(mAdapter);
             horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
