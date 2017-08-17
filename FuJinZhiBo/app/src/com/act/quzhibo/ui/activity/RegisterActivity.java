@@ -88,6 +88,15 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+
+        findViewById(R.id.verify_fail).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               startActivity(new Intent(RegisterActivity.this,RegisterNormalActivity.class));
+                RegisterActivity.this.finish();
+            }
+        });
+
     }
 
     private void getCode() {
@@ -147,7 +156,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
 
-        BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString(), new UpdateListener() {
+        BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
@@ -155,7 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
                     rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
                     rootUser.setMobilePhoneNumberVerified(true);
                     Toast.makeText(RegisterActivity.this, "验证成功，自动注册登录中......", Toast.LENGTH_SHORT).show();
-                    rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString(), new LogInListener<RootUser>() {
+                    rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new LogInListener<RootUser>() {
 
                         @Override
                         public void done(RootUser rootUser, BmobException e) {

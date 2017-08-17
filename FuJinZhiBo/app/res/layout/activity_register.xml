@@ -96,6 +96,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_sms_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -132,6 +133,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="30dp">
 
@@ -171,4 +173,15 @@
         android:textColor="@drawable/textcolor_selector"
         android:textSize="18sp" />
 
+    <TextView
+        android:layout_marginTop="25dp"
+        android:id="@+id/verify_fail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:layout_marginRight="15dp"
+        android:text="短信注册失败请点击这里"
+        android:textSize="16sp" />
 </LinearLayout>

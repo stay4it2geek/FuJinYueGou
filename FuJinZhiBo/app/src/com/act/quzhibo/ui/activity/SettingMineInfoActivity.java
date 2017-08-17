@@ -149,11 +149,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
                                 if (rootUser != null) {
                                     rootUser.secretScan = true;
+                                    rootUser.secretPassword = secretText;
                                     rootUser.update(rootUser.getObjectId(), new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
-                                                rootUser.secretPassword = secretText;
                                                 openSecret_txt.setText("私密访问已开启");
                                                 fecth();
                                                 Toast.makeText(SettingMineInfoActivity.this, "私密访问开启成功,请牢记密码", Toast.LENGTH_SHORT).show();
