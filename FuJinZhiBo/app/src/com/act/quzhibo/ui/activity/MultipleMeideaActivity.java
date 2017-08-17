@@ -30,7 +30,7 @@ public class MultipleMeideaActivity extends TabSlideBaseActivity {
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"男性VIP专属秘笈","女性VIP专属秘笈"};
+        return new String[]{"V专属秘笈","专属秘笈"};
     }
 
     @Override

@@ -44,23 +44,25 @@ public class WelcomeActivity extends Activity {
         setContentView(R.layout.activity_welcome);
         psdInputView = (PsdInputView) findViewById(R.id.psdInputView);
         user = BmobUser.getCurrentUser(RootUser.class);
-        if (user != null&&user.secretScan) {
+        if (user != null && user.secretScan) {
             fecth();
 
-                findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
-                psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
-                    @Override
-                    public void onSettingMode(String text) {
-                        if (text.equals(user.secretPassword)) {
-                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                            }
-                            findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
-                            request();
+            findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
+            psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
+                @Override
+                public void onSettingMode(String text) {
+                    if (text.equals(user.secretPassword)) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                         }
+                        findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
+                        request();
+                    } else {
+                        Toast.makeText(WelcomeActivity.this, "密码不正确", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            });
         } else {
             findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
             request();

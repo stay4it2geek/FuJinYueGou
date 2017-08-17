@@ -29,19 +29,20 @@ public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
     private String[] mTitles = {"课堂", "直播", "广场", "财富", "我的"};
-    private String[] mTitlesSpecial = {"直播", "我的"};
+    private String[] mTitlesSpecial = {"课堂", "财富", "我的"};
+
     private int[] mIconUnselectIds = {R.drawable.home, R.drawable.zhibo, R.drawable.square, R.drawable.money, R.drawable.mine};
-    private int[] mIconUnselectIdsSpecial = {R.drawable.zhibo, R.drawable.mine};
+
     private int[] mIconSelectIds = {R.drawable.home_s, R.drawable.zhibo_s, R.drawable.square_s, R.drawable.money_s, R.drawable.mine_s};
-    private int[] mIconSelectIdsSpecial = {R.drawable.zhibo_s, R.drawable.mine_s};
+
+    private int[] mIconUnselectIdsSpecial = {R.drawable.zhibo, R.drawable.money, R.drawable.mine};
+    private int[] mIconSelectIdsSpecial = {R.drawable.home_s, R.drawable.money_s, R.drawable.mine_s};
+
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
     private StringBuffer catagory;
     private PlateCatagory plateCatagory;
-    public static final int REQUEST_PERMISSION_SEETING = 200;
-    //6.0权限处理
-    private boolean bPermission = false;
-    private final int WRITE_PERMISSION_REQ_CODE = 100;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,34 +53,34 @@ public class TabMainActivity extends TabActivity {
         tabHost = TabMainActivity.this.getTabHost();
         Intent showListIntent = new Intent(TabMainActivity.this, ShowerListActivity.class);
         showListIntent.putExtra(Constants.TAB_PLATE_LIST, getIntent().getStringExtra(Constants.TAB_PLATE_LIST));
-        tabHost.addTab(tabHost.newTabSpec("课堂")
-                .setIndicator(null, null)
-                .setContent(new Intent(TabMainActivity.this, MultipleMeideaActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("直播")
-                .setIndicator(null, null)
-                .setContent(showListIntent));
-        tabHost.addTab(tabHost.newTabSpec("广场")
-                .setIndicator(null, null)
-                .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("财富")
-                .setIndicator(null, null)
-                .setContent(new Intent(TabMainActivity.this, MoneyActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("我的")
-                .setIndicator(null, null)
-                .setContent(new Intent(TabMainActivity.this, MineActivity.class)));
-        bPermission = checkPublishPermission();
-//        if (!bPermission) {
-//            Snackbar.make(findViewById(R.id.snack), "请设置权限", Snackbar.LENGTH_INDEFINITE).setAction("确定", new View.OnClickListener() {
-//
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-//                    intent.setData(uri);
-//                    startActivityForResult(intent, REQUEST_PERMISSION_SEETING);
-//                }
-//            }).show();
-//        }
+        if (CommonUtil.getToggle(this, Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
+            tabHost.addTab(tabHost.newTabSpec("课堂")
+                    .setIndicator(null, null)
+                    .setContent(new Intent(TabMainActivity.this, MultipleMeideaActivity.class)));
+            tabHost.addTab(tabHost.newTabSpec("直播")
+                    .setIndicator(null, null)
+                    .setContent(showListIntent));
+            tabHost.addTab(tabHost.newTabSpec("广场")
+                    .setIndicator(null, null)
+                    .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
+            tabHost.addTab(tabHost.newTabSpec("财富")
+                    .setIndicator(null, null)
+                    .setContent(new Intent(TabMainActivity.this, MoneyActivity.class)));
+            tabHost.addTab(tabHost.newTabSpec("我的")
+                    .setIndicator(null, null)
+                    .setContent(new Intent(TabMainActivity.this, MineActivity.class)));
+        } else {
+            tabHost.addTab(tabHost.newTabSpec("课堂")
+                    .setIndicator(null, null)
+                    .setContent(new Intent(TabMainActivity.this, MultipleMeideaActivity.class)));
+            tabHost.addTab(tabHost.newTabSpec("财富")
+                    .setIndicator(null, null)
+                    .setContent(new Intent(TabMainActivity.this, MoneyActivity.class)));
+            tabHost.addTab(tabHost.newTabSpec("我的")
+                    .setIndicator(null, null)
+                    .setContent(new Intent(TabMainActivity.this, MineActivity.class)));
+        }
+
         SetIndexButton();
         tabHost.setCurrentTab(0);
     }
@@ -137,31 +138,5 @@ public class TabMainActivity extends TabActivity {
         super.onResume();
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case WRITE_PERMISSION_REQ_CODE:
-                for (int ret : grantResults) {
-                    if (ret != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                }
-                bPermission = true;
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //如果是从设置界面返回,就继续判断权限
-        if (requestCode == REQUEST_PERMISSION_SEETING) {
-            bPermission = checkPublishPermission();
-        }
-    }
 
 }

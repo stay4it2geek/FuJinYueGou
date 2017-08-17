@@ -25,7 +25,7 @@ public class MoneyActivity extends TabSlideBaseActivity {
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"赚钱项目", "赚钱秘笈", "赚钱防骗"};
+        return new String[]{"项", "秘", "防"};
     }
 
     @Override

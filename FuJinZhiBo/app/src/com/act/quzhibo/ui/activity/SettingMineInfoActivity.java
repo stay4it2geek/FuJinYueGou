@@ -36,10 +36,11 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class SettingMineInfoActivity extends FragmentActivity {
     private OptionsPickerView ageOptions;
+    private OptionsPickerView sexOptions;
+
     private ArrayList<CardBean> ageItems = new ArrayList<>();
     private TextView age_txt;
     private TextView sex_txt;
-    private Switch sex_switch;
     private RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
     private TextView openSecret_txt;
     private Switch openSecret_switch;
@@ -52,6 +53,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
     private static final int MSG_LOAD_SUCCESS = 0x0002;
     private static final int MSG_LOAD_FAILED = 0x0003;
     private boolean isLoaded = false;
+    private ArrayList<CardBean> sexItems = new ArrayList<>();
 
     @Override
     protected void onResume() {
@@ -59,12 +61,14 @@ public class SettingMineInfoActivity extends FragmentActivity {
         fecth();
         if (rootUser != null) {
             openSecret_switch.setChecked(rootUser.secretScan);
-            sex_switch.setChecked(rootUser.sex);
+            sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别已设置为：" + rootUser.sex);
+            if (!TextUtils.isEmpty(rootUser.sex)) {
+                sex_txt.setTextColor(Color.LTGRAY);
+                findViewById(R.id.sex_rl).setVisibility(View.GONE);
+            }
             openSecret_txt.setText(rootUser.secretScan ? "私密访问已开启" : "私密访问未开启");
-            sex_txt.setText(rootUser.sex ? "您的性别已设置为：男" : "您的性别已设置为：女");
             arealocation_txt.setText(TextUtils.isEmpty(rootUser.provinceAndcity) ? "省市区未设置" : "你的地址是" + rootUser.provinceAndcity);
             age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "你的年龄已设置为：" + rootUser.age);
-
         }
     }
 
@@ -73,18 +77,13 @@ public class SettingMineInfoActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_mine_info);
         age_txt = (TextView) findViewById(R.id.age_txt);
-        sex_switch = (Switch) findViewById(R.id.sex_switch);
         openSecret_switch = (Switch) findViewById(R.id.openSecret_switch);
         openSecret_txt = (TextView) findViewById(R.id.openSecret_txt);
         sex_txt = (TextView) findViewById(R.id.sex_txt);
         arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
+        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
 
-        findViewById(R.id.modifyPSWlayout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingMineInfoActivity.this, ResetPasswordActivity.class));
-            }
-        });
+
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("资 料 设 置");
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -93,16 +92,26 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 SettingMineInfoActivity.this.finish();
             }
         });
-        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+
+        getSexData();
+        initSexOptionPicker();
         getAgeData();
         initAgeOptionPicker();
+
+
         if (rootUser != null) {
             openSecret_switch.setChecked(rootUser.secretScan);
-            sex_switch.setChecked(rootUser.sex);
             openSecret_txt.setText(rootUser.secretScan ? "私密访问已开启" : "私密访问未开启");
             arealocation_txt.setText(TextUtils.isEmpty(rootUser.provinceAndcity) ? "省市区未设置" : "你的地址是" + rootUser.provinceAndcity);
             age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "你的年龄已设置为：" + rootUser.age);
         }
+
+        findViewById(R.id.modifyPSWlayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingMineInfoActivity.this, ResetPasswordActivity.class));
+            }
+        });
         arealocation_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,54 +123,17 @@ public class SettingMineInfoActivity extends FragmentActivity {
             }
         });
 
+        findViewById(R.id.sex_rl).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sexOptions.show();
+            }
+        });
+
         age_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ageOptions.show();
-            }
-        });
-
-        sex_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (rootUser != null) {
-                    if (!rootUser.sex && isChecked) {
-                        sex_txt.setText("您的性别已设置为：男");
-                        rootUser.sex = true;
-                        rootUser.update(rootUser.getObjectId(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    sex_switch.setChecked(true);
-                                    fecth();
-                                    Toast.makeText(SettingMineInfoActivity.this, "男性更新成功", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    sex_switch.setChecked(false);
-                                    Toast.makeText(SettingMineInfoActivity.this, "男性更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    } else {
-                        sex_txt.setText("您的性别已设置为：女");
-                        rootUser.sex = false;
-                        rootUser.update(rootUser.getObjectId(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    sex_switch.setChecked(false);
-                                    fecth();
-                                    Toast.makeText(SettingMineInfoActivity.this, "女性更新成功", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    sex_switch.setChecked(true);
-                                    Toast.makeText(SettingMineInfoActivity.this, "女性更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                }
-
-
-
             }
         });
 
@@ -223,7 +195,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
     }
 
-    private void fecth(){
+    private void fecth() {
         BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
             @Override
             public void done(RootUser user, BmobException e) {
@@ -235,6 +207,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
             }
         });
     }
+
     private void initAgeOptionPicker() {
         ageOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
@@ -255,7 +228,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     });
                 }
             }
-        }).setDividerColor(Color.BLACK).setTitleText("年龄选择").setTextColorCenter(Color.BLACK).setContentTextSize(20).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+        }).setDividerColor(Color.BLACK).setTitleText("年龄选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
             @Override
             public void customLayout(View v) {
                 final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
@@ -278,10 +251,63 @@ public class SettingMineInfoActivity extends FragmentActivity {
         ageOptions.setPicker(ageItems);//添加数据
     }
 
+    private void initSexOptionPicker() {
+        sexOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                sex_txt.setText("你的性别已设置为：" + sexItems.get(options1).getPickerViewText() + "性");
+
+                if (rootUser != null) {
+                    rootUser.sex = sexItems.get(options1).getPickerViewText() + "";
+                    rootUser.update(rootUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                sex_txt.setTextColor(Color.LTGRAY);
+                                findViewById(R.id.sex_rl).setVisibility(View.GONE);
+                                fecth();
+                                Toast.makeText(SettingMineInfoActivity.this, rootUser.sex + "性更新成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SettingMineInfoActivity.this, rootUser.sex + "性更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        }).setDividerColor(Color.BLACK).setTitleText("性别选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+            @Override
+            public void customLayout(View v) {
+                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
+                tvSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sexOptions.returnData();
+                        sexOptions.dismiss();
+                    }
+                });
+                ivCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sexOptions.dismiss();
+                    }
+                });
+            }
+        }).isDialog(true).build();
+        sexOptions.setPicker(sexItems);//添加数据
+    }
+
+
     private void getAgeData() {
         for (int index = 1; index <= 100; index++) {
             ageItems.add(new CardBean("" + index));
         }
+    }
+
+    private void getSexData() {
+
+        sexItems.add(new CardBean("男"));
+        sexItems.add(new CardBean("女"));
     }
 
     private Handler mHandler = new Handler() {
@@ -292,7 +318,6 @@ public class SettingMineInfoActivity extends FragmentActivity {
                         thread = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                // 写子线程中的操作,解析省市区数据
                                 initJsonData();
                             }
                         });
@@ -333,7 +358,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     });
                 }
             }
-        }).setTitleText("城市选择").setDividerColor(Color.BLACK).setTextColorCenter(Color.BLACK).setContentTextSize(20).build();
+        }).setTitleText("城市选择").setDividerColor(Color.BLACK).setTextColorCenter(Color.BLACK).setContentTextSize(22).build();
         pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
     }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.NoResActivity;
@@ -28,6 +29,7 @@ import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
 import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
+import com.act.quzhibo.util.CommonUtil;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -42,12 +44,22 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
+        if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("false")) {
+            view.findViewById(R.id.vip_policy).setVisibility(View.GONE);
+            view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
+            view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
+            view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
+            view.findViewById(R.id.noReslayout).setVisibility(View.GONE);
+            view.findViewById(R.id.myVideo_download_layout).setVisibility(View.GONE);
+            view.findViewById(R.id.myIMG_download_layout).setVisibility(View.GONE);
+            view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
+        }
+
         view.findViewById(R.id.isLogin).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
         view.findViewById(R.id.vip_order_listlayout).setOnClickListener(this);
         view.findViewById(R.id.who_see_me).setOnClickListener(this);
-        view.findViewById(R.id.myfocus_shower).setOnClickListener(this);
         view.findViewById(R.id.myfocus_person).setOnClickListener(this);
         view.findViewById(R.id.myfocus_shower).setOnClickListener(this);
         view.findViewById(R.id.settingDetailayout).setOnClickListener(this);
@@ -144,14 +156,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("已登录");
             ((TextView) view.findViewById(R.id.nickName)).setText(rootUser.getUsername() != null ? rootUser.getUsername() : "未设置昵称");
-            ((TextView) view.findViewById(R.id.vip_type)).setText(rootUser.vipTypeName != null ? rootUser.vipTypeName : "您还不是VIP哦");
-            String sexAndAge = (rootUser.sex ? "男" : "女") + "/" + (TextUtils.isEmpty(rootUser.age) ? "未知" : (rootUser.age + "岁"));
+            ((TextView) view.findViewById(R.id.vip_type)).setText(rootUser.vipTypeName != null ? rootUser.vipTypeName : "您等级积分不足");
+            String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex) + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄":rootUser.age);
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
         } else {
             view.findViewById(R.id.logout).setVisibility(View.GONE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("去登录");
             ((TextView) view.findViewById(R.id.nickName)).setText("未设置昵称");
-            ((TextView) view.findViewById(R.id.vip_type)).setText("您还不是VIP哦");
+            ((TextView) view.findViewById(R.id.vip_type)).setText("您等级积分不足");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }
     }
