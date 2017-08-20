@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
@@ -27,21 +32,74 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 import okhttp3.Response;
+import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
+import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
+import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
-public class WelcomeActivity extends Activity {
+import static com.act.quzhibo.R.id.imageView;
+import static com.act.quzhibo.common.Constants.REQUEST_PERMISSION_SETTING;
+
+public class WelcomeActivity extends ActivityManagePermission {
 
     private String plateListStr;
     RootUser user;
     PsdInputView psdInputView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        grantPermission();
+
+
+    }
+
+    private void grantPermission() {
+
+        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_READ_PHONE_STATE,PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
+            @Override
+            public void permissionGranted() {
+               doRequest();
+                Toast.makeText(WelcomeActivity.this, "qingqiu", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void permissionDenied() {
+               findViewById(R.id.container).setVisibility(View.VISIBLE);
+                Snackbar.make( findViewById(R.id.container), "您需要同意权限",Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);                    }
+                }).setDuration(10000).show();
+            }
+            @Override
+            public void permissionForeverDenied() {
+                findViewById(R.id.container).setVisibility(View.VISIBLE);
+                Snackbar.make( findViewById(R.id.container), "您需要同意权限",Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);                    }
+                }).setDuration(10000).show();
+
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            Toast.makeText(WelcomeActivity.this, "shezhi", Toast.LENGTH_SHORT).show();
+            grantPermission();
+    }
+    private  void doRequest(){
         psdInputView = (PsdInputView) findViewById(R.id.psdInputView);
         user = BmobUser.getCurrentUser(RootUser.class);
         if (user != null && user.secretScan) {
@@ -67,9 +125,7 @@ public class WelcomeActivity extends Activity {
             findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
             request();
         }
-
     }
-
     private void fecth() {
         BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
             @Override
@@ -153,5 +209,6 @@ public class WelcomeActivity extends Activity {
             finish();
         }
     };
+
 
 }

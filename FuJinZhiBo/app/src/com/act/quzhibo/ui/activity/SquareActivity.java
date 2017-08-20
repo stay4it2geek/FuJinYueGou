@@ -3,6 +3,8 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.act.quzhibo.advanced_use.course_download.CourseDownloadFragment;
+import com.act.quzhibo.advanced_use.course_preview.CoursePreviewFragment;
 import com.act.quzhibo.ui.fragment.FuliPicsFragement;
 import com.act.quzhibo.ui.fragment.FuliVideoFragement;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
@@ -32,16 +34,17 @@ public class SquareActivity extends TabSlideBaseActivity implements InterestPlat
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"达人", "专辑", "视频", "附近"};
+        return new String[]{"专辑", "视频", "下载"};
     }
 
     @Override
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new InterestPlatesFragment());
+//        fragments.add(new InterestPlatesFragment());
         fragments.add(new FuliPicsFragement());
-        fragments.add(new FuliVideoFragement());
-        fragments.add(new NearFragment());
+        fragments.add(new CoursePreviewFragment());
+//        fragments.add(new NearFragment());
+        fragments.add(new CourseDownloadFragment());
         return fragments;
     }
 

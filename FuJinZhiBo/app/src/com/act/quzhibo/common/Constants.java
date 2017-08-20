@@ -35,4 +35,5 @@ public class Constants {
     public static final int BUY_VIP = 13;
     public static final int LOGIN = 14;
     public static final int LOGIN_OK = 15;
+    public static final int REQUEST_PERMISSION_SETTING = 16;
 }

@@ -9,38 +9,43 @@
         style="@android:style/Widget.ProgressBar.Small"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|center"
-        />
+        android:layout_marginBottom="40dp" />
 
 
     <RelativeLayout
         android:id="@+id/psdInputViewLayout"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorbg">
+        android:background="@color/colorbg"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="请输入私密访问密码"
-            android:textSize="18sp"
-            android:textColor="#000"
+            android:layout_marginTop="150dp"
             android:gravity="center"
-            android:layout_marginTop="150dp" />
+            android:text="请输入私密访问密码"
+            android:textColor="#000"
+            android:textSize="18sp" />
 
         <com.act.quzhibo.view.PsdInputView
             android:id="@+id/psdInputView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:inputType="numberDecimal"
             android:layout_below="@+id/title"
             android:layout_margin="20dp"
-            android:background="@null" />
+            android:background="@null"
+            android:inputType="numberDecimal" />
     </RelativeLayout>
-
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/container"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"/>
 </FrameLayout>
