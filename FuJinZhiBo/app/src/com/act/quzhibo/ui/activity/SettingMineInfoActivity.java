@@ -19,6 +19,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.entity.CardBean;
 import com.act.quzhibo.entity.JsonBean;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.FragmentSecretDialog;
 import com.act.quzhibo.view.TitleBarView;
 import com.bigkoo.pickerview.OptionsPickerView;
@@ -58,7 +59,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fecth();
+        CommonUtil.fecth(this);
         if (rootUser != null) {
             openSecret_switch.setChecked(rootUser.secretScan);
             sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别已设置为：" + rootUser.sex);
@@ -155,7 +156,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 openSecret_txt.setText("私密访问已开启");
-                                                fecth();
+                                                CommonUtil.fecth(SettingMineInfoActivity.this);
                                                 Toast.makeText(SettingMineInfoActivity.this, "私密访问开启成功,请牢记密码", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 openSecret_switch.setChecked(false);
@@ -180,7 +181,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                             public void done(BmobException e) {
                                 if (e == null) {
                                     openSecret_switch.setChecked(false);
-                                    fecth();
+                                    CommonUtil.fecth(SettingMineInfoActivity.this);
                                 } else {
                                     openSecret_switch.setChecked(true);
                                     Toast.makeText(SettingMineInfoActivity.this, "私密访问关闭失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -195,18 +196,6 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
     }
 
-    private void fecth() {
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(SettingMineInfoActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SettingMineInfoActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
     private void initAgeOptionPicker() {
         ageOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
@@ -219,7 +208,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
-                                fecth();
+                                CommonUtil.fecth(SettingMineInfoActivity.this);
                                 Toast.makeText(SettingMineInfoActivity.this, "年龄更新成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(SettingMineInfoActivity.this, "年龄更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -265,7 +254,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                             if (e == null) {
                                 sex_txt.setTextColor(Color.LTGRAY);
                                 findViewById(R.id.sex_rl).setVisibility(View.GONE);
-                                fecth();
+                                CommonUtil.fecth(SettingMineInfoActivity.this);
                                 Toast.makeText(SettingMineInfoActivity.this, rootUser.sex + "性更新成功", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(SettingMineInfoActivity.this, rootUser.sex + "性更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();

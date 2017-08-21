@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.LogInListener;
 
 import static android.text.InputType.TYPE_CLASS_TEXT;
@@ -52,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        TitleBarView  titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("登  录");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
@@ -69,14 +70,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         et_password.setSingleLine(true);
-        et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
+        et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
         ((CheckBox) findViewById(R.id.isSetPswVisi)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 } else {
-                    et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
+                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 et_password.setSelection(et_password.getText().length());
             }
@@ -115,4 +116,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

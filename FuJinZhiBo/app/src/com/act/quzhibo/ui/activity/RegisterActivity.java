@@ -12,15 +12,14 @@ import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.TitleBarView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobSMS;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -169,7 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void done(RootUser rootUser, BmobException e) {
                             if (rootUser != null) {
-                                fecth();
+                                CommonUtil.fecth(RegisterActivity.this);
                                 RegisterActivity.this.finish();
                                 Toast.makeText(RegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                             } else {
@@ -187,19 +186,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    private void fecth() {
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(RegisterActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(RegisterActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
 

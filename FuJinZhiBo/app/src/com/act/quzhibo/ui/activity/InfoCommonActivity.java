@@ -69,8 +69,8 @@ public class InfoCommonActivity extends AppCompatActivity {
             int count = getIntent().getIntExtra("count", 0);
             post = (InterestPost) getIntent().getSerializableExtra(Constants.POST);
             if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
-                int max = 2000;
-                int min = 200;
+                int max = 20000;
+                int min = 1000;
                 Random random = new Random();
                 second = random.nextInt(max) % (max - min + 4) + min;
                 CommonUtil.saveData(this, second, "time");
@@ -103,9 +103,9 @@ public class InfoCommonActivity extends AppCompatActivity {
         }
         if (post.user.vipLevel.equals("1")) {
             ((TextView) findViewById(R.id.level)).setText("初级VIP");
-        } else if(post.user.vipLevel.equals("2")){
+        } else if (post.user.vipLevel.equals("2")) {
             ((TextView) findViewById(R.id.level)).setText("中级VIP");
-        }else if(post.user.vipLevel.equals("3")){
+        } else if (post.user.vipLevel.equals("3")) {
             ((TextView) findViewById(R.id.level)).setText("超级VIP");
         }
         ((TextView) findViewById(R.id.disPurpose)).setText(post.user.disPurpose);

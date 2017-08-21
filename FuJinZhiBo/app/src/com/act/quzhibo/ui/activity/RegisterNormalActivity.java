@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.TitleBarView;
 
 import java.util.regex.Matcher;
@@ -74,14 +75,14 @@ public class RegisterNormalActivity extends AppCompatActivity {
         });
         et_password = (EditText) findViewById(R.id.et_password);
         et_password.setSingleLine(true);
-        et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
+        et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
         ((CheckBox) findViewById(R.id.isSetPswVisi)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 } else {
-                    et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
+                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 et_password.setSelection(et_password.getText().length());
 
@@ -123,7 +124,8 @@ public class RegisterNormalActivity extends AppCompatActivity {
                 if (e == null) {
                     Toast.makeText(RegisterNormalActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                     if (rootUser != null) {
-                        fecth();
+                        CommonUtil.fecth(RegisterNormalActivity.this);
+                        ;
                         RegisterNormalActivity.this.finish();
                         Toast.makeText(RegisterNormalActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                     }
@@ -136,19 +138,5 @@ public class RegisterNormalActivity extends AppCompatActivity {
 
 
     }
-
-    private void fecth() {
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(RegisterNormalActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(RegisterNormalActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
 
 }

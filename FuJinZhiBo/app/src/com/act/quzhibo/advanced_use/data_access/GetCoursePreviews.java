@@ -45,7 +45,7 @@ public class GetCoursePreviews {
                     //
                     "http://mp4.28mtv.com/mp41/1862-刘德华-余生一起过[68mtv.com].mp4",
                     //
-                    "http://182.254.149.157/ftp/image/shop/product/儿童英语拓展篇HD_air.com.congcongbb.yingyue.mi_1000000.apk",
+                    "http://bmob-cdn-13639.b0.upaiyun.com/2017/08/22/08af1a3440e7878380f621126af60135.png",
                     //
                     "http://dlsw.baidu.com/sw-search-sp/soft/c6/25790/WeChatzhCN1.0.0.6.1428545414.dmg",
                     //

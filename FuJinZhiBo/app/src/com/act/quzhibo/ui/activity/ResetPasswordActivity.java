@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.TitleBarView;
 
 
@@ -35,12 +36,15 @@ public class ResetPasswordActivity extends AppCompatActivity {
     EditText et_c_newpsw;
     EditText et_sms_code;
     private EditText et_userPhonenumber;
-    TitleBarView  titlebar;
+    TitleBarView titlebar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resetpassword);
-        fecth();
+        CommonUtil.fecth(ResetPasswordActivity.this);
+        ;
+
         et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
 
         et_newpsw = (EditText) findViewById(R.id.et_newpsw);
@@ -99,40 +103,27 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void done(BmobException ex) {
                 if (ex == null) {
-                    fecth();
+                    CommonUtil.fecth(ResetPasswordActivity.this);
                     Toast.makeText(ResetPasswordActivity.this, "密码重置成功", Toast.LENGTH_SHORT).show();
                     ResetPasswordActivity.this.finish();
                 } else {
-                    Toast.makeText(ResetPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage()+ ex.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ResetPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage() + ex.getErrorCode(), Toast.LENGTH_SHORT).show();
 
                 }
 
             }
         });
 
-    }
-
-    private void fecth() {
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(ResetPasswordActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ResetPasswordActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
 
     private void getCode() {
-        if (TextUtils.isEmpty(et_newpsw.getText())||et_newpsw.getText().toString().equals("新密码") ) {
+        if (TextUtils.isEmpty(et_newpsw.getText()) || et_newpsw.getText().toString().equals("新密码")) {
             Toast.makeText(this, "请输入新密码", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(et_c_newpsw.getText())||et_c_newpsw.getText().toString().equals("确认密码") ) {
+        if (TextUtils.isEmpty(et_c_newpsw.getText()) || et_c_newpsw.getText().toString().equals("确认密码")) {
             Toast.makeText(this, "请确认新密码", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -150,7 +141,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             }
 
         }
-        if (!et_userPhonenumber.getText().toString().equals(BmobUser.getCurrentUser(RootUser.class).getMobilePhoneNumber()) ) {
+        if (!et_userPhonenumber.getText().toString().equals(BmobUser.getCurrentUser(RootUser.class).getMobilePhoneNumber())) {
             Toast.makeText(this, "旧手机号不匹配", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -172,7 +163,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private void verifyAndResetPsw() {
 
-        if (TextUtils.isEmpty(et_sms_code.getText())||et_sms_code.getText().toString().equals("请输入短信验证码") ) {
+        if (TextUtils.isEmpty(et_sms_code.getText()) || et_sms_code.getText().toString().equals("请输入短信验证码")) {
             Toast.makeText(this, "请输入短信验证码", Toast.LENGTH_SHORT).show();
             return;
         }

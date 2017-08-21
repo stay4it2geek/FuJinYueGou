@@ -475,7 +475,7 @@
                     android:layout_height="29dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="13dp"
-                    android:background="@drawable/logout" />
+                    android:background="@drawable/phone" />
 
                 <TextView
                     android:id="@+id/registertxt"

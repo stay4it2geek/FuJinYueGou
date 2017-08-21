@@ -34,7 +34,7 @@ import java.util.List;
  * Course Download Fragment
  * 课程下载界面
  */
-public class CourseDownloadFragment extends Fragment implements CourseDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener {
+public class CourseDownloadFragment extends Fragment implements CourseDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener, OnFileDownloadStatusListener {
 
     private RecyclerView mRvCourseDownload;
     private CourseDownloadAdapter mCourseDownloadAdapter;
@@ -80,6 +80,8 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
 
             FileDownloader.registerDownloadStatusListener(mCourseDownloadAdapter);
             FileDownloader.registerDownloadFileChangeListener(this);
+                        FileDownloader.registerDownloadStatusListener(this);
+
         }
 
         return rootView;
@@ -252,7 +254,6 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
                         builder.show();
                     } else {
                         showToast(getString(R.string.advanced_use__delete_failed));
-                        // can not do it
                     }
                 }
             }
@@ -284,4 +285,38 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
     }
 
 
+    @Override
+    public void onFileDownloadStatusWaiting(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusPreparing(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusPrepared(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusDownloading(DownloadFileInfo downloadFileInfo, float downloadSpeed, long remainingTime) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusPaused(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusCompleted(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusFailed(String url, DownloadFileInfo downloadFileInfo, FileDownloadStatusFailReason failReason) {
+                Log.e("url",url+"ppp"+"pppppppp"+failReason.getMessage()) ;
+    }
 }

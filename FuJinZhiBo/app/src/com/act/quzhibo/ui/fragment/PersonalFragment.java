@@ -55,10 +55,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myIMG_download_layout).setVisibility(View.GONE);
             view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
         }
-        rootUser = BmobUser.getCurrentUser(RootUser.class);
-        if (rootUser == null) {
-            view.findViewById(R.id.registerLayout).setVisibility(View.VISIBLE);
-        }
+
         view.findViewById(R.id.isLogin).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
@@ -158,15 +155,18 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        fecth();
+        rootUser = BmobUser.getCurrentUser(RootUser.class);
         if (rootUser != null) {
+            CommonUtil.fecth(getActivity());
+            view.findViewById(R.id.registerLayout).setVisibility(View.GONE);
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("已登录");
             ((TextView) view.findViewById(R.id.nickName)).setText(rootUser.getUsername() != null ? rootUser.getUsername() : "未设置昵称");
             ((TextView) view.findViewById(R.id.vip_type)).setText(rootUser.vipTypeName != null ? rootUser.vipTypeName : "您等级积分不足");
-            String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex) + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age);
+            String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex+"性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age+"岁");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
         } else {
+            view.findViewById(R.id.registerLayout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.logout).setVisibility(View.GONE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("去登录");
             ((TextView) view.findViewById(R.id.nickName)).setText("未设置昵称");
@@ -175,16 +175,4 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void fecth() {
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(getActivity(), "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 }

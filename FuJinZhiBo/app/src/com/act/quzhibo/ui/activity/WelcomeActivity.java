@@ -23,6 +23,7 @@ import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.Callback;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.PsdInputView;
 
 import java.util.List;
@@ -59,52 +60,53 @@ public class WelcomeActivity extends ActivityManagePermission {
 
     private void grantPermission() {
 
-        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_READ_PHONE_STATE,PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
+        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_READ_PHONE_STATE, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
             public void permissionGranted() {
-               doRequest();
-                Toast.makeText(WelcomeActivity.this, "qingqiu", Toast.LENGTH_SHORT).show();
-
+                doRequest();
             }
 
             @Override
             public void permissionDenied() {
-               findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make( findViewById(R.id.container), "您需要同意权限",Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                findViewById(R.id.container).setVisibility(View.VISIBLE);
+                Snackbar.make(findViewById(R.id.container), "您需要同意权限", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);                    }
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                    }
                 }).setDuration(10000).show();
             }
+
             @Override
             public void permissionForeverDenied() {
                 findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make( findViewById(R.id.container), "您需要同意权限",Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                Snackbar.make(findViewById(R.id.container), "您需要同意权限", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);                    }
+                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                    }
                 }).setDuration(10000).show();
 
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            Toast.makeText(WelcomeActivity.this, "shezhi", Toast.LENGTH_SHORT).show();
-            grantPermission();
+        grantPermission();
     }
-    private  void doRequest(){
+
+    private void doRequest() {
         psdInputView = (PsdInputView) findViewById(R.id.psdInputView);
         user = BmobUser.getCurrentUser(RootUser.class);
         if (user != null && user.secretScan) {
-            fecth();
-
+            CommonUtil.fecth(this);
             findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
             psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
                 @Override
@@ -125,18 +127,6 @@ public class WelcomeActivity extends ActivityManagePermission {
             findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
             request();
         }
-    }
-    private void fecth() {
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(WelcomeActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(WelcomeActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     private void request() {

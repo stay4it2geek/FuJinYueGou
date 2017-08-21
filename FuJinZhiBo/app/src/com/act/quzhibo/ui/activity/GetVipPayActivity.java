@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.VipOrders;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -51,7 +52,6 @@ import static android.widget.AbsListView.CHOICE_MODE_SINGLE;
 public class GetVipPayActivity extends FragmentActivity {
     private TextView alipay;
     ProgressDialog dialog;
-    private static final int REQUESTPERMISSION = 101;
     private String mGoodsDescription;
     ArrayList<String> titles = new ArrayList<>();
     ArrayList<Integer> imgs = new ArrayList<>();
@@ -77,7 +77,6 @@ public class GetVipPayActivity extends FragmentActivity {
         }
         listView = (SwipeMenuListView) findViewById(R.id.viplist);
 
-
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -89,7 +88,6 @@ public class GetVipPayActivity extends FragmentActivity {
                 openItem.setTitle("选择");
                 openItem.setTitleSize(18);
                 openItem.setTitleColor(Color.WHITE);
-
 
                 // create "delete" item
                 SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
@@ -296,10 +294,11 @@ public class GetVipPayActivity extends FragmentActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            fetch();
+                            CommonUtil.fecth(GetVipPayActivity.this);
+                            ;
                             Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功" + user.vipTypeName + "kkkkk" + mGoodsDescription, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功，原因是:" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新失败，原因是:" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -342,18 +341,6 @@ public class GetVipPayActivity extends FragmentActivity {
         });
     }
 
-    private void fetch() {
-        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    Toast.makeText(GetVipPayActivity.this, "缓存同步成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(GetVipPayActivity.this, "缓存同步失败，请先登录", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
     void showDialog(String message) {
         try {
@@ -402,18 +389,5 @@ public class GetVipPayActivity extends FragmentActivity {
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUESTPERMISSION) {
-            if (permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                } else {
-
-                }
-            }
-        }
-    }
 }
 

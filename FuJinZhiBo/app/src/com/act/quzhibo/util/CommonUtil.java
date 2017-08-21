@@ -11,12 +11,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Toast;
 
 import com.act.quzhibo.entity.LocationData;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.entity.Toggle;
+import com.act.quzhibo.ui.activity.WelcomeActivity;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -39,6 +42,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FetchUserInfoListener;
 
 public class CommonUtil {
 
@@ -258,5 +265,20 @@ public class CommonUtil {
         SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
         return sp.getInt(key,0);
     }
+
+
+    public static void  fecth(final Activity activity) {
+        BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
+            @Override
+            public void done(RootUser user, BmobException e) {
+                if (e == null) {
+                    ToastUtil.showToast(activity,"缓存同步成功");
+                } else {
+                    ToastUtil.showToast(activity,"缓存同步失败");
+                }
+            }
+        });
+    }
+
 
 }
