@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.activity;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -21,28 +22,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.entity.PayConis;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.VipOrders;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.view.TitleBarView;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import c.b.BP;
 import c.b.PListener;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FetchUserInfoListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -51,19 +55,14 @@ import static android.widget.AbsListView.CHOICE_MODE_SINGLE;
 
 public class GetVipPayActivity extends FragmentActivity {
     private TextView alipay;
-    ProgressDialog dialog;
+    private ProgressDialog dialog;
     private String mGoodsDescription;
-    ArrayList<String> titles = new ArrayList<>();
-    ArrayList<Integer> imgs = new ArrayList<>();
-    ArrayList<String> types = new ArrayList<>();
-    ArrayList<String> prices = new ArrayList<>();
-    ArrayList<String> prices_maket = new ArrayList<>();
+    ArrayList<PayConis> payConisList = new ArrayList<>();
     private double mPayMoney = 0.01;
     private TextView userSelectText;
-    VipOrders vipOrders;
-    private String orderType;
+    private VipOrders vipOrders;
     private SwipeMenuListView listView;
-    MyAdapter mAdapter;
+    private MyAdapter mAdapter;
     boolean hasShow;
 
     @Override
@@ -75,8 +74,16 @@ public class GetVipPayActivity extends FragmentActivity {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
         }
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setBarTitle(" 充值趣币,享受VIP特权");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetVipPayActivity.this.finish();
+            }
+        });
+        vipOrders = new VipOrders();
         listView = (SwipeMenuListView) findViewById(R.id.viplist);
-
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -88,56 +95,18 @@ public class GetVipPayActivity extends FragmentActivity {
                 openItem.setTitle("选择");
                 openItem.setTitleSize(18);
                 openItem.setTitleColor(Color.WHITE);
-
-                // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
-                deleteItem.setBackground(new ColorDrawable(getResources().getColor(R.color.blue)));
-                deleteItem.setWidth(300);
-                deleteItem.setTitle("查看");
-                deleteItem.setTitleSize(18);
-                deleteItem.setTitleColor(Color.WHITE);
-
                 menu.addMenuItem(openItem);
-                menu.addMenuItem(deleteItem);
+
             }
         };
 
         listView.setMenuCreator(creator);
-        alipay = (TextView) findViewById(R.id.alipay);
-        userSelectText = (TextView) findViewById(R.id.userSelectText);
         listView.setChoiceMode(CHOICE_MODE_SINGLE);
-        listView.setAdapter(mAdapter = new MyAdapter(this));
-        vipOrders = new VipOrders();
-        vipOrders.user = BmobUser.getCurrentUser(RootUser.class);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                userSelectText.setText(titles.get(position));
-                mGoodsDescription = titles.get(position);
-                orderType = types.get(position);
-                mPayMoney = Double.parseDouble(prices.get(position));
-            }
-        });
-
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
-        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
-                switch (index) {
-                    case 0:
-                        userSelectText.setText(titles.get(position));
-                        mGoodsDescription = titles.get(position);
-                        orderType = types.get(position);
-                        mPayMoney = Double.parseDouble(prices.get(position));
-                        break;
-                    case 1:
-                        Toast.makeText(GetVipPayActivity.this, "show", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                return false;
-            }
-        });
+        alipay = (TextView) findViewById(R.id.alipay);
+        userSelectText = (TextView) findViewById(R.id.userSelectText);
+
 
         alipay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,62 +114,31 @@ public class GetVipPayActivity extends FragmentActivity {
                 alipay();
             }
         });
+
+        queryData();
     }
 
     class MyAdapter extends BaseAdapter {
+        ArrayList<PayConis> payConises;
         Context context;
         LayoutInflater inflater;
 
-        public MyAdapter(Context context) {
+        public MyAdapter(Context context, ArrayList<PayConis> payConises) {
             super();
             this.context = context;
+            this.payConises = payConises;
             inflater = LayoutInflater.from(context);
 
-            titles.add("超级VIP");
-            titles.add("特级VIP");
-            titles.add("初级VIP");
-            titles.add("初级升级到超级");
-            titles.add("特级升级到超级");
-            titles.add("初级升级到特级");
-
-            types.add("0");
-            types.add("1");
-            types.add("2");
-            types.add("3");
-            types.add("4");
-            types.add("5");
-
-            prices_maket.add("499");
-            prices_maket.add("399");
-            prices_maket.add("199");
-            prices_maket.add("300");
-            prices_maket.add("200");
-            prices_maket.add("200");
-
-
-            prices.add("299");
-            prices.add("199");
-            prices.add("99");
-            prices.add("200");
-            prices.add("100");
-            prices.add("100");
-
-            imgs.add(R.drawable.supervip);
-            imgs.add(R.drawable.midvip);
-            imgs.add(R.drawable.chuvip);
-            imgs.add(R.drawable.up);
-            imgs.add(R.drawable.up);
-            imgs.add(R.drawable.up);
         }
 
         @Override
         public int getCount() {
-            return imgs.size();
+            return payConises.size();
         }
 
         @Override
-        public Object getItem(int position) {
-            return null;
+        public PayConis getItem(int position) {
+            return payConises.get(position);
         }
 
         @Override
@@ -212,15 +150,16 @@ public class GetVipPayActivity extends FragmentActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             convertView = inflater.inflate(R.layout.item_buyvip, null, false);
-            TextView title = (TextView) convertView.findViewById(R.id.title_vip);
-            title.setText(titles.get(position));
-            TextView price_vip = (TextView) convertView.findViewById(R.id.price_vip);
-            price_vip.setText(prices.get(position) + "元");
+            TextView title = (TextView) convertView.findViewById(R.id.payConisCount);
+            title.setText(payConises.get(position).payConisCount + "趣币");
+            TextView price_vip = (TextView) convertView.findViewById(R.id.priceConis);
+            price_vip.setText(payConises.get(position).priceConis + "元");
+            TextView conisPresent = (TextView) convertView.findViewById(R.id.conisPresent);
+            conisPresent.setText("赠送" + payConises.get(position).conisPresent + "趣币");
             TextView price_vip_market = (TextView) convertView.findViewById(R.id.price_vip_maket);
-            price_vip_market.setText(prices_maket.get(position) + "元");
+            price_vip_market.setText(payConises.get(position).price_vip_maket + "元");
             ((TextView) convertView.findViewById(R.id.price_vip_maket)).getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-            ImageView vip_img = (ImageView) convertView.findViewById(R.id.vip_img);
-            vip_img.setBackgroundResource(imgs.get(position));
+
             return convertView;
         }
     }
@@ -231,10 +170,11 @@ public class GetVipPayActivity extends FragmentActivity {
         super.onResume();
         if (vipOrders.orderStatus && !hasShow) {
             hideDialog();
-            FragmentDialog.newInstance("", "尊敬的用户您好，你购买" + "\"" + mGoodsDescription + "\"" + "已支付成功!", "我知道了!", "", -1, true, new FragmentDialog.OnClickBottomListener() {
+            FragmentDialog.newInstance("", "尊敬的用户您好,您" + mGoodsDescription + "已支付成功!", "我知道了!", "", -1, true, new FragmentDialog.OnClickBottomListener() {
                 @Override
                 public void onPositiveClick(Dialog dialog) {
                     dialog.dismiss();
+                    GetVipPayActivity.this.finish();
                 }
 
                 @Override
@@ -246,20 +186,22 @@ public class GetVipPayActivity extends FragmentActivity {
         }
     }
 
-    RootUser user = BmobUser.getCurrentUser(RootUser.class);
-
+    RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
+    RootUser  updateUser=new RootUser();
     private void alipay() {
-        if (BmobUser.getCurrentUser(RootUser.class) == null) {
-            Toast.makeText(GetVipPayActivity.this, "您还没有登录或注册哦!", Toast.LENGTH_SHORT).show();
+        if (rootUser== null) {
+            ToastUtil.showToast(GetVipPayActivity.this, "您还没有登录或注册哦!");
             startActivity(new Intent(GetVipPayActivity.this, LoginActivity.class));
             return;
+        }else{
+            CommonUtil.fecth(this);
         }
         if (TextUtils.isEmpty(userSelectText.getText())) {
-            Toast.makeText(GetVipPayActivity.this, "您还没有选择VIP种类哦!", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(GetVipPayActivity.this, "您还没有选择充值种类哦!");
             return;
         }
         if (!checkPackageInstalled("com.eg.android.AlipayGphone", "https://mobile.alipay.com/index.htm")) {
-            Toast.makeText(GetVipPayActivity.this, "您还没安装支付宝客户端哦!", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(GetVipPayActivity.this, "您还没安装支付宝客户端哦!");
             return;
         }
 
@@ -269,7 +211,7 @@ public class GetVipPayActivity extends FragmentActivity {
             // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
             @Override
             public void unknow() {
-                Toast.makeText(GetVipPayActivity.this, "支付结果未知,请您稍后手动查询", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(GetVipPayActivity.this, "支付结果未知,请您稍后手动查询");
                 hideDialog();
             }
 
@@ -282,23 +224,23 @@ public class GetVipPayActivity extends FragmentActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            Toast.makeText(GetVipPayActivity.this, "VIP支付信息更新成功", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(GetVipPayActivity.this, "VIP支付信息更新失败：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                user.vipType = orderType;
-                user.vipTypeName = mGoodsDescription;
-                user.update(user.getObjectId(), new UpdateListener() {
-                    @Override
-                    public void done(BmobException e) {
-                        if (e == null) {
+                            ToastUtil.showToast(GetVipPayActivity.this, "订单充值支付信息更新成功");
+                            if (rootUser.vipConis > 0) {
+                                updateUser.vipConis = mPayConisCount+rootUser.vipConis ;
+                            }
+                            updateUser.update(rootUser.getObjectId(),new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        ToastUtil.showToast(GetVipPayActivity.this, "趣币信息更新成功，您还有" + updateUser.vipConis + "趣币");
+                                    } else {
+                                        ToastUtil.showToast(GetVipPayActivity.this, "趣币信息更新失败，原因是:" + e.getErrorCode());
+                                    }
+                                }
+                            });
                             CommonUtil.fecth(GetVipPayActivity.this);
-                            ;
-                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新成功" + user.vipTypeName + "kkkkk" + mGoodsDescription, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(GetVipPayActivity.this, "VIP信息更新失败，原因是:" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(GetVipPayActivity.this, "订单充值支付信息更新失败：" + e.getLocalizedMessage());
                         }
                     }
                 });
@@ -312,14 +254,13 @@ public class GetVipPayActivity extends FragmentActivity {
                 vipOrders.orderId = orderId;
                 vipOrders.orderPrice = mPayMoney + "";
                 vipOrders.goodsDescription = mGoodsDescription;
-                vipOrders.orderType = orderType + "";
                 vipOrders.save(new SaveListener<String>() {
                     @Override
                     public void done(String objectId, BmobException e) {
                         if (e == null) {
                             showDialog("生成订单成功!请等待跳转到支付页面");
                         } else {
-                            Toast.makeText(GetVipPayActivity.this, "添加订单数据失败：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(GetVipPayActivity.this, "添加订单数据失败：" + e.getLocalizedMessage());
                         }
                     }
                 });
@@ -332,7 +273,7 @@ public class GetVipPayActivity extends FragmentActivity {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
-                            Toast.makeText(GetVipPayActivity.this, "交易关闭!原因是" + reason, Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(GetVipPayActivity.this, "交易关闭!原因是" + reason);
                         }
                     }
                 });
@@ -380,8 +321,7 @@ public class GetVipPayActivity extends FragmentActivity {
                     intent.setData(Uri.parse(browserUrl));
                     startActivity(intent);
                 } catch (Exception eee) {
-                    Toast.makeText(GetVipPayActivity.this, "您的手机上没有没有应用市场也没有浏览器，请您去想办法安装支付宝/微信吧",
-                            Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(GetVipPayActivity.this, "您的手机上没有没有应用市场也没有浏览器，请您去想办法安装支付宝/微信吧");
                 }
             }
         }
@@ -389,5 +329,62 @@ public class GetVipPayActivity extends FragmentActivity {
     }
 
 
+    private void queryData() {
+        final BmobQuery<PayConis> query = new BmobQuery<>();
+        query.order("-payConisCount");
+        query.findObjects(new FindListener<PayConis>() {
+            @Override
+            public void done(List<PayConis> list, BmobException e) {
+                if (e == null) {
+                    if (list.size() > 0) {
+                        payConisList.addAll(list);
+                        Message message = new Message();
+                        message.obj = payConisList;
+                        handler.sendMessage(message);
+                    }
+                }
+            }
+        });
+    }
+
+    private Integer mPayConisCount;
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            final ArrayList<PayConis> payConises = (ArrayList<PayConis>) msg.obj;
+            if (payConises == null) {
+                return;
+            }
+            if (mAdapter == null) {
+                listView.setAdapter(mAdapter = new MyAdapter(GetVipPayActivity.this, payConises));
+                vipOrders.user = BmobUser.getCurrentUser(RootUser.class);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                        mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送"+payConises.get(position).conisPresent+"趣币";
+                        userSelectText.setText(mGoodsDescription);
+                        mPayMoney = payConises.get(position).priceConis;
+                        mPayConisCount = payConises.get(position).payConisCount+payConises.get(position).conisPresent;
+                    }
+                });
+                listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
+                        switch (index) {
+                            case 0:
+                                mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送"+payConises.get(position).conisPresent+"趣币";
+                                userSelectText.setText(mGoodsDescription);
+                                mPayMoney = payConises.get(position).priceConis;
+                                mPayConisCount = payConises.get(position).payConisCount+payConises.get(position).conisPresent;
+                                break;
+                        }
+                        return false;
+                    }
+                });
+            }
+        }
+    };
 }
 

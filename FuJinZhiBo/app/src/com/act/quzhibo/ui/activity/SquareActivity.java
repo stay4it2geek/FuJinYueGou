@@ -3,12 +3,10 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.act.quzhibo.advanced_use.course_download.CourseDownloadFragment;
-import com.act.quzhibo.advanced_use.course_preview.CoursePreviewFragment;
+import com.act.quzhibo.ui.fragment.CourseDownloadFragment;
+import com.act.quzhibo.ui.fragment.CoursePreviewFragment;
 import com.act.quzhibo.ui.fragment.FuliPicsFragement;
-import com.act.quzhibo.ui.fragment.FuliVideoFragement;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
-import com.act.quzhibo.ui.fragment.NearFragment;
 
 import java.util.ArrayList;
 

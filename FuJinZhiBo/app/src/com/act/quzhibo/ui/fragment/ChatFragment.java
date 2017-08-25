@@ -26,6 +26,7 @@ import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.act.quzhibo.ui.activity.ShowerInfoActivityLandscape;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.HorizontialListView;
@@ -259,7 +260,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             }, 5000);
 
         } else {
-            Toast.makeText(getActivity(), "消息加载异常，暂时无法操作该功能", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(getActivity(), "消息加载异常，暂时无法操作该功能");
         }
     }
 

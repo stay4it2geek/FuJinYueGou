@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;
 
 import java.util.regex.Matcher;
@@ -100,19 +101,19 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void getCode() {
         if (et_userPhonenumber.getText().toString().equals("手机号") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
-            Toast.makeText(this, "请输入正确位数的手机号码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入正确位数的手机号码");
             return;
         } else {
             String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
             Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher(et_userPhonenumber.getText().toString());
             if (!m.find()) {
-                Toast.makeText(this, "请输入国内通用的手机号码", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(this, "请输入国内通用的手机号码");
                 return;
             }
         }
         if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
-            Toast.makeText(this, "请输入密码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入密码");
             return;
         }
         BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
@@ -121,9 +122,9 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void done(Integer o, BmobException e) {
                         if (e == null) {
-                            Toast.makeText(RegisterActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(RegisterActivity.this, "短信验证码已经发送,序列号是：" + o);
                         } else {
-                            Toast.makeText(RegisterActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(RegisterActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage());
 
                         }
                     }
@@ -134,22 +135,22 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void verifyAndLogin() {
         if (!check_agree.isChecked()) {
-            Toast.makeText(this, "请先同意用户协议", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请先同意用户协议");
             return;
         }
         if (et_sms_code.getText().toString().equals("请输入短信验证码") || et_sms_code.getText().toString().equals("")) {
-            Toast.makeText(this, "请输入短信验证码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入短信验证码");
             return;
         }
         if (et_userPhonenumber.getText().toString().equals("请输入手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
-            Toast.makeText(this, "请输入正确位数的手机号码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入正确位数的手机号码");
             return;
         } else {
             String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
             Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher(et_userPhonenumber.getText().toString());
             if (!m.find()) {
-                Toast.makeText(this, "请输入国内通用的手机号码", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(this, "请输入国内通用的手机号码");
                 return;
             }
         }
@@ -162,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
                     RootUser rootUser = new RootUser();
                     rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
                     rootUser.setMobilePhoneNumberVerified(true);
-                    Toast.makeText(RegisterActivity.this, "验证成功，自动注册登录中......", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(RegisterActivity.this, "验证成功，自动注册登录中......");
                     rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new LogInListener<RootUser>() {
 
                         @Override
@@ -170,16 +171,16 @@ public class RegisterActivity extends AppCompatActivity {
                             if (rootUser != null) {
                                 CommonUtil.fecth(RegisterActivity.this);
                                 RegisterActivity.this.finish();
-                                Toast.makeText(RegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(RegisterActivity.this, "登录成功");
                             } else {
-                                Toast.makeText(RegisterActivity.this, "登录失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(RegisterActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
 
                             }
                         }
 
                     });
                 } else {
-                    Toast.makeText(RegisterActivity.this, "验证失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(RegisterActivity.this, "验证失败，原因是：" + e.getLocalizedMessage());
 
                 }
             }

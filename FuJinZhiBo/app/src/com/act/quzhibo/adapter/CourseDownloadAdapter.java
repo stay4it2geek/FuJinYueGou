@@ -1,4 +1,4 @@
-package com.act.quzhibo.advanced_use.course_download;
+package com.act.quzhibo.adapter;
 
 
 import android.app.AlertDialog;
@@ -19,7 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.entity.CoursePreviewInfo;
+import com.act.quzhibo.util.CharUtils;
 import com.act.quzhibo.util.ToastUtil;
 
 import org.wlf.filedownloader.DownloadFileInfo;
@@ -202,7 +203,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                 // download file status:downloading
                 case Status.DOWNLOAD_STATUS_DOWNLOADING:
                     if (payload != null && payload.mDownloadSpeed > 0 && payload.mRemainingTime > 0) {
-                        tvText.setText(MathUtil.formatNumber(payload.mDownloadSpeed) + "KB/s   " + TimeUtil
+                        tvText.setText(MathUtil.formatNumber(payload.mDownloadSpeed) + "KB/s   " + CharUtils.TimeUtil
                                 .seconds2HH_mm_ss(payload.mRemainingTime));
                     } else {
                         tvText.setText(context.getString(R.string.advanced_use__downloading));

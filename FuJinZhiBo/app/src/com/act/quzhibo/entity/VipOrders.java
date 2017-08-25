@@ -12,5 +12,4 @@ public class VipOrders extends BmobObject implements Serializable {
     public String orderPrice;
     public String goodsDescription;
     public String orderId;
-    public String orderType;
 }

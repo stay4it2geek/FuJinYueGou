@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -272,9 +273,10 @@ public class CommonUtil {
             @Override
             public void done(RootUser user, BmobException e) {
                 if (e == null) {
-                    ToastUtil.showToast(activity,"缓存同步成功");
+                    ToastUtil.showToast(activity, "缓存同步成功");
                 } else {
-                    ToastUtil.showToast(activity,"缓存同步失败");
+                    ToastUtil.showToast(activity, "缓存同步失败");
+
                 }
             }
         });

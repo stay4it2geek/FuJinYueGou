@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;
 
 import java.util.regex.Matcher;
@@ -93,22 +94,22 @@ public class RegisterNormalActivity extends AppCompatActivity {
 
     private void verifyAndLogin() {
         if (!check_agree.isChecked()) {
-            Toast.makeText(this, "请先同意用户协议", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请先同意用户协议");
             return;
         }
         if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
-            Toast.makeText(this, "请输入密码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入密码");
             return;
         }
         if (et_userPhonenumber.getText().toString().equals("请输入手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
-            Toast.makeText(this, "请输入正确位数的手机号码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入正确位数的手机号码");
             return;
         } else {
             String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
             Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher(et_userPhonenumber.getText().toString());
             if (!m.find()) {
-                Toast.makeText(this, "请输入国内通用的手机号码", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(this, "请输入国内通用的手机号码");
                 return;
             }
         }
@@ -122,15 +123,15 @@ public class RegisterNormalActivity extends AppCompatActivity {
             @Override
             public void done(RootUser rootUser, BmobException e) {
                 if (e == null) {
-                    Toast.makeText(RegisterNormalActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(RegisterNormalActivity.this, "注册成功");
                     if (rootUser != null) {
                         CommonUtil.fecth(RegisterNormalActivity.this);
                         ;
                         RegisterNormalActivity.this.finish();
-                        Toast.makeText(RegisterNormalActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToast(RegisterNormalActivity.this, "登录成功");
                     }
                 } else {
-                    Toast.makeText(RegisterNormalActivity.this, "登录失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(RegisterNormalActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
 
                 }
             }

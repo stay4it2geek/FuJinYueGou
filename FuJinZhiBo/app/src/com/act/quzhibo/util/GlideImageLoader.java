@@ -1,4 +1,4 @@
-package com.act.quzhibo.common;
+package com.act.quzhibo.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;

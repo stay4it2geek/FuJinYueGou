@@ -1,4 +1,4 @@
-package com.act.quzhibo.advanced_use.course_preview;
+package com.act.quzhibo.ui.fragment;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.data_access.GetCoursePreviews;
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.adapter.CoursePreviewAdapter;
+import com.act.quzhibo.data_access.GetCoursePreviews;
+import com.act.quzhibo.entity.CoursePreviewInfo;
 import com.act.quzhibo.util.ToastUtil;
 
 import java.util.List;

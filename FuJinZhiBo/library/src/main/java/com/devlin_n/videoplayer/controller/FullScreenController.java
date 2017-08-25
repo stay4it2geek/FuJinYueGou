@@ -198,13 +198,13 @@ public class FullScreenController extends BaseVideoController implements View.On
             gestureEnabled = true;
             show();
             lock.setSelected(false);
-            Toast.makeText(getContext(), R.string.unlocked, Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(getContext(), R.string.unlocked, ).show();
         } else {
             hide();
             isLocked = true;
             gestureEnabled = false;
             lock.setSelected(true);
-            Toast.makeText(getContext(), R.string.locked, Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(getContext(), R.string.locked, ).show();
         }
         mediaPlayer.setLock(isLocked);
     }

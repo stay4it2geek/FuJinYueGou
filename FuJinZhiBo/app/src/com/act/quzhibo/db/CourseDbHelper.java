@@ -1,10 +1,10 @@
-package com.act.quzhibo.advanced_use.db;
+package com.act.quzhibo.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.entity.CoursePreviewInfo;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.util.List;

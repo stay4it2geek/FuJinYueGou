@@ -20,6 +20,7 @@ import com.act.quzhibo.entity.CardBean;
 import com.act.quzhibo.entity.JsonBean;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentSecretDialog;
 import com.act.quzhibo.view.TitleBarView;
 import com.bigkoo.pickerview.OptionsPickerView;
@@ -43,6 +44,8 @@ public class SettingMineInfoActivity extends FragmentActivity {
     private TextView age_txt;
     private TextView sex_txt;
     private RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
+    private RootUser updateUser = new RootUser();
+
     private TextView openSecret_txt;
     private Switch openSecret_switch;
     private TextView arealocation_txt;
@@ -59,7 +62,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        CommonUtil.fecth(this);
+
         if (rootUser != null) {
             openSecret_switch.setChecked(rootUser.secretScan);
             sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别已设置为：" + rootUser.sex);
@@ -119,7 +122,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 if (isLoaded) {
                     ShowPickerView();
                 } else {
-                    Toast.makeText(SettingMineInfoActivity.this, "请等待省市区数据解析完成！", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(SettingMineInfoActivity.this, "请等待省市区数据解析完成！");
                 }
             }
         });
@@ -149,18 +152,18 @@ public class SettingMineInfoActivity extends FragmentActivity {
                             public void onPositiveClick(Dialog dialog, final String secretText) {
 
                                 if (rootUser != null) {
-                                    rootUser.secretScan = true;
-                                    rootUser.secretPassword = secretText;
-                                    rootUser.update(rootUser.getObjectId(), new UpdateListener() {
+                                    updateUser.secretScan = true;
+                                    updateUser.secretPassword = secretText;
+                                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 openSecret_txt.setText("私密访问已开启");
                                                 CommonUtil.fecth(SettingMineInfoActivity.this);
-                                                Toast.makeText(SettingMineInfoActivity.this, "私密访问开启成功,请牢记密码", Toast.LENGTH_SHORT).show();
+                                                ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问开启成功,请牢记密码");
                                             } else {
                                                 openSecret_switch.setChecked(false);
-                                                Toast.makeText(SettingMineInfoActivity.this, "私密访问开启失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                                ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问开启失败，原因是：" + e.getLocalizedMessage());
                                             }
                                         }
                                     });
@@ -175,8 +178,8 @@ public class SettingMineInfoActivity extends FragmentActivity {
                             }
                         }).show(getSupportFragmentManager(), "secretDilog");
                     } else {
-                        rootUser.secretScan = false;
-                        rootUser.update(rootUser.getObjectId(), new UpdateListener() {
+                        updateUser.secretScan = false;
+                        updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
                                 if (e == null) {
@@ -184,7 +187,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                     CommonUtil.fecth(SettingMineInfoActivity.this);
                                 } else {
                                     openSecret_switch.setChecked(true);
-                                    Toast.makeText(SettingMineInfoActivity.this, "私密访问关闭失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问关闭失败，原因是：" + e.getLocalizedMessage());
                                 }
                             }
                         });
@@ -203,15 +206,15 @@ public class SettingMineInfoActivity extends FragmentActivity {
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 age_txt.setText("你的年龄已设置为：" + ageItems.get(options1).getPickerViewText() + "岁");
                 if (rootUser != null) {
-                    rootUser.age = ageItems.get(options1).getPickerViewText() + "";
-                    rootUser.update(rootUser.getObjectId(), new UpdateListener() {
+                    updateUser.age = ageItems.get(options1).getPickerViewText() + "";
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
                                 CommonUtil.fecth(SettingMineInfoActivity.this);
-                                Toast.makeText(SettingMineInfoActivity.this, "年龄更新成功", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "年龄更新成功");
                             } else {
-                                Toast.makeText(SettingMineInfoActivity.this, "年龄更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "年龄更新失败，原因是：" + e.getLocalizedMessage());
                             }
                         }
                     });
@@ -247,17 +250,17 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 sex_txt.setText("你的性别已设置为：" + sexItems.get(options1).getPickerViewText() + "性");
 
                 if (rootUser != null) {
-                    rootUser.sex = sexItems.get(options1).getPickerViewText() + "";
-                    rootUser.update(rootUser.getObjectId(), new UpdateListener() {
+                    updateUser.sex = sexItems.get(options1).getPickerViewText() + "";
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
                                 sex_txt.setTextColor(Color.LTGRAY);
                                 findViewById(R.id.sex_rl).setVisibility(View.GONE);
                                 CommonUtil.fecth(SettingMineInfoActivity.this);
-                                Toast.makeText(SettingMineInfoActivity.this, rootUser.sex + "性更新成功", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(SettingMineInfoActivity.this, rootUser.sex + "性更新成功");
                             } else {
-                                Toast.makeText(SettingMineInfoActivity.this, rootUser.sex + "性更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(SettingMineInfoActivity.this, rootUser.sex + "性更新失败，原因是：" + e.getLocalizedMessage());
                             }
                         }
                     });
@@ -317,7 +320,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     isLoaded = true;
                     break;
                 case MSG_LOAD_FAILED:
-                    Toast.makeText(SettingMineInfoActivity.this, "省市区数据解析失败，请稍候重试", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(SettingMineInfoActivity.this, "省市区数据解析失败，请稍候重试");
                     break;
             }
         }
@@ -334,14 +337,14 @@ public class SettingMineInfoActivity extends FragmentActivity {
                         options3Items.get(options1).get(options2).get(options3);
                 arealocation_txt.setText(text);
                 if (rootUser != null) {
-                    rootUser.provinceAndcity = text;
-                    rootUser.update(rootUser.getObjectId(), new UpdateListener() {
+                    updateUser.provinceAndcity = text;
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             if (e == null) {
-                                Toast.makeText(SettingMineInfoActivity.this, "省市区信息更新成功", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "省市区信息更新成功");
                             } else {
-                                Toast.makeText(SettingMineInfoActivity.this, "省市区更新失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "省市区更新失败，原因是：" + e.getLocalizedMessage());
                             }
                         }
                     });

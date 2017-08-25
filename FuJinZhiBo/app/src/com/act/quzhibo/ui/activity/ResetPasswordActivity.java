@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;
 
 
@@ -104,10 +105,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
             public void done(BmobException ex) {
                 if (ex == null) {
                     CommonUtil.fecth(ResetPasswordActivity.this);
-                    Toast.makeText(ResetPasswordActivity.this, "密码重置成功", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(ResetPasswordActivity.this, "密码重置成功");
                     ResetPasswordActivity.this.finish();
                 } else {
-                    Toast.makeText(ResetPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage() + ex.getErrorCode(), Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(ResetPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage() + ex.getErrorCode());
 
                 }
 
@@ -119,30 +120,30 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private void getCode() {
         if (TextUtils.isEmpty(et_newpsw.getText()) || et_newpsw.getText().toString().equals("新密码")) {
-            Toast.makeText(this, "请输入新密码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入新密码");
             return;
         }
 
         if (TextUtils.isEmpty(et_c_newpsw.getText()) || et_c_newpsw.getText().toString().equals("确认密码")) {
-            Toast.makeText(this, "请确认新密码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请确认新密码");
             return;
         }
 
         if (et_userPhonenumber.getText().toString().equals("手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
-            Toast.makeText(this, "请输入正确位数的手机号码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入正确位数的手机号码");
             return;
         } else {
             String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
             Pattern p = Pattern.compile(regex);
             Matcher m = p.matcher(et_userPhonenumber.getText().toString());
             if (!m.find()) {
-                Toast.makeText(this, "请输入国内通用的手机号码", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(this, "请输入国内通用的手机号码");
                 return;
             }
 
         }
         if (!et_userPhonenumber.getText().toString().equals(BmobUser.getCurrentUser(RootUser.class).getMobilePhoneNumber())) {
-            Toast.makeText(this, "旧手机号不匹配", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "旧手机号不匹配");
             return;
         }
         BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
@@ -151,9 +152,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     @Override
                     public void done(Integer o, BmobException e) {
                         if (e == null) {
-                            Toast.makeText(ResetPasswordActivity.this, "短信验证码已经发送,序列号是：" + o, Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(ResetPasswordActivity.this, "短信验证码已经发送,序列号是：" + o);
                         } else {
-                            Toast.makeText(ResetPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(ResetPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage());
 
                         }
                     }
@@ -164,7 +165,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
     private void verifyAndResetPsw() {
 
         if (TextUtils.isEmpty(et_sms_code.getText()) || et_sms_code.getText().toString().equals("请输入短信验证码")) {
-            Toast.makeText(this, "请输入短信验证码", Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, "请输入短信验证码");
             return;
         }
 
@@ -172,10 +173,10 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Toast.makeText(ResetPasswordActivity.this, "验证成功，正在重置密码", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(ResetPasswordActivity.this, "验证成功，正在重置密码");
                     resetPasswordBySMSCodeBtn();
                 } else {
-                    Toast.makeText(ResetPasswordActivity.this, "验证失败，原因是：" + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    ToastUtil.showToast(ResetPasswordActivity.this, "验证失败，原因是：" + e.getLocalizedMessage());
 
                 }
             }

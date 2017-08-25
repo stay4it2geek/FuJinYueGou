@@ -1,18 +1,14 @@
-package com.act.quzhibo.advanced_use.data_access;
+package com.act.quzhibo.data_access;
 
 import android.content.Context;
 
 
-import com.act.quzhibo.advanced_use.db.CourseDbHelper;
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.db.CourseDbHelper;
+import com.act.quzhibo.entity.CoursePreviewInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author wlf(Andy)
- * @email 411086563@qq.com
- */
 public class GetCoursePreviews {
 
     public void getCoursePreviews(Context context, OnGetCoursePreviewsListener onGetCoursePreviewsListener) {

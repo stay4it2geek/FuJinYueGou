@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.common.GlideImageLoader;
+import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.NearPerson;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;

@@ -3,12 +3,7 @@ package com.act.quzhibo.util;
 import android.content.Context;
 import android.widget.Toast;
 
-/**
- * show toast util
- *
- * @author wlf
- * @email 411086563@qq.com
- */
+
 public class ToastUtil {
 
     private static Toast cacheToast = null;

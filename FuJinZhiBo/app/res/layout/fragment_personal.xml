@@ -22,13 +22,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/userAvtar"
-            android:layout_marginLeft="25dp"
-            android:layout_marginStart="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="13dp"
             android:layout_toEndOf="@+id/userAvtar"
             android:layout_toRightOf="@+id/userAvtar"
             android:text="昵称"
-            android:textColor="#000"
+
             android:textSize="16sp" />
 
         <TextView
@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/userAvtar"
-            android:layout_alignLeft="@+id/nickName"
             android:layout_alignStart="@+id/nickName"
             android:text="年龄/性别"
             android:textColor="#4A4A4A"
@@ -47,24 +46,24 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/nickName"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="18dp"
             android:background="@drawable/button_common_selector"
             android:text="去登录"
-            android:textColor="#fff"
+            android:textColor="@color/red"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/vip_type"
+            android:id="@+id/vip_coins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/isLogin"
-            android:layout_alignBottom="@+id/userAvtar"
+            android:layout_alignBottom="@+id/sexAndAge"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/sexAndAge"
+            android:layout_below="@+id/isLogin"
             android:layout_marginRight="15dp"
             android:gravity="right"
-            android:text="您等级积分不足"
-            android:textColor="@color/colorAccent"
+            android:text="您趣币不足"
             android:textSize="16sp" />
 
 
@@ -101,7 +100,41 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/vipimage"
                     android:paddingTop="5dp"
-                    android:text="VIP等级说明" />
+                    android:text="趣会员特权" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/get_vip"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/orderstatus"
+                    android:layout_width="27dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/getvip" />
+
+                <TextView
+                    android:id="@+id/orderstext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/orderstatus"
+                    android:paddingTop="5dp"
+                    android:text="获取趣会员特权" />
 
                 <View
                     android:layout_width="10dp"
@@ -135,40 +168,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/orderslist_img"
                     android:paddingTop="5dp"
-                    android:text="我的VIP订单" />
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/get_vip"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="1dp"
-                android:background="#fff">
-
-                <ImageView
-                    android:id="@+id/orderstatus"
-                    android:layout_width="27dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/getvip" />
-
-                <TextView
-                    android:id="@+id/orderstext"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/orderstatus"
-                    android:paddingTop="5dp"
-                    android:text="获取VIP特权" />
+                    android:text="我的趣币充值订单" />
 
                 <View
                     android:layout_width="10dp"
@@ -461,6 +461,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/registerLayout"
                 android:layout_width="match_parent"
@@ -491,6 +492,7 @@
                     android:text="立即去注册" />
 
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/logout"
                 android:layout_width="match_parent"

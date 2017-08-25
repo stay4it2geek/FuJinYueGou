@@ -17,6 +17,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.VipOrders;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -45,9 +46,15 @@ public class VipOrdersActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_common);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-        TextView title = (TextView) findViewById(R.id.layout);
-        title.setText("订单列表");
-        title.setVisibility(View.VISIBLE);
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setBarTitle("订单列表");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VipOrdersActivity.this.finish();
+            }
+        });
+        titlebar.setVisibility(View.VISIBLE);
         recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
@@ -92,8 +99,7 @@ public class VipOrdersActivity extends FragmentActivity {
 
     private void query() {
         BmobQuery<VipOrders> query = new BmobQuery<>();
-        BmobUser bmobUser = BmobUser.getCurrentUser(RootUser.class);
-        query.addWhereEqualTo("user", bmobUser);
+        query.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
         query.order("-updatedAt");
         query.findObjects(new FindListener<VipOrders>() {
             @Override
@@ -104,12 +110,6 @@ public class VipOrdersActivity extends FragmentActivity {
                         queryData(Constants.REFRESH);
                     } else {
                         loadNetView.setlayoutVisily(Constants.BUY_VIP);
-                        loadNetView.setBuyButtonListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(VipOrdersActivity.this,GetVipPayActivity.class));
-                            }
-                        });
                     }
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);

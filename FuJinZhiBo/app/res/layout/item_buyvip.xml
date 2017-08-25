@@ -7,20 +7,44 @@
 
     <ImageView
         android:id="@+id/vip_img"
-        android:layout_width="40dp"
+        android:layout_width="35dp"
         android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_margin="10dp"
         android:background="@drawable/supervip" />
 
     <TextView
-        android:id="@+id/title_vip"
+        android:id="@+id/payConisCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
         android:layout_toRightOf="@+id/vip_img"
-        android:text=""
+        android:text="90000趣币"
+        android:textColor="@color/darkorange"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/conisPresent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/payConisCount"
+        android:layout_below="@+id/payConisCount"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="2dp"
+        android:gravity="right"
+        android:text="赠送1000趣币"
+        android:textColor="@color/darkorange"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/priceConis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="45dp"
+        android:text="399元"
         android:textColor="@color/red"
         android:textSize="17sp" />
 
@@ -28,24 +52,12 @@
         android:id="@+id/price_vip_maket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="80dp"
-        android:gravity="right"
-        android:textColor="#aaa"
-        android:text=""
-        android:textSize="14sp" />
+        android:layout_marginTop="2dp"
+        android:layout_alignEnd="@+id/priceConis"
+        android:layout_below="@+id/priceConis"
+        android:layout_marginRight="10dp"
+        android:text="499元"
+        android:textSize="10sp" />
 
-    <TextView
-        android:id="@+id/price_vip"
-        android:textColor="#000"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
-        android:gravity="right"
-        android:text=""
-        android:textSize="17sp" />
 
 </RelativeLayout>

@@ -37,6 +37,7 @@ import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
 import com.act.quzhibo.ui.activity.InfoCommonActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -233,13 +234,13 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 @Override
                 public void onClick(View v) {
                     if (((Item3ViewHolder) holder).talk.getText().equals("点击这里评论她/他") || ((Item3ViewHolder) holder).talk.getText().length()== 0) {
-                        Toast.makeText(activity, "您是否忘记了评论内容?", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToast(activity, "您是否忘记了评论内容?");
                     } else {
-                        Toast.makeText(activity, "正在评论...", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToast(activity, "正在评论...");
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(activity, "评论异常，请稍后重试！", Toast.LENGTH_SHORT).show();
+                                ToastUtil.showToast(activity, "评论异常，请稍后重试！");
                                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(((Item3ViewHolder) holder).pinglun.getWindowToken(), 0);
                             }

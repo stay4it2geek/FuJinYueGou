@@ -6,11 +6,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +16,6 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
-import com.act.quzhibo.ui.activity.NoResActivity;
 import com.act.quzhibo.ui.activity.PicsDownLoadHistoryActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
@@ -162,7 +159,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("已登录");
             ((TextView) view.findViewById(R.id.nickName)).setText(rootUser.getUsername() != null ? rootUser.getUsername() : "未设置昵称");
-            ((TextView) view.findViewById(R.id.vip_type)).setText(rootUser.vipTypeName != null ? rootUser.vipTypeName : "您等级积分不足");
+            ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis!= null&& rootUser.vipConis>0? rootUser.vipConis+"趣币" : "您趣币不足");
             String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex+"性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age+"岁");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
         } else {
@@ -170,9 +167,10 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.logout).setVisibility(View.GONE);
             ((TextView) view.findViewById(R.id.isLogin)).setText("去登录");
             ((TextView) view.findViewById(R.id.nickName)).setText("未设置昵称");
-            ((TextView) view.findViewById(R.id.vip_type)).setText("您等级积分不足");
+            ((TextView) view.findViewById(R.id.vip_coins)).setText("您趣币不足");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }
     }
+
 
 }

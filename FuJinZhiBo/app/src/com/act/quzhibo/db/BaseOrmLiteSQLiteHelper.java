@@ -1,4 +1,4 @@
-package com.act.quzhibo.advanced_use.db;
+package com.act.quzhibo.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

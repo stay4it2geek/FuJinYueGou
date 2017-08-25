@@ -77,7 +77,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                         intent.setData(uri);
                         startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
                     }
-                }).setDuration(10000).show();
+                }).setDuration(50000).show();
             }
 
             @Override
@@ -91,7 +91,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                         intent.setData(uri);
                         startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
                     }
-                }).setDuration(10000).show();
+                }).setDuration(50000).show();
 
             }
         });
@@ -119,7 +119,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                         findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
                         request();
                     } else {
-                        Toast.makeText(WelcomeActivity.this, "密码不正确", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showToast(WelcomeActivity.this, "密码不正确");
                     }
                 }
             });
@@ -146,7 +146,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "请求超时,正在重试", Toast.LENGTH_SHORT).show();
+                            ToastUtil.showToast(getApplicationContext(), "请求超时,正在重试");
                         }
                     });
                     request();

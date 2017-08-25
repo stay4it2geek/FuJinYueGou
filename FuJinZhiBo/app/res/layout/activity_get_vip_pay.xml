@@ -5,17 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/layout"
+    <com.act.quzhibo.view.TitleBarView
+        android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="#f6dd3e"
-        android:gravity="center"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="获取VIP特权"
-        android:textColor="@color/commontextcolor"
-        android:textSize="18sp"
+        android:layout_height="@dimen/commonViewHeight"
         android:textStyle="normal" />
 
     <TextView
@@ -75,19 +68,19 @@
                 android:id="@+id/userSelectText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/userSelect"
                 android:gravity="center_vertical"
                 android:text=""
                 android:textColor="@color/red"
-                android:textSize="18sp" />
+                android:textSize="17sp" />
 
         </RelativeLayout>
 
         <TextView
             android:id="@+id/alipay"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
@@ -99,7 +92,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp">
 
@@ -116,7 +109,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/zhifubao"
                 android:gravity="center_vertical"
-                android:text="  安全快捷支付，首选支付宝" />
+                android:text="安全快捷支付，首选支付宝" />
         </RelativeLayout>
     </LinearLayout>
 

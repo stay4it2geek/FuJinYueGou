@@ -1,4 +1,4 @@
-package com.act.quzhibo.advanced_use.course_preview;
+package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.entity.CoursePreviewInfo;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
 
@@ -20,10 +20,6 @@ import org.wlf.filedownloader.FileDownloader;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author wlf(Andy)
- * @email 411086563@qq.com
- */
 public class CoursePreviewAdapter extends RecyclerView.Adapter<CoursePreviewAdapter.CoursePreviewViewHolder> {
 
     private List<CoursePreviewInfo> mCoursePreviewInfos = new ArrayList<CoursePreviewInfo>();
@@ -49,7 +45,7 @@ public class CoursePreviewAdapter extends RecyclerView.Adapter<CoursePreviewAdap
             return null;
         }
 
-        View itemView = View.inflate(parent.getContext(), R.layout.advanced_use__item_course_preview, null);
+        View itemView = View.inflate(parent.getContext(), R.layout.item_course_preview, null);
 
         CoursePreviewViewHolder holder = new CoursePreviewViewHolder(itemView);
 

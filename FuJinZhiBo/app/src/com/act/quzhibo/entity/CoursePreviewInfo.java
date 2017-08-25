@@ -1,9 +1,9 @@
-package com.act.quzhibo.advanced_use.model;
+package com.act.quzhibo.entity;
 
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.act.quzhibo.advanced_use.db.CourseDbHelper;
+import com.act.quzhibo.db.CourseDbHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.field.DatabaseField;

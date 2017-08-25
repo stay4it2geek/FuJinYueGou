@@ -1,4 +1,4 @@
-package com.act.quzhibo.advanced_use.course_download;
+package com.act.quzhibo.ui.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,8 +15,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.data_access.GetCourseDownloads;
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.adapter.CourseDownloadAdapter;
+import com.act.quzhibo.data_access.GetCourseDownloads;
+import com.act.quzhibo.entity.CoursePreviewInfo;
 import com.act.quzhibo.util.ToastUtil;
 
 import org.wlf.filedownloader.DownloadFileInfo;
