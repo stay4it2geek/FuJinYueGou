@@ -40,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button getCode_btn;
     public int T = 20; //倒计时时长
     private Handler mHandler = new Handler();
+    private EditText et_userNick;
 
     class MyCountDownTimer implements Runnable{
 
@@ -81,6 +82,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
+        et_userNick = (EditText) findViewById(R.id.et_userNick);
+
         et_sms_code = (EditText) findViewById(R.id.et_sms_code);
         check_agree = (CheckBox) findViewById(R.id.check_agree);
 
@@ -140,6 +143,18 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void getCode() {
+        if (et_userNick.getText().toString().equals("用户名") || et_userNick.getText().toString().equals("") || et_userNick.getText().length() > 20) {
+            ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
+            return;
+        } else {
+            String regex = "^[0-9a-zA_Z]+$";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(et_userNick.getText().toString());
+            if (!m.find()) {
+                ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
+                return;
+            }
+        }
         if (et_userPhonenumber.getText().toString().equals("手机号") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
             ToastUtil.showToast(this, "请输入正确位数的手机号码");
             return;
@@ -152,6 +167,11 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
         }
+        if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
+            ToastUtil.showToast(this, "请输入密码");
+            return;
+        }
+
         if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
             ToastUtil.showToast(this, "请输入密码");
             return;
@@ -204,6 +224,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void done(BmobException e) {
                 if (e == null) {
                     RootUser rootUser = new RootUser();
+                    rootUser.setUsername(et_userNick.getText().toString());
                     rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
                     rootUser.setMobilePhoneNumberVerified(true);
                     ToastUtil.showToast(RegisterActivity.this, "验证成功，自动注册登录中......");

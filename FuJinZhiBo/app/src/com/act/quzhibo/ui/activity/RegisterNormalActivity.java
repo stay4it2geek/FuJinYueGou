@@ -40,6 +40,7 @@ public class RegisterNormalActivity extends AppCompatActivity {
     private EditText et_sms_code;
     private EditText et_password;
     private CheckBox check_agree;
+    private EditText et_userNick;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class RegisterNormalActivity extends AppCompatActivity {
         et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
         et_sms_code = (EditText) findViewById(R.id.et_sms_code);
         check_agree = (CheckBox) findViewById(R.id.check_agree);
+        et_userNick = (EditText) findViewById(R.id.et_userNick);
 
         et_password = (EditText) findViewById(R.id.et_password);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
@@ -89,6 +91,8 @@ public class RegisterNormalActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
 
@@ -96,6 +100,19 @@ public class RegisterNormalActivity extends AppCompatActivity {
         if (!check_agree.isChecked()) {
             ToastUtil.showToast(this, "请先同意用户协议");
             return;
+        }
+
+        if (et_userNick.getText().toString().equals("用户名") || et_userNick.getText().toString().equals("") || et_userNick.getText().length() > 20) {
+            ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
+            return;
+        } else {
+            String regex = "^[0-9a-zA_Z]+$";
+            Pattern p = Pattern.compile(regex);
+            Matcher m = p.matcher(et_userNick.getText().toString());
+            if (!m.find()) {
+                ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
+                return;
+            }
         }
         if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
             ToastUtil.showToast(this, "请输入密码");
@@ -114,12 +131,13 @@ public class RegisterNormalActivity extends AppCompatActivity {
             }
         }
 
-        RootUser bu = new RootUser();
-        bu.setUsername(et_userPhonenumber.getText().toString());
-        bu.setPassword(et_password.getText().toString());
-        bu.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+        RootUser rootUser = new RootUser();
+        rootUser.setUsername(et_userPhonenumber.getText().toString());
+        rootUser.setPassword(et_password.getText().toString());
+        rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+        rootUser.setUsername(et_userNick.getText().toString());
 
-        bu.signUp(new SaveListener<RootUser>() {
+        rootUser.signUp(new SaveListener<RootUser>() {
             @Override
             public void done(RootUser rootUser, BmobException e) {
                 if (e == null) {

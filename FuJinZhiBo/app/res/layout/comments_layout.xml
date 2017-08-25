@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <TextView
-        android:layout_marginTop="30dp"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
         android:padding="10dp"
-        android:textColor="@color/colorAccent"
         android:text="最新回复"
-        android:id="@+id/textView" />
+        android:textColor="@color/colorAccent" />
+
     <com.act.quzhibo.view.MyListView
-        android:layout_width="match_parent"
         android:id="@+id/comments_lv"
-        android:listSelector="@android:color/transparent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="70dp"
+        android:listSelector="@android:color/transparent" />
 
     <LinearLayout
         android:id="@+id/pinglunlayout"
@@ -23,8 +27,8 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:background="#eee"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:orientation="horizontal">
+
         <EditText
             android:id="@+id/talk"
             style="@android:style/TextAppearance.Widget.EditText"
@@ -34,6 +38,7 @@
             android:gravity="center"
             android:hint="点击这里评论她/他"
             android:textSize="16sp" />
+
         <TextView
             android:id="@+id/pinglun"
             android:layout_width="0dp"
@@ -46,4 +51,4 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

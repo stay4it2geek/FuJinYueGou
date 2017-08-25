@@ -25,6 +25,7 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.TitleBarView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
 
@@ -46,7 +47,19 @@ public class InfoCommonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_common_layout);
         initView();
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setBarTitle("个 人 档 案");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InfoCommonActivity.this.finish();
+            }
+        });
 
+    }
+
+    private void initView() {
+        loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,10 +67,6 @@ public class InfoCommonActivity extends AppCompatActivity {
                 initView();
             }
         });
-    }
-
-    private void initView() {
-        loadNetView = (LoadNetView) findViewById(R.id.loadview);
         Display display = this.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -68,8 +77,8 @@ public class InfoCommonActivity extends AppCompatActivity {
             int count = getIntent().getIntExtra("count", 0);
             post = (InterestPost) getIntent().getSerializableExtra(Constants.POST);
             if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
-                int max = 20000;
-                int min = 1000;
+                int max = 5000;
+                int min = 600;
                 Random random = new Random();
                 second = random.nextInt(max) % (max - min + 4) + min;
                 CommonUtil.saveData(this, second, "time");
@@ -158,7 +167,7 @@ public class InfoCommonActivity extends AppCompatActivity {
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.COMMON_USER_ID, post.user.userId);
-                                    intent.setClass(InfoCommonActivity.this, CommonPersonPostActivity.class);
+                                    intent.setClass(InfoCommonActivity.this, CommonPersonPostListActivity.class);
                                     startActivity(intent);
                                 }
                             });
@@ -170,6 +179,9 @@ public class InfoCommonActivity extends AppCompatActivity {
                     loadNetView.setlayoutVisily(Constants.RELOAD);
                 }
 
+            }else {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };

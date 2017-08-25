@@ -1,9 +1,11 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +17,12 @@ import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostListInfoPersonParentData;
+import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -25,10 +30,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import cn.bmob.v3.BmobUser;
 import okhttp3.Call;
 
 
-public class CommonPersonPostActivity extends AppCompatActivity {
+public class CommonPersonPostListActivity extends FragmentActivity {
 
     private XRecyclerView recyclerView;
     private ArrayList<InterestPost> posts = new ArrayList<>();
@@ -37,12 +43,13 @@ public class CommonPersonPostActivity extends AppCompatActivity {
     private String userId;
     private String ctime = "0";
     private LoadNetView loadNetView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_interest_post);
         findViewById(R.id.title_layout).setVisibility(View.VISIBLE);
-        loadNetView= (LoadNetView) findViewById(R.id.loadview);
+        loadNetView = (LoadNetView) findViewById(R.id.loadview);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
         recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);
@@ -111,14 +118,16 @@ public class CommonPersonPostActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what != Constants.NetWorkError) {
+                RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
+
                 final InterestPostListInfoPersonParentData data =
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
-                if (data!=null&&data.result != null) {
+                if (data != null && data.result != null) {
                     interestPostSize = data.result.posts.size();
                 }
                 if (data.result.posts != null && interestPostSize > 0) {
                     ctime = data.result.posts.get(interestPostSize - 1).ctime;
-                    Log.e("htime2",ctime);
+                    Log.e("htime2", ctime);
                 }
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
@@ -126,14 +135,48 @@ public class CommonPersonPostActivity extends AppCompatActivity {
                 if (posts != null && interestPostSize > 0) {
                     posts.addAll(data.result.posts);
                     if (adapter == null) {
-                        adapter = new InterestPostListAdapter(CommonPersonPostActivity.this, posts, 0);
+                        int isBlurType = 0;
+                        if (rootUser != null && rootUser.vipConis > 1000) {
+                            isBlurType = 1;
+                        } else {
+                            isBlurType = 0;
+                        }
+                        adapter = new InterestPostListAdapter(CommonPersonPostListActivity.this, posts, isBlurType);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {
-                                if (false) {
+                                RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
+                                if (rootUser == null) {
+                                    FragmentDialog.newInstance("请确认您的权限", "你是否未注册或者登录？", "去注册", "去登录", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            startActivity(new Intent(CommonPersonPostListActivity.this, RegisterActivity.class));
+
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            startActivity(new Intent(CommonPersonPostListActivity.this, LoginActivity.class));
+
+                                        }
+                                    });
+                                } else if (rootUser != null && rootUser.vipConis < 1000) {
+                                    FragmentDialog.newInstance("请确认您的趣币数量", "您的趣币少于1000个了", "去充值", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            startActivity(new Intent(CommonPersonPostListActivity.this, GetVipPayActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+
+                                } else if (rootUser != null && rootUser.vipConis > 1000) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.POST_ID, post);
-                                    intent.setClass(CommonPersonPostActivity.this, PostDetailActivity.class);
+                                    intent.setClass(CommonPersonPostListActivity.this, PostDetailActivity.class);
                                     startActivity(intent);
                                 }
                             }
@@ -176,7 +219,7 @@ public class CommonPersonPostActivity extends AppCompatActivity {
 
     public void getData(String ctime, final int what) {
 
-        if(userId==null){
+        if (userId == null) {
             handler.sendEmptyMessage(Constants.NetWorkError);
             return;
         }

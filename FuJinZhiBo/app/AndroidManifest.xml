@@ -140,7 +140,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.CommonPersonPostActivity"
+            android:name="com.act.quzhibo.ui.activity.CommonPersonPostListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
@@ -196,6 +196,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.NoResActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.MyPostListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

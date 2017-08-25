@@ -16,6 +16,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
+import com.act.quzhibo.ui.activity.MyPostListActivity;
 import com.act.quzhibo.ui.activity.PicsDownLoadHistoryActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
@@ -133,7 +134,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         getActivity().startActivity(new Intent(getActivity(), SettingMineInfoActivity.class));
                         break;
                     case R.id.myPostlayout:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), MyPostListActivity.class));
                         break;
                     case R.id.noReslayout:
                         getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));

@@ -20,6 +20,7 @@
         <TextView
             android:id="@+id/nickName"
             android:layout_width="wrap_content"
+            android:maxLength="20"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/userAvtar"
             android:layout_marginLeft="15dp"

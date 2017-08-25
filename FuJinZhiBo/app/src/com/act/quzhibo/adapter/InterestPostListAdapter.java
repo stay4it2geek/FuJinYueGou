@@ -72,11 +72,11 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             if (day < 365) {
                 ((MyViewHolder) holder).createTime.setText(day + "天" + hour + "时" + min + "分钟前");
             }
-            ((MyViewHolder) holder).title.setText(datas.get(position).title);
-            ((MyViewHolder) holder).absText.setText(datas.get(position).absText);
-            ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView);
-            ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments);
-            ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards);
+            ((MyViewHolder) holder).title.setText(datas.get(position).title+"");
+            ((MyViewHolder) holder).absText.setText(datas.get(position).absText+"");
+            ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView+"");
+            ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments+"");
+            ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards+"");
 
             if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
