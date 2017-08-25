@@ -15,5 +15,5 @@ public class RootUser extends BmobUser {
     public boolean secretScan;
     public String secretPassword;
     public BmobFile photoUrlFile;
-
+    public String lastLoginTime;
 }

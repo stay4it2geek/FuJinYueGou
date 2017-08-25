@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -21,6 +22,7 @@ import com.act.quzhibo.entity.JsonBean;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.FragmentSecretDialog;
 import com.act.quzhibo.view.TitleBarView;
 import com.bigkoo.pickerview.OptionsPickerView;
@@ -163,7 +165,20 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                                 ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问开启成功,请牢记密码");
                                             } else {
                                                 openSecret_switch.setChecked(false);
-                                                ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问开启失败，原因是：" + e.getLocalizedMessage());
+                                                if (e.getErrorCode() == 206) {
+                                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                                        @Override
+                                                        public void onPositiveClick(Dialog dialog) {
+                                                            rootUser.logOut();
+                                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                                        }
+
+                                                        @Override
+                                                        public void onNegtiveClick(Dialog dialog) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    }).show(getSupportFragmentManager(),"");                                                }
+
                                             }
                                         }
                                     });
@@ -187,7 +202,20 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                     CommonUtil.fecth(SettingMineInfoActivity.this);
                                 } else {
                                     openSecret_switch.setChecked(true);
-                                    ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问关闭失败，原因是：" + e.getLocalizedMessage());
+                                    if (e.getErrorCode() == 206) {
+                                        FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                            @Override
+                                            public void onPositiveClick(Dialog dialog) {
+                                                rootUser.logOut();
+                                                SettingMineInfoActivity.this.finish();
+                                                startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                            }
+
+                                            @Override
+                                            public void onNegtiveClick(Dialog dialog) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show(getSupportFragmentManager(),"");                                    }
                                 }
                             }
                         });
@@ -214,7 +242,20 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 CommonUtil.fecth(SettingMineInfoActivity.this);
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "年龄更新成功");
                             } else {
-                                ToastUtil.showToast(SettingMineInfoActivity.this, "年龄更新失败，原因是：" + e.getLocalizedMessage());
+                                if (e.getErrorCode() == 206) {
+                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            rootUser.logOut();
+                                            SettingMineInfoActivity.this.finish();
+                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show(getSupportFragmentManager(),"");                                }
                             }
                         }
                     });
@@ -260,7 +301,20 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 CommonUtil.fecth(SettingMineInfoActivity.this);
                                 ToastUtil.showToast(SettingMineInfoActivity.this, rootUser.sex + "性更新成功");
                             } else {
-                                ToastUtil.showToast(SettingMineInfoActivity.this, rootUser.sex + "性更新失败，原因是：" + e.getLocalizedMessage());
+                                if (e.getErrorCode() == 206) {
+                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            rootUser.logOut();
+                                            SettingMineInfoActivity.this.finish();
+                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show(getSupportFragmentManager(),"");                                }
                             }
                         }
                     });
@@ -321,6 +375,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     break;
                 case MSG_LOAD_FAILED:
                     ToastUtil.showToast(SettingMineInfoActivity.this, "省市区数据解析失败，请稍候重试");
+
                     break;
             }
         }
@@ -344,7 +399,21 @@ public class SettingMineInfoActivity extends FragmentActivity {
                             if (e == null) {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "省市区信息更新成功");
                             } else {
-                                ToastUtil.showToast(SettingMineInfoActivity.this, "省市区更新失败，原因是：" + e.getLocalizedMessage());
+                                if (e.getErrorCode() == 206) {
+                                    SettingMineInfoActivity.this.finish();
+                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            rootUser.logOut();
+                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show(getSupportFragmentManager(),"");
+                                }
                             }
                         }
                     });

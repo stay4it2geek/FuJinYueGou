@@ -159,7 +159,7 @@ public class CommonPersonPostListActivity extends FragmentActivity {
                                             startActivity(new Intent(CommonPersonPostListActivity.this, LoginActivity.class));
 
                                         }
-                                    });
+                                    }).show(getSupportFragmentManager(),"");
                                 } else if (rootUser != null && rootUser.vipConis < 1000) {
                                     FragmentDialog.newInstance("请确认您的趣币数量", "您的趣币少于1000个了", "去充值", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
@@ -171,7 +171,7 @@ public class CommonPersonPostListActivity extends FragmentActivity {
                                         public void onNegtiveClick(Dialog dialog) {
                                             dialog.dismiss();
                                         }
-                                    });
+                                    }).show(getSupportFragmentManager(),"");
 
                                 } else if (rootUser != null && rootUser.vipConis > 1000) {
                                     Intent intent = new Intent();

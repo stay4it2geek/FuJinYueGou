@@ -187,13 +187,14 @@ public class GetVipPayActivity extends FragmentActivity {
     }
 
     RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
-    RootUser  updateUser=new RootUser();
+    RootUser updateUser = new RootUser();
+
     private void alipay() {
-        if (rootUser== null) {
+        if (rootUser == null) {
             ToastUtil.showToast(GetVipPayActivity.this, "您还没有登录或注册哦!");
             startActivity(new Intent(GetVipPayActivity.this, LoginActivity.class));
             return;
-        }else{
+        } else {
             CommonUtil.fecth(this);
         }
         if (TextUtils.isEmpty(userSelectText.getText())) {
@@ -204,7 +205,19 @@ public class GetVipPayActivity extends FragmentActivity {
             ToastUtil.showToast(GetVipPayActivity.this, "您还没安装支付宝客户端哦!");
             return;
         }
-
+        updateUser.lastLoginTime = System.currentTimeMillis() + "";
+        updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e != null) {
+                    if (e.getErrorCode() == 206) {
+                        ToastUtil.showToast(GetVipPayActivity.this, "缓存已过期，请重新登录后修改" + e.getLocalizedMessage());
+                        BmobUser.logOut();
+                        startActivity(new Intent(GetVipPayActivity.this,LoginActivity.class));
+                    }
+                }
+            }
+        });
         showDialog("正在生成订单，请您稍候...");
         BP.pay(mGoodsDescription, mGoodsDescription, 0.01, true, new PListener() {
 
@@ -226,9 +239,9 @@ public class GetVipPayActivity extends FragmentActivity {
                         if (e == null) {
                             ToastUtil.showToast(GetVipPayActivity.this, "订单充值支付信息更新成功");
                             if (rootUser.vipConis > 0) {
-                                updateUser.vipConis = mPayConisCount+rootUser.vipConis ;
+                                updateUser.vipConis = mPayConisCount + rootUser.vipConis;
                             }
-                            updateUser.update(rootUser.getObjectId(),new UpdateListener() {
+                            updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
@@ -363,10 +376,10 @@ public class GetVipPayActivity extends FragmentActivity {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                        mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送"+payConises.get(position).conisPresent+"趣币";
+                        mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送" + payConises.get(position).conisPresent + "趣币";
                         userSelectText.setText(mGoodsDescription);
                         mPayMoney = payConises.get(position).priceConis;
-                        mPayConisCount = payConises.get(position).payConisCount+payConises.get(position).conisPresent;
+                        mPayConisCount = payConises.get(position).payConisCount + payConises.get(position).conisPresent;
                     }
                 });
                 listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
@@ -374,10 +387,10 @@ public class GetVipPayActivity extends FragmentActivity {
                     public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
                         switch (index) {
                             case 0:
-                                mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送"+payConises.get(position).conisPresent+"趣币";
+                                mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送" + payConises.get(position).conisPresent + "趣币";
                                 userSelectText.setText(mGoodsDescription);
                                 mPayMoney = payConises.get(position).priceConis;
-                                mPayConisCount = payConises.get(position).payConisCount+payConises.get(position).conisPresent;
+                                mPayConisCount = payConises.get(position).payConisCount + payConises.get(position).conisPresent;
                                 break;
                         }
                         return false;

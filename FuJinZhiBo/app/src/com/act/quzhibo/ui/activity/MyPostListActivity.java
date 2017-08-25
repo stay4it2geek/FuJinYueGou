@@ -23,6 +23,7 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.VipOrders;
 import com.act.quzhibo.ui.fragment.CommonSeeFragment;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -39,7 +40,7 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class MyPostListActivity extends AppCompatActivity{
+public class MyPostListActivity extends AppCompatActivity {
 
 
     private XRecyclerView recyclerView;
@@ -50,7 +51,7 @@ public class MyPostListActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_common);
-        recyclerView = (XRecyclerView)findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -88,12 +89,21 @@ public class MyPostListActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
-               queryData(Constants.REFRESH);
+                queryData(Constants.REFRESH);
+            }
+        });
+
+
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setVisibility(View.VISIBLE);
+        titlebar.setBarTitle("我 的 状 态");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyPostListActivity.this.finish();
             }
         });
     }
-
-
 
 
     private int limit = 10; // 每页的数据是10条
@@ -158,21 +168,20 @@ public class MyPostListActivity extends AppCompatActivity{
 
         @Override
         public int compare(MyPost post1, MyPost post2) {
-            int m1=Integer.parseInt(post1.ctime!=null?post1.ctime:"0");
-            int m2=Integer.parseInt(post2.ctime!=null?post2.ctime:"0");
-            int result=0;
-            if(m1>m2)
-            {
-                result=1;
+            int m1 = Integer.parseInt(post1.ctime != null ? post1.ctime : "0");
+            int m2 = Integer.parseInt(post2.ctime != null ? post2.ctime : "0");
+            int result = 0;
+            if (m1 > m2) {
+                result = 1;
             }
-            if(m1<m2)
-            {
-                result=-1;
+            if (m1 < m2) {
+                result = -1;
             }
             return result;
         }
 
     }
+
     private int myPostsSize;
     Handler handler = new Handler() {
         @Override
@@ -214,7 +223,6 @@ public class MyPostListActivity extends AppCompatActivity{
             }
         }
     };
-
 
 
 }
