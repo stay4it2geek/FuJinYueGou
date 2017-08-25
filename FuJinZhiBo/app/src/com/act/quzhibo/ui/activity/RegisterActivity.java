@@ -2,13 +2,14 @@ package com.act.quzhibo.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
@@ -36,6 +37,43 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText et_sms_code;
     private EditText et_password;
     private CheckBox check_agree;
+    private Button getCode_btn;
+    public int T = 20; //倒计时时长
+    private Handler mHandler = new Handler();
+
+    class MyCountDownTimer implements Runnable{
+
+        @Override
+        public void run() {
+
+            //倒计时开始，循环
+            while (T > 0) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getCode_btn.setClickable(false);
+                        getCode_btn.setText(T + "秒后重新开始");
+                    }
+                });
+                try {
+                    Thread.sleep(1000); //强制线程休眠1秒，就是设置倒计时的间隔时间为1秒。
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                T--;
+            }
+
+            //倒计时结束，也就是循环结束
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    getCode_btn.setClickable(true);
+                    getCode_btn.setText("点击获取验证码");
+                }
+            });
+            T = 20; //最后再恢复倒计时时长
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,9 +93,11 @@ public class RegisterActivity extends AppCompatActivity {
                 RegisterActivity.this.finish();
             }
         });
-        findViewById(R.id.getCode_btn).setOnClickListener(new View.OnClickListener() {
+        getCode_btn = (Button) findViewById(R.id.getCode_btn);
+        getCode_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 getCode();
             }
         });
@@ -116,6 +156,9 @@ public class RegisterActivity extends AppCompatActivity {
             ToastUtil.showToast(this, "请输入密码");
             return;
         }
+
+        new Thread(new MyCountDownTimer()).start();//开始执行
+
         BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
                 "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>() {
 

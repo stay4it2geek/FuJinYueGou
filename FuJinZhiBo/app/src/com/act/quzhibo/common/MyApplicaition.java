@@ -8,12 +8,15 @@ import org.wlf.filedownloader.FileDownloadConfiguration;
 import org.wlf.filedownloader.FileDownloader;
 
 import java.io.File;
+import java.util.HashMap;
 
 import c.b.BP;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 
 public class MyApplicaition extends Application {
+
+    public static HashMap<String, Long> map;
 
     public void onCreate() {
         super.onCreate();

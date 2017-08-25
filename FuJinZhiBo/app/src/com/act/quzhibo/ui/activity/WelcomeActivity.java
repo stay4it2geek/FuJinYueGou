@@ -108,11 +108,14 @@ public class WelcomeActivity extends ActivityManagePermission {
         if (user != null && user.secretScan) {
             CommonUtil.fecth(this);
             findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
+            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (!imm.isActive(psdInputView)) {
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
             psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
                 @Override
                 public void onSettingMode(String text) {
                     if (text.equals(user.secretPassword)) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         if (imm != null) {
                             imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                         }
