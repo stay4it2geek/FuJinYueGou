@@ -1,16 +1,15 @@
-package com.act.quzhibo.ui.fragment;
+package com.act.quzhibo.ui.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -25,13 +24,14 @@ import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.base.Status;
 import org.wlf.filedownloader.listener.OnDeleteDownloadFilesListener;
 import org.wlf.filedownloader.listener.OnDownloadFileChangeListener;
+import org.wlf.filedownloader.listener.OnFileDownloadStatusListener;
 import org.wlf.filedownloader.util.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CourseDownloadFragment extends BackHandledFragment implements CourseDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener {
+public class VideosDownloadedActivity extends FragmentActivity implements CourseDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener, OnFileDownloadStatusListener {
 
     private RecyclerView mRvCourseDownload;
     private CourseDownloadAdapter mCourseDownloadAdapter;
@@ -42,49 +42,45 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
     private Button mBtnDelete;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_download);
 
-        View rootView = getView();
+        mRvCourseDownload = (RecyclerView)findViewById(R.id.rvCourseDownload);
 
-        if (rootView == null) {
+        // create LinearLayoutManager
+        LinearLayoutManager layoutManager = new LinearLayoutManager(VideosDownloadedActivity.this);
+        // vertical layout
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        // set layoutManager
+        mRvCourseDownload.setLayoutManager(layoutManager);
 
-            rootView = inflater.inflate(R.layout.fragment_download, null);
-
-            mRvCourseDownload = (RecyclerView) rootView.findViewById(R.id.rvCourseDownload);
-
-            // create LinearLayoutManager
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            // vertical layout
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            // set layoutManager
-            mRvCourseDownload.setLayoutManager(layoutManager);
-
-            if (mCourseDownloadAdapter != null) {
-                mCourseDownloadAdapter.release();
-            }
-            mCourseDownloadAdapter = new CourseDownloadAdapter(getActivity(), null);
-            mRvCourseDownload.setAdapter(mCourseDownloadAdapter);
-
-            mRvCourseDownload.setItemAnimator(null);
-            mCourseDownloadAdapter.setOnItemSelectListener(this);
-
-            mLnlyOperation = (LinearLayout) rootView.findViewById(R.id.lnlyOperation);
-            mBtnPause = (Button) rootView.findViewById(R.id.btnPause);
-            mBtnStartOrContinue = (Button) rootView.findViewById(R.id.btnStartOrContinue);
-            mBtnDelete = (Button) rootView.findViewById(R.id.btnDelete);
-
-            initCourseDownloadData(true);
-
-            FileDownloader.registerDownloadStatusListener(mCourseDownloadAdapter);
-            FileDownloader.registerDownloadFileChangeListener(this);
+        if (mCourseDownloadAdapter != null) {
+            mCourseDownloadAdapter.release();
         }
+        mCourseDownloadAdapter = new CourseDownloadAdapter(VideosDownloadedActivity.this, null);
+        mRvCourseDownload.setAdapter(mCourseDownloadAdapter);
 
-        return rootView;
+        mRvCourseDownload.setItemAnimator(null);
+        mCourseDownloadAdapter.setOnItemSelectListener(this);
+
+        mLnlyOperation = (LinearLayout)findViewById(R.id.lnlyOperation);
+        mBtnPause = (Button)findViewById(R.id.btnPause);
+        mBtnStartOrContinue = (Button)findViewById(R.id.btnStartOrContinue);
+        mBtnDelete = (Button)findViewById(R.id.btnDelete);
+
+        initCourseDownloadData(true);
+
+        FileDownloader.registerDownloadStatusListener(mCourseDownloadAdapter);
+        FileDownloader.registerDownloadFileChangeListener(this);
+        FileDownloader.registerDownloadStatusListener(this);
     }
+
+
 
     private void initCourseDownloadData(final boolean clearSelects) {
         GetCourseDownloads getCourseDownloads = new GetCourseDownloads();
-        getCourseDownloads.getCourseDownloads(getActivity(), new GetCourseDownloads.OnGetCourseDownloadsListener() {
+        getCourseDownloads.getCourseDownloads(VideosDownloadedActivity.this, new GetCourseDownloads.OnGetCourseDownloadsListener() {
             @Override
             public void onGetCourseDownloadsSucceed(List<CoursePreviewInfo> coursePreviewInfos) {
                 mCourseDownloadAdapter.update(coursePreviewInfos, clearSelects);
@@ -92,9 +88,9 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
 
             @Override
             public void onGetCourseDownloadsFailed() {
-                ToastUtil.showToast(getActivity(), getActivity().getString(R.string.common__get_data_failed));
+                ToastUtil.showToast(VideosDownloadedActivity.this, VideosDownloadedActivity.this.getString(R.string.common__get_data_failed));
             }
-        },"18950060294","0");
+        },"18950060294","1");
     }
 
     @Override
@@ -188,7 +184,7 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
 
                     if (!CollectionUtil.isEmpty(needDeleteUrls)) {
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VideosDownloadedActivity.this);
                         String note = getString(R.string.course_center__course_cache_delete_confirm);
                         note = String.format(note, needDeleteUrls.size());
                         builder.setTitle(note);
@@ -223,7 +219,7 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
                                             @Override
                                             public void onDeleteDownloadFilesPrepared(List<DownloadFileInfo>
                                                                                               downloadFilesNeedDelete) {
-                                                Log.e("wlf", "开始批量删除，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
+                                                Log.e("", "开始批量删除，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
                                                         ());
                                                 showToast(getString(R.string.need_delete) +
                                                         downloadFilesNeedDelete.size());
@@ -256,7 +252,7 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
     }
 
     private void showToast(String msg) {
-        ToastUtil.showToast(getActivity(), msg);
+        ToastUtil.showToast(VideosDownloadedActivity.this, msg);
     }
 
     @Override
@@ -281,7 +277,37 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
 
 
     @Override
-    public boolean onBackPressed() {
-        return false;
+    public void onFileDownloadStatusWaiting(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusPreparing(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusPrepared(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusDownloading(DownloadFileInfo downloadFileInfo, float downloadSpeed, long remainingTime) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusPaused(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusCompleted(DownloadFileInfo downloadFileInfo) {
+
+    }
+
+    @Override
+    public void onFileDownloadStatusFailed(String url, DownloadFileInfo downloadFileInfo, FileDownloadStatusFailReason failReason) {
+                Log.e("url",url+"ppp"+"pppppppp"+failReason.getMessage()) ;
     }
 }

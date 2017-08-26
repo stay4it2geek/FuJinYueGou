@@ -21,8 +21,6 @@ public class CourseDbHelper extends BaseOrmLiteSQLiteHelper {
     }
 
     /**
-     * get CourseDbHelper single instance,if the instance is null,will init the instance and open the database
-     * <br/>
      * 获取单一实例，如果实例不存在将新创建，并且同时打开当前管理的数据库
      *
      * @param context

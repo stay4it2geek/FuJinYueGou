@@ -27,6 +27,11 @@
 		<item name="android:backgroundDimEnabled">true</item>
 	</style>
 
+	<!-- Variant of Theme.Holo.Dialog that does not include a title bar. -->
+	<style name="Theme.Holo.Dialog.CustomNoActionBar" parent="Theme.AppCompat.Dialog">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
 	<style name="CustomGiftDialog" parent="android:style/Theme.Dialog">
 		<!--背景颜色及和透明程度-->
 		<item name="android:windowBackground">@android:color/transparent</item>

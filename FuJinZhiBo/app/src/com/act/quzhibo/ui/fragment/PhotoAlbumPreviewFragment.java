@@ -19,7 +19,7 @@ import com.act.quzhibo.util.ToastUtil;
 import java.util.List;
 
 
-public class CoursePreviewFragment extends Fragment {
+public class PhotoAlbumPreviewFragment extends BackHandledFragment {
 
 
     private RecyclerView mRvCoursePreview;
@@ -72,6 +72,11 @@ public class CoursePreviewFragment extends Fragment {
                 ToastUtil.showToast(getActivity(), getActivity().getString(R.string.common__get_data_failed));
             }
         });
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 
     public static class CoursePreviewItemDecoration extends RecyclerView.ItemDecoration {

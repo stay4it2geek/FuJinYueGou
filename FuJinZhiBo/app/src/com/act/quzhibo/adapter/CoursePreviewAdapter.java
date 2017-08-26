@@ -84,12 +84,12 @@ public class CoursePreviewAdapter extends RecyclerView.Adapter<CoursePreviewAdap
                 // download course
                 if (TextUtils.isEmpty(coursePreviewInfo.getCourseUrl())) {
                     ToastUtil.showToast(v.getContext(), v.getContext().getString(R.string
-                            .advanced_use__course_preview_url_is_empty_note));
+                            .course_preview_url_is_empty_note));
                     return;
                 }
 
                 ToastUtil.showToast(v.getContext(), v.getContext().getString(R.string
-                        .advanced_use__course_preview_add_download) + coursePreviewInfo.getCourseName());
+                        .course_preview_add_download) + coursePreviewInfo.getCourseName());
                 // use FileDownloader to download
                 FileDownloader.start(coursePreviewInfo.getCourseUrl());
             }

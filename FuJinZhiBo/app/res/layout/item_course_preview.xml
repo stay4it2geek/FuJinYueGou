@@ -1,41 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:drawable/btn_default"
+    android:layout_margin="5dp"
+    android:background="@drawable/background_card"
     android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_margin="5dp"
             android:id="@+id/ivCourseCover"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_launcher"/>
+            android:layout_margin="5dp"
+            android:scaleType="fitXY" />
+
 
         <ImageView
             android:id="@+id/ivDownloadCourse"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@android:drawable/btn_default"
-            android:src="@drawable/downvideo"/>
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="10dp"
+            android:background="@drawable/download" />
     </FrameLayout>
+
 
     <TextView
         android:id="@+id/tvCourseName"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_margin="5dp"
-        android:gravity="center"
+        android:gravity="left|center_vertical"
         android:lines="2"
-        android:text="Course Name"
+        android:text=""
         android:textColor="@android:color/black"
-        android:textSize="15dp"/>
+        android:textSize="15dp" />
+
 
 </LinearLayout>

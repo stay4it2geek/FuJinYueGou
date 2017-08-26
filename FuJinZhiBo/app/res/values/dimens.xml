@@ -16,6 +16,6 @@
     <dimen name="heart_size_height">27.3dp</dimen>
     <dimen name="heart_size_width">32.5dp</dimen>
     <dimen name="size">12dp</dimen>
-    <dimen name="advanced_use___course_preview_item_decoration_margin">8dp</dimen>
+    <dimen name="_course_preview_item_decoration_margin">8dp</dimen>
 
 </resources>

@@ -17,8 +17,10 @@ import org.wlf.filedownloader.listener.OnDownloadFileChangeListener;
 
 import java.sql.SQLException;
 
+import cn.bmob.v3.BmobObject;
+
 @DatabaseTable(tableName = "tb_course")
-public class CoursePreviewInfo implements OnDownloadFileChangeListener {
+public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChangeListener {
 
     public static final String COLUMN_NAME_OF_FIELD_COURSE_URL = "course_url";
 
@@ -37,17 +39,37 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
     @DatabaseField(columnName = "course_name")
     private String mCourseName;//the name of the course
 
+    @DatabaseField(columnName = "author_id", unique = true, canBeNull = false)
+    private String mAuthorId;
+
+    @DatabaseField(columnName = "course_type", canBeNull = false)
+    private String mCourseType;//
+
     private DownloadFileInfo mDownloadFileInfo;//DownloadFileInfo
     private CourseDbHelper mCourseDbHelper;//the DbOpenHelper
 
-    private CoursePreviewInfo() {
-        init();
+    public void setmCourseId(String mCourseId) {
+        this.mCourseId = mCourseId;
     }
 
-    public CoursePreviewInfo(String courseId, String courseUrl, String courseCoverUrl, String courseName,
+    public void setmCourseCoverUrl(String mCourseCoverUrl) {
+        this.mCourseCoverUrl = mCourseCoverUrl;
+    }
+
+    public void setmCourseUrl(String mCourseUrl) {
+        this.mCourseUrl = mCourseUrl;
+    }
+
+    public void setmCourseName(String mCourseName) {
+        this.mCourseName = mCourseName;
+    }
+
+    public CoursePreviewInfo(String courseId, String courseUrl, String courseCoverUrl, String courseName, String authorId, String courseType,
                              CourseDbHelper courseDbHelper) {
         mCourseId = courseId;
         mCourseUrl = courseUrl;
+        mAuthorId = authorId;
+        mCourseType = courseType;
         mCourseCoverUrl = courseCoverUrl;
         mCourseName = courseName;
         mCourseDbHelper = courseDbHelper;
@@ -88,6 +110,10 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
         return mCourseUrl;
     }
 
+    public String getAuthorId() {
+        return mAuthorId;
+    }
+
     public String getCourseCoverUrl() {
         return mCourseCoverUrl;
     }
@@ -100,20 +126,20 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
         return mDownloadFileInfo;
     }
 
+    public void setCourseType(String mCourseType) {
+        this.mCourseType = mCourseType;
+    }
+
+    public String getCourseType() {
+        return mCourseType;
+    }
+
     @Override
     public void onDownloadFileCreated(DownloadFileInfo downloadFileInfo) {
 
         if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals
                 (mCourseUrl)) {
 
-            // add this CoursePreviewInfo in database download record
-            // 
-            // the reason why to save this CoursePreviewInfo in course database is 
-            // that when the user enter the CourseDownloadFragment,the fragment need to show the course title to the 
-            // user,however the DownloadFileInfo in FileDownloader can not provide the course title,also the fragment 
-            // need to know how many course items need to show,so it is depends on the size of the course database, 
-            // because FileDownloader is just a tool to download, record and manage all the files which were 
-            // downloaded from the internet
             try {
                 if (mCourseDbHelper == null) {
                     return;
@@ -133,8 +159,7 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
     @Override
     public void onDownloadFileUpdated(DownloadFileInfo downloadFileInfo, Type type) {
 
-        if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals
-                (mCourseUrl)) {
+        if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals(mCourseUrl)) {
             if (this.mDownloadFileInfo == null) {
                 try {
                     if (mCourseDbHelper == null) {

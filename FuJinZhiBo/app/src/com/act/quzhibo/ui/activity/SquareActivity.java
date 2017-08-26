@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.ui.fragment.CourseDownloadFragment;
-import com.act.quzhibo.ui.fragment.CoursePreviewFragment;
-import com.act.quzhibo.ui.fragment.FuliPicsFragement;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
+import com.act.quzhibo.ui.fragment.PhotoAlbumAuthorsFragment;
+import com.act.quzhibo.ui.fragment.VideosAuthorsFragment;
 
 import java.util.ArrayList;
 
@@ -32,17 +32,18 @@ public class SquareActivity extends TabSlideBaseActivity implements InterestPlat
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"专辑", "视频", "下载"};
+        return new String[]{"专辑", "视频", "下载一览"};
     }
 
     @Override
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new InterestPlatesFragment());
-        fragments.add(new FuliPicsFragement());
-        fragments.add(new CoursePreviewFragment());
-//        fragments.add(new NearFragment());
+        //        fragments.add(new InterestPlatesFragment());
+        //        fragments.add(new NearFragment());
+        fragments.add(new PhotoAlbumAuthorsFragment());
+        fragments.add(new VideosAuthorsFragment());
         fragments.add(new CourseDownloadFragment());
+
         return fragments;
     }
 
@@ -59,6 +60,6 @@ public class SquareActivity extends TabSlideBaseActivity implements InterestPlat
 
     @Override
     public void onNear() {
-        setPage(3);
+        setPage(1);
     }
 }

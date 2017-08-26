@@ -81,7 +81,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             return null;
         }
 
-        View itemView = View.inflate(parent.getContext(), R.layout.advanced_use__item_course_download, null);
+        View itemView = View.inflate(parent.getContext(), R.layout.item_download, null);
 
         // set item layout param
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
@@ -140,7 +140,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             holder.mTvDownloadSize.setText("00.00M/");
             holder.mTvTotalSize.setText("00.00M");
             holder.mTvPercent.setText("00.00%");
-            holder.mTvText.setText(context.getString(R.string.advanced_use__course_download_not_start));
+            holder.mTvText.setText(context.getString(R.string.course_download_not_start));
         } else {
             // course icon
             if ("mp4".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {//mp4
@@ -178,11 +178,11 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             switch (downloadFileInfo.getStatus()) {
                 // download file status:unknown
                 case Status.DOWNLOAD_STATUS_UNKNOWN:
-                    tvText.setText(context.getString(R.string.advanced_use__can_not_download));
+                    tvText.setText(context.getString(R.string.can_not_download));
                     break;
                 // download file status:waiting
                 case Status.DOWNLOAD_STATUS_WAITING:
-                    tvText.setText(context.getString(R.string.advanced_use__waiting));
+                    tvText.setText(context.getString(R.string.waiting));
                     break;
                 // download file status:waiting
                 case Status.DOWNLOAD_STATUS_RETRYING:
@@ -190,15 +190,15 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                     if (payload != null) {
                         retryTimesStr = "(" + payload.mRetryTimes + ")";
                     }
-                    tvText.setText(context.getString(R.string.advanced_use__retrying_connect_resource) + retryTimesStr);
+                    tvText.setText(context.getString(R.string.retrying_connect_resource) + retryTimesStr);
                     break;
                 // download file status:preparing
                 case Status.DOWNLOAD_STATUS_PREPARING:
-                    tvText.setText(context.getString(R.string.advanced_use__getting_resource));
+                    tvText.setText(context.getString(R.string.getting_resource));
                     break;
                 // download file status:prepared
                 case Status.DOWNLOAD_STATUS_PREPARED:
-                    tvText.setText(context.getString(R.string.advanced_use__connected_resource));
+                    tvText.setText(context.getString(R.string.connected_resource));
                     break;
                 // download file status:downloading
                 case Status.DOWNLOAD_STATUS_DOWNLOADING:
@@ -206,54 +206,52 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                         tvText.setText(MathUtil.formatNumber(payload.mDownloadSpeed) + "KB/s   " + CharUtils.TimeUtil
                                 .seconds2HH_mm_ss(payload.mRemainingTime));
                     } else {
-                        tvText.setText(context.getString(R.string.advanced_use__downloading));
+                        tvText.setText(context.getString(R.string.downloading));
                     }
                     break;
                 // download file status:paused
                 case Status.DOWNLOAD_STATUS_PAUSED:
-                    tvText.setText(context.getString(R.string.advanced_use__paused));
+                    tvText.setText(context.getString(R.string.paused));
                     break;
                 // download file status:error
                 case Status.DOWNLOAD_STATUS_ERROR:
 
-                    String msg = context.getString(R.string.advanced_use__download_error);
+                    String msg = context.getString(R.string.download_error);
 
                     if (payload != null && payload.mFailReason != null) {
                         FileDownloadStatusFailReason failReason = payload.mFailReason;
                         if (FileDownloadStatusFailReason.TYPE_NETWORK_DENIED.equals(failReason.getType())) {
-                            msg += context.getString(R.string.advanced_use__check_network);
+                            msg += context.getString(R.string.check_network);
                         } else if (FileDownloadStatusFailReason.TYPE_URL_ILLEGAL.equals(failReason.getType())) {
-                            msg += context.getString(R.string.advanced_use__url_illegal);
+                            msg += context.getString(R.string.url_illegal);
                         } else if (FileDownloadStatusFailReason.TYPE_NETWORK_TIMEOUT.equals(failReason.getType())) {
-                            msg += context.getString(R.string.advanced_use__network_timeout);
+                            msg += context.getString(R.string.network_timeout);
                         }
                     }
 
-                    tvText.setText(msg);
-
-                    tvText.setText(context.getString(R.string.advanced_use__download_error));
+                    tvText.setText(msg+context.getString(R.string.download_error));
                     break;
                 // download file status:completed
                 case Status.DOWNLOAD_STATUS_COMPLETED:
                     holder.mTvDownloadSize.setText("");
                     //mp4
                     if ("mp4".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {
-                        tvText.setText(context.getString(R.string.advanced_use__course_download_play_mp4));
+                        tvText.setText(context.getString(R.string.course_download_play_mp4));
                     }
                     //flv
                     else if ("flv".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {
-                        tvText.setText(context.getString(R.string.advanced_use__course_download_play_flv));
+                        tvText.setText(context.getString(R.string.course_download_play_flv));
                     }
                     //other
                     else {
                         //more
-                        tvText.setText(context.getString(R.string.advanced_use__download_completed));
+                        tvText.setText(context.getString(R.string.download_completed));
                     }
                     break;
                 // download file status:file not exist
                 case Status.DOWNLOAD_STATUS_FILE_NOT_EXIST:
                     holder.mTvDownloadSize.setText("");
-                    tvText.setText(context.getString(R.string.advanced_use__file_not_exist));
+                    tvText.setText(context.getString(R.string.file_not_exist));
                     break;
             }
         }
@@ -336,9 +334,9 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                         // download file status:unknown
                         case Status.DOWNLOAD_STATUS_UNKNOWN:
 
-                            showToast(context, context.getString(R.string.advanced_use__can_not_download2) +
+                            showToast(context, context.getString(R.string.can_not_download2) +
                                     downloadFileInfo.getFilePath() + context.getString(R.string
-                                    .advanced_use__re_download));
+                                    .re_download));
 
                             break;
                         // download file status:error & paused
@@ -348,24 +346,24 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                             // start
                             FileDownloader.start(url);
 
-                            showToast(context, context.getString(R.string.advanced_use__start_download) + courseName);
+                            showToast(context, context.getString(R.string.start_download) + courseName);
                             break;
                         // download file status:file not exist
                         case Status.DOWNLOAD_STATUS_FILE_NOT_EXIST:
 
                             // show dialog
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                            builder.setTitle(context.getString(R.string.advanced_use__whether_re_download))
-                                    .setNegativeButton(context.getString(R.string.advanced_use__dialog_btn_cancel), 
+                            builder.setTitle(context.getString(R.string.whether_re_download))
+                                    .setNegativeButton(context.getString(R.string.dialog_btn_cancel), 
                                             null);
-                            builder.setPositiveButton(context.getString(R.string.advanced_use__dialog_btn_confirm), 
+                            builder.setPositiveButton(context.getString(R.string.dialog_btn_confirm), 
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
 
                                             // re-download
                                             FileDownloader.reStart(url);
 
-                                            showToast(context, context.getString(R.string.advanced_use__re_download2)
+                                            showToast(context, context.getString(R.string.re_download2)
                                                     + courseName);
                                         }
                                     });
@@ -380,10 +378,10 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                             // pause
                             FileDownloader.pause(url);
 
-                            showToast(context, context.getString(R.string.advanced_use__paused_download) + courseName);
+                            showToast(context, context.getString(R.string.paused_download) + courseName);
 
                             if (holder.mTvText != null) {
-                                holder.mTvText.setText(context.getString(R.string.advanced_use__paused));
+                                holder.mTvText.setText(context.getString(R.string.paused));
                             }
                             break;
                         // download file status:completed
@@ -397,17 +395,17 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                             if (tvText != null) {
                                 //mp4
                                 if ("mp4".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {
-                                    tvText.setText(context.getString(R.string.advanced_use__course_download_play_mp4));
+                                    tvText.setText(context.getString(R.string.course_download_play_mp4));
                                 }
                                 //flv
                                 else if ("flv".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()
                                 ))) {
-                                    tvText.setText(context.getString(R.string.advanced_use__course_download_play_flv));
+                                    tvText.setText(context.getString(R.string.course_download_play_flv));
                                 }
                                 //other
                                 else {
                                     //more
-                                    tvText.setText(context.getString(R.string.advanced_use__download_completed));
+                                    tvText.setText(context.getString(R.string.download_completed));
                                 }
                             }
                             break;
@@ -501,27 +499,27 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
 
 
         if (mContext != null) {
-            String msg = mContext.getString(R.string.advanced_use__download_error);
+            String msg = mContext.getString(R.string.download_error);
 
             if (failReason != null) {
                 if (FileDownloadStatusFailReason.TYPE_NETWORK_DENIED.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__check_network);
+                    msg += mContext.getString(R.string.check_network);
                 } else if (FileDownloadStatusFailReason.TYPE_URL_ILLEGAL.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__url_illegal);
+                    msg += mContext.getString(R.string.url_illegal);
                 } else if (FileDownloadStatusFailReason.TYPE_NETWORK_TIMEOUT.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__network_timeout);
+                    msg += mContext.getString(R.string.network_timeout);
                 } else if (FileDownloadStatusFailReason.TYPE_STORAGE_SPACE_IS_FULL.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__storage_space_is_full);
+                    msg += mContext.getString(R.string.storage_space_is_full);
                 } else if (FileDownloadStatusFailReason.TYPE_STORAGE_SPACE_CAN_NOT_WRITE.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__storage_space_can_not_write);
+                    msg += mContext.getString(R.string.storage_space_can_not_write);
                 } else if (FileDownloadStatusFailReason.TYPE_FILE_NOT_DETECT.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__file_not_detect);
+                    msg += mContext.getString(R.string.file_not_detect);
                 } else if (FileDownloadStatusFailReason.TYPE_BAD_HTTP_RESPONSE_CODE.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__http_bad_response_code);
+                    msg += mContext.getString(R.string.http_bad_response_code);
                 } else if (FileDownloadStatusFailReason.TYPE_HTTP_FILE_NOT_EXIST.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__http_file_not_exist);
+                    msg += mContext.getString(R.string.http_file_not_exist);
                 } else if (FileDownloadStatusFailReason.TYPE_SAVE_FILE_NOT_EXIST.equals(failReason.getType())) {
-                    msg += mContext.getString(R.string.advanced_use__save_file_not_exist);
+                    msg += mContext.getString(R.string.save_file_not_exist);
                 }
             }
 

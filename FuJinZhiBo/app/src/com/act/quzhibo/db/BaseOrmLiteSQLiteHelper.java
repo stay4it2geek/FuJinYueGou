@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * base database helper class
- * <br/>
+ *
  * 基本的数据库帮助类，使用了OrmLite框架进行管理
  */
 public abstract class BaseOrmLiteSQLiteHelper extends OrmLiteSqliteOpenHelper {
@@ -61,8 +61,6 @@ public abstract class BaseOrmLiteSQLiteHelper extends OrmLiteSqliteOpenHelper {
 
     /**
      * 关闭并释放资源。包括释放单一实例自己。
-     * <p/>
-     * <li>
      * 应用退出时务必手动调用进行关闭
      */
     @Override

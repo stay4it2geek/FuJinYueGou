@@ -84,7 +84,7 @@ public class GetCoursePreviews {
             for (int i = 0; i < courseUrls.length; i++) {
                 String courseName = courseUrls[i].substring(courseUrls[i].lastIndexOf("/") + 1, courseUrls[i].length());
                 CoursePreviewInfo coursePreviewInfo = new CoursePreviewInfo("C" + i, courseUrls[i], coverUrls[i], 
-                        courseName, CourseDbHelper.getInstance(context));
+                        courseName,"18950060294","0", CourseDbHelper.getInstance(context));
                 coursePreviewInfos.add(coursePreviewInfo);
             }
 

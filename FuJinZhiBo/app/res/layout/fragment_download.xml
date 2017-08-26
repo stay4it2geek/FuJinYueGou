@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
@@ -18,7 +16,7 @@
             android:id="@+id/rvCourseDownload"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
@@ -27,30 +25,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@android:color/darker_gray"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnPause"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="@string/advanced_use__btn_pause"/>
+            android:background="@drawable/button_common_selector"
+            android:text="@string/btn_pause" />
 
         <Button
             android:id="@+id/btnStartOrContinue"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/advanced_use__btn_start_or_continue"/>
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="1.6"
+            android:background="@drawable/button_common_selector"
+            android:padding="5dp"
+            android:text="@string/btn_start_or_continue" />
 
         <Button
             android:id="@+id/btnDelete"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="@string/advanced_use__btn_delete"/>
+            android:background="@drawable/button_common_selector"
+            android:text="@string/btn_delete" />
     </LinearLayout>
 
 </FrameLayout>

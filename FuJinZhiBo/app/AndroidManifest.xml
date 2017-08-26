@@ -40,9 +40,9 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
 
     <application
@@ -124,7 +124,8 @@
             android:name="com.act.quzhibo.ui.activity.TermOfUseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait" /> <activity
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.MineActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
@@ -208,8 +209,8 @@
             android:name="com.act.quzhibo.ui.activity.VIPConisTableActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Holo.Dialog.CustomNoActionBar" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MyPostListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

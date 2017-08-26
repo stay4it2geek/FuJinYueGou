@@ -83,15 +83,15 @@ public class SettingMineInfoActivity extends FragmentActivity {
         if (rootUser != null) {
             CommonUtil.fecth(this);
             openSecret_switch.setChecked(rootUser.secretScan);
-            sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别是:" + rootUser.sex + "性");
+            sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别是" + rootUser.sex + "性");
             if (!TextUtils.isEmpty(rootUser.sex)) {
                 sex_txt.setTextColor(Color.LTGRAY);
                 findViewById(R.id.sex_rl).setVisibility(View.GONE);
             }
             openSecret_txt.setText(rootUser.secretScan ? "私密访问已开启" : "私密访问未开启");
             arealocation_txt.setText(TextUtils.isEmpty(rootUser.provinceAndcity) ? "省市区未设置" : "您的地区是" + rootUser.provinceAndcity);
-            age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "您的年龄是：" + rootUser.age + "岁");
-            disPurpose_txt.setText(TextUtils.isEmpty(rootUser.disPurpose) ? "情感状态未设置" : "您现在是:" + rootUser.disPurpose);
+            age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "您的年龄是" + rootUser.age + "岁");
+            disPurpose_txt.setText(TextUtils.isEmpty(rootUser.disPurpose) ? "情感状态未设置" : "您现在是" + rootUser.disPurpose);
             datingThought_txt.setText(TextUtils.isEmpty(rootUser.datingthought) ? "交友想法未设置" : "您想要" + rootUser.datingthought);
             candateThing_txt.setText(TextUtils.isEmpty(rootUser.canDateThing) ? "是否可约未设置" : "您可以" + rootUser.canDateThing);
         }
@@ -122,11 +122,13 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 SettingMineInfoActivity.this.finish();
             }
         });
-        getCanDatingThingData();
+
         getSexData();
+        getAgeData();
         getDatingThoughtData();
         getDisPurposeData();
-        getAgeData();
+        getCanDatingThingData();
+
         initSexOptionPicker();
         initAgeOptionPicker();
         initCanDatingThingOptionPicker();
@@ -163,6 +165,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 disPurposeOption.show();
             }
         });
+
         datingThought_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -274,7 +277,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         ageOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                age_txt.setText("您的年龄是：" + ageItems.get(options1).getPickerViewText() + "岁");
+                age_txt.setText("您的年龄是" + ageItems.get(options1).getPickerViewText() + "岁");
                 if (rootUser != null) {
                     updateUser.age = ageItems.get(options1).getPickerViewText() + "";
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
@@ -331,7 +334,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         candateThingOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                candateThing_txt.setText("您可以：" + candateThingiItems.get(options1).getPickerViewText());
+                candateThing_txt.setText("您可以" + candateThingiItems.get(options1).getPickerViewText());
                 if (rootUser != null) {
                     updateUser.canDateThing = candateThingiItems.get(options1).getPickerViewText() + "";
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
@@ -388,7 +391,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         sexOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                sex_txt.setText("您的性别是：" + sexItems.get(options1).getPickerViewText() + "性");
+                sex_txt.setText("您的性别是" + sexItems.get(options1).getPickerViewText() + "性");
 
                 if (rootUser != null) {
                     updateUser.sex = sexItems.get(options1).getPickerViewText() + "";
@@ -449,7 +452,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         datingThoughtOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                datingThought_txt.setText("交友想法是：" + datingThoughtItems.get(options1).getPickerViewText());
+                datingThought_txt.setText("交友想法是" + datingThoughtItems.get(options1).getPickerViewText());
                 if (rootUser != null) {
                     updateUser.datingthought = datingThoughtItems.get(options1).getPickerViewText() + "";
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
@@ -507,7 +510,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         disPurposeOption = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                disPurpose_txt.setText("您的状态是：" + disPurposeItems.get(options1).getPickerViewText());
+                disPurpose_txt.setText("您的状态是" + disPurposeItems.get(options1).getPickerViewText());
                 if (rootUser != null) {
                     updateUser.disPurpose = disPurposeItems.get(options1).getPickerViewText() + "";
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
@@ -576,13 +579,13 @@ public class SettingMineInfoActivity extends FragmentActivity {
         datingThoughtItems.add(new CardBean("来者不拒"));
         datingThoughtItems.add(new CardBean("长期交往"));
         datingThoughtItems.add(new CardBean("短期交往"));
-        datingThoughtItems.add(new CardBean("ons"));
+        datingThoughtItems.add(new CardBean("o－n－s"));
     }
 
     private void getCanDatingThingData() {
 
         candateThingiItems.add(new CardBean("见面一起做爱做的事"));
-        candateThingiItems.add(new CardBean("在软件里聊天就好"));
+        candateThingiItems.add(new CardBean("只在软件里聊天就好"));
         candateThingiItems.add(new CardBean("不想理任何人"));
 
     }
@@ -634,7 +637,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 String text = options1Items.get(options1).getPickerViewText() +
                         options2Items.get(options1).get(options2) +
                         options3Items.get(options1).get(options2).get(options3);
-                arealocation_txt.setText("您的地区是：" + text);
+                arealocation_txt.setText("您的地区是" + text);
                 if (rootUser != null) {
                     updateUser.provinceAndcity = text;
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {

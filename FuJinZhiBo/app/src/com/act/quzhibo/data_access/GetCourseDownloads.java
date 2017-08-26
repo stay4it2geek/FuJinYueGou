@@ -11,13 +11,13 @@ import java.util.List;
 
 public class GetCourseDownloads {
 
-    public void getCourseDownloads(Context context, OnGetCourseDownloadsListener onGetCourseDownloadsListener) {
+    public void getCourseDownloads(Context context, OnGetCourseDownloadsListener onGetCourseDownloadsListener,String authorId,String type) {
 
         List<CoursePreviewInfo> coursePreviewInfos = null;
 
         try {
             Dao<CoursePreviewInfo, Integer> dao = CourseDbHelper.getInstance(context).getDao(CoursePreviewInfo.class);
-            coursePreviewInfos = dao.queryForAll();
+            coursePreviewInfos = dao.queryBuilder().where().eq("author_id", authorId).and().eq("course_type", type).query();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

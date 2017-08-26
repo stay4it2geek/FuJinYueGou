@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -106,12 +107,12 @@ public class VipOrdersActivity extends FragmentActivity {
             public void done(List<VipOrders> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
-                        findViewById(R.id.tips).setVisibility(View.VISIBLE);
                         queryData(Constants.REFRESH);
                     } else {
                         loadNetView.setlayoutVisily(Constants.BUY_VIP);
                     }
                 } else {
+                    Log.e("fdsfds",e.getMessage());
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
