@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.CoursePreviewAdapter;
 import com.act.quzhibo.data_access.GetCoursePreviews;
@@ -18,9 +19,14 @@ import com.act.quzhibo.util.ToastUtil;
 
 import java.util.List;
 
-
 public class CoursePreviewFragment extends Fragment {
 
+    public static CoursePreviewFragment newInstance() {
+        CoursePreviewFragment frag = new CoursePreviewFragment();
+        //        Bundle args = new Bundle();
+        //        frag.setArguments(args);
+        return frag;
+    }
 
     private RecyclerView mRvCoursePreview;
     private CoursePreviewAdapter mCoursePreviewAdapter;
@@ -42,7 +48,7 @@ public class CoursePreviewFragment extends Fragment {
             if (mCoursePreviewAdapter != null) {
                 mCoursePreviewAdapter.release();
             }
-            mCoursePreviewAdapter = new CoursePreviewAdapter(getActivity(),null);
+            mCoursePreviewAdapter = new CoursePreviewAdapter(null);
             mRvCoursePreview.setAdapter(mCoursePreviewAdapter);
 
             initCoursePreviewData();
@@ -64,7 +70,7 @@ public class CoursePreviewFragment extends Fragment {
 
             @Override
             public void onGetCoursePreviewsSucceed(List<CoursePreviewInfo> coursePreviewInfos) {
-                mCoursePreviewAdapter.update(getActivity(),coursePreviewInfos);
+                mCoursePreviewAdapter.update(coursePreviewInfos);
             }
 
             @Override
@@ -80,7 +86,7 @@ public class CoursePreviewFragment extends Fragment {
 
         public CoursePreviewItemDecoration(Context context) {
             margin = context.getResources().getDimensionPixelSize(R.dimen
-                    ._course_preview_item_decoration_margin);
+                    .course_preview_item_decoration_margin);
         }
 
         @Override

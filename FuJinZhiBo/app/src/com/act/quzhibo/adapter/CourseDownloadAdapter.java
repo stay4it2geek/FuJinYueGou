@@ -30,6 +30,7 @@ import org.wlf.filedownloader.listener.OnRetryableFileDownloadStatusListener;
 import org.wlf.filedownloader.util.FileUtil;
 import org.wlf.filedownloader.util.MathUtil;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -229,7 +230,9 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                         }
                     }
 
-                    tvText.setText(msg+context.getString(R.string.download_error));
+                    tvText.setText(msg);
+
+                    tvText.setText(context.getString(R.string.download_error));
                     break;
                 // download file status:completed
                 case Status.DOWNLOAD_STATUS_COMPLETED:
@@ -263,7 +266,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                 if (isChecked) {
                     mSelectCoursePreviewInfos.add(coursePreviewInfo);
 
-                    Log.e("wlf", "isChecked=true mSelectCoursePreviewInfos.size:" + mSelectCoursePreviewInfos.size()
+                    Log.e("wlf", "isChecked=true mSelectCoursePreviewInfos.size:" + mSelectCoursePreviewInfos.size() 
                             + ",position:" + position);
 
                     if (mOnItemSelectListener != null) {
@@ -466,7 +469,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
     }
 
     @Override
-    public void onFileDownloadStatusDownloading(DownloadFileInfo downloadFileInfo, float downloadSpeed, long
+    public void onFileDownloadStatusDownloading(DownloadFileInfo downloadFileInfo, float downloadSpeed, long 
             remainingTime) {
         int position = findPosition(downloadFileInfo);
         if (position >= 0 && position < getItemCount()) {

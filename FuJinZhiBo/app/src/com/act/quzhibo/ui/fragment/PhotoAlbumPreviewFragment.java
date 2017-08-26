@@ -42,7 +42,7 @@ public class PhotoAlbumPreviewFragment extends BackHandledFragment {
             if (mCoursePreviewAdapter != null) {
                 mCoursePreviewAdapter.release();
             }
-            mCoursePreviewAdapter = new CoursePreviewAdapter(getActivity(),null);
+            mCoursePreviewAdapter = new CoursePreviewAdapter(null);
             mRvCoursePreview.setAdapter(mCoursePreviewAdapter);
 
             initCoursePreviewData();
@@ -64,7 +64,7 @@ public class PhotoAlbumPreviewFragment extends BackHandledFragment {
 
             @Override
             public void onGetCoursePreviewsSucceed(List<CoursePreviewInfo> coursePreviewInfos) {
-                mCoursePreviewAdapter.update(getActivity(),coursePreviewInfos);
+                mCoursePreviewAdapter.update(coursePreviewInfos);
             }
 
             @Override
@@ -85,7 +85,7 @@ public class PhotoAlbumPreviewFragment extends BackHandledFragment {
 
         public CoursePreviewItemDecoration(Context context) {
             margin = context.getResources().getDimensionPixelSize(R.dimen
-                    ._course_preview_item_decoration_margin);
+                    .course_preview_item_decoration_margin);
         }
 
         @Override

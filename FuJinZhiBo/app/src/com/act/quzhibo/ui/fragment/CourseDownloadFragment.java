@@ -27,11 +27,18 @@ import org.wlf.filedownloader.listener.OnDeleteDownloadFilesListener;
 import org.wlf.filedownloader.listener.OnDownloadFileChangeListener;
 import org.wlf.filedownloader.util.CollectionUtil;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
+public class CourseDownloadFragment extends Fragment implements CourseDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener {
 
-public class CourseDownloadFragment extends BackHandledFragment implements CourseDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener {
+    public static CourseDownloadFragment newInstance() {
+        CourseDownloadFragment frag = new CourseDownloadFragment();
+        //        Bundle args = new Bundle();
+        //        frag.setArguments(args);
+        return frag;
+    }
 
     private RecyclerView mRvCourseDownload;
     private CourseDownloadAdapter mCourseDownloadAdapter;
@@ -104,7 +111,7 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
         FileDownloader.unregisterDownloadFileChangeListener(this);
         if (mCourseDownloadAdapter != null) {
             mCourseDownloadAdapter.release();
-        }
+        }   
     }
 
     @Override
@@ -192,63 +199,64 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
                         String note = getString(R.string.course_center__course_cache_delete_confirm);
                         note = String.format(note, needDeleteUrls.size());
                         builder.setTitle(note);
-                        builder.setNegativeButton("cancel", null);
-                        builder.setPositiveButton("confirm", new
+                        builder.setNegativeButton("取消", null);
+                        builder.setPositiveButton("确认", new
                                 DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                FileDownloader.delete(needDeleteUrls, true, new OnDeleteDownloadFilesListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                    public void onDeletingDownloadFiles(List<DownloadFileInfo> 
+                                                                                downloadFilesNeedDelete, 
+                                                                        List<DownloadFileInfo> downloadFilesDeleted, 
+                                                                        List<DownloadFileInfo> downloadFilesSkip, 
+                                                                        DownloadFileInfo downloadFileDeleting) {
+                                        Log.e("wlf", "批量删除中，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
+                                                () + ",downloadFilesDeleted:" + downloadFilesDeleted.size());
+                                        if (downloadFileDeleting != null && downloadFilesSkip != null) {
+                                            showToast(getString(R.string.deleting) +
+                                                    downloadFileDeleting.getFileName() +
+                                                    getString(R.string.progress) +
+                                                    (downloadFilesDeleted.size() + downloadFilesSkip.size()) +
+                                                    getString(R.string.failed2) +
+                                                    downloadFilesSkip.size() + getString(R.string
+                                                    .skip_and_total_delete_division) +
 
-                                        FileDownloader.delete(needDeleteUrls, true, new OnDeleteDownloadFilesListener() {
-                                            @Override
-                                            public void onDeletingDownloadFiles(List<DownloadFileInfo>
-                                                                                        downloadFilesNeedDelete,
-                                                                                List<DownloadFileInfo> downloadFilesDeleted,
-                                                                                List<DownloadFileInfo> downloadFilesSkip,
-                                                                                DownloadFileInfo downloadFileDeleting) {
-                                                Log.e("wlf", "批量删除中，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
-                                                        () + ",downloadFilesDeleted:" + downloadFilesDeleted.size());
-                                                if (downloadFileDeleting != null && downloadFilesSkip != null) {
-                                                    showToast(getString(R.string.deleting) +
-                                                            downloadFileDeleting.getFileName() +
-                                                            getString(R.string.progress) +
-                                                            (downloadFilesDeleted.size() + downloadFilesSkip.size()) +
-                                                            getString(R.string.failed2) +
-                                                            downloadFilesSkip.size() + getString(R.string
-                                                            .skip_and_total_delete_division) +
+                                                    downloadFilesNeedDelete.size());
+                                        }
+                                    }
 
-                                                            downloadFilesNeedDelete.size());
-                                                }
-                                            }
+                                    @Override
+                                    public void onDeleteDownloadFilesPrepared(List<DownloadFileInfo> 
+                                                                                      downloadFilesNeedDelete) {
+                                        Log.e("wlf", "开始批量删除，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
+                                                ());
+                                        showToast(getString(R.string.need_delete) + 
+                                                downloadFilesNeedDelete.size());
+                                    }
 
-                                            @Override
-                                            public void onDeleteDownloadFilesPrepared(List<DownloadFileInfo>
-                                                                                              downloadFilesNeedDelete) {
-                                                Log.e("wlf", "开始批量删除，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
-                                                        ());
-                                                showToast(getString(R.string.need_delete) +
-                                                        downloadFilesNeedDelete.size());
-                                            }
-
-                                            @Override
-                                            public void onDeleteDownloadFilesCompleted(List<DownloadFileInfo>
-                                                                                               downloadFilesNeedDelete,
-                                                                                       List<DownloadFileInfo>
-                                                                                               downloadFilesDeleted) {
-                                                Log.e("wlf", "批量删除完成，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
-                                                        () + ",downloadFilesDeleted:" + downloadFilesDeleted.size());
-                                                showToast(getString(R.string.delete_finish) +
-                                                        downloadFilesDeleted.size() +
-                                                        getString(R.string.failed3) + (downloadFilesNeedDelete
-                                                        .size() - downloadFilesDeleted.size()));
-                                            }
-                                        });
-                                        //
-                                        dialog.dismiss();
+                                    @Override
+                                    public void onDeleteDownloadFilesCompleted(List<DownloadFileInfo> 
+                                                                                       downloadFilesNeedDelete, 
+                                                                               List<DownloadFileInfo> 
+                                                                                       downloadFilesDeleted) {
+                                        Log.e("wlf", "批量删除完成，downloadFilesNeedDelete：" + downloadFilesNeedDelete.size
+                                                () + ",downloadFilesDeleted:" + downloadFilesDeleted.size());
+                                        showToast(getString(R.string.delete_finish) +
+                                                downloadFilesDeleted.size() +
+                                                getString(R.string.failed3) + (downloadFilesNeedDelete
+                                                .size() - downloadFilesDeleted.size()));
                                     }
                                 });
+                                // 
+                                dialog.dismiss();
+                            }
+                        });
                         builder.show();
                     } else {
                         showToast(getString(R.string.delete_failed));
+                        // can not do it
                     }
                 }
             }
@@ -279,9 +287,4 @@ public class CourseDownloadFragment extends BackHandledFragment implements Cours
         initCourseDownloadData(true);
     }
 
-
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
 }

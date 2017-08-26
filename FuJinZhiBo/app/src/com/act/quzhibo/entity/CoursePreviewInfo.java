@@ -48,20 +48,33 @@ public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChang
     private DownloadFileInfo mDownloadFileInfo;//DownloadFileInfo
     private CourseDbHelper mCourseDbHelper;//the DbOpenHelper
 
-    public void setmCourseId(String mCourseId) {
-        this.mCourseId = mCourseId;
+    private CoursePreviewInfo() {
+        init();
     }
 
-    public void setmCourseCoverUrl(String mCourseCoverUrl) {
-        this.mCourseCoverUrl = mCourseCoverUrl;
+
+    public void setmCourseId(String mCourseId) {
+        this.mCourseId = mCourseId;
     }
 
     public void setmCourseUrl(String mCourseUrl) {
         this.mCourseUrl = mCourseUrl;
     }
 
+    public void setmCourseCoverUrl(String mCourseCoverUrl) {
+        this.mCourseCoverUrl = mCourseCoverUrl;
+    }
+
     public void setmCourseName(String mCourseName) {
         this.mCourseName = mCourseName;
+    }
+
+    public void setmAuthorId(String mAuthorId) {
+        this.mAuthorId = mAuthorId;
+    }
+
+    public void setmCourseType(String mCourseType) {
+        this.mCourseType = mCourseType;
     }
 
     public CoursePreviewInfo(String courseId, String courseUrl, String courseCoverUrl, String courseName, String authorId, String courseType,
@@ -125,11 +138,6 @@ public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChang
     public DownloadFileInfo getDownloadFileInfo() {
         return mDownloadFileInfo;
     }
-
-    public void setCourseType(String mCourseType) {
-        this.mCourseType = mCourseType;
-    }
-
     public String getCourseType() {
         return mCourseType;
     }
@@ -159,7 +167,8 @@ public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChang
     @Override
     public void onDownloadFileUpdated(DownloadFileInfo downloadFileInfo, Type type) {
 
-        if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals(mCourseUrl)) {
+        if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals
+                (mCourseUrl)) {
             if (this.mDownloadFileInfo == null) {
                 try {
                     if (mCourseDbHelper == null) {
