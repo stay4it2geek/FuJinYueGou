@@ -11,6 +11,39 @@
         android:layout_height="@dimen/commonViewHeight" />
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff">
+
+        <ImageView
+            android:id="@+id/openSecret_img"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/yinsi" />
+
+        <TextView
+            android:id="@+id/openSecret_txt"
+            style="@style/textStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/openSecret_img"
+            android:gravity="center_vertical"
+            android:paddingTop="3dp"
+            android:text="是否开启私密模式" />
+
+        <Switch
+            android:id="@+id/openSecret_switch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp" />
+    </RelativeLayout>
+    <RelativeLayout
         android:id="@+id/modifyPSWlayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight"
@@ -44,39 +77,6 @@
             android:background="@drawable/rightarr" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"
-        android:layout_marginTop="1dp"
-        android:background="#fff">
-
-        <ImageView
-            android:id="@+id/openSecret_img"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:background="@drawable/yinsi" />
-
-        <TextView
-            android:id="@+id/openSecret_txt"
-            style="@style/textStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/openSecret_img"
-            android:gravity="center_vertical"
-            android:paddingTop="3dp"
-            android:text="是否开启私密模式" />
-
-        <Switch
-            android:id="@+id/openSecret_switch"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp" />
-    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingTop="3dp"
-            android:text="设置性别，设置后无法更改" />
+            android:text="设置性别后无法更改，要真实哦" />
 
         <RelativeLayout
             android:id="@+id/sex_rl"
@@ -123,7 +123,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:gravity="center_vertical|left"
-            android:text="设置年龄" />
+            android:text="设置您的年龄" />
 
         <ImageView
             android:layout_width="40dp"
@@ -149,7 +149,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:text="设置省份城市" />
+            android:text="设置您的地区" />
 
         <ImageView
             android:layout_width="40dp"
@@ -160,5 +160,79 @@
             android:background="@drawable/spinner" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff">
+
+        <TextView
+            android:id="@+id/datingThought_txt"
+            style="@style/textStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="设置交友想法" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/spinner" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff">
+
+        <TextView
+            android:id="@+id/candateThing_txt"
+            style="@style/textStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="设置是否可约" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/spinner" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:layout_marginTop="1dp"
+        android:background="#fff">
+
+        <TextView
+            android:id="@+id/disPurpose_txt"
+            style="@style/textStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="设置情感状态" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/spinner" />
+    </RelativeLayout>
 
 </LinearLayout>

@@ -98,7 +98,6 @@ public class MyPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             });
 
             if (rootUser.photoUrlFile != null) {
-                Log.e("ffffff",rootUser.photoUrlFile.getUrl()+"LLLLL"+rootUser.photoUrlFile.getFileUrl()) ;
                 if (rootUser.sex.equals("女")) {
                     Glide.with(activity).load(rootUser.photoUrlFile.getUrl()).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                         @Override

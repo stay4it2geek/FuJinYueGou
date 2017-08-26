@@ -21,6 +21,7 @@ import com.act.quzhibo.ui.activity.PicsDownLoadHistoryActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
+import com.act.quzhibo.ui.activity.VIPConisTableActivity;
 import com.act.quzhibo.ui.activity.VideoDownLoadHistoryActivty;
 import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
@@ -54,7 +55,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
         }
 
-        view.findViewById(R.id.isLogin).setOnClickListener(this);
+        view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
         view.findViewById(R.id.vip_order_listlayout).setOnClickListener(this);
@@ -78,18 +79,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(final View view) {
-        if (view.getId() == R.id.isLogin) {
-            if (rootUser == null) {
-                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
+        if (view.getId() == R.id.vipLevel) {
+            startActivity(new Intent(getActivity(), VIPConisTableActivity.class));
             return;
         }
-        //点击效果
         view.setBackgroundColor(getResources().getColor(R.color.colorbg));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                //还原
                 view.setBackgroundColor(getResources().getColor(R.color.white));
                 if (rootUser == null) {
                     if (view.getId() == R.id.vip_policy) {
@@ -158,15 +155,23 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             CommonUtil.fecth(getActivity());
             view.findViewById(R.id.registerLayout).setVisibility(View.GONE);
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
-            ((TextView) view.findViewById(R.id.isLogin)).setText("已登录");
             ((TextView) view.findViewById(R.id.nickName)).setText(rootUser.getUsername() != null ? rootUser.getUsername() : "未设置昵称");
-            ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis!= null&& rootUser.vipConis>0? rootUser.vipConis+"趣币" : "您趣币不足");
-            String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex+"性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age+"岁");
+            ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis != null && rootUser.vipConis > 0 ? rootUser.vipConis + "趣币" : "您趣币不足");
+            String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex + "性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age + "岁");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
+            if (0 < rootUser.vipConis && rootUser.vipConis < 3000) {
+                ((TextView) view.findViewById(R.id.vipLevel)).setText("初级趣会员");
+            } else if (3000 < rootUser.vipConis && rootUser.vipConis < 5000) {
+                ((TextView) view.findViewById(R.id.vipLevel)).setText("中级趣会员");
+            } else if (5000 < rootUser.vipConis && rootUser.vipConis < 8000) {
+                ((TextView) view.findViewById(R.id.vipLevel)).setText("特级趣会员");
+            } else if (rootUser.vipConis > 8000) {
+                ((TextView) view.findViewById(R.id.vipLevel)).setText("超级趣会员");
+
+            }
         } else {
             view.findViewById(R.id.registerLayout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.logout).setVisibility(View.GONE);
-            ((TextView) view.findViewById(R.id.isLogin)).setText("去登录");
             ((TextView) view.findViewById(R.id.nickName)).setText("未设置昵称");
             ((TextView) view.findViewById(R.id.vip_coins)).setText("您趣币不足");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");

@@ -46,7 +46,10 @@ public class MyPostListActivity extends AppCompatActivity {
     private XRecyclerView recyclerView;
     private MyPostListAdapter myPostListAdapter;
     private LoadNetView loadNetView;
-
+    private int limit = 10; // 每页的数据是10条
+    private String lastTime = "";
+    private ArrayList<MyPost> myPosts = new ArrayList<>();
+    private int myPostsSize;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +99,7 @@ public class MyPostListActivity extends AppCompatActivity {
 
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
+        findViewById(R.id.postButton).setVisibility(View.VISIBLE);
         titlebar.setBarTitle("我 的 状 态");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
@@ -105,10 +109,6 @@ public class MyPostListActivity extends AppCompatActivity {
         });
     }
 
-
-    private int limit = 10; // 每页的数据是10条
-    String lastTime = "";
-    ArrayList<MyPost> myPosts = new ArrayList<>();
 
     /**
      * 分页获取数据
@@ -182,7 +182,6 @@ public class MyPostListActivity extends AppCompatActivity {
 
     }
 
-    private int myPostsSize;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -203,7 +202,7 @@ public class MyPostListActivity extends AppCompatActivity {
                                 public void onItemClick(MyPost post) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.POST_ID, post);
-                                    intent.setClass(MyPostListActivity.this, PostDetailActivity.class);
+                                    intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
                                     startActivity(intent);
                                 }
                             });

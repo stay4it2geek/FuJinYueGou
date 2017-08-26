@@ -49,13 +49,17 @@
                 tl:tl_textUnselectColor="#8F8F8F"
                 tl:tl_textsize="18sp">
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/postImg"-->
-                    <!--android:layout_width="32dp"-->
-                    <!--android:layout_height="32dp"-->
-                    <!--android:layout_gravity="right"-->
-                    <!--android:layout_margin="5dp"-->
-                    <!--android:background="@drawable/post" />-->
+                <Button
+                    android:id="@+id/isLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:background="@drawable/button_common_selector"
+                    android:text="去登录"
+                    android:textColor="@color/red"
+                    android:textSize="16sp" />
+
             </com.flyco.tablayout.CommonTabLayout>
         </LinearLayout>
 

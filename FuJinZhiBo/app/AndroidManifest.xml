@@ -200,6 +200,17 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.act.quzhibo.ui.activity.MyPostDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.VIPConisTableActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.MyPostListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"

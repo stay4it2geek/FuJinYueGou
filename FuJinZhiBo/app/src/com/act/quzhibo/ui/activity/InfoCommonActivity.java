@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostListInfoPersonParentData;
@@ -32,6 +33,7 @@ import com.youth.banner.Banner;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cn.bmob.v3.BmobUser;
 import okhttp3.Call;
 
 public class InfoCommonActivity extends AppCompatActivity {
@@ -119,6 +121,13 @@ public class InfoCommonActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.disPurpose)).setText(post.user.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(post.user.disMariState);
         ((TextView) findViewById(R.id.nickName)).setText(post.user.nick);
+        findViewById(R.id.talk_accese).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(InfoCommonActivity.this, GetVipPayActivity.class));
+            }
+        });
+
         getTextAndImageData();
 
     }
@@ -160,8 +169,15 @@ public class InfoCommonActivity extends AppCompatActivity {
                                 imgs.addAll(post.images);
                             }
                         }
+                        RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
+                        int isBlurType = 0;
+                        if (rootUser != null && rootUser.vipConis > 1000) {
+                            isBlurType = 1;
+                        } else {
+                            isBlurType = 0;
+                        }
                         if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                            gridView.setAdapter(new PostImageAdapter(InfoCommonActivity.this, imgs, 2, 0));
+                            gridView.setAdapter(new PostImageAdapter(InfoCommonActivity.this, imgs, 2, isBlurType));
                             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -179,7 +195,7 @@ public class InfoCommonActivity extends AppCompatActivity {
                     loadNetView.setlayoutVisily(Constants.RELOAD);
                 }
 
-            }else {
+            } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }

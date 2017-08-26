@@ -1,6 +1,8 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -45,36 +48,52 @@ public class SettingMineInfoActivity extends FragmentActivity {
     private ArrayList<CardBean> ageItems = new ArrayList<>();
     private TextView age_txt;
     private TextView sex_txt;
+
     private RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
     private RootUser updateUser = new RootUser();
 
     private TextView openSecret_txt;
     private Switch openSecret_switch;
     private TextView arealocation_txt;
+
+    private ArrayList<CardBean> sexItems = new ArrayList<>();
     private ArrayList<JsonBean> options1Items = new ArrayList<>();
+    private ArrayList<CardBean> candateThingiItems = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+    private ArrayList<CardBean> datingThoughtItems = new ArrayList<>();
+    private ArrayList<CardBean> disPurposeItems = new ArrayList<>();
     private Thread thread;
     private static final int MSG_LOAD_DATA = 0x0001;
     private static final int MSG_LOAD_SUCCESS = 0x0002;
     private static final int MSG_LOAD_FAILED = 0x0003;
     private boolean isLoaded = false;
-    private ArrayList<CardBean> sexItems = new ArrayList<>();
+
+    private OptionsPickerView datingThoughtOptions;
+    private OptionsPickerView disPurposeOption;
+    private TextView disPurpose_txt;
+    private TextView datingThought_txt;
+    private TextView candateThing_txt;
+    private OptionsPickerView candateThingOptions;
 
     @Override
     protected void onResume() {
         super.onResume();
 
         if (rootUser != null) {
+            CommonUtil.fecth(this);
             openSecret_switch.setChecked(rootUser.secretScan);
-            sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别已设置为：" + rootUser.sex);
+            sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别是:" + rootUser.sex + "性");
             if (!TextUtils.isEmpty(rootUser.sex)) {
                 sex_txt.setTextColor(Color.LTGRAY);
                 findViewById(R.id.sex_rl).setVisibility(View.GONE);
             }
             openSecret_txt.setText(rootUser.secretScan ? "私密访问已开启" : "私密访问未开启");
-            arealocation_txt.setText(TextUtils.isEmpty(rootUser.provinceAndcity) ? "省市区未设置" : "你的地址是" + rootUser.provinceAndcity);
-            age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "你的年龄已设置为：" + rootUser.age);
+            arealocation_txt.setText(TextUtils.isEmpty(rootUser.provinceAndcity) ? "省市区未设置" : "您的地区是" + rootUser.provinceAndcity);
+            age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "您的年龄是：" + rootUser.age + "岁");
+            disPurpose_txt.setText(TextUtils.isEmpty(rootUser.disPurpose) ? "情感状态未设置" : "您现在是:" + rootUser.disPurpose);
+            datingThought_txt.setText(TextUtils.isEmpty(rootUser.datingthought) ? "交友想法未设置" : "您想要" + rootUser.datingthought);
+            candateThing_txt.setText(TextUtils.isEmpty(rootUser.canDateThing) ? "是否可约未设置" : "您可以" + rootUser.canDateThing);
         }
     }
 
@@ -86,7 +105,12 @@ public class SettingMineInfoActivity extends FragmentActivity {
         openSecret_switch = (Switch) findViewById(R.id.openSecret_switch);
         openSecret_txt = (TextView) findViewById(R.id.openSecret_txt);
         sex_txt = (TextView) findViewById(R.id.sex_txt);
+        disPurpose_txt = (TextView) findViewById(R.id.disPurpose_txt);
+        datingThought_txt = (TextView) findViewById(R.id.datingThought_txt);
+        candateThing_txt = (TextView) findViewById(R.id.candateThing_txt);
         arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
+
+
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
 
 
@@ -98,19 +122,16 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 SettingMineInfoActivity.this.finish();
             }
         });
-
+        getCanDatingThingData();
         getSexData();
-        initSexOptionPicker();
+        getDatingThoughtData();
+        getDisPurposeData();
         getAgeData();
+        initSexOptionPicker();
         initAgeOptionPicker();
-
-
-        if (rootUser != null) {
-            openSecret_switch.setChecked(rootUser.secretScan);
-            openSecret_txt.setText(rootUser.secretScan ? "私密访问已开启" : "私密访问未开启");
-            arealocation_txt.setText(TextUtils.isEmpty(rootUser.provinceAndcity) ? "省市区未设置" : "你的地址是" + rootUser.provinceAndcity);
-            age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "你的年龄已设置为：" + rootUser.age);
-        }
+        initCanDatingThingOptionPicker();
+        initDatingThoughtOptionPicker();
+        initDisPurposeOptionPicker();
 
         findViewById(R.id.modifyPSWlayout).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +157,25 @@ public class SettingMineInfoActivity extends FragmentActivity {
             }
         });
 
+        disPurpose_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disPurposeOption.show();
+            }
+        });
+        datingThought_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datingThoughtOptions.show();
+            }
+        });
+
+        candateThing_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                candateThingOptions.show();
+            }
+        });
         age_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,7 +217,8 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                                         public void onNegtiveClick(Dialog dialog) {
                                                             dialog.dismiss();
                                                         }
-                                                    }).show(getSupportFragmentManager(),"");                                                }
+                                                    }).show(getSupportFragmentManager(), "");
+                                                }
 
                                             }
                                         }
@@ -215,7 +256,8 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                             public void onNegtiveClick(Dialog dialog) {
                                                 dialog.dismiss();
                                             }
-                                        }).show(getSupportFragmentManager(),"");                                    }
+                                        }).show(getSupportFragmentManager(), "");
+                                    }
                                 }
                             }
                         });
@@ -232,7 +274,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         ageOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                age_txt.setText("你的年龄已设置为：" + ageItems.get(options1).getPickerViewText() + "岁");
+                age_txt.setText("您的年龄是：" + ageItems.get(options1).getPickerViewText() + "岁");
                 if (rootUser != null) {
                     updateUser.age = ageItems.get(options1).getPickerViewText() + "";
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
@@ -255,7 +297,8 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                         public void onNegtiveClick(Dialog dialog) {
                                             dialog.dismiss();
                                         }
-                                    }).show(getSupportFragmentManager(),"");                                }
+                                    }).show(getSupportFragmentManager(), "");
+                                }
                             }
                         }
                     });
@@ -284,11 +327,68 @@ public class SettingMineInfoActivity extends FragmentActivity {
         ageOptions.setPicker(ageItems);//添加数据
     }
 
+    private void initCanDatingThingOptionPicker() {
+        candateThingOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                candateThing_txt.setText("您可以：" + candateThingiItems.get(options1).getPickerViewText());
+                if (rootUser != null) {
+                    updateUser.canDateThing = candateThingiItems.get(options1).getPickerViewText() + "";
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                CommonUtil.fecth(SettingMineInfoActivity.this);
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "是否可约更新成功");
+                            } else {
+                                if (e.getErrorCode() == 206) {
+                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            rootUser.logOut();
+                                            SettingMineInfoActivity.this.finish();
+                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show(getSupportFragmentManager(), "");
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }).setDividerColor(Color.BLACK).setTitleText("年龄选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+            @Override
+            public void customLayout(View v) {
+                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
+                tvSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        candateThingOptions.returnData();
+                        candateThingOptions.dismiss();
+                    }
+                });
+                ivCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        candateThingOptions.dismiss();
+                    }
+                });
+            }
+        }).isDialog(true).build();
+        candateThingOptions.setPicker(candateThingiItems);
+    }
+
     private void initSexOptionPicker() {
         sexOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                sex_txt.setText("你的性别已设置为：" + sexItems.get(options1).getPickerViewText() + "性");
+                sex_txt.setText("您的性别是：" + sexItems.get(options1).getPickerViewText() + "性");
 
                 if (rootUser != null) {
                     updateUser.sex = sexItems.get(options1).getPickerViewText() + "";
@@ -314,7 +414,8 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                         public void onNegtiveClick(Dialog dialog) {
                                             dialog.dismiss();
                                         }
-                                    }).show(getSupportFragmentManager(),"");                                }
+                                    }).show(getSupportFragmentManager(), "");
+                                }
                             }
                         }
                     });
@@ -341,6 +442,149 @@ public class SettingMineInfoActivity extends FragmentActivity {
             }
         }).isDialog(true).build();
         sexOptions.setPicker(sexItems);//添加数据
+    }
+
+
+    private void initDatingThoughtOptionPicker() {
+        datingThoughtOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                datingThought_txt.setText("交友想法是：" + datingThoughtItems.get(options1).getPickerViewText());
+                if (rootUser != null) {
+                    updateUser.datingthought = datingThoughtItems.get(options1).getPickerViewText() + "";
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                CommonUtil.fecth(SettingMineInfoActivity.this);
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "交友想法更新成功");
+                            } else {
+                                if (e.getErrorCode() == 206) {
+                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            rootUser.logOut();
+                                            SettingMineInfoActivity.this.finish();
+                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show(getSupportFragmentManager(), "");
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }).setDividerColor(Color.BLACK).setTitleText("交友想法选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+            @Override
+            public void customLayout(View v) {
+                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
+                tvSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datingThoughtOptions.returnData();
+                        datingThoughtOptions.dismiss();
+                    }
+                });
+                ivCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datingThoughtOptions.dismiss();
+                    }
+                });
+            }
+        }).isDialog(true).build();
+        datingThoughtOptions.setPicker(datingThoughtItems);
+    }
+
+
+    private void initDisPurposeOptionPicker() {
+        disPurposeOption = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                disPurpose_txt.setText("您的状态是：" + disPurposeItems.get(options1).getPickerViewText());
+                if (rootUser != null) {
+                    updateUser.disPurpose = disPurposeItems.get(options1).getPickerViewText() + "";
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                CommonUtil.fecth(SettingMineInfoActivity.this);
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "情感状态更新成功");
+                            } else {
+                                if (e.getErrorCode() == 206) {
+                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请登出并重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog) {
+                                            rootUser.logOut();
+                                            SettingMineInfoActivity.this.finish();
+                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show(getSupportFragmentManager(), "");
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }).setDividerColor(Color.BLACK).setTitleText("情感状态选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+            @Override
+            public void customLayout(View v) {
+                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
+                tvSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        disPurposeOption.returnData();
+                        disPurposeOption.dismiss();
+                    }
+                });
+                ivCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        disPurposeOption.dismiss();
+                    }
+                });
+            }
+        }).isDialog(true).build();
+        disPurposeOption.setPicker(disPurposeItems);//添加数据
+    }
+
+
+    private void getDisPurposeData() {
+
+        disPurposeItems.add(new CardBean("已经结婚了"));
+        disPurposeItems.add(new CardBean("刚刚交往中"));
+        disPurposeItems.add(new CardBean("正在分手期"));
+        disPurposeItems.add(new CardBean("正在热恋期"));
+        disPurposeItems.add(new CardBean("单身狗一枚"));
+    }
+
+
+    private void getDatingThoughtData() {
+
+        datingThoughtItems.add(new CardBean("来者不拒"));
+        datingThoughtItems.add(new CardBean("长期交往"));
+        datingThoughtItems.add(new CardBean("短期交往"));
+        datingThoughtItems.add(new CardBean("ons"));
+    }
+
+    private void getCanDatingThingData() {
+
+        candateThingiItems.add(new CardBean("见面一起做爱做的事"));
+        candateThingiItems.add(new CardBean("在软件里聊天就好"));
+        candateThingiItems.add(new CardBean("不想理任何人"));
+
     }
 
 
@@ -390,7 +634,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 String text = options1Items.get(options1).getPickerViewText() +
                         options2Items.get(options1).get(options2) +
                         options3Items.get(options1).get(options2).get(options3);
-                arealocation_txt.setText(text);
+                arealocation_txt.setText("您的地区是：" + text);
                 if (rootUser != null) {
                     updateUser.provinceAndcity = text;
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
@@ -412,7 +656,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                         public void onNegtiveClick(Dialog dialog) {
                                             dialog.dismiss();
                                         }
-                                    }).show(getSupportFragmentManager(),"");
+                                    }).show(getSupportFragmentManager(), "");
                                 }
                             }
                         }

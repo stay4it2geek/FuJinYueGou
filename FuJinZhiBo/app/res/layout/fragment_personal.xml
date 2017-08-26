@@ -9,49 +9,48 @@
         android:layout_height="90dp"
         android:background="@color/tabline">
 
-        <ImageView
-            android:id="@+id/userAvtar"
+        <FrameLayout
+            android:id="@+id/avaterlayout"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/man"
-            android:src="@drawable/layerlist_circle_mask_personnal" />
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:id="@+id/userAvtar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/man"
+                android:src="@drawable/layerlist_circle_mask_personnal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_gravity="bottom" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/nickName"
             android:layout_width="wrap_content"
-            android:maxLength="20"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/userAvtar"
+            android:layout_alignTop="@+id/avaterlayout"
             android:layout_marginLeft="15dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="13dp"
-            android:layout_toEndOf="@+id/userAvtar"
-            android:layout_toRightOf="@+id/userAvtar"
+            android:layout_toEndOf="@+id/avaterlayout"
+            android:layout_toRightOf="@+id/avaterlayout"
+            android:maxEms="20"
+            android:maxLength="20"
             android:text="昵称"
-
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/sexAndAge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/userAvtar"
+            android:layout_alignBottom="@+id/avaterlayout"
             android:layout_alignStart="@+id/nickName"
             android:text="年龄/性别"
             android:textColor="#4A4A4A"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/isLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/button_common_selector"
-            android:text="去登录"
-            android:textColor="@color/red"
             android:textSize="16sp" />
 
         <TextView
@@ -61,10 +60,23 @@
             android:layout_alignBottom="@+id/sexAndAge"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/sexAndAge"
-            android:layout_below="@+id/isLogin"
             android:layout_marginRight="15dp"
             android:gravity="right"
             android:text="您趣币不足"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/vipLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/avaterlayout"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="13dp"
+            android:layout_toEndOf="@+id/sexAndAge"
+            android:gravity="right"
+            android:text=""
+            android:textColor="@color/darkred"
             android:textSize="16sp" />
 
 

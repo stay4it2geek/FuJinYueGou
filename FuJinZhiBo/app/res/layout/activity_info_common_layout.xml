@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="#eee"
     android:layout_height="match_parent">
 
     <com.act.quzhibo.view.TitleBarView
@@ -137,12 +138,9 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginTop="1dp"
                     android:background="#fff">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
 
                     <TextView
                         android:id="@+id/talk_accese_tv"
@@ -163,7 +161,7 @@
                         android:gravity="center"
                         android:textSize="18sp"
                         android:textColor="@android:color/holo_orange_dark"
-                        android:text="立刻获取授权" />
+                        android:text="获取趣币开始私聊" />
 
                     <View
                         android:layout_width="12dp"
@@ -180,12 +178,9 @@
                     android:id="@+id/txtImg_rl"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginTop="1dp"
                     android:background="#fff">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
 
                     <TextView
                         android:id="@+id/textpost"
@@ -222,6 +217,7 @@
                     android:id="@+id/rl_zipai_img"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginTop="1dp"
                     android:background="#fff"
                     android:visibility="gone">
 
@@ -283,13 +279,10 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_marginTop="2dp"
                     android:layout_height="60dp"
                     android:background="#fff">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
 
                     <TextView
                         android:id="@+id/spirit"
@@ -317,12 +310,10 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginTop="1dp"
                     android:background="#fff">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
+
 
                     <TextView
                         android:id="@+id/disPurpose_tv"
@@ -351,13 +342,10 @@
                     android:id="@+id/last_see_20_rl"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginTop="1dp"
                     android:background="#fff"
                     android:visibility="gone">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
 
                     <TextView
                         android:id="@+id/who_see_her"
@@ -381,12 +369,9 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginTop="1dp"
                     android:background="#fff">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
 
                     <TextView
                         android:id="@+id/isCanDate_tv"

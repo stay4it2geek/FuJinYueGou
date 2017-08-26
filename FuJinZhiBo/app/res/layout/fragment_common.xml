@@ -5,11 +5,21 @@
     android:background="#eee">
 
 
-  <com.act.quzhibo.view.TitleBarView
-      android:id="@+id/titlebar"
-      android:visibility="gone"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/commonViewHeight"/>
+    <com.act.quzhibo.view.TitleBarView
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/postButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/post"
+            android:visibility="gone" />
+    </com.act.quzhibo.view.TitleBarView>
 
     <FrameLayout
         android:layout_width="match_parent"

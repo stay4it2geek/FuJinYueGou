@@ -16,6 +16,7 @@ import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import okhttp3.Call;
@@ -33,7 +34,7 @@ public class PostDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_postdetail);
         recyclerview = (XRecyclerView) findViewById(R.id.postRecyleview);
-       findViewById(R.id.layout).setVisibility(View.VISIBLE);
+       findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
         recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
@@ -50,6 +51,16 @@ public class PostDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
                 getData();
+            }
+        });
+
+
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setBarTitle("状 态 详 情");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PostDetailActivity.this.finish();
             }
         });
     }
