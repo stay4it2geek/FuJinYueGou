@@ -36,4 +36,8 @@ public class Constants {
     public static final int LOGIN = 14;
     public static final int LOGIN_OK = 15;
     public static final int REQUEST_PERMISSION_SETTING = 16;
+    public static final int PHOTO_ALBUM = 17;
+    public static final int VIDEO_ALBUM = 18;
+    public static final String PHOTO = "photo";
+    public static final String VIDEO = "video";
 }

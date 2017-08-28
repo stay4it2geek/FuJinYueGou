@@ -1,4 +1,4 @@
-package com.act.quzhibo.adapter;
+package com.act.quzhibo.advanced_use.course_download;
 
 
 import android.app.AlertDialog;
@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
-import com.act.quzhibo.util.CharUtils;
 import com.act.quzhibo.util.ToastUtil;
 
 import org.wlf.filedownloader.DownloadFileInfo;
@@ -29,7 +28,6 @@ import org.wlf.filedownloader.base.Status;
 import org.wlf.filedownloader.listener.OnRetryableFileDownloadStatusListener;
 import org.wlf.filedownloader.util.FileUtil;
 import org.wlf.filedownloader.util.MathUtil;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -204,7 +202,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                 // download file status:downloading
                 case Status.DOWNLOAD_STATUS_DOWNLOADING:
                     if (payload != null && payload.mDownloadSpeed > 0 && payload.mRemainingTime > 0) {
-                        tvText.setText(MathUtil.formatNumber(payload.mDownloadSpeed) + "KB/s   " + CharUtils.TimeUtil
+                        tvText.setText(MathUtil.formatNumber(payload.mDownloadSpeed) + "KB/s   " + TimeUtil
                                 .seconds2HH_mm_ss(payload.mRemainingTime));
                     } else {
                         tvText.setText(context.getString(R.string.downloading));
@@ -266,7 +264,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                 if (isChecked) {
                     mSelectCoursePreviewInfos.add(coursePreviewInfo);
 
-                    Log.e("wlf", "isChecked=true mSelectCoursePreviewInfos.size:" + mSelectCoursePreviewInfos.size() 
+                    Log.e("wlf", "isChecked=true mSelectCoursePreviewInfos.size:" + mSelectCoursePreviewInfos.size()
                             + ",position:" + position);
 
                     if (mOnItemSelectListener != null) {
@@ -469,7 +467,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
     }
 
     @Override
-    public void onFileDownloadStatusDownloading(DownloadFileInfo downloadFileInfo, float downloadSpeed, long 
+    public void onFileDownloadStatusDownloading(DownloadFileInfo downloadFileInfo, float downloadSpeed, long
             remainingTime) {
         int position = findPosition(downloadFileInfo);
         if (position >= 0 && position < getItemCount()) {

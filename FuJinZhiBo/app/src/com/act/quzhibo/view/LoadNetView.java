@@ -56,7 +56,12 @@ public class LoadNetView extends LinearLayout {
             reloadlayout.setVisibility(View.VISIBLE);
             loadlayout.setVisibility(View.GONE);
         }else if(loadType == Constants.BUY_VIP){
-            reloadlayout.setVisibility(View.GONE);
+            loadlayout.setVisibility(View.GONE);
+            vipNulllayout.setVisibility(View.VISIBLE);
+        }else if(loadType == Constants.PHOTO_ALBUM){
+            loadlayout.setVisibility(View.GONE);
+            vipNulllayout.setVisibility(View.VISIBLE);
+        }else if(loadType == Constants.VIDEO_ALBUM){
             loadlayout.setVisibility(View.GONE);
             vipNulllayout.setVisibility(View.VISIBLE);
         }

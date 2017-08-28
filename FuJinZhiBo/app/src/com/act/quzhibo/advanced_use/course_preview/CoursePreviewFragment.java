@@ -1,4 +1,4 @@
-package com.act.quzhibo.ui.fragment;
+package com.act.quzhibo.advanced_use.course_preview;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -10,23 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.CoursePreviewAdapter;
-import com.act.quzhibo.data_access.GetCoursePreviews;
-import com.act.quzhibo.entity.CoursePreviewInfo;
+import com.act.quzhibo.advanced_use.data_access.GetCoursePreviews;
+import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.ToastUtil;
 
 import java.util.List;
 
+/**
+ * 课程预览界面
+ */
+
 public class CoursePreviewFragment extends Fragment {
 
-    public static CoursePreviewFragment newInstance() {
-        CoursePreviewFragment frag = new CoursePreviewFragment();
-        //        Bundle args = new Bundle();
-        //        frag.setArguments(args);
-        return frag;
-    }
 
     private RecyclerView mRvCoursePreview;
     private CoursePreviewAdapter mCoursePreviewAdapter;
@@ -38,9 +35,9 @@ public class CoursePreviewFragment extends Fragment {
 
         if (rootView == null) {
 
-            rootView = inflater.inflate(R.layout.fragment_course_preview, null);
+            rootView = inflater.inflate(R.layout.fragment_preview, null);
 
-            mRvCoursePreview = (RecyclerView) rootView.findViewById(R.id.rvCoursePreview);
+            mRvCoursePreview = (RecyclerView) rootView.findViewById(R.id.rvPreview);
             mRvCoursePreview.addItemDecoration(new CoursePreviewItemDecoration(getActivity()));
             mRvCoursePreview.setHasFixedSize(true);
             mRvCoursePreview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -48,7 +45,7 @@ public class CoursePreviewFragment extends Fragment {
             if (mCoursePreviewAdapter != null) {
                 mCoursePreviewAdapter.release();
             }
-            mCoursePreviewAdapter = new CoursePreviewAdapter(null);
+            mCoursePreviewAdapter = new CoursePreviewAdapter(getActivity(),null);
             mRvCoursePreview.setAdapter(mCoursePreviewAdapter);
 
             initCoursePreviewData();
@@ -70,7 +67,7 @@ public class CoursePreviewFragment extends Fragment {
 
             @Override
             public void onGetCoursePreviewsSucceed(List<CoursePreviewInfo> coursePreviewInfos) {
-                mCoursePreviewAdapter.update(coursePreviewInfos);
+                mCoursePreviewAdapter.update(getActivity(),coursePreviewInfos);
             }
 
             @Override
@@ -79,6 +76,8 @@ public class CoursePreviewFragment extends Fragment {
             }
         });
     }
+
+
 
     public static class CoursePreviewItemDecoration extends RecyclerView.ItemDecoration {
 

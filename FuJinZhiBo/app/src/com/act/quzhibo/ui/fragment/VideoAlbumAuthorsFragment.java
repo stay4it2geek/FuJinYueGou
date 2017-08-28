@@ -8,12 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.course_preview.CoursePreviewFragment;
 import com.act.quzhibo.ui.activity.MediaActivity;
-import com.act.quzhibo.util.CommonUtil;
 
-
-public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
+/**
+ * Created by asus-pc on 2017/8/28.
+ */
+public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     View view;
 
     @Nullable

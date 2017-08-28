@@ -16,7 +16,7 @@
             android:orientation="vertical">
 
             <com.flyco.tablayout.SlidingTabLayout
-                android:id="@+id/showerListLayout"
+                android:id="@+id/sListLayout"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="#f6dd3e"
@@ -26,7 +26,7 @@
                 tl:tl_indicator_margin_left="2dp"
                 tl:tl_indicator_margin_right="2dp"
                 tl:tl_indicator_style="NORMAL"
-                tl:tl_indicator_width="50dp"
+                tl:tl_indicator_width="70dp"
                 tl:tl_textSelectColor="@color/commontextcolor"
                 tl:tl_textUnselectColor="#8F8F8F"
                 tl:tl_textsize="18sp" />

@@ -1,14 +1,18 @@
-package com.act.quzhibo.data_access;
+package com.act.quzhibo.advanced_use.data_access;
 
 import android.content.Context;
 
 
-import com.act.quzhibo.db.CourseDbHelper;
-import com.act.quzhibo.entity.CoursePreviewInfo;
+import com.act.quzhibo.advanced_use.db.CourseDbHelper;
+import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author wlf(Andy)
+ * @email 411086563@qq.com
+ */
 public class GetCoursePreviews {
 
     public void getCoursePreviews(Context context, OnGetCoursePreviewsListener onGetCoursePreviewsListener) {
@@ -35,13 +39,13 @@ public class GetCoursePreviews {
 
             String[] courseUrls = new String[]{
                     //
-                    "http://sqdd.myapp.com/myapp/qqteam/AndroidQQ/mobileqq_android.apk",
+                    "http://happy.qryingxiao.com/old/part1/oa10-1.mp4",
                     //
                     "http://down.sandai.net/thunder7/Thunder_dl_7.9.41.5020.exe",
                     //
                     "http://mp4.28mtv.com/mp41/1862-刘德华-余生一起过[68mtv.com].mp4",
                     //
-                    "http://bmob-cdn-13639.b0.upaiyun.com/2017/08/22/08af1a3440e7878380f621126af60135.png",
+                    "http://182.254.149.157/ftp/image/shop/product/儿童英语拓展篇HD_air.com.congcongbb.yingyue.mi_1000000.apk",
                     //
                     "http://dlsw.baidu.com/sw-search-sp/soft/c6/25790/WeChatzhCN1.0.0.6.1428545414.dmg",
                     //
@@ -84,7 +88,7 @@ public class GetCoursePreviews {
             for (int i = 0; i < courseUrls.length; i++) {
                 String courseName = courseUrls[i].substring(courseUrls[i].lastIndexOf("/") + 1, courseUrls[i].length());
                 CoursePreviewInfo coursePreviewInfo = new CoursePreviewInfo("C" + i, courseUrls[i], coverUrls[i], 
-                        courseName,"18950060294","0", CourseDbHelper.getInstance(context));
+                        courseName, CourseDbHelper.getInstance(context));
                 coursePreviewInfos.add(coursePreviewInfo);
             }
 

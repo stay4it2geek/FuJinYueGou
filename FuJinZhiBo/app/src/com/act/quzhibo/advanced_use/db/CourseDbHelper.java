@@ -1,10 +1,10 @@
-package com.act.quzhibo.db;
+package com.act.quzhibo.advanced_use.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 
-import com.act.quzhibo.entity.CoursePreviewInfo;
+import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.util.List;
@@ -21,6 +21,8 @@ public class CourseDbHelper extends BaseOrmLiteSQLiteHelper {
     }
 
     /**
+     * get CourseDbHelper single instance,if the instance is null,will init the instance and open the database
+     * <br/>
      * 获取单一实例，如果实例不存在将新创建，并且同时打开当前管理的数据库
      *
      * @param context

@@ -34,7 +34,7 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sliding_tab_video);
+        setContentView(R.layout.activity_sliding_tab);
         initView();
     }
 
@@ -67,7 +67,7 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
         ViewPager pager = ViewFindUtils.find(decorView, R.id.viewpager);
         mAdapter = new MyPagerAdapter(getSupportFragmentManager(), tabTitles.toArray(new String[tabTitles.size()]));
         pager.setAdapter(mAdapter);
-        final SlidingTabLayout tabLayout = ViewFindUtils.find(decorView, R.id.showerListLayout);
+        final SlidingTabLayout tabLayout = ViewFindUtils.find(decorView, R.id.sListLayout);
         tabLayout.setViewPager(pager, tabTitles.toArray(new String[tabTitles.size()]), this, mFragments);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

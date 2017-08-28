@@ -1,5 +1,6 @@
-package com.act.quzhibo.adapter;
+package com.act.quzhibo.advanced_use.course_preview;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,25 +13,29 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
 import com.act.quzhibo.util.ToastUtil;
+import com.bumptech.glide.Glide;
 
 import org.wlf.filedownloader.FileDownloader;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class CoursePreviewAdapter extends RecyclerView.Adapter<CoursePreviewAdapter.CoursePreviewViewHolder> {
 
     private List<CoursePreviewInfo> mCoursePreviewInfos = new ArrayList<CoursePreviewInfo>();
+    private Context context;
 
-    public CoursePreviewAdapter(List<CoursePreviewInfo> coursePreviewInfos) {
-        update(coursePreviewInfos);
+    public CoursePreviewAdapter(Context context, List<CoursePreviewInfo> coursePreviewInfos) {
+
+        update(context,coursePreviewInfos);
     }
 
-    public void update(List<CoursePreviewInfo> coursePreviewInfos) {
+    public void update(Context context,List<CoursePreviewInfo> coursePreviewInfos) {
         if (coursePreviewInfos == null) {
             return;
         }
+        this.context=context;
         mCoursePreviewInfos = coursePreviewInfos;
         notifyDataSetChanged();
     }
@@ -68,7 +73,8 @@ public class CoursePreviewAdapter extends RecyclerView.Adapter<CoursePreviewAdap
         if (TextUtils.isEmpty(coursePreviewInfo.getCourseCoverUrl())) {
             holder.mIvCourseCover.setImageResource(R.drawable.ic_launcher);
         } else {
-//            ImageLoader.getInstance().displayImage(coursePreviewInfo.getCourseCoverUrl(), holder.mIvCourseCover);
+            Glide.with(context).load(coursePreviewInfo.getCourseCoverUrl()).placeholder(R.drawable.xiangjiao).into(holder.mIvCourseCover);//加载网络图片
+
         }
         // course name
         holder.mTvCourseName.setText(coursePreviewInfo.getCourseName());

@@ -1,9 +1,10 @@
-package com.act.quzhibo.entity;
+package com.act.quzhibo.advanced_use.model;
 
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.act.quzhibo.db.CourseDbHelper;
+import com.act.quzhibo.advanced_use.db.CourseDbHelper;
+import com.act.quzhibo.common.Constants;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.field.DatabaseField;
@@ -17,10 +18,8 @@ import org.wlf.filedownloader.listener.OnDownloadFileChangeListener;
 
 import java.sql.SQLException;
 
-import cn.bmob.v3.BmobObject;
-
 @DatabaseTable(tableName = "tb_course")
-public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChangeListener {
+public class CoursePreviewInfo implements OnDownloadFileChangeListener {
 
     public static final String COLUMN_NAME_OF_FIELD_COURSE_URL = "course_url";
 
@@ -39,11 +38,8 @@ public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChang
     @DatabaseField(columnName = "course_name")
     private String mCourseName;//the name of the course
 
-    @DatabaseField(columnName = "author_id", unique = true, canBeNull = false)
-    private String mAuthorId;
-
-    @DatabaseField(columnName = "course_type", canBeNull = false)
-    private String mCourseType;//
+    @DatabaseField(columnName = "course_type")
+    private String mCourseType;
 
     private DownloadFileInfo mDownloadFileInfo;//DownloadFileInfo
     private CourseDbHelper mCourseDbHelper;//the DbOpenHelper
@@ -52,40 +48,14 @@ public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChang
         init();
     }
 
-
-    public void setmCourseId(String mCourseId) {
-        this.mCourseId = mCourseId;
-    }
-
-    public void setmCourseUrl(String mCourseUrl) {
-        this.mCourseUrl = mCourseUrl;
-    }
-
-    public void setmCourseCoverUrl(String mCourseCoverUrl) {
-        this.mCourseCoverUrl = mCourseCoverUrl;
-    }
-
-    public void setmCourseName(String mCourseName) {
-        this.mCourseName = mCourseName;
-    }
-
-    public void setmAuthorId(String mAuthorId) {
-        this.mAuthorId = mAuthorId;
-    }
-
-    public void setmCourseType(String mCourseType) {
-        this.mCourseType = mCourseType;
-    }
-
-    public CoursePreviewInfo(String courseId, String courseUrl, String courseCoverUrl, String courseName, String authorId, String courseType,
+    public CoursePreviewInfo(String courseId, String courseUrl, String courseCoverUrl, String courseName,
                              CourseDbHelper courseDbHelper) {
         mCourseId = courseId;
         mCourseUrl = courseUrl;
-        mAuthorId = authorId;
-        mCourseType = courseType;
         mCourseCoverUrl = courseCoverUrl;
         mCourseName = courseName;
         mCourseDbHelper = courseDbHelper;
+        mCourseType = Constants.PHOTO;
 
         init();
     }
@@ -123,10 +93,6 @@ public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChang
         return mCourseUrl;
     }
 
-    public String getAuthorId() {
-        return mAuthorId;
-    }
-
     public String getCourseCoverUrl() {
         return mCourseCoverUrl;
     }
@@ -138,15 +104,13 @@ public class CoursePreviewInfo extends BmobObject implements OnDownloadFileChang
     public DownloadFileInfo getDownloadFileInfo() {
         return mDownloadFileInfo;
     }
-    public String getCourseType() {
-        return mCourseType;
-    }
 
     @Override
     public void onDownloadFileCreated(DownloadFileInfo downloadFileInfo) {
 
         if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals
                 (mCourseUrl)) {
+
 
             try {
                 if (mCourseDbHelper == null) {
