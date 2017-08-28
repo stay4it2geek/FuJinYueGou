@@ -1,4 +1,4 @@
-package com.act.quzhibo.advanced_use.course_download;
+package com.act.quzhibo.advanced_use.media_download;
 
 
 import android.app.AlertDialog;
@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.advanced_use.model.MediaInfo;
 import com.act.quzhibo.util.ToastUtil;
 
 import org.wlf.filedownloader.DownloadFileInfo;
@@ -33,27 +33,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAdapter.CourseDownloadViewHolder> implements OnRetryableFileDownloadStatusListener {
+public class MediaDownloadAdapter extends RecyclerView.Adapter<MediaDownloadAdapter.mediaDownloadViewHolder> implements OnRetryableFileDownloadStatusListener {
 
-    private List<CoursePreviewInfo> mCoursePreviewInfos = new ArrayList<CoursePreviewInfo>();
-    private List<CoursePreviewInfo> mSelectCoursePreviewInfos = new ArrayList<CoursePreviewInfo>();
+    private List<MediaInfo> mMediaPreviewInfos = new ArrayList<>();
+    private List<MediaInfo> mSelectMediaPreviewInfos = new ArrayList<>();
 
     private OnItemSelectListener mOnItemSelectListener;
     private Context mContext;
 
-    public CourseDownloadAdapter(Context context, List<CoursePreviewInfo> coursePreviewInfos) {
+    public MediaDownloadAdapter(Context context, List<MediaInfo> mediaPreviewInfos) {
         this.mContext = context;
-        update(coursePreviewInfos, true);
+        update(mediaPreviewInfos, true);
     }
 
-    public void update(List<CoursePreviewInfo> coursePreviewInfos, boolean clearSelects) {
-        if (coursePreviewInfos == null) {
+    public void update(List<MediaInfo> mediaPreviewInfos, boolean clearSelects) {
+        if (mediaPreviewInfos == null) {
             return;
         }
-        mCoursePreviewInfos = coursePreviewInfos;
+        mMediaPreviewInfos = mediaPreviewInfos;
 
         if (clearSelects) {
-            mSelectCoursePreviewInfos.clear();
+            mSelectMediaPreviewInfos.clear();
             if (mOnItemSelectListener != null) {
                 mOnItemSelectListener.onNoneSelect();
             }
@@ -72,7 +72,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
     }
 
     @Override
-    public CourseDownloadViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
+    public mediaDownloadViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
 
         Log.e("wlf", "onCreateViewHolder,viewType(==position):" + viewType);
 
@@ -80,20 +80,20 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             return null;
         }
 
-        View itemView = View.inflate(parent.getContext(), R.layout.item_download, null);
+        View itemView = View.inflate(parent.getContext(), R.layout.item_media_download, null);
 
         // set item layout param
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup
                 .LayoutParams.WRAP_CONTENT);
         itemView.setLayoutParams(lp);
 
-        CourseDownloadViewHolder holder = new CourseDownloadViewHolder(itemView);
+        mediaDownloadViewHolder holder = new mediaDownloadViewHolder(itemView);
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final CourseDownloadViewHolder holder, final int position, List<Object> payloads) {
+    public void onBindViewHolder(final mediaDownloadViewHolder holder, final int position, List<Object> payloads) {
 
         Log.e("wlf", "position:" + position + ",payloads:" + payloads.size() + ",payloads.toString:" + payloads
                 .toString());
@@ -102,7 +102,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             return;
         }
 
-        if (position >= mCoursePreviewInfos.size()) {
+        if (position >= mMediaPreviewInfos.size()) {
             return;
         }
 
@@ -118,17 +118,17 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             }
         }
 
-        final CoursePreviewInfo coursePreviewInfo = mCoursePreviewInfos.get(position);
-        if (coursePreviewInfo == null) {
+        final MediaInfo mediaPreviewInfo = mMediaPreviewInfos.get(position);
+        if (mediaPreviewInfo == null) {
             return;
         }
 
         final Context context = holder.itemView.getContext();
 
-        // course name
-        holder.mTvFileName.setText(coursePreviewInfo.getCourseName());
+        // media name
+        holder.mTvFileName.setText(mediaPreviewInfo.getMediaName());
 
-        DownloadFileInfo downloadFileInfo = coursePreviewInfo.getDownloadFileInfo();
+        DownloadFileInfo downloadFileInfo = mediaPreviewInfo.getDownloadFileInfo();
 
         Log.e("wlf", "onBindViewHolder,position:" + position + ",downloadFileInfo:" + downloadFileInfo);
 
@@ -139,9 +139,9 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             holder.mTvDownloadSize.setText("00.00M/");
             holder.mTvTotalSize.setText("00.00M");
             holder.mTvPercent.setText("00.00%");
-            holder.mTvText.setText(context.getString(R.string.course_download_not_start));
+            holder.mTvText.setText(context.getString(R.string.media_download_not_start));
         } else {
-            // course icon
+            // media icon
             if ("mp4".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {//mp4
                 holder.mIvIcon.setImageResource(R.drawable.ic_launcher);
             } else if ("flv".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {//flv
@@ -237,11 +237,11 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                     holder.mTvDownloadSize.setText("");
                     //mp4
                     if ("mp4".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {
-                        tvText.setText(context.getString(R.string.course_download_play_mp4));
+                        tvText.setText(context.getString(R.string.media_download_play_mp4));
                     }
                     //flv
                     else if ("flv".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {
-                        tvText.setText(context.getString(R.string.course_download_play_flv));
+                        tvText.setText(context.getString(R.string.media_download_play_flv));
                     }
                     //other
                     else {
@@ -262,22 +262,22 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mSelectCoursePreviewInfos.add(coursePreviewInfo);
+                    mSelectMediaPreviewInfos.add(mediaPreviewInfo);
 
-                    Log.e("wlf", "isChecked=true mSelectCoursePreviewInfos.size:" + mSelectCoursePreviewInfos.size()
+                    Log.e("wlf", "isChecked=true mSelectMediaPreviewInfos.size:" + mSelectMediaPreviewInfos.size()
                             + ",position:" + position);
 
                     if (mOnItemSelectListener != null) {
                         // select a download file
-                        mOnItemSelectListener.onSelected(mSelectCoursePreviewInfos);
+                        mOnItemSelectListener.onSelected(mSelectMediaPreviewInfos);
                     }
                 } else {
-                    mSelectCoursePreviewInfos.remove(coursePreviewInfo);
+                    mSelectMediaPreviewInfos.remove(mediaPreviewInfo);
 
-                    Log.e("wlf", "isChecked=false mSelectCoursePreviewInfos.size:" + mSelectCoursePreviewInfos.size()
+                    Log.e("wlf", "isChecked=false mSelectMediaPreviewInfos.size:" + mSelectMediaPreviewInfos.size()
                             + ",position:" + position);
 
-                    if (mSelectCoursePreviewInfos.isEmpty()) {
+                    if (mSelectMediaPreviewInfos.isEmpty()) {
                         if (mOnItemSelectListener != null) {
                             // select none
                             mOnItemSelectListener.onNoneSelect();
@@ -285,7 +285,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                     } else {
                         if (mOnItemSelectListener != null) {
                             // select a download file
-                            mOnItemSelectListener.onSelected(mSelectCoursePreviewInfos);
+                            mOnItemSelectListener.onSelected(mSelectMediaPreviewInfos);
                         }
                     }
                 }
@@ -294,8 +294,8 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
 
         // set check status
         boolean isChecked = false;
-        for (CoursePreviewInfo selectCoursePreviewInfo : mSelectCoursePreviewInfos) {
-            if (selectCoursePreviewInfo == coursePreviewInfo) {
+        for (MediaInfo selectMediaPreviewInfo : mSelectMediaPreviewInfos) {
+            if (selectMediaPreviewInfo == mediaPreviewInfo) {
                 isChecked = true;
                 break;
             }
@@ -303,13 +303,13 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
         holder.mCbSelect.setChecked(isChecked);
 
         // set background on click listener
-        setBackgroundOnClickListener(holder, coursePreviewInfo);
+        setBackgroundOnClickListener(holder, mediaPreviewInfo);
 
     }
 
     // set background on click listener
-    private void setBackgroundOnClickListener(final CourseDownloadViewHolder holder, final CoursePreviewInfo 
-            coursePreviewInfo) {
+    private void setBackgroundOnClickListener(final mediaDownloadViewHolder holder, final MediaInfo
+            mediaPreviewInfo) {
 
         if (holder == null || holder.itemView == null) {
             return;
@@ -320,14 +320,14 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
             @Override
             public void onClick(View v) {
 
-                if (coursePreviewInfo == null) {
+                if (mediaPreviewInfo == null) {
                     return;
                 }
 
-                final DownloadFileInfo downloadFileInfo = coursePreviewInfo.getDownloadFileInfo();
+                final DownloadFileInfo downloadFileInfo = mediaPreviewInfo.getDownloadFileInfo();
 
-                final String courseName = coursePreviewInfo.getCourseName();// or downloadFileInfo.getFileName()
-                final String url = coursePreviewInfo.getCourseUrl();// or downloadFileInfo.getUrl()
+                final String mediaName = mediaPreviewInfo.getMediaName();// or downloadFileInfo.getFileName()
+                final String url = mediaPreviewInfo.getMediaUrl();// or downloadFileInfo.getUrl()
 
                 final Context context = v.getContext();
                 if (downloadFileInfo != null) {
@@ -347,7 +347,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                             // start
                             FileDownloader.start(url);
 
-                            showToast(context, context.getString(R.string.start_download) + courseName);
+                            showToast(context, context.getString(R.string.start_download) + mediaName);
                             break;
                         // download file status:file not exist
                         case Status.DOWNLOAD_STATUS_FILE_NOT_EXIST:
@@ -365,7 +365,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                                             FileDownloader.reStart(url);
 
                                             showToast(context, context.getString(R.string.re_download2)
-                                                    + courseName);
+                                                    + mediaName);
                                         }
                                     });
                             builder.show();
@@ -379,7 +379,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                             // pause
                             FileDownloader.pause(url);
 
-                            showToast(context, context.getString(R.string.paused_download) + courseName);
+                            showToast(context, context.getString(R.string.paused_download) + mediaName);
 
                             if (holder.mTvText != null) {
                                 holder.mTvText.setText(context.getString(R.string.paused));
@@ -396,12 +396,12 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
                             if (tvText != null) {
                                 //mp4
                                 if ("mp4".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()))) {
-                                    tvText.setText(context.getString(R.string.course_download_play_mp4));
+                                    tvText.setText(context.getString(R.string.media_download_play_mp4));
                                 }
                                 //flv
                                 else if ("flv".equalsIgnoreCase(FileUtil.getFileSuffix(downloadFileInfo.getFileName()
                                 ))) {
-                                    tvText.setText(context.getString(R.string.course_download_play_flv));
+                                    tvText.setText(context.getString(R.string.media_download_play_flv));
                                 }
                                 //other
                                 else {
@@ -420,7 +420,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
     }
 
     @Override
-    public void onBindViewHolder(CourseDownloadViewHolder holder, int position) {
+    public void onBindViewHolder(mediaDownloadViewHolder holder, int position) {
     }
 
     // show toast
@@ -430,7 +430,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
 
     @Override
     public int getItemCount() {
-        return mCoursePreviewInfos.size();
+        return mMediaPreviewInfos.size();
     }
 
     @Override
@@ -529,7 +529,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
         }
     }
 
-    public static final class CourseDownloadViewHolder extends RecyclerView.ViewHolder {
+    public static final class mediaDownloadViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mIvIcon;
         private TextView mTvFileName;
@@ -541,7 +541,7 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
         private CheckBox mCbSelect;
 
 
-        public CourseDownloadViewHolder(View itemView) {
+        public mediaDownloadViewHolder(View itemView) {
             super(itemView);
 
             mIvIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
@@ -559,12 +559,12 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
         if (downloadFileInfo == null) {
             return -1;
         }
-        for (int i = 0; i < mCoursePreviewInfos.size(); i++) {
-            CoursePreviewInfo coursePreviewInfo = mCoursePreviewInfos.get(i);
-            if (coursePreviewInfo == null || TextUtils.isEmpty(coursePreviewInfo.getCourseUrl())) {
+        for (int i = 0; i < mMediaPreviewInfos.size(); i++) {
+            MediaInfo mediaPreviewInfo = mMediaPreviewInfos.get(i);
+            if (mediaPreviewInfo == null || TextUtils.isEmpty(mediaPreviewInfo.getMediaUrl())) {
                 continue;
             }
-            if (coursePreviewInfo.getCourseUrl().equals(downloadFileInfo.getUrl())) {
+            if (mediaPreviewInfo.getMediaUrl().equals(downloadFileInfo.getUrl())) {
                 // find
                 return i;
             }
@@ -609,17 +609,17 @@ public class CourseDownloadAdapter extends RecyclerView.Adapter<CourseDownloadAd
      */
     public interface OnItemSelectListener {
 
-        void onSelected(List<CoursePreviewInfo> selectCoursePreviewInfos);
+        void onSelected(List<MediaInfo> selectmediaPreviewInfos);
 
         void onNoneSelect();
     }
 
     public void release() {
-        for (CoursePreviewInfo coursePreviewInfo : mCoursePreviewInfos) {
-            if (coursePreviewInfo == null) {
+        for (MediaInfo mediaPreviewInfo : mMediaPreviewInfos) {
+            if (mediaPreviewInfo == null) {
                 continue;
             }
-            coursePreviewInfo.release();
+            mediaPreviewInfo.release();
         }
     }
 

@@ -2,12 +2,12 @@
 <resources>
     <string name="app_name">趣直播</string>
 
-    <string name="action_tab_course_preview_text">Course preview</string>
-    <string name="action_tab_course_download_text">Course download</string>
-    <string name="course_preview_url_is_empty_note">Course url is empty!</string>
-    <string name="course_preview_add_download">add download:</string>
-    <string name="course_download_play_mp4">Play mp4 course</string>
-    <string name="course_download_play_flv">Play flv course</string>
+    <string name="action_tab_media_preview_text">media preview</string>
+    <string name="action_tab_media_download_text">media download</string>
+    <string name="media_preview_url_is_empty_note">media url is empty!</string>
+    <string name="media_preview_add_download">add download:</string>
+    <string name="media_download_play_mp4">Play mp4 media</string>
+    <string name="media_download_play_flv">Play flv media</string>
     <string name="can_not_download">Can not download, please delete the file</string>
     <string name="getting_resource">Getting resource</string>
     <string name="retrying_connect_resource">Retrying connect resource</string>
@@ -26,7 +26,7 @@
     <string name="paused_download">Paused download:</string>
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_confirm">Confirm</string>
-    <string name="course_download_not_start">Not start</string>
+    <string name="media_download_not_start">Not start</string>
 
     <string name="check_network">(Check network)</string>
     <string name="url_illegal">(Url illegal)</string>
@@ -42,7 +42,7 @@
     <string name="btn_start_or_continue">开始/继续</string>
     <string name="btn_delete">删除</string>
 
-    <string name="course_center__course_cache_delete_confirm">是否删除 %d 条？</string>
+    <string name="media_center__media_cache_delete_confirm">是否删除 %d 条？</string>
 
     <string name="main__delete_succeed">删除成功</string>
     <string name="deleting">删除中</string>

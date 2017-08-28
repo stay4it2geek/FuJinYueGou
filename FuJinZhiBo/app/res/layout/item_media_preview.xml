@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/ivCourseCover"
+            android:id="@+id/ivMediaCover"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_margin="5dp"
@@ -19,7 +19,7 @@
 
 
         <ImageView
-            android:id="@+id/ivDownloadCourse"
+            android:id="@+id/ivMediaDownload"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_gravity="bottom|right"
@@ -29,7 +29,7 @@
 
 
     <TextView
-        android:id="@+id/tvCourseName"
+        android:id="@+id/tvMediaName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

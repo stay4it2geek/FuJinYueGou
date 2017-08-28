@@ -3,8 +3,9 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.act.quzhibo.advanced_use.course_download.CourseDownloadFragment;
-import com.act.quzhibo.advanced_use.course_preview.CoursePreviewFragment;
+import com.act.quzhibo.advanced_use.media_download.MediaDownloadFragment;
+import com.act.quzhibo.advanced_use.media_preview.MediaPreviewFragment;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 
 import java.util.ArrayList;
@@ -29,14 +30,18 @@ public class MediaActivity extends TabSlideBaseActivity implements InterestPlate
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"一览", "下载"};
+        return new String[]{getIntent().getStringExtra("title"), "下载"};
     }
 
     @Override
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> mFragments = new ArrayList<>();
-        mFragments.add(new CoursePreviewFragment());
-        mFragments.add(new CourseDownloadFragment());
+        MediaPreviewFragment mediaPreviewFragment=new MediaPreviewFragment();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("author",getIntent().getSerializableExtra(Constants.MEDIA_AUTHOR));
+        mediaPreviewFragment.setArguments(bundle);
+        mFragments.add(mediaPreviewFragment);
+        mFragments.add(new MediaDownloadFragment());
         return mFragments;
     }
     @Override

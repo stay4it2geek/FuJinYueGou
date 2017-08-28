@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,24 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="400dp">
 
-        <ImageView
-            android:id="@+id/author_rv"
-            android:background="@drawable/default_head"
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/media_author_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </FrameLayout>
 
 
-    <Button
-        android:id="@+id/change"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom" />
-
     <com.act.quzhibo.view.LoadNetView
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
-</LinearLayout>
+</FrameLayout>

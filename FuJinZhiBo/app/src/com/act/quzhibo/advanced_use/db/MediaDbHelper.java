@@ -4,35 +4,29 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.advanced_use.model.MediaInfo;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.util.List;
 
-public class CourseDbHelper extends BaseOrmLiteSQLiteHelper {
+public class MediaDbHelper extends BaseOrmLiteSQLiteHelper {
 
-    private static final String DB_NAME = "course.db";
+    private static final String DB_NAME = "media.db";
     private static final int DB_VERSION = 1;
 
-    private static CourseDbHelper sInstance;
+    private static MediaDbHelper sInstance;
 
-    public CourseDbHelper(Context context) {
+    public MediaDbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    /**
-     * get CourseDbHelper single instance,if the instance is null,will init the instance and open the database
-     * <br/>
-     * 获取单一实例，如果实例不存在将新创建，并且同时打开当前管理的数据库
-     *
-     * @param context
-     * @return single instance
-     */
-    public static CourseDbHelper getInstance(Context context) {
+
+
+    public static MediaDbHelper getInstance(Context context) {
         if (sInstance == null) {
-            synchronized (CourseDbHelper.class) {
+            synchronized (MediaDbHelper.class) {
                 if (sInstance == null || !sInstance.isOpen()) {
-                    sInstance = new CourseDbHelper(context.getApplicationContext());
+                    sInstance = new MediaDbHelper(context.getApplicationContext());
                 }
             }
         }
@@ -45,7 +39,7 @@ public class CourseDbHelper extends BaseOrmLiteSQLiteHelper {
             return;
         }
         // add table
-        supportTables.add(CoursePreviewInfo.class);
+        supportTables.add(MediaInfo.class);
     }
 
     @Override

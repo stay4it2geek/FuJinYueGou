@@ -1,9 +1,8 @@
-package com.act.quzhibo.advanced_use.course_download;
+package com.act.quzhibo.advanced_use.media_download;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,8 +14,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.data_access.GetCourseDownloads;
-import com.act.quzhibo.advanced_use.model.CoursePreviewInfo;
+import com.act.quzhibo.advanced_use.data_access.GetMediaDownloads;
+import com.act.quzhibo.advanced_use.model.MediaInfo;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.ToastUtil;
 
@@ -25,20 +24,15 @@ import org.wlf.filedownloader.FileDownloader;
 import org.wlf.filedownloader.base.Status;
 import org.wlf.filedownloader.listener.OnDeleteDownloadFilesListener;
 import org.wlf.filedownloader.listener.OnDownloadFileChangeListener;
-import org.wlf.filedownloader.listener.OnFileDownloadStatusListener;
 import org.wlf.filedownloader.util.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Course Download Fragment
- * 课程下载界面
- */
-public class CourseDownloadFragment extends Fragment implements CourseDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener {
+public class MediaDownloadFragment extends BackHandledFragment implements MediaDownloadAdapter.OnItemSelectListener, OnDownloadFileChangeListener {
 
-    private RecyclerView mRvCourseDownload;
-    private CourseDownloadAdapter mCourseDownloadAdapter;
+    private RecyclerView mRvmediaDownload;
+    private MediaDownloadAdapter mMediaDownloadAdapter;
 
     private LinearLayout mLnlyOperation;
     private Button mBtnPause;
@@ -54,48 +48,54 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
 
             rootView = inflater.inflate(R.layout.fragment_download, null);
 
-            mRvCourseDownload = (RecyclerView) rootView.findViewById(R.id.rvCourseDownload);
+            mRvmediaDownload = (RecyclerView) rootView.findViewById(R.id.rvMediaDownload);
 
             // create LinearLayoutManager
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             // vertical layout
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             // set layoutManager
-            mRvCourseDownload.setLayoutManager(layoutManager);
+            mRvmediaDownload.setLayoutManager(layoutManager);
 
-            if (mCourseDownloadAdapter != null) {
-                mCourseDownloadAdapter.release();
+            if (mMediaDownloadAdapter != null) {
+                mMediaDownloadAdapter.release();
             }
-            mCourseDownloadAdapter = new CourseDownloadAdapter(getActivity(), null);
-            mRvCourseDownload.setAdapter(mCourseDownloadAdapter);
+            mMediaDownloadAdapter = new MediaDownloadAdapter(getActivity(), null);
+            mRvmediaDownload.setAdapter(mMediaDownloadAdapter);
 
-            mRvCourseDownload.setItemAnimator(null);
-            mCourseDownloadAdapter.setOnItemSelectListener(this);
+            mRvmediaDownload.setItemAnimator(null);
+            mMediaDownloadAdapter.setOnItemSelectListener(this);
 
             mLnlyOperation = (LinearLayout) rootView.findViewById(R.id.lnlyOperation);
             mBtnPause = (Button) rootView.findViewById(R.id.btnPause);
             mBtnStartOrContinue = (Button) rootView.findViewById(R.id.btnStartOrContinue);
             mBtnDelete = (Button) rootView.findViewById(R.id.btnDelete);
 
-            initCourseDownloadData(true);
+            initmediaDownloadData(true);
 
-            FileDownloader.registerDownloadStatusListener(mCourseDownloadAdapter);
+            FileDownloader.registerDownloadStatusListener(mMediaDownloadAdapter);
             FileDownloader.registerDownloadFileChangeListener(this);
         }
 
         return rootView;
     }
 
-    private void initCourseDownloadData(final boolean clearSelects) {
-        GetCourseDownloads getCourseDownloads = new GetCourseDownloads();
-        getCourseDownloads.getCourseDownloads(getActivity(), new GetCourseDownloads.OnGetCourseDownloadsListener() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        initmediaDownloadData(true);
+    }
+
+    private void initmediaDownloadData(final boolean clearSelects) {
+        GetMediaDownloads getmediaDownloads = new GetMediaDownloads();
+        getmediaDownloads.getMediaDownloads(getActivity(), new GetMediaDownloads.OnGetmediaDownloadsListener() {
             @Override
-            public void onGetCourseDownloadsSucceed(List<CoursePreviewInfo> coursePreviewInfos) {
-                mCourseDownloadAdapter.update(coursePreviewInfos, clearSelects);
+            public void onGetmediaDownloadsSucceed(List<MediaInfo> mediaPreviewInfos) {
+                mMediaDownloadAdapter.update(mediaPreviewInfos, clearSelects);
             }
 
             @Override
-            public void onGetCourseDownloadsFailed() {
+            public void onGetmediaDownloadsFailed() {
                 ToastUtil.showToast(getActivity(), getActivity().getString(R.string.common__get_data_failed));
             }
         });
@@ -104,24 +104,24 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
     @Override
     public void onDestroy() {
         super.onDestroy();
-        FileDownloader.unregisterDownloadStatusListener(mCourseDownloadAdapter);
+        FileDownloader.unregisterDownloadStatusListener(mMediaDownloadAdapter);
         FileDownloader.unregisterDownloadFileChangeListener(this);
-        if (mCourseDownloadAdapter != null) {
-            mCourseDownloadAdapter.release();
+        if (mMediaDownloadAdapter != null) {
+            mMediaDownloadAdapter.release();
         }
     }
 
     @Override
-    public void onSelected(final List<CoursePreviewInfo> selectCoursePreviewInfos) {
+    public void onSelected(final List<MediaInfo> selectMediaPreviewInfos) {
 
         mLnlyOperation.setVisibility(View.VISIBLE);
 
         mBtnStartOrContinue.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectCoursePreviewInfos != null && !selectCoursePreviewInfos.isEmpty()) {
+                if (selectMediaPreviewInfos != null && !selectMediaPreviewInfos.isEmpty()) {
                     List<String> stoppedUrls = new ArrayList<String>();
-                    for (CoursePreviewInfo info : selectCoursePreviewInfos) {
+                    for (MediaInfo info : selectMediaPreviewInfos) {
                         if (info == null || info.getDownloadFileInfo() == null) {
                             continue;
                         }
@@ -146,9 +146,9 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
         mBtnPause.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectCoursePreviewInfos != null && !selectCoursePreviewInfos.isEmpty()) {
+                if (selectMediaPreviewInfos != null && !selectMediaPreviewInfos.isEmpty()) {
                     List<String> downloadingUrls = new ArrayList<String>();
-                    for (CoursePreviewInfo info : selectCoursePreviewInfos) {
+                    for (MediaInfo info : selectMediaPreviewInfos) {
                         if (info == null || info.getDownloadFileInfo() == null) {
                             continue;
                         }
@@ -174,15 +174,15 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
         mBtnDelete.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!CollectionUtil.isEmpty(selectCoursePreviewInfos)) {
+                if (!CollectionUtil.isEmpty(selectMediaPreviewInfos)) {
                     final List<String> needDeleteUrls = new ArrayList<String>();
-                    for (CoursePreviewInfo info : selectCoursePreviewInfos) {
+                    for (MediaInfo info : selectMediaPreviewInfos) {
                         if (info == null) {
                             continue;
                         }
                         if (info.getDownloadFileInfo() == null) {
-                            if (info.getCourseUrl() != null) {
-                                needDeleteUrls.add(info.getCourseUrl());
+                            if (info.getMediaUrl() != null) {
+                                needDeleteUrls.add(info.getMediaUrl());
                             }
                         } else {
                             needDeleteUrls.add(info.getDownloadFileInfo().getUrl());
@@ -193,7 +193,7 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
                     if (!CollectionUtil.isEmpty(needDeleteUrls)) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        String note = getString(R.string.course_center__course_cache_delete_confirm);
+                        String note = getString(R.string.media_center__media_cache_delete_confirm);
                         note = String.format(note, needDeleteUrls.size());
                         builder.setTitle(note);
                         builder.setNegativeButton("cancel", null);
@@ -272,7 +272,7 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
     @Override
     public void onDownloadFileCreated(DownloadFileInfo downloadFileInfo) {
         Log.e("wlf", "onDownloadFileCreated---" + downloadFileInfo.getUrl() + ",thread:" + Thread.currentThread());
-        initCourseDownloadData(false);
+        initmediaDownloadData(false);
     }
 
     @Override
@@ -281,8 +281,12 @@ public class CourseDownloadFragment extends Fragment implements CourseDownloadAd
 
     @Override
     public void onDownloadFileDeleted(DownloadFileInfo downloadFileInfo) {
-        initCourseDownloadData(true);
+        initmediaDownloadData(true);
     }
 
 
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
 }

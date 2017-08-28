@@ -3,8 +3,7 @@ package com.act.quzhibo.advanced_use.model;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.act.quzhibo.advanced_use.db.CourseDbHelper;
-import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.advanced_use.db.MediaDbHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.Dao.CreateOrUpdateStatus;
 import com.j256.ormlite.field.DatabaseField;
@@ -18,44 +17,42 @@ import org.wlf.filedownloader.listener.OnDownloadFileChangeListener;
 
 import java.sql.SQLException;
 
-@DatabaseTable(tableName = "tb_course")
-public class CoursePreviewInfo implements OnDownloadFileChangeListener {
+import cn.bmob.v3.BmobObject;
 
-    public static final String COLUMN_NAME_OF_FIELD_COURSE_URL = "course_url";
+@DatabaseTable(tableName = "tb_media")
+public class MediaInfo extends BmobObject implements OnDownloadFileChangeListener {
+
+    public static final String COLUMN_NAME_OF_FIELD_MEDIA_URL = "media_url";
 
     @DatabaseField(generatedId = true, columnName = "_id")
     private Integer mId;//the id of the table
 
-    @DatabaseField(columnName = "course_id", unique = true, canBeNull = false)
-    private String mCourseId;//the id of the course
+    @DatabaseField(columnName = "media_id", unique = true, canBeNull = false)
+    private String mMediaId;//the id of the media
 
-    @DatabaseField(columnName = COLUMN_NAME_OF_FIELD_COURSE_URL, unique = true, canBeNull = false)
-    private String mCourseUrl;//the url of the course
+    @DatabaseField(columnName = COLUMN_NAME_OF_FIELD_MEDIA_URL, unique = true, canBeNull = false)
+    private String mMediaUrl;//the url of the media
 
-    @DatabaseField(columnName = "course_cover_url")
-    private String mCourseCoverUrl;//the cover_url of the course
+    @DatabaseField(columnName = "media_cover_url")
+    private String mMediaCoverUrl;//the cover_url of the media
 
-    @DatabaseField(columnName = "course_name")
-    private String mCourseName;//the name of the course
-
-    @DatabaseField(columnName = "course_type")
-    private String mCourseType;
+    @DatabaseField(columnName = "media_name")
+    private String mMediaName;//the name of the media
 
     private DownloadFileInfo mDownloadFileInfo;//DownloadFileInfo
-    private CourseDbHelper mCourseDbHelper;//the DbOpenHelper
+    private MediaDbHelper mMediaDbHelper;//the DbOpenHelper
 
-    private CoursePreviewInfo() {
+    private MediaInfo() {
         init();
     }
 
-    public CoursePreviewInfo(String courseId, String courseUrl, String courseCoverUrl, String courseName,
-                             CourseDbHelper courseDbHelper) {
-        mCourseId = courseId;
-        mCourseUrl = courseUrl;
-        mCourseCoverUrl = courseCoverUrl;
-        mCourseName = courseName;
-        mCourseDbHelper = courseDbHelper;
-        mCourseType = Constants.PHOTO;
+    public MediaInfo(String mediaId, String mediaUrl, String mediaCoverUrl, String mediaName,
+                     MediaDbHelper mediaDbHelper) {
+        mMediaId = mediaId;
+        mMediaUrl = mediaUrl;
+        mMediaCoverUrl = mediaCoverUrl;
+        mMediaName = mediaName;
+        mMediaDbHelper = mediaDbHelper;
 
         init();
     }
@@ -67,8 +64,8 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
         // register DownloadFileChangeListener
         FileDownloader.registerDownloadFileChangeListener(this);
         // init DownloadFileInfo if has been downloaded
-        if (!TextUtils.isEmpty(mCourseUrl)) {
-            mDownloadFileInfo = FileDownloader.getDownloadFile(mCourseUrl);
+        if (!TextUtils.isEmpty(mMediaUrl)) {
+            mDownloadFileInfo = FileDownloader.getDownloadFile(mMediaUrl);
         }
     }
 
@@ -85,20 +82,20 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
         return mId;
     }
 
-    public String getCourseId() {
-        return mCourseId;
+    public String getMediaId() {
+        return mMediaId;
     }
 
-    public String getCourseUrl() {
-        return mCourseUrl;
+    public String getMediaUrl() {
+        return mMediaUrl;
     }
 
-    public String getCourseCoverUrl() {
-        return mCourseCoverUrl;
+    public String getMediaCoverUrl() {
+        return mMediaCoverUrl;
     }
 
-    public String getCourseName() {
-        return mCourseName;
+    public String getMediaName() {
+        return mMediaName;
     }
 
     public DownloadFileInfo getDownloadFileInfo() {
@@ -109,14 +106,14 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
     public void onDownloadFileCreated(DownloadFileInfo downloadFileInfo) {
 
         if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals
-                (mCourseUrl)) {
+                (mMediaUrl)) {
 
 
             try {
-                if (mCourseDbHelper == null) {
+                if (mMediaDbHelper == null) {
                     return;
                 }
-                Dao<CoursePreviewInfo, Integer> dao = mCourseDbHelper.getDao(CoursePreviewInfo.class);
+                Dao<MediaInfo, Integer> dao = mMediaDbHelper.getDao(MediaInfo.class);
                 CreateOrUpdateStatus status = dao.createOrUpdate(this);
                 if (status.isCreated() || status.isUpdated()) {
                     this.mDownloadFileInfo = downloadFileInfo;
@@ -132,19 +129,19 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
     public void onDownloadFileUpdated(DownloadFileInfo downloadFileInfo, Type type) {
 
         if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals
-                (mCourseUrl)) {
+                (mMediaUrl)) {
             if (this.mDownloadFileInfo == null) {
                 try {
-                    if (mCourseDbHelper == null) {
+                    if (mMediaDbHelper == null) {
                         return;
                     }
-                    UpdateBuilder builder = mCourseDbHelper.getDao(CoursePreviewInfo.class).updateBuilder();
-                    builder.where().eq(CoursePreviewInfo.COLUMN_NAME_OF_FIELD_COURSE_URL, downloadFileInfo.getUrl());
+                    UpdateBuilder builder = mMediaDbHelper.getDao(MediaInfo.class).updateBuilder();
+                    builder.where().eq(MediaInfo.COLUMN_NAME_OF_FIELD_MEDIA_URL, downloadFileInfo.getUrl());
                     int result = builder.update();
                     if (result == 1) {
                         this.mDownloadFileInfo = downloadFileInfo;
                     } else {
-                        Dao<CoursePreviewInfo, Integer> dao = mCourseDbHelper.getDao(CoursePreviewInfo.class);
+                        Dao<MediaInfo, Integer> dao = mMediaDbHelper.getDao(MediaInfo.class);
                         CreateOrUpdateStatus status = dao.createOrUpdate(this);
                         if (status.isCreated() || status.isUpdated()) {
                             this.mDownloadFileInfo = downloadFileInfo;
@@ -168,14 +165,14 @@ public class CoursePreviewInfo implements OnDownloadFileChangeListener {
         }
 
         if (downloadFileInfo != null && downloadFileInfo.getUrl() != null && downloadFileInfo.getUrl().equals
-                (mCourseUrl)) {
-            // delete this course preview in database download record
+                (mMediaUrl)) {
+            // delete this media preview in database download record
             try {
-                if (mCourseDbHelper == null) {
+                if (mMediaDbHelper == null) {
                     return;
                 }
-                DeleteBuilder builder = mCourseDbHelper.getDao(CoursePreviewInfo.class).deleteBuilder();
-                builder.where().eq(CoursePreviewInfo.COLUMN_NAME_OF_FIELD_COURSE_URL, mCourseUrl);
+                DeleteBuilder builder = mMediaDbHelper.getDao(MediaInfo.class).deleteBuilder();
+                builder.where().eq(MediaInfo.COLUMN_NAME_OF_FIELD_MEDIA_URL, mMediaUrl);
                 int result = builder.delete();
                 if (result == 1) {
                     this.mDownloadFileInfo = null;
