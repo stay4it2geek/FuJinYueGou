@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.advanced_use.db.MediaDbHelper;
 import com.act.quzhibo.advanced_use.model.MediaInfo;
+import com.act.quzhibo.advanced_use.model.MediaModel;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.view.LoadNetView;
@@ -51,10 +53,19 @@ public class MediaPreviewFragment extends BackHandledFragment {
 
             if (mMediaPreviewAdapter != null) {
                 mMediaPreviewAdapter.release();
+                mMediaPreviewAdapter.setOnItemClickListener(new MediaPreviewAdapter.OnMediaModelRecyclerViewItemClickListener() {
+
+                    @Override
+                    public void onItemClick(MediaModel MediaModel) {
+
+                    }
+                });
             }
-            mMediaPreviewAdapter = new MediaPreviewAdapter(getActivity(),null);
+
+
+            mMediaPreviewAdapter = new MediaPreviewAdapter(getActivity(), null);
             mRvmediaPreview.setAdapter(mMediaPreviewAdapter);
-            loadNetView= (LoadNetView) rootView.findViewById(R.id.loadview);
+            loadNetView = (LoadNetView) rootView.findViewById(R.id.loadview);
             loadNetView.setReloadButtonListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -75,12 +86,12 @@ public class MediaPreviewFragment extends BackHandledFragment {
         }
     }
 
-    
+
     private int limit = 10; // 每页的数据是10条
     private String lastTime = "";
-    private ArrayList<MediaInfo> medias = new ArrayList<>();
     private int mediasSize;
 
+    private ArrayList<MediaModel> medias= new ArrayList<>();
 
     /**
      * 分页获取数据
@@ -91,6 +102,7 @@ public class MediaPreviewFragment extends BackHandledFragment {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
         List<BmobQuery<MediaInfo>> queries = new ArrayList<>();
+
         query2.setLimit(limit);
         if (actionType == Constants.LOADMORE) {
             // 只查询小于最后一个item发表时间的数据
@@ -105,11 +117,11 @@ public class MediaPreviewFragment extends BackHandledFragment {
             }
         }
         BmobQuery<MediaInfo> query3 = new BmobQuery<>();
-        query3.addWhereEqualTo("mediaType", "0");
-        BmobQuery<MediaInfo> query4 = new BmobQuery<>();
-        query4.addWhereEqualTo("author", getArguments().getSerializable("author"));
+        query3.addWhereEqualTo("mediaType", Constants.VIDEO_ALBUM);
+//        BmobQuery<MediaInfo> query4 = new BmobQuery<>();
+//        query4.addWhereEqualTo("author", getArguments().getSerializable("author"));
         queries.add(query3);
-        queries.add(query4);
+//        queries.add(query4);
         query.and(queries);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MediaInfo>() {
@@ -117,15 +129,26 @@ public class MediaPreviewFragment extends BackHandledFragment {
             public void done(List<MediaInfo> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
+                        ArrayList<MediaModel> mediaModels = new ArrayList<>();
+
+                        for (MediaInfo infoModel : list) {
+                            MediaModel model = new MediaModel(
+                                    infoModel.mMediaId,
+                                    infoModel.mMediaUrl,
+                                    infoModel.mMediaCoverUrl,
+                                    infoModel.mMediaName,
+                                    MediaDbHelper.getInstance(getActivity()));
+                            mediaModels.add(model);
+                        }
                         if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
                             medias.clear();
                             lastTime = list.get(list.size() - 1).getCreatedAt();
-                            medias.addAll(list);
+                            medias.addAll(mediaModels);
                         } else if (actionType == Constants.LOADMORE) {
-                            medias.addAll(list);
+                            medias.addAll(mediaModels);
                             lastTime = list.get(list.size() - 1).getCreatedAt();
                         }
+
                         Message message = new Message();
                         message.obj = medias;
                         message.what = actionType;
@@ -133,6 +156,9 @@ public class MediaPreviewFragment extends BackHandledFragment {
                     } else {
                         handler.sendEmptyMessage(Constants.NO_MORE);
                     }
+                } else {
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+
                 }
             }
         });
@@ -143,36 +169,27 @@ public class MediaPreviewFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<MediaInfo> mediaInfos = (ArrayList<MediaInfo>) msg.obj;
+            ArrayList<MediaModel> MediaModels = (ArrayList<MediaModel>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what != Constants.NO_MORE) {
-                    if (mediaInfos != null) {
-                        mediasSize = mediaInfos.size();
-                    }
+                if (MediaModels != null) {
+                    mediasSize = MediaModels.size();
+                }
 //                    Collections.sort(medias, new ComparatorValues());
-                    if (mediasSize > 0) {
-                        if (mMediaPreviewAdapter == null) {
-                            mMediaPreviewAdapter.update(getActivity(),mediaInfos);
-                            mMediaPreviewAdapter.setOnItemClickListener(new MediaPreviewAdapter.OnMediaInfoRecyclerViewItemClickListener() {
-
-                                @Override
-                                public void onItemClick(MediaInfo mediaInfo) {
-
-                                }
-                            });
-                        } else {
-                            mMediaPreviewAdapter.notifyDataSetChanged();
-                        }
+                if (mediasSize > 0) {
+                    if (mMediaPreviewAdapter != null) {
+                        mMediaPreviewAdapter.update(getActivity(), MediaModels);
+                        mMediaPreviewAdapter.notifyDataSetChanged();
                     }
 
                     loadNetView.setVisibility(View.GONE);
                 } else {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.RELOAD);
+
                 }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.RELOAD);
+                loadNetView.setlayoutVisily(Constants.NetWorkError);
             }
         }
     };

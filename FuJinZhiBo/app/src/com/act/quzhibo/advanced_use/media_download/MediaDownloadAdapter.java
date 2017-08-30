@@ -19,7 +19,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.advanced_use.model.MediaInfo;
+import com.act.quzhibo.advanced_use.model.MediaModel;
+import com.act.quzhibo.util.TimeUtil;
 import com.act.quzhibo.util.ToastUtil;
 
 import org.wlf.filedownloader.DownloadFileInfo;
@@ -35,18 +36,18 @@ import java.util.List;
 
 public class MediaDownloadAdapter extends RecyclerView.Adapter<MediaDownloadAdapter.mediaDownloadViewHolder> implements OnRetryableFileDownloadStatusListener {
 
-    private List<MediaInfo> mMediaPreviewInfos = new ArrayList<>();
-    private List<MediaInfo> mSelectMediaPreviewInfos = new ArrayList<>();
+    private List<MediaModel> mMediaPreviewInfos = new ArrayList<>();
+    private List<MediaModel> mSelectMediaPreviewInfos = new ArrayList<>();
 
     private OnItemSelectListener mOnItemSelectListener;
     private Context mContext;
 
-    public MediaDownloadAdapter(Context context, List<MediaInfo> mediaPreviewInfos) {
+    public MediaDownloadAdapter(Context context, List<MediaModel> mediaPreviewInfos) {
         this.mContext = context;
         update(mediaPreviewInfos, true);
     }
 
-    public void update(List<MediaInfo> mediaPreviewInfos, boolean clearSelects) {
+    public void update(List<MediaModel> mediaPreviewInfos, boolean clearSelects) {
         if (mediaPreviewInfos == null) {
             return;
         }
@@ -118,7 +119,7 @@ public class MediaDownloadAdapter extends RecyclerView.Adapter<MediaDownloadAdap
             }
         }
 
-        final MediaInfo mediaPreviewInfo = mMediaPreviewInfos.get(position);
+        final MediaModel mediaPreviewInfo = mMediaPreviewInfos.get(position);
         if (mediaPreviewInfo == null) {
             return;
         }
@@ -294,7 +295,7 @@ public class MediaDownloadAdapter extends RecyclerView.Adapter<MediaDownloadAdap
 
         // set check status
         boolean isChecked = false;
-        for (MediaInfo selectMediaPreviewInfo : mSelectMediaPreviewInfos) {
+        for (MediaModel selectMediaPreviewInfo : mSelectMediaPreviewInfos) {
             if (selectMediaPreviewInfo == mediaPreviewInfo) {
                 isChecked = true;
                 break;
@@ -308,7 +309,7 @@ public class MediaDownloadAdapter extends RecyclerView.Adapter<MediaDownloadAdap
     }
 
     // set background on click listener
-    private void setBackgroundOnClickListener(final mediaDownloadViewHolder holder, final MediaInfo
+    private void setBackgroundOnClickListener(final mediaDownloadViewHolder holder, final MediaModel
             mediaPreviewInfo) {
 
         if (holder == null || holder.itemView == null) {
@@ -560,7 +561,7 @@ public class MediaDownloadAdapter extends RecyclerView.Adapter<MediaDownloadAdap
             return -1;
         }
         for (int i = 0; i < mMediaPreviewInfos.size(); i++) {
-            MediaInfo mediaPreviewInfo = mMediaPreviewInfos.get(i);
+            MediaModel mediaPreviewInfo = mMediaPreviewInfos.get(i);
             if (mediaPreviewInfo == null || TextUtils.isEmpty(mediaPreviewInfo.getMediaUrl())) {
                 continue;
             }
@@ -609,13 +610,13 @@ public class MediaDownloadAdapter extends RecyclerView.Adapter<MediaDownloadAdap
      */
     public interface OnItemSelectListener {
 
-        void onSelected(List<MediaInfo> selectmediaPreviewInfos);
+        void onSelected(List<MediaModel> selectmediaPreviewInfos);
 
         void onNoneSelect();
     }
 
     public void release() {
-        for (MediaInfo mediaPreviewInfo : mMediaPreviewInfos) {
+        for (MediaModel mediaPreviewInfo : mMediaPreviewInfos) {
             if (mediaPreviewInfo == null) {
                 continue;
             }

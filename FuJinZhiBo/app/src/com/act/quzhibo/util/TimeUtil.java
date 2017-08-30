@@ -1,4 +1,4 @@
-package com.act.quzhibo.advanced_use.media_download;
+package com.act.quzhibo.util;
 
 /**
  * time util

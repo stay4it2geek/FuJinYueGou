@@ -36,7 +36,8 @@ public class Constants {
     public static final int RELOAD = 15;
     public static final int BUY_VIP = 16;
     public static final int REQUEST_PERMISSION_SETTING = 17;
-    public static final int PHOTO_ALBUM = 18;
-    public static final int VIDEO_ALBUM = 19;
+    public static final String PHOTO_ALBUM = "18";
+    public static final String VIDEO_ALBUM = "19";
     public static final String MEDIA_AUTHOR = "media_author";
+
 }

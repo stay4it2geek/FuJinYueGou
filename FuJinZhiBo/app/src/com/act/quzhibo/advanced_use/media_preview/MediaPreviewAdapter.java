@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
-import com.act.quzhibo.advanced_use.model.MediaInfo;
+import com.act.quzhibo.advanced_use.model.MediaModel;
 import com.act.quzhibo.entity.MediaAuthor;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
@@ -25,24 +25,24 @@ import java.util.List;
 
 public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapter.mediaPreviewViewHolder> {
 
-    private List<MediaInfo> mMediaPreviewInfos = new ArrayList<>();
+    private List<MediaModel> mMediaPreviewInfos = new ArrayList<>();
     private Context context;
 
-    public MediaPreviewAdapter(Context context, List<MediaInfo> mediaPreviewInfos) {
+    public MediaPreviewAdapter(Context context, List<MediaModel> mediaPreviewInfos) {
 
         update(context,mediaPreviewInfos);
     }
-    public interface OnMediaInfoRecyclerViewItemClickListener {
-        void onItemClick(MediaInfo mediaInfo);
+    public interface OnMediaModelRecyclerViewItemClickListener {
+        void onItemClick(MediaModel MediaModel);
     }
 
-    private OnMediaInfoRecyclerViewItemClickListener mOnItemClickListener = null;
+    private OnMediaModelRecyclerViewItemClickListener mOnItemClickListener = null;
 
-    public void setOnItemClickListener(OnMediaInfoRecyclerViewItemClickListener listener) {
+    public void setOnItemClickListener(OnMediaModelRecyclerViewItemClickListener listener) {
         mOnItemClickListener = listener;
     }
 
-    public void update(Context context,List<MediaInfo> mediaPreviewInfos) {
+    public void update(Context context,List<MediaModel> mediaPreviewInfos) {
         if (mediaPreviewInfos == null) {
             return;
         }
@@ -75,7 +75,7 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
             return;
         }
 
-        final MediaInfo mediaPreviewInfo = mMediaPreviewInfos.get(position);
+        final MediaModel mediaPreviewInfo = mMediaPreviewInfos.get(position);
         if (mediaPreviewInfo == null) {
             return;
         }
@@ -137,7 +137,7 @@ public class MediaPreviewAdapter extends RecyclerView.Adapter<MediaPreviewAdapte
     }
 
     public void release() {
-        for (MediaInfo mediaPreviewInfo : mMediaPreviewInfos) {
+        for (MediaModel mediaPreviewInfo : mMediaPreviewInfos) {
             if (mediaPreviewInfo == null) {
                 continue;
             }

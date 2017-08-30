@@ -33,6 +33,8 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
+import static com.act.quzhibo.common.Constants.VIDEO_ALBUM;
+
 
 public class VideoAlbumAuthorsFragment extends BackHandledFragment {
 
@@ -127,7 +129,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
             }
         }
         BmobQuery<MediaAuthor> query3 = new BmobQuery<>();
-        query3.addWhereEqualTo("mediaType", "0");
+        query3.addWhereEqualTo("mediaType", VIDEO_ALBUM);
         queries.add(query3);
         query.and(queries);
         query.order("-updatedAt");

@@ -3,7 +3,7 @@ package com.act.quzhibo.advanced_use.data_access;
 import android.content.Context;
 
 import com.act.quzhibo.advanced_use.db.MediaDbHelper;
-import com.act.quzhibo.advanced_use.model.MediaInfo;
+import com.act.quzhibo.advanced_use.model.MediaModel;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -13,18 +13,18 @@ public class GetMediaDownloads {
 
     public void getMediaDownloads(Context context, OnGetmediaDownloadsListener onGetmediaDownloadsListener) {
 
-        List<MediaInfo> mediaPreviewInfos = null;
+        List<MediaModel> mediaPreviewInfos = null;
 
         try {
-            Dao<MediaInfo, Integer> dao = MediaDbHelper.getInstance(context).getDao(MediaInfo.class);
-            mediaPreviewInfos =  dao.queryForAll();;
+            Dao<MediaModel, Integer> dao = MediaDbHelper.getInstance(context).getDao(MediaModel.class);
+            mediaPreviewInfos =  dao.queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (mediaPreviewInfos != null) {
 
-                // init DownloadFiles
-                for (MediaInfo mediaPreviewInfo : mediaPreviewInfos) {
+
+                for (MediaModel mediaPreviewInfo : mediaPreviewInfos) {
                     if (mediaPreviewInfo == null) {
                         continue;
                     }
@@ -41,7 +41,7 @@ public class GetMediaDownloads {
 
     public interface OnGetmediaDownloadsListener {
 
-        void onGetmediaDownloadsSucceed(List<MediaInfo> mediaPreviewInfos);
+        void onGetmediaDownloadsSucceed(List<MediaModel> mediaPreviewInfos);
 
         void onGetmediaDownloadsFailed();
     }

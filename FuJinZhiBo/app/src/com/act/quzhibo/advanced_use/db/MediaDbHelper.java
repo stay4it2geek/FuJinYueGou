@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 
-import com.act.quzhibo.advanced_use.model.MediaInfo;
+import com.act.quzhibo.advanced_use.model.MediaModel;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class MediaDbHelper extends BaseOrmLiteSQLiteHelper {
             return;
         }
         // add table
-        supportTables.add(MediaInfo.class);
+        supportTables.add(MediaModel.class);
     }
 
     @Override

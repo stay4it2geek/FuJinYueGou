@@ -37,9 +37,9 @@ public class MediaActivity extends TabSlideBaseActivity implements InterestPlate
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> mFragments = new ArrayList<>();
         MediaPreviewFragment mediaPreviewFragment=new MediaPreviewFragment();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("author",getIntent().getSerializableExtra(Constants.MEDIA_AUTHOR));
-        mediaPreviewFragment.setArguments(bundle);
+//        Bundle bundle=new Bundle();
+//        bundle.putSerializable("author",getIntent().getSerializableExtra(Constants.MEDIA_AUTHOR));
+//        mediaPreviewFragment.setArguments(bundle);
         mFragments.add(mediaPreviewFragment);
         mFragments.add(new MediaDownloadFragment());
         return mFragments;

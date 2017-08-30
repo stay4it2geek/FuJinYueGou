@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.advanced_use.data_access.GetMediaDownloads;
-import com.act.quzhibo.advanced_use.model.MediaInfo;
+import com.act.quzhibo.advanced_use.model.MediaModel;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.ToastUtil;
 
@@ -90,7 +90,7 @@ public class MediaDownloadFragment extends BackHandledFragment implements MediaD
         GetMediaDownloads getmediaDownloads = new GetMediaDownloads();
         getmediaDownloads.getMediaDownloads(getActivity(), new GetMediaDownloads.OnGetmediaDownloadsListener() {
             @Override
-            public void onGetmediaDownloadsSucceed(List<MediaInfo> mediaPreviewInfos) {
+            public void onGetmediaDownloadsSucceed(List<MediaModel> mediaPreviewInfos) {
                 mMediaDownloadAdapter.update(mediaPreviewInfos, clearSelects);
             }
 
@@ -112,7 +112,7 @@ public class MediaDownloadFragment extends BackHandledFragment implements MediaD
     }
 
     @Override
-    public void onSelected(final List<MediaInfo> selectMediaPreviewInfos) {
+    public void onSelected(final List<MediaModel> selectMediaPreviewInfos) {
 
         mLnlyOperation.setVisibility(View.VISIBLE);
 
@@ -121,7 +121,7 @@ public class MediaDownloadFragment extends BackHandledFragment implements MediaD
             public void onClick(View v) {
                 if (selectMediaPreviewInfos != null && !selectMediaPreviewInfos.isEmpty()) {
                     List<String> stoppedUrls = new ArrayList<String>();
-                    for (MediaInfo info : selectMediaPreviewInfos) {
+                    for (MediaModel info : selectMediaPreviewInfos) {
                         if (info == null || info.getDownloadFileInfo() == null) {
                             continue;
                         }
@@ -148,7 +148,7 @@ public class MediaDownloadFragment extends BackHandledFragment implements MediaD
             public void onClick(View v) {
                 if (selectMediaPreviewInfos != null && !selectMediaPreviewInfos.isEmpty()) {
                     List<String> downloadingUrls = new ArrayList<String>();
-                    for (MediaInfo info : selectMediaPreviewInfos) {
+                    for (MediaModel info : selectMediaPreviewInfos) {
                         if (info == null || info.getDownloadFileInfo() == null) {
                             continue;
                         }
@@ -176,7 +176,7 @@ public class MediaDownloadFragment extends BackHandledFragment implements MediaD
             public void onClick(View v) {
                 if (!CollectionUtil.isEmpty(selectMediaPreviewInfos)) {
                     final List<String> needDeleteUrls = new ArrayList<String>();
-                    for (MediaInfo info : selectMediaPreviewInfos) {
+                    for (MediaModel info : selectMediaPreviewInfos) {
                         if (info == null) {
                             continue;
                         }
