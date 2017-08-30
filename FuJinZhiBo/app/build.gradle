@@ -21,9 +21,11 @@ dependencies {
     compile 'com.github.arcadefire:nice-spinner:1.2'
     compile 'com.contrarywind:Android-PickerView:3.2.6'
     compile 'com.baoyz.swipemenulistview:library:1.3.0'
-    compile 'org.wlf:FileDownloader:0.3.2'
-    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile 'cn.woblog.android:downloader:1.0.1'
     compile 'com.auron:permission-manage:1.1.7'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.j256.ormlite:ormlite-android:5.0'
+    compile 'com.j256.ormlite:ormlite-core:5.0'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
     compile files('libs/okhttp-3.8.1.jar')
 }

@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.activity.DownloadManagerActivity;
+import com.act.quzhibo.download.domain.MyDownloadInfLocal;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
@@ -55,6 +57,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
         }
 
+        view.findViewById(R.id.mydownloading_layout).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
@@ -103,6 +106,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 switch (view.getId()) {
+                    case R.id.mydownloading_layout:
+                        getActivity().startActivity(new Intent(getActivity(), DownloadManagerActivity.class));
+                        break;
                     case R.id.vip_policy:
                         getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
                         break;

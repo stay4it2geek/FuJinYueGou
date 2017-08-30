@@ -29,7 +29,7 @@ public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
     private String[] mTitles = {"课堂", "直播", "广场", "财富", "我的"};
-    private String[] mTitlesSpecial = {"课堂", "财富", "我的"};
+    private String[] mTitlesSpecial = {"课堂", "广场", "我的"};
 
     private int[] mIconUnselectIds = {R.drawable.home, R.drawable.zhibo, R.drawable.square, R.drawable.money, R.drawable.mine};
 
@@ -73,9 +73,9 @@ public class TabMainActivity extends TabActivity {
             tabHost.addTab(tabHost.newTabSpec("课堂")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MultipleMeideaActivity.class)));
-            tabHost.addTab(tabHost.newTabSpec("财富")
+            tabHost.addTab(tabHost.newTabSpec("广场")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, MoneyActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("我的")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MineActivity.class)));

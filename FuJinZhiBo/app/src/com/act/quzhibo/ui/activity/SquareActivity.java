@@ -3,8 +3,6 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.act.quzhibo.advanced_use.media_download.MediaDownloadFragment;
-import com.act.quzhibo.advanced_use.media_preview.MediaPreviewFragment;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.ui.fragment.PhotoAlbumAuthorsFragment;
 import com.act.quzhibo.ui.fragment.VideoAlbumAuthorsFragment;

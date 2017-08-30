@@ -303,6 +303,38 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/mydownloading_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/mydownloading_img"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/mydownloading" />
+
+                <TextView
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/mydownloading_img"
+                    android:paddingTop="5dp"
+                    android:text="查看我正在下载的" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/rightarr" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/myVideo_download_layout"

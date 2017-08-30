@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.entity.MediaAuthor;
-import com.act.quzhibo.ui.activity.MediaActivity;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -198,7 +198,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                                     Intent intent = new Intent();
                                     intent.putExtra("title", "视频一览");
                                     intent.putExtra(Constants.MEDIA_AUTHOR, mediaAuthor);
-                                    intent.setClass(getActivity(), MediaActivity.class);
+                                    intent.setClass(getActivity(), DownloadManagerActivity.class);
                                     startActivity(intent);
                                 }
                             });

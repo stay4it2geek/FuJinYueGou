@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">趣直播</string>
+    <string name="app_name">趣</string>
 
     <string name="action_tab_media_preview_text">media preview</string>
     <string name="action_tab_media_download_text">media download</string>
