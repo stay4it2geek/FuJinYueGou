@@ -6,8 +6,8 @@ import com.j256.ormlite.table.DatabaseTable;
 /**
  * Created by renpingqing on 17/3/2.
  */
-@DatabaseTable(tableName = "MyBusinessInfLocal")
-public class MyBusinessInfLocal {
+@DatabaseTable(tableName = "MediaInfoLocal")
+public class MediaInfoLocal {
 
   @DatabaseField(id = true)
   private int id;
@@ -21,10 +21,10 @@ public class MyBusinessInfLocal {
   @DatabaseField
   private String url;
 
-  public MyBusinessInfLocal() {
+  public MediaInfoLocal() {
   }
 
-  public MyBusinessInfLocal(int id, String name, String icon, String url) {
+  public MediaInfoLocal(int id, String name, String icon, String url) {
     this.id = id;
     this.name = name;
     this.icon = icon;

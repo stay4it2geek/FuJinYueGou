@@ -2,16 +2,16 @@ package com.act.quzhibo.download.domain;
 
 import java.io.Serializable;
 
-/**
- * Created by renpingqing on 17/1/19.
- */
-public class MyBusinessInfo implements Serializable {
+import cn.bmob.v3.BmobObject;
+
+
+public class MediaInfo extends BmobObject implements Serializable {
 
   private String name;
   private String icon;
   private String url;
 
-  public MyBusinessInfo(String name, String icon, String url) {
+  public MediaInfo(String name, String icon, String url) {
     this.name = name;
     this.icon = icon;
     this.url = url;

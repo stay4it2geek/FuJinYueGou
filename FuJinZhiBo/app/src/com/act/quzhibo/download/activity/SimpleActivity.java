@@ -1,5 +1,6 @@
 package com.act.quzhibo.download.activity;
 
+import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -146,7 +147,12 @@ public class SimpleActivity extends BaseActivity implements OnClickListener {
     });
     downloadManager.download(downloadInfo);
   }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_simple);
 
+  }
   @Override
   public void initView() {
     tv_download_info = (TextView) findViewById(R.id.tv_download_info);

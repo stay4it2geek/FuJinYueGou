@@ -16,9 +16,10 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.adapter.BaseRecyclerViewAdapter;
 import com.act.quzhibo.download.callback.MyDownloadListener;
 import com.act.quzhibo.download.db.DBController;
-import com.act.quzhibo.download.domain.MyBusinessInfLocal;
-import com.act.quzhibo.download.domain.MyBusinessInfo;
+import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.util.FileUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -37,7 +38,7 @@ import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
 /**
  * Created by renpingqing on 17/1/19.
  */
-public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo, DownloadListAdapter.ViewHolder> {
+public class DownloadListAdapter extends BaseRecyclerViewAdapter<MediaInfo, DownloadListAdapter.ViewHolder> {
 
   private static final String TAG = "DownloadListAdapter";
   private final Context context;
@@ -54,13 +55,20 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
       e.printStackTrace();
     }
   }
+    public interface OnMediaInfoRecyclerViewItemClickListener {
+        void onItemClick(MediaInfo mediaInfo);
+    }
 
+    private OnMediaInfoRecyclerViewItemClickListener mOnItemClickListener = null;
+
+    public void setOnItemClickListener(OnMediaInfoRecyclerViewItemClickListener listener) {
+        mOnItemClickListener = listener;
+    }
   @Override
   public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     return new ViewHolder(LayoutInflater.from(context).inflate(
         R.layout.item_download_info, parent, false));
   }
-
   @Override
   public void onBindViewHolder(DownloadListAdapter.ViewHolder holder, final int position) {
     holder.bindData(getData(position), position, context);
@@ -75,7 +83,14 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
     });
   }
 
+  OnDeleteItemListner onDeleteItemListner;
+  public void setOnDeleItemlIstner( OnDeleteItemListner onDeleteItemListner){
+    this.onDeleteItemListner=onDeleteItemListner;
 
+  }
+public interface  OnDeleteItemListner{
+  void deleteItem(int position);
+}
   class ViewHolder extends RecyclerView.ViewHolder {
 
     private final ImageView iv_icon;
@@ -98,7 +113,7 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
     }
 
     @SuppressWarnings("unchecked")
-    public void bindData(final MyBusinessInfo data, int position, final Context context) {
+    public void bindData(final MediaInfo data, final int position, final Context context) {
       Glide.with(context).load(data.getIcon()).into(iv_icon);
       tv_name.setText(data.getName());
 
@@ -123,10 +138,12 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
 
       refresh();
 
+
 //      Download button
       bt_action.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View v) {
+
           if (downloadInfo != null) {
 
             switch (downloadInfo.getStatus()) {
@@ -163,7 +180,7 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
 
                   @Override
                   public void onRefresh() {
-                    notifyDownloadStatus();
+                    notifyDownloadStatus(position);
 
                     if (getUserTag() != null && getUserTag().get() != null) {
                       ViewHolder viewHolder = (ViewHolder) getUserTag().get();
@@ -174,10 +191,10 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
             downloadManager.download(downloadInfo);
 
             //save extra info to my database.
-            MyBusinessInfLocal myBusinessInfLocal = new MyBusinessInfLocal(
+            MediaInfoLocal mediaInfoLocal = new MediaInfoLocal(
                 data.getUrl().hashCode(), data.getName(), data.getIcon(), data.getUrl());
             try {
-              dbController.createOrUpdateMyDownloadInfo(myBusinessInfLocal);
+              dbController.createOrUpdateMyDownloadInfo(mediaInfoLocal);
             } catch (SQLException e) {
               e.printStackTrace();
             }
@@ -187,10 +204,13 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
 
     }
 
-    private void notifyDownloadStatus() {
+    private void notifyDownloadStatus(int position) {
       if (downloadInfo.getStatus() == STATUS_REMOVED) {
         try {
+
+          ToastUtil.showToast(context,"delete3");
           dbController.deleteMyDownloadInfo(downloadInfo.getUri().hashCode());
+          onDeleteItemListner.deleteItem(position);
         } catch (SQLException e) {
           e.printStackTrace();
         }
@@ -251,6 +271,7 @@ public class DownloadListAdapter extends BaseRecyclerViewAdapter<MyBusinessInfo,
             pb.setProgress(0);
             bt_action.setText("Download");
             tv_status.setText("not downloadInfo");
+            break;
           case STATUS_WAIT:
             tv_size.setText("");
             pb.setProgress(0);

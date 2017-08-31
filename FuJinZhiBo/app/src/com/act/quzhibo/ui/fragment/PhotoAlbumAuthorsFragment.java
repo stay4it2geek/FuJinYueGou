@@ -16,7 +16,9 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.ListActivity;
+import com.act.quzhibo.download.activity.SimpleActivity;
 import com.act.quzhibo.entity.MediaAuthor;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -198,8 +200,10 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                                     Intent intent = new Intent();
                                     intent.putExtra("title", "专辑一览");
                                     intent.putExtra(Constants.MEDIA_AUTHOR, mediaAuthor);
-                                    intent.setClass(getActivity(), ListActivity.class);
+                                    intent.setClass(getActivity(), SimpleActivity.class);
                                     startActivity(intent);
+
+//                                    CommonUtil.switchFragment(new PhotoAlbumListFragment(),R.id.layoutContainer,getActivity());
                                 }
                             });
                         } else {

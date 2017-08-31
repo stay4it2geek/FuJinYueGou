@@ -2,7 +2,6 @@ package com.act.quzhibo.download.activity;
 
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.activity.BaseActivity;
 import com.act.quzhibo.download.callback.MyDownloadListener;
-import com.act.quzhibo.download.domain.MyBusinessInfo;
+import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
@@ -47,7 +46,7 @@ public class DownloadDetailActivity extends BaseActivity {
   private ProgressBar pb;
   private TextView tv_name;
   private Button bt_action;
-  private MyBusinessInfo data;
+  private MediaInfo data;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +70,7 @@ public class DownloadDetailActivity extends BaseActivity {
   @Override
   protected void initData() {
     super.initData();
-    data = (MyBusinessInfo) getIntent().getSerializableExtra(DATA);
+    data = (MediaInfo) getIntent().getSerializableExtra(DATA);
     Glide.with(this).load(data.getIcon()).into(iv_icon);
 
     downloadManager = DownloadService.getDownloadManager(getApplicationContext());

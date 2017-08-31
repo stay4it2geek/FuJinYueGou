@@ -3,7 +3,8 @@ package com.act.quzhibo.download.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.act.quzhibo.download.domain.MyBusinessInfLocal;
+
+import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.download.domain.MyDownloadInfLocal;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
@@ -12,10 +13,6 @@ import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
 
 
-
-/**
- * Created by renpingqing on 17/3/2.
- */
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {
 
@@ -30,7 +27,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
   @Override
   public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
     try {
-      TableUtils.createTable(connectionSource, MyBusinessInfLocal.class);
+      TableUtils.createTable(connectionSource, MediaInfoLocal.class);
       TableUtils.createTable(connectionSource, MyDownloadInfLocal.class);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -41,7 +38,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
   public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion,
                         int newVersion) {
     try {
-      TableUtils.dropTable(connectionSource, MyBusinessInfLocal.class, true);
+      TableUtils.dropTable(connectionSource, MediaInfoLocal.class, true);
       TableUtils.dropTable(connectionSource, MyDownloadInfLocal.class, true);
     } catch (SQLException e) {
       e.printStackTrace();

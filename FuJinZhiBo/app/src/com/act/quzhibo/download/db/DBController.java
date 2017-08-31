@@ -2,7 +2,7 @@ package com.act.quzhibo.download.db;
 
 import android.content.Context;
 
-import com.act.quzhibo.download.domain.MyBusinessInfLocal;
+import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.download.domain.MyDownloadInfLocal;
 import com.act.quzhibo.download.domain.MyDownloadThreadInfoLocal;
 import com.j256.ormlite.dao.Dao;
@@ -29,7 +29,7 @@ public class DBController implements DownloadDBController {
   private static DBController instance;
   private final Context context;
   private final DBHelper dbHelper;
-  private final Dao<MyBusinessInfLocal, Integer> myBusinessInfoLocalsDao;
+  private final Dao<MediaInfoLocal, Integer> myBusinessInfoLocalsDao;
   private final Dao<MyDownloadInfLocal, Integer> myDownloadInfLocalDao;
   private final Dao<MyDownloadThreadInfoLocal, Integer> myDownloadThreadInfoLocalDao;
 
@@ -37,7 +37,7 @@ public class DBController implements DownloadDBController {
     this.context = context;
     dbHelper = new DBHelper(context);
     try {
-      myBusinessInfoLocalsDao = dbHelper.getDao(MyBusinessInfLocal.class);
+      myBusinessInfoLocalsDao = dbHelper.getDao(MediaInfoLocal.class);
       myDownloadInfLocalDao = dbHelper.getDao(MyDownloadInfLocal.class);
       myDownloadThreadInfoLocalDao = dbHelper.getDao(MyDownloadThreadInfoLocal.class);
     } catch (SQLException e) {
@@ -54,7 +54,7 @@ public class DBController implements DownloadDBController {
   }
 
 
-  public void createOrUpdateMyDownloadInfo(MyBusinessInfLocal downloadInfoLocal)
+  public void createOrUpdateMyDownloadInfo(MediaInfoLocal downloadInfoLocal)
       throws SQLException {
     myBusinessInfoLocalsDao.createOrUpdate(downloadInfoLocal);
   }
@@ -64,7 +64,7 @@ public class DBController implements DownloadDBController {
     return myBusinessInfoLocalsDao.deleteById(id);
   }
 
-  public MyBusinessInfLocal findMyDownloadInfoById(int id)
+  public MediaInfoLocal findMyDownloadInfoById(int id)
       throws SQLException {
     return myBusinessInfoLocalsDao.queryForId(id);
   }
