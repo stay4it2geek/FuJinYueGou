@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -88,7 +89,12 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                 queryData(Constants.REFRESH);
             }
         });
-
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;     //截断事件的传递
+            }
+        });
 
         return view;
     }
@@ -197,13 +203,11 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                             mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
                                 @Override
                                 public void onItemClick(MediaAuthor mediaAuthor) {
-                                    Intent intent = new Intent();
-                                    intent.putExtra("title", "专辑一览");
-                                    intent.putExtra(Constants.MEDIA_AUTHOR, mediaAuthor);
-                                    intent.setClass(getActivity(), SimpleActivity.class);
-                                    startActivity(intent);
-
-//                                    CommonUtil.switchFragment(new PhotoAlbumListFragment(),R.id.layoutContainer,getActivity());
+                                    PhotoAlbumListFragment photoAlbumListFragment=new PhotoAlbumListFragment();
+                                    Bundle bundle=new Bundle();
+                                    bundle.putSerializable("author",mediaAuthor);
+                                    photoAlbumListFragment.setArguments(bundle);
+                            CommonUtil.switchFragment(photoAlbumListFragment,R.id.layoutContainer,getActivity());
                                 }
                             });
                         } else {

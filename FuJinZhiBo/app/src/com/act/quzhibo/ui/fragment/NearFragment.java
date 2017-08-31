@@ -142,12 +142,9 @@ public class NearFragment extends BackHandledFragment {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
                             nearPersonArrayList.clear();
-                            lastTime = list.get(list.size() - 1).getUpdatedAt();
-                            nearPersonArrayList.addAll(list);
-                        } else if (actionType == Constants.LOADMORE) {
-                            nearPersonArrayList.addAll(list);
-                            lastTime = list.get(list.size() - 1).getUpdatedAt();
                         }
+                        nearPersonArrayList.addAll(list);
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
                         Message message = new Message();
                         message.obj = nearPersonArrayList;
                         message.what = actionType;

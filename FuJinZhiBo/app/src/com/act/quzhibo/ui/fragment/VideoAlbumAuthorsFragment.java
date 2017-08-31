@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -87,7 +88,12 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
             }
         });
 
-
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;     //截断事件的传递
+            }
+        });
         return view;
     }
 
@@ -141,12 +147,9 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                         if (actionType == Constants.REFRESH) {
                             // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
                             medias.clear();
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
-                            medias.addAll(list);
-                        } else if (actionType == Constants.LOADMORE) {
-                            medias.addAll(list);
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
                         }
+                        medias.addAll(list);
+                        lastTime = list.get(list.size() - 1).getCreatedAt();
                         Message message = new Message();
                         message.obj = medias;
                         message.what = actionType;

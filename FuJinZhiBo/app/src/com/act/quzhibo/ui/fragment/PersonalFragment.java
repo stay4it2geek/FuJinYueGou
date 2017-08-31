@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -73,7 +74,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.logout).setOnClickListener(this);
         view.findViewById(R.id.noRes).setOnClickListener(this);
         view.findViewById(R.id.registerLayout).setOnClickListener(this);
-
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;     //截断事件的传递
+            }
+        });
         return view;
     }
 

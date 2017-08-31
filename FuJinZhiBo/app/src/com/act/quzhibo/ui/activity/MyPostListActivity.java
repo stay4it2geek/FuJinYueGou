@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,12 +147,9 @@ public class MyPostListActivity extends AppCompatActivity {
                         if (actionType == Constants.REFRESH) {
                             // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
                             myPosts.clear();
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
-                            myPosts.addAll(list);
-                        } else if (actionType == Constants.LOADMORE) {
-                            myPosts.addAll(list);
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
                         }
+                        lastTime = list.get(list.size() - 1).getCreatedAt();
+                        myPosts.addAll(list);
                         Message message = new Message();
                         message.obj = myPosts;
                         message.what = actionType;
@@ -159,6 +157,8 @@ public class MyPostListActivity extends AppCompatActivity {
                     } else {
                         handler.sendEmptyMessage(Constants.NO_MORE);
                     }
+                }else {
+                    handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });

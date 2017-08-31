@@ -26,6 +26,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.j256.ormlite:ormlite-android:5.0'
     compile 'com.j256.ormlite:ormlite-core:5.0'
+    compile 'me.xiaopan:sketch:2.4.1'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
     compile files('libs/okhttp-3.8.1.jar')
 }
