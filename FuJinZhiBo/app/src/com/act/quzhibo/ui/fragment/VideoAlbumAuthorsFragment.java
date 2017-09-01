@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,8 +15,8 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.entity.MediaAuthor;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -44,7 +43,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.media_authors_fragment, null);
+        view = inflater.inflate(R.layout.video_authors_fragment, null);
 
         recyclerView = (XRecyclerView) view.findViewById(R.id.media_author_rv);
         recyclerView.setPullRefreshEnabled(true);
@@ -198,11 +197,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                             mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
                                 @Override
                                 public void onItemClick(MediaAuthor mediaAuthor) {
-                                    Intent intent = new Intent();
-                                    intent.putExtra("title", "视频一览");
-                                    intent.putExtra(Constants.MEDIA_AUTHOR, mediaAuthor);
-                                    intent.setClass(getActivity(), DownloadManagerActivity.class);
-                                    startActivity(intent);
+                                    CommonUtil.switchFragment(new VideoAlbumListFragment(), R.id._videolayoutContainer, getActivity());
                                 }
                             });
                         } else {

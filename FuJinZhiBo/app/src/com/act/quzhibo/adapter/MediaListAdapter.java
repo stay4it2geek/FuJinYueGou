@@ -14,13 +14,15 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.download.activity.ListActivity;
 import com.act.quzhibo.download.domain.MediaInfo;
+import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.ui.activity.XImageActivity;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MediaListAdapter  extends RecyclerView.Adapter<MediaListAdapter.MediaListViewHolder> {
+public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.MediaListViewHolder> {
 
     private Activity activity;
     private List<MediaInfo> mMediaInfos = new ArrayList<>();
@@ -28,6 +30,7 @@ public class MediaListAdapter  extends RecyclerView.Adapter<MediaListAdapter.Med
     public MediaListAdapter(Activity activity, List<MediaInfo> coursePreviewInfos) {
         this.activity = activity;
         update(coursePreviewInfos);
+
     }
 
     public void update(List<MediaInfo> coursePreviewInfos) {
@@ -52,7 +55,7 @@ public class MediaListAdapter  extends RecyclerView.Adapter<MediaListAdapter.Med
     }
 
     @Override
-    public void onBindViewHolder(MediaListViewHolder holder, int position) {
+    public void onBindViewHolder(MediaListViewHolder holder, final int position) {
 
         if (holder == null) {
             return;
@@ -73,11 +76,18 @@ public class MediaListAdapter  extends RecyclerView.Adapter<MediaListAdapter.Med
             Glide.with(activity).load(mediaInfo.getIcon()).placeholder(R.drawable.xiangjiao).into(holder.mIvCourseCover);//加载网络图片
         }
         holder.mTvCourseName.setText(mediaInfo.getName());
-
+      final  ArrayList<String> urls=new ArrayList();
+        for (MediaInfo media:mMediaInfos) {
+            urls.add(media.getUrl()+"");
+        }
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-              activity.startActivity(new Intent(activity, ListActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("position",position);
+                intent.putStringArrayListExtra("imgUrls", urls);
+                intent.setClass(activity, XImageActivity.class);
+                activity.startActivity(intent);
             }
         });
     }
@@ -88,12 +98,11 @@ public class MediaListAdapter  extends RecyclerView.Adapter<MediaListAdapter.Med
     }
 
     public void setData(ArrayList<MediaInfo> mediaInfos) {
-        this.mMediaInfos=mediaInfos;
+        this.mMediaInfos = mediaInfos;
     }
 
     public static class MediaListViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mIvDownloadCourse;
         private ImageView mIvCourseCover;
         private TextView mTvCourseName;
 

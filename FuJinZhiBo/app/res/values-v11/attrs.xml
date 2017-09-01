@@ -23,5 +23,33 @@
             <enum name="bottomLine" value="1" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="XImageView">
+        <!-- 初始化状态时, 如果图片小于 view 的尺寸，是否需要适应view的尺寸-->
+        <attr name="initType" format="enum" >
+            <enum name="fitViewMin" value="1" />
+            <enum name="fitViewMax" value="2" />
+            <enum name="fitImage" value="4" />
+            <enum name="fitViewMinImageMin" value="8" />
+        </attr>
 
+        <attr name="doubleType" format="enum">
+            <enum name="fitViewMinViewMax" value="1" />
+            <enum name="fitImageMinViewMax" value="2" />
+            <enum name="fitViewMinImageMax" value="4" />
+            <enum name="fitImageMinImageMax" value="8" />
+        </attr>
+    </declare-styleable>
+
+
+
+    <declare-styleable name="CircleProgress">
+        <attr name="circle_progress" format="integer"/>
+        <attr name="circle_max" format="integer"/>
+        <attr name="circle_unfinished_color" format="color"/>
+        <attr name="circle_finished_color" format="color"/>
+        <attr name="circle_text_size" format="dimension"/>
+        <attr name="circle_text_color" format="color"/>
+        <attr name="circle_prefix_text" format="string"/>
+        <attr name="circle_suffix_text" format="string"/>
+    </declare-styleable>
 </resources>

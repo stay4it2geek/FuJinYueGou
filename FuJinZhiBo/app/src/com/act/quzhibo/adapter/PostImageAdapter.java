@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.stackblur.StackBlurManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
@@ -98,7 +99,7 @@ public class PostImageAdapter extends BaseAdapter {
                     }
                 });
             }else{
-                Glide.with(context).load(imgs.get(position)).placeholder(R.drawable.xiangjiao).into(viewHolder.avatar);//加载网络图片
+                Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.xiangjiao).into(viewHolder.avatar);//加载网络图片
 
             }
 

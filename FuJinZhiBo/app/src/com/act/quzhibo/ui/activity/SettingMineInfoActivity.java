@@ -30,6 +30,7 @@ import com.act.quzhibo.view.FragmentSecretDialog;
 import com.act.quzhibo.view.TitleBarView;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.listener.CustomListener;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -134,7 +135,24 @@ public class SettingMineInfoActivity extends FragmentActivity {
         initCanDatingThingOptionPicker();
         initDatingThoughtOptionPicker();
         initDisPurposeOptionPicker();
+        findViewById(R.id.clear_cache_txt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.get(SettingMineInfoActivity.this).clearMemory();
+                    }
+                });
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.get(SettingMineInfoActivity.this).clearDiskCache();
 
+                    }
+                }).start();
+            }
+        });
         findViewById(R.id.modifyPSWlayout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
