@@ -26,12 +26,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.PayConis;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.VipOrders;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -64,7 +66,7 @@ public class GetVipPayActivity extends FragmentActivity {
     private SwipeMenuListView listView;
     private MyAdapter mAdapter;
     boolean hasShow;
-
+    private LoadNetView loadNetView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +76,7 @@ public class GetVipPayActivity extends FragmentActivity {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
         }
+        loadNetView= (LoadNetView) findViewById(R.id.loadview);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle(" 充值趣币,享受VIP特权");
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -99,7 +102,13 @@ public class GetVipPayActivity extends FragmentActivity {
 
             }
         };
-
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData();
+            }
+        });
         listView.setMenuCreator(creator);
         listView.setChoiceMode(CHOICE_MODE_SINGLE);
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
@@ -354,7 +363,14 @@ public class GetVipPayActivity extends FragmentActivity {
                         Message message = new Message();
                         message.obj = payConisList;
                         handler.sendMessage(message);
+                        loadNetView.setVisibility(View.GONE);
+                    }else {
+                        loadNetView.setVisibility(View.VISIBLE);
+                        loadNetView.setlayoutVisily(Constants.RELOAD);
                     }
+                } else {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.RELOAD);
                 }
             }
         });

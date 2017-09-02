@@ -24,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
@@ -56,6 +57,7 @@ import cn.woblog.android.downloader.callback.DownloadManager;
 import cn.woblog.android.downloader.domain.DownloadInfo;
 import cn.woblog.android.downloader.exception.DownloadException;
 
+import static cn.woblog.android.downloader.DownloadService.downloadManager;
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_COMPLETED;
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_REMOVED;
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
@@ -70,7 +72,7 @@ public class XImageActivity extends FragmentActivity {
 
     boolean isSdCardExist;
     private DownloadManager downloadManager;
-
+    PagerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +83,7 @@ public class XImageActivity extends FragmentActivity {
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setPageMargin((int) (getResources().getDisplayMetrics().density * 15));
-        mPager.setAdapter(new PagerAdapter() {
+        mPager.setAdapter(adapter=new PagerAdapter() {
             @Override
             public int getCount() {
                 return urls.size();
@@ -94,14 +96,11 @@ public class XImageActivity extends FragmentActivity {
 
             @Override
             public Object instantiateItem(ViewGroup container, final int position) {
-
                 final DownloadInfo downloadInfo = downloadManager.getDownloadById(urls.get(position).hashCode());
-
-
                 View view = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.imglayout, null);
                 final Button bt_action = (Button) view.findViewById(R.id.bt_action);
                 final TextView tv_status = (TextView) view.findViewById(R.id.tv_status);
-                final ProgressBar pb = (ProgressBar) view.findViewById(R.id.pb);
+                final ProgressBar pb = (ProgressBar) view.findViewById(R.id.pbProgress);
                 refresh(downloadInfo, tv_status, pb, bt_action);
                 final XImageView xImageView = (XImageView) view.findViewById(R.id.ximageview);
                 xImageView.setDoubleTapScaleType(IXImageView.DoubleType.FIT_VIEW_MIN_VIEW_MAX);
@@ -111,13 +110,10 @@ public class XImageActivity extends FragmentActivity {
                     @Override
                     public void onClick(View v) {
                         if (downloadInfo != null) {
-
                             switch (downloadInfo.getStatus()) {
                                 case DownloadInfo.STATUS_NONE:
                                 case DownloadInfo.STATUS_PAUSED:
                                 case DownloadInfo.STATUS_ERROR:
-
-                                    //resume downloadInfo
                                     downloadManager.resume(downloadInfo);
                                     break;
 
@@ -131,17 +127,9 @@ public class XImageActivity extends FragmentActivity {
                                     downloadManager.remove(downloadInfo);
                                     break;
                             }
+                            refresh(downloadInfo, tv_status, pb, bt_action);
                         } else {
-//            createDownload(urls.get(position),)
-//
-//            //save extra info to my database.
-//            MediaInfoLocal mediaInfoLocal = new MediaInfoLocal(
-//                    data.getUrl().hashCode(), data.getName(), data.getIcon(), data.getUrl());
-//            try {
-//                dbController.createOrUpdateMyDownloadInfo(mediaInfoLocal);
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
+                            createDownload(urls.get(position), tv_status, pb, bt_action);
                         }
                     }
                 });
@@ -170,7 +158,7 @@ public class XImageActivity extends FragmentActivity {
     }
 
 
-    private void refresh(DownloadInfo downloadInfo, TextView tv_status, ProgressBar pb, Button bt_action) {
+    private void refresh(final DownloadInfo downloadInfo, TextView tv_status, ProgressBar pb, final Button bt_action) {
         if (downloadInfo == null) {
             pb.setProgress(0);
             bt_action.setText("Download");
@@ -203,14 +191,14 @@ public class XImageActivity extends FragmentActivity {
                     tv_status.setText("downloading");
                     break;
                 case STATUS_COMPLETED:
-                    bt_action.setText("Delete");
+                    bt_action.setVisibility(View.GONE);
                     try {
                         pb.setProgress((int) (downloadInfo.getProgress() * 100.0 / downloadInfo.getSize()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    tv_status.setText("success");
+                    tv_status.setText("下载完成");
                     break;
                 case STATUS_REMOVED:
 
@@ -231,16 +219,14 @@ public class XImageActivity extends FragmentActivity {
     DownloadInfo downloadInfo;
 
     private DownloadInfo createDownload(String url, final TextView tv_status, final ProgressBar pb, final Button bt_action) {
-        String filepath = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                File.separator +
-                "photoDownload" +
-                File.separator +
-                url.substring(url.length() - 15, url.length());
-        File file = new File(filepath);
-        if (!file.exists()) {
-            file.mkdirs();
+        File d = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "photoDownload");
+        if (!d.exists()) {
+            d.mkdirs();
         }
-        downloadInfo = new DownloadInfo.Builder().setUrl(url).setPath(filepath).build();
+        String path = d.getAbsolutePath().concat("/").concat(url.substring(url.length()-10,url.length()));
+        downloadInfo = new DownloadInfo.Builder().setUrl(url)
+                .setPath(path)
+                .build();
         downloadInfo.setDownloadListener(new DownloadListener() {
 
             @Override

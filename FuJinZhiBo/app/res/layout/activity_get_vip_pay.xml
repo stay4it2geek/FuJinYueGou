@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activity_pay"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.act.quzhibo.view.TitleBarView
-        android:id="@+id/titlebar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"
-        android:textStyle="normal" />
-
-    <TextView
-        android:id="@+id/tips"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#afedae"
-        android:gravity="center"
-        android:singleLine="true"
-        android:text="下单后请及时支付哦!未支付订单将自动删除!"
-        android:textColor="@color/red"
-        android:textSize="14sp" />
-
     <LinearLayout
+        android:id="@+id/activity_pay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
+        android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <com.act.quzhibo.view.TitleBarView
+            android:id="@+id/titlebar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/commonViewHeight"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tips"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#afedae"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="下单后请及时支付哦!未支付订单将自动删除!"
+            android:textColor="@color/red"
+            android:textSize="14sp" />
+
 
         <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/viplist"
@@ -36,82 +36,80 @@
             android:dividerHeight="0.5dp"
             android:scrollbars="none" />
 
-    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/gray" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="0.5dp"
-        android:background="#fff"
-        android:orientation="vertical">
-
-        <RelativeLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:paddingLeft="15dp">
+            android:layout_height="0.5dp"
+            android:background="@color/gray" />
 
-            <TextView
-                android:id="@+id/userSelect"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:gravity="center_vertical"
-                android:text="您想要的是:"
-                android:textColor="@color/commontextcolor"
-                android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0.5dp"
+            android:background="#fff"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/userSelectText"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/userSelect"
-                android:gravity="center_vertical"
-                android:text=""
-                android:textColor="@color/red"
-                android:textSize="17sp" />
+                android:layout_height="35dp"
+                android:paddingLeft="15dp">
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/userSelect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:text="您想要的是:"
+                    android:textColor="@color/commontextcolor"
+                    android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/alipay"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/bg_circle_orange"
-            android:gravity="center"
-            android:text="使用支付宝购买"
-            android:textColor="#fff"
-            android:textSize="19sp" />
+                <TextView
+                    android:id="@+id/userSelectText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/userSelect"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:textColor="@color/red"
+                    android:textSize="17sp" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp">
-
-            <ImageView
-                android:id="@+id/zhifubao"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/zhifubao" />
+            </RelativeLayout>
 
             <TextView
+                android:id="@+id/alipay"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bg_circle_orange"
+                android:gravity="center"
+                android:text="使用支付宝购买"
+                android:textColor="#fff"
+                android:textSize="19sp" />
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/zhifubao"
-                android:gravity="center_vertical"
-                android:text="安全快捷支付，首选支付宝" />
-        </RelativeLayout>
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/zhifubao"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/zhifubao" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/zhifubao"
+                    android:gravity="center_vertical"
+                    android:text="安全快捷支付，首选支付宝" />
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
-
-
-</LinearLayout>
+</FrameLayout>

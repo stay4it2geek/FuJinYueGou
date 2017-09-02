@@ -19,6 +19,7 @@ import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.download.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
@@ -149,7 +150,7 @@ public class DownloadAdapter extends
                             case DownloadInfo.STATUS_NONE:
                             case DownloadInfo.STATUS_PAUSED:
                             case DownloadInfo.STATUS_ERROR:
-                                    downloadManager.resume(downloadInfo);
+                                downloadManager.resume(downloadInfo);
                                 break;
 
                             case DownloadInfo.STATUS_DOWNLOADING:
@@ -182,15 +183,18 @@ public class DownloadAdapter extends
                 bt_action.setText("Download");
                 tv_status.setText("not downloadInfo");
             } else {
+
                 switch (downloadInfo.getStatus()) {
                     case DownloadInfo.STATUS_NONE:
                         bt_action.setText("Download");
+                        bt_action.setVisibility(View.VISIBLE);
                         tv_status.setText("not downloadInfo");
                         break;
                     case DownloadInfo.STATUS_PAUSED:
                     case DownloadInfo.STATUS_ERROR:
                         bt_action.setText("Continue");
                         tv_status.setText("paused");
+                        bt_action.setVisibility(View.VISIBLE);
                         bt_delete.setVisibility(View.VISIBLE);
                         bt_delete.setOnClickListener(new OnClickListener() {
                             @Override
@@ -215,12 +219,21 @@ public class DownloadAdapter extends
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        bt_action.setVisibility(View.VISIBLE);
                         tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
                                 .formatFileSize(downloadInfo.getSize()));
                         tv_status.setText("downloading");
                         break;
                     case STATUS_COMPLETED:
-                        bt_action.setText("Delete");
+                        bt_action.setVisibility(View.GONE);
+                        bt_delete.setVisibility(View.VISIBLE);
+                        bt_delete.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                downloadManager.remove(downloadInfo);
+                                bt_action.setVisibility(View.VISIBLE);
+                            }
+                        });
                         try {
                             pb.setProgress((int) (downloadInfo.getProgress() * 100.0 / downloadInfo.getSize()));
                         } catch (Exception e) {
@@ -233,6 +246,7 @@ public class DownloadAdapter extends
                         publishDownloadSuccessStatus();
                         break;
                     case STATUS_REMOVED:
+                        bt_action.setVisibility(View.VISIBLE);
                         tv_size.setText("");
                         pb.setProgress(0);
                         bt_action.setText("Download");
@@ -241,6 +255,7 @@ public class DownloadAdapter extends
                         publishDownloadSuccessStatus();
                         break;
                     case STATUS_WAIT:
+                        bt_action.setVisibility(View.VISIBLE);
                         tv_size.setText("");
                         pb.setProgress(0);
                         bt_action.setText("Pause");

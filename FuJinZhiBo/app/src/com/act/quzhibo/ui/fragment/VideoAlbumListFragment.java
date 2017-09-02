@@ -1,7 +1,9 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,8 +18,10 @@ import com.act.quzhibo.entity.VideoBean;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.RecycleViewDivider;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 import com.devlin_n.videoplayer.player.VideoViewManager;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ import java.util.List;
 public class VideoAlbumListFragment extends BackHandledFragment {
     View view;
     private LoadNetView loadNetView;
+    private XRecyclerView recyclerView;
 
 
     @Nullable
@@ -47,8 +52,25 @@ public class VideoAlbumListFragment extends BackHandledFragment {
     }
 
     private void initView() {
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView.setPullRefreshEnabled(true);
+        recyclerView.setLoadingMoreEnabled(true);
+        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
+        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(new VideoRecyclerViewAdapter(getVideoList(), getActivity()));
         recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
@@ -61,8 +83,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 IjkVideoView ijkVideoView = (IjkVideoView) view.findViewById(R.id.video_player);
 
                 if (ijkVideoView != null && !ijkVideoView.isFullScreen()) {
-                    ijkVideoView.autoRotate() //启用重力感应自动进入/推出全屏功能
-                            .enableCache() //启用边播边缓存功能
+                    ijkVideoView.enableCache() //启用边播边缓存功能
                             .useSurfaceView(); //启用SurfaceView显示视频，不调用默认使用TextureView
                     Log.d("@@@@@@", "onChildViewDetachedFromWindow: called");
                     int tag = (int) ijkVideoView.getTag();
