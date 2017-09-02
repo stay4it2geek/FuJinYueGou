@@ -1,6 +1,7 @@
 package com.act.quzhibo.download.adapter;
 
 import android.content.Context;
+import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.adapter.BaseRecyclerViewAdapter;
 import com.act.quzhibo.download.callback.MyDownloadListener;
 import com.act.quzhibo.download.db.DBController;
@@ -19,11 +21,11 @@ import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.download.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
 
@@ -31,9 +33,7 @@ import java.sql.SQLException;
 import cn.woblog.android.downloader.domain.DownloadInfo;
 
 import static cn.woblog.android.downloader.DownloadService.downloadManager;
-import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_COMPLETED;
-import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_REMOVED;
-import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
+
 
 /**
  * Created by renpingqing on 17/3/1.
@@ -112,8 +112,7 @@ public class DownloadAdapter extends
 
         @SuppressWarnings("unchecked")
         public void bindData(final DownloadInfo data, int position, final Context context) {
-//      Glide.with(context).load(data.getIcon()).into(iv_icon);
-//      tv_name.setText(data.getName());
+
 
             // Get download task status.
             downloadInfo = data;
@@ -140,7 +139,7 @@ public class DownloadAdapter extends
 
             refresh();
 
-//      Download button
+
             bt_action.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -155,8 +154,8 @@ public class DownloadAdapter extends
 
                             case DownloadInfo.STATUS_DOWNLOADING:
                             case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
-                            case STATUS_WAIT:
-                                //pause downloadInfo
+                            case DownloadInfo.STATUS_WAIT:
+                                //pause DownloadInfo
                                 downloadManager.pause(downloadInfo);
                                 break;
                             case DownloadInfo.STATUS_COMPLETED:
@@ -180,21 +179,19 @@ public class DownloadAdapter extends
             if (downloadInfo == null) {
                 tv_size.setText("");
                 pb.setProgress(0);
-                bt_action.setText("Download");
-                tv_status.setText("not downloadInfo");
+                bt_action.setText("下载");
+                tv_status.setText("");
             } else {
-
+                bt_action.setVisibility(View.VISIBLE);
                 switch (downloadInfo.getStatus()) {
                     case DownloadInfo.STATUS_NONE:
-                        bt_action.setText("Download");
-                        bt_action.setVisibility(View.VISIBLE);
-                        tv_status.setText("not downloadInfo");
+                        bt_action.setText("下载");
+                        tv_status.setText("");
                         break;
                     case DownloadInfo.STATUS_PAUSED:
                     case DownloadInfo.STATUS_ERROR:
-                        bt_action.setText("Continue");
-                        tv_status.setText("paused");
-                        bt_action.setVisibility(View.VISIBLE);
+                        bt_action.setText("继续");
+                        tv_status.setText("暂停");
                         bt_delete.setVisibility(View.VISIBLE);
                         bt_delete.setOnClickListener(new OnClickListener() {
                             @Override
@@ -213,25 +210,23 @@ public class DownloadAdapter extends
 
                     case DownloadInfo.STATUS_DOWNLOADING:
                     case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
-                        bt_action.setText("Pause");
+                        bt_action.setText("暂停");
                         try {
                             pb.setProgress((int) (downloadInfo.getProgress() * 100.0 / downloadInfo.getSize()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        bt_action.setVisibility(View.VISIBLE);
                         tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
                                 .formatFileSize(downloadInfo.getSize()));
-                        tv_status.setText("downloading");
+                        tv_status.setText("下载中");
                         break;
-                    case STATUS_COMPLETED:
+                    case DownloadInfo.STATUS_COMPLETED:
                         bt_action.setVisibility(View.GONE);
                         bt_delete.setVisibility(View.VISIBLE);
                         bt_delete.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 downloadManager.remove(downloadInfo);
-                                bt_action.setVisibility(View.VISIBLE);
                             }
                         });
                         try {
@@ -241,25 +236,23 @@ public class DownloadAdapter extends
                         }
                         tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
                                 .formatFileSize(downloadInfo.getSize()));
-                        tv_status.setText("success");
+                        tv_status.setText("下载完成");
 
                         publishDownloadSuccessStatus();
                         break;
-                    case STATUS_REMOVED:
-                        bt_action.setVisibility(View.VISIBLE);
+                    case DownloadInfo.STATUS_REMOVED:
                         tv_size.setText("");
                         pb.setProgress(0);
-                        bt_action.setText("Download");
-                        tv_status.setText("not downloadInfo");
+                        bt_action.setText("下载");
+                        tv_status.setText("");
 
                         publishDownloadSuccessStatus();
                         break;
-                    case STATUS_WAIT:
-                        bt_action.setVisibility(View.VISIBLE);
+                    case DownloadInfo.STATUS_WAIT:
                         tv_size.setText("");
                         pb.setProgress(0);
-                        bt_action.setText("Pause");
-                        tv_status.setText("Waiting");
+                        bt_action.setText("暂停");
+                        tv_status.setText("等待");
                         break;
                 }
 
@@ -271,14 +264,31 @@ public class DownloadAdapter extends
         }
 
         public void bindBaseInfo(MediaInfoLocal mediaInfoLocal) {
-            Glide.with(context).load(mediaInfoLocal.getIcon()).into(iv_icon);
+            if(mediaInfoLocal.getType().equals(Constants.VIDEO_ALBUM)){
+                Glide.with(context).load(mediaInfoLocal.getIcon()).into(iv_icon);
+            }else {
+                Glide.with(context).load(mediaInfoLocal.getUrl()).into(iv_icon);
+            }
+
             tv_name.setText(mediaInfoLocal.getName());
         }
 
         private void notifyDownloadStatus() {
 
-            if (downloadInfo.getStatus() == STATUS_REMOVED) {
+            if (downloadInfo.getStatus() == DownloadInfo.STATUS_REMOVED) {
                 try {
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "photoDownload");
+                    if (!file.exists()) {
+                        file.mkdirs();
+                    }
+
+                    String url=downloadInfo.getUri().toString();
+                    ToastUtil.showToast(context,url);
+                    String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length()));
+                    File localFile = new File(path);
+                    if (localFile.isFile() && localFile.exists()) {
+                        file.delete();
+                    }
 
                     ToastUtil.showToast(context, "delete2");
                     dbController.deleteMyDownloadInfo(downloadInfo.getUri().hashCode());

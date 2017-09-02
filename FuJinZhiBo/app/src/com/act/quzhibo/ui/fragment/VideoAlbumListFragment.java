@@ -1,7 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +14,6 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.VideoRecyclerViewAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.VideoBean;
-import com.act.quzhibo.ui.fragment.BackHandledFragment;
-import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.RecycleViewDivider;
 import com.devlin_n.videoplayer.player.IjkVideoView;
@@ -81,13 +78,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             @Override
             public void onChildViewDetachedFromWindow(View view) {
                 IjkVideoView ijkVideoView = (IjkVideoView) view.findViewById(R.id.video_player);
-
                 if (ijkVideoView != null && !ijkVideoView.isFullScreen()) {
-                    ijkVideoView.enableCache() //启用边播边缓存功能
-                            .useSurfaceView(); //启用SurfaceView显示视频，不调用默认使用TextureView
-                    Log.d("@@@@@@", "onChildViewDetachedFromWindow: called");
-                    int tag = (int) ijkVideoView.getTag();
-                    Log.d("@@@@@@", "onChildViewDetachedFromWindow: position: " + tag);
                     ijkVideoView.release();
                 }
             }
@@ -161,6 +152,10 @@ public class VideoAlbumListFragment extends BackHandledFragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public boolean onBackPressed() {

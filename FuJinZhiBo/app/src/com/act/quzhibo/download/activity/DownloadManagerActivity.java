@@ -1,53 +1,40 @@
 package com.act.quzhibo.download.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.activity.BaseActivity;
-import com.act.quzhibo.download.adapter.DownloadManagerAdapter;
+import com.act.quzhibo.download.fragment.DownloadedFragment;
+import com.act.quzhibo.download.fragment.DownloadingFragment;
+import com.act.quzhibo.ui.activity.TabSlideBaseActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Download manager page.
- */
-public class DownloadManagerActivity extends BaseActivity {
+public class DownloadManagerActivity extends TabSlideBaseActivity {
 
-  private TabLayout tl;
-  private ViewPager vp;
-  private DownloadManagerAdapter downloadManagerAdapter;
+    @Override
+    public boolean getActivityType() {
+        return false;
+    }
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_download_manager);
-  }
+    @Override
+    protected boolean isNeedShowBackDialog() {
+        return false;
+    }
 
-  @Override
-  protected void initView() {
-    super.initView();
-    tl = (TabLayout) findViewById(R.id.tl);
-    vp = (ViewPager) findViewById(R.id.vp);
-  }
+    @Override
+    protected String[] getTitles() {
+        return new String[]{"下载中", " 已下载"};
+    }
 
-  @Override
-  protected void initData() {
-    super.initData();
+    @Override
+    protected ArrayList<Fragment> getFragments() {
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(DownloadingFragment.newInstance());
+        fragments.add(DownloadedFragment.newInstance());
 
-    downloadManagerAdapter = new DownloadManagerAdapter(
-        getSupportFragmentManager(), getActivity());
+        return fragments;
+    }
 
-    List<String> strings = new ArrayList<>();
-    strings.add("Downloading");
-    strings.add("Downloaded");
 
-    downloadManagerAdapter.setData(strings);
-    vp.setAdapter(downloadManagerAdapter);
-    tl.setupWithViewPager(vp);
-    tl.setTabsFromPagerAdapter(downloadManagerAdapter);
-
-  }
 }

@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,8 +15,6 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.download.activity.ListActivity;
-import com.act.quzhibo.download.activity.SimpleActivity;
 import com.act.quzhibo.entity.MediaAuthor;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;

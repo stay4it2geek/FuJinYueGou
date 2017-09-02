@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -106,8 +107,12 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                 e.printStackTrace();
             }
         }
+        BmobQuery<MediaInfo> query3 = new BmobQuery<>();
+        query3.addWhereEqualTo("authorId", ((MediaAuthor)getArguments().getSerializable("author")).getObjectId());
+        Log.e("authoid",((MediaAuthor)getArguments().getSerializable("author")).getObjectId());
+        queries.add(query3);
         BmobQuery<MediaInfo> query4 = new BmobQuery<>();
-        query4.addWhereEqualTo("authorId", ((MediaAuthor)getArguments().getSerializable("author")).getObjectId());
+        query4.addWhereEqualTo("type", Constants.PHOTO_ALBUM);
         queries.add(query4);
         query.and(queries);
         query.order("-updatedAt");

@@ -4,17 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.act.quzhibo.view.TitleBarView
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/commonViewHeight"
+        android:textStyle="normal" />
+
     <LinearLayout
         android:id="@+id/activity_pay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/commonViewHeight"
         android:orientation="vertical">
-
-        <com.act.quzhibo.view.TitleBarView
-            android:id="@+id/titlebar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/commonViewHeight"
-            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tips"
@@ -112,4 +113,10 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <com.act.quzhibo.view.LoadNetView
+        android:id="@+id/loadview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/commonViewHeight" />
 </FrameLayout>

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.ui.fragment.PhotoAlbumAuthorsFragment;
 import com.act.quzhibo.ui.fragment.VideoAlbumAuthorsFragment;
+import com.act.quzhibo.util.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -13,11 +14,6 @@ import java.util.ArrayList;
  * 广场
  */
 public class SquareActivity extends TabSlideBaseActivity implements InterestPlatesFragment.OnNearByListner {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public boolean getActivityType() {
@@ -60,4 +56,5 @@ public class SquareActivity extends TabSlideBaseActivity implements InterestPlat
     public void onNear() {
         setPage(1);
     }
+
 }
