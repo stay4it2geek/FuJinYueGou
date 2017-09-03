@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,7 +9,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.OrderAdapter;
@@ -45,7 +43,7 @@ public class VipOrdersActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_common);
+        setContentView(R.layout.layout_common);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("订单列表");

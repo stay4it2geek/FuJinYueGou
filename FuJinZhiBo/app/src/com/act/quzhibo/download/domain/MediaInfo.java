@@ -9,16 +9,17 @@ import cn.bmob.v3.BmobObject;
 
 
 public class MediaInfo extends BmobObject implements  Parcelable {
-
+  private String title;
   private String name;
   private String icon;
   private String url;
   private String type;
 
-  public MediaInfo(String name, String icon, String url, String type) {
+  public MediaInfo(String title,String name, String icon, String url, String type) {
     this.name = name;
     this.icon = icon;
     this.url = url;
+    this.title = title;
     this.type = type;
   }
 
@@ -27,6 +28,7 @@ public class MediaInfo extends BmobObject implements  Parcelable {
     icon = in.readString();
     url = in.readString();
     type = in.readString();
+    title = in.readString();
   }
 
   public static final Creator<MediaInfo> CREATOR = new Creator<MediaInfo>() {
@@ -47,6 +49,14 @@ public class MediaInfo extends BmobObject implements  Parcelable {
 
   public void setIcon(String icon) {
     this.icon = icon;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getName() {
@@ -84,6 +94,7 @@ public class MediaInfo extends BmobObject implements  Parcelable {
     dest.writeString(icon);
     dest.writeString(url);
     dest.writeString(type);
+    dest.writeString(title);
   }
 
 

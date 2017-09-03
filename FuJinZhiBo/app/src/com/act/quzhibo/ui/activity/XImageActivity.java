@@ -292,7 +292,7 @@ public class XImageActivity extends AppCompatActivity {
 
             //save extra info to my database.
             MediaInfoLocal myBusinessInfLocal = new MediaInfoLocal(
-                    mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType());
+                    mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle());
             try {
                 dbController.createOrUpdateMyDownloadInfo(myBusinessInfLocal);
             } catch (SQLException e) {

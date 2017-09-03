@@ -8,21 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.CommonSeeAdapter;
-import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.adapter.MyPostListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CommonPerson;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.entity.VipOrders;
-import com.act.quzhibo.ui.fragment.CommonSeeFragment;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -54,7 +46,7 @@ public class MyPostListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_common);
+        setContentView(R.layout.layout_common);
         recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);

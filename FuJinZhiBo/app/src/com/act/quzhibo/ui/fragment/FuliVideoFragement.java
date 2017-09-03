@@ -15,7 +15,7 @@ public class FuliVideoFragement extends BackHandledFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_common, null, false);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_common, null, false);
 
         return view;
     }

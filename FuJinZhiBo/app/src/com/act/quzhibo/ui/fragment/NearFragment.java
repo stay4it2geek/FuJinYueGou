@@ -20,7 +20,6 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class NearFragment extends BackHandledFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_common, null, false);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_common, null, false);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         recyclerView.setPullRefreshEnabled(true);

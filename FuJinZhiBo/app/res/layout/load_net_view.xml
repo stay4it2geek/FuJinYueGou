@@ -179,4 +179,17 @@
             android:text="立即去查看视频种类"
             android:textSize="16sp" />
     </LinearLayout>
+
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/noDownloadDataText"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="您还没有保存过任何图片或视频哦"
+            android:textSize="16sp" />
+
 </FrameLayout>

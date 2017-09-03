@@ -4,10 +4,17 @@ import android.content.Context;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.PopupMenu;
 import android.util.AttributeSet;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.callback.OnVideoControllerListner;
 import com.act.quzhibo.util.ToastUtil;
 import com.devlin_n.videoplayer.controller.StandardVideoController;
 
@@ -18,18 +25,18 @@ import com.devlin_n.videoplayer.controller.StandardVideoController;
 public class MyStandardVideoController extends StandardVideoController implements View.OnClickListener {
     public MyStandardVideoController(@NonNull Context context) {
         super(context);
-        moreMenu.setVisibility(GONE);
     }
 
     public MyStandardVideoController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        moreMenu.setVisibility(GONE);
     }
 
     public MyStandardVideoController(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        moreMenu.setVisibility(GONE);
+
     }
+
+    protected PopupMenu popupMenu;
 
     private void doLockUnlock() {
         if (this.isLocked) {
@@ -50,30 +57,54 @@ public class MyStandardVideoController extends StandardVideoController implement
         this.mediaPlayer.setLock(this.isLocked);
     }
 
-    public interface OnStartFullScreenListner {
-        void onStartFullScreen();
+
+
+    public OnVideoControllerListner onVideoControllerListner;
+
+    public void setOnVideoControllerListner(OnVideoControllerListner onVideoControllerListner) {
+        this.onVideoControllerListner = onVideoControllerListner;
+
     }
 
-    public OnStartFullScreenListner onStartFullScreenListner;
 
-    public void setOnStartFullScreenListner(OnStartFullScreenListner onStartFullScreenListner) {
-        this.onStartFullScreenListner = onStartFullScreenListner;
+    public void onClick(View v) {
+        int i = v.getId();
+        if(i != com.devlin_n.videoplayer.R.id.fullscreen && i != com.devlin_n.videoplayer.R.id.back) {
+            if(i == com.devlin_n.videoplayer.R.id.lock) {
+                this.doLockUnlock();
+            } else if(i != com.devlin_n.videoplayer.R.id.iv_play && i != com.devlin_n.videoplayer.R.id.thumb && i != com.devlin_n.videoplayer.R.id.iv_replay) {
+                if(i == com.devlin_n.videoplayer.R.id.more_menu) {
+                    this.popupMenu.show();
+                    this.show();
+                }
+            }else if (i == R.id.fullscreen) {
+                onVideoControllerListner.onMyVideoController(Constants.FULL_SCREEN);
+            } else {
+                this.doPauseResume();
+            }
+        } else {
+            this.doStartStopFullScreen();
+        }
 
     }
 
     @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i != com.devlin_n.videoplayer.R.id.fullscreen && i != com.devlin_n.videoplayer.R.id.back) {
-            if (i == com.devlin_n.videoplayer.R.id.lock) {
-                this.doLockUnlock();
-            } else {
-                this.doPauseResume();
+    protected void initView() {
+        super.initView();
+        findViewById(R.id.more_menu).setVisibility(VISIBLE);
+        this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
+        this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_list, this.popupMenu.getMenu());
+        this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+                if(itemId == R.id.fullscreen) {
+                    onVideoControllerListner.onMyVideoController(Constants.FULL_SCREEN);
+                } else if(itemId == R.id.download) {
+                    onVideoControllerListner.onMyVideoController(Constants.DOWNLAOD_VIDEO);
+                }
+                MyStandardVideoController.this.popupMenu.dismiss();
+                return false;
             }
-        } else if (i == R.id.fullscreen) {
-            onStartFullScreenListner.onStartFullScreen();
-        }
-
-
+        });
     }
 }

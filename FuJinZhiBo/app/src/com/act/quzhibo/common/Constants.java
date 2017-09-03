@@ -38,6 +38,8 @@ public class Constants {
     public static final int REQUEST_PERMISSION_SETTING = 17;
     public static final String PHOTO_ALBUM = "18";
     public static final String VIDEO_ALBUM = "19";
-    public static final String MEDIA_AUTHOR = "media_author";
 
+    public static final String FULL_SCREEN = "fill_screen";
+    public static final String DOWNLAOD_VIDEO ="download_video" ;
+    public static final int NO_DOWN_DATA = 20;
 }

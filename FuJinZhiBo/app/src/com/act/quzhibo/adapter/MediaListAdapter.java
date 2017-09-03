@@ -3,7 +3,6 @@ package com.act.quzhibo.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.act.quzhibo.ui.activity.XImageActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.MediaListViewHolder> {
 
@@ -74,7 +72,7 @@ public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.Medi
         } else {
             Glide.with(activity).load(mediaInfo.getIcon()).placeholder(R.drawable.xiangjiao).into(holder.mIvMediaCover);//加载网络图片
         }
-        holder.mTvMediaName.setText(mediaInfo.getName());
+        holder.mTvMediaTtile.setText(mediaInfo.getTitle());
 
 
         holder.itemView.setOnClickListener(new OnClickListener() {
@@ -103,12 +101,12 @@ public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.Medi
     public static class MediaListViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView mIvMediaCover;
-        private TextView mTvMediaName;
+        private TextView mTvMediaTtile;
 
         public MediaListViewHolder(View itemView) {
             super(itemView);
             mIvMediaCover = (ImageView) itemView.findViewById(R.id.ivMediaCover);
-            mTvMediaName = (TextView) itemView.findViewById(R.id.tvMediaName);
+            mTvMediaTtile = (TextView) itemView.findViewById(R.id.tvMediaTtile);
         }
     }
 }

@@ -24,15 +24,26 @@ public class MediaInfoLocal {
   @DatabaseField
   private String type;
 
+  @DatabaseField
+  private String title;
   public MediaInfoLocal() {
   }
 
-  public MediaInfoLocal(int id, String name, String icon, String url, String type) {
+  public MediaInfoLocal(int id, String name, String icon, String url, String type,String title) {
     this.id = id;
     this.name = name;
     this.icon = icon;
     this.url = url;
     this.type = type;
+    this.title = title;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getType() {

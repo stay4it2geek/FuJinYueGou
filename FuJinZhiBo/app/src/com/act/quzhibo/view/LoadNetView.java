@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -16,23 +17,27 @@ import com.act.quzhibo.common.Constants;
 
 public class LoadNetView extends LinearLayout {
 
+    private final LinearLayout photoalbum_layout;
     private  LinearLayout vipNulllayout;
+    private TextView noDownloadDataText;
+
     private Button reloadbutton;
     private Button buybutton;
     private LinearLayout loadlayout;
     private LinearLayout reloadlayout;
-
+    private LinearLayout video_album_layout;
     public LoadNetView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         // 加载布局
         LayoutInflater.from(context).inflate(R.layout.load_net_view, this);
 
-        // 获取控件
+        noDownloadDataText = (TextView) findViewById(R.id.noDownloadDataText);
         reloadlayout = (LinearLayout) findViewById(R.id.reloadlayout);
-        reloadlayout = (LinearLayout) findViewById(R.id.reloadlayout);
+        video_album_layout = (LinearLayout) findViewById(R.id.video_album_layout);
         reloadbutton = (Button) findViewById(R.id.relaodbutton);
         buybutton = (Button) findViewById(R.id.buybutton);
+        photoalbum_layout = (LinearLayout) findViewById(R.id.photoalbum_layout);
 
         loadlayout = (LinearLayout) findViewById(R.id.loadlayout);
         vipNulllayout = (LinearLayout) findViewById(R.id.VipNulllayout);
@@ -60,10 +65,13 @@ public class LoadNetView extends LinearLayout {
             vipNulllayout.setVisibility(View.VISIBLE);
         }else if(loadType ==Integer.parseInt(Constants.PHOTO_ALBUM)){
             loadlayout.setVisibility(View.GONE);
-            vipNulllayout.setVisibility(View.VISIBLE);
+            photoalbum_layout.setVisibility(View.VISIBLE);
         }else if(loadType == Integer.parseInt(Constants.VIDEO_ALBUM)){
             loadlayout.setVisibility(View.GONE);
-            vipNulllayout.setVisibility(View.VISIBLE);
+            video_album_layout.setVisibility(View.VISIBLE);
+        }else if(loadType == Constants.NO_DOWN_DATA){
+            loadlayout.setVisibility(View.GONE);
+            noDownloadDataText.setVisibility(View.VISIBLE);
         }
     }
 

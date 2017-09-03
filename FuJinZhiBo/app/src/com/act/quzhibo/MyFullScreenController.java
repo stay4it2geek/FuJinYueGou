@@ -9,15 +9,15 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.callback.OnVideoControllerListner;
 import com.devlin_n.videoplayer.controller.FullScreenController;
 import com.devlin_n.videoplayer.util.WindowUtil;
 
-/**
- * Created by weiminglin on 17/9/2.
- */
 
 public class MyFullScreenController extends FullScreenController {
     public MyFullScreenController(@NonNull Context context) {
@@ -30,6 +30,12 @@ public class MyFullScreenController extends FullScreenController {
 
     public MyFullScreenController(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+    public OnVideoControllerListner onVideoControllerListner;
+
+    public void setOnVideoControllerListner(OnVideoControllerListner onVideoControllerListner) {
+        this.onVideoControllerListner = onVideoControllerListner;
+
     }
 
     private void doLockUnlock() {
@@ -72,15 +78,18 @@ public class MyFullScreenController extends FullScreenController {
     @Override
     protected void initView() {
         super.initView();
+        findViewById(R.id.more_menu).setVisibility(VISIBLE);
+        ImageView more_menu= (ImageView) findViewById(R.id.more_menu);
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) more_menu.getLayoutParams();
+        lp.setMargins(0, 0, 100, 0);
+        more_menu.setLayoutParams(lp);
         this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
-        this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_my, this.popupMenu.getMenu());
+        this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_download, this.popupMenu.getMenu());
         this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 int itemId = item.getItemId();
-                if(itemId == R.id.float_window) {
-                    MyFullScreenController.super.mediaPlayer.startFloatWindow();
-                } else if(itemId == R.id.download) {
-                    ToastUtil.showToast(MyFullScreenController.this.getContext(),"fdsfds");
+                if(itemId == R.id.download) {
+                    onVideoControllerListner.onMyVideoController(Constants.DOWNLAOD_VIDEO);
                 }
 
                 MyFullScreenController.this.popupMenu.dismiss();

@@ -134,7 +134,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
             }
         }
         BmobQuery<MediaAuthor> query3 = new BmobQuery<>();
-        query3.addWhereEqualTo("mediaType", PHOTO_ALBUM);
+        query3.addWhereEqualTo("type", PHOTO_ALBUM);
         queries.add(query3);
         query.and(queries);
         query.order("-updatedAt");

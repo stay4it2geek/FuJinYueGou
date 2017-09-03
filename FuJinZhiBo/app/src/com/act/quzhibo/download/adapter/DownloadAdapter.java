@@ -92,7 +92,7 @@ public class DownloadAdapter extends
         private final TextView tv_size;
         private final TextView tv_status;
         private final ProgressBar pb;
-        private final TextView tv_name;
+        private final TextView tv_title;
         private final Button bt_action;
         private final Button bt_delete;
         private DownloadInfo downloadInfo;
@@ -104,7 +104,7 @@ public class DownloadAdapter extends
             tv_size = (TextView) view.findViewById(R.id.tv_size);
             tv_status = (TextView) view.findViewById(R.id.tv_status);
             pb = (ProgressBar) view.findViewById(R.id.pb);
-            tv_name = (TextView) view.findViewById(R.id.tv_name);
+            tv_title = (TextView) view.findViewById(R.id.tv_name);
             bt_action = (Button) view.findViewById(R.id.bt_action);
             bt_delete = (Button) view.findViewById(R.id.bt_delete);
 
@@ -237,7 +237,7 @@ public class DownloadAdapter extends
                         tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
                                 .formatFileSize(downloadInfo.getSize()));
                         tv_status.setText("下载完成");
-
+                        bt_action.setText("下载");
                         publishDownloadSuccessStatus();
                         break;
                     case DownloadInfo.STATUS_REMOVED:
@@ -270,7 +270,7 @@ public class DownloadAdapter extends
                 Glide.with(context).load(mediaInfoLocal.getUrl()).into(iv_icon);
             }
 
-            tv_name.setText(mediaInfoLocal.getName());
+            tv_title.setText(mediaInfoLocal.getTitle());
         }
 
         private void notifyDownloadStatus() {

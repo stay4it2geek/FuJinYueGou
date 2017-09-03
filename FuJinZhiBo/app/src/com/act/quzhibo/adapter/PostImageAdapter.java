@@ -2,8 +2,6 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -60,11 +58,11 @@ public class PostImageAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             if (type == 0) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_post_img, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_post_list_img, parent, false);
             } else if (type == 1) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_post_page_img, parent, false);
             } else {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_info_post_img, parent, false);
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_info_common_user_img, parent, false);
             }
             viewHolder.avatar = (ImageView) convertView.findViewById(R.id.postimg);
             convertView.setTag(viewHolder);

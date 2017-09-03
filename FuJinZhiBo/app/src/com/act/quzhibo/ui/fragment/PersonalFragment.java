@@ -47,17 +47,19 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
-        if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("false")) {
+        if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
             view.findViewById(R.id.vip_policy).setVisibility(View.GONE);
-            view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
-            view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
-            view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
+//            view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
+//            view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
+//            view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
             view.findViewById(R.id.noReslayout).setVisibility(View.GONE);
             view.findViewById(R.id.myVideo_download_layout).setVisibility(View.GONE);
             view.findViewById(R.id.myIMG_download_layout).setVisibility(View.GONE);
-            view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
+//            view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
         }
-
+        view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
+        view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
+        view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
         view.findViewById(R.id.mydownloading_layout).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);

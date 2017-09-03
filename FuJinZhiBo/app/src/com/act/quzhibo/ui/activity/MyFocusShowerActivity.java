@@ -40,7 +40,7 @@ public class MyFocusShowerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_common);
+        setContentView(R.layout.layout_common);
         loadNetView= (LoadNetView) findViewById(R.id.loadview);
         recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setPullRefreshEnabled(true);

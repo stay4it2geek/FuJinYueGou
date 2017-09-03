@@ -197,7 +197,11 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                             mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
                                 @Override
                                 public void onItemClick(MediaAuthor mediaAuthor) {
-                                    CommonUtil.switchFragment(new VideoAlbumListFragment(), R.id._videolayoutContainer, getActivity());
+                                    VideoAlbumListFragment videoAlbumListFragment = new VideoAlbumListFragment();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("author", mediaAuthor);
+                                    videoAlbumListFragment.setArguments(bundle);
+                                    CommonUtil.switchFragment(videoAlbumListFragment, R.id._videolayoutContainer, getActivity());
                                 }
                             });
                         } else {
@@ -207,8 +211,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
 
                     loadNetView.setVisibility(View.GONE);
                 } else {
-                    loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.RELOAD);
+                    recyclerView.setNoMore(true);
                 }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);

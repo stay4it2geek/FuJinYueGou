@@ -6,22 +6,18 @@
     android:background="@drawable/background_card"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/ivMediaCover"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_margin="5dp"
-            android:scaleType="fitXY" />
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/ivMediaCover"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        android:scaleType="fitXY" />
 
 
     <TextView
-        android:id="@+id/tvMediaName"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvMediaTtile"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_margin="5dp"

@@ -16,7 +16,7 @@ public class WomenSoureceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_common,null,false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_common,null,false);
 
         return view;
     }
