@@ -42,4 +42,11 @@ public class Constants {
     public static final String FULL_SCREEN = "fill_screen";
     public static final String DOWNLAOD_VIDEO ="download_video" ;
     public static final int NO_DOWN_DATA = 20;
+    public static final String PHOTO_DOWNLOAD ="photoDownLoad";
+    public static final String VIDEO_DOWNLOAD ="videoDownLoad";
+
+
+
+
+
 }

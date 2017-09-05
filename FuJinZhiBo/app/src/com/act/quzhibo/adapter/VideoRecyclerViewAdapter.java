@@ -106,7 +106,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         String url=videoBean.getUrl()+"";
         DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
         if (isSdCardExist) {
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "videoDownload");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();
             }
@@ -214,7 +214,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     private DownloadInfo createDownload(MediaInfo mediaInfo, String url) {
         DownloadInfo downloadInfo = null;
         if (isSdCardExist) {
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "videoDownload");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();
             }

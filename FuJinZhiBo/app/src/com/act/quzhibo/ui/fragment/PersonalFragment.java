@@ -11,21 +11,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
-import com.act.quzhibo.download.domain.MyDownloadInfLocal;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
-import com.act.quzhibo.ui.activity.PicsDownLoadHistoryActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
 import com.act.quzhibo.ui.activity.VIPConisTableActivity;
-import com.act.quzhibo.ui.activity.VideoDownLoadHistoryActivty;
+import com.act.quzhibo.ui.activity.CommonDownLoadHistoryActivty;
 import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
@@ -35,8 +32,6 @@ import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FetchUserInfoListener;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
     RootUser rootUser;
@@ -136,10 +131,16 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         getActivity().startActivity(new Intent(getActivity(), MyFocusPersonActivity.class));
                         break;
                     case R.id.myVideo_download_layout:
-                        getActivity().startActivity(new Intent(getActivity(), VideoDownLoadHistoryActivty.class));
+                        Intent videoIntent=new Intent();
+                        videoIntent.putExtra("downLoadType",Constants.VIDEO_DOWNLOAD);
+                        videoIntent.setClass(getActivity(),CommonDownLoadHistoryActivty.class);
+                        getActivity().startActivity(videoIntent);
                         break;
                     case R.id.myIMG_download_layout:
-                        getActivity().startActivity(new Intent(getActivity(), PicsDownLoadHistoryActivity.class));
+                        Intent photoIntent=new Intent();
+                        photoIntent.putExtra("downLoadType",Constants.PHOTO_DOWNLOAD);
+                        photoIntent.setClass(getActivity(),CommonDownLoadHistoryActivty.class);
+                        getActivity().startActivity(photoIntent);
                         break;
                     case R.id.settingDetailayout:
                         getActivity().startActivity(new Intent(getActivity(), SettingMineInfoActivity.class));

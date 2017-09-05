@@ -3,6 +3,7 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,7 +12,6 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.DownLoadHistoryListAdapter;
-import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
@@ -21,31 +21,44 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
-public class VideoDownLoadHistoryActivty extends AppCompatActivity {
+public class CommonDownLoadHistoryActivty extends AppCompatActivity {
 
     LoadNetView loadNetView;
     XRecyclerView recyclerView;
-    private boolean canload;
-    int loadCount;
     DownLoadHistoryListAdapter adapter;
+    int size;
+    List<File> files;
+    private int pagesize = 10;
+    int pagecount = 0;
+    int pageHasIndex = 0;
+    int totalcount;
+    private int loadIndex = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-        loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
+        size = getSourcePathFromSD().size();
         recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-        titlebar.setBarTitle("我下载的视频");
+        if (getIntent().getStringExtra("downLoadType").equals(Constants.VIDEO_DOWNLOAD)) {
+            titlebar.setBarTitle("我下载的视频");
+        } else {
+            titlebar.setBarTitle("我下载的照片");
+        }
         titlebar.setVisibility(View.VISIBLE);
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VideoDownLoadHistoryActivty.this.finish();
+                CommonDownLoadHistoryActivty.this.finish();
             }
         });
+        files = getSourcePathFromSD();
+        totalcount = files.size();
+        pageHasIndex = totalcount % pagesize;
 
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
@@ -53,12 +66,13 @@ public class VideoDownLoadHistoryActivty extends AppCompatActivity {
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        loadIndex = 1;
                         recyclerView.setNoMore(false);
                         recyclerView.setLoadingMoreEnabled(true);
-//                        queryData(Constants.REFRESH);
+                        handler.sendEmptyMessage(Constants.REFRESH);
                         recyclerView.refreshComplete();
                     }
                 }, 1000);
@@ -66,10 +80,15 @@ public class VideoDownLoadHistoryActivty extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        queryData(Constants.LOADMORE);
+                        ++loadIndex;
+                        if (loadIndex > pagecount) {
+                            handler.sendEmptyMessage(Constants.NO_MORE);
+                        } else {
+                            handler.sendEmptyMessage(Constants.LOADMORE);
+                        }
                         recyclerView.loadMoreComplete();
                     }
                 }, 1000);
@@ -78,50 +97,85 @@ public class VideoDownLoadHistoryActivty extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        int loadnum;
-        if (getImagePathFromSD().size() > 0) {
-            int size = getImagePathFromSD().size();
-            int canLoadNum = size / 10;
-            if (canLoadNum == 0) {
+        if (totalcount > 0) {
+            handler.sendEmptyMessage(Constants.REFRESH);
+        } else {
+            loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
+        }
 
-                adapter = new DownLoadHistoryListAdapter(this, getImagePathFromSD());
-                recyclerView.setAdapter(adapter);
-
-                loadNetView.setVisibility(View.GONE);
-            } else if (canLoadNum > 0) {
-                canload = true;
-                loadnum = (canLoadNum / 10) - (canLoadNum % 10);
-//                adapter.setDatas();
-            }
-
+        if (pageHasIndex > 0) {
+            pagecount = totalcount / pagesize + 1;
+        } else {
+            pagecount = totalcount / pagesize;
         }
     }
 
+    List<File> fileList = new ArrayList<>();
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            if (msg.what != Constants.NO_DOWN_DATA) {
+                adapter = new DownLoadHistoryListAdapter(CommonDownLoadHistoryActivty.this);
+                recyclerView.setAdapter(adapter);
+                if (totalcount <= 0) {
+                    return;
+
+                }
+                if (msg.what == Constants.REFRESH) {
+                    fileList.clear();
+                    List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
+                    fileList.addAll(subList);
+                    adapter.updateDatas(fileList);
+
+                } else if (msg.what == Constants.LOADMORE) {
+                    if (loadIndex == pagecount) {
+                        List<File> subList = files.subList((loadIndex - 1) * pagesize, totalcount);
+                        fileList.addAll(subList);
+                    } else {
+                        List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
+                        fileList.addAll(subList);
+                    }
+                    adapter.updateDatas(fileList);
+                } else {
+                    recyclerView.setNoMore(true);
+                }
+
+                loadNetView.setVisibility(View.GONE);
+
+            }
+        }
+
+
+    };
 
     /**
-     * 从sd卡获取图片资源
+     * 从sd卡获取资源
      *
      * @return
      */
-    private ArrayList<File> getImagePathFromSD() {
+    private List<File> getSourcePathFromSD() {
         // 图片列表
-        ArrayList<File> videoFlieList = new ArrayList<File>();
+        List<File> sourceFlieList = new ArrayList<>();
         // 得到sd卡内image文件夹的路径   File.separator(/)
         String filePath = Environment.getExternalStorageDirectory().toString() + File.separator
-                + "videoDownLoad";
+                + getIntent().getStringExtra("downLoadType");
         // 得到该路径文件夹下所有的文件
         File fileAll = new File(filePath);
         File[] files = fileAll.listFiles();
-        // 将所有的文件存入ArrayList中,并过滤所有图片格式的文件
-        for (int i = 0; i < files.length; i++) {
-            File file = files[i];
-            if (checkIsVideoFile(file.getPath())) {
-                videoFlieList.add(file);
+        if (files != null && files.length > 0) {
+            for (int i = 0; i < files.length; i++) {
+                File file = files[i];
+//            if (checkIsVideoFile(file.getPath())) {
+                sourceFlieList.add(file);
+//            }
             }
+            Collections.sort(sourceFlieList, new FileComparator());
         }
-        Collections.sort(videoFlieList, new FileComparator());
         // 返回得到的图片列表
-        return videoFlieList;
+        return sourceFlieList;
     }
 
     private class FileComparator implements Comparator<File> {

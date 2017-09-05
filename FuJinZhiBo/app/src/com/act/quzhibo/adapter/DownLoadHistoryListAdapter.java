@@ -15,9 +15,10 @@ import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DownLoadHistoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<File> paths;
+    private List<File> paths;
     private Activity activity;
 
     public interface OnMediaRecyclerViewItemClickListener {
@@ -31,12 +32,12 @@ public class DownLoadHistoryListAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     //适配器初始化
-    public DownLoadHistoryListAdapter(Activity context, ArrayList<File> paths) {
+    public DownLoadHistoryListAdapter(Activity context) {
         activity = context;
-        this.paths = paths;
     }
 
-    public void setDatas(ArrayList<File> paths) {
+
+    public void updateDatas(List<File> paths) {
         this.paths = paths;
         this.notifyDataSetChanged();
 

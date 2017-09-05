@@ -180,7 +180,7 @@ public class XImageActivity extends AppCompatActivity {
         public void onLongPressed(XImageView view, MotionEvent event) {
 
             if (isSdCardExist) {
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "photoDownload");
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  Constants.PHOTO_DOWNLOAD);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
@@ -274,7 +274,7 @@ public class XImageActivity extends AppCompatActivity {
     private DownloadInfo createDownload(MediaInfo mediaInfo, String url) {
         DownloadInfo downloadInfo = null;
         if (isSdCardExist) {
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "photoDownload");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.PHOTO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();
             }
