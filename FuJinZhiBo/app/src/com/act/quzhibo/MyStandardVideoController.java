@@ -77,13 +77,11 @@ public class MyStandardVideoController extends StandardVideoController implement
                     this.popupMenu.show();
                     this.show();
                 }
-            }else if (i == R.id.fullscreen) {
-                onVideoControllerListner.onMyVideoController(Constants.FULL_SCREEN);
-            } else {
+            }else {
                 this.doPauseResume();
             }
-        } else {
-            this.doStartStopFullScreen();
+        }else if (i == R.id.fullscreen) {
+            onVideoControllerListner.onMyVideoController(Constants.FULL_SCREEN);
         }
 
     }

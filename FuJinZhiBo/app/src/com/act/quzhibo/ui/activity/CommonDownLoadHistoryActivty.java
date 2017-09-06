@@ -100,7 +100,6 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        ToastUtil.showToast(this,totalcount+"ppp");
         if (totalcount > 0) {
             handler.sendEmptyMessage(Constants.REFRESH);
         } else {
