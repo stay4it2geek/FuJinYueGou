@@ -13,6 +13,7 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.DownLoadHistoryListAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -28,7 +29,6 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
     LoadNetView loadNetView;
     XRecyclerView recyclerView;
     DownLoadHistoryListAdapter adapter;
-    int size;
     List<File> files;
     private int pagesize = 10;
     int pagecount = 0;
@@ -41,7 +41,6 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-        size = getSourcePathFromSD().size();
         recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         if (getIntent().getStringExtra("downLoadType").equals(Constants.VIDEO_DOWNLOAD)) {
@@ -59,7 +58,11 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         files = getSourcePathFromSD();
         totalcount = files.size();
         pageHasIndex = totalcount % pagesize;
-
+        if (pageHasIndex > 0) {
+            pagecount = totalcount / pagesize + 1;
+        } else {
+            pagecount = totalcount / pagesize;
+        }
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -97,16 +100,11 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
+        ToastUtil.showToast(this,totalcount+"ppp");
         if (totalcount > 0) {
             handler.sendEmptyMessage(Constants.REFRESH);
         } else {
             loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
-        }
-
-        if (pageHasIndex > 0) {
-            pagecount = totalcount / pagesize + 1;
-        } else {
-            pagecount = totalcount / pagesize;
         }
     }
 
@@ -116,65 +114,51 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             if (msg.what != Constants.NO_DOWN_DATA) {
-                adapter = new DownLoadHistoryListAdapter(CommonDownLoadHistoryActivty.this);
-                recyclerView.setAdapter(adapter);
-                if (totalcount <= 0) {
-                    return;
-
-                }
-                if (msg.what == Constants.REFRESH) {
-                    fileList.clear();
-                    List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
-                    fileList.addAll(subList);
-                    adapter.updateDatas(fileList);
-
-                } else if (msg.what == Constants.LOADMORE) {
-                    if (loadIndex == pagecount) {
-                        List<File> subList = files.subList((loadIndex - 1) * pagesize, totalcount);
-                        fileList.addAll(subList);
-                    } else {
-                        List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
-                        fileList.addAll(subList);
+                if (totalcount > 0) {
+                    if (totalcount > pagesize) {
+                        if (msg.what == Constants.REFRESH) {
+                            fileList.clear();
+                            List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
+                            fileList.addAll(subList);
+                            adapter = new DownLoadHistoryListAdapter(CommonDownLoadHistoryActivty.this, fileList);
+                            recyclerView.setAdapter(adapter);
+                        } else if (msg.what == Constants.LOADMORE) {
+                            if (loadIndex == pagecount) {
+                                List<File> subList = files.subList((loadIndex - 1) * pagesize, totalcount);
+                                fileList.addAll(subList);
+                            } else {
+                                List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
+                                fileList.addAll(subList);
+                            }
+                            adapter.notifyDataSetChanged();
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
+                    }else{
+                        adapter = new DownLoadHistoryListAdapter(CommonDownLoadHistoryActivty.this, files);
                     }
-                    adapter.updateDatas(fileList);
-                } else {
-                    recyclerView.setNoMore(true);
+                    loadNetView.setVisibility(View.GONE);
                 }
-
-                loadNetView.setVisibility(View.GONE);
-
             }
         }
 
 
     };
 
-    /**
-     * 从sd卡获取资源
-     *
-     * @return
-     */
     private List<File> getSourcePathFromSD() {
-        // 图片列表
         List<File> sourceFlieList = new ArrayList<>();
-        // 得到sd卡内image文件夹的路径   File.separator(/)
         String filePath = Environment.getExternalStorageDirectory().toString() + File.separator
                 + getIntent().getStringExtra("downLoadType");
-        // 得到该路径文件夹下所有的文件
         File fileAll = new File(filePath);
         File[] files = fileAll.listFiles();
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
-//            if (checkIsVideoFile(file.getPath())) {
                 sourceFlieList.add(file);
-//            }
             }
             Collections.sort(sourceFlieList, new FileComparator());
         }
-        // 返回得到的图片列表
         return sourceFlieList;
     }
 
@@ -191,23 +175,4 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
 
     }
 
-    /**
-     * 检查扩展名，得到图片格式的文件
-     *
-     * @param fName 文件名
-     * @return
-     */
-    private boolean checkIsVideoFile(String fName) {
-        boolean isVideoFile = false;
-        // 获取扩展名
-        String FileEnd = fName.substring(fName.lastIndexOf(".") + 1,
-                fName.length()).toLowerCase();
-        if (FileEnd.equals("mp4") || FileEnd.equals("MP4") || FileEnd.equals("FLV")
-                || FileEnd.equals("flv")) {
-            isVideoFile = true;
-        } else {
-            isVideoFile = false;
-        }
-        return isVideoFile;
-    }
 }
