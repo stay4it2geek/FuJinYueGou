@@ -10,13 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.List;
 
-public class DownLoadHistoryListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DownLoadHistoryListAdapter extends RecyclerView.Adapter<DownLoadHistoryListAdapter.MyViewHolder> {
     private List<File> files;
     private Activity activity;
 
@@ -37,29 +38,32 @@ public class DownLoadHistoryListAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.item_post_page_img, parent, false);//这个布局就是一个imageview用来显示图片
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_com_download_img, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof MyViewHolder) {
-            ((MyViewHolder) holder).photoImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(files.get(position).getAbsolutePath());
-                }
-            });
-            ToastUtil.showToast(activity, files.get(position).getAbsolutePath());
-            if (! checkIsVideoFile(files.get(position).getName())) {
-                Glide.with(activity).load(files.get(position).getAbsolutePath() + "").thumbnail(0.1f).placeholder(R.drawable.women).into(((MyViewHolder) holder).photoImg);//加载网络图片
-            } else {
-                Glide.with(activity).load(Uri.fromFile(new File(files.get(position).getAbsolutePath()))).into(((MyViewHolder) holder).photoImg);//加载网络图片
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
+        holder.photoImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClick(files.get(position).getAbsolutePath());
             }
+        });
+        ToastUtil.showToast(activity, files.get(position).getAbsolutePath());
+        if (!checkIsVideoFile(files.get(position).getName())) {
+            holder.photoImg.setVisibility(View.VISIBLE);
+            holder.videoImg.setVisibility(View.GONE);
+            Glide.with(activity).load(files.get(position).getAbsolutePath() + "").thumbnail(0.1f).placeholder(R.drawable.xiangjiao).into(holder.photoImg);//加载网络图片
+        } else {
+            holder.photoImg.setVisibility(View.GONE);
+            holder.videoImg.setVisibility(View.VISIBLE);
+           Glide.with(activity).load(files.get(position).getAbsolutePath()).into(holder.videoImg);//加载网络图片
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -68,16 +72,19 @@ public class DownLoadHistoryListAdapter extends RecyclerView.Adapter<RecyclerVie
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
+        private ImageView videoImg;
         private ImageView photoImg;
 
         public MyViewHolder(View view) {
             super(view);
-            photoImg = (ImageView) view.findViewById(R.id.postimg);
+            photoImg = (ImageView) view.findViewById(R.id.thumbImg);
+            videoImg = (ImageView) view.findViewById(R.id.videoImg);
+
         }
     }
 
     private boolean checkIsVideoFile(String fName) {
-        boolean isVideoFile ;
+        boolean isVideoFile;
         // 获取扩展名
         String FileEnd = fName.substring(fName.lastIndexOf(".") + 1,
                 fName.length()).toLowerCase();

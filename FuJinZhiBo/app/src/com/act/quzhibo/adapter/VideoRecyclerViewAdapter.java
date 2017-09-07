@@ -222,7 +222,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
             File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
             if (localFile.isFile() && localFile.exists()) {
-                file.delete();
+                localFile.delete();
             }
 
             downloadInfo = new DownloadInfo.Builder().setUrl(url).setPath(path).build();

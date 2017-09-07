@@ -1,7 +1,12 @@
 package com.act.quzhibo.download.adapter;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Environment;
+import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +21,13 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.adapter.BaseRecyclerViewAdapter;
 import com.act.quzhibo.download.callback.MyDownloadListener;
+import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.download.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,14 +50,21 @@ public class DownloadAdapter extends
         BaseRecyclerViewAdapter<DownloadInfo, DownloadAdapter.ViewHolder> {
 
     private DBController dbController;
+    private OnDeleteListner deleteListner;
+    private FragmentActivity activity;
 
-    public DownloadAdapter(Context context) {
-        super(context);
+    public DownloadAdapter(FragmentActivity activity) {
+        super(activity);
+        this.activity=activity;
         try {
             dbController = DBController.getInstance(context.getApplicationContext());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setOnDeleteListner(OnDeleteListner deleteListner) {
+        this.deleteListner = deleteListner;
     }
 
     @Override
@@ -111,7 +125,7 @@ public class DownloadAdapter extends
         }
 
         @SuppressWarnings("unchecked")
-        public void bindData(final DownloadInfo data, int position, final Context context) {
+        public void bindData(final DownloadInfo data,final  int position, final Context context) {
 
 
             // Get download task status.
@@ -130,14 +144,14 @@ public class DownloadAdapter extends
                                         if (getUserTag() != null && getUserTag().get() != null) {
                                             DownloadAdapter.ViewHolder viewHolder = (DownloadAdapter.ViewHolder) getUserTag()
                                                     .get();
-                                            viewHolder.refresh();
+                                            viewHolder.refresh(position);
                                         }
                                     }
                                 });
 
             }
 
-            refresh();
+            refresh(position);
 
 
             bt_action.setOnClickListener(new OnClickListener() {
@@ -175,7 +189,7 @@ public class DownloadAdapter extends
 
         }
 
-        private void refresh() {
+        private void refresh(final int position) {
             if (downloadInfo == null) {
                 tv_size.setText("");
                 pb.setProgress(0);
@@ -196,7 +210,25 @@ public class DownloadAdapter extends
                         bt_delete.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                downloadManager.remove(downloadInfo);
+                                FragmentDialog.newInstance("", "确定删除?", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    @Override
+                                    public void onPositiveClick(Dialog dialog) {
+                                        deleteListner.onDelete(downloadInfo,position);
+                                        dialog.dismiss();
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                downloadManager.remove(downloadInfo);
+
+                                            }
+                                        },1000);
+                                    }
+
+                                    @Override
+                                    public void onNegtiveClick(Dialog dialog) {
+                                        dialog.dismiss();
+                                    }
+                                }).show(activity.getSupportFragmentManager(),"");
                             }
                         });
                         try {
@@ -264,9 +296,9 @@ public class DownloadAdapter extends
         }
 
         public void bindBaseInfo(MediaInfoLocal mediaInfoLocal) {
-            if(mediaInfoLocal.getType().equals(Constants.VIDEO_ALBUM)){
+            if (mediaInfoLocal.getType().equals(Constants.VIDEO_ALBUM)) {
                 Glide.with(context).load(mediaInfoLocal.getIcon()).into(iv_icon);
-            }else {
+            } else {
                 Glide.with(context).load(mediaInfoLocal.getUrl()).into(iv_icon);
             }
 
@@ -277,20 +309,7 @@ public class DownloadAdapter extends
 
             if (downloadInfo.getStatus() == DownloadInfo.STATUS_REMOVED) {
                 try {
-                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "photoDownload");
-                    if (!file.exists()) {
-                        file.mkdirs();
-                    }
 
-                    String url=downloadInfo.getUri().toString();
-                    ToastUtil.showToast(context,url);
-                    String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length()));
-                    File localFile = new File(path);
-                    if (localFile.isFile() && localFile.exists()) {
-                        file.delete();
-                    }
-
-                    ToastUtil.showToast(context, "delete2");
                     dbController.deleteMyDownloadInfo(downloadInfo.getUri().hashCode());
                 } catch (SQLException e) {
                     e.printStackTrace();

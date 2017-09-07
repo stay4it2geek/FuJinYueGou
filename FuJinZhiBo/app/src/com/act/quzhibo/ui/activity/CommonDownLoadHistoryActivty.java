@@ -30,7 +30,7 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
     XRecyclerView recyclerView;
     DownLoadHistoryListAdapter adapter;
     List<File> files;
-    private int pagesize = 10;
+    private int pagesize = 8;
     int pagecount = 0;
     int pageHasIndex = 0;
     int totalcount;
@@ -44,9 +44,9 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         if (getIntent().getStringExtra("downLoadType").equals(Constants.VIDEO_DOWNLOAD)) {
-            titlebar.setBarTitle("我下载的视频");
+            titlebar.setBarTitle("我保存好的视频");
         } else {
-            titlebar.setBarTitle("我下载的照片");
+            titlebar.setBarTitle("我保存好的照片");
         }
         titlebar.setVisibility(View.VISIBLE);
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -62,6 +62,10 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
             pagecount = totalcount / pagesize + 1;
         } else {
             pagecount = totalcount / pagesize;
+        }
+        if (files.size() > pagesize) {
+            recyclerView.setNoMore(false);
+            recyclerView.setLoadingMoreEnabled(true);
         }
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
@@ -115,13 +119,18 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what != Constants.NO_DOWN_DATA) {
                 if (totalcount > 0) {
+                    if (files.size() > pagesize) {
+                        recyclerView.setNoMore(false);
+                        recyclerView.setLoadingMoreEnabled(true);
+                    }
                     if (totalcount > pagesize) {
                         if (msg.what == Constants.REFRESH) {
-                            fileList.clear();
                             List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
+                            fileList.clear();
                             fileList.addAll(subList);
                             adapter = new DownLoadHistoryListAdapter(CommonDownLoadHistoryActivty.this, fileList);
                             recyclerView.setAdapter(adapter);
+
                         } else if (msg.what == Constants.LOADMORE) {
                             if (loadIndex == pagecount) {
                                 List<File> subList = files.subList((loadIndex - 1) * pagesize, totalcount);
@@ -136,6 +145,9 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
                         }
                     }else{
                         adapter = new DownLoadHistoryListAdapter(CommonDownLoadHistoryActivty.this, files);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setNoMore(true);
+
                     }
                     loadNetView.setVisibility(View.GONE);
                 }
