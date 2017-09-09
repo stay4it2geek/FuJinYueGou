@@ -47,11 +47,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 //            view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
 //            view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
 //            view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
-            view.findViewById(R.id.noReslayout).setVisibility(View.GONE);
             view.findViewById(R.id.myVideo_download_layout).setVisibility(View.GONE);
             view.findViewById(R.id.myIMG_download_layout).setVisibility(View.GONE);
+            view.findViewById(R.id.noReslayout).setVisibility(View.GONE);
 //            view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
         }
+
         view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
         view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
         view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);

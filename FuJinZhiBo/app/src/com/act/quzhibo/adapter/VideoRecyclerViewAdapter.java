@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,9 @@ import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.ui.activity.FullScreenActivity;
-import com.act.quzhibo.ui.activity.XImageActivity;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.xImageView.IXImageView;
-import com.act.quzhibo.view.xImageView.XImageView;
 import com.bumptech.glide.Glide;
 import com.devlin_n.videoplayer.player.IjkVideoView;
-
 
 import java.io.File;
 import java.sql.SQLException;
@@ -88,9 +83,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             public void onMyVideoController(String controllerFlg) {
                 if (Constants.DOWNLAOD_VIDEO.equals(controllerFlg)) {
                     downLoadVideo(videoBean);
-                }else{
+                } else {
                     Intent intent = new Intent();
-                    Bundle bundle=new Bundle();
+                    Bundle bundle = new Bundle();
                     bundle.putParcelable("videoBean", videoBean);
                     intent.putExtras(bundle);
                     intent.setClass(context, FullScreenActivity.class);
@@ -103,10 +98,10 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     }
 
     private void downLoadVideo(MediaInfo videoBean) {
-        String url=videoBean.getUrl()+"";
+        String url = videoBean.getUrl() + "";
         DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
         if (isSdCardExist) {
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  Constants.VIDEO_DOWNLOAD);
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();
             }
@@ -163,15 +158,24 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
     class MyDownloadListener implements DownloadListener {
         DownloadInfo downloadInfo;
-
+        String path;
+        private File oldFile;
+        File newFile;
         public MyDownloadListener(DownloadInfo downloadInfo) {
             this.downloadInfo = downloadInfo;
+            if (isSdCardExist){
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
+                if (!file.exists()) {
+                    file.mkdirs();
+                }
+                path = downloadInfo.getPath();
+                 oldFile = new File(path); //要重命名的文件或文件夹
+            }
         }
 
         @Override
         public void onStart() {
             ToastUtil.showToast(context, "开始保存");
-
         }
 
         @Override
@@ -184,11 +188,13 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         public void onPaused() {
             ToastUtil.showToast(context, "暂停保存");
 
+
         }
 
         @Override
         public void onDownloading(long progress, long size) {
             ToastUtil.showToast(context, "正在保存");
+
 
         }
 
@@ -196,11 +202,14 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         public void onRemoved() {
             ToastUtil.showToast(context, "已删除保存任务");
             downloadInfo = null;
+
+
         }
 
         @Override
         public void onDownloadSuccess() {
             ToastUtil.showToast(context, "保存成功");
+
         }
 
         @Override

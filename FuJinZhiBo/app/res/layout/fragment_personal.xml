@@ -325,7 +325,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/mydownloading_img"
                     android:paddingTop="5dp"
-                    android:text="查看我正在下载的" />
+                    android:text="查看我的离线下载" />
 
                 <View
                     android:layout_width="10dp"

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -24,16 +25,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class CommonDownLoadHistoryActivty extends AppCompatActivity {
+import cn.woblog.android.downloader.domain.DownloadInfo;
 
+public class CommonDownLoadHistoryActivty extends AppCompatActivity {
+    List<File> fileList = new ArrayList<>();
     LoadNetView loadNetView;
     XRecyclerView recyclerView;
     DownLoadHistoryListAdapter adapter;
-    List<File> files;
+    List<File> files=new ArrayList<>();
     private int pagesize = 8;
     int pagecount = 0;
     int pageHasIndex = 0;
-    int totalcount;
     private int loadIndex = 1;
 
     @Override
@@ -55,13 +57,12 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
                 CommonDownLoadHistoryActivty.this.finish();
             }
         });
-        files = getSourcePathFromSD();
-        totalcount = files.size();
-        pageHasIndex = totalcount % pagesize;
+        files.addAll(getSourcePathFromSD());
+        pageHasIndex = files.size() % pagesize;
         if (pageHasIndex > 0) {
-            pagecount = totalcount / pagesize + 1;
+            pagecount = files.size() / pagesize + 1;
         } else {
-            pagecount = totalcount / pagesize;
+            pagecount = files.size() / pagesize;
         }
         if (files.size() > pagesize) {
             recyclerView.setNoMore(false);
@@ -104,26 +105,25 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        if (totalcount > 0) {
+        if (files.size() > 0) {
             handler.sendEmptyMessage(Constants.REFRESH);
         } else {
             loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
         }
     }
 
-    List<File> fileList = new ArrayList<>();
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what != Constants.NO_DOWN_DATA) {
-                if (totalcount > 0) {
+                if (files.size() > 0) {
                     if (files.size() > pagesize) {
                         recyclerView.setNoMore(false);
                         recyclerView.setLoadingMoreEnabled(true);
                     }
-                    if (totalcount > pagesize) {
+                    if (files.size() > pagesize) {
                         if (msg.what == Constants.REFRESH) {
                             List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
                             fileList.clear();
@@ -133,7 +133,7 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
 
                         } else if (msg.what == Constants.LOADMORE) {
                             if (loadIndex == pagecount) {
-                                List<File> subList = files.subList((loadIndex - 1) * pagesize, totalcount);
+                                List<File> subList = files.subList((loadIndex - 1) * pagesize, files.size());
                                 fileList.addAll(subList);
                             } else {
                                 List<File> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
@@ -143,7 +143,7 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
                         } else {
                             recyclerView.setNoMore(true);
                         }
-                    }else{
+                    } else {
                         adapter = new DownLoadHistoryListAdapter(CommonDownLoadHistoryActivty.this, files);
                         recyclerView.setAdapter(adapter);
                         recyclerView.setNoMore(true);
@@ -151,6 +151,8 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
                     }
                     loadNetView.setVisibility(View.GONE);
                 }
+            }else{
+                loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
             }
         }
 
@@ -166,7 +168,18 @@ public class CommonDownLoadHistoryActivty extends AppCompatActivity {
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
-                sourceFlieList.add(file);
+                Log.e("file",file.getAbsolutePath()+"pppp");
+                {
+                    if(file.getAbsolutePath().contains("@#@#@#@#")){
+                        String space[]=file.getAbsolutePath().split("@#@#@#@#");
+                        if (space[1].equals("")) {
+                            sourceFlieList.add(file);
+                        }
+                    }else{
+                        sourceFlieList.add(file);
+                    }
+
+                }
             }
             Collections.sort(sourceFlieList, new FileComparator());
         }

@@ -1,24 +1,20 @@
 package com.act.quzhibo.download.fragment;
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.DownLoadHistoryListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.fragment.BaseFragment;
 import com.act.quzhibo.download.adapter.DownloadAdapter;
 import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
-import com.act.quzhibo.ui.activity.CommonDownLoadHistoryActivty;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -28,14 +24,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import cn.woblog.android.downloader.DownloadService;
 import cn.woblog.android.downloader.callback.DownloadManager;
 import cn.woblog.android.downloader.domain.DownloadInfo;
-
-import static cn.woblog.android.downloader.DownloadService.downloadManager;
 
 public class DownloadingFragment extends BaseFragment {
 
@@ -48,7 +41,6 @@ public class DownloadingFragment extends BaseFragment {
     int pagecount = 0;
     int pageHasIndex = 0;
     private int loadIndex = 1;
-    List<DownloadInfo> fileList = new ArrayList<>();
 
     public static DownloadingFragment newInstance() {
 
@@ -72,8 +64,6 @@ public class DownloadingFragment extends BaseFragment {
         recyclerView = (XRecyclerView) getView().findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         loadNetView = (LoadNetView) getView().findViewById(R.id.loadview);
-
-
     }
 
     @Override
@@ -122,28 +112,27 @@ public class DownloadingFragment extends BaseFragment {
             }
         });
 
+    }
+
+    private void initFilesize() {
+        files.clear();
+        files.addAll(downloadManager.findAllDownloading());
+
+        pageHasIndex = files.size() % pagesize;
+        if (pageHasIndex > 0) {
+            pagecount = files.size() / pagesize + 1;
+        } else {
+            pagecount = files.size() / pagesize;
+        }
+
         if (files.size() > 0) {
             handler.sendEmptyMessage(Constants.REFRESH);
         } else {
             loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
         }
-
-
-    }
-
-    private void initFilesize() {
-        files.clear();
-        fileList.clear();
-        files = downloadManager.findAllDownloading();
         if (files.size() > pagesize) {
             recyclerView.setNoMore(false);
             recyclerView.setLoadingMoreEnabled(true);
-        }
-            pageHasIndex = files.size() % pagesize;
-        if (pageHasIndex > 0) {
-            pagecount = files.size() / pagesize + 1;
-        } else {
-            pagecount = files.size() / pagesize;
         }
     }
 
@@ -159,32 +148,31 @@ public class DownloadingFragment extends BaseFragment {
                 if (files.size() > 0) {
                     if (files.size() > pagesize) {
                         if (msg.what == Constants.REFRESH) {
-                            List<DownloadInfo> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
-                            fileList.clear();
-                            fileList.addAll(subList);
+                            List<DownloadInfo> subList = downloadManager.findAllDownloading().subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
+                            files.clear();
+                            files.addAll(subList);
                             downloadAdapter = new DownloadAdapter(getActivity());
                             recyclerView.setAdapter(downloadAdapter);
-                            setUiData(fileList);
+                            setUiData(files);
                         } else if (msg.what == Constants.LOADMORE) {
                             if (loadIndex == pagecount) {
-                                List<DownloadInfo> subList = files.subList((loadIndex - 1) * pagesize, files.size());
-                                fileList.addAll(subList);
+                                List<DownloadInfo> subList = downloadManager.findAllDownloading().subList((loadIndex - 1) * pagesize, files.size());
+                                files.addAll(subList);
                             } else {
-                                List<DownloadInfo> subList = files.subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
-                                fileList.addAll(subList);
+                                List<DownloadInfo> subList = downloadManager.findAllDownloading().subList((loadIndex - 1) * pagesize, pagesize * (loadIndex));
+                                files.addAll(subList);
                             }
-                            notifyChangeUiData(fileList);
+                            notifyChangeUiData(files);
                         } else {
                             recyclerView.setNoMore(true);
                         }
-                    } else {
+                    } else{
                         downloadAdapter = new DownloadAdapter(getActivity());
                         recyclerView.setAdapter(downloadAdapter);
-                        fileList.clear();
-                        fileList.addAll(files);
-                        setUiData(fileList);
-                        recyclerView.setNoMore(true);
-
+                        setUiData(files);
+                        if (loadIndex > pagecount) {
+                            recyclerView.setNoMore(true);
+                        }
                     }
 
 
@@ -195,10 +183,8 @@ public class DownloadingFragment extends BaseFragment {
                             if (localFile.isFile() && localFile.exists()) {
                                 localFile.delete();
                                 files.remove(position);
-                                fileList.remove(position);
-                                downloadAdapter.setData(fileList);
-                                downloadAdapter.notifyDataSetChanged();
-                                if (files.size() > 0) {
+                                downloadAdapter.setData(files);
+                                if (files.size() == 0) {
                                     loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
                                 }
                                 ToastUtil.showToast(getActivity(), "删除成功" + downloadInfo == null ? "null" : "nonull");
@@ -218,11 +204,6 @@ public class DownloadingFragment extends BaseFragment {
     @Subscribe
     public void onEventMainThread(DownloadStatusChanged event) {
         initFilesize();
-        if (files.size() > 0) {
-            handler.sendEmptyMessage(Constants.REFRESH);
-        } else {
-            loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
-        }
 
     }
 
