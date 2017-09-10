@@ -235,10 +235,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                             } else {
                                                 openSecret_switch.setChecked(false);
                                                 if (e.getErrorCode() == 206) {
-                                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                                         @Override
-                                                        public void onPositiveClick(Dialog dialog) {
+                                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                                             rootUser.logOut();
+                                                            dialog.dismiss();
                                                             startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                                         }
 
@@ -273,10 +274,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 } else {
                                     openSecret_switch.setChecked(true);
                                     if (e.getErrorCode() == 206) {
-                                        FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                             @Override
-                                            public void onPositiveClick(Dialog dialog) {
+                                            public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                                 rootUser.logOut();
+                                                dialog.dismiss();
                                                 SettingMineInfoActivity.this.finish();
                                                 startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                             }
@@ -348,10 +350,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "年龄更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
+                                            dialog.dismiss();
                                             SettingMineInfoActivity.this.finish();
                                             startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                         }
@@ -405,10 +408,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "是否可约更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
+                                            dialog.dismiss();
                                             SettingMineInfoActivity.this.finish();
                                             startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                         }
@@ -465,10 +469,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, rootUser.sex + "性更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
+                                            dialog.dismiss();
                                             SettingMineInfoActivity.this.finish();
                                             startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                         }
@@ -523,10 +528,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "交友想法更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
+                                            dialog.dismiss();
                                             SettingMineInfoActivity.this.finish();
                                             startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                         }
@@ -581,10 +587,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "情感状态更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
+                                            dialog.dismiss();
                                             SettingMineInfoActivity.this.finish();
                                             startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                         }
@@ -708,10 +715,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
                             } else {
                                 if (e.getErrorCode() == 206) {
                                     SettingMineInfoActivity.this.finish();
-                                    FragmentDialog.newInstance("权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
+                                            dialog.dismiss();
                                             startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
                                         }
 

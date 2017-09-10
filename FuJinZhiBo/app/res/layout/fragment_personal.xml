@@ -303,38 +303,6 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/rightarr" />
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/mydownloading_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="1dp"
-                android:background="#fff">
-
-                <ImageView
-                    android:id="@+id/mydownloading_img"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/mydownloading" />
-
-                <TextView
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/mydownloading_img"
-                    android:paddingTop="5dp"
-                    android:text="查看我的离线下载" />
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/myVideo_download_layout"
@@ -359,7 +327,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/myVideo_download_img"
                     android:paddingTop="5dp"
-                    android:text="我下载的趣味视频" />
+                    android:text="离线下载的视频" />
 
                 <View
                     android:layout_width="10dp"
@@ -393,7 +361,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/myIMG_download_img"
                     android:paddingTop="5dp"
-                    android:text="我下载的高清私照" />
+                    android:text="离线下载的私照" />
 
                 <View
                     android:layout_width="10dp"

@@ -9,12 +9,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.youth.banner.loader.ImageLoader;
+
 public class GlideImageLoader extends ImageLoader {
         int drawableId;
         public GlideImageLoader(int drawableId) {
             this.drawableId = drawableId;
         }
-
         @Override
         public void displayImage(Context context, Object path, final ImageView imageView) {
 
@@ -23,13 +23,11 @@ public class GlideImageLoader extends ImageLoader {
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     imageView.setBackgroundDrawable(new BitmapDrawable(resource));
                 }
-
                 @Override
                 public void onLoadStarted(Drawable placeholder) {
                     super.onLoadStarted(placeholder);
                     imageView.setBackgroundDrawable(placeholder);
                 }
             });
-
         }
 }

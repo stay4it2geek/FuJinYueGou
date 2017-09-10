@@ -1,12 +1,9 @@
 package com.act.quzhibo.download.adapter;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,30 +29,21 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
 import java.lang.ref.SoftReference;
 import java.sql.SQLException;
-
 
 import cn.woblog.android.downloader.domain.DownloadInfo;
 
 import static cn.woblog.android.downloader.DownloadService.downloadManager;
 
-
-/**
- * Created by renpingqing on 17/3/1.
- */
-
-public class DownloadAdapter extends
-        BaseRecyclerViewAdapter<DownloadInfo, DownloadAdapter.ViewHolder> {
-
+public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, DownloadingAdapter.ViewHolder> {
     private DBController dbController;
     private OnDeleteListner deleteListner;
     private FragmentActivity activity;
 
-    public DownloadAdapter(FragmentActivity activity) {
+    public DownloadingAdapter(FragmentActivity activity) {
         super(activity);
-        this.activity=activity;
+        this.activity = activity;
         try {
             dbController = DBController.getInstance(context.getApplicationContext());
         } catch (SQLException e) {
@@ -69,27 +57,21 @@ public class DownloadAdapter extends
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new DownloadAdapter.ViewHolder(LayoutInflater.from(context).inflate(
-                R.layout.item_download_info, parent, false));
+        return new DownloadingAdapter.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_download_info, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
         DownloadInfo data = getData(position);
         try {
-            MediaInfoLocal myDownloadInfoById = dbController
-                    .findMyDownloadInfoById(data.getUri().hashCode());
+            MediaInfoLocal myDownloadInfoById = dbController.findMyDownloadInfoById(data.getUri().hashCode());
             if (myDownloadInfoById != null) {
                 holder.bindBaseInfo(myDownloadInfoById);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         holder.bindData(data, position, context);
-
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +83,6 @@ public class DownloadAdapter extends
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-
         private final ImageView iv_icon;
         private final TextView tv_size;
         private final TextView tv_status;
@@ -121,33 +102,25 @@ public class DownloadAdapter extends
             tv_title = (TextView) view.findViewById(R.id.tv_name);
             bt_action = (Button) view.findViewById(R.id.bt_action);
             bt_delete = (Button) view.findViewById(R.id.bt_delete);
-
         }
 
         @SuppressWarnings("unchecked")
-        public void bindData(final DownloadInfo data,final  int position, final Context context) {
-
-
+        public void bindData(final DownloadInfo data, final int position, final Context context) {
             // Get download task status.
             downloadInfo = data;
-
-            // Set a download listener
             if (downloadInfo != null) {
-                downloadInfo
-                        .setDownloadListener(
-                                new MyDownloadListener(new SoftReference(DownloadAdapter.ViewHolder.this)) {
-                                    //  Call interval about one second.
-                                    @Override
-                                    public void onRefresh() {
-                                        notifyDownloadStatus();
-
-                                        if (getUserTag() != null && getUserTag().get() != null) {
-                                            DownloadAdapter.ViewHolder viewHolder = (DownloadAdapter.ViewHolder) getUserTag()
-                                                    .get();
-                                            viewHolder.refresh(position);
-                                        }
-                                    }
-                                });
+                downloadInfo.setDownloadListener(
+                        new MyDownloadListener(new SoftReference(DownloadingAdapter.ViewHolder.this)) {
+                            //  Call interval about one second.
+                            @Override
+                            public void onRefresh() {
+                                notifyDownloadStatus();
+                                if (getUserTag() != null && getUserTag().get() != null) {
+                                    DownloadingAdapter.ViewHolder viewHolder = (DownloadingAdapter.ViewHolder) getUserTag().get();
+                                    viewHolder.refresh(position);
+                                }
+                            }
+                        });
 
             }
 
@@ -158,7 +131,6 @@ public class DownloadAdapter extends
                 @Override
                 public void onClick(View v) {
                     if (downloadInfo != null) {
-
                         switch (downloadInfo.getStatus()) {
                             case DownloadInfo.STATUS_NONE:
                             case DownloadInfo.STATUS_PAUSED:
@@ -169,18 +141,11 @@ public class DownloadAdapter extends
                             case DownloadInfo.STATUS_DOWNLOADING:
                             case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
                             case DownloadInfo.STATUS_WAIT:
-                                //pause DownloadInfo
                                 downloadManager.pause(downloadInfo);
                                 break;
                             case DownloadInfo.STATUS_COMPLETED:
                                 downloadManager.remove(downloadInfo);
-                                bt_delete.setVisibility(View.VISIBLE);
-                                bt_delete.setOnClickListener(new OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        downloadManager.remove(downloadInfo);
-                                    }
-                                });
+                                publishDownloadSuccessStatus();
                                 break;
                         }
                     }
@@ -210,25 +175,24 @@ public class DownloadAdapter extends
                         bt_delete.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                FragmentDialog.newInstance("", "确定删除?", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(true,"", "确定删除?", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
-                                    public void onPositiveClick(Dialog dialog) {
-                                        deleteListner.onDelete(downloadInfo,position);
-                                        dialog.dismiss();
+                                    public void onPositiveClick(Dialog dialog ,boolean needDelete) {
+                                        deleteListner.onDelete(downloadInfo, position ,needDelete);
                                         new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
                                                 downloadManager.remove(downloadInfo);
-
                                             }
-                                        },1000);
+                                        }, 1000);
+                                        dialog.dismiss();
                                     }
 
                                     @Override
                                     public void onNegtiveClick(Dialog dialog) {
                                         dialog.dismiss();
                                     }
-                                }).show(activity.getSupportFragmentManager(),"");
+                                }).show(activity.getSupportFragmentManager(), "");
                             }
                         });
                         try {
@@ -243,6 +207,7 @@ public class DownloadAdapter extends
                     case DownloadInfo.STATUS_DOWNLOADING:
                     case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
                         bt_action.setText("暂停");
+                        bt_delete.setVisibility(View.GONE);
                         try {
                             pb.setProgress((int) (downloadInfo.getProgress() * 100.0 / downloadInfo.getSize()));
                         } catch (Exception e) {
@@ -253,32 +218,10 @@ public class DownloadAdapter extends
                         tv_status.setText("下载中");
                         break;
                     case DownloadInfo.STATUS_COMPLETED:
-                        bt_action.setVisibility(View.GONE);
-                        bt_delete.setVisibility(View.VISIBLE);
-                        bt_delete.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                downloadManager.remove(downloadInfo);
-                            }
-                        });
-                        try {
-                            pb.setProgress((int) (downloadInfo.getProgress() * 100.0 / downloadInfo.getSize()));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        tv_size.setText(FileUtil.formatFileSize(downloadInfo.getProgress()) + "/" + FileUtil
-                                .formatFileSize(downloadInfo.getSize()));
-                        tv_status.setText("下载完成");
-                        bt_action.setText("下载");
                         publishDownloadSuccessStatus();
                         break;
                     case DownloadInfo.STATUS_REMOVED:
-                        tv_size.setText("");
-                        pb.setProgress(0);
-                        bt_action.setText("下载");
-                        tv_status.setText("");
-
-                        publishDownloadSuccessStatus();
+                        ToastUtil.showToast(context, "STATUS_REMOVED");
                         break;
                     case DownloadInfo.STATUS_WAIT:
                         tv_size.setText("");
@@ -287,7 +230,6 @@ public class DownloadAdapter extends
                         tv_status.setText("等待");
                         break;
                 }
-
             }
         }
 
@@ -301,7 +243,6 @@ public class DownloadAdapter extends
             } else {
                 Glide.with(context).load(mediaInfoLocal.getUrl()).into(iv_icon);
             }
-
             tv_title.setText(mediaInfoLocal.getTitle());
         }
 
@@ -309,7 +250,7 @@ public class DownloadAdapter extends
 
             if (downloadInfo.getStatus() == DownloadInfo.STATUS_REMOVED) {
                 try {
-
+                    ToastUtil.showToast(context, "delete");
                     dbController.deleteMyDownloadInfo(downloadInfo.getUri().hashCode());
                 } catch (SQLException e) {
                     e.printStackTrace();

@@ -19,8 +19,8 @@ public class LoadNetView extends LinearLayout {
 
     private final LinearLayout photoalbum_layout;
     private  LinearLayout vipNulllayout;
-    private TextView noDownloadDataText;
-
+    private TextView noDownloadedDataText;
+    private TextView noDownloadingDataText;
     private Button reloadbutton;
     private Button buybutton;
     private LinearLayout loadlayout;
@@ -31,14 +31,13 @@ public class LoadNetView extends LinearLayout {
 
         // 加载布局
         LayoutInflater.from(context).inflate(R.layout.load_net_view, this);
-
-        noDownloadDataText = (TextView) findViewById(R.id.noDownloadDataText);
+        noDownloadedDataText = (TextView) findViewById(R.id.noDownloadedDataText);
         reloadlayout = (LinearLayout) findViewById(R.id.reloadlayout);
         video_album_layout = (LinearLayout) findViewById(R.id.video_album_layout);
         reloadbutton = (Button) findViewById(R.id.relaodbutton);
         buybutton = (Button) findViewById(R.id.buybutton);
         photoalbum_layout = (LinearLayout) findViewById(R.id.photoalbum_layout);
-
+        noDownloadingDataText= (TextView) findViewById(R.id.noDownloadingDataText);
         loadlayout = (LinearLayout) findViewById(R.id.loadlayout);
         vipNulllayout = (LinearLayout) findViewById(R.id.VipNulllayout);
 
@@ -47,10 +46,6 @@ public class LoadNetView extends LinearLayout {
     // 为左侧返回按钮添加自定义点击事件
     public void setReloadButtonListener(OnClickListener listener) {
         reloadbutton.setOnClickListener(listener);
-    }
-    // 为左侧返回按钮添加自定义点击事件
-    public void setBuyButtonListener(OnClickListener listener) {
-        buybutton.setOnClickListener(listener);
     }
 
     public void setlayoutVisily(int loadType) {
@@ -71,7 +66,10 @@ public class LoadNetView extends LinearLayout {
             video_album_layout.setVisibility(View.VISIBLE);
         }else if(loadType == Constants.NO_DOWN_DATA){
             loadlayout.setVisibility(View.GONE);
-            noDownloadDataText.setVisibility(View.VISIBLE);
+            noDownloadedDataText.setVisibility(View.VISIBLE);
+        }else if(loadType == Constants.NO_DOWNING_DATA){
+            loadlayout.setVisibility(View.GONE);
+            noDownloadingDataText.setVisibility(View.VISIBLE);
         }
     }
 

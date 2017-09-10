@@ -6,7 +6,9 @@ import cn.woblog.android.downloader.domain.DownloadInfo;
 
 public class DownloadStatusChanged {
 
-  public DownloadStatusChanged(DownloadInfo downloadInfo) {
+  public  DownloadInfo downloadInfo;
 
-  }
+    public DownloadStatusChanged(DownloadInfo downloadInfo) {
+        this.downloadInfo = downloadInfo;
+    }
 }

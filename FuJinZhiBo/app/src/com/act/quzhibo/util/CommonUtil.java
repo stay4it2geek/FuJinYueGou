@@ -83,17 +83,13 @@ public class CommonUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return SceneListString;
-
     }
 
     @SuppressWarnings("unchecked")
     public static List String2SceneList(String SceneListString) {
-        byte[] mobileBytes = Base64.decode(SceneListString.getBytes(),
-                Base64.DEFAULT);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-                mobileBytes);
+        byte[] mobileBytes = Base64.decode(SceneListString.getBytes(),Base64.DEFAULT);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(mobileBytes);
         ObjectInputStream objectInputStream;
         List<Toggle> SceneList = null;
         try {
@@ -129,15 +125,12 @@ public class CommonUtil {
         T result = gson.fromJson(jsonData, type);
         return result;
     }
-    public static <T> ArrayList<T> jsonToArrayList(String json, Class<T> clazz)
-    {
+    public static <T> ArrayList<T> jsonToArrayList(String json, Class<T> clazz){
         Type type = new TypeToken<ArrayList<JsonObject>>()
         {}.getType();
         ArrayList<JsonObject> jsonObjects = new Gson().fromJson(json, type);
-
         ArrayList<T> arrayList = new ArrayList<>();
-        for (JsonObject jsonObject : jsonObjects)
-        {
+        for (JsonObject jsonObject : jsonObjects){
             arrayList.add(new Gson().fromJson(jsonObject, clazz));
         }
         return arrayList;
@@ -149,7 +142,6 @@ public class CommonUtil {
             commonTabLayout = ViewFindUtils.find(decorView, R.id.layout_mine);
         } else {
             commonTabLayout = ViewFindUtils.find(decorView, R.id.layout);
-
         }
         commonTabLayout.setVisibility(View.VISIBLE);
         ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
@@ -157,30 +149,23 @@ public class CommonUtil {
             mTabEntities.add(new TabEntity(mTitles[i], 0, 0));
         }
         commonTabLayout.setTabData(mTabEntities);
-
         commonTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
                 viewPager.setCurrentItem(position);
             }
-
             @Override
             public void onTabReselect(int position) {
             }
         });
-
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
-
             @Override
             public void onPageSelected(int position) {
                 commonTabLayout.setCurrentTab(position);
             }
-
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -217,12 +202,9 @@ public class CommonUtil {
     /**
      * 获取第某前天的时间
      */
-
     public static String getDataString(int num) {
-
         Date dNow = new Date();   //当前时间
         Date dBefore;
-
         Calendar calendar = Calendar.getInstance(); //得到日历
         calendar.setTime(dNow);//把当前时间赋给日历
         calendar.add(Calendar.DAY_OF_MONTH, -num);  //设置为前n天
@@ -230,10 +212,6 @@ public class CommonUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
         String defaultStartDate = sdf.format(dBefore);    //格式化前n天
         String defaultEndDate = sdf.format(dNow); //格式化当前时间
-
-        System.out.println("前n天的时间是：" + defaultStartDate);
-        System.out.println("生成的时间是：" + defaultEndDate);
-
         return defaultStartDate;
     }
 
@@ -279,10 +257,9 @@ public class CommonUtil {
             @Override
             public void done(RootUser user, BmobException e) {
                 if (e == null) {
-                    ToastUtil.showToast(activity, "缓存同步成功");
+                    ToastUtil.showToast(activity, "同步成功");
                 } else {
-                    ToastUtil.showToast(activity, "缓存同步失败");
-
+                    ToastUtil.showToast(activity, "同步失败,原因是："+e.getLocalizedMessage());
                 }
             }
         });

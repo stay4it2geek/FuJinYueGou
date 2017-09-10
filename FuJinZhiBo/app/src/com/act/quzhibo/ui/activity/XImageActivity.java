@@ -1,6 +1,8 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -19,10 +21,12 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.act.quzhibo.view.xImageView.IXImageView;
@@ -47,10 +51,10 @@ import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
 public class XImageActivity extends AppCompatActivity {
 
     private ViewPager mPager;
-    boolean isSdCardExist;
+    private boolean isSdCardExist;
     private DownloadManager downloadManager;
-    PagerAdapter adapter;
-    DBController dbController;
+    private PagerAdapter adapter;
+    private DBController dbController;
     private LoadNetView loadNetView;
 
     @Override
@@ -58,7 +62,7 @@ public class XImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-        titlebar.setBarTitle("专 辑 列 表");
+        titlebar.setBarTitle("高 清 私 照");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +72,7 @@ public class XImageActivity extends AppCompatActivity {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setPageMargin((int) (getResources().getDisplayMetrics().density * 15));
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.container), "长按照片可保存到本地", Snackbar.LENGTH_LONG);
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.container), "长按保存,双击或双指按住拉伸放大", Snackbar.LENGTH_LONG);
         snackbar.setAction("知道了", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,82 +97,81 @@ public class XImageActivity extends AppCompatActivity {
 
         adapter = null;
         mediaInfos = getIntent().getParcelableArrayListExtra("mediaList");
-        if(mediaInfos.size()>0){
-        downloadManager = DownloadService.getDownloadManager(getApplicationContext());
-        isSdCardExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);// 判断sdcard是否存在
-        try {
-            dbController = DBController.getInstance(this.getApplicationContext());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (mediaInfos.size() > 0) {
+            downloadManager = DownloadService.getDownloadManager(getApplicationContext());
+            isSdCardExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);// 判断sdcard是否存在
+            try {
+                dbController = DBController.getInstance(this.getApplicationContext());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            mPager.setAdapter(adapter = new PagerAdapter() {
+                @Override
+                public int getCount() {
+                    return mediaInfos.size();
+                }
+
+                @Override
+                public boolean isViewFromObject(View view, Object object) {
+                    return view == object;
+                }
+
+                @Override
+                public Object instantiateItem(ViewGroup container, final int position) {
+                    String url = mediaInfos.get(position).getUrl();
+                    DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
+                    View view = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.imglayout, null);
+
+                    final XImageView xImageView = (XImageView) view.findViewById(R.id.ximageview);
+                    xImageView.setDoubleTapScaleType(IXImageView.DoubleType.FIT_VIEW_MIN_VIEW_MAX);
+                    xImageView.setInitType(IXImageView.InitType.FIT_VIEW_MIN_IMAGE_MIN);
+                    xImageView.setActionListener(new MyActionListner(mediaInfos.get(position), downloadInfo, url));
+
+                    Glide.with(XImageActivity.this).load(url).asBitmap().skipMemoryCache(false).placeholder(R.drawable.xiangjiao).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            xImageView.setImage(resource);
+                        }
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            super.onLoadStarted(placeholder);
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            super.onLoadFailed(e, errorDrawable);
+                            loadNetView.setlayoutVisily(Constants.RELOAD);
+                        }
+                    });
+
+                    container.addView(view);
+                    return view;
+                }
+
+                @Override
+                public void destroyItem(ViewGroup container, int position, Object object) {
+                    container.removeView((View) object);
+                }
+            });
         }
-        mPager.setAdapter(adapter = new PagerAdapter() {
-            @Override
-            public int getCount() {
-                return mediaInfos.size();
-            }
-
-            @Override
-            public boolean isViewFromObject(View view, Object object) {
-                return view == object;
-            }
-
-            @Override
-            public Object instantiateItem(ViewGroup container, final int position) {
-                String url = mediaInfos.get(position).getUrl();
-                DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
-                View view = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.imglayout, null);
-
-                final XImageView xImageView = (XImageView) view.findViewById(R.id.ximageview);
-                xImageView.setDoubleTapScaleType(IXImageView.DoubleType.FIT_VIEW_MIN_VIEW_MAX);
-                xImageView.setInitType(IXImageView.InitType.FIT_VIEW_MIN_IMAGE_MIN);
-                xImageView.setActionListener(new MyActionListner(mediaInfos.get(position), downloadInfo, url));
-
-                Glide.with(XImageActivity.this).load(url).asBitmap().skipMemoryCache(false).placeholder(R.drawable.xiangjiao).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        xImageView.setImage(resource);
-                    }
-
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        loadNetView.setlayoutVisily(Constants.RELOAD);
-                    }
-                });
-
-                container.addView(view);
-                return view;
-            }
-
-            @Override
-            public void destroyItem(ViewGroup container, int position, Object object) {
-                container.removeView((View) object);
-            }
-        });}
         mPager.setCurrentItem(getIntent().getIntExtra("position", 0));
         loadNetView.setVisibility(View.GONE);
     }
 
     class MyActionListner implements XImageView.OnActionListener {
         DownloadInfo downloadInfo;
-        String url;
         MediaInfo mediaInfo;
+        String url;
 
         public MyActionListner(MediaInfo mediaInfo, DownloadInfo downloadInfo, String url) {
             this.downloadInfo = downloadInfo;
-            this.url = url;
             this.mediaInfo = mediaInfo;
-
+            this.url = url;
         }
 
         @Override
         public void onSingleTapped(XImageView view, MotionEvent event, boolean onImage) {
-
         }
 
         @Override
@@ -178,48 +181,62 @@ public class XImageActivity extends AppCompatActivity {
 
         @Override
         public void onLongPressed(XImageView view, MotionEvent event) {
-
             if (isSdCardExist) {
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),  Constants.PHOTO_DOWNLOAD);
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.PHOTO_DOWNLOAD);
                 if (!file.exists()) {
                     file.mkdirs();
                 }
                 File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
+                if (downloadInfo != null) {
+                    ToastUtil.showToast(XImageActivity.this, downloadInfo.getStatus() + "");
+                }
 
-                if (localFile.exists() && localFile.isFile()) {
-                    if (downloadInfo != null) {
-                        switch (downloadInfo.getStatus()) {
-                            case DownloadInfo.STATUS_NONE:
-                            case DownloadInfo.STATUS_PAUSED:
-                            case DownloadInfo.STATUS_ERROR:
-                                downloadManager.resume(downloadInfo);
-                                break;
-                            case DownloadInfo.STATUS_DOWNLOADING:
-                            case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
-                            case STATUS_WAIT:
-                                //pause DownloadInfo
-                                downloadManager.pause(downloadInfo);
-                                break;
-                            case DownloadInfo.STATUS_COMPLETED:
-                                ToastUtil.showToast(XImageActivity.this, "您已经保存过该照片");
-                                break;
-                        }
-                    } else {
-                        ToastUtil.showToast(XImageActivity.this, "您已经保存过该照片");
+                if (localFile.exists() && localFile.isFile() && downloadInfo != null) {
+                    switch (downloadInfo.getStatus()) {
+                        case DownloadInfo.STATUS_NONE:
+                        case DownloadInfo.STATUS_PAUSED:
+                        case DownloadInfo.STATUS_ERROR:
+                            downloadManager.resume(downloadInfo);
+                            break;
+                        case DownloadInfo.STATUS_DOWNLOADING:
+                        case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
+                        case STATUS_WAIT:
+                            downloadManager.pause(downloadInfo);
+                            break;
+                        case DownloadInfo.STATUS_COMPLETED:
+                            ToastUtil.showToast(XImageActivity.this, "您已经保存过该照片");
+                            break;
                     }
                 } else {
-                    createDownload(mediaInfo, url);
+                    if (downloadManager.findAllDownloading().size() > 10) {
+                        ToastUtil.showToast(XImageActivity.this, "下载任务最多10个,请稍后下载");
+                        if (downloadManager.findAllDownloaded().size() >20) {
+                            FragmentDialog.newInstance(false,"", "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                @Override
+                                public void onPositiveClick(Dialog dialog,boolean needDelete) {
+                                    Intent photoIntent = new Intent();
+                                    photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
+                                    photoIntent.setClass(XImageActivity.this, DownloadManagerActivity.class);
+                                    startActivity(photoIntent);
+                                    dialog.dismiss();
+                                }
+                                @Override
+                                public void onNegtiveClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            }).show(getSupportFragmentManager(), "");
+                        }
+                    } else {
+                        createDownload(mediaInfo, url);
+                    }
                 }
             }
-
         }
 
         @Override
         public void onSetImageFinished(XImageView view, boolean success, Rect image) {
         }
-
     }
-
 
     class MyDownloadListener implements DownloadListener {
         DownloadInfo downloadInfo;
@@ -231,25 +248,21 @@ public class XImageActivity extends AppCompatActivity {
         @Override
         public void onStart() {
             ToastUtil.showToast(XImageActivity.this, "开始保存");
-
         }
 
         @Override
         public void onWaited() {
             ToastUtil.showToast(XImageActivity.this, "等待保存");
-
         }
 
         @Override
         public void onPaused() {
             ToastUtil.showToast(XImageActivity.this, "暂停保存");
-
         }
 
         @Override
         public void onDownloading(long progress, long size) {
             ToastUtil.showToast(XImageActivity.this, "正在保存");
-
         }
 
         @Override
@@ -266,9 +279,7 @@ public class XImageActivity extends AppCompatActivity {
         @Override
         public void onDownloadFailed(DownloadException e) {
             ToastUtil.showToast(XImageActivity.this, "保存失败，原因是：" + e.getMessage());
-
         }
-
     }
 
     private DownloadInfo createDownload(MediaInfo mediaInfo, String url) {
@@ -279,17 +290,13 @@ public class XImageActivity extends AppCompatActivity {
                 file.mkdirs();
             }
             String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length()));
-
             File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
             if (localFile.isFile() && localFile.exists()) {
                 file.delete();
             }
-
             downloadInfo = new DownloadInfo.Builder().setUrl(url).setPath(path).build();
             downloadInfo.setDownloadListener(new MyDownloadListener(downloadInfo));
             downloadManager.download(downloadInfo);
-
-
             //save extra info to my database.
             MediaInfoLocal myBusinessInfLocal = new MediaInfoLocal(
                     mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle());
@@ -300,31 +307,6 @@ public class XImageActivity extends AppCompatActivity {
             }
         }
         return downloadInfo;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e("onPause", "onPause");
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        Log.e("onStop", "onStop");
-
-
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e("onDestroy", "onDestroy");
-
-
     }
 }
 

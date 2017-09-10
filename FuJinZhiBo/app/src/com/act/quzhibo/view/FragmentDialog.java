@@ -11,7 +11,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
@@ -57,6 +61,11 @@ public class FragmentDialog extends DialogFragment {
     private boolean isSingle = false;
 
     private Dialog dialog;
+    private boolean needDelete;
+    private boolean needDeleteConfirm;
+
+    private CheckBox delete_cb;
+    private RelativeLayout delete_confirm_layout;
 
     private void initView(View rootView) {
         Bundle args = getArguments();
@@ -68,17 +77,18 @@ public class FragmentDialog extends DialogFragment {
         message = args.getString("message");
         imageResId = args.getInt("imageResId");
         isSingle = args.getBoolean("isSingle");
-
+        needDelete = args.getBoolean("needDelete");
         negtiveBn = (Button) rootView.findViewById(R.id.negtive);
         positiveBn = (Button) rootView.findViewById(R.id.positive);
         titleTv = (TextView) rootView.findViewById(R.id.title);
         messageTv = (TextView) rootView.findViewById(R.id.message);
         imageIv = (ImageView) rootView.findViewById(R.id.image);
+        delete_cb = (CheckBox) rootView.findViewById(R.id.delete_cb);
+        delete_confirm_layout = (RelativeLayout) rootView.findViewById(R.id.delete_confirm_layout);
         columnLineView = rootView.findViewById(R.id.column_line);
-
     }
 
-    public static final FragmentDialog newInstance(String title, String message, String positive, String negtive, int imageResId, boolean isSingle, OnClickBottomListener onClickBottomListener) {
+    public static final FragmentDialog newInstance(boolean needDelete, String title, String message, String positive, String negtive, int imageResId, boolean isSingle, OnClickBottomListener onClickBottomListener) {
         FragmentDialog fragment = new FragmentDialog();
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
@@ -87,6 +97,7 @@ public class FragmentDialog extends DialogFragment {
         bundle.putString("negtive", negtive);
         bundle.putInt("imageResId", imageResId);
         bundle.putBoolean("isSingle", isSingle);
+        bundle.putBoolean("needDelete", needDelete);
         fragment.onClickBottomListener = onClickBottomListener;
         fragment.setArguments(bundle);
         return fragment;
@@ -102,7 +113,7 @@ public class FragmentDialog extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 if (onClickBottomListener != null) {
-                    onClickBottomListener.onPositiveClick(dialog);
+                    onClickBottomListener.onPositiveClick(dialog, needDeleteConfirm);
                 }
             }
         });
@@ -114,6 +125,12 @@ public class FragmentDialog extends DialogFragment {
                 if (onClickBottomListener != null) {
                     onClickBottomListener.onNegtiveClick(dialog);
                 }
+            }
+        });
+        delete_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                needDeleteConfirm = checked;
             }
         });
     }
@@ -160,6 +177,12 @@ public class FragmentDialog extends DialogFragment {
             negtiveBn.setVisibility(View.VISIBLE);
             columnLineView.setVisibility(View.VISIBLE);
         }
+
+        if (needDelete) {
+            delete_confirm_layout.setVisibility(View.VISIBLE);
+        } else {
+            delete_confirm_layout.setVisibility(View.GONE);
+        }
         dialog.show();
     }
 
@@ -172,7 +195,7 @@ public class FragmentDialog extends DialogFragment {
         /**
          * 点击确定按钮事件
          */
-        public void onPositiveClick(Dialog dialog);
+        public void onPositiveClick(Dialog dialog, boolean deleteFileSource);
 
         /**
          * 点击取消按钮事件

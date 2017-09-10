@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 
-public class NoFragment extends Fragment {
+public class NoViewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

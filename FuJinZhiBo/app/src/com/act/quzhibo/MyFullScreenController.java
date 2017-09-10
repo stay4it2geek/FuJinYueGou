@@ -15,8 +15,12 @@ import android.widget.Toast;
 
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
+import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.ToastUtil;
 import com.devlin_n.videoplayer.controller.FullScreenController;
 import com.devlin_n.videoplayer.util.WindowUtil;
+
+import cn.bmob.v3.BmobUser;
 
 
 public class MyFullScreenController extends FullScreenController {
@@ -73,6 +77,19 @@ public class MyFullScreenController extends FullScreenController {
             this.doPauseResume();
         }
 
+    }
+
+    @Override
+    protected void doPauseResume() {
+        if (this.mediaPlayer.isPlaying()) {
+            this.mediaPlayer.pause();
+        } else {
+            if (BmobUser.getCurrentUser(RootUser.class)!=null && BmobUser.getCurrentUser(RootUser.class).vipConis > 14000) {
+                this.mediaPlayer.start();
+            }else{
+                ToastUtil.showToast(getContext(), "积分不足");
+            }
+        }
     }
 
     @Override

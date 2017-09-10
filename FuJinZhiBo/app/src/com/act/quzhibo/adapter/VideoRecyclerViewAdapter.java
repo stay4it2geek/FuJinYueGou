@@ -1,9 +1,11 @@
 package com.act.quzhibo.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,14 @@ import android.widget.LinearLayout;
 import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.ui.activity.FullScreenActivity;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 
@@ -32,6 +36,7 @@ import cn.woblog.android.downloader.callback.DownloadManager;
 import cn.woblog.android.downloader.domain.DownloadInfo;
 import cn.woblog.android.downloader.exception.DownloadException;
 
+import static cn.woblog.android.downloader.DownloadService.downloadManager;
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
 
 public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecyclerViewAdapter.VideoHolder> {
@@ -40,9 +45,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     private DownloadManager downloadManager;
     DBController dbController;
     private List<MediaInfo> videos;
-    private Context context;
+    private FragmentActivity context;
 
-    public VideoRecyclerViewAdapter(List<MediaInfo> videos, Context context) {
+    public VideoRecyclerViewAdapter(List<MediaInfo> videos, FragmentActivity context) {
         this.videos = videos;
         this.context = context;
 
@@ -82,7 +87,29 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             @Override
             public void onMyVideoController(String controllerFlg) {
                 if (Constants.DOWNLAOD_VIDEO.equals(controllerFlg)) {
-                    downLoadVideo(videoBean);
+                    if (downloadManager.findAllDownloading().size() > 10) {
+                        ToastUtil.showToast(context, "下载任务最多10个,请稍后下载");
+                        if (downloadManager.findAllDownloaded().size() > 20) {
+                            FragmentDialog.newInstance(false, "", "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                @Override
+                                public void onPositiveClick(Dialog dialog, boolean needDelete) {
+                                    Intent videoIntent = new Intent();
+                                    videoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.VIDEO_ALBUM);
+                                    videoIntent.setClass(context, DownloadManagerActivity.class);
+                                    context.startActivity(videoIntent);
+                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void onNegtiveClick(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            }).show(context.getSupportFragmentManager(), "");
+                            ;
+                        }
+                    } else {
+                        downLoadVideo(videoBean);
+                    }
                 } else {
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
@@ -107,26 +134,21 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             }
             File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
 
-            if (localFile.exists() && localFile.isFile()) {
-                if (downloadInfo != null) {
-                    switch (downloadInfo.getStatus()) {
-                        case DownloadInfo.STATUS_NONE:
-                        case DownloadInfo.STATUS_PAUSED:
-                        case DownloadInfo.STATUS_ERROR:
-                            downloadManager.resume(downloadInfo);
-                            break;
-                        case DownloadInfo.STATUS_DOWNLOADING:
-                        case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
-                        case STATUS_WAIT:
-                            //pause DownloadInfo
-                            downloadManager.pause(downloadInfo);
-                            break;
-                        case DownloadInfo.STATUS_COMPLETED:
-                            ToastUtil.showToast(context, "您已经保存过视频");
-                            break;
-                    }
-                } else {
-                    ToastUtil.showToast(context, "您已经保存过视频");
+            if (localFile.exists() && localFile.isFile() && downloadInfo != null) {
+                switch (downloadInfo.getStatus()) {
+                    case DownloadInfo.STATUS_NONE:
+                    case DownloadInfo.STATUS_PAUSED:
+                    case DownloadInfo.STATUS_ERROR:
+                        downloadManager.resume(downloadInfo);
+                        break;
+                    case DownloadInfo.STATUS_DOWNLOADING:
+                    case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
+                    case STATUS_WAIT:
+                        downloadManager.pause(downloadInfo);
+                        break;
+                    case DownloadInfo.STATUS_COMPLETED:
+                        ToastUtil.showToast(context, "您已经保存过视频");
+                        break;
                 }
             } else {
                 createDownload(videoBean, url);
@@ -158,19 +180,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
     class MyDownloadListener implements DownloadListener {
         DownloadInfo downloadInfo;
-        String path;
-        private File oldFile;
-        File newFile;
+
         public MyDownloadListener(DownloadInfo downloadInfo) {
             this.downloadInfo = downloadInfo;
-            if (isSdCardExist){
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-                path = downloadInfo.getPath();
-                 oldFile = new File(path); //要重命名的文件或文件夹
-            }
         }
 
         @Override
@@ -227,9 +239,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             if (!file.exists()) {
                 file.mkdirs();
             }
-            String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length()));
+            String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 15, url.length()));
 
-            File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
+            File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 15, url.length())));
             if (localFile.isFile() && localFile.exists()) {
                 localFile.delete();
             }

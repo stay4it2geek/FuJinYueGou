@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.fragment.DownloadedFragment;
 import com.act.quzhibo.download.fragment.DownloadingFragment;
 import com.act.quzhibo.ui.activity.TabSlideBaseActivity;
@@ -30,8 +31,14 @@ public class DownloadManagerActivity extends TabSlideBaseActivity {
     @Override
     protected ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(DownloadingFragment.newInstance());
-        fragments.add(DownloadedFragment.newInstance());
+        DownloadingFragment downloadingFragment=new DownloadingFragment();
+        DownloadedFragment downloadedFragment=new DownloadedFragment();
+        Bundle bundle=new Bundle();
+        bundle.putString(Constants.DOWN_LOAD_TYPE,getIntent().getStringExtra(Constants.DOWN_LOAD_TYPE));
+        downloadingFragment.setArguments(bundle);
+        downloadedFragment.setArguments(bundle);
+        fragments.add(downloadingFragment);
+        fragments.add(downloadedFragment);
 
         return fragments;
     }

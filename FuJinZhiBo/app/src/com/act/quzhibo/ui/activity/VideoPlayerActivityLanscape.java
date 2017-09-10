@@ -14,7 +14,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ViewPlayerPageAdapter;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.fragment.ChatFragment;
-import com.act.quzhibo.ui.fragment.NoFragment;
+import com.act.quzhibo.ui.fragment.NoViewFragment;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
     private ChatFragment chatFragment;
-    private NoFragment noFragment;
+    private NoViewFragment noViewFragment;
     private VideoView videoView;
     private Room room;
 
@@ -45,9 +45,9 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
         bundle.putString("type", "landscape");
         chatFragment = new ChatFragment();
         chatFragment.setArguments(bundle);
-        noFragment = new NoFragment();
+        noViewFragment = new NoViewFragment();
         fragments.add(chatFragment);
-        fragments.add(noFragment);
+        fragments.add(noViewFragment);
         final ProgressBar bar = (ProgressBar) findViewById(R.id.bar);
         bar.requestFocus();
         final Uri uri = Uri.parse(room.liveStream);

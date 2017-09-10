@@ -1,9 +1,11 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -17,11 +19,13 @@ import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.VideoRecyclerViewAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.devlin_n.floatWindowPermission.FloatWindowManager;
 import com.devlin_n.videoplayer.controller.FullScreenController;
 import com.devlin_n.videoplayer.player.IjkVideoView;
@@ -42,7 +46,7 @@ import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
  * Created by Devlin_n on 2017/4/21.
  */
 
-public class FullScreenActivity extends AppCompatActivity {
+public class FullScreenActivity extends FragmentActivity {
 
     private IjkVideoView ijkVideoView;
     boolean isSdCardExist;
@@ -74,7 +78,26 @@ public class FullScreenActivity extends AppCompatActivity {
         myFullScreenController.setOnVideoControllerListner(new OnVideoControllerListner() {
             @Override
             public void onMyVideoController(String controllerFlg) {
-                if (Constants.DOWNLAOD_VIDEO.equals(controllerFlg)) {
+                if (downloadManager.findAllDownloading().size() > 10) {
+                    ToastUtil.showToast(FullScreenActivity.this, "下载任务最多10个,请稍后下载");
+                    if (downloadManager.findAllDownloaded().size() >20) {
+                        FragmentDialog.newInstance(false, "", "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            @Override
+                            public void onPositiveClick(Dialog dialog  ,boolean needDelete) {
+                                Intent videoIntent = new Intent();
+                                videoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.VIDEO_ALBUM);
+                                videoIntent.setClass(FullScreenActivity.this, DownloadManagerActivity.class);
+                                startActivity(videoIntent);
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onNegtiveClick(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        }).show(getSupportFragmentManager(),"");
+                    }
+                } else {
                     downLoadVideo();
                 }
             }
@@ -82,6 +105,7 @@ public class FullScreenActivity extends AppCompatActivity {
         ijkVideoView
                 .autoRotate()
                 .alwaysFullScreen()
+                .enableCache()
                 .setTitle(videoBean.getTitle())
                 .setUrl(videoBean.getUrl())
                 .setVideoController(myFullScreenController)
@@ -138,25 +162,21 @@ public class FullScreenActivity extends AppCompatActivity {
         @Override
         public void onStart() {
             ToastUtil.showToast(FullScreenActivity.this, "开始保存");
-
         }
 
         @Override
         public void onWaited() {
             ToastUtil.showToast(FullScreenActivity.this, "等待保存");
-
         }
 
         @Override
         public void onPaused() {
             ToastUtil.showToast(FullScreenActivity.this, "暂停保存");
-
         }
 
         @Override
         public void onDownloading(long progress, long size) {
             ToastUtil.showToast(FullScreenActivity.this, "正在保存");
-
         }
 
         @Override
@@ -175,29 +195,23 @@ public class FullScreenActivity extends AppCompatActivity {
             ToastUtil.showToast(FullScreenActivity.this, "保存失败，原因是：" + e.getMessage());
 
         }
-
     }
 
     private DownloadInfo createDownload(MediaInfo mediaInfo, String url) {
         DownloadInfo downloadInfo = null;
         if (isSdCardExist) {
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "videoDownload");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();
             }
             String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length()));
-
             File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
             if (localFile.isFile() && localFile.exists()) {
                 file.delete();
             }
-
             downloadInfo = new DownloadInfo.Builder().setUrl(url).setPath(path).build();
             downloadInfo.setDownloadListener(new MyDownloadListener(downloadInfo));
             downloadManager.download(downloadInfo);
-
-
-            //save extra info to my database.
             MediaInfoLocal myBusinessInfLocal = new MediaInfoLocal(
                     mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle());
             try {
@@ -219,7 +233,6 @@ public class FullScreenActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         ijkVideoView.resume();
-        ijkVideoView.stopFloatWindow();
     }
 
     @Override
@@ -232,18 +245,6 @@ public class FullScreenActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (!ijkVideoView.onBackPressed()) {
             super.onBackPressed();
-        }
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FloatWindowManager.PERMISSION_REQUEST_CODE) {
-            if (FloatWindowManager.getInstance().checkPermission(this)) {
-                ijkVideoView.startFloatWindow();
-            } else {
-                Toast.makeText(FullScreenActivity.this, "权限授予失败，无法开启悬浮窗", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 }

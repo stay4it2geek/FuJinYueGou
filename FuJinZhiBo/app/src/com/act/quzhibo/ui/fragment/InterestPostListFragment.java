@@ -6,7 +6,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,7 +44,6 @@ public class InterestPostListFragment extends BackHandledFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_interest_post, null, false);
         loadNetView= (LoadNetView) view.findViewById(R.id.loadview);
-
         pid = ((SquareActivity) getActivity()).getPid();
         recyclerView = (XRecyclerView) view.findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);

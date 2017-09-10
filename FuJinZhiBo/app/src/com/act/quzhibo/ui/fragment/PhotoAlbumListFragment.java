@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.MediaListAdapter;
+import com.act.quzhibo.adapter.PhotoAlbumListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.entity.MediaAuthor;
@@ -34,24 +34,18 @@ import cn.bmob.v3.listener.FindListener;
 
 
 public class PhotoAlbumListFragment extends BackHandledFragment {
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
-
+    private String lastTime = "";
+    private int mediasSize;
+    private ArrayList<MediaInfo> medias = new ArrayList<>();
     private XRecyclerView recycleview;
-    private MediaListAdapter mInfoListAdapter;
+    private PhotoAlbumListAdapter mInfoListAdapter;
     private LoadNetView loadNetView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View rootView = getView();
-
         if (rootView == null) {
-
             rootView = inflater.inflate(R.layout.fragment_preview, null);
-
             recycleview = (XRecyclerView) rootView.findViewById(R.id.rvPreview);
             recycleview.setLoadingListener(new XRecyclerView.LoadingListener() {
                 @Override
@@ -66,7 +60,6 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                         }
                     }, 1000);
                 }
-
                 @Override
                 public void onLoadMore() {
                     new Handler().postDelayed(new Runnable() {
@@ -87,10 +80,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                     }, 1000);
                 }
             });
-            recycleview.addItemDecoration(new mediaPreviewItemDecoration(getActivity()));
-            recycleview.setHasFixedSize(true);
             recycleview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
             loadNetView = (LoadNetView) rootView.findViewById(R.id.loadview);
             loadNetView.setReloadButtonListener(new View.OnClickListener() {
                 @Override
@@ -110,26 +100,12 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         return rootView;
     }
 
-
-    private int limit = 10; // 每页的数据是10条
-    private String lastTime = "";
-    private int mediasSize;
-
-    private ArrayList<MediaInfo> medias = new ArrayList<>();
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void initPhotoListData(final int actionType) {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
         List<BmobQuery<MediaInfo>> queries = new ArrayList<>();
-
-        query2.setLimit(limit);
+        query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -168,12 +144,10 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                     }
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
-
                 }
             }
         });
     }
-
 
     Handler handler = new Handler() {
         @Override
@@ -186,7 +160,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                 }
                 if (mediasSize > 0) {
                     if (mInfoListAdapter == null) {
-                        mInfoListAdapter = new MediaListAdapter(getActivity(), mediaInfos);
+                        mInfoListAdapter = new PhotoAlbumListAdapter(getActivity(), mediaInfos);
                         recycleview.setAdapter(mInfoListAdapter);
 
                     } else {
@@ -205,20 +179,9 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         }
     };
 
-    public static class mediaPreviewItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int margin;
-
-        public mediaPreviewItemDecoration(Context context) {
-            margin = context.getResources().getDimensionPixelSize(R.dimen
-                    .media_preview_item_decoration_margin);
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.set(margin, margin, margin, margin);
-        }
-
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 
 }

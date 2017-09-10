@@ -19,12 +19,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class MediaListAdapter extends RecyclerView.Adapter<MediaListAdapter.MediaListViewHolder> {
+public class PhotoAlbumListAdapter extends RecyclerView.Adapter<PhotoAlbumListAdapter.MediaListViewHolder> {
 
     private Activity activity;
     private ArrayList<MediaInfo> mMediaInfos = new ArrayList<>();
 
-    public MediaListAdapter(Activity activity, ArrayList<MediaInfo> coursePreviewInfos) {
+    public PhotoAlbumListAdapter(Activity activity, ArrayList<MediaInfo> coursePreviewInfos) {
         this.activity = activity;
         update(coursePreviewInfos);
 

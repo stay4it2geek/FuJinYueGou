@@ -15,8 +15,11 @@ import android.widget.Toast;
 
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
+import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.ToastUtil;
 import com.devlin_n.videoplayer.controller.StandardVideoController;
+
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by weiminglin on 17/9/2.
@@ -58,7 +61,6 @@ public class MyStandardVideoController extends StandardVideoController implement
     }
 
 
-
     public OnVideoControllerListner onVideoControllerListner;
 
     public void setOnVideoControllerListner(OnVideoControllerListner onVideoControllerListner) {
@@ -69,21 +71,35 @@ public class MyStandardVideoController extends StandardVideoController implement
 
     public void onClick(View v) {
         int i = v.getId();
-        if(i != com.devlin_n.videoplayer.R.id.fullscreen && i != com.devlin_n.videoplayer.R.id.back) {
-            if(i == com.devlin_n.videoplayer.R.id.lock) {
+        if (i != com.devlin_n.videoplayer.R.id.fullscreen && i != com.devlin_n.videoplayer.R.id.back) {
+            if (i == com.devlin_n.videoplayer.R.id.lock) {
                 this.doLockUnlock();
-            } else if(i != com.devlin_n.videoplayer.R.id.iv_play && i != com.devlin_n.videoplayer.R.id.thumb && i != com.devlin_n.videoplayer.R.id.iv_replay) {
-                if(i == com.devlin_n.videoplayer.R.id.more_menu) {
+            } else if (i != com.devlin_n.videoplayer.R.id.iv_play && i != com.devlin_n.videoplayer.R.id.thumb && i != com.devlin_n.videoplayer.R.id.iv_replay) {
+                if (i == com.devlin_n.videoplayer.R.id.more_menu) {
                     this.popupMenu.show();
                     this.show();
                 }
-            }else {
-                this.doPauseResume();
+            } else {
+                    this.doPauseResume();
+
             }
-        }else if (i == R.id.fullscreen) {
+        } else if (i == R.id.fullscreen) {
             onVideoControllerListner.onMyVideoController(Constants.FULL_SCREEN);
         }
 
+    }
+
+    @Override
+    protected void doPauseResume() {
+        if (this.mediaPlayer.isPlaying()) {
+            this.mediaPlayer.pause();
+        } else {
+            if (BmobUser.getCurrentUser(RootUser.class)!=null && BmobUser.getCurrentUser(RootUser.class).vipConis > 14000) {
+                this.mediaPlayer.start();
+            }else{
+                ToastUtil.showToast(getContext(), "积分不足");
+            }
+        }
     }
 
     @Override
@@ -95,9 +111,9 @@ public class MyStandardVideoController extends StandardVideoController implement
         this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 int itemId = item.getItemId();
-                if(itemId == R.id.fullscreen) {
+                if (itemId == R.id.fullscreen) {
                     onVideoControllerListner.onMyVideoController(Constants.FULL_SCREEN);
-                } else if(itemId == R.id.download) {
+                } else if (itemId == R.id.download) {
                     onVideoControllerListner.onMyVideoController(Constants.DOWNLAOD_VIDEO);
                 }
                 MyStandardVideoController.this.popupMenu.dismiss();

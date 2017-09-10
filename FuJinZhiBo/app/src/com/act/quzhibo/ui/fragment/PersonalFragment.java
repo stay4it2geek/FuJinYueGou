@@ -22,7 +22,6 @@ import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
 import com.act.quzhibo.ui.activity.VIPConisTableActivity;
-import com.act.quzhibo.ui.activity.CommonDownLoadHistoryActivty;
 import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
@@ -44,19 +43,15 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
         if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
             view.findViewById(R.id.vip_policy).setVisibility(View.GONE);
-//            view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
-//            view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
-//            view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
             view.findViewById(R.id.myVideo_download_layout).setVisibility(View.GONE);
             view.findViewById(R.id.myIMG_download_layout).setVisibility(View.GONE);
             view.findViewById(R.id.noReslayout).setVisibility(View.GONE);
-//            view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
+            view.findViewById(R.id.myPostlayout).setVisibility(View.GONE);
+            view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
+            view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
+            view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
         }
 
-        view.findViewById(R.id.who_see_me).setVisibility(View.GONE);
-        view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
-        view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
-        view.findViewById(R.id.mydownloading_layout).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
@@ -110,9 +105,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 switch (view.getId()) {
-                    case R.id.mydownloading_layout:
-                        getActivity().startActivity(new Intent(getActivity(), DownloadManagerActivity.class));
-                        break;
                     case R.id.vip_policy:
                         getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
                         break;
@@ -133,14 +125,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         break;
                     case R.id.myVideo_download_layout:
                         Intent videoIntent=new Intent();
-                        videoIntent.putExtra("downLoadType",Constants.VIDEO_DOWNLOAD);
-                        videoIntent.setClass(getActivity(),CommonDownLoadHistoryActivty.class);
+                        videoIntent.putExtra(Constants.DOWN_LOAD_TYPE,Constants.VIDEO_ALBUM);
+                        videoIntent.setClass(getActivity(),DownloadManagerActivity.class);
                         getActivity().startActivity(videoIntent);
                         break;
                     case R.id.myIMG_download_layout:
                         Intent photoIntent=new Intent();
-                        photoIntent.putExtra("downLoadType",Constants.PHOTO_DOWNLOAD);
-                        photoIntent.setClass(getActivity(),CommonDownLoadHistoryActivty.class);
+                        photoIntent.putExtra(Constants.DOWN_LOAD_TYPE,Constants.PHOTO_ALBUM);
+                        photoIntent.setClass(getActivity(),DownloadManagerActivity.class);
                         getActivity().startActivity(photoIntent);
                         break;
                     case R.id.settingDetailayout:

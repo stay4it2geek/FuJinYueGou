@@ -44,9 +44,6 @@ public class Constants {
     public static final int NO_DOWN_DATA = 20;
     public static final String PHOTO_DOWNLOAD ="photoDownLoad";
     public static final String VIDEO_DOWNLOAD ="videoDownLoad";
-
-
-
-
-
+    public static final String DOWN_LOAD_TYPE ="downLoadType";
+    public static final int NO_DOWNING_DATA = 21;
 }

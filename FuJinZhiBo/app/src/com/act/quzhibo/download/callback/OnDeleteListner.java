@@ -8,5 +8,5 @@ import cn.woblog.android.downloader.domain.DownloadInfo;
  */
 
 public interface OnDeleteListner {
-    void onDelete(DownloadInfo downloadInfo, int position);
+    void onDelete(DownloadInfo downloadInfo, int position ,boolean needDelete);
 }

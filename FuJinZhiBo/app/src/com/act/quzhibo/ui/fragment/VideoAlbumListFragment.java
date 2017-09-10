@@ -38,14 +38,13 @@ import cn.bmob.v3.listener.FindListener;
 
 
 public class VideoAlbumListFragment extends BackHandledFragment {
-    View view;
+    private View view;
     private LoadNetView loadNetView;
     private XRecyclerView recyclerView;
-
     private String lastTime = "";
     private int mediasSize;
     private ArrayList<MediaInfo> medias = new ArrayList<>();
-    VideoRecyclerViewAdapter mInfoListAdapter;
+    private VideoRecyclerViewAdapter mInfoListAdapter;
 
     @Nullable
     @Override
@@ -105,66 +104,9 @@ public class VideoAlbumListFragment extends BackHandledFragment {
         });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(gridLayoutManager);
         initMediaVideoListData(Constants.REFRESH);
     }
-
-//    public List<VideoBean> getVideoList() {
-//        List<VideoBean> videoList = new ArrayList<>();
-//        videoList.add(new VideoBean("办公室小野开番外了，居然在办公室开澡堂！老板还点赞？",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-17_17-30-43.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-17_17-33-30.mp4"));
-//
-//        videoList.add(new VideoBean("小野在办公室用丝袜做茶叶蛋 边上班边看《外科风云》",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-10_10-09-58.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-10_10-20-26.mp4"));
-//
-//        videoList.add(new VideoBean("花盆叫花鸡，怀念玩泥巴，过家家，捡根竹竿当打狗棒的小时候",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-03_12-52-08.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-03_13-02-41.mp4"));
-//
-//        videoList.add(new VideoBean("针织方便面，这可能是史上最不方便的方便面",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-28_18-18-22.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-28_18-20-56.mp4"));
-//
-//        videoList.add(new VideoBean("宵夜的下午茶，办公室不只有KPI，也有诗和远方",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-26_10-00-28.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-26_10-06-25.mp4"));
-//
-//        videoList.add(new VideoBean("可乐爆米花，嘭嘭嘭......收花的人说要把我娶回家",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-21_16-37-16.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-21_16-41-07.mp4"));
-//
-//        videoList.add(new VideoBean("办公室小野开番外了，居然在办公室开澡堂！老板还点赞？",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-17_17-30-43.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-17_17-33-30.mp4"));
-//
-//        videoList.add(new VideoBean("小野在办公室用丝袜做茶叶蛋 边上班边看《外科风云》",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-10_10-09-58.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-10_10-20-26.mp4"));
-//
-//        videoList.add(new VideoBean("花盆叫花鸡，怀念玩泥巴，过家家，捡根竹竿当打狗棒的小时候",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-03_12-52-08.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/05/2017-05-03_13-02-41.mp4"));
-//
-//        videoList.add(new VideoBean("针织方便面，这可能是史上最不方便的方便面",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-28_18-18-22.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-28_18-20-56.mp4"));
-//
-//        videoList.add(new VideoBean("宵夜的下午茶，办公室不只有KPI，也有诗和远方",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-26_10-00-28.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-26_10-06-25.mp4"));
-//
-//        videoList.add(new VideoBean("可乐爆米花，嘭嘭嘭......收花的人说要把我娶回家",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-21_16-37-16.jpg",
-//                "http://tanzi27niu.cdsb.mobi/wps/wp-content/uploads/2017/04/2017-04-21_16-41-07.mp4"));
-//        loadNetView.setVisibility(View.GONE);
-////    } else {
-////        loadNetView.setVisibility(View.VISIBLE);
-////        loadNetView.setlayoutVisily(Constants.RELOAD)
-//        return videoList;
-//    }
 
     @Override
     public void onPause() {
@@ -185,12 +127,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
         return false;
     }
 
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void initMediaVideoListData(final int actionType) {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
@@ -198,7 +134,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
 
         query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -221,7 +156,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             @Override
             public void done(List<MediaInfo> list, BmobException e) {
                 if (e == null) {
-                    Log.e("list.size()",list.size()+"ppp");
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
                             medias.clear();
@@ -261,7 +195,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                         recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
                             @Override
                             public void onChildViewAttachedToWindow(View view) {
-
                             }
 
                             @Override
@@ -289,23 +222,4 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             }
         }
     };
-
-
-    public static class mediaPreviewItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int margin;
-
-        public mediaPreviewItemDecoration(Context context) {
-            margin = context.getResources().getDimensionPixelSize(R.dimen
-                    .media_preview_item_decoration_margin);
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.set(margin, margin, margin, margin);
-        }
-
-    }
-
-
 }

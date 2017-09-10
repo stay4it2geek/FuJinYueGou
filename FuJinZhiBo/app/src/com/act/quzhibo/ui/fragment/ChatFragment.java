@@ -169,9 +169,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     };
 
     private void showDialog(Member m) {
-        FragmentDialog.newInstance(m.nickname, "", "确定", "取消", -1, true, new FragmentDialog.OnClickBottomListener() {
+        FragmentDialog.newInstance(false,m.nickname, "", "确定", "取消", -1, true, new FragmentDialog.OnClickBottomListener() {
             @Override
-            public void onPositiveClick(Dialog dialog) {
+            public void onPositiveClick(Dialog dialog,boolean needDelete) {
                 dialog.dismiss();
             }
 

@@ -35,15 +35,14 @@ public class TabMainActivity extends TabActivity {
 
     private int[] mIconSelectIds = {R.drawable.home_s, R.drawable.zhibo_s, R.drawable.square_s, R.drawable.money_s, R.drawable.mine_s};
 
-    private int[] mIconUnselectIdsSpecial = {R.drawable.zhibo, R.drawable.money, R.drawable.mine};
+    private int[] mIconUnselectIdsSpecial = {R.drawable.home, R.drawable.money, R.drawable.mine};
     private int[] mIconSelectIdsSpecial = {R.drawable.home_s, R.drawable.money_s, R.drawable.mine_s};
 
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
     private StringBuffer catagory;
     private PlateCatagory plateCatagory;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
