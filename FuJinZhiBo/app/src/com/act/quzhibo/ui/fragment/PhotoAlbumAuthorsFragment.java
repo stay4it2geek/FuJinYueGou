@@ -68,8 +68,17 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        queryData(Constants.LOADMORE);
-                        recyclerView.loadMoreComplete();
+                        if (mediasSize > 0) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    queryData(Constants.LOADMORE);
+                                    recyclerView.loadMoreComplete();
+                                }
+                            }, 1000);
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
                     }
                 }, 1000);
             }
@@ -193,6 +202,8 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                 if (msg.what != Constants.NO_MORE) {
                     if (mediaAuthor != null) {
                         mediasSize = mediaAuthor.size();
+                    }else{
+                        mediasSize=0;
                     }
                     Collections.sort(medias, new ComparatorValues());
                     if (mediasSize > 0) {

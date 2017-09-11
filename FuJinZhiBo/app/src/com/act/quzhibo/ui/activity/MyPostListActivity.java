@@ -70,8 +70,17 @@ public class MyPostListActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        queryData(Constants.LOADMORE);
-                        recyclerView.loadMoreComplete();
+                        if (myPostsSize > 0) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    queryData(Constants.LOADMORE);
+                                    recyclerView.loadMoreComplete();
+                                }
+                            }, 1000);
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
                     }
                 }, 1000);
             }
@@ -183,6 +192,8 @@ public class MyPostListActivity extends AppCompatActivity {
                 if (msg.what != Constants.NO_MORE) {
                     if (myPosts != null) {
                         myPostsSize = myPosts.size();
+                    }else {
+                        myPostsSize=0;
                     }
                     Collections.sort(myPosts, new ComparatorValues());
                     if (myPostsSize > 0) {

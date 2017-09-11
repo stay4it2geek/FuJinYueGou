@@ -60,6 +60,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                         }
                     }, 1000);
                 }
+
                 @Override
                 public void onLoadMore() {
                     new Handler().postDelayed(new Runnable() {
@@ -104,7 +105,6 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
         List<BmobQuery<MediaInfo>> queries = new ArrayList<>();
-        query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -124,6 +124,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         query4.addWhereEqualTo("type", Constants.PHOTO_ALBUM);
         queries.add(query4);
         query.and(queries);
+        query.setLimit(10);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MediaInfo>() {
             @Override
@@ -157,6 +158,8 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
             if (msg.what != Constants.NetWorkError) {
                 if (mediaInfos != null) {
                     mediasSize = mediaInfos.size();
+                } else{
+                    mediasSize = 0;
                 }
                 if (mediasSize > 0) {
                     if (mInfoListAdapter == null) {

@@ -38,13 +38,18 @@ import static com.act.quzhibo.common.Constants.VIDEO_ALBUM;
 
 public class VideoAlbumAuthorsFragment extends BackHandledFragment {
 
-    View view;
+    private  View view;
+    private XRecyclerView recyclerView;
+    private MediaAuthorListAdapter mediaAuthorListAdapter;
+    private LoadNetView loadNetView;
+    private String lastTime = "";
+    private ArrayList<MediaAuthor> medias = new ArrayList<>();
+    private int mediasSize;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.video_authors_fragment, null);
-
         recyclerView = (XRecyclerView) view.findViewById(R.id.media_author_rv);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
@@ -68,8 +73,17 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        queryData(Constants.LOADMORE);
-                        recyclerView.loadMoreComplete();
+                        if (mediasSize > 0) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    queryData(Constants.LOADMORE);
+                                    recyclerView.loadMoreComplete();
+                                }
+                            }, 1000);
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
                     }
                 }, 1000);
             }
@@ -102,25 +116,12 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     }
 
 
-    private XRecyclerView recyclerView;
-    private MediaAuthorListAdapter mediaAuthorListAdapter;
-    private LoadNetView loadNetView;
-    private int limit = 10; // 每页的数据是10条
-    private String lastTime = "";
-    private ArrayList<MediaAuthor> medias = new ArrayList<>();
-    private int mediasSize;
 
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void queryData(final int actionType) {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
         List<BmobQuery<MediaAuthor>> queries = new ArrayList<>();
-        query2.setLimit(limit);
+        query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             // 只查询小于最后一个item发表时间的数据
             Date date;
@@ -190,6 +191,8 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                 if (msg.what != Constants.NO_MORE) {
                     if (mediaAuthor != null) {
                         mediasSize = mediaAuthor.size();
+                    }else{
+                        mediasSize=0;
                     }
                     Collections.sort(medias, new ComparatorValues());
                     if (mediasSize > 0) {

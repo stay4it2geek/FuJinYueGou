@@ -174,6 +174,8 @@ public class ShowerListFragment extends BackHandledFragment {
                     } else {
                         adapter.notifyDataSetChanged();
                     }
+                }else{
+                    recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
             } else {

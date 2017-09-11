@@ -67,8 +67,17 @@ public class NearFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        queryData(Constants.LOADMORE);
-                        recyclerView.loadMoreComplete();
+                        if (seeMeSize > 0) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    queryData(Constants.LOADMORE);
+                                    recyclerView.loadMoreComplete();
+                                }
+                            }, 1000);
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
                     }
                 }, 1000);
             }
@@ -166,6 +175,8 @@ public class NearFragment extends BackHandledFragment {
                 if (msg.what != Constants.NO_MORE) {
                     if (nearPersonArrayList != null) {
                         seeMeSize = nearPersonArrayList.size();
+                    }else{
+                        seeMeSize=0;
                     }
                     if (seeMeSize > 0) {
                         if (nearSeeAdapter == null) {

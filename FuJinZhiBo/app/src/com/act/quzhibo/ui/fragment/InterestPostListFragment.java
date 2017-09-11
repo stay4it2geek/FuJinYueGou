@@ -153,6 +153,8 @@ public class InterestPostListFragment extends BackHandledFragment {
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoParentData.class);
                 if (data.result!= null) {
                     interestPostSize = data.result.size();
+                }else {
+                    interestPostSize=0;
                 }
                 if (interestPostSize> 0) {
                     ctime = data.result.get(interestPostSize - 1).ctime;

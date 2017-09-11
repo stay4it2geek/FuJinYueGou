@@ -33,7 +33,7 @@ public class CommonSeeFragment extends BackHandledFragment {
 
     private XRecyclerView recyclerView;
     private CommonSeeAdapter commonSeeAdapter;
-    private  View view;
+    private View view;
 
     @Nullable
     @Override
@@ -62,8 +62,17 @@ public class CommonSeeFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        queryData(Constants.LOADMORE);
-                        recyclerView.loadMoreComplete();
+                        if (seeMeSize > 0) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    queryData(Constants.LOADMORE);
+                                    recyclerView.loadMoreComplete();
+                                }
+                            }, 1000);
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
                     }
                 }, 1000);
             }
@@ -75,7 +84,6 @@ public class CommonSeeFragment extends BackHandledFragment {
 
         return view;
     }
-
 
 
     private int limit = 10; // 每页的数据是10条
@@ -125,32 +133,33 @@ public class CommonSeeFragment extends BackHandledFragment {
             }
         });
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        if(commonSeeAdapter!=null){
+        if (commonSeeAdapter != null) {
             commonSeeAdapter.setCount();
         }
     }
+
     public static final class ComparatorValues implements Comparator<CommonPerson> {
 
         @Override
         public int compare(CommonPerson post1, CommonPerson post2) {
-            int m1=Integer.parseInt(post1.viewTime!=null?post1.viewTime:"0");
-            int m2=Integer.parseInt(post2.viewTime!=null?post2.viewTime:"0");
-            int result=0;
-            if(m1>m2)
-            {
-                result=1;
+            int m1 = Integer.parseInt(post1.viewTime != null ? post1.viewTime : "0");
+            int m2 = Integer.parseInt(post2.viewTime != null ? post2.viewTime : "0");
+            int result = 0;
+            if (m1 > m2) {
+                result = 1;
             }
-            if(m1<m2)
-            {
-                result=-1;
+            if (m1 < m2) {
+                result = -1;
             }
             return result;
         }
 
     }
+
     private int seeMeSize;
     Handler handler = new Handler() {
         @Override
@@ -161,6 +170,8 @@ public class CommonSeeFragment extends BackHandledFragment {
                 if (msg.what != Constants.NO_MORE) {
                     if (commonPersons != null) {
                         seeMeSize = commonPersons.size();
+                    } else {
+                        seeMeSize = 0;
                     }
                     Collections.sort(commonPersons, new ComparatorValues());
                     if (seeMeSize > 0) {

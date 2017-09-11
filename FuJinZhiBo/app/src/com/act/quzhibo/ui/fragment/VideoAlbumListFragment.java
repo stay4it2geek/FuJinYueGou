@@ -185,6 +185,8 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             if (msg.what != Constants.NetWorkError) {
                 if (mediaInfos != null) {
                     mediasSize = mediaInfos.size();
+                }else{
+                    mediasSize=0;
                 }
 //                    Collections.sort(medias, new ComparatorValues());
                 if (mediasSize > 0) {

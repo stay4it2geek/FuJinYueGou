@@ -124,10 +124,11 @@ public class CommonPersonPostListActivity extends FragmentActivity {
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
                 if (data != null && data.result != null) {
                     interestPostSize = data.result.posts.size();
+                }else {
+                    interestPostSize=0;
                 }
                 if (data.result.posts != null && interestPostSize > 0) {
                     ctime = data.result.posts.get(interestPostSize - 1).ctime;
-                    Log.e("htime2", ctime);
                 }
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
