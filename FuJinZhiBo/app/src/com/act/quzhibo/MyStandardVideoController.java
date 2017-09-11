@@ -1,6 +1,7 @@
 package com.act.quzhibo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.util.ToastUtil;
 import com.devlin_n.videoplayer.controller.StandardVideoController;
 
@@ -94,10 +96,15 @@ public class MyStandardVideoController extends StandardVideoController implement
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.pause();
         } else {
-            if (BmobUser.getCurrentUser(RootUser.class)!=null && BmobUser.getCurrentUser(RootUser.class).vipConis > 14000) {
-                this.mediaPlayer.start();
+            if (BmobUser.getCurrentUser(RootUser.class)==null ) {
+
+                getContext().startActivity(new Intent(getContext(), LoginActivity.class));
             }else{
-                ToastUtil.showToast(getContext(), "积分不足");
+              if(  BmobUser.getCurrentUser(RootUser.class).vipConis > 14000){
+                    this.mediaPlayer.start();
+                }else{
+                  ToastUtil.showToast(getContext(),"积分不足14000");
+              }
             }
         }
     }

@@ -156,6 +156,8 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                     } else {
                         handler.sendEmptyMessage(Constants.NO_MORE);
                     }
+                }else{
+                    handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });

@@ -35,8 +35,9 @@ public class MyFocusShowerActivity extends AppCompatActivity {
     private XRecyclerView recyclerView;
     private RoomListAdapter roomListAdapter;
     private LoadNetView loadNetView;
-
-
+    private String lastTime = "";
+    private ArrayList<Room> rooms = new ArrayList<>();
+    private int myfocusSize;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,21 +78,9 @@ public class MyFocusShowerActivity extends AppCompatActivity {
         queryData(Constants.REFRESH);
     }
 
-
-
-    private int limit = 10; // 每页的数据是10条
-    String lastTime = "";
-    ArrayList<Room> rooms = new ArrayList<>();
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void queryData(final int actionType) {
         final BmobQuery<Room> query = new BmobQuery<>();
-        query.setLimit(limit);
-        // 如果是加载更多
+        query.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             // 只查询小于最后一个item发表时间的数据
             Date date = null;
@@ -110,14 +99,11 @@ public class MyFocusShowerActivity extends AppCompatActivity {
                 if (e == null) {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
+                            // 当是下拉刷新操作时，将当前页的编号重置为0，并清空，重新添加
                             rooms.clear();
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
-                            rooms.addAll(list);
-                        } else if (actionType == Constants.LOADMORE) {
-                            rooms.addAll(list);
-                            lastTime = list.get(list.size() - 1).getCreatedAt();
                         }
+                        lastTime = list.get(list.size() - 1).getCreatedAt();
+                        rooms.addAll(list);
                         Message message = new Message();
                         message.obj = rooms;
                         message.what = actionType;
@@ -130,8 +116,6 @@ public class MyFocusShowerActivity extends AppCompatActivity {
         });
     }
 
-
-    private int seeMeSize;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -140,13 +124,13 @@ public class MyFocusShowerActivity extends AppCompatActivity {
             if (msg.what != Constants.NetWorkError) {
                 if (msg.what != Constants.NO_MORE) {
                     if (commonPersons != null) {
-                        seeMeSize = commonPersons.size();
+                        myfocusSize = commonPersons.size();
                     }
                     Display display = MyFocusShowerActivity.this.getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
                     int screenWidth = size.x;
-                    if (seeMeSize > 0) {
+                    if (myfocusSize > 0) {
                         if (roomListAdapter == null) {
                             roomListAdapter = new RoomListAdapter(MyFocusShowerActivity.this, commonPersons,"",screenWidth,"");
                             recyclerView.setAdapter(roomListAdapter);

@@ -171,7 +171,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     }
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
-
                 }
             }
         });
@@ -217,8 +216,8 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     recyclerView.setNoMore(true);
                 }
             } else {
-                loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NetWorkError);
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };

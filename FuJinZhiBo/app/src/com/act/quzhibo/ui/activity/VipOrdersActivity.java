@@ -110,7 +110,6 @@ public class VipOrdersActivity extends FragmentActivity {
                         loadNetView.setlayoutVisily(Constants.BUY_VIP);
                     }
                 } else {
-                    Log.e("fdsfds",e.getMessage());
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }

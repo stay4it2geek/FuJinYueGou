@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,9 +60,8 @@ public class FragmentDialog extends DialogFragment {
     private boolean isSingle = false;
 
     private Dialog dialog;
-    private boolean needDelete;
-    private boolean needDeleteConfirm;
-
+    private boolean needShowDelete;
+    private boolean deleteConfirm;
     private CheckBox delete_cb;
     private RelativeLayout delete_confirm_layout;
 
@@ -76,8 +74,8 @@ public class FragmentDialog extends DialogFragment {
         negtive = args.getString("negtive");
         message = args.getString("message");
         imageResId = args.getInt("imageResId");
+        needShowDelete = args.getBoolean("needShowDelete");
         isSingle = args.getBoolean("isSingle");
-        needDelete = args.getBoolean("needDelete");
         negtiveBn = (Button) rootView.findViewById(R.id.negtive);
         positiveBn = (Button) rootView.findViewById(R.id.positive);
         titleTv = (TextView) rootView.findViewById(R.id.title);
@@ -88,7 +86,7 @@ public class FragmentDialog extends DialogFragment {
         columnLineView = rootView.findViewById(R.id.column_line);
     }
 
-    public static final FragmentDialog newInstance(boolean needDelete, String title, String message, String positive, String negtive, int imageResId, boolean isSingle, OnClickBottomListener onClickBottomListener) {
+    public static final FragmentDialog newInstance(boolean needShowDelete,String title, String message, String positive, String negtive, int imageResId, boolean isSingle, OnClickBottomListener onClickBottomListener) {
         FragmentDialog fragment = new FragmentDialog();
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
@@ -97,15 +95,13 @@ public class FragmentDialog extends DialogFragment {
         bundle.putString("negtive", negtive);
         bundle.putInt("imageResId", imageResId);
         bundle.putBoolean("isSingle", isSingle);
-        bundle.putBoolean("needDelete", needDelete);
+        bundle.putBoolean("needShowDelete", needShowDelete);
         fragment.onClickBottomListener = onClickBottomListener;
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    /**
-     * 初始化界面的确定和取消监听器
-     */
+
     private void initEvent() {
         //设置确定按钮被点击后，向外界提供监听
         positiveBn.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +109,7 @@ public class FragmentDialog extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 if (onClickBottomListener != null) {
-                    onClickBottomListener.onPositiveClick(dialog, needDeleteConfirm);
+                    onClickBottomListener.onPositiveClick(dialog, deleteConfirm);
                 }
             }
         });
@@ -127,12 +123,15 @@ public class FragmentDialog extends DialogFragment {
                 }
             }
         });
-        delete_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                needDeleteConfirm = checked;
-            }
-        });
+
+            delete_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                    deleteConfirm = checked;
+                }
+            });
+
+
     }
 
     /**
@@ -178,7 +177,7 @@ public class FragmentDialog extends DialogFragment {
             columnLineView.setVisibility(View.VISIBLE);
         }
 
-        if (needDelete) {
+        if (needShowDelete) {
             delete_confirm_layout.setVisibility(View.VISIBLE);
         } else {
             delete_confirm_layout.setVisibility(View.GONE);

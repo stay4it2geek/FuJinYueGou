@@ -25,6 +25,7 @@ import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
@@ -34,6 +35,8 @@ import com.act.quzhibo.view.xImageView.XImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -56,7 +59,8 @@ public class XImageActivity extends AppCompatActivity {
     private PagerAdapter adapter;
     private DBController dbController;
     private LoadNetView loadNetView;
-
+    private ArrayList<MediaInfo> mediaInfos;
+    private int pageCurrent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +93,7 @@ public class XImageActivity extends AppCompatActivity {
         });
     }
 
-    ArrayList<MediaInfo> mediaInfos;
+
 
     @Override
     protected void onResume() {
@@ -121,7 +125,6 @@ public class XImageActivity extends AppCompatActivity {
                     String url = mediaInfos.get(position).getUrl();
                     DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
                     View view = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.imglayout, null);
-
                     final XImageView xImageView = (XImageView) view.findViewById(R.id.ximageview);
                     xImageView.setDoubleTapScaleType(IXImageView.DoubleType.FIT_VIEW_MIN_VIEW_MAX);
                     xImageView.setInitType(IXImageView.InitType.FIT_VIEW_MIN_IMAGE_MIN);
@@ -186,7 +189,8 @@ public class XImageActivity extends AppCompatActivity {
                 if (!file.exists()) {
                     file.mkdirs();
                 }
-                File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
+                String path = file.getAbsolutePath().concat("/").concat(mediaInfo.getName());
+                File localFile = new File(path);
                 if (downloadInfo != null) {
                     ToastUtil.showToast(XImageActivity.this, downloadInfo.getStatus() + "");
                 }
@@ -211,7 +215,7 @@ public class XImageActivity extends AppCompatActivity {
                     if (downloadManager.findAllDownloading().size() > 10) {
                         ToastUtil.showToast(XImageActivity.this, "下载任务最多10个,请稍后下载");
                         if (downloadManager.findAllDownloaded().size() >20) {
-                            FragmentDialog.newInstance(false,"", "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            FragmentDialog.newInstance(false,"",  "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                 @Override
                                 public void onPositiveClick(Dialog dialog,boolean needDelete) {
                                     Intent photoIntent = new Intent();
@@ -273,6 +277,7 @@ public class XImageActivity extends AppCompatActivity {
 
         @Override
         public void onDownloadSuccess() {
+            adapter.notifyDataSetChanged();
             ToastUtil.showToast(XImageActivity.this, "保存成功");
         }
 
@@ -289,8 +294,9 @@ public class XImageActivity extends AppCompatActivity {
             if (!file.exists()) {
                 file.mkdirs();
             }
-            String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length()));
-            File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
+            String path = file.getAbsolutePath().concat("/").concat(mediaInfo.getName());
+            File localFile = new File(path);
+
             if (localFile.isFile() && localFile.exists()) {
                 file.delete();
             }
@@ -299,7 +305,8 @@ public class XImageActivity extends AppCompatActivity {
             downloadManager.download(downloadInfo);
             //save extra info to my database.
             MediaInfoLocal myBusinessInfLocal = new MediaInfoLocal(
-                    mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle());
+                    mediaInfo.getUrl().hashCode(), mediaInfo.getName(),
+                    mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle(),mediaInfo.getLocalPath());
             try {
                 dbController.createOrUpdateMyDownloadInfo(myBusinessInfLocal);
             } catch (SQLException e) {

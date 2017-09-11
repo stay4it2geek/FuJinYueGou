@@ -90,7 +90,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
                     if (downloadManager.findAllDownloading().size() > 10) {
                         ToastUtil.showToast(context, "下载任务最多10个,请稍后下载");
                         if (downloadManager.findAllDownloaded().size() > 20) {
-                            FragmentDialog.newInstance(false, "", "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧", "","确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                 @Override
                                 public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                     Intent videoIntent = new Intent();
@@ -108,13 +108,26 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
                             ;
                         }
                     } else {
-                        downLoadVideo(videoBean);
+                        FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "确认下载", "继续观看", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            @Override
+                            public void onPositiveClick(Dialog dialog, boolean needDelete) {
+                                downLoadVideo(videoBean);
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void onNegtiveClick(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        }).show(context.getSupportFragmentManager(), "");
+
                     }
                 } else {
                     Intent intent = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("videoBean", videoBean);
                     intent.putExtras(bundle);
+                    intent.putExtra("isLocal",false);
                     intent.setClass(context, FullScreenActivity.class);
                     context.startActivity(intent);
                 }
@@ -132,8 +145,8 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             if (!file.exists()) {
                 file.mkdirs();
             }
-            File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 10, url.length())));
-
+            String path = file.getAbsolutePath().concat("/").concat(videoBean.getName());
+            File localFile = new File(path);
             if (localFile.exists() && localFile.isFile() && downloadInfo != null) {
                 switch (downloadInfo.getStatus()) {
                     case DownloadInfo.STATUS_NONE:
@@ -199,8 +212,6 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         @Override
         public void onPaused() {
             ToastUtil.showToast(context, "暂停保存");
-
-
         }
 
         @Override
@@ -221,13 +232,11 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         @Override
         public void onDownloadSuccess() {
             ToastUtil.showToast(context, "保存成功");
-
         }
 
         @Override
         public void onDownloadFailed(DownloadException e) {
             ToastUtil.showToast(context, "保存失败，原因是：" + e.getMessage());
-
         }
 
     }
@@ -239,21 +248,18 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             if (!file.exists()) {
                 file.mkdirs();
             }
-            String path = file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 15, url.length()));
+            String path = file.getAbsolutePath().concat("/").concat(mediaInfo.getName());
 
-            File localFile = new File(file.getAbsolutePath().concat("/").concat(url.substring(url.length() - 15, url.length())));
+            File localFile = new File(path);
             if (localFile.isFile() && localFile.exists()) {
                 localFile.delete();
             }
-
             downloadInfo = new DownloadInfo.Builder().setUrl(url).setPath(path).build();
             downloadInfo.setDownloadListener(new MyDownloadListener(downloadInfo));
             downloadManager.download(downloadInfo);
-
-
             //save extra info to my database.
             MediaInfoLocal myBusinessInfLocal = new MediaInfoLocal(
-                    mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle());
+                    mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle(), path);
             try {
                 dbController.createOrUpdateMyDownloadInfo(myBusinessInfLocal);
             } catch (SQLException e) {

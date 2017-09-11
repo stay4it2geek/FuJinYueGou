@@ -26,16 +26,29 @@ public class MediaInfoLocal {
 
   @DatabaseField
   private String title;
+
+  @DatabaseField
+  private String localPath;
+
   public MediaInfoLocal() {
   }
 
-  public MediaInfoLocal(int id, String name, String icon, String url, String type,String title) {
+  public MediaInfoLocal(int id, String name, String icon, String url, String type,String title,String localPath) {
     this.id = id;
     this.name = name;
     this.icon = icon;
     this.url = url;
     this.type = type;
     this.title = title;
+    this.localPath = localPath;
+  }
+
+  public String getLocalPath() {
+    return localPath;
+  }
+
+  public void setLocalPath(String localPath) {
+    this.localPath = localPath;
   }
 
   public String getTitle() {

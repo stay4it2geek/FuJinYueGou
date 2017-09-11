@@ -39,7 +39,7 @@ import okhttp3.Call;
 public class InfoCommonActivity extends AppCompatActivity {
 
     private InterestPost post;
-    GridView gridView;
+    private GridView gridView;
     private Banner banner;
     private int second;
     private LoadNetView loadNetView;

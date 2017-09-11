@@ -101,7 +101,6 @@ public class DownloadingFragment extends BaseFragment {
             downloadingAdapter.setOnDeleteListner(new OnDeleteListner() {
                 @Override
                 public void onDelete(DownloadInfo downloadInfo, int position, boolean needDelete) {
-                    Log.e("onDelete", "onDelete" + downloadInfo.getStatus() + "");
                     if (needDelete) {
                         File localFile = new File(downloadInfo.getPath());
                         if (localFile.isFile() && localFile.exists()) {

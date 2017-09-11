@@ -14,13 +14,15 @@ public class MediaInfo extends BmobObject implements  Parcelable {
   private String icon;
   private String url;
   private String type;
+  private String localPath;
 
-  public MediaInfo(String title,String name, String icon, String url, String type) {
+  public MediaInfo(String title,String name, String icon, String url, String type,String localPath)  {
     this.name = name;
     this.icon = icon;
     this.url = url;
     this.title = title;
     this.type = type;
+    this.localPath = localPath;
   }
 
   protected MediaInfo(Parcel in) {
@@ -29,6 +31,7 @@ public class MediaInfo extends BmobObject implements  Parcelable {
     url = in.readString();
     type = in.readString();
     title = in.readString();
+    localPath = in.readString();
   }
 
   public static final Creator<MediaInfo> CREATOR = new Creator<MediaInfo>() {
@@ -83,6 +86,15 @@ public class MediaInfo extends BmobObject implements  Parcelable {
     this.type = type;
   }
 
+  public String getLocalPath() {
+    return localPath;
+  }
+
+  public void setLocalPath(String localPath) {
+    this.localPath = localPath;
+  }
+
+
   @Override
   public int describeContents() {
     return 0;
@@ -95,6 +107,7 @@ public class MediaInfo extends BmobObject implements  Parcelable {
     dest.writeString(url);
     dest.writeString(type);
     dest.writeString(title);
+    dest.writeString(localPath);
   }
 
 

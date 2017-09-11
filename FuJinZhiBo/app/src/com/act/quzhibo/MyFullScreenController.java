@@ -95,11 +95,13 @@ public class MyFullScreenController extends FullScreenController {
     @Override
     protected void initView() {
         super.initView();
-        findViewById(R.id.more_menu).setVisibility(VISIBLE);
-        ImageView more_menu= (ImageView) findViewById(R.id.more_menu);
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) more_menu.getLayoutParams();
-        lp.setMargins(0, 0, 100, 0);
-        more_menu.setLayoutParams(lp);
+        if(!isLocal){
+            findViewById(R.id.more_menu).setVisibility(VISIBLE);
+            ImageView more_menu= (ImageView) findViewById(R.id.more_menu);
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) more_menu.getLayoutParams();
+            lp.setMargins(0, 0, 150, 0);
+            more_menu.setLayoutParams(lp);
+        }
         this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
         this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_download, this.popupMenu.getMenu());
         this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -113,5 +115,11 @@ public class MyFullScreenController extends FullScreenController {
                 return false;
             }
         });
+    }
+
+    public boolean isLocal;
+    public void setIslocal(boolean isLocal) {
+        this.isLocal=isLocal;
+
     }
 }

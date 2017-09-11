@@ -71,7 +71,7 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        holder.bindData(data, position, context);
+        holder.bindData(data, position);
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,13 +99,13 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
             tv_size = (TextView) view.findViewById(R.id.tv_size);
             tv_status = (TextView) view.findViewById(R.id.tv_status);
             pb = (ProgressBar) view.findViewById(R.id.pb);
-            tv_title = (TextView) view.findViewById(R.id.tv_name);
+            tv_title = (TextView) view.findViewById(R.id.tv_title);
             bt_action = (Button) view.findViewById(R.id.bt_action);
             bt_delete = (Button) view.findViewById(R.id.bt_delete);
         }
 
         @SuppressWarnings("unchecked")
-        public void bindData(final DownloadInfo data, final int position, final Context context) {
+        public void bindData(final DownloadInfo data, final int position) {
             // Get download task status.
             downloadInfo = data;
             if (downloadInfo != null) {
@@ -144,7 +144,6 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
                                 downloadManager.pause(downloadInfo);
                                 break;
                             case DownloadInfo.STATUS_COMPLETED:
-                                downloadManager.remove(downloadInfo);
                                 publishDownloadSuccessStatus();
                                 break;
                         }
@@ -175,10 +174,10 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
                         bt_delete.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                FragmentDialog.newInstance(true,"", "确定删除?", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false,"确定删除?", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog ,boolean needDelete) {
-                                        deleteListner.onDelete(downloadInfo, position ,needDelete);
+                                        deleteListner.onDelete(downloadInfo, position ,true);
                                         new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {

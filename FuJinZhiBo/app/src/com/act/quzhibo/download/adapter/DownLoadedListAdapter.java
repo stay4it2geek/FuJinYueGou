@@ -2,9 +2,12 @@ package com.act.quzhibo.download.adapter;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +28,7 @@ import com.act.quzhibo.ui.activity.XImageActivity;
 import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -66,7 +70,7 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentDialog.newInstance(true,"", "确定删除?", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(true,"确定删除?", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(Dialog dialog ,boolean needDelete) {
                                 deleteListner.onDelete(downloadInfo, position,needDelete);
@@ -93,7 +97,12 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                     }
                 });
                 final MediaInfoLocal myDownloadInfoById = dbController.findMyDownloadInfoById(downloadInfo.getUri().hashCode());
-                final MediaInfo mediaInfo = new MediaInfo(myDownloadInfoById.getTitle(), myDownloadInfoById.getName(), myDownloadInfoById.getIcon(), myDownloadInfoById.getUrl(), myDownloadInfoById.getType());
+                final MediaInfo mediaInfo = new MediaInfo(myDownloadInfoById.getTitle(),
+                        myDownloadInfoById.getName(),
+                        myDownloadInfoById.getIcon(),
+                        myDownloadInfoById.getUrl(),
+                        myDownloadInfoById.getType(),
+                        myDownloadInfoById.getLocalPath());
                 final ArrayList<MediaInfo> mMediaInfos = new ArrayList<>();
                 mMediaInfos.add(mediaInfo);
                 holder.download_item_layout.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +118,18 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                             activity.startActivity(intent);
                         } else {
                             Intent intent = new Intent();
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("videoBean", mediaInfo);
-                            intent.putExtras(bundle);
-                            intent.setClass(context, FullScreenActivity.class);
+                            intent.setAction(android.content.Intent.ACTION_VIEW);
+                            File file = new File(mediaInfo.getLocalPath());
+                            Uri uri;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                Uri contentUri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".FileProvider", file);
+                                intent.setDataAndType(contentUri, "video/*");
+                            } else {
+                                uri = Uri.fromFile(file);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.setDataAndType(uri, "video/*");
+                            }
                             context.startActivity(intent);
                         }
                     }

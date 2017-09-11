@@ -15,6 +15,7 @@ import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
@@ -52,6 +53,7 @@ public class ShowerInfoActivityLandscape extends Activity {
             public void onResponse(String response, int id) {
                 Message message = handler.obtainMessage();
                 message.obj = response;
+                message.what = Constants.REFRESH;
                 handler.sendMessage(message);
             }
         });
@@ -61,54 +63,58 @@ public class ShowerInfoActivityLandscape extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            try {
-                JSONObject jsonObject = new JSONObject((String) msg.obj);
-                String fansCount = jsonObject.getString("fansCount");
-                String nickname = jsonObject.getString("nickname");
-                String introduce = jsonObject.getString("introduce");
-                String portrait_img = jsonObject.getString("portrait_path_1280");
-                String liveType = jsonObject.getString("liveType");
-                String gender = jsonObject.getString("gender");
+            if (msg.what != Constants.NetWorkError) {
+                try {
+                    JSONObject jsonObject = new JSONObject((String) msg.obj);
+                    String fansCount = jsonObject.getString("fansCount");
+                    String nickname = jsonObject.getString("nickname");
+                    String introduce = jsonObject.getString("introduce");
+                    String portrait_img = jsonObject.getString("portrait_path_1280");
+                    String liveType = jsonObject.getString("liveType");
+                    String gender = jsonObject.getString("gender");
 
-                JSONObject jsonObject1 = jsonObject.getJSONObject("getPhotoListResult");
-                if (msg.what != Constants.NetWorkError) {
-                    ((TextView) findViewById(R.id.fansCount)).setText(fansCount != null ? "粉丝 " + fansCount : "");
-                    ((TextView) findViewById(R.id.introduce)).setText(introduce != null ? introduce : "");
-                    ((TextView) findViewById(R.id.nickName)).setText(nickname != null ? nickname : "");
-                    if (liveType.equals("1")) {
-                        findViewById(R.id.isShowing).setVisibility(View.VISIBLE);
-                        ((TextView) findViewById(R.id.isShowing)).setText("直播中");
-                    }
-                    if (introduce != null && !introduce.equals("")) {
-                        findViewById(R.id.introduce).setVisibility(View.VISIBLE);
+                    JSONObject jsonObject1 = jsonObject.getJSONObject("getPhotoListResult");
+                    if (msg.what != Constants.NetWorkError) {
+                        ((TextView) findViewById(R.id.fansCount)).setText(fansCount != null ? "粉丝 " + fansCount : "");
                         ((TextView) findViewById(R.id.introduce)).setText(introduce != null ? introduce : "");
-                    }
-                    JSONArray photos = jsonObject1.getJSONArray("photoList");
-
-                    List<String> urls = new ArrayList<>();
-                    if (photos != null && photos.length() > 0) {
-                        for (int i = 0; i < photos.length(); i++) {
-                            JSONObject jsonObject2 = photos.getJSONObject(i);
-                            String url = (String) jsonObject2.get("photo_path_original");
-                            urls.add(url);
+                        ((TextView) findViewById(R.id.nickName)).setText(nickname != null ? nickname : "");
+                        if (liveType.equals("1")) {
+                            findViewById(R.id.isShowing).setVisibility(View.VISIBLE);
+                            ((TextView) findViewById(R.id.isShowing)).setText("直播中");
                         }
-                    } else {
-                        urls.clear();
-                        urls.add(portrait_img);
-                    }
-                    if (gender.equals("0")) {
-                        ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
-                        Glide.with(ShowerInfoActivityLandscape.this).load(portrait_img).placeholder(R.drawable.women).into((CircleImageView) findViewById(R.id.userImage));
-                    } else {
-                        ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
-                        Glide.with(ShowerInfoActivityLandscape.this).load(portrait_img).placeholder(R.drawable.man).into((CircleImageView) findViewById(R.id.userImage));
+                        if (introduce != null && !introduce.equals("")) {
+                            findViewById(R.id.introduce).setVisibility(View.VISIBLE);
+                            ((TextView) findViewById(R.id.introduce)).setText(introduce != null ? introduce : "");
+                        }
+                        JSONArray photos = jsonObject1.getJSONArray("photoList");
 
+                        List<String> urls = new ArrayList<>();
+                        if (photos != null && photos.length() > 0) {
+                            for (int i = 0; i < photos.length(); i++) {
+                                JSONObject jsonObject2 = photos.getJSONObject(i);
+                                String url = (String) jsonObject2.get("photo_path_original");
+                                urls.add(url);
+                            }
+                        } else {
+                            urls.clear();
+                            urls.add(portrait_img);
+                        }
+                        if (gender.equals("0")) {
+                            ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
+                            Glide.with(ShowerInfoActivityLandscape.this).load(portrait_img).placeholder(R.drawable.women).into((CircleImageView) findViewById(R.id.userImage));
+                        } else {
+                            ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
+                            Glide.with(ShowerInfoActivityLandscape.this).load(portrait_img).placeholder(R.drawable.man).into((CircleImageView) findViewById(R.id.userImage));
+
+                        }
                     }
+                } catch (JSONException e) {
+
+                } catch (Exception e) {
+
                 }
-            } catch (JSONException e) {
-
-            } catch (Exception e) {
-
+            } else {
+                ToastUtil.showToast(ShowerInfoActivityLandscape.this, "请求失败");
             }
         }
     };

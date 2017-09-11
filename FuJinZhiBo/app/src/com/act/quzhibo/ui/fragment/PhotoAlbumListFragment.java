@@ -174,8 +174,9 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                 }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NetWorkError);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
+
         }
     };
 
