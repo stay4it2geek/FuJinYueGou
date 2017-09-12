@@ -163,18 +163,14 @@ public class ShowerListFragment extends BackHandledFragment {
                         adapter.setOnItemClickListener(new RoomListAdapter.OnRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                if (cataTitle.equals("手机达人")) {
-                                    getExtrance(position, "2", roomList.pathPrefix);
-                                } else {
-                                    getExtrance(position, "1", roomList.pathPrefix);
-                                }
+                                getExtrance(position);
                             }
                         });
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.notifyDataSetChanged();
                     }
-                }else{
+                } else {
                     recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
@@ -189,8 +185,8 @@ public class ShowerListFragment extends BackHandledFragment {
     public static final class ComparatorValues implements Comparator<Room> {
         @Override
         public int compare(Room room1, Room room2) {
-            int m1 = Integer.parseInt(room1.onlineCount != null ? room1.onlineCount : "0");
-            int m2 = Integer.parseInt(room2.onlineCount != null ? room2.onlineCount : "0");
+            int m1 = Integer.parseInt(room1.onlineCount != null && !room1.onlineCount.equals("0") ? room1.onlineCount : "0");
+            int m2 = Integer.parseInt(room2.onlineCount != null && !room2.onlineCount.equals("0") ? room2.onlineCount : "0");
             int result = 0;
             if (m1 > m2) {
                 result = -1;
@@ -209,6 +205,7 @@ public class ShowerListFragment extends BackHandledFragment {
             public void onError(Call call, Exception e, int id) {
                 handler.sendEmptyMessage(Constants.NetWorkError);
             }
+
             @Override
             public void onResponse(String response, int id) {
                 Message message = handler.obtainMessage();
@@ -219,15 +216,27 @@ public class ShowerListFragment extends BackHandledFragment {
         });
     }
 
-    private void getExtrance(int position, String other, String pathPrefix) {
-        if (rooms.get(position).liveType.equals(other)) {
-            onCallShowViewListner.onShowVideo(rooms.get(position), pathPrefix, rooms.get(position).screenType);
+    private void getExtrance(int position) {
+        if (rooms.get(position).screenType.equals(Constants.LANSPACE)) {
+            if (rooms.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)) {
+                onCallShowViewListner.onShowVideo(rooms.get(position), rooms.get(position).screenType);
+            } else {
+                Intent intent = new Intent();
+                intent.putExtra("room", rooms.get(position));
+                intent.setClass(getActivity(), ShowerInfoActivity.class);
+                startActivity(intent);
+            }
         } else {
-            Intent intent = new Intent();
-            intent.putExtra(Constants.ROOM_BUNDLE, rooms.get(position));
-            intent.setClass(getActivity(), ShowerInfoActivity.class);
-            startActivity(intent);
+            if (rooms.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE)) {
+                onCallShowViewListner.onShowVideo(rooms.get(position), rooms.get(position).screenType);
+            } else {
+                Intent intent = new Intent();
+                intent.putExtra("room", rooms.get(position));
+                intent.setClass(getActivity(), ShowerInfoActivity.class);
+                startActivity(intent);
+            }
         }
+
     }
 
     @Override
@@ -236,7 +245,7 @@ public class ShowerListFragment extends BackHandledFragment {
     }
 
     public interface OnCallShowViewListner {
-        void onShowVideo(Room room, String pathPrefix, String screenType);
+        void onShowVideo(Room room, String screenType);
     }
 
 }

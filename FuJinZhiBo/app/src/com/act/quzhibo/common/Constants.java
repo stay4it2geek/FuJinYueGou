@@ -15,7 +15,6 @@ public class Constants {
     public static final String COMMON_TAB_DETAIL ="common_tab_detail" ;
     public static final String CATAID = "cataId";
     public static final String CATATITLE = "catatitle";
-    public static final String ROOM_BUNDLE = "roomBundle";
     public static final String SQUARE_INTERES_TAB = "squareInterestTab";
     public static final String SQUARE_INTERES_POST= "squareInterestPost";
 
@@ -23,6 +22,8 @@ public class Constants {
     public static final String POST_ID = "post_id";
     public static final String SHOWER_INFO = "showerInfo";
     public static final String POST_USER_WHO_SEE_ME = "POST_USER_WHO_SEE_ME";
+
+    public static final String SHOWER_LIST_COUNT = "shower_list_count";
 
     public static final String NEAR_USER = "near_user";
     public static final String AUDIO = "AUDIO";
@@ -46,4 +47,9 @@ public class Constants {
     public static final String VIDEO_DOWNLOAD ="videoDownLoad";
     public static final String DOWN_LOAD_TYPE ="downLoadType";
     public static final int NO_DOWNING_DATA = 21;
+    public static final String LANSPACE = "1";
+    public static final String LANSPACE_IS_LIVE = "1";
+    public static final String PORTAIL_IS_LIVE = "2";
+
+    public static final int NO_DATA = 22;
 }

@@ -35,13 +35,10 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
     private void initView() {
         videoView = (VideoView) findViewById(R.id.video);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        // 设置viewPager的适配器
         fragments = new ArrayList<>();
         room = (Room) getIntent().getSerializableExtra("room");
         Bundle bundle = new Bundle();
         bundle.putSerializable("room", room);
-        bundle.putString("pathPrefix", getIntent().getStringExtra("pathPrefix"));
-        bundle.putString("type", "portrait");
         chatFragment = new ChatFragment();
         chatFragment.setArguments(bundle);
         noViewFragment = new NoViewFragment();

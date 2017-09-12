@@ -12,11 +12,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyFocusShowers;
 import com.act.quzhibo.entity.MyFocusShowers;
+import com.act.quzhibo.okhttp.OkHttpUtils;
+import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.bumptech.glide.Glide;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import okhttp3.Call;
 
 public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -26,9 +34,20 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
     private String pathPrefix;
     private ArrayList<MyFocusShowers> datas;//数据
 
+
+    private OnDeleteListener mListener = null;
+
+    public interface OnDeleteListener {
+        void onDelete(int position);
+    }
+
+    public void setDelteListener(OnDeleteListener listener) {
+        mListener = listener;
+    }
+
     //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position, MyFocusShowers myFocusShowers);
     }
 
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -38,9 +57,8 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     //适配器初始化
-    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShowers> datas, String pathPrefix, int screenWidth, String cataTitle) {
+    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShowers> datas,int screenWidth, String cataTitle) {
         mContext = context;
-        this.pathPrefix = pathPrefix;
         this.cataTitle = cataTitle;
         this.datas = datas;
         this.screenWidth = screenWidth;
@@ -54,25 +72,33 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             ((MyViewHolder) holder).showerAvtar.setAdjustViewBounds(true);
             ((MyViewHolder) holder).showerAvtar.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).gender.equals("0")) {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.women).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
             } else {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.man).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
 
             }
         }
-
         ((MyViewHolder) holder).nickName.setText(datas.get(position).nickname);
-        ((MyViewHolder) holder).showerAvtar.setOnClickListener(new View.OnClickListener() {
+        ((MyViewHolder) holder).showerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.onItemClick(v, position);
+                mOnItemClickListener.onItemClick(v, position, datas.get(position));
             }
         });
+        ((MyViewHolder) holder).showerLayout.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                mListener.onDelete(position);
+                return false;
+            }
+        });
+
 
     }
 
@@ -84,6 +110,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
 
     //自定义ViewHolder，用于加载图片
     class MyViewHolder extends RecyclerView.ViewHolder {
+        private RelativeLayout showerLayout;
         private TextView isRelax;
         private ImageView showerAvtar;
         private TextView nickName;
@@ -91,6 +118,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public MyViewHolder(View view) {
             super(view);
+            showerLayout = (RelativeLayout) view.findViewById(R.id.showerLayout);
             showerAvtar = (ImageView) view.findViewById(R.id.showerAvtar);
             nickName = (TextView) view.findViewById(R.id.nickName);
             onlineCount = (TextView) view.findViewById(R.id.onlineCount);

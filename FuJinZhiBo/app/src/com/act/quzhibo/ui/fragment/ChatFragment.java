@@ -13,20 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MemberAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.event.DownloadStatusChanged;
+import com.act.quzhibo.download.event.FocusChangeEvent;
 import com.act.quzhibo.entity.Member;
 import com.act.quzhibo.entity.MyFocusShowers;
 import com.act.quzhibo.entity.NearPerson;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.ShowerInfoActivity;
-import com.act.quzhibo.ui.activity.ShowerInfoActivityLandscape;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
@@ -34,6 +34,9 @@ import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.HorizontialListView;
 import com.bumptech.glide.Glide;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private Room room;
     View view;
     int onlineCount = 0;
+    private String photoUrl;
 
     @Nullable
     @Override
@@ -68,75 +72,35 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private void initView() {
         mRandom = new Random();
         CircleImageView zhuboAvatar = (CircleImageView) view.findViewById(R.id.zhuboAvatar);
-        final String photoUrl = getArguments().getString("pathPrefix") + room.poster_path_1280;
-        if (room.roomGender.equals("0")) {
-            Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
+        if (!room.portrait_path_1280.contains("http://ures.kktv8.com/kktv")) {
+            photoUrl = "http://ures.kktv8.com/kktv" + room.portrait_path_1280;
         } else {
-            Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
+            photoUrl = room.portrait_path_1280;
         }
+        Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
+        int startValue = mRandom.nextInt(10);
+        if (startValue == 0) {
+            startValue = 2;
+        }
+        int value = mRandom.nextInt(30);
+        final String finalValue = startValue + "" + value * 2560;
         zhuboAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra(Constants.ROOM_BUNDLE, room);
-                intent.putExtra("pathPrefix",getArguments().getString("pathPrefix") + room.poster_path_1280);
-                if (getArguments().getString("type").equals("landscape")) {
-                    intent.setClass(getActivity(), ShowerInfoActivityLandscape.class);
-                } else {
-                    intent.setClass(getActivity(), ShowerInfoActivity.class);
-                }
+                intent.putExtra("room", room);
+                intent.putExtra("FromChatFragment", true);
+                intent.putExtra("photoUrl", photoUrl);
+                intent.setClass(getActivity(), ShowerInfoActivity.class);
                 startActivity(intent);
             }
 
         });
 
 
-        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
-        query.addWhereEqualTo("userId", room.userId);
-        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
-        query.findObjects(new FindListener<MyFocusShowers>() {
-            @Override
-            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
-                if (e == null) {
-                    if (myFocusShowers.size() >= 1) {
-                        ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
-                    } else {
-                        if (!((TextView) view.findViewById(R.id.focus_top)).getText().equals("已关注")) {
-                            view.findViewById(R.id.focus_top).setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(final View view) {
-                                    MyFocusShowers myFocusShowers = new MyFocusShowers();
-                                    myFocusShowers.rootUser = BmobUser.getCurrentUser(RootUser.class);
-                                    myFocusShowers.poster_path_400 = photoUrl;
-                                    myFocusShowers.nickname = room.nickname;
-                                    myFocusShowers.roomId = room.roomId;
-                                    myFocusShowers.userId = room.userId;
-                                    myFocusShowers.gender = room.gender;
-                                    myFocusShowers.pathPrefix = room.gender;
-                                    myFocusShowers.city = room.city;
-                                    myFocusShowers.save(new SaveListener<String>() {
-                                        @Override
-                                        public void done(String objectId, BmobException e) {
-                                            if (e == null) {
-                                                ToastUtil.showToast(getActivity(), "关注成功");
-                                                ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
-                                            } else {
-                                                ToastUtil.showToast(getActivity(), "关注失败");
-                                            }
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    }
-                } else {
-                    ToastUtil.showToast(getContext(), "请求异常");
-                }
-            }
-        });
         onlineCount = Integer.parseInt(room.onlineCount);
         ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
-        ((TextView) view.findViewById(R.id.starValue)).setText("⭐：" + room.starLevel);
+        ((TextView) view.findViewById(R.id.starValue)).setText("⭐：" + finalValue);
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);
@@ -155,7 +119,11 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 view.findViewById(R.id.retrylayout).setVisibility(View.VISIBLE);
             }
         }, 5000);
+
+        EventBus.getDefault().register(this);
+
     }
+
 
     private void queryData() {
         final BmobQuery<NearPerson> query = new BmobQuery<>();
@@ -201,7 +169,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             int max = views.size();
             final ArrayList<Member> members = CommonUtil.jsonToArrayList(views.get(new Random().nextInt(max - 1)), Member.class);
             horizontialListView = (HorizontialListView) view.findViewById(R.id.list);
-            mAdapter = new MemberAdapter(getActivity(), members);
+            mAdapter = new MemberAdapter(getContext().getApplicationContext(), members);
             mAdapter.setDatas(members);
             horizontialListView.setAdapter(mAdapter);
             horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -270,6 +238,58 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         countHandler.postDelayed(countRunnable, 10000);
         heartHandler.postDelayed(heartRunnable, 1000);
+        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+        query.addWhereEqualTo("userId", room.userId);
+        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+        query.findObjects(new FindListener<MyFocusShowers>() {
+            @Override
+            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                if (e == null) {
+                    if (myFocusShowers.size() >= 1) {
+                        ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+                    }
+                } else {
+                    ToastUtil.showToast(getContext(), "请求异常");
+                }
+            }
+        });
+
+
+        view.findViewById(R.id.focus_top).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                    if (!(((TextView) view.findViewById(R.id.focus_top)).getText().toString().trim()).equals("已关注")) {
+                        MyFocusShowers myFocusShowers = new MyFocusShowers();
+                        myFocusShowers.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                        myFocusShowers.portrait_path_1280 = photoUrl;
+                        myFocusShowers.nickname = room.nickname;
+                        myFocusShowers.roomId = room.roomId;
+                        myFocusShowers.userId = room.userId;
+                        myFocusShowers.gender = room.gender;
+                        myFocusShowers.liveStream = room.liveStream;
+                        myFocusShowers.city = room.city;
+                        myFocusShowers.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String objectId, BmobException e) {
+                                if (e == null) {
+                                    ToastUtil.showToast(getActivity(), "关注成功");
+                                    ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+                                } else {
+                                    ToastUtil.showToast(getActivity(), "关注失败");
+                                }
+                            }
+                        });
+                    }else{
+                        ToastUtil.showToast(getActivity(), "您已经关注");
+
+                    }
+                } else {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+            }
+        });
+
 
     }
 
@@ -280,6 +300,12 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEventMainThread(FocusChangeEvent event) {
+        ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
     }
 
     @Override
@@ -324,5 +350,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     public interface OnFinishVideoCallbak {
         void finishVideo();
     }
+
 
 }

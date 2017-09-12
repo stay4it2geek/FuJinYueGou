@@ -24,6 +24,7 @@ public class LoadNetView extends LinearLayout {
     private Button reloadbutton;
     private Button buybutton;
     private LinearLayout loadlayout;
+    private TextView  noDataText;
     private LinearLayout reloadlayout;
     private LinearLayout video_album_layout;
     public LoadNetView(Context context, AttributeSet attrs) {
@@ -38,8 +39,10 @@ public class LoadNetView extends LinearLayout {
         buybutton = (Button) findViewById(R.id.buybutton);
         photoalbum_layout = (LinearLayout) findViewById(R.id.photoalbum_layout);
         noDownloadingDataText= (TextView) findViewById(R.id.noDownloadingDataText);
+        noDataText= (TextView) findViewById(R.id.noDataText);
         loadlayout = (LinearLayout) findViewById(R.id.loadlayout);
         vipNulllayout = (LinearLayout) findViewById(R.id.VipNulllayout);
+        video_album_layout = (LinearLayout) findViewById(R.id.video_album_layout);
 
     }
 
@@ -70,6 +73,9 @@ public class LoadNetView extends LinearLayout {
         }else if(loadType == Constants.NO_DOWNING_DATA){
             loadlayout.setVisibility(View.GONE);
             noDownloadingDataText.setVisibility(View.VISIBLE);
+        }else if(loadType == Constants.NO_DATA){
+            loadlayout.setVisibility(View.GONE);
+            noDataText.setVisibility(View.VISIBLE);
         }
     }
 

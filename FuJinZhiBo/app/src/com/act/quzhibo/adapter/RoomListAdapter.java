@@ -1,6 +1,7 @@
 package com.act.quzhibo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.Room;
 import com.bumptech.glide.Glide;
 
@@ -55,28 +57,35 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            Log.e("datas.get(position).",datas.get(position).userId);
             if (!TextUtils.equals("手机达人", cataTitle)) {
                 ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
-                if (datas.get(position).liveType.equals("1")) {
-                    ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
-                    ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
-                    ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+                if (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)) {
+                    if (Integer.parseInt(datas.get(position).onlineCount) > 1) {
+                        ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
+                        ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
+                        ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+                    }
                 } else {
-                    ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
-                    ((MyViewHolder) holder).isRelax.setText("休息中");
-                    ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
+                    if (Integer.parseInt(datas.get(position).onlineCount) < 1) {
+                        ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
+                        ((MyViewHolder) holder).isRelax.setText("休息中");
+                        ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
+                    }
                 }
             } else {
                 ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
-                if (datas.get(position).liveType.equals("2")) {
-                    ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
-                    ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
-                    ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+                if (datas.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE)) {
+                    if (Integer.parseInt(datas.get(position).onlineCount) > 1) {
+                        ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
+                        ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
+                        ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+                    }
                 } else {
-                    ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
-                    ((MyViewHolder) holder).isRelax.setText("休息中");
-                    ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
+                    if (Integer.parseInt(datas.get(position).onlineCount) < 1) {
+                        ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
+                        ((MyViewHolder) holder).isRelax.setText("休息中");
+                        ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
+                    }
                 }
             }
 

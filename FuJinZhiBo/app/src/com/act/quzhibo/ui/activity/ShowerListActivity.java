@@ -48,7 +48,7 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
         for (PlateCatagory plateCatagory : plates.plateList) {
             if (plateCatagory.getTitleName().contains("VR") || plateCatagory.getTitleName().contains("游戏") ||
                     plateCatagory.getTitleName().contains("交友") || plateCatagory.getTitleName().contains("非遗")) {
-               continue;
+                continue;
             } else {
                 tabTitles.add(plateCatagory.getTitleName());
                 tabTitleIds.add(plateCatagory.getTitleId());
@@ -61,8 +61,8 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
             }
 
         }
-        tabTitles.add(2,"秘播");
-        mFragments.add(2,new MiBoFragement());
+        tabTitles.add(2, "秘播");
+        mFragments.add(2, new MiBoFragement());
         View decorView = getWindow().getDecorView();
         ViewPager pager = ViewFindUtils.find(decorView, R.id.viewpager);
         mAdapter = new MyPagerAdapter(getSupportFragmentManager(), tabTitles.toArray(new String[tabTitles.size()]));
@@ -88,22 +88,15 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
 
 
     @Override
-    public void onShowVideo(Room room, String pathPrefix, String screenType) {
-        if (screenType.equals("2")) {
-            Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("room", room);
-            bundle.putString("pathPrefix", pathPrefix);
-            intent.putExtras(bundle);
-            startActivity(intent);
+    public void onShowVideo(Room room,String screenType) {
+        Intent intent;
+        if (!screenType.equals(Constants.LANSPACE)) {
+            intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
         } else {
-            Intent intent = new Intent(ShowerListActivity.this, VideoPlayerActivityLanscape.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("room", room);
-            bundle.putString("pathPrefix", pathPrefix);
-            intent.putExtras(bundle);
-            startActivity(intent);
+            intent = new Intent(ShowerListActivity.this, VideoPlayerActivityLanscape.class);
         }
+        intent.putExtra("room", room);
+        startActivity(intent);
     }
 
     @Override
@@ -111,9 +104,9 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
         if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    FragmentDialog.newInstance(false, "客官再看一会儿呗", "",  "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
+                    FragmentDialog.newInstance(false, "客官再看一会儿呗", "", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
                         @Override
-                        public void onPositiveClick(Dialog dialog,boolean needDelete) {
+                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                             dialog.dismiss();
                         }
 

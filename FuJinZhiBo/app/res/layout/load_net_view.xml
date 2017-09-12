@@ -202,4 +202,15 @@
         android:gravity="center"
         android:text="您没有正在保存的任何图片或视频哦"
         android:textSize="16sp" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/noDataText"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="没有数据哦"
+        android:textSize="16sp" />
 </FrameLayout>

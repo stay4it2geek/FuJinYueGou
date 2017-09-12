@@ -12,6 +12,7 @@ import android.widget.VideoView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ViewPlayerPageAdapter;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.ui.fragment.ChatFragment;
 import com.act.quzhibo.ui.fragment.NoViewFragment;
@@ -36,13 +37,10 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
     private void initView() {
         videoView = (VideoView) findViewById(R.id.video);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        // 设置viewPager的适配器
         fragments = new ArrayList<>();
         room = (Room) getIntent().getSerializableExtra("room");
         Bundle bundle = new Bundle();
         bundle.putSerializable("room", room);
-        bundle.putString("pathPrefix", getIntent().getStringExtra("pathPrefix"));
-        bundle.putString("type", "landscape");
         chatFragment = new ChatFragment();
         chatFragment.setArguments(bundle);
         noViewFragment = new NoViewFragment();
