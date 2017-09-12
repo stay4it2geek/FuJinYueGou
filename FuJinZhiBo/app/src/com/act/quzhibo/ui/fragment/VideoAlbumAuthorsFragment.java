@@ -121,7 +121,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
         List<BmobQuery<MediaAuthor>> queries = new ArrayList<>();
-        query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             // 只查询小于最后一个item发表时间的数据
             Date date;
@@ -138,6 +137,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
         query3.addWhereEqualTo("type", VIDEO_ALBUM);
         queries.add(query3);
         query.and(queries);
+        query.setLimit(10);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MediaAuthor>() {
             @Override
@@ -149,7 +149,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                             medias.clear();
                         }
                         medias.addAll(list);
-                        lastTime = list.get(list.size() - 1).getCreatedAt();
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
                         Message message = new Message();
                         message.obj = medias;
                         message.what = actionType;

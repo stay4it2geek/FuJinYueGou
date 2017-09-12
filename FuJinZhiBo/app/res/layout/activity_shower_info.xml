@@ -135,34 +135,46 @@
             android:layout_gravity="bottom"
             android:orientation="horizontal">
 
-            <RadioButton
+            <TextView
                 android:id="@+id/talk"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/background_card"
-                android:button="@null"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_common_selector"
                 android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
                 android:text="私聊TA"
                 android:textColor="#000"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <View
                 android:layout_width="0.5dp"
                 android:layout_height="match_parent"
                 android:background="#aaa" />
 
-            <RadioButton
+            <TextView
                 android:id="@+id/focus"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/background_card"
-                android:button="@null"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_common_selector"
                 android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
                 android:text="关注TA"
                 android:textColor="#000"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

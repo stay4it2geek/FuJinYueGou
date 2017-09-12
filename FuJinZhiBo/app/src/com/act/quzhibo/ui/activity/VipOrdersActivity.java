@@ -77,8 +77,17 @@ public class VipOrdersActivity extends FragmentActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        queryData(Constants.LOADMORE);
-                        recyclerView.loadMoreComplete();
+                        if (orderSize> 0) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    queryData(Constants.LOADMORE);
+                                    recyclerView.loadMoreComplete();
+                                }
+                            }, 1000);
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
                     }
                 }, 1000);
             }
@@ -174,17 +183,19 @@ public class VipOrdersActivity extends FragmentActivity {
         }
     }
 
+    private int orderSize;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             ArrayList<VipOrders> vipOrderses = (ArrayList<VipOrders>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                int orderSize = 0;
                 if (vipOrderses != null) {
                     orderSize = vipOrderses.size();
+                }else {
+                    orderSize=0;
                 }
-                if (msg.what == Constants.REFRESH) {
+                if (msg. what == Constants.REFRESH) {
                     vipOrderSList.clear();
                 }
                 if (orderSize > 0) {

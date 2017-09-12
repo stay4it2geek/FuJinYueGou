@@ -1,15 +1,22 @@
 package com.act.quzhibo.ui.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.MyFocusShowers;
+import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.entity.Toggle;
+import com.act.quzhibo.entity.VipOrders;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.okhttp.OkHttpUtils;
@@ -27,6 +34,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SaveListener;
 import okhttp3.Call;
 
 
@@ -35,10 +49,52 @@ public class ShowerInfoActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shower_info);
-        Room room = (Room) getIntent().getSerializableExtra(Constants.ROOM_BUNDLE);
+        final Room room = (Room) getIntent().getSerializableExtra(Constants.ROOM_BUNDLE);
         if (room != null) {
             getData(room.userId);
         }
+        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+        query.addWhereEqualTo("userId", room.userId);
+        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+        query.findObjects(new FindListener<MyFocusShowers>() {
+            @Override
+            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                if (e == null) {
+                    if (myFocusShowers.size() >= 1) {
+                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                    } else {
+                        if (!((TextView) findViewById(R.id.focus)).getText().equals("已关注")) {
+                            findViewById(R.id.focus).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    MyFocusShowers myFocusShowers = new MyFocusShowers();
+                                    myFocusShowers.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                                    myFocusShowers.poster_path_400 = getIntent().getStringExtra("pathPrefix");
+                                    myFocusShowers.nickname = room.nickname;
+                                    myFocusShowers.roomId = room.roomId;
+                                    myFocusShowers.userId = room.userId;
+                                    myFocusShowers.gender = room.gender;
+                                    myFocusShowers.city = room.city;
+                                    myFocusShowers.save(new SaveListener<String>() {
+                                        @Override
+                                        public void done(String objectId, BmobException e) {
+                                            if (e == null) {
+                                                ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                ToastUtil.showToast(ShowerInfoActivity.this, "关注成功");
+                                            } else {
+                                                ToastUtil.showToast(ShowerInfoActivity.this, "关注失败");
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    ToastUtil.showToast(ShowerInfoActivity.this, "请求异常");
+                }
+            }
+        });
     }
 
 
@@ -82,7 +138,7 @@ public class ShowerInfoActivity extends Activity {
                             ((TextView) findViewById(R.id.introduce)).setText(introduce != null ? introduce : "");
                         }
                         ((TextView) findViewById(R.id.nickName)).setText(nickname != null ? nickname : "");
-                        if (liveType.equals("1")) {
+                        if (liveType.equals("0")) {
                             findViewById(R.id.isShowing).setVisibility(View.VISIBLE);
                             ((TextView) findViewById(R.id.isShowing)).setText("直播中");
                         }

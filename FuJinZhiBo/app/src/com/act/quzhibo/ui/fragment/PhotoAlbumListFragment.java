@@ -134,7 +134,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                         if (actionType == Constants.REFRESH) {
                             medias.clear();
                         }
-                        lastTime = list.get(list.size() - 1).getCreatedAt();
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
                         medias.addAll(list);
                         Message message = new Message();
                         message.obj = medias;

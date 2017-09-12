@@ -121,7 +121,7 @@ public class CommonSeeFragment extends BackHandledFragment {
                             commonPersons.clear();
                         }
                         commonPersons.addAll(list);
-                        lastTime = list.get(list.size() - 1).getCreatedAt();
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
                         Message message = new Message();
                         message.obj = commonPersons;
                         message.what = actionType;

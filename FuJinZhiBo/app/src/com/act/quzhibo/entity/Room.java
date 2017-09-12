@@ -48,4 +48,5 @@ public class Room extends BmobObject implements Serializable{
     public String poster_path_400;
     public String poster_path_756;
     public String poster_path_300;
+
 }

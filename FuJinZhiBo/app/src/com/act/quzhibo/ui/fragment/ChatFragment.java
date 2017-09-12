@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,8 +21,10 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MemberAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.Member;
+import com.act.quzhibo.entity.MyFocusShowers;
 import com.act.quzhibo.entity.NearPerson;
 import com.act.quzhibo.entity.Room;
+import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.act.quzhibo.ui.activity.ShowerInfoActivityLandscape;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
@@ -37,8 +40,10 @@ import java.util.List;
 import java.util.Random;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 import tyrantgit.widget.HeartLayout;
 
 public class ChatFragment extends Fragment implements View.OnClickListener {
@@ -48,7 +53,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private Random mRandom;
     private Room room;
     View view;
-    int onlineCount=0;
+    int onlineCount = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,7 +68,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private void initView() {
         mRandom = new Random();
         CircleImageView zhuboAvatar = (CircleImageView) view.findViewById(R.id.zhuboAvatar);
-        String photoUrl = getArguments().getString("pathPrefix") + room.poster_path_1280;
+        final String photoUrl = getArguments().getString("pathPrefix") + room.poster_path_1280;
         if (room.roomGender.equals("0")) {
             Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
         } else {
@@ -71,27 +77,66 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         zhuboAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.putExtra(Constants.ROOM_BUNDLE, room);
-                    if (getArguments().getString("type").equals("landscape")) {
-                        intent.setClass(getActivity(), ShowerInfoActivityLandscape.class);
-                    } else {
-                        intent.setClass(getActivity(), ShowerInfoActivity.class);
-                    }
-                    startActivity(intent);
+                Intent intent = new Intent();
+                intent.putExtra(Constants.ROOM_BUNDLE, room);
+                intent.putExtra("pathPrefix",getArguments().getString("pathPrefix") + room.poster_path_1280);
+                if (getArguments().getString("type").equals("landscape")) {
+                    intent.setClass(getActivity(), ShowerInfoActivityLandscape.class);
+                } else {
+                    intent.setClass(getActivity(), ShowerInfoActivity.class);
                 }
+                startActivity(intent);
+            }
 
         });
 
-        int startValue = mRandom.nextInt(10);
-        if (startValue == 0) {
-            startValue = 2;
-        }
-        int value = mRandom.nextInt(100);
-        String finalValue = startValue + "" + value * 2560;
-        onlineCount=Integer.parseInt(room.onlineCount);
+
+        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+        query.addWhereEqualTo("userId", room.userId);
+        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+        query.findObjects(new FindListener<MyFocusShowers>() {
+            @Override
+            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                if (e == null) {
+                    if (myFocusShowers.size() >= 1) {
+                        ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+                    } else {
+                        if (!((TextView) view.findViewById(R.id.focus_top)).getText().equals("已关注")) {
+                            view.findViewById(R.id.focus_top).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(final View view) {
+                                    MyFocusShowers myFocusShowers = new MyFocusShowers();
+                                    myFocusShowers.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                                    myFocusShowers.poster_path_400 = photoUrl;
+                                    myFocusShowers.nickname = room.nickname;
+                                    myFocusShowers.roomId = room.roomId;
+                                    myFocusShowers.userId = room.userId;
+                                    myFocusShowers.gender = room.gender;
+                                    myFocusShowers.pathPrefix = room.gender;
+                                    myFocusShowers.city = room.city;
+                                    myFocusShowers.save(new SaveListener<String>() {
+                                        @Override
+                                        public void done(String objectId, BmobException e) {
+                                            if (e == null) {
+                                                ToastUtil.showToast(getActivity(), "关注成功");
+                                                ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+                                            } else {
+                                                ToastUtil.showToast(getActivity(), "关注失败");
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    ToastUtil.showToast(getContext(), "请求异常");
+                }
+            }
+        });
+        onlineCount = Integer.parseInt(room.onlineCount);
         ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
-        ((TextView) view.findViewById(R.id.starValue)).setText("⭐：" + finalValue);
+        ((TextView) view.findViewById(R.id.starValue)).setText("⭐：" + room.starLevel);
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);
@@ -169,9 +214,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     };
 
     private void showDialog(Member m) {
-        FragmentDialog.newInstance(false,m.nickname,"", "确定", "取消", -1, true, new FragmentDialog.OnClickBottomListener() {
+        FragmentDialog.newInstance(false, m.nickname, "", "确定", "取消", -1, true, new FragmentDialog.OnClickBottomListener() {
             @Override
-            public void onPositiveClick(Dialog dialog,boolean needDelete) {
+            public void onPositiveClick(Dialog dialog, boolean needDelete) {
                 dialog.dismiss();
             }
 
@@ -204,13 +249,14 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void run() {
                     Random random = new Random();
-                    onlineCount=onlineCount+random.nextInt(4);
-                    ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount+ "人");
+                    onlineCount = onlineCount + random.nextInt(4);
+                    ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
                 }
             });
             countHandler.postDelayed(this, 10000);
         }
     };
+
     @Override
     public void onPause() {
         super.onPause();

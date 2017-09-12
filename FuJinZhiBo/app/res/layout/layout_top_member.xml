@@ -83,7 +83,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/guanzhu"
+                android:id="@+id/focus_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -95,7 +95,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="5dp"
-                android:text="关注"
+                android:text="关注TA"
                 android:textColor="#000"
                 android:textSize="13sp" />
         </LinearLayout>

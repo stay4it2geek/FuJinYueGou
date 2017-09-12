@@ -107,13 +107,14 @@
             android:name="com.act.quzhibo.ui.activity.ShowerInfoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" />
+        />
+        <!--    android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" -->
         <activity
             android:name="com.act.quzhibo.ui.activity.ShowerInfoActivityLandscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" />
+           />
         <activity
             android:name="com.act.quzhibo.ui.activity.TabMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

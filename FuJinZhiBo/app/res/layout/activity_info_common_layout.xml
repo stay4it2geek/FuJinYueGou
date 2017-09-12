@@ -407,23 +407,31 @@
     <LinearLayout
         android:id="@+id/focuslayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:background="#eee"
-        android:layout_marginBottom="-5dp"
+        android:layout_marginBottom="-4dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/talk"
-            android:layout_margin="0.5dp"
+            android:layout_margin="4dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/background_card"
             android:button="@null"
-            android:gravity="center"
             android:text="私聊TA"
-            android:textSize="16sp" />
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button_common_selector"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textColor="#000"
+            android:textSize="18sp" />
 
 
 
@@ -432,12 +440,20 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_margin="0.5dp"
-            android:background="@drawable/background_card"
+            android:layout_margin="4dp"
             android:button="@null"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button_common_selector"
             android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
             android:text="关注TA"
-            android:textSize="16sp" />
+            android:textColor="#000"
+            android:textSize="18sp" />
     </LinearLayout>
 
 

@@ -121,7 +121,6 @@ public class MyPostListActivity extends AppCompatActivity {
         BmobQuery<MyPost> query = new BmobQuery<>();
         BmobQuery<MyPost> query2 = new BmobQuery<>();
         List<BmobQuery<MyPost>> queries = new ArrayList<>();
-        query2.setLimit(limit);
         if (actionType == Constants.LOADMORE) {
             // 只查询小于最后一个item发表时间的数据
             Date date;
@@ -139,6 +138,7 @@ public class MyPostListActivity extends AppCompatActivity {
         query3.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
         queries.add(query3);
         query.and(queries);
+        query.setLimit(10);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MyPost>() {
             @Override
@@ -149,7 +149,7 @@ public class MyPostListActivity extends AppCompatActivity {
                             // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
                             myPosts.clear();
                         }
-                        lastTime = list.get(list.size() - 1).getCreatedAt();
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
                         myPosts.addAll(list);
                         Message message = new Message();
                         message.obj = myPosts;

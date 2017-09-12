@@ -41,7 +41,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
-        if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
+        if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("false")) {
             view.findViewById(R.id.vip_policy).setVisibility(View.GONE);
             view.findViewById(R.id.myVideo_download_layout).setVisibility(View.GONE);
             view.findViewById(R.id.myIMG_download_layout).setVisibility(View.GONE);

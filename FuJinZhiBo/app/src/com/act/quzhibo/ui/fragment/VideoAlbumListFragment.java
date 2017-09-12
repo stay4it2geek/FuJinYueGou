@@ -131,8 +131,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
         List<BmobQuery<MediaInfo>> queries = new ArrayList<>();
-
-        query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -151,6 +149,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
         query4.addWhereEqualTo("type", Constants.VIDEO_ALBUM);
         queries.add(query4);
         query.and(queries);
+        query.setLimit(10);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MediaInfo>() {
             @Override
@@ -160,7 +159,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                         if (actionType == Constants.REFRESH) {
                             medias.clear();
                         }
-                        lastTime = list.get(list.size() - 1).getCreatedAt();
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
                         medias.addAll(list);
                         Message message = new Message();
                         message.obj = medias;
