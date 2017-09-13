@@ -25,10 +25,10 @@ import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
 
-public class NearAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity activity;
     private List<NearPerson> datas;//数据
-    public NearAdapter(Activity context, List<NearPerson> datas) {
+    public NearPersonAdapter(Activity context, List<NearPerson> datas) {
         activity = context;
         this.datas = datas;
     }

@@ -138,7 +138,6 @@ public class VipOrdersActivity extends FragmentActivity {
         List<BmobQuery<VipOrders>> queries = new ArrayList<>();
         query2.setLimit(limit);
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -150,7 +149,6 @@ public class VipOrdersActivity extends FragmentActivity {
             }
         }
         BmobQuery<VipOrders> query3 = new BmobQuery<>();
-
         query3.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
         queries.add(query3);
         query.and(queries);
@@ -191,6 +189,7 @@ public class VipOrdersActivity extends FragmentActivity {
             ArrayList<VipOrders> vipOrderses = (ArrayList<VipOrders>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
                 if (vipOrderses != null) {
+                    vipOrderSList.addAll(vipOrderses);
                     orderSize = vipOrderses.size();
                 }else {
                     orderSize=0;
@@ -198,17 +197,14 @@ public class VipOrdersActivity extends FragmentActivity {
                 if (msg. what == Constants.REFRESH) {
                     vipOrderSList.clear();
                 }
-                if (orderSize > 0) {
-                    vipOrderSList.addAll(vipOrderses);
+
                     if (orderAdapter == null) {
                         orderAdapter = new OrderAdapter(VipOrdersActivity.this, vipOrderSList);
                         recyclerView.setAdapter(orderAdapter);
                     } else {
                         orderAdapter.notifyDataSetChanged();
                     }
-                } else {
-                    recyclerView.setNoMore(true);
-                }
+
                 if (orderAdapter != null) {
                     orderAdapter.setListener(new OrderAdapter.OnRecyclerViewListener() {
                         @Override
@@ -219,6 +215,11 @@ public class VipOrdersActivity extends FragmentActivity {
                                     if (e == null) {
                                         vipOrderSList.remove(position);
                                         orderAdapter.notifyDataSetChanged();
+                                        if (vipOrderSList.size() == 0) {
+                                            loadNetView.setVisibility(View.VISIBLE);
+                                            loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                                            return;
+                                        }
                                     }
                                 }
                             });
@@ -226,6 +227,11 @@ public class VipOrdersActivity extends FragmentActivity {
                     });
                 }
                 loadNetView.setVisibility(View.GONE);
+                if (vipOrderSList.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                    return;
+                }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);

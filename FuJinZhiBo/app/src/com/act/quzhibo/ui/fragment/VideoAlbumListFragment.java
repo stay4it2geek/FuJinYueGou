@@ -160,9 +160,8 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                             medias.clear();
                         }
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        medias.addAll(list);
                         Message message = new Message();
-                        message.obj = medias;
+                        message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
                     } else {
@@ -184,42 +183,44 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             if (msg.what != Constants.NetWorkError) {
                 if (mediaInfos != null) {
                     mediasSize = mediaInfos.size();
-                }else{
-                    mediasSize=0;
+                    medias.addAll(mediaInfos);
+                } else {
+                    mediasSize = 0;
                 }
-//                    Collections.sort(medias, new ComparatorValues());
-                if (mediasSize > 0) {
-                    if (mInfoListAdapter == null) {
-                        mInfoListAdapter = new VideoRecyclerViewAdapter(mediaInfos, getActivity());
-                        recyclerView.setAdapter(mInfoListAdapter);
-                        recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-                            @Override
-                            public void onChildViewAttachedToWindow(View view) {
+
+                if (mInfoListAdapter == null) {
+                    mInfoListAdapter = new VideoRecyclerViewAdapter(medias, getActivity());
+                    recyclerView.setAdapter(mInfoListAdapter);
+                    recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+                        @Override
+                        public void onChildViewAttachedToWindow(View view) {
+                        }
+
+                        @Override
+                        public void onChildViewDetachedFromWindow(View view) {
+                            IjkVideoView ijkVideoView = (IjkVideoView) view.findViewById(R.id.video_player);
+                            if (ijkVideoView != null && !ijkVideoView.isFullScreen()) {
+                                ijkVideoView.release();
                             }
+                        }
+                    });
 
-                            @Override
-                            public void onChildViewDetachedFromWindow(View view) {
-                                IjkVideoView ijkVideoView = (IjkVideoView) view.findViewById(R.id.video_player);
-                                if (ijkVideoView != null && !ijkVideoView.isFullScreen()) {
-                                    ijkVideoView.release();
-                                }
-                            }
-                        });
-
-
-                    } else {
-                        mInfoListAdapter.notifyDataSetChanged();
-                    }
-
-                    loadNetView.setVisibility(View.GONE);
 
                 } else {
-                    recyclerView.setNoMore(true);
+                    mInfoListAdapter.notifyDataSetChanged();
+                }
+
+                loadNetView.setVisibility(View.GONE);
+                if (medias.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
                 }
             } else {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.RELOAD);
             }
+
         }
     };
 }

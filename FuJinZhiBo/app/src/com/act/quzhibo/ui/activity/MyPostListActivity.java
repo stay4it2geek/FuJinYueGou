@@ -41,8 +41,9 @@ public class MyPostListActivity extends AppCompatActivity {
     private LoadNetView loadNetView;
     private int limit = 10; // 每页的数据是10条
     private String lastTime = "";
-    private ArrayList<MyPost> myPosts = new ArrayList<>();
+    private ArrayList<MyPost> myPostList = new ArrayList<>();
     private int myPostsSize;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,18 +148,17 @@ public class MyPostListActivity extends AppCompatActivity {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
                             // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
-                            myPosts.clear();
+                            myPostList.clear();
                         }
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        myPosts.addAll(list);
                         Message message = new Message();
-                        message.obj = myPosts;
+                        message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
                     } else {
                         handler.sendEmptyMessage(Constants.NO_MORE);
                     }
-                }else {
+                } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
@@ -189,40 +189,40 @@ public class MyPostListActivity extends AppCompatActivity {
             super.handleMessage(msg);
             ArrayList<MyPost> myPosts = (ArrayList<MyPost>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what != Constants.NO_MORE) {
-                    if (myPosts != null) {
-                        myPostsSize = myPosts.size();
-                    }else {
-                        myPostsSize=0;
-                    }
-                    Collections.sort(myPosts, new ComparatorValues());
-                    if (myPostsSize > 0) {
-                        if (myPostListAdapter == null) {
-                            myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPosts);
-                            recyclerView.setAdapter(myPostListAdapter);
-                            myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
-                                @Override
-                                public void onItemClick(MyPost post) {
-                                    Intent intent = new Intent();
-                                    intent.putExtra(Constants.POST_ID, post);
-                                    intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
-                                    startActivity(intent);
-                                }
-                            });
-                        } else {
-                            myPostListAdapter.notifyDataSetChanged();
-                        }
-                    }
 
-                    loadNetView.setVisibility(View.GONE);
+                if (myPosts != null) {
+                    myPostList.addAll(myPosts);
+                    myPostsSize = myPosts.size();
                 } else {
+                    myPostsSize = 0;
+                }
+                Collections.sort(myPosts, new ComparatorValues());
+                    if (myPostListAdapter == null) {
+                        myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
+                        recyclerView.setAdapter(myPostListAdapter);
+                        myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
+                            @Override
+                            public void onItemClick(MyPost post) {
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.POST, post);
+                                intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        myPostListAdapter.notifyDataSetChanged();
+                    }
+                loadNetView.setVisibility(View.GONE);
+                if (myPosts.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.RELOAD);
+                    loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                    return;
                 }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
+
         }
     };
 

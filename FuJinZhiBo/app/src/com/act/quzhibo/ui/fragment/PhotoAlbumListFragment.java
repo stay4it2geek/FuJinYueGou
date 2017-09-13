@@ -1,12 +1,9 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -135,9 +132,8 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                             medias.clear();
                         }
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        medias.addAll(list);
                         Message message = new Message();
-                        message.obj = medias;
+                        message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
                     } else {
@@ -158,28 +154,26 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
             if (msg.what != Constants.NetWorkError) {
                 if (mediaInfos != null) {
                     mediasSize = mediaInfos.size();
-                } else{
+                    medias.addAll(mediaInfos);
+                } else {
                     mediasSize = 0;
                 }
-                if (mediasSize > 0) {
-                    if (mInfoListAdapter == null) {
-                        mInfoListAdapter = new PhotoAlbumListAdapter(getActivity(), mediaInfos);
-                        recycleview.setAdapter(mInfoListAdapter);
-
-                    } else {
-                        mInfoListAdapter.notifyDataSetChanged();
-                    }
-
-                    loadNetView.setVisibility(View.GONE);
+                if (mInfoListAdapter == null) {
+                    mInfoListAdapter = new PhotoAlbumListAdapter(getActivity(), mediaInfos);
+                    recycleview.setAdapter(mInfoListAdapter);
                 } else {
-                    recycleview.setNoMore(true);
-
+                    mInfoListAdapter.notifyDataSetChanged();
+                }
+                loadNetView.setVisibility(View.GONE);
+                if (medias.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
                 }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
-
         }
     };
 

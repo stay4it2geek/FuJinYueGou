@@ -391,8 +391,6 @@
                         android:layout_toRightOf="@+id/isCanDate_tv"
                         android:gravity="left|center_vertical"
                         android:text="一起吃饭、聊天、泡茶、做爱做的事" />
-
-
                 </RelativeLayout>
 
             </LinearLayout>
@@ -433,8 +431,6 @@
             android:textColor="#000"
             android:textSize="18sp" />
 
-
-
         <RadioButton
             android:id="@+id/focus"
             android:layout_width="0dp"
@@ -455,7 +451,6 @@
             android:textColor="#000"
             android:textSize="18sp" />
     </LinearLayout>
-
 
     <com.act.quzhibo.view.LoadNetView
         android:id="@+id/loadview"

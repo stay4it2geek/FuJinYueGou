@@ -38,7 +38,7 @@ import static com.act.quzhibo.common.Constants.VIDEO_ALBUM;
 
 public class VideoAlbumAuthorsFragment extends BackHandledFragment {
 
-    private  View view;
+    private View view;
     private XRecyclerView recyclerView;
     private MediaAuthorListAdapter mediaAuthorListAdapter;
     private LoadNetView loadNetView;
@@ -116,7 +116,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     }
 
 
-
     private void queryData(final int actionType) {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
@@ -148,16 +147,15 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                             // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
                             medias.clear();
                         }
-                        medias.addAll(list);
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                         Message message = new Message();
-                        message.obj = medias;
+                        message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
                     } else {
                         handler.sendEmptyMessage(Constants.NO_MORE);
                     }
-                }else{
+                } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
@@ -191,37 +189,41 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                 if (msg.what != Constants.NO_MORE) {
                     if (mediaAuthor != null) {
                         mediasSize = mediaAuthor.size();
-                    }else{
-                        mediasSize=0;
+                        medias.addAll(mediaAuthor);
+                    } else {
+                        mediasSize = 0;
                     }
                     Collections.sort(medias, new ComparatorValues());
-                    if (mediasSize > 0) {
-                        if (mediaAuthorListAdapter == null) {
-                            mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthor);
-                            recyclerView.setAdapter(mediaAuthorListAdapter);
-                            mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
-                                @Override
-                                public void onItemClick(MediaAuthor mediaAuthor) {
-                                    VideoAlbumListFragment videoAlbumListFragment = new VideoAlbumListFragment();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putSerializable("author", mediaAuthor);
-                                    videoAlbumListFragment.setArguments(bundle);
-                                    CommonUtil.switchFragment(videoAlbumListFragment, R.id._videolayoutContainer, getActivity());
-                                }
-                            });
-                        } else {
-                            mediaAuthorListAdapter.notifyDataSetChanged();
-                        }
-                    }
 
-                    loadNetView.setVisibility(View.GONE);
-                } else {
-                    recyclerView.setNoMore(true);
+                    if (mediaAuthorListAdapter == null) {
+                        mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthor);
+                        recyclerView.setAdapter(mediaAuthorListAdapter);
+                        mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
+                            @Override
+                            public void onItemClick(MediaAuthor mediaAuthor) {
+                                VideoAlbumListFragment videoAlbumListFragment = new VideoAlbumListFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("author", mediaAuthor);
+                                videoAlbumListFragment.setArguments(bundle);
+                                CommonUtil.switchFragment(videoAlbumListFragment, R.id._videolayoutContainer, getActivity());
+                            }
+                        });
+                    } else {
+                        mediaAuthorListAdapter.notifyDataSetChanged();
+                    }
+                }
+                loadNetView.setVisibility(View.GONE);
+                if (medias.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
                 }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
+
             }
+
         }
     };
 

@@ -43,7 +43,7 @@ public class InterestPostListFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_interest_post, null, false);
-        loadNetView= (LoadNetView) view.findViewById(R.id.loadview);
+        loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         pid = ((SquareActivity) getActivity()).getPid();
         recyclerView = (XRecyclerView) view.findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);
@@ -97,8 +97,8 @@ public class InterestPostListFragment extends BackHandledFragment {
         view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collections.sort(posts,new  ComparatorValues());
-                if(adapter!=null){
+                Collections.sort(posts, new ComparatorValues());
+                if (adapter != null) {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -125,11 +125,10 @@ public class InterestPostListFragment extends BackHandledFragment {
     }
 
     public static final class ComparatorValues implements Comparator<InterestPost> {
-
         @Override
         public int compare(InterestPost post1, InterestPost post2) {
             long m1 = Long.parseLong(post1.ctime != null ? post1.ctime : "0l");
-            long m2= Long.parseLong(post2.ctime != null ? post2.ctime : "0l");
+            long m2 = Long.parseLong(post2.ctime != null ? post2.ctime : "0l");
             int result = 0;
             if (m1 > m2) {
                 result = -1;
@@ -139,7 +138,6 @@ public class InterestPostListFragment extends BackHandledFragment {
             }
             return result;
         }
-
     }
 
     private String ctime;
@@ -147,45 +145,43 @@ public class InterestPostListFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             if (msg.what != Constants.NetWorkError) {
                 final InterestPostListInfoParentData data =
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoParentData.class);
-                if (data.result!= null) {
-                    interestPostSize = data.result.size();
-                }else {
-                    interestPostSize=0;
-                }
-                if (interestPostSize> 0) {
-                    ctime = data.result.get(interestPostSize - 1).ctime;
-                }
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
                 }
-                if (data.result!= null && interestPostSize > 0) {
+                if (data.result != null) {
+                    interestPostSize = data.result.size();
                     posts.addAll(data.result);
-                    if (adapter == null) {
-                        adapter = new InterestPostListAdapter(getActivity(), posts,1);
-                        adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(InterestPost post) {
-                                PostDetailFragment fragment = new PostDetailFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable(Constants.POST_ID, post);
-                                fragment.setArguments(bundle);
-                                CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
-                            }
-                        });
-                        recyclerView.setAdapter(adapter);
-                    } else {
-                        adapter.notifyDataSetChanged();
-                    }
-
                 } else {
-                    recyclerView.setNoMore(true);
+                    interestPostSize = 0;
                 }
-
+                if (interestPostSize > 0) {
+                    ctime = data.result.get(interestPostSize - 1).ctime;
+                }
+                if (adapter == null) {
+                    adapter = new InterestPostListAdapter(getActivity(), posts, 1);
+                    adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(InterestPost post) {
+                            PostDetailFragment fragment = new PostDetailFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(Constants.POST, post);
+                            fragment.setArguments(bundle);
+                            CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
+                        }
+                    });
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    adapter.notifyDataSetChanged();
+                }
                 loadNetView.setVisibility(View.GONE);
+                if (posts.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
+                }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
@@ -195,7 +191,7 @@ public class InterestPostListFragment extends BackHandledFragment {
 
 
     public void getData(String pid, String htime, final int what) {
-        if(pid==null){
+        if (pid == null) {
             handler.sendEmptyMessage(Constants.NetWorkError);
             return;
         }

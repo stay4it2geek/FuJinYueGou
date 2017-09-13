@@ -42,7 +42,7 @@ public class PostDetailActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         if (getIntent() != null) {
-            post = (InterestPost) getIntent().getSerializableExtra(Constants.POST_ID);
+            post = (InterestPost) getIntent().getSerializableExtra(Constants.POST);
         }
         getData();
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
@@ -66,7 +66,7 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        OkHttpUtils.get().url(CommonUtil.getToggle(this, Constants.POST_ID).getToggleObject().replace(Constants.POST_ID, post.postId)).build().execute(new StringCallback() {
+        OkHttpUtils.get().url(CommonUtil.getToggle(this, Constants.POST).getToggleObject().replace(Constants.POST, post.postId)).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 handler.sendEmptyMessage(Constants.NetWorkError);

@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.NearAdapter;
+import com.act.quzhibo.adapter.NearPersonAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.NearPerson;
 import com.act.quzhibo.view.LoadNetView;
@@ -30,15 +30,9 @@ import cn.bmob.v3.listener.FindListener;
 
 
 public class NearFragment extends BackHandledFragment {
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
 
     private LoadNetView loadNetView;
-
     View view;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,13 +55,12 @@ public class NearFragment extends BackHandledFragment {
                     }
                 }, 1000);
             }
-
             @Override
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (seeMeSize > 0) {
+                        if (nearPersonSize > 0) {
                             new Handler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
@@ -109,28 +102,14 @@ public class NearFragment extends BackHandledFragment {
         });
         return view;
     }
-
     private XRecyclerView recyclerView;
-    NearAdapter nearSeeAdapter;
-    private int limit = 10; // 每页的数据是10条
-    ArrayList<NearPerson> nearPersonArrayList = new ArrayList<>();
+    NearPersonAdapter nearPersonAdapter;
+    ArrayList<NearPerson> nearArrayList = new ArrayList<>();
     public String lastTime;
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void queryData(final int actionType) {
-
-
         final BmobQuery<NearPerson> query = new BmobQuery<>();
-        query.setLimit(limit);
-        // 如果是加载更多
-
-        // 如果是加载更多
+        query.setLimit(10);
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -140,7 +119,6 @@ public class NearFragment extends BackHandledFragment {
             }
             query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
         }
-
         query.order("-updatedAt");
         query.findObjects(new FindListener<NearPerson>() {
 
@@ -149,12 +127,11 @@ public class NearFragment extends BackHandledFragment {
                 if (e == null) {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
-                            nearPersonArrayList.clear();
+                            nearArrayList.clear();
                         }
-                        nearPersonArrayList.addAll(list);
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                         Message message = new Message();
-                        message.obj = nearPersonArrayList;
+                        message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
                     } else {
@@ -165,38 +142,43 @@ public class NearFragment extends BackHandledFragment {
         });
     }
 
-    private int seeMeSize;
+    private int nearPersonSize;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<NearPerson> nearPersonArrayList = (ArrayList<NearPerson>) msg.obj;
+            ArrayList<NearPerson> nearPersonList = (ArrayList<NearPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what != Constants.NO_MORE) {
-                    if (nearPersonArrayList != null) {
-                        seeMeSize = nearPersonArrayList.size();
-                    }else{
-                        seeMeSize=0;
-                    }
-                    if (seeMeSize > 0) {
-                        if (nearSeeAdapter == null) {
-                            nearSeeAdapter = new NearAdapter(getActivity(), nearPersonArrayList);
-                            recyclerView.setAdapter(nearSeeAdapter);
-                        } else {
-                            nearSeeAdapter.notifyDataSetChanged();
-                        }
-                    }
-                    recyclerView.setHasFixedSize(true);
+                if (nearArrayList != null) {
+                    nearPersonSize = nearPersonList.size();
+                    nearArrayList.addAll(nearPersonList);
                 } else {
-                    recyclerView.setNoMore(true);
+                    nearPersonSize = 0;
                 }
-
-
+                if (nearPersonSize > 0) {
+                    if (nearPersonAdapter == null) {
+                        nearPersonAdapter = new NearPersonAdapter(getActivity(), nearArrayList);
+                        recyclerView.setAdapter(nearPersonAdapter);
+                    } else {
+                        nearPersonAdapter.notifyDataSetChanged();
+                    }
+                }
                 loadNetView.setVisibility(View.GONE);
+                if (nearArrayList.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
+                }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+
 }

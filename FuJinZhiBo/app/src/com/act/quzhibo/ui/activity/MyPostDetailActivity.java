@@ -35,7 +35,7 @@ public class MyPostDetailActivity extends AppCompatActivity {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setVisibility(View.VISIBLE);
         if (getIntent() != null) {
-            post = (MyPost) getIntent().getSerializableExtra(Constants.POST_ID);
+            post = (MyPost) getIntent().getSerializableExtra(Constants.POST);
             if (post == null) {
                 return;
             }

@@ -19,7 +19,7 @@ public class Constants {
     public static final String SQUARE_INTERES_POST= "squareInterestPost";
 
     public static final String TEXT_IMG_POST = "text_img_post";
-    public static final String POST_ID = "post_id";
+    public static final String POST = "post_id";
     public static final String SHOWER_INFO = "showerInfo";
     public static final String POST_USER_WHO_SEE_ME = "POST_USER_WHO_SEE_ME";
 

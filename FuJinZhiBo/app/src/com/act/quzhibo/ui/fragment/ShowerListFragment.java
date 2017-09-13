@@ -163,7 +163,7 @@ public class ShowerListFragment extends BackHandledFragment {
                         adapter.setOnItemClickListener(new RoomListAdapter.OnRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                getExtrance(position);
+                                onCallShowViewListner.onShowVideo(rooms.get(position), rooms.get(position).screenType);
                             }
                         });
                         recyclerView.setAdapter(adapter);
@@ -216,28 +216,6 @@ public class ShowerListFragment extends BackHandledFragment {
         });
     }
 
-    private void getExtrance(int position) {
-        if (rooms.get(position).screenType.equals(Constants.LANSPACE)) {
-            if (rooms.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)) {
-                onCallShowViewListner.onShowVideo(rooms.get(position), rooms.get(position).screenType);
-            } else {
-                Intent intent = new Intent();
-                intent.putExtra("room", rooms.get(position));
-                intent.setClass(getActivity(), ShowerInfoActivity.class);
-                startActivity(intent);
-            }
-        } else {
-            if (rooms.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE)) {
-                onCallShowViewListner.onShowVideo(rooms.get(position), rooms.get(position).screenType);
-            } else {
-                Intent intent = new Intent();
-                intent.putExtra("room", rooms.get(position));
-                intent.setClass(getActivity(), ShowerInfoActivity.class);
-                startActivity(intent);
-            }
-        }
-
-    }
 
     @Override
     public boolean onBackPressed() {

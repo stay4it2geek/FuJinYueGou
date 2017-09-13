@@ -165,14 +165,7 @@ public class MyFocusShowerActivity extends AppCompatActivity {
                 display.getSize(size);
                 int screenWidth = size.x;
 
-
                 if (myFocusShowerListAdapter == null) {
-                    if (myFocusShowerses.size() == 0) {
-                        loadNetView.setVisibility(View.VISIBLE);
-                        loadNetView.setlayoutVisily(Constants.NO_DATA);
-                        return;
-                    }
-
                     myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses, screenWidth, "");
                     recyclerView.setAdapter(myFocusShowerListAdapter);
                     myFocusShowerListAdapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
@@ -229,8 +222,6 @@ public class MyFocusShowerActivity extends AppCompatActivity {
 
                         }
                     });
-
-
                     if (myFocusShowerListAdapter != null) {
                         myFocusShowerListAdapter.setDelteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
                             @Override
@@ -254,13 +245,9 @@ public class MyFocusShowerActivity extends AppCompatActivity {
                     }
                 } else {
                     myFocusShowerListAdapter.notifyDataSetChanged();
-                    if (myFocusShowerses.size() == 0) {
-                        loadNetView.setVisibility(View.VISIBLE);
-                        loadNetView.setlayoutVisily(Constants.NO_DATA);
-                        return;
-                    }
                 }
                 loadNetView.setVisibility(View.GONE);
+
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.NO_DATA);

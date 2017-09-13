@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -21,7 +20,6 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -176,7 +174,7 @@ public class CommonPersonPostListActivity extends FragmentActivity {
 
                                 } else if (rootUser != null && rootUser.vipConis > 1000) {
                                     Intent intent = new Intent();
-                                    intent.putExtra(Constants.POST_ID, post);
+                                    intent.putExtra(Constants.POST, post);
                                     intent.setClass(CommonPersonPostListActivity.this, PostDetailActivity.class);
                                     startActivity(intent);
                                 }

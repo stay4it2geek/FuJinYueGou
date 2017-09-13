@@ -37,14 +37,12 @@ import static com.act.quzhibo.common.Constants.PHOTO_ALBUM;
 
 
 public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
-
     View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.media_authors_fragment, null);
-
         recyclerView = (XRecyclerView) view.findViewById(R.id.media_author_rv);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
@@ -110,7 +108,6 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
         return false;
     }
 
-
     private XRecyclerView recyclerView;
     private MediaAuthorListAdapter mediaAuthorListAdapter;
     private LoadNetView loadNetView;
@@ -119,12 +116,6 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
     private ArrayList<MediaAuthor> medias = new ArrayList<>();
     private int mediasSize;
 
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void queryData(final int actionType) {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
@@ -156,16 +147,15 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                             // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
                             medias.clear();
                         }
-                        medias.addAll(list);
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                         Message message = new Message();
-                        message.obj = medias;
+                        message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
                     } else {
                         handler.sendEmptyMessage(Constants.NO_MORE);
                     }
-                }else {
+                } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
@@ -187,7 +177,6 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
             }
             return result;
         }
-
     }
 
     Handler handler = new Handler() {
@@ -196,42 +185,36 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
             super.handleMessage(msg);
             ArrayList<MediaAuthor> mediaAuthor = (ArrayList<MediaAuthor>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what != Constants.NO_MORE) {
-                    if (mediaAuthor != null) {
-                        mediasSize = mediaAuthor.size();
-                    }else{
-                        mediasSize=0;
-                    }
-                    Collections.sort(medias, new ComparatorValues());
-                    if (mediasSize > 0) {
-                        if (mediaAuthorListAdapter == null) {
-                            mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthor);
-                            recyclerView.setAdapter(mediaAuthorListAdapter);
-                            mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
-                                @Override
-                                public void onItemClick(MediaAuthor mediaAuthor) {
-                                    PhotoAlbumListFragment photoAlbumListFragment=new PhotoAlbumListFragment();
-                                    Bundle bundle=new Bundle();
-                                    bundle.putSerializable("author",mediaAuthor);
-                                    photoAlbumListFragment.setArguments(bundle);
-                            CommonUtil.switchFragment(photoAlbumListFragment,R.id.layoutContainer,getActivity());
-                                }
-                            });
-                        } else {
-                            mediaAuthorListAdapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    loadNetView.setVisibility(View.GONE);
+                if (mediaAuthor != null) {
+                    mediasSize = mediaAuthor.size();
+                    medias.addAll(mediaAuthor);
                 } else {
-                    loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.RELOAD);
+                    mediasSize = 0;
                 }
+                Collections.sort(medias, new ComparatorValues());
+                if (mediasSize > 0) {
+                    if (mediaAuthorListAdapter == null) {
+                        mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), medias);
+                        recyclerView.setAdapter(mediaAuthorListAdapter);
+                        mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
+                            @Override
+                            public void onItemClick(MediaAuthor mediaAuthor) {
+                                PhotoAlbumListFragment photoAlbumListFragment = new PhotoAlbumListFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("author", mediaAuthor);
+                                photoAlbumListFragment.setArguments(bundle);
+                                CommonUtil.switchFragment(photoAlbumListFragment, R.id.layoutContainer, getActivity());
+                            }
+                        });
+                    } else {
+                        mediaAuthorListAdapter.notifyDataSetChanged();
+                    }
+                }
+                loadNetView.setVisibility(View.GONE);
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };
-
 }

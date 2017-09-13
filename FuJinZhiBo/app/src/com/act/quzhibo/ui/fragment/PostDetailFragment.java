@@ -44,7 +44,7 @@ public class PostDetailFragment extends BackHandledFragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
         if (getArguments() != null) {
-            post = (InterestPost) getArguments().getSerializable(Constants.POST_ID);
+            post = (InterestPost) getArguments().getSerializable(Constants.POST);
         }
         getData();
         view.setOnTouchListener(new View.OnTouchListener() {
@@ -66,7 +66,7 @@ public class PostDetailFragment extends BackHandledFragment {
     }
 
     private void getData() {
-        OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.POST_ID).getToggleObject().replace(Constants.POST_ID, post.postId)).build().execute(new StringCallback() {
+        OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.POST).getToggleObject().replace(Constants.POST, post.postId)).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
                 handler.sendEmptyMessage(Constants.NetWorkError);
