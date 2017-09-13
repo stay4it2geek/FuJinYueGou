@@ -42,6 +42,7 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         chatFragment = new ChatFragment();
         chatFragment.setArguments(bundle);
         noViewFragment = new NoViewFragment();
+        noViewFragment.setArguments(bundle);
         fragments.add(chatFragment);
         fragments.add(noViewFragment);
         final ProgressBar bar = (ProgressBar) findViewById(R.id.bar);
@@ -68,7 +69,6 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         viewPager.setCurrentItem(0);
     }
 
-
     @Override
     public void finishVideo() {
         videoView.stopPlayback();
@@ -93,4 +93,5 @@ public class VideoPlayerActivity extends FragmentActivity implements ChatFragmen
         videoView.stopPlayback();
         finish();
     }
+
 }

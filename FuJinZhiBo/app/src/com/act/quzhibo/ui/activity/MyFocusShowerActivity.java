@@ -198,7 +198,7 @@ public class MyFocusShowerActivity extends AppCompatActivity {
                                         Intent intent;
                                         if (room.screenType.equals(Constants.LANSPACE)) {
                                             if (room.liveType.equals(Constants.LANSPACE_IS_LIVE)) {
-                                                intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivityLanscape.class);
+                                                intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
                                             } else {
                                                 intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
                                                 ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");

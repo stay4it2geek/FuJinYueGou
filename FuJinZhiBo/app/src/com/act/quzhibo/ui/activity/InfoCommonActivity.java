@@ -118,6 +118,12 @@ public class InfoCommonActivity extends AppCompatActivity {
         } else if (post.user.vipLevel.equals("3")) {
             ((TextView) findViewById(R.id.level)).setText("超级VIP");
         }
+
+        if (post.user.vipLevel.equals("1")) {
+            ((TextView) findViewById(R.id.isCanDate)).setText("见面一起做爱做的事");
+        } else  {
+            ((TextView) findViewById(R.id.isCanDate)).setText("只在软件里聊天就好");
+        }
         ((TextView) findViewById(R.id.disPurpose)).setText(post.user.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(post.user.disMariState);
         ((TextView) findViewById(R.id.nickName)).setText(post.user.nick);

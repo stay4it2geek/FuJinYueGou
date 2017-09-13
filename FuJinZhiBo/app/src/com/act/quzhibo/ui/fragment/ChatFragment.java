@@ -13,12 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MemberAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.download.event.FocusChangeEvent;
 import com.act.quzhibo.entity.Member;
 import com.act.quzhibo.entity.MyFocusShowers;
@@ -33,6 +33,7 @@ import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.HorizontialListView;
+import com.act.quzhibo.view.UPMarqueeView;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,17 +48,25 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import tyrantgit.widget.HeartLayout;
 
 public class ChatFragment extends Fragment implements View.OnClickListener {
-    HorizontialListView listview;
+    private HorizontialListView listview;
     private MemberAdapter mAdapter;
     private HeartLayout heartLayout;
     private Random mRandom;
     private Room room;
-    View view;
-    int onlineCount = 0;
+    private View view;
+    private int onlineCount = 0;
     private String photoUrl;
+    private ArrayList<NearPerson> nearPersonArrayList = new ArrayList<>();
+    public String lastTime;
+    private UPMarqueeView upview1;
+    List<String> data = new ArrayList<>();
+    List<View> views = new ArrayList<>();
+    private LinearLayout moreView;
+    private MyFocusShowers myFocusShower;
 
     @Nullable
     @Override
@@ -66,10 +75,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_chat, null, false);
         room = (Room) getArguments().getSerializable("room");
         initView();
+
+
         return view;
     }
 
     private void initView() {
+
         mRandom = new Random();
         CircleImageView zhuboAvatar = (CircleImageView) view.findViewById(R.id.zhuboAvatar);
         if (!room.portrait_path_1280.contains("http://ures.kktv8.com/kktv")) {
@@ -78,12 +90,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             photoUrl = room.portrait_path_1280;
         }
         Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
-        int startValue = mRandom.nextInt(10);
-        if (startValue == 0) {
-            startValue = 2;
-        }
-        int value = mRandom.nextInt(30);
-        final String finalValue = startValue + "" + value * 2560;
+
         zhuboAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,10 +104,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
         });
 
-
         onlineCount = Integer.parseInt(room.onlineCount);
         ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
-        ((TextView) view.findViewById(R.id.starValue)).setText("⭐：" + finalValue);
+        ((TextView) view.findViewById(R.id.starValue)).setText("星光值：" + (Integer.parseInt(room.roomId) - 10156345));
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);
@@ -111,24 +117,29 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.gift).setOnClickListener(this);
         view.findViewById(R.id.message).setOnClickListener(this);
         view.findViewById(R.id.addherat).setOnClickListener(this);
-        view.findViewById(R.id.retrylayout).setOnClickListener(this);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.findViewById(R.id.connetFaillayout).setVisibility(View.GONE);
-                view.findViewById(R.id.retrylayout).setVisibility(View.VISIBLE);
-            }
-        }, 5000);
 
         EventBus.getDefault().register(this);
-
+        handler.postDelayed(task, 2000);//延迟调用
+        upview1 = (UPMarqueeView) view.findViewById(R.id.marqueeView);
+        initdata();
+        setView();
+        upview1.setViews(views);
     }
 
+    Handler handler = new Handler();
+
+    private Runnable task = new Runnable() {
+        public void run() {
+            handler.postDelayed(this, 5 * 1000);
+            int countRandom = mRandom.nextInt(10);
+            onlineCount = Integer.parseInt(room.onlineCount) + countRandom;
+            ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
+        }
+    };
 
     private void queryData() {
         final BmobQuery<NearPerson> query = new BmobQuery<>();
         query.setLimit(20);
-        // 如果是加载更多
         query.order("-updatedAt");
         query.findObjects(new FindListener<NearPerson>() {
 
@@ -150,10 +161,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    ArrayList<NearPerson> nearPersonArrayList = new ArrayList<>();
-    public String lastTime;
-
-
     private HorizontialListView horizontialListView;
     Handler memberHandler = new Handler() {
         @Override
@@ -169,8 +176,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             int max = views.size();
             final ArrayList<Member> members = CommonUtil.jsonToArrayList(views.get(new Random().nextInt(max - 1)), Member.class);
             horizontialListView = (HorizontialListView) view.findViewById(R.id.list);
-            mAdapter = new MemberAdapter(getContext().getApplicationContext(), members);
-            mAdapter.setDatas(members);
+            mAdapter = new MemberAdapter(members, getContext().getApplicationContext());
             horizontialListView.setAdapter(mAdapter);
             horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -246,6 +252,8 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
                 if (e == null) {
                     if (myFocusShowers.size() >= 1) {
+                        myFocusShower = myFocusShowers.get(0);
+
                         ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
                     }
                 } else {
@@ -280,8 +288,27 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                                 }
                             }
                         });
-                    }else{
-                        ToastUtil.showToast(getActivity(), "您已经关注");
+                    } else {
+                        FragmentDialog.newInstance(false, "是否取消关注", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            @Override
+                            public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
+                                myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            ((TextView) view.findViewById(R.id.focus_top)).setText("关注TA");
+                                            ToastUtil.showToast(getContext(), "取消关注成功");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onNegtiveClick(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        });
 
                     }
                 } else {
@@ -319,19 +346,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     heartLayout.addHeart(randomColor());
                 }
             });
-        } else if (R.id.retrylayout == v.getId()) {
-            view.findViewById(R.id.connetFaillayout).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.retrylayout).setVisibility(View.GONE);
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    view.findViewById(R.id.connetFaillayout).setVisibility(View.GONE);
-                    view.findViewById(R.id.retrylayout).setVisibility(View.VISIBLE);
-                }
-            }, 5000);
-
-        } else {
+        } else if (R.id.send_message == v.getId() || R.id.message == v.getId() || R.id.gift == v.getId()) {
             ToastUtil.showToast(getActivity(), "消息加载异常，暂时无法操作该功能");
         }
     }
@@ -352,4 +367,41 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    private void setView() {
+        for (int i = 0; i < data.size(); i = i + 2) {
+            moreView = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_view, null);
+            TextView tv1 = (TextView) moreView.findViewById(R.id.message_fail);
+            final Handler handler = new Handler();
+            moreView.findViewById(R.id.retrylayout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            moreView.findViewById(R.id.connetFaillayout).setVisibility(View.VISIBLE);
+                            moreView.findViewById(R.id.retrylayout).setVisibility(View.GONE);
+
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    moreView.findViewById(R.id.connetFaillayout).setVisibility(View.GONE);
+                                    moreView.findViewById(R.id.retrylayout).setVisibility(View.VISIBLE);
+                                }
+                            }, 2000);
+                        }
+                    });
+
+                }
+            });
+            tv1.setText(data.get(i).toString());
+            views.add(moreView);
+        }
+    }
+
+
+    private void initdata() {
+        data = new ArrayList<>();
+        data.add("消息连接异常，正在重试连接");
+        data.add("消息连接异常，正在重试连接");
+    }
 }

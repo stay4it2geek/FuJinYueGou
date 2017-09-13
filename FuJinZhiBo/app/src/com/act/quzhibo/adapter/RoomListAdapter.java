@@ -1,10 +1,8 @@
 package com.act.quzhibo.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +23,8 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int screenWidth;
     private Context mContext;
     private String pathPrefix;
-    private ArrayList<Room> datas;//数据
+    private ArrayList<Room> datas;
 
-    //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
     }
@@ -38,7 +35,6 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mOnItemClickListener = listener;
     }
 
-    //适配器初始化
     public RoomListAdapter(Context context, ArrayList<Room> datas, String pathPrefix, int screenWidth, String cataTitle) {
         mContext = context;
         this.pathPrefix = pathPrefix;
@@ -59,34 +55,19 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof MyViewHolder) {
             if (!TextUtils.equals("手机达人", cataTitle)) {
                 ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
-                if (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)) {
-                    if (Integer.parseInt(datas.get(position).onlineCount) > 1) {
-                        ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
-                        ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
-                        ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
-                    }
-                } else {
-                    if (Integer.parseInt(datas.get(position).onlineCount) < 1) {
-                        ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
-                        ((MyViewHolder) holder).isRelax.setText("休息中");
-                        ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
-                    }
-                }
             } else {
                 ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
-                if (datas.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE)) {
-                    if (Integer.parseInt(datas.get(position).onlineCount) > 1) {
-                        ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
-                        ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
-                        ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
-                    }
-                } else {
-                    if (Integer.parseInt(datas.get(position).onlineCount) < 1) {
-                        ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
-                        ((MyViewHolder) holder).isRelax.setText("休息中");
-                        ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
-                    }
-                }
+            }
+
+            if (Integer.parseInt(datas.get(position).onlineCount) > 1 && datas.get(position).liveType != null && (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)
+                    || datas.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE))) {
+                ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
+                ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
+                ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+            } else {
+                ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
+                ((MyViewHolder) holder).isRelax.setText("休息中");
+                ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
             }
 
             ((MyViewHolder) holder).showerAvtar.setAdjustViewBounds(true);
@@ -111,11 +92,9 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return datas.size();//获取数据的个数
+        return datas.size();
     }
 
-
-    //自定义ViewHolder，用于加载图片
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView isRelax;
         private ImageView showerAvtar;

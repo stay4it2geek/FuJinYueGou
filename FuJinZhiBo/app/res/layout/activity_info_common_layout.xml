@@ -390,7 +390,7 @@
                         android:layout_marginRight="15dp"
                         android:layout_toRightOf="@+id/isCanDate_tv"
                         android:gravity="left|center_vertical"
-                        android:text="一起吃饭、聊天、泡茶、做爱做的事" />
+                        android:text="" />
                 </RelativeLayout>
 
             </LinearLayout>

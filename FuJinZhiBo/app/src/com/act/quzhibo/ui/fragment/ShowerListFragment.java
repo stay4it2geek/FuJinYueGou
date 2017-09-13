@@ -163,7 +163,7 @@ public class ShowerListFragment extends BackHandledFragment {
                         adapter.setOnItemClickListener(new RoomListAdapter.OnRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                onCallShowViewListner.onShowVideo(rooms.get(position), rooms.get(position).screenType);
+                                onCallShowViewListner.onShowVideo(rooms.get(position));
                             }
                         });
                         recyclerView.setAdapter(adapter);
@@ -223,7 +223,7 @@ public class ShowerListFragment extends BackHandledFragment {
     }
 
     public interface OnCallShowViewListner {
-        void onShowVideo(Room room, String screenType);
+        void onShowVideo(Room room);
     }
 
 }

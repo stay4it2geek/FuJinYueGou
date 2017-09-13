@@ -19,6 +19,7 @@ import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.MiBoFragement;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 import com.act.quzhibo.view.FragmentDialog;
 import com.flyco.tablayout.SlidingTabLayout;
@@ -88,14 +89,27 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
 
 
     @Override
-    public void onShowVideo(Room room,String screenType) {
+    public void onShowVideo(Room room) {
         Intent intent;
-        if (!screenType.equals(Constants.LANSPACE)) {
-            intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
+        if (room.screenType.equals(Constants.LANSPACE)) {
+            if (room.liveType.equals(Constants.LANSPACE_IS_LIVE)) {
+                intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
+            } else {
+                intent = new Intent(ShowerListActivity.this, ShowerInfoActivity.class);
+                intent.putExtra("FromShowListActivity",true);
+                ToastUtil.showToast(ShowerListActivity.this, "该主播未直播哦");
+            }
         } else {
-            intent = new Intent(ShowerListActivity.this, VideoPlayerActivityLanscape.class);
+            if (room.liveType.equals(Constants.PORTAIL_IS_LIVE)) {
+                intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
+            } else {
+                intent = new Intent(ShowerListActivity.this, ShowerInfoActivity.class);
+                intent.putExtra("FromShowListActivity",true);
+                ToastUtil.showToast(ShowerListActivity.this, "该主播未直播哦");
+            }
         }
-        intent.putExtra("room", room);
+
+        intent.putExtra("room",room);
         startActivity(intent);
     }
 

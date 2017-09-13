@@ -9,17 +9,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:padding="2dp"
         android:background="@drawable/background_card">
 
-
-            <ImageView
-                android:id="@+id/showerAvtar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <ImageView
+            android:id="@+id/showerAvtar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
 
@@ -28,7 +27,7 @@
             android:layout_alignLeft="@+id/showerAvtar"
             android:layout_alignRight="@+id/showerAvtar"
             android:layout_below="@+id/showerAvtar"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="3dp">
 
             <TextView
                 android:id="@+id/nickName"
@@ -37,7 +36,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:padding="2dp"
-                android:text="TextView"
+                android:text=""
                 android:textColor="#000"
                 android:textSize="11sp" />
 

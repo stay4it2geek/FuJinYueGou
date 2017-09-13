@@ -1,6 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.bumptech.glide.Glide;
@@ -53,12 +55,14 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 
 
 public class ShowerInfoActivity extends Activity {
     private Room room;
     private LoadNetView loadNetView;
+    MyFocusShowers myFocusShower;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,6 +101,7 @@ public class ShowerInfoActivity extends Activity {
             public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
                 if (e == null) {
                     if (myFocusShowers.size() >= 1) {
+                        myFocusShower = myFocusShowers.get(0);
                         ((TextView) findViewById(R.id.focus)).setText("已关注");
                     }
                 } else {
@@ -114,7 +119,7 @@ public class ShowerInfoActivity extends Activity {
 
                         if (getIntent().getBooleanExtra("FromChatFragment", false)) {
                             myFocusShowers.portrait_path_1280 = getIntent().getStringExtra("photoUrl");
-                        } else if (getIntent().getBooleanExtra("FromShowListFragment", false)) {
+                        } else if (getIntent().getBooleanExtra("FromShowListActivity", false)) {
                             myFocusShowers.portrait_path_1280 = "http://ures.kktv8.com/kktv" + room.portrait_path_1280;
 
                         } else {
@@ -140,7 +145,26 @@ public class ShowerInfoActivity extends Activity {
                             }
                         });
                     } else {
-                        ToastUtil.showToast(ShowerInfoActivity.this, "已关注");
+                        FragmentDialog.newInstance(false, "是否取消关注", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            @Override
+                            public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
+                                myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            ((TextView) findViewById(R.id.focus)).setText("关注TA");
+                                            ToastUtil.showToast(ShowerInfoActivity.this, "取消关注成功");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onNegtiveClick(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        });
                     }
                 } else {
                     startActivity(new Intent(ShowerInfoActivity.this, LoginActivity.class));
@@ -184,9 +208,9 @@ public class ShowerInfoActivity extends Activity {
                     JSONObject jsonObject1 = jsonObject.getJSONObject("getPhotoListResult");
                     if (msg.what != Constants.NetWorkError) {
                         ((TextView) findViewById(R.id.fansCount)).setText(fansCount != null ? "粉丝 " + fansCount : "");
-                        if (introduce != null && !introduce.equals("")) {
+                        if (!introduce.equals("") && introduce != null) {
                             findViewById(R.id.introduce).setVisibility(View.VISIBLE);
-                            ((TextView) findViewById(R.id.introduce)).setText(introduce != null ? introduce : "");
+                            ((TextView) findViewById(R.id.introduce)).setText(introduce);
                         }
                         ((TextView) findViewById(R.id.nickName)).setText(nickname != null ? nickname : "");
 
