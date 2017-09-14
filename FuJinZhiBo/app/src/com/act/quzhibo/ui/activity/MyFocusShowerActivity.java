@@ -1,11 +1,13 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +23,7 @@ import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -42,7 +45,7 @@ import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 
 
-public class MyFocusShowerActivity extends AppCompatActivity {
+public class MyFocusShowerActivity extends FragmentActivity {
 
     private XRecyclerView recyclerView;
     private MyFocusShowerListAdapter myFocusShowerListAdapter;
@@ -226,18 +229,29 @@ public class MyFocusShowerActivity extends AppCompatActivity {
                         myFocusShowerListAdapter.setDelteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
-                                myFocusShowerses.get(position).delete(myFocusShowerses.get(position).getObjectId(), new UpdateListener() {
+                                FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
-                                    public void done(BmobException e) {
-                                        if (e == null) {
-                                            myFocusShowerses.remove(position);
-                                            myFocusShowerListAdapter.notifyDataSetChanged();
-                                            if (myFocusShowerses.size() == 0) {
-                                                loadNetView.setVisibility(View.VISIBLE);
-                                                loadNetView.setlayoutVisily(Constants.NO_DATA);
-                                                return;
+                                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                                        myFocusShowerses.get(position).delete(myFocusShowerses.get(position).getObjectId(), new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    myFocusShowerses.remove(position);
+                                                    myFocusShowerListAdapter.notifyDataSetChanged();
+                                                    if (myFocusShowerses.size() == 0) {
+                                                        loadNetView.setVisibility(View.VISIBLE);
+                                                        loadNetView.setlayoutVisily(Constants.NO_DATA);
+                                                        return;
+                                                    }
+                                                }
                                             }
-                                        }
+                                        });
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onNegtiveClick(Dialog dialog) {
+                                        dialog.dismiss();
                                     }
                                 });
                             }
