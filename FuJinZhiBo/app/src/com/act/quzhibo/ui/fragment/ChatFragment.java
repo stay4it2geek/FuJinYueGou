@@ -106,7 +106,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
         onlineCount = Integer.parseInt(room.onlineCount);
         ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
-        ((TextView) view.findViewById(R.id.starValue)).setText("星光值：" + (Integer.parseInt(room.roomId) - 10156345));
+        ((TextView) view.findViewById(R.id.starValue)).setText("星光值：" + (Integer.parseInt(room.roomId) - 112015634));
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);
@@ -176,7 +176,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             int max = views.size();
             final ArrayList<Member> members = CommonUtil.jsonToArrayList(views.get(new Random().nextInt(max - 1)), Member.class);
             horizontialListView = (HorizontialListView) view.findViewById(R.id.list);
-            mAdapter = new MemberAdapter(members, getContext().getApplicationContext());
+            mAdapter = new MemberAdapter(members, getActivity());
             horizontialListView.setAdapter(mAdapter);
             horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -244,24 +244,23 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         countHandler.postDelayed(countRunnable, 10000);
         heartHandler.postDelayed(heartRunnable, 1000);
-        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
-        query.addWhereEqualTo("userId", room.userId);
-        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
-        query.findObjects(new FindListener<MyFocusShowers>() {
-            @Override
-            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
-                if (e == null) {
-                    if (myFocusShowers.size() >= 1) {
-                        myFocusShower = myFocusShowers.get(0);
-
-                        ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+            BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+            query.setLimit(1);
+            query.addWhereEqualTo("userId", room.userId);
+            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+            query.findObjects(new FindListener<MyFocusShowers>() {
+                @Override
+                public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                    if (e == null) {
+                        if (myFocusShowers.size() >= 1) {
+                            myFocusShower = myFocusShowers.get(0);
+                            ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+                        }
                     }
-                } else {
-                    ToastUtil.showToast(getContext(), "请求异常");
                 }
-            }
-        });
-
+            });
+        }
 
         view.findViewById(R.id.focus_top).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,6 +282,22 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                                 if (e == null) {
                                     ToastUtil.showToast(getActivity(), "关注成功");
                                     ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+                                    if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+                                        query.addWhereEqualTo("userId", room.userId);
+                                        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));                                        query.findObjects(new FindListener<MyFocusShowers>() {
+                                            @Override
+                                            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                                                if (e == null) {
+                                                    if (myFocusShowers.size() >= 1) {
+                                                        myFocusShower = myFocusShowers.get(0);
+                                                        ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+                                                    }
+                                                }
+
+                                            }
+                                        });
+                                    }
                                 } else {
                                     ToastUtil.showToast(getActivity(), "关注失败");
                                 }
@@ -292,24 +307,26 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                         FragmentDialog.newInstance(false, "是否取消关注", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
-                                myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
-                                    @Override
-                                    public void done(BmobException e) {
-                                        if (e == null) {
-                                            ((TextView) view.findViewById(R.id.focus_top)).setText("关注TA");
-                                            ToastUtil.showToast(getContext(), "取消关注成功");
+                                if (myFocusShower != null) {
+                                    myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                ((TextView) view.findViewById(R.id.focus_top)).setText("关注TA");
+                                                ToastUtil.showToast(getContext(), "取消关注成功");
+                                            }
+                                            dialog.dismiss();
                                         }
-                                        dialog.dismiss();
-                                    }
-                                });
+                                    });
+                                }
+
                             }
 
                             @Override
                             public void onNegtiveClick(Dialog dialog) {
                                 dialog.dismiss();
                             }
-                        });
-
+                        }).show(getActivity().getSupportFragmentManager(), "");
                     }
                 } else {
                     startActivity(new Intent(getActivity(), LoginActivity.class));

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -59,7 +60,7 @@ import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 
 
-public class ShowerInfoActivity extends Activity {
+public class ShowerInfoActivity extends FragmentActivity {
     private Room room;
     private LoadNetView loadNetView;
     MyFocusShowers myFocusShower;
@@ -93,22 +94,24 @@ public class ShowerInfoActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
-        query.addWhereEqualTo("userId", room.userId);
-        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
-        query.findObjects(new FindListener<MyFocusShowers>() {
-            @Override
-            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
-                if (e == null) {
-                    if (myFocusShowers.size() >= 1) {
-                        myFocusShower = myFocusShowers.get(0);
-                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+            BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+            query.setLimit(1);
+            query.addWhereEqualTo("userId", room.userId);
+            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+            query.findObjects(new FindListener<MyFocusShowers>() {
+                @Override
+                public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                    if (e == null) {
+                        if (myFocusShowers.size() >= 1) {
+                            myFocusShower = myFocusShowers.get(0);
+                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                        }
                     }
-                } else {
-                    ToastUtil.showToast(ShowerInfoActivity.this, "请求异常");
                 }
-            }
-        });
+            });
+        }
+
 
         findViewById(R.id.focus).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,12 +119,10 @@ public class ShowerInfoActivity extends Activity {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
                     if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
                         MyFocusShowers myFocusShowers = new MyFocusShowers();
-
                         if (getIntent().getBooleanExtra("FromChatFragment", false)) {
                             myFocusShowers.portrait_path_1280 = getIntent().getStringExtra("photoUrl");
                         } else if (getIntent().getBooleanExtra("FromShowListActivity", false)) {
                             myFocusShowers.portrait_path_1280 = "http://ures.kktv8.com/kktv" + room.portrait_path_1280;
-
                         } else {
                             myFocusShowers.portrait_path_1280 = room.portrait_path_1280;
                         }
@@ -138,6 +139,22 @@ public class ShowerInfoActivity extends Activity {
                                 if (e == null) {
                                     ((TextView) findViewById(R.id.focus)).setText("已关注");
                                     EventBus.getDefault().post(new FocusChangeEvent());
+                                    if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+                                        query.setLimit(1);
+                                        query.addWhereEqualTo("userId", room.userId);
+                                        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));                                        query.findObjects(new FindListener<MyFocusShowers>() {
+                                            @Override
+                                            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                                                if (e == null) {
+                                                    if (myFocusShowers.size() >= 1) {
+                                                        myFocusShower = myFocusShowers.get(0);
+                                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
                                     ToastUtil.showToast(ShowerInfoActivity.this, "关注成功");
                                 } else {
                                     ToastUtil.showToast(ShowerInfoActivity.this, "关注失败");
@@ -148,31 +165,31 @@ public class ShowerInfoActivity extends Activity {
                         FragmentDialog.newInstance(false, "是否取消关注", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
-                                myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
-                                    @Override
-                                    public void done(BmobException e) {
-                                        if (e == null) {
-                                            ((TextView) findViewById(R.id.focus)).setText("关注TA");
-                                            ToastUtil.showToast(ShowerInfoActivity.this, "取消关注成功");
+                                if (myFocusShower != null) {
+                                    myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                ((TextView) findViewById(R.id.focus)).setText("关注TA");
+                                                ToastUtil.showToast(ShowerInfoActivity.this, "取消关注成功");
+                                            }
+                                            dialog.dismiss();
                                         }
-                                        dialog.dismiss();
-                                    }
-                                });
+                                    });
+                                }
                             }
 
                             @Override
                             public void onNegtiveClick(Dialog dialog) {
                                 dialog.dismiss();
                             }
-                        });
+                        }).show(getSupportFragmentManager(), "");
                     }
                 } else {
                     startActivity(new Intent(ShowerInfoActivity.this, LoginActivity.class));
                 }
-
             }
         });
-
     }
 
     public void getData(String userId) {
