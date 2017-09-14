@@ -15,7 +15,7 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusShowerListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.MyFocusShowers;
+import com.act.quzhibo.entity.MyFocusShower;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
@@ -48,7 +48,7 @@ public class MyFocusShowerActivity extends AppCompatActivity {
     private MyFocusShowerListAdapter myFocusShowerListAdapter;
     private LoadNetView loadNetView;
     private String lastTime = "";
-    private ArrayList<MyFocusShowers> myFocusShowerses = new ArrayList<>();
+    private ArrayList<MyFocusShower> myFocusShowerses = new ArrayList<>();
     private int myfocusSize;
 
     @Override
@@ -110,7 +110,7 @@ public class MyFocusShowerActivity extends AppCompatActivity {
     }
 
     private void queryData(final int actionType) {
-        final BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+        final BmobQuery<MyFocusShower> query = new BmobQuery<>();
         query.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             // 只查询小于最后一个item发表时间的数据
@@ -124,9 +124,9 @@ public class MyFocusShowerActivity extends AppCompatActivity {
             query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
         }
         query.order("-updatedAt");
-        query.findObjects(new FindListener<MyFocusShowers>() {
+        query.findObjects(new FindListener<MyFocusShower>() {
             @Override
-            public void done(List<MyFocusShowers> list, BmobException e) {
+            public void done(List<MyFocusShower> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
@@ -150,7 +150,7 @@ public class MyFocusShowerActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<MyFocusShowers> showerses = (ArrayList<MyFocusShowers>) msg.obj;
+            ArrayList<MyFocusShower> showerses = (ArrayList<MyFocusShower>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
 
                 if (showerses != null) {
@@ -170,8 +170,8 @@ public class MyFocusShowerActivity extends AppCompatActivity {
                     recyclerView.setAdapter(myFocusShowerListAdapter);
                     myFocusShowerListAdapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
-                        public void onItemClick(View view, int position, final MyFocusShowers myFocusShowers) {
-                            String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", myFocusShowers.userId);
+                        public void onItemClick(View view, int position, final MyFocusShower myFocusShower) {
+                            String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", myFocusShower.userId);
                             OkHttpUtils.get().url(url).build().execute(new StringCallback() {
                                 @Override
                                 public void onError(Call call, Exception e, int id) {

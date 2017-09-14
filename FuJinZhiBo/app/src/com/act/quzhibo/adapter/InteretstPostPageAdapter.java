@@ -6,14 +6,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.act.quzhibo.entity.ProvinceAndCityEntify;
@@ -35,7 +30,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
-import com.act.quzhibo.ui.activity.InfoCommonActivity;
+import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.MyListView;
@@ -44,7 +39,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by asus-pc on 2017/6/11.
@@ -140,7 +134,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                     Intent intent = new Intent();
                     intent.putExtra(Constants.POST, post);
                     intent.putExtra("count", count);
-                    intent.setClass(activity, InfoCommonActivity.class);
+                    intent.setClass(activity, InfoInterestPersonActivity.class);
                     activity.startActivity(intent);
                     count++;
                 }

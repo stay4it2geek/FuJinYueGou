@@ -20,20 +20,22 @@ import android.widget.TextView;
 import com.act.quzhibo.entity.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CommonPerson;
+import com.act.quzhibo.entity.InterestPostPerson;
 import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.ui.activity.InfoCommonActivity;
+import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
+
 public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int isBlurType;
     private ArrayList<InterestPost> datas;
     private Activity activity;
     int count = 0;
+
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
     }
@@ -45,7 +47,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     //适配器初始化
-    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas,int isBlurType) {
+    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas, int isBlurType) {
         activity = context;
         this.datas = datas;
         this.isBlurType = isBlurType;
@@ -57,12 +59,14 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            final CommonPerson user = datas.get(position).user;
+            final InterestPostPerson user = datas.get(position).user;
             final InterestPost post = datas.get(position);
-            ((MyViewHolder) holder).nickName.setText(user.nick);
+           String nick = user.nick.replaceAll("\r|\n", "");
+            ((MyViewHolder) holder).nickName.setText(nick);
 
             long l = System.currentTimeMillis() - Long.parseLong(datas.get(position).ctime);
             long day = l / (24 * 60 * 60 * 1000);
@@ -71,18 +75,20 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((MyViewHolder) holder).sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
             if (day < 365) {
                 ((MyViewHolder) holder).createTime.setText(day + "天" + hour + "时" + min + "分钟前");
+            }else{
+                ((MyViewHolder) holder).createTime.setText("N天" + hour + "时" + min + "分钟前");
             }
-            ((MyViewHolder) holder).title.setText(datas.get(position).title+"");
-            ((MyViewHolder) holder).absText.setText(datas.get(position).absText+"");
-            ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView+"");
-            ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments+"");
-            ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards+"");
+            ((MyViewHolder) holder).title.setText(datas.get(position).title + "");
+            ((MyViewHolder) holder).absText.setText(datas.get(position).absText + "");
+            ((MyViewHolder) holder).viewNum.setText(datas.get(position).pageView + "");
+            ((MyViewHolder) holder).pinglunNum.setText(datas.get(position).totalComments + "");
+            ((MyViewHolder) holder).dashangNum.setText(datas.get(position).rewards + "");
 
             if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0,isBlurType));
+                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0, isBlurType));
                 ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
             } else {
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
@@ -111,7 +117,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     Intent intent = new Intent();
                     intent.putExtra(Constants.POST, post);
                     intent.putExtra("count", count);
-                    intent.setClass(activity, InfoCommonActivity.class);
+                    intent.setClass(activity, InfoInterestPersonActivity.class);
                     activity.startActivity(intent);
                     count++;
                 }
@@ -134,6 +140,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
                     }
+
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);

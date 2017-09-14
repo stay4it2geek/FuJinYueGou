@@ -161,7 +161,7 @@
                         android:gravity="center"
                         android:textSize="18sp"
                         android:textColor="@android:color/holo_orange_dark"
-                        android:text="获取趣币开始私聊" />
+                        android:text="开启权限去私聊" />
 
                     <View
                         android:layout_width="12dp"
@@ -214,17 +214,13 @@
 
 
                 <RelativeLayout
-                    android:id="@+id/rl_zipai_img"
+                    android:id="@+id/rl_zipai_img_layout"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="1dp"
                     android:background="#fff"
                     android:visibility="gone">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
 
                     <TextView
                         android:id="@+id/pictruelibs"
@@ -247,16 +243,13 @@
 
 
                 <RelativeLayout
-                    android:id="@+id/rl_zipai_video"
+                    android:id="@+id/rl_zipai_video_layout"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="#fff"
+                    android:layout_marginTop="1dp"
                     android:visibility="gone">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eee" />
 
                     <TextView
                         android:id="@+id/video_list"
@@ -279,7 +272,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="1dp"
                     android:layout_height="60dp"
                     android:background="#fff">
 
@@ -313,8 +306,6 @@
                     android:layout_marginTop="1dp"
                     android:background="#fff">
 
-
-
                     <TextView
                         android:id="@+id/disPurpose_tv"
                         style="@style/textStyle"
@@ -333,7 +324,6 @@
                         android:layout_toRightOf="@+id/disPurpose_tv"
                         android:gravity="center"
                         android:text="" />
-
 
                 </RelativeLayout>
 
@@ -389,7 +379,7 @@
                         android:layout_marginLeft="25dp"
                         android:layout_marginRight="15dp"
                         android:layout_toRightOf="@+id/isCanDate_tv"
-                        android:gravity="left|center_vertical"
+                        android:gravity="center"
                         android:text="" />
                 </RelativeLayout>
 
@@ -397,7 +387,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="#fff" />
         </LinearLayout>
     </ScrollView>
@@ -405,15 +395,13 @@
     <LinearLayout
         android:id="@+id/focuslayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#eee"
-        android:layout_marginBottom="-4dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="2dp"
         android:layout_gravity="bottom"
         android:orientation="horizontal">
 
-        <RadioButton
+        <TextView
             android:id="@+id/talk"
-            android:layout_margin="4dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -431,12 +419,11 @@
             android:textColor="#000"
             android:textSize="18sp" />
 
-        <RadioButton
+        <TextView
             android:id="@+id/focus"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_margin="4dp"
             android:button="@null"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
@@ -454,6 +441,7 @@
 
     <com.act.quzhibo.view.LoadNetView
         android:id="@+id/loadview"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="45dp"

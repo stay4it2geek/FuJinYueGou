@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +57,6 @@ import static android.widget.AbsListView.CHOICE_MODE_SINGLE;
 
 
 public class GetVipPayActivity extends FragmentActivity {
-    private TextView alipay;
     private ProgressDialog dialog;
     private String mGoodsDescription;
     ArrayList<PayConis> payConisList = new ArrayList<>();
@@ -67,6 +67,7 @@ public class GetVipPayActivity extends FragmentActivity {
     private MyAdapter mAdapter;
     boolean hasShow;
     private LoadNetView loadNetView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +77,7 @@ public class GetVipPayActivity extends FragmentActivity {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
         }
-        loadNetView= (LoadNetView) findViewById(R.id.loadview);
+        loadNetView = (LoadNetView) findViewById(R.id.loadview);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle(" 充值趣币,享受VIP特权");
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -113,14 +114,19 @@ public class GetVipPayActivity extends FragmentActivity {
         listView.setChoiceMode(CHOICE_MODE_SINGLE);
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
-        alipay = (TextView) findViewById(R.id.alipay);
         userSelectText = (TextView) findViewById(R.id.userSelectText);
 
 
-        alipay.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.alipay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alipay();
+            }
+        });
+        findViewById(R.id.promoteLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -179,9 +185,9 @@ public class GetVipPayActivity extends FragmentActivity {
         super.onResume();
         if (vipOrders.orderStatus && !hasShow) {
             hideDialog();
-            FragmentDialog.newInstance(false,"尊敬的用户您好,您" + mGoodsDescription + "已支付成功!","",  "我知道了!", "", -1, true, new FragmentDialog.OnClickBottomListener() {
+            FragmentDialog.newInstance(false, "尊敬的用户您好,您" + mGoodsDescription + "已支付成功!", "", "我知道了!", "", -1, true, new FragmentDialog.OnClickBottomListener() {
                 @Override
-                public void onPositiveClick(Dialog dialog,boolean needDelete) {
+                public void onPositiveClick(Dialog dialog, boolean needDelete) {
                     dialog.dismiss();
                     GetVipPayActivity.this.finish();
                 }
@@ -222,7 +228,7 @@ public class GetVipPayActivity extends FragmentActivity {
                     if (e.getErrorCode() == 206) {
                         ToastUtil.showToast(GetVipPayActivity.this, "缓存已过期，请重新登录后修改" + e.getLocalizedMessage());
                         BmobUser.logOut();
-                        startActivity(new Intent(GetVipPayActivity.this,LoginActivity.class));
+                        startActivity(new Intent(GetVipPayActivity.this, LoginActivity.class));
                     }
                 }
             }
@@ -364,7 +370,7 @@ public class GetVipPayActivity extends FragmentActivity {
                         message.obj = payConisList;
                         handler.sendMessage(message);
                         loadNetView.setVisibility(View.GONE);
-                    }else {
+                    } else {
                         loadNetView.setVisibility(View.VISIBLE);
                         loadNetView.setlayoutVisily(Constants.RELOAD);
                     }

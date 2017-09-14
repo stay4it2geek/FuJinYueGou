@@ -48,4 +48,6 @@ public class Constants {
     public static final String PORTAIL_IS_LIVE = "2";
 
     public static final int NO_DATA = 22;
+    public static final String INTEREST ="1" ;
+    public static final String NEAR ="2" ;
 }

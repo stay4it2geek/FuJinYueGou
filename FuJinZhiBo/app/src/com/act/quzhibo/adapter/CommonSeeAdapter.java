@@ -18,8 +18,8 @@ import android.widget.TextView;
 import com.act.quzhibo.entity.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CommonPerson;
-import com.act.quzhibo.ui.activity.InfoCommonActivity;
+import com.act.quzhibo.entity.InterestPostPerson;
+import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -30,8 +30,8 @@ import java.util.List;
 
 public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity activity;
-    private List<CommonPerson> datas;
-    public CommonSeeAdapter(Activity context, List<CommonPerson> datas) {
+    private List<InterestPostPerson> datas;
+    public CommonSeeAdapter(Activity context, List<InterestPostPerson> datas) {
         activity = context;
         this.datas = datas;
     }
@@ -50,7 +50,7 @@ public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            final CommonPerson user = datas.get(position);
+            final InterestPostPerson user = datas.get(position);
             ((MyViewHolder) holder).nickName.setText(user.nick);
             ((MyViewHolder) holder).disMariState.setText(user.disMariState);
             long l = System.currentTimeMillis() - (position * 100 + 100);
@@ -69,7 +69,7 @@ public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     Intent intent = new Intent();
                     intent.putExtra(Constants.POST_USER_WHO_SEE_ME, datas.get(position));
                     intent.putExtra("count", count);
-                    intent.setClass(activity, InfoCommonActivity.class);
+                    intent.setClass(activity, InfoInterestPersonActivity.class);
                     activity.startActivity(intent);
                     count++;
                 }

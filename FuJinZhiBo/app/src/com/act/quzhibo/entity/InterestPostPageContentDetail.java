@@ -6,7 +6,7 @@ public class InterestPostPageContentDetail implements Serializable {
     public String postId;
     public String title;
     public ArrayList<PostContentAndImageDesc> desc;
-    public CommonPerson user;
+    public InterestPostPerson user;
     public long ctime;
     public boolean elite;// false,
     public boolean top;//false,

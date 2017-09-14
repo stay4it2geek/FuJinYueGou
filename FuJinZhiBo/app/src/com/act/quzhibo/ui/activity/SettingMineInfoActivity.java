@@ -652,7 +652,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
     private void getCanDatingThingData() {
 
         candateThingiItems.add(new CardBean("见面一起做爱做的事"));
-        candateThingiItems.add(new CardBean("只在软件里聊天就好"));
+        candateThingiItems.add(new CardBean("先在软件里聊天试试"));
         candateThingiItems.add(new CardBean("不想理任何人"));
 
     }

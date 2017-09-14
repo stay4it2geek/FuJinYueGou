@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.CommonSeeAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CommonPerson;
+import com.act.quzhibo.entity.InterestPostPerson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -88,7 +88,7 @@ public class CommonSeeFragment extends BackHandledFragment {
 
     private int limit = 10; // 每页的数据是10条
     String lastTime = "";
-    ArrayList<CommonPerson> commonPersons = new ArrayList<>();
+    ArrayList<InterestPostPerson> interestPostPersons = new ArrayList<>();
 
     /**
      * 分页获取数据
@@ -96,7 +96,7 @@ public class CommonSeeFragment extends BackHandledFragment {
      * @param actionType
      */
     private void queryData(final int actionType) {
-        final BmobQuery<CommonPerson> query = new BmobQuery<>();
+        final BmobQuery<InterestPostPerson> query = new BmobQuery<>();
         query.setLimit(limit);
         // 如果是加载更多
         if (actionType == Constants.LOADMORE) {
@@ -111,19 +111,19 @@ public class CommonSeeFragment extends BackHandledFragment {
             query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
         }
         query.order("-updatedAt");
-        query.findObjects(new FindListener<CommonPerson>() {
+        query.findObjects(new FindListener<InterestPostPerson>() {
             @Override
-            public void done(List<CommonPerson> list, BmobException e) {
+            public void done(List<InterestPostPerson> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
                             // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
-                            commonPersons.clear();
+                            interestPostPersons.clear();
                         }
-                        commonPersons.addAll(list);
+                        interestPostPersons.addAll(list);
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                         Message message = new Message();
-                        message.obj = commonPersons;
+                        message.obj = interestPostPersons;
                         message.what = actionType;
                         handler.sendMessage(message);
                     } else {
@@ -142,10 +142,10 @@ public class CommonSeeFragment extends BackHandledFragment {
         }
     }
 
-    public static final class ComparatorValues implements Comparator<CommonPerson> {
+    public static final class ComparatorValues implements Comparator<InterestPostPerson> {
 
         @Override
-        public int compare(CommonPerson post1, CommonPerson post2) {
+        public int compare(InterestPostPerson post1, InterestPostPerson post2) {
             int m1 = Integer.parseInt(post1.viewTime != null ? post1.viewTime : "0");
             int m2 = Integer.parseInt(post2.viewTime != null ? post2.viewTime : "0");
             int result = 0;
@@ -165,18 +165,18 @@ public class CommonSeeFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<CommonPerson> commonPersons = (ArrayList<CommonPerson>) msg.obj;
+            ArrayList<InterestPostPerson> interestPostPersons = (ArrayList<InterestPostPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
                 if (msg.what != Constants.NO_MORE) {
-                    if (commonPersons != null) {
-                        seeMeSize = commonPersons.size();
+                    if (interestPostPersons != null) {
+                        seeMeSize = interestPostPersons.size();
                     } else {
                         seeMeSize = 0;
                     }
-                    Collections.sort(commonPersons, new ComparatorValues());
+                    Collections.sort(interestPostPersons, new ComparatorValues());
                     if (seeMeSize > 0) {
                         if (commonSeeAdapter == null) {
-                            commonSeeAdapter = new CommonSeeAdapter(getActivity(), commonPersons);
+                            commonSeeAdapter = new CommonSeeAdapter(getActivity(), interestPostPersons);
                             recyclerView.setAdapter(commonSeeAdapter);
                         } else {
                             commonSeeAdapter.notifyDataSetChanged();

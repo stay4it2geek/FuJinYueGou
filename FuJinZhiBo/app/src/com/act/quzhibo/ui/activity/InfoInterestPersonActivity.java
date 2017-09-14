@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.MyFocusCommonPerson;
+import com.act.quzhibo.entity.MyFocusShower;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.InterestPost;
@@ -24,25 +27,35 @@ import com.act.quzhibo.entity.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
 
-public class InfoCommonActivity extends AppCompatActivity {
+public class InfoInterestPersonActivity extends AppCompatActivity {
 
     private InterestPost post;
     private GridView gridView;
     private Banner banner;
     private int second;
     private LoadNetView loadNetView;
+
+    MyFocusCommonPerson myFcPerson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +67,7 @@ public class InfoCommonActivity extends AppCompatActivity {
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InfoCommonActivity.this.finish();
+                InfoInterestPersonActivity.this.finish();
             }
         });
 
@@ -76,7 +89,6 @@ public class InfoCommonActivity extends AppCompatActivity {
         banner = (Banner) findViewById(R.id.banner);
         banner.setLayoutParams(new FrameLayout.LayoutParams(size.x - 10, size.x - 10));
         if (getIntent() != null) {
-            int count = getIntent().getIntExtra("count", 0);
             post = (InterestPost) getIntent().getSerializableExtra(Constants.POST);
             if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
                 int max = 5000;
@@ -90,7 +102,7 @@ public class InfoCommonActivity extends AppCompatActivity {
             }
             if (second != 0) {
                 if (second % 60 == 0) {
-                    ((TextView) findViewById(R.id.online_time)).setText(second / 60 + "分前在线");
+                    ((TextView) findViewById(R.id.online_time)).setText(second / 60 + "时前在线");
                 } else {
                     ((TextView) findViewById(R.id.online_time)).setText((second - (second % 60)) / 60 + "分" + second % 60 + "秒前在线");
                 }
@@ -111,31 +123,130 @@ public class InfoCommonActivity extends AppCompatActivity {
 
             }
         }
-        if (post.user.vipLevel.equals("1")) {
-            ((TextView) findViewById(R.id.level)).setText("初级VIP");
-        } else if (post.user.vipLevel.equals("2")) {
-            ((TextView) findViewById(R.id.level)).setText("中级VIP");
-        } else if (post.user.vipLevel.equals("3")) {
-            ((TextView) findViewById(R.id.level)).setText("超级VIP");
+        int vip = Integer.parseInt(post.user.vipLevel);
+        if (vip < 2) {
+            ((TextView) findViewById(R.id.level)).setText("非会员");
+        } else if (vip > 2 && vip < 5) {
+            ((TextView) findViewById(R.id.level)).setText("初级趣会员");
+        } else if (vip > 5 && vip < 7) {
+            ((TextView) findViewById(R.id.level)).setText("中级趣会员");
+        } else if (vip > 7) {
+            ((TextView) findViewById(R.id.level)).setText("超级趣会员");
         }
 
         if (post.user.vipLevel.equals("1")) {
             ((TextView) findViewById(R.id.isCanDate)).setText("见面一起做爱做的事");
-        } else  {
-            ((TextView) findViewById(R.id.isCanDate)).setText("只在软件里聊天就好");
+        } else {
+            ((TextView) findViewById(R.id.isCanDate)).setText("先在软件里聊天试试");
         }
         ((TextView) findViewById(R.id.disPurpose)).setText(post.user.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(post.user.disMariState);
-        ((TextView) findViewById(R.id.nickName)).setText(post.user.nick);
+        String nick = post.user.nick.replaceAll("\r|\n", "");
+        ((TextView) findViewById(R.id.nickName)).setText(nick);
         findViewById(R.id.talk_accese).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(InfoCommonActivity.this, GetVipPayActivity.class));
+                startActivity(new Intent(InfoInterestPersonActivity.this, GetVipPayActivity.class));
             }
         });
 
+
         getTextAndImageData();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+            query.setLimit(1);
+            query.addWhereEqualTo("userId", post.user.userId);
+            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+            query.addWhereEqualTo("userType", Constants.INTEREST);
+            query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                @Override
+                public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
+                    if (e == null) {
+                        if (myFcPersons.size() >= 1) {
+                            myFcPerson = myFcPersons.get(0);
+                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                        }
+                    }
+                }
+            });
+        }
+
+
+        findViewById(R.id.focus).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
+                        MyFocusCommonPerson myFcPerson = new MyFocusCommonPerson();
+                        myFcPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                        myFcPerson.username = post.user.nick;
+                        myFcPerson.userId = post.user.userId;
+                        myFcPerson.photoUrl = post.user.photoUrl;
+                        myFcPerson.sex = post.user.sex;
+                        myFcPerson.userType = Constants.INTEREST;
+                        myFcPerson.save(new SaveListener<String>() {
+                            @Override
+                            public void done(String objectId, BmobException e) {
+                                if (e == null) {
+                                    ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                    if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+                                        query.setLimit(1);
+                                        query.addWhereEqualTo("userId", post.user.userId);
+                                        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                        query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                                            @Override
+                                            public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
+                                                if (e == null) {
+                                                    if (myFcPersons.size() >= 1) {
+                                                        InfoInterestPersonActivity.this.myFcPerson = myFcPersons.get(0);
+                                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                    ToastUtil.showToast(InfoInterestPersonActivity.this, "关注成功");
+                                } else {
+                                    ToastUtil.showToast(InfoInterestPersonActivity.this, "关注失败");
+                                }
+                            }
+                        });
+                    } else {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            @Override
+                            public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
+                                if (myFcPerson != null) {
+                                    myFcPerson.delete(myFcPerson.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                ((TextView) findViewById(R.id.focus)).setText("关注TA");
+                                                ToastUtil.showToast(InfoInterestPersonActivity.this, "取消关注成功");
+                                            }
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onNegtiveClick(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        }).show(getSupportFragmentManager(), "");
+                    }
+                } else {
+                    startActivity(new Intent(InfoInterestPersonActivity.this, LoginActivity.class));
+                }
+            }
+        });
     }
 
 
@@ -183,13 +294,13 @@ public class InfoCommonActivity extends AppCompatActivity {
                             isBlurType = 0;
                         }
                         if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                            gridView.setAdapter(new PostImageAdapter(InfoCommonActivity.this, imgs, 2, isBlurType));
+                            gridView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, 2, isBlurType));
                             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.COMMON_USER_ID, post.user.userId);
-                                    intent.setClass(InfoCommonActivity.this, CommonPersonPostListActivity.class);
+                                    intent.setClass(InfoInterestPersonActivity.this, CommonPersonPostListActivity.class);
                                     startActivity(intent);
                                 }
                             });

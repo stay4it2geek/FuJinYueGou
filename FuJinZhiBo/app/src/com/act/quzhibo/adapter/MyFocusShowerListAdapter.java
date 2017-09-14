@@ -2,8 +2,6 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.MyFocusShowers;
-import com.act.quzhibo.entity.MyFocusShowers;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.entity.MyFocusShower;
 import com.bumptech.glide.Glide;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-
-import okhttp3.Call;
 
 public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -32,7 +21,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
     private int screenWidth;
     private Context mContext;
     private String pathPrefix;
-    private ArrayList<MyFocusShowers> datas;//数据
+    private ArrayList<MyFocusShower> datas;//数据
 
 
     private OnDeleteListener mListener = null;
@@ -47,7 +36,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
 
     //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view, int position, MyFocusShowers myFocusShowers);
+        void onItemClick(View view, int position, MyFocusShower myFocusShower);
     }
 
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -57,7 +46,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     //适配器初始化
-    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShowers> datas,int screenWidth, String cataTitle) {
+    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShower> datas, int screenWidth, String cataTitle) {
         mContext = context;
         this.cataTitle = cataTitle;
         this.datas = datas;

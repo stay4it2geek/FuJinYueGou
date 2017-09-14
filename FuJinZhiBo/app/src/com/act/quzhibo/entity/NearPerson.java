@@ -2,10 +2,7 @@ package com.act.quzhibo.entity;
 
 import java.io.Serializable;
 
-import cn.bmob.v3.BmobObject;
-
-public class NearPerson extends BmobObject implements Serializable{
-    public String userId;
+public class NearPerson extends InterestPostPerson implements Serializable {
     public String absCoverPic;
     public String soundUrl;
     public String photoLibraries;
@@ -21,8 +18,5 @@ public class NearPerson extends BmobObject implements Serializable{
     public String pics;
     public String vipType;
     public String distance;
-    public String sex;
-    public String isNear;
-    public String disMariState;//,
-    public String disPurpose;//短期public String   ,
+    public String userType;
 }

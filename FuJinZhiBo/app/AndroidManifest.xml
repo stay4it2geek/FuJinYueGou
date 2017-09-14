@@ -150,7 +150,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.NearInfoCommonActivity"
+            android:name="com.act.quzhibo.ui.activity.InfonNearPersonActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
@@ -170,7 +170,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.InfoCommonActivity"
+            android:name="com.act.quzhibo.ui.activity.InfoInterestPersonActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

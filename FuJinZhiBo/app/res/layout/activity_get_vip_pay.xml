@@ -10,6 +10,13 @@
         android:layout_height="@dimen/commonViewHeight"
         android:textStyle="normal" />
 
+    <com.act.quzhibo.view.LoadNetView
+        android:id="@+id/loadview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/commonViewHeight"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/activity_pay"
         android:layout_width="match_parent"
@@ -43,80 +50,106 @@
             android:layout_height="0.5dp"
             android:background="@color/gray" />
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="0.5dp"
-            android:background="#fff"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:paddingLeft="15dp">
+                android:layout_height="match_parent"
+                android:layout_marginTop="0.5dp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/userSelect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center_vertical"
-                    android:text="您想要的是:"
-                    android:textColor="@color/commontextcolor"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/userSelectText"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/userSelect"
-                    android:gravity="center_vertical"
-                    android:text=""
-                    android:textColor="@color/red"
-                    android:textSize="17sp" />
+                    android:layout_height="35dp"
+                    android:paddingLeft="15dp">
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/userSelect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:text="您想要的是:"
+                        android:textColor="@color/commontextcolor"
+                        android:textSize="16sp" />
 
-            <TextView
-                android:id="@+id/alipay"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/bg_circle_orange"
-                android:gravity="center"
-                android:text="使用支付宝购买"
-                android:textColor="#fff"
-                android:textSize="19sp" />
+                    <TextView
+                        android:id="@+id/userSelectText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/userSelect"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/red"
+                        android:textSize="17sp" />
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp">
+                </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/zhifubao"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/zhifubao" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/zhifubao"
-                    android:gravity="center_vertical"
-                    android:text="安全快捷支付，首选支付宝" />
-            </RelativeLayout>
-        </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/alipay"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/bg_circle_orange">
+
+                    <ImageView
+                        android:id="@+id/zhifubao"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/zhifubao" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/zhifubao"
+                        android:background="@drawable/bg_circle_orange"
+                        android:gravity="center_vertical"
+                        android:text="使用支付宝快捷安全支付"
+                        android:textColor="#fff"
+                        android:textSize="17sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/promoteLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/bg_circle_orange">
+
+                    <ImageView
+                        android:id="@+id/tui"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:background="@drawable/tui" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/tui"
+                        android:background="@drawable/bg_circle_orange"
+                        android:gravity="center_vertical"
+                        android:text="支付宝余额不足，推广赚趣币"
+                        android:textColor="#fff"
+                        android:textSize="17sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
     </LinearLayout>
-
-    <com.act.quzhibo.view.LoadNetView
-        android:id="@+id/loadview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/commonViewHeight" />
 </FrameLayout>

@@ -1,10 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,24 +12,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.event.FocusChangeEvent;
-import com.act.quzhibo.entity.MyFocusShowers;
+import com.act.quzhibo.entity.MyFocusShower;
 import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.entity.Toggle;
-import com.act.quzhibo.entity.VipOrders;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
@@ -49,12 +41,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
@@ -63,7 +53,7 @@ import okhttp3.Call;
 public class ShowerInfoActivity extends FragmentActivity {
     private Room room;
     private LoadNetView loadNetView;
-    MyFocusShowers myFocusShower;
+    MyFocusShower myFocusShower;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,13 +85,13 @@ public class ShowerInfoActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         if (BmobUser.getCurrentUser(RootUser.class) != null) {
-            BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+            BmobQuery<MyFocusShower> query = new BmobQuery<>();
             query.setLimit(1);
             query.addWhereEqualTo("userId", room.userId);
             query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
-            query.findObjects(new FindListener<MyFocusShowers>() {
+            query.findObjects(new FindListener<MyFocusShower>() {
                 @Override
-                public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                     if (e == null) {
                         if (myFocusShowers.size() >= 1) {
                             myFocusShower = myFocusShowers.get(0);
@@ -118,37 +108,37 @@ public class ShowerInfoActivity extends FragmentActivity {
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
                     if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
-                        MyFocusShowers myFocusShowers = new MyFocusShowers();
+                        MyFocusShower myFocusShower = new MyFocusShower();
                         if (getIntent().getBooleanExtra("FromChatFragment", false)) {
-                            myFocusShowers.portrait_path_1280 = getIntent().getStringExtra("photoUrl");
+                            myFocusShower.portrait_path_1280 = getIntent().getStringExtra("photoUrl");
                         } else if (getIntent().getBooleanExtra("FromShowListActivity", false)) {
-                            myFocusShowers.portrait_path_1280 = "http://ures.kktv8.com/kktv" + room.portrait_path_1280;
+                            myFocusShower.portrait_path_1280 = "http://ures.kktv8.com/kktv" + room.portrait_path_1280;
                         } else {
-                            myFocusShowers.portrait_path_1280 = room.portrait_path_1280;
+                            myFocusShower.portrait_path_1280 = room.portrait_path_1280;
                         }
-                        myFocusShowers.rootUser = BmobUser.getCurrentUser(RootUser.class);
-                        myFocusShowers.nickname = room.nickname;
-                        myFocusShowers.roomId = room.roomId;
-                        myFocusShowers.userId = room.userId;
-                        myFocusShowers.gender = room.gender;
-                        myFocusShowers.liveStream = room.liveStream;
-                        myFocusShowers.city = room.city;
-                        myFocusShowers.save(new SaveListener<String>() {
+                        myFocusShower.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                        myFocusShower.nickname = room.nickname;
+                        myFocusShower.roomId = room.roomId;
+                        myFocusShower.userId = room.userId;
+                        myFocusShower.gender = room.gender;
+                        myFocusShower.liveStream = room.liveStream;
+                        myFocusShower.city = room.city;
+                        myFocusShower.save(new SaveListener<String>() {
                             @Override
                             public void done(String objectId, BmobException e) {
                                 if (e == null) {
                                     ((TextView) findViewById(R.id.focus)).setText("已关注");
                                     EventBus.getDefault().post(new FocusChangeEvent());
                                     if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                                        BmobQuery<MyFocusShowers> query = new BmobQuery<>();
+                                        BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                         query.setLimit(1);
                                         query.addWhereEqualTo("userId", room.userId);
-                                        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));                                        query.findObjects(new FindListener<MyFocusShowers>() {
+                                        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));                                        query.findObjects(new FindListener<MyFocusShower>() {
                                             @Override
-                                            public void done(List<MyFocusShowers> myFocusShowers, BmobException e) {
+                                            public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                                                 if (e == null) {
                                                     if (myFocusShowers.size() >= 1) {
-                                                        myFocusShower = myFocusShowers.get(0);
+                                                        ShowerInfoActivity.this.myFocusShower = myFocusShowers.get(0);
                                                         ((TextView) findViewById(R.id.focus)).setText("已关注");
                                                     }
                                                 }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 public class InterestPostPageCommentDetail implements Serializable {
     public String cid;//593ca5640cf20d45b5d4491c",
-    public CommonPerson user;
+    public InterestPostPerson user;
     public ArrayList<SubComments> subComments;
     public long totalChildren;
     public boolean hot;
