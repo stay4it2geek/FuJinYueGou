@@ -124,13 +124,13 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             }
         }
         int vip = Integer.parseInt(post.user.vipLevel);
-        if (vip < 2) {
+        if (vip < 1) {
             ((TextView) findViewById(R.id.level)).setText("非会员");
-        } else if (vip > 2 && vip < 5) {
+        } else if (vip >=1 && vip < 5) {
             ((TextView) findViewById(R.id.level)).setText("初级趣会员");
-        } else if (vip > 5 && vip < 7) {
+        } else if (vip >= 5 && vip < 7) {
             ((TextView) findViewById(R.id.level)).setText("中级趣会员");
-        } else if (vip > 7) {
+        } else if (vip >= 7) {
             ((TextView) findViewById(R.id.level)).setText("超级趣会员");
         }
 
