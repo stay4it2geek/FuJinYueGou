@@ -10,8 +10,6 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.act.quzhibo.common.Constants;
@@ -82,7 +80,7 @@ public class MyStandardVideoController extends StandardVideoController implement
                     this.show();
                 }
             } else {
-                    this.doPauseResume();
+                this.doPauseResume();
 
             }
         } else if (i == R.id.fullscreen) {
@@ -96,15 +94,20 @@ public class MyStandardVideoController extends StandardVideoController implement
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.pause();
         } else {
-            if (BmobUser.getCurrentUser(RootUser.class)==null ) {
+            if (BmobUser.getCurrentUser(RootUser.class) == null) {
 
                 getContext().startActivity(new Intent(getContext(), LoginActivity.class));
-            }else{
-              if(  BmobUser.getCurrentUser(RootUser.class).vipConis > 14000){
+            } else {
+                if (needLoginToStart) {
+                    if (BmobUser.getCurrentUser(RootUser.class).vipConis > 14000) {
+                        this.mediaPlayer.start();
+                    } else {
+                        ToastUtil.showToast(getContext(), "积分不足14000");
+                    }
+                } else {
                     this.mediaPlayer.start();
-                }else{
-                  ToastUtil.showToast(getContext(),"积分不足14000");
-              }
+                }
+
             }
         }
     }
@@ -112,7 +115,13 @@ public class MyStandardVideoController extends StandardVideoController implement
     @Override
     protected void initView() {
         super.initView();
-        findViewById(R.id.more_menu).setVisibility(VISIBLE);
+        if (viewGone) {
+            findViewById(R.id.more_menu).setVisibility(GONE);
+//            findViewById(R.id.fullscreen).setVisibility(GONE);
+        } else {
+            findViewById(R.id.more_menu).setVisibility(VISIBLE);
+//            findViewById(R.id.fullscreen).setVisibility(VISIBLE);
+        }
         this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
         this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_list, this.popupMenu.getMenu());
         this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -127,5 +136,13 @@ public class MyStandardVideoController extends StandardVideoController implement
                 return false;
             }
         });
+    }
+
+    public boolean viewGone;
+    public boolean needLoginToStart;
+
+    public void setInitData(boolean needLoginToStart, boolean viewGone) {
+        this.needLoginToStart = needLoginToStart;
+        this.viewGone = viewGone;
     }
 }

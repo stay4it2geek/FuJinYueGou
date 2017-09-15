@@ -74,13 +74,9 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (mediasSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    queryData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            queryData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
+
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -142,19 +138,17 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
             @Override
             public void done(List<MediaAuthor> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
-                        if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
-                            medias.clear();
-                        }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
+
+                    if (actionType == Constants.REFRESH) {
+                        medias.clear();
                     }
+                    if (list.size() > 0) {
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
@@ -177,7 +171,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
             }
             return result;
         }
-
     }
 
     Handler handler = new Handler() {
@@ -186,32 +179,31 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
             super.handleMessage(msg);
             ArrayList<MediaAuthor> mediaAuthor = (ArrayList<MediaAuthor>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what != Constants.NO_MORE) {
-                    if (mediaAuthor != null) {
-                        mediasSize = mediaAuthor.size();
-                        medias.addAll(mediaAuthor);
-                    } else {
-                        mediasSize = 0;
-                    }
-                    Collections.sort(medias, new ComparatorValues());
-
-                    if (mediaAuthorListAdapter == null) {
-                        mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthor);
-                        recyclerView.setAdapter(mediaAuthorListAdapter);
-                        mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(MediaAuthor mediaAuthor) {
-                                VideoAlbumListFragment videoAlbumListFragment = new VideoAlbumListFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("author", mediaAuthor);
-                                videoAlbumListFragment.setArguments(bundle);
-                                CommonUtil.switchFragment(videoAlbumListFragment, R.id._videolayoutContainer, getActivity());
-                            }
-                        });
-                    } else {
-                        mediaAuthorListAdapter.notifyDataSetChanged();
-                    }
+                if (mediaAuthor != null) {
+                    mediasSize = mediaAuthor.size();
+                    medias.addAll(mediaAuthor);
+                } else {
+                    mediasSize = 0;
                 }
+                Collections.sort(medias, new ComparatorValues());
+
+                if (mediaAuthorListAdapter == null) {
+                    mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthor);
+                    recyclerView.setAdapter(mediaAuthorListAdapter);
+                    mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(MediaAuthor mediaAuthor) {
+                            VideoAlbumListFragment videoAlbumListFragment = new VideoAlbumListFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("author", mediaAuthor);
+                            videoAlbumListFragment.setArguments(bundle);
+                            CommonUtil.switchFragment(videoAlbumListFragment, R.id._videolayoutContainer, getActivity());
+                        }
+                    });
+                } else {
+                    mediaAuthorListAdapter.notifyDataSetChanged();
+                }
+
                 loadNetView.setVisibility(View.GONE);
                 if (medias.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
@@ -223,6 +215,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                 loadNetView.setlayoutVisily(Constants.RELOAD);
 
             }
+
 
         }
     };

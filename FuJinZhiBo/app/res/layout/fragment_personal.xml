@@ -248,7 +248,7 @@
                     android:layout_height="27dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:background="@drawable/zhuboguanzhu" />
+                    android:background="@drawable/focus_shower" />
 
                 <TextView
                     android:id="@+id/focusshower"

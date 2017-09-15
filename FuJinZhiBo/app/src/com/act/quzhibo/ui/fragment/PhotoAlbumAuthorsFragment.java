@@ -37,7 +37,13 @@ import static com.act.quzhibo.common.Constants.PHOTO_ALBUM;
 
 
 public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
-    View view;
+    private View view;
+    private XRecyclerView recyclerView;
+    private MediaAuthorListAdapter mediaAuthorListAdapter;
+    private LoadNetView loadNetView;
+    private String lastTime = "";
+    private ArrayList<MediaAuthor> mediaAuthors = new ArrayList<>();
+    private int mediasSize;
 
     @Nullable
     @Override
@@ -67,13 +73,8 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (mediasSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    queryData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            queryData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -108,13 +109,6 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
         return false;
     }
 
-    private XRecyclerView recyclerView;
-    private MediaAuthorListAdapter mediaAuthorListAdapter;
-    private LoadNetView loadNetView;
-    private int limit = 10; // 每页的数据是10条
-    private String lastTime = "";
-    private ArrayList<MediaAuthor> medias = new ArrayList<>();
-    private int mediasSize;
 
     private void queryData(final int actionType) {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
@@ -144,16 +138,15 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                 if (e == null) {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
-                            medias.clear();
+                            mediaAuthors.clear();
                         }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                        if (list.size() > 0) {
+                            lastTime = list.get(list.size() - 1).getUpdatedAt();
+                        }
                         Message message = new Message();
                         message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
                     }
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
@@ -187,14 +180,14 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
             if (msg.what != Constants.NetWorkError) {
                 if (mediaAuthor != null) {
                     mediasSize = mediaAuthor.size();
-                    medias.addAll(mediaAuthor);
+                    mediaAuthors.addAll(mediaAuthor);
                 } else {
                     mediasSize = 0;
                 }
-                Collections.sort(medias, new ComparatorValues());
+                Collections.sort(mediaAuthors, new ComparatorValues());
                 if (mediasSize > 0) {
                     if (mediaAuthorListAdapter == null) {
-                        mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), medias);
+                        mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthors);
                         recyclerView.setAdapter(mediaAuthorListAdapter);
                         mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
                             @Override
@@ -211,6 +204,12 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                     }
                 }
                 loadNetView.setVisibility(View.GONE);
+
+                if (mediasSize == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
+                }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);

@@ -53,7 +53,7 @@ import okhttp3.Call;
 public class ShowerInfoActivity extends FragmentActivity {
     private Room room;
     private LoadNetView loadNetView;
-    MyFocusShower myFocusShower;
+    private MyFocusShower mMyFocusShower;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                     if (e == null) {
                         if (myFocusShowers.size() >= 1) {
-                            myFocusShower = myFocusShowers.get(0);
+                            mMyFocusShower = myFocusShowers.get(0);
                             ((TextView) findViewById(R.id.focus)).setText("已关注");
                         }
                     }
@@ -108,15 +108,9 @@ public class ShowerInfoActivity extends FragmentActivity {
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
                     if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
-                        if (myFocusShower.getObjectId()==null){
+
+                        if (mMyFocusShower == null) {
                             MyFocusShower myFocusShower = new MyFocusShower();
-                            if (getIntent().getBooleanExtra("FromChatFragment", false)) {
-                                myFocusShower.portrait_path_1280 = getIntent().getStringExtra("photoUrl");
-                            } else if (getIntent().getBooleanExtra("FromShowListActivity", false)) {
-                                myFocusShower.portrait_path_1280 = "http://ures.kktv8.com/kktv" + room.portrait_path_1280;
-                            } else {
-                                myFocusShower.portrait_path_1280 = room.portrait_path_1280;
-                            }
                             myFocusShower.rootUser = BmobUser.getCurrentUser(RootUser.class);
                             myFocusShower.nickname = room.nickname;
                             myFocusShower.roomId = room.roomId;
@@ -124,22 +118,31 @@ public class ShowerInfoActivity extends FragmentActivity {
                             myFocusShower.gender = room.gender;
                             myFocusShower.liveStream = room.liveStream;
                             myFocusShower.city = room.city;
+                            if (getIntent().getBooleanExtra("FromChatFragment", false)) {
+                                myFocusShower.portrait_path_1280 = getIntent().getStringExtra("photoUrl");
+                            } else if (getIntent().getBooleanExtra("FromShowListActivity", false)) {
+                                myFocusShower.portrait_path_1280 = "http://ures.kktv8.com/kktv" + room.portrait_path_1280;
+                            } else {
+                                myFocusShower.portrait_path_1280 = room.portrait_path_1280;
+                            }
+
                             myFocusShower.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
                                         ((TextView) findViewById(R.id.focus)).setText("已关注");
-                                        EventBus.getDefault().post(new FocusChangeEvent());
+                                        EventBus.getDefault().post(new FocusChangeEvent(true));
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.setLimit(1);
                                             query.addWhereEqualTo("userId", room.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));                                        query.findObjects(new FindListener<MyFocusShower>() {
+                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.findObjects(new FindListener<MyFocusShower>() {
                                                 @Override
                                                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
-                                                            ShowerInfoActivity.this.myFocusShower = myFocusShowers.get(0);
+                                                            ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
                                                             ((TextView) findViewById(R.id.focus)).setText("已关注");
                                                         }
                                                     }
@@ -152,24 +155,23 @@ public class ShowerInfoActivity extends FragmentActivity {
                                     }
                                 }
                             });
-                        }else{
-
-                            myFocusShower.update(myFocusShower.getObjectId(),new UpdateListener() {
+                        } else {
+                            mMyFocusShower.update(mMyFocusShower.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
                                         ((TextView) findViewById(R.id.focus)).setText("已关注");
-                                        EventBus.getDefault().post(new FocusChangeEvent());
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.setLimit(1);
                                             query.addWhereEqualTo("userId", room.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));                                        query.findObjects(new FindListener<MyFocusShower>() {
+                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.findObjects(new FindListener<MyFocusShower>() {
                                                 @Override
                                                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
-                                                            ShowerInfoActivity.this.myFocusShower = myFocusShowers.get(0);
+                                                            ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
                                                             ((TextView) findViewById(R.id.focus)).setText("已关注");
                                                         }
                                                     }
@@ -185,25 +187,29 @@ public class ShowerInfoActivity extends FragmentActivity {
                         }
 
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
-                                if (myFocusShower != null) {
-                                    myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                ((TextView) findViewById(R.id.focus)).setText("关注TA");
-                                                ToastUtil.showToast(ShowerInfoActivity.this, "取消关注成功");
-                                            }
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                }
+                                dialog.dismiss();
                             }
 
                             @Override
                             public void onNegtiveClick(Dialog dialog) {
+                                if (mMyFocusShower != null) {
+                                    mMyFocusShower.delete(mMyFocusShower.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                mMyFocusShower = null;
+                                                ((TextView) findViewById(R.id.focus)).setText("关注ta");
+                                                ToastUtil.showToast(ShowerInfoActivity.this, "取消关注成功");
+                                                EventBus.getDefault().post(new FocusChangeEvent(false));
+
+                                            }
+
+                                        }
+                                    });
+                                }
                                 dialog.dismiss();
                             }
                         }).show(getSupportFragmentManager(), "");

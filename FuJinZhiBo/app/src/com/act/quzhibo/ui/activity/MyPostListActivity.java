@@ -68,22 +68,18 @@ public class MyPostListActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (myPostsSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (myPostsSize > 0) {
                                     queryData(Constants.LOADMORE);
                                     recyclerView.loadMoreComplete();
+                                } else {
+                                    recyclerView.setNoMore(true);
                                 }
-                            }, 1000);
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                            }
+                        }, 1000);
             }
         });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
@@ -145,9 +141,7 @@ public class MyPostListActivity extends AppCompatActivity {
             @Override
             public void done(List<MyPost> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
                             myPostList.clear();
                         }
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
@@ -155,9 +149,6 @@ public class MyPostListActivity extends AppCompatActivity {
                         message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
-                    }
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
@@ -197,23 +188,24 @@ public class MyPostListActivity extends AppCompatActivity {
                     myPostsSize = 0;
                 }
                 Collections.sort(myPosts, new ComparatorValues());
-                    if (myPostListAdapter == null) {
-                        myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
-                        recyclerView.setAdapter(myPostListAdapter);
-                        myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(MyPost post) {
-                                Intent intent = new Intent();
-                                intent.putExtra(Constants.POST, post);
-                                intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                    } else {
-                        myPostListAdapter.notifyDataSetChanged();
-                    }
+                if (myPostListAdapter == null) {
+                    myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
+                    recyclerView.setAdapter(myPostListAdapter);
+                    myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(MyPost post) {
+                            Intent intent = new Intent();
+                            intent.putExtra(Constants.POST, post);
+                            intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    myPostListAdapter.notifyDataSetChanged();
+                }
+
                 loadNetView.setVisibility(View.GONE);
-                if (myPosts.size() == 0) {
+                if (myPostList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.BUY_VIP);
                     return;

@@ -78,7 +78,7 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
                             dialog.dismiss();
                             TabSlideBaseActivity.super.onBackPressed();
                         }
-                    }).show(getSupportFragmentManager(), "dialog");
+                    }).show(getSupportFragmentManager(), "");
                 } else {
                     TabSlideBaseActivity.super.onBackPressed();
                 }

@@ -69,13 +69,8 @@ public class InterestPostListFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (interestPostSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getData(pid, ctime, Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            getData(pid, ctime, Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }

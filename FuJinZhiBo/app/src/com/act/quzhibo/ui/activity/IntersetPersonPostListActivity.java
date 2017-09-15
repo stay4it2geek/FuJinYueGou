@@ -22,6 +22,7 @@ import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -46,7 +47,16 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_interest_post);
-        findViewById(R.id.title_layout).setVisibility(View.VISIBLE);
+        findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setVisibility(View.VISIBLE);
+        titlebar.setBarTitle("ta的情趣状态");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntersetPersonPostListActivity.this.finish();
+            }
+        });
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
         recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
@@ -122,8 +132,8 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
                 if (data != null && data.result != null) {
                     interestPostSize = data.result.posts.size();
-                }else {
-                    interestPostSize=0;
+                } else {
+                    interestPostSize = 0;
                 }
                 if (data.result.posts != null && interestPostSize > 0) {
                     ctime = data.result.posts.get(interestPostSize - 1).ctime;
@@ -146,9 +156,9 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                             public void onItemClick(InterestPost post) {
                                 RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
                                 if (rootUser == null) {
-                                    FragmentDialog.newInstance(false,"请确认您的权限", "你是否未注册或者登录？", "去注册", "去登录", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "请确认您的权限", "你是否未注册或者登录？", "去注册", "去登录", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog,boolean needDelete) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             startActivity(new Intent(IntersetPersonPostListActivity.this, RegisterActivity.class));
 
                                         }
@@ -158,11 +168,11 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                                             startActivity(new Intent(IntersetPersonPostListActivity.this, LoginActivity.class));
 
                                         }
-                                    }).show(getSupportFragmentManager(),"");
+                                    }).show(getSupportFragmentManager(), "");
                                 } else if (rootUser != null && rootUser.vipConis < 1000) {
-                                    FragmentDialog.newInstance(false,"请确认您的趣币数量", "您的趣币少于1000个了", "去充值", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "请确认您的趣币数量", "您的趣币少于1000个了", "去充值", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
-                                        public void onPositiveClick(Dialog dialog,boolean needDelete) {
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             startActivity(new Intent(IntersetPersonPostListActivity.this, GetVipPayActivity.class));
                                         }
 
@@ -170,7 +180,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                                         public void onNegtiveClick(Dialog dialog) {
                                             dialog.dismiss();
                                         }
-                                    }).show(getSupportFragmentManager(),"");
+                                    }).show(getSupportFragmentManager(), "");
 
                                 } else if (rootUser != null && rootUser.vipConis > 1000) {
                                     Intent intent = new Intent();

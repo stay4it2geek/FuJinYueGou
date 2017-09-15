@@ -110,36 +110,10 @@
             android:text=""
             android:textSize="15sp" />
 
-        <FrameLayout
-            android:visibility="gone"
-            android:id="@+id/videoFr"
-            android:layout_width="match_parent"
-            android:layout_height="485dp"
-            android:layout_below="@+id/content">
-
-            <VideoView
-                android:id="@+id/videoView"
+            <com.devlin_n.videoplayer.player.IjkVideoView
+                android:layout_below="@+id/content"
+                android:id="@+id/video_player"
                 android:layout_width="match_parent"
-                android:layout_height="485dp" />
-
-            <ImageView
-                android:id="@+id/coverUser"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <ImageView
-                android:id="@+id/coverplay"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                android:background="@drawable/vedio" />
-            <ProgressBar
-                android:visibility="gone"
-                android:layout_width="50dp"
-                android:id="@+id/bar"
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_gravity="center"
-                android:layout_height="50dp" />
-        </FrameLayout>
+                android:layout_height="wrap_content" />
     </RelativeLayout>
 </LinearLayout>

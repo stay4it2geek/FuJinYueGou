@@ -52,7 +52,6 @@ import cn.bmob.v3.listener.UpdateListener;
 import tyrantgit.widget.HeartLayout;
 
 public class ChatFragment extends Fragment implements View.OnClickListener {
-    private HorizontialListView listview;
     private MemberAdapter mAdapter;
     private HeartLayout heartLayout;
     private Random mRandom;
@@ -63,10 +62,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private ArrayList<NearPerson> nearPersonArrayList = new ArrayList<>();
     public String lastTime;
     private UPMarqueeView upview1;
-    List<String> data = new ArrayList<>();
-    List<View> views = new ArrayList<>();
+    private List<String> data = new ArrayList<>();
+    private List<View> views = new ArrayList<>();
     private LinearLayout moreView;
-    private MyFocusShower myFocusShower;
+    private MyFocusShower mMyFocusShower;
 
     @Nullable
     @Override
@@ -75,8 +74,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_chat, null, false);
         room = (Room) getArguments().getSerializable("room");
         initView();
-
-
         return view;
     }
 
@@ -110,7 +107,6 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);
-        listview = (HorizontialListView) view.findViewById(R.id.list);
         queryData();
         heartLayout = (HeartLayout) view.findViewById(R.id.heart_layout);
         view.findViewById(R.id.send_message).setOnClickListener(this);
@@ -188,7 +184,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     };
 
     private void showDialog(Member m) {
-        FragmentDialog.newInstance(false, m.nickname, "", "确定", "取消", -1, true, new FragmentDialog.OnClickBottomListener() {
+        FragmentDialog.newInstance(false, m.nickname, "", "关闭", "", -1, true, new FragmentDialog.OnClickBottomListener() {
             @Override
             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                 dialog.dismiss();
@@ -198,7 +194,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             public void onNegtiveClick(Dialog dialog) {
                 dialog.dismiss();
             }
-        }).show(getChildFragmentManager(), "dialog");
+        }).show(getChildFragmentManager(), "");
     }
 
     Handler heartHandler = new Handler();
@@ -254,7 +250,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                     if (e == null) {
                         if (myFocusShowers.size() >= 1) {
-                            myFocusShower = myFocusShowers.get(0);
+                            mMyFocusShower = myFocusShowers.get(0);
                             ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
                         }
                     }
@@ -267,17 +263,17 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
             public void onClick(final View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
                     if (!(((TextView) view.findViewById(R.id.focus_top)).getText().toString().trim()).equals("已关注")) {
-                        if(ChatFragment.this.myFocusShower.getObjectId()==null){
-                        MyFocusShower myFocusShower = new MyFocusShower();
-                        myFocusShower.rootUser = BmobUser.getCurrentUser(RootUser.class);
-                        myFocusShower.portrait_path_1280 = photoUrl;
-                        myFocusShower.nickname = room.nickname;
-                        myFocusShower.roomId = room.roomId;
-                        myFocusShower.userId = room.userId;
-                        myFocusShower.gender = room.gender;
-                        myFocusShower.liveStream = room.liveStream;
-                        myFocusShower.city = room.city;
-                        myFocusShower.save(new SaveListener<String>() {
+                        if (mMyFocusShower == null) {
+                            MyFocusShower myFocusShower = new MyFocusShower();
+                            myFocusShower.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                            myFocusShower.portrait_path_1280 = photoUrl;
+                            myFocusShower.nickname = room.nickname;
+                            myFocusShower.roomId = room.roomId;
+                            myFocusShower.userId = room.userId;
+                            myFocusShower.gender = room.gender;
+                            myFocusShower.liveStream = room.liveStream;
+                            myFocusShower.city = room.city;
+                            myFocusShower.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
@@ -292,7 +288,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                                                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
-                                                            ChatFragment.this.myFocusShower = myFocusShowers.get(0);
+                                                            ChatFragment.this.mMyFocusShower = myFocusShowers.get(0);
                                                             ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
                                                         }
                                                     }
@@ -305,10 +301,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                                     }
                                 }
                             });
-                        }else{
-                            myFocusShower.update(myFocusShower.getObjectId(),new UpdateListener() {
+                        } else {
+                            mMyFocusShower.update(mMyFocusShower.getObjectId(), new UpdateListener() {
                                 @Override
-                                public void done( BmobException e) {
+                                public void done(BmobException e) {
                                     if (e == null) {
                                         ToastUtil.showToast(getActivity(), "关注成功");
                                         ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
@@ -321,7 +317,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                                                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
-                                                            ChatFragment.this.myFocusShower = myFocusShowers.get(0);
+                                                            ChatFragment.this.mMyFocusShower = myFocusShowers.get(0);
                                                             ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
                                                         }
                                                     }
@@ -337,26 +333,27 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                         }
 
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
-                                if (myFocusShower != null) {
-                                    myFocusShower.delete(myFocusShower.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                ((TextView) view.findViewById(R.id.focus_top)).setText("关注TA");
-                                                ToastUtil.showToast(getContext(), "取消关注成功");
-                                            }
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                }
-
+                                dialog.dismiss();
                             }
 
                             @Override
                             public void onNegtiveClick(Dialog dialog) {
+                                if (mMyFocusShower != null) {
+                                    mMyFocusShower.delete(mMyFocusShower.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                mMyFocusShower = null;
+                                                ((TextView) view.findViewById(R.id.focus_top)).setText("关注ta");
+                                                ToastUtil.showToast(getContext(), "取消关注成功");
+                                            }
+
+                                        }
+                                    });
+                                }
                                 dialog.dismiss();
                             }
                         }).show(getActivity().getSupportFragmentManager(), "");
@@ -382,7 +379,13 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
     @Subscribe
     public void onEventMainThread(FocusChangeEvent event) {
+
+        if (event.focus) {
             ((TextView) view.findViewById(R.id.focus_top)).setText("已关注");
+        } else {
+            ((TextView) view.findViewById(R.id.focus_top)).setText("关注ta");
+
+        }
     }
 
     @Override

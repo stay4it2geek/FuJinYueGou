@@ -143,15 +143,15 @@ public class FullScreenActivity extends FragmentActivity {
                     ToastUtil.showToast(FullScreenActivity.this, "您已经保存过该视频");
                 }
             } else {
-                FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "确认下载", "继续观看", -1, false, new FragmentDialog.OnClickBottomListener() {
+                FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "继续观看", "确认下载", -1, false, new FragmentDialog.OnClickBottomListener() {
                     @Override
                     public void onPositiveClick(Dialog dialog, boolean needDelete) {
-                        createDownload(mediaInfo);
                         dialog.dismiss();
                     }
 
                     @Override
                     public void onNegtiveClick(Dialog dialog) {
+                        createDownload(mediaInfo);
                         dialog.dismiss();
                     }
                 }).show(getSupportFragmentManager(), "");

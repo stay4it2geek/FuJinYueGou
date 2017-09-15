@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -64,7 +65,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (holder instanceof MyViewHolder) {
             final InterestPostPerson user = datas.get(position).user;
             final InterestPost post = datas.get(position);
-           String nick = user.nick.replaceAll("\r|\n", "");
+            String nick = user.nick.replaceAll("\r|\n", "");
             ((MyViewHolder) holder).nickName.setText(nick);
 
             long l = System.currentTimeMillis() - Long.parseLong(datas.get(position).ctime);
@@ -74,7 +75,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             ((MyViewHolder) holder).sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
             if (day < 365) {
                 ((MyViewHolder) holder).createTime.setText(day + "天" + hour + "时" + min + "分钟前");
-            }else{
+            } else {
                 ((MyViewHolder) holder).createTime.setText("N天" + hour + "时" + min + "分钟前");
             }
             ((MyViewHolder) holder).title.setText(datas.get(position).title + "");
@@ -85,7 +86,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
             if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
+                ((MyViewHolder) holder).imgVideolayout.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
                 ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, 0, isBlurType));
                 ((MyViewHolder) holder).imgtotal.setText("共" + datas.get(position).totalImages + "张");
@@ -93,8 +94,22 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
                 ((MyViewHolder) holder).imgGridview.setVisibility(View.GONE);
                 if (!TextUtils.isEmpty(post.vedioUrl)) {
-                    ((MyViewHolder) holder).imgVideo.setVisibility(View.VISIBLE);
-                    ((MyViewHolder) holder).imgVideo.setImageResource(R.drawable.video);
+                    if (!TextUtils.isEmpty(post.vedioUrl)) {
+                        new AsyncTask<Void, Void, Bitmap>() {
+                            @Override
+                            protected Bitmap doInBackground(Void... params) {
+                                Bitmap bitmap = CommonUtil.createBitmapFromVideoPath(post.vedioUrl);
+                                return bitmap;
+                            }
+
+                            @Override
+                            protected void onPostExecute(Bitmap bitmap) {
+                                super.onPostExecute(bitmap);
+                                ((MyViewHolder) holder).imgVideo.setImageBitmap(bitmap);
+                                ((MyViewHolder) holder).imgVideolayout.setVisibility(View.VISIBLE);
+                            }
+                        }.execute();
+                    }
                 }
             }
             ((MyViewHolder) holder).postlayout.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +144,8 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
+                        ((MyViewHolder) holder).photoImg.setBackgroundDrawable(placeholder);
+
                     }
                 });
             } else {
@@ -141,6 +158,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
+                        ((MyViewHolder) holder).photoImg.setBackgroundDrawable(placeholder);
                     }
                 });
             }
@@ -192,6 +210,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
         private TextView arealocation;
         private TextView createTime;
         private TextView sexAndAge;
+        private FrameLayout imgVideolayout;
 
         public MyViewHolder(View view) {
             super(view);
@@ -209,6 +228,9 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
             postlayout = (RelativeLayout) view.findViewById(R.id.postlayout);
             imgGridview = (GridView) view.findViewById(R.id.imgGridview);
             imgVideo = (ImageView) view.findViewById(R.id.imgVideo);
+            imgVideolayout = (FrameLayout) view.findViewById(R.id.imgVideolayout);
+
+
         }
     }
 }

@@ -69,7 +69,7 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentDialog.newInstance(true, "确定删除?", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(true, "确定删除?", "删除后不可恢复!", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                 deleteListner.onDelete(downloadInfo, position, needDelete);
@@ -139,6 +139,7 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                     holder.videoLayout.setVisibility(View.VISIBLE);
                     Glide.with(activity).load(myDownloadInfoById.getIcon()).skipMemoryCache(false).into(holder.videoImg);//加载网络图片
                 }
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

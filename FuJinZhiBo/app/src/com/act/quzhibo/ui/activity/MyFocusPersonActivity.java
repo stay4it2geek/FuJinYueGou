@@ -83,13 +83,8 @@ public class MyFocusPersonActivity extends FragmentActivity {
                     @Override
                     public void run() {
                         if (myfocusSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    queryData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            queryData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -122,19 +117,21 @@ public class MyFocusPersonActivity extends FragmentActivity {
             @Override
             public void done(List<MyFocusCommonPerson> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
-                        if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并清空，重新添加
-                            myFocusCommonPersons.clear();
-                        }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
+                    if (actionType == Constants.REFRESH) {
+                        // 当是下拉刷新操作时，将当前页的编号重置为0，并清空，重新添加
+                        myFocusCommonPersons.clear();
                     }
+                    if (list.size() > 0) {
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
+
+                } else {
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+
                 }
             }
         });
@@ -179,9 +176,15 @@ public class MyFocusPersonActivity extends FragmentActivity {
                         myFocusPersonListAdapter.setDelteListener(new MyFocusPersonListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
-                                FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onNegtiveClick(Dialog dialog) {
                                         myFocusCommonPersons.get(position).delete(myFocusCommonPersons.get(position).getObjectId(), new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
@@ -198,12 +201,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
                                         });
                                         dialog.dismiss();
                                     }
-
-                                    @Override
-                                    public void onNegtiveClick(Dialog dialog) {
-                                        dialog.dismiss();
-                                    }
-                                }).show(getSupportFragmentManager(),"");
+                                }).show(getSupportFragmentManager(), "");
                             }
                         });
                     }
@@ -211,10 +209,14 @@ public class MyFocusPersonActivity extends FragmentActivity {
                     myFocusPersonListAdapter.notifyDataSetChanged();
                 }
                 loadNetView.setVisibility(View.GONE);
-
+                if (myFocusCommonPersons.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
+                }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };
@@ -222,7 +224,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(myFocusPersonListAdapter!=null){
+        if (myFocusPersonListAdapter != null) {
             myFocusPersonListAdapter.notifyDataSetChanged();
             if (myFocusCommonPersons.size() == 0) {
                 loadNetView.setVisibility(View.VISIBLE);

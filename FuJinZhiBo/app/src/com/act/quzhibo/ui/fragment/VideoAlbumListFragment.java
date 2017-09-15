@@ -88,13 +88,10 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (mediasSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    initMediaVideoListData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+
+                            initMediaVideoListData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
+
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -155,18 +152,18 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             @Override
             public void done(List<MediaInfo> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
-                        if (actionType == Constants.REFRESH) {
-                            medias.clear();
-                        }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
+
+                    if (actionType == Constants.REFRESH) {
+                        medias.clear();
                     }
+                    if (list.size() > 0) {
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
+
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
@@ -217,8 +214,8 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     return;
                 }
             } else {
-                    loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.RELOAD);
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
 
         }

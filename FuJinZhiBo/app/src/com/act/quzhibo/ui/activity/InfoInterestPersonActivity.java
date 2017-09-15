@@ -54,7 +54,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
     private int second;
     private LoadNetView loadNetView;
 
-    MyFocusCommonPerson myFcPerson;
+    MyFocusCommonPerson myFocusCommonPerson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_info_common_layout);
         initView();
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-        titlebar.setBarTitle("个 人 档 案");
+        titlebar.setBarTitle("情趣达人档案");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +125,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
         int vip = Integer.parseInt(post.user.vipLevel);
         if (vip < 1) {
             ((TextView) findViewById(R.id.level)).setText("非会员");
-        } else if (vip >=1 && vip < 5) {
+        } else if (vip >= 1 && vip < 5) {
             ((TextView) findViewById(R.id.level)).setText("初级趣会员");
         } else if (vip >= 5 && vip < 7) {
             ((TextView) findViewById(R.id.level)).setText("中级趣会员");
@@ -165,10 +165,10 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             query.addWhereEqualTo("userType", Constants.INTEREST);
             query.findObjects(new FindListener<MyFocusCommonPerson>() {
                 @Override
-                public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
+                public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
                     if (e == null) {
-                        if (myFcPersons.size() >= 1) {
-                            myFcPerson = myFcPersons.get(0);
+                        if (myFocusCommonPersons.size() >= 1) {
+                            myFocusCommonPerson = myFocusCommonPersons.get(0);
                             ((TextView) findViewById(R.id.focus)).setText("已关注");
                         }
                     }
@@ -182,61 +182,95 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
                     if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
-                        MyFocusCommonPerson myFcPerson = new MyFocusCommonPerson();
-                        myFcPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
-                        myFcPerson.username = post.user.nick;
-                        myFcPerson.userId = post.user.userId;
-                        myFcPerson.photoUrl = post.user.photoUrl;
-                        myFcPerson.sex = post.user.sex;
-                        myFcPerson.userType = Constants.INTEREST;
-                        myFcPerson.save(new SaveListener<String>() {
-                            @Override
-                            public void done(String objectId, BmobException e) {
-                                if (e == null) {
-                                    ((TextView) findViewById(R.id.focus)).setText("已关注");
-                                    if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                                        BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
-                                        query.setLimit(1);
-                                        query.addWhereEqualTo("userId", post.user.userId);
-                                        query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
-                                        query.findObjects(new FindListener<MyFocusCommonPerson>() {
-                                            @Override
-                                            public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
-                                                if (e == null) {
-                                                    if (myFcPersons.size() >= 1) {
-                                                        InfoInterestPersonActivity.this.myFcPerson = myFcPersons.get(0);
-                                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                        if (myFocusCommonPerson == null) {
+                            MyFocusCommonPerson myFocusCommonPerson = new MyFocusCommonPerson();
+                            myFocusCommonPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                            myFocusCommonPerson.username = post.user.nick;
+                            myFocusCommonPerson.userId = post.user.userId;
+                            myFocusCommonPerson.photoUrl = post.user.photoUrl;
+                            myFocusCommonPerson.sex = post.user.sex;
+                            myFocusCommonPerson.userType = Constants.INTEREST;
+                            myFocusCommonPerson.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String objectId, BmobException e) {
+                                    if (e == null) {
+                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+                                            query.setLimit(1);
+                                            query.addWhereEqualTo("userId", post.user.userId);
+                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                                                @Override
+                                                public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
+                                                    if (e == null) {
+                                                        if (myFocusCommonPersons.size() >= 1) {
+                                                            InfoInterestPersonActivity.this.myFocusCommonPerson = myFocusCommonPersons.get(0);
+                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        });
+                                            });
+                                        }
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注成功");
+                                    } else {
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注失败");
                                     }
-                                    ToastUtil.showToast(InfoInterestPersonActivity.this, "关注成功");
-                                } else {
-                                    ToastUtil.showToast(InfoInterestPersonActivity.this, "关注失败");
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            myFocusCommonPerson.update(myFocusCommonPerson.getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+                                            query.setLimit(1);
+                                            query.addWhereEqualTo("userId", post.user.userId);
+                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                                                @Override
+                                                public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
+                                                    if (e == null) {
+                                                        if (myFocusCommonPersons.size() >= 1) {
+                                                            InfoInterestPersonActivity.this.myFocusCommonPerson = myFocusCommonPersons.get(0);
+                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注成功");
+                                    } else {
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注失败");
+                                    }
+                                }
+                            });
+                        }
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
-                                if (myFcPerson != null) {
-                                    myFcPerson.delete(myFcPerson.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                ((TextView) findViewById(R.id.focus)).setText("关注TA");
-                                                ToastUtil.showToast(InfoInterestPersonActivity.this, "取消关注成功");
-                                            }
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                }
+
+                                dialog.dismiss();
                             }
 
                             @Override
                             public void onNegtiveClick(Dialog dialog) {
+                                if (myFocusCommonPerson != null) {
+                                    myFocusCommonPerson.delete(myFocusCommonPerson.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                ((TextView) findViewById(R.id.focus)).setText("关注ta");
+                                                myFocusCommonPerson = null;
+                                                ToastUtil.showToast(InfoInterestPersonActivity.this, "取消关注成功");
+                                            }
+
+                                        }
+                                    });
+                                }
                                 dialog.dismiss();
                             }
                         }).show(getSupportFragmentManager(), "");

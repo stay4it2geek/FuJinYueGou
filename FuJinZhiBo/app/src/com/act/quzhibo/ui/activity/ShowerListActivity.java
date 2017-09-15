@@ -118,7 +118,7 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
         if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    FragmentDialog.newInstance(false, "客官再看一会儿呗", "", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
+                    FragmentDialog.newInstance(false, "客官,再看一会儿呗", "真的要离开吗？", "再欣赏下", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
                         @Override
                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                             dialog.dismiss();
@@ -129,7 +129,7 @@ public class ShowerListActivity extends FragmentActivity implements ShowerListFr
                             dialog.dismiss();
                             ShowerListActivity.super.onBackPressed();
                         }
-                    }).show(getSupportFragmentManager(), "dialog");
+                    }).show(getSupportFragmentManager(), "");
                 } else {
                     getSupportFragmentManager().popBackStack();
                 }

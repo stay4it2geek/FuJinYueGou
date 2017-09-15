@@ -434,7 +434,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:text="关注TA"
+            android:text="关注ta"
             android:textColor="#000"
             android:textSize="18sp" />
     </LinearLayout>

@@ -88,9 +88,9 @@
 
     <RelativeLayout
         android:id="@+id/content"
-        android:layout_below="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header">
 
         <TextView
             android:id="@+id/title"
@@ -130,16 +130,27 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp">
 
-            <ImageView
-                android:id="@+id/imgVideo"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
+            <FrameLayout
+                android:id="@+id/imgVideolayout"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-                android:adjustViewBounds="false"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/imgVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:adjustViewBounds="false"
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/video_paly_cover" />
+            </FrameLayout>
 
             <GridView
                 android:id="@+id/imgGridview"

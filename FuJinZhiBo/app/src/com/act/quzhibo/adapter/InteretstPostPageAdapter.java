@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -20,10 +18,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
+import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.entity.ProvinceAndCityEntify;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -37,18 +35,15 @@ import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.util.ArrayList;
 
-/**
- * Created by asus-pc on 2017/6/11.
- */
 public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final InterestPost post;
     private InterestPostPageDetailAndComments data;//数据
     private Activity activity;
-    private int count;
 
     public enum ITEM_TYPE {
         ITEM1,
@@ -133,10 +128,8 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.putExtra(Constants.POST, post);
-                    intent.putExtra("count", count);
                     intent.setClass(activity, InfoInterestPersonActivity.class);
                     activity.startActivity(intent);
-                    count++;
                 }
             });
 
@@ -151,8 +144,12 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
             if (day < 365) {
                 ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
+            } else {
+                ((Item1ViewHolder) holder).createTime.setText(day + "N天" + hour + "小时" + min + "分钟前");
+
             }
-            ((Item1ViewHolder) holder).nickName.setText(data.detail.user.nick);
+            String nick = data.detail.user.nick.replaceAll("\r|\n", "");
+            ((Item1ViewHolder) holder).nickName.setText(nick);
             ((Item1ViewHolder) holder).title.setText(data.detail.title);
 
             StringBuffer sb = new StringBuffer();
@@ -161,7 +158,6 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             }
             ((Item1ViewHolder) holder).content.setText(sb.toString());
             if (!TextUtils.isEmpty(post.vedioUrl)) {
-                ((Item1ViewHolder) holder).videoframlayout.setVisibility(View.VISIBLE);
                 new AsyncTask<Void, Void, Bitmap>() {
                     @Override
                     protected Bitmap doInBackground(Void... params) {
@@ -172,26 +168,18 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                     @Override
                     protected void onPostExecute(Bitmap bitmap) {
                         super.onPostExecute(bitmap);
-                        ((Item1ViewHolder) holder).coverUser.setImageBitmap(bitmap);
-                        ((Item1ViewHolder) holder).coverplay.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ((Item1ViewHolder) holder).coverUser.setVisibility(View.GONE);
-                                ((Item1ViewHolder) holder).coverplay.setVisibility(View.GONE);
-                                ((Item1ViewHolder) holder).bar.setVisibility(View.VISIBLE);
-                                Uri uri = Uri.parse(post.vedioUrl);
-                                ((Item1ViewHolder) holder).videoView.setVideoURI(uri);
-                                ((Item1ViewHolder) holder).videoView.start();
-                                ((Item1ViewHolder) holder).videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                    @Override
-                                    public void onPrepared(MediaPlayer mp) {
-                                        ((Item1ViewHolder) holder).bar.setVisibility(View.GONE);
-                                    }
-                                });
-                            }
-                        });
+                        ((Item1ViewHolder) holder).controller.getThumb().setImageBitmap(bitmap);
+                        ((Item1ViewHolder) holder).ijkVideoView
+                                .enableCache()
+                                .addToPlayerManager()
+                                .setUrl(post.vedioUrl)
+                                .setTitle(post.title)
+                                .setVideoController(((Item1ViewHolder) holder).controller);
+
                     }
                 }.execute();
+            } else {
+                ((Item1ViewHolder) holder).ijkVideoView.setVisibility(View.GONE);
             }
 
             new AsyncTask<Void, Void, String>() {
@@ -227,14 +215,15 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             ((Item3ViewHolder) holder).pinglun.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (((Item3ViewHolder) holder).talk.getText().equals("点击这里评论她/他") || ((Item3ViewHolder) holder).talk.getText().length()== 0) {
+                    if (((Item3ViewHolder) holder).talk.getText().equals("点击这里评论她/他") || ((Item3ViewHolder) holder).talk.getText().length() == 0) {
                         ToastUtil.showToast(activity, "您是否忘记了评论内容?");
                     } else {
                         ToastUtil.showToast(activity, "正在评论...");
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtil.showToast(activity, "评论异常，请稍后重试！");
+                                ToastUtil.showToast(activity, "评论已提交审核");
+                                ((Item3ViewHolder) holder).talk.setText("");
                                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(((Item3ViewHolder) holder).pinglun.getWindowToken(), 0);
                             }
@@ -253,9 +242,6 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
 
     class Item1ViewHolder extends RecyclerView.ViewHolder {
 
-        private ProgressBar bar;
-        private ImageView coverplay;
-        private ImageView coverUser;
         private TextView arealocation;
         private TextView createTime;
         private ImageView userImage;
@@ -263,25 +249,23 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
         private TextView nickName;
         private TextView title;
         private io.github.rockerhieu.emojicon.EmojiconTextView content;
-        private VideoView videoView;
-        private FrameLayout videoframlayout;
+        private IjkVideoView ijkVideoView;
+        private MyStandardVideoController controller;
 
         public Item1ViewHolder(View view) {
             super(view);
-            videoframlayout = (FrameLayout) view.findViewById(R.id.videoFr);
-            bar = (ProgressBar) view.findViewById(R.id.bar);
-            videoView = (VideoView) view.findViewById(R.id.videoView);
-            coverUser = (ImageView) view.findViewById(R.id.coverUser);
-            coverplay = (ImageView) view.findViewById(R.id.coverplay);
-            videoView = (VideoView) view.findViewById(R.id.videoView);
             nickName = (TextView) view.findViewById(R.id.nickName);
             createTime = (TextView) view.findViewById(R.id.createTime);
             arealocation = (TextView) view.findViewById(R.id.arealocation);
             userImage = (ImageView) view.findViewById(R.id.userImage);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             nickName = (TextView) view.findViewById(R.id.nickName);
-
-
+            ijkVideoView = (IjkVideoView) itemView.findViewById(R.id.video_player);
+            int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+            ijkVideoView.setLayoutParams(new RelativeLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
+            controller = new MyStandardVideoController(activity);
+            controller.setInitData(false, true);
+            ijkVideoView.setVideoController(controller);
             title = (TextView) view.findViewById(R.id.title);
             content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.content);
         }
@@ -315,7 +299,6 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
 
 
     }
-
 
 
 }

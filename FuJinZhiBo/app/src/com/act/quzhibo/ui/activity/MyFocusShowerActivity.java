@@ -91,13 +91,8 @@ public class MyFocusShowerActivity extends FragmentActivity {
                     @Override
                     public void run() {
                         if (myfocusSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    queryData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            queryData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -130,19 +125,18 @@ public class MyFocusShowerActivity extends FragmentActivity {
             @Override
             public void done(List<MyFocusShower> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
-                        if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并清空，重新添加
-                            myFocusShowerses.clear();
-                        }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
+                    if (actionType == Constants.REFRESH) {
+                        myFocusShowerses.clear();
                     }
+                    if (list.size() > 0) {
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
+                } else {
+                    handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });
@@ -228,9 +222,15 @@ public class MyFocusShowerActivity extends FragmentActivity {
                         myFocusShowerListAdapter.setDelteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
-                                FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "取消", "确定", -1, false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onNegtiveClick(Dialog dialog) {
                                         myFocusShowerses.get(position).delete(myFocusShowerses.get(position).getObjectId(), new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
@@ -247,30 +247,31 @@ public class MyFocusShowerActivity extends FragmentActivity {
                                         });
                                         dialog.dismiss();
                                     }
-
-                                    @Override
-                                    public void onNegtiveClick(Dialog dialog) {
-                                        dialog.dismiss();
-                                    }
-                                }).show(getSupportFragmentManager(),"");
+                                }).show(getSupportFragmentManager(), "");
                             }
                         });
                     }
                 } else {
                     myFocusShowerListAdapter.notifyDataSetChanged();
                 }
-                loadNetView.setVisibility(View.GONE);
 
+                loadNetView.setVisibility(View.GONE);
+                if (myFocusShowerses.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
+                }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };
+
     @Override
     protected void onResume() {
         super.onResume();
-        if(myFocusShowerListAdapter!=null){
+        if (myFocusShowerListAdapter != null) {
             myFocusShowerListAdapter.notifyDataSetChanged();
             if (myFocusShowerses.size() == 0) {
                 loadNetView.setVisibility(View.VISIBLE);

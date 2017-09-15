@@ -64,13 +64,10 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                         @Override
                         public void run() {
                             if (mediasSize > 0) {
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+
                                         initPhotoListData(Constants.LOADMORE);
                                         recycleview.loadMoreComplete();
-                                    }
-                                }, 1000);
+
                             } else {
                                 recycleview.setNoMore(true);
                             }
@@ -127,18 +124,16 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
             @Override
             public void done(List<MediaInfo> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
                             medias.clear();
                         }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                        if(list.size()>0){
+                            lastTime = list.get(list.size() - 1).getUpdatedAt();
+                        }
                         Message message = new Message();
                         message.obj = list;
                         message.what = actionType;
                         handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
-                    }
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }

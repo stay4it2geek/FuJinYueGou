@@ -57,9 +57,8 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-
+            String nick = rootUser.getUsername().replaceAll("\r|\n", "");
             holder.nickName.setText(rootUser.getUsername() + "");
-
             long l = System.currentTimeMillis() - Long.parseLong(posts.get(position).ctime);
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
@@ -67,14 +66,14 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             holder.sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex + "");
             if (day < 365) {
                 holder.createTime.setText(day + "天" + hour + "时" + min + "分钟前");
-            }else{
+            } else {
                 holder.createTime.setText("N天" + hour + "时" + min + "分钟前");
             }
-            holder.title.setText(posts.get(position).title+"");
-            holder.absText.setText(posts.get(position).absText+"");
-            holder.viewNum.setText(posts.get(position).pageView+"");
-            holder.pinglunNum.setText(posts.get(position).totalComments+"");
-            holder.dashangNum.setText(posts.get(position).rewards+"");
+            holder.title.setText(posts.get(position).title + "");
+            holder.absText.setText(posts.get(position).absText + "");
+            holder.viewNum.setText(posts.get(position).pageView + "");
+            holder.pinglunNum.setText(posts.get(position).totalComments + "");
+            holder.dashangNum.setText(posts.get(position).rewards + "");
 
             if (posts.get(position).totalImages != null && Integer.parseInt(posts.get(position).totalImages) > 0) {
                 holder.imgGridview.setVisibility(View.VISIBLE);
@@ -127,7 +126,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                 }
             }
 
-            holder.arealocation.setText(rootUser.provinceAndcity+"");
+            holder.arealocation.setText(rootUser.provinceAndcity + "");
 
         }
     }

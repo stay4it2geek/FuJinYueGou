@@ -152,7 +152,7 @@
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/vedio" />
+            android:background="@drawable/video_paly_cover" />
 
         <TextView
             android:id="@+id/textView4"

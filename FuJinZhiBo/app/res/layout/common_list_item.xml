@@ -21,6 +21,8 @@
 
             <ImageView
                 android:id="@+id/photoImg"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -31,7 +33,7 @@
                 android:layout_gravity="right|bottom"
                 android:layout_margin="5dp"
                 android:background="@drawable/delete"
-                android:visibility="gone" />
+                android:visibility="gone"  />
         </FrameLayout>
 
         <RelativeLayout

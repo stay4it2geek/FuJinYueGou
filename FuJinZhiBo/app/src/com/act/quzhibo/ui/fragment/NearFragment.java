@@ -33,6 +33,7 @@ public class NearFragment extends BackHandledFragment {
 
     private LoadNetView loadNetView;
     View view;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,19 +56,15 @@ public class NearFragment extends BackHandledFragment {
                     }
                 }, 1000);
             }
+
             @Override
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (nearPersonSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    queryData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            queryData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -102,10 +99,12 @@ public class NearFragment extends BackHandledFragment {
         });
         return view;
     }
+
     private XRecyclerView recyclerView;
     NearPersonAdapter nearPersonAdapter;
     ArrayList<NearPerson> nearArrayList = new ArrayList<>();
     public String lastTime;
+
     private void queryData(final int actionType) {
         final BmobQuery<NearPerson> query = new BmobQuery<>();
         query.setLimit(10);
@@ -125,18 +124,17 @@ public class NearFragment extends BackHandledFragment {
             @Override
             public void done(List<NearPerson> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
-                        if (actionType == Constants.REFRESH) {
-                            nearArrayList.clear();
-                        }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
+                    if (actionType == Constants.REFRESH) {
+                        nearArrayList.clear();
                     }
+                    lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
+
+                } else {
+                    handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });

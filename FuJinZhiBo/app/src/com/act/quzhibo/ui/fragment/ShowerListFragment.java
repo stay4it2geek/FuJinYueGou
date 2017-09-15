@@ -1,7 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,10 +16,9 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.RoomListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.entity.RoomList;
+import com.act.quzhibo.entity.RoomParentList;
 import com.act.quzhibo.okhttp.OkHttpUtils;
 import com.act.quzhibo.okhttp.callback.StringCallback;
-import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
@@ -83,13 +81,8 @@ public class ShowerListFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (mCurrentCounter < roomTotal && mLastRequstRoomListSize == 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    getData(cataId, String.valueOf(page), Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                            getData(cataId, String.valueOf(page), Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -97,6 +90,8 @@ public class ShowerListFragment extends BackHandledFragment {
                 }, 1000);
             }
         });
+
+
         cataId = getArguments().getString(Constants.CATAID);
         cataTitle = getArguments().getString(Constants.CATATITLE);
         if (cataTitle.equals("手机达人")) {
@@ -110,7 +105,7 @@ public class ShowerListFragment extends BackHandledFragment {
             gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(gridLayoutManager);
         }
-        getData(cataId, "0", Constants.REFRESH);
+
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,54 +127,64 @@ public class ShowerListFragment extends BackHandledFragment {
                 }
             }
         });
+
+        getData(cataId, "0", Constants.REFRESH);
+
         return view;
     }
+
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            final RoomList roomList = CommonUtil.parseJsonWithGson((String) msg.obj, RoomList.class);
+            final RoomParentList roomParentList = CommonUtil.parseJsonWithGson((String) msg.obj, RoomParentList.class);
             if (msg.what != Constants.NetWorkError) {
                 if (msg.what == Constants.REFRESH) {
                     page = 20;
                     rooms.clear();
                     mCurrentCounter = 0;
-                    roomTotal = Integer.parseInt(roomList.roomTotal);
+                    roomTotal = Integer.parseInt(roomParentList.roomTotal);
                     mLastRequstRoomListSize = 0;
                 } else if (msg.what == Constants.LOADMORE) {
                     page = page * 2;
-                    mCurrentCounter += roomList.roomList.size();
-                    mLastRequstRoomListSize = roomList.roomList.size();
+                    mCurrentCounter += roomParentList.roomList.size();
+                    mLastRequstRoomListSize = roomParentList.roomList.size();
                 }
-                if (roomList != null && roomList.roomList.size() > 0) {
-                    rooms.addAll(roomList.roomList);
-                    if (adapter == null) {
-                        Display display = getActivity().getWindowManager().getDefaultDisplay();
-                        Point size = new Point();
-                        display.getSize(size);
-                        int screenWidth = size.x;
-                        adapter = new RoomListAdapter(getActivity(), rooms, roomList.pathPrefix, screenWidth, cataTitle);
-                        adapter.setOnItemClickListener(new RoomListAdapter.OnRecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                onCallShowViewListner.onShowVideo(rooms.get(position));
-                            }
-                        });
-                        recyclerView.setAdapter(adapter);
-                    } else {
-                        adapter.notifyDataSetChanged();
-                    }
+
+                rooms.addAll(roomParentList.roomList);
+                if (adapter == null) {
+                    Display display = getActivity().getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int screenWidth = size.x;
+                    adapter = new RoomListAdapter(getActivity(), rooms, roomParentList.pathPrefix, screenWidth, cataTitle);
+                    adapter.setOnItemClickListener(new RoomListAdapter.OnRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            onCallShowViewListner.onShowVideo(rooms.get(position));
+                        }
+                    });
+                    recyclerView.setAdapter(adapter);
                 } else {
-                    recyclerView.setNoMore(true);
+                    adapter.notifyDataSetChanged();
                 }
                 loadNetView.setVisibility(View.GONE);
+
+                if (rooms.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
+                }
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
 
+
         }
+
+
     };
 
     public static final class ComparatorValues implements Comparator<Room> {

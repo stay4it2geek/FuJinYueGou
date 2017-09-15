@@ -1,36 +1,28 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.InterestPlates;
-import com.act.quzhibo.entity.Member;
 import com.act.quzhibo.entity.VipOrders;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
     ArrayList<VipOrders> vipOrderses;
     Activity mContext;
-    private OnRecyclerViewListener mListener = null;
+    private OnDeleteListener mListener = null;
 
-    public interface OnRecyclerViewListener {
+    public interface OnDeleteListener {
         void onDelete(int position);
     }
 
-    public void setListener(OnRecyclerViewListener listener) {
+    public void setDeleteListener(OnDeleteListener listener) {
         mListener = listener;
     }
 

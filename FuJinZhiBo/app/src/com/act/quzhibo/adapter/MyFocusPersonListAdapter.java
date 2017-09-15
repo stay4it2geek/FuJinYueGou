@@ -59,14 +59,15 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         if (holder instanceof MyViewHolder) {
             holder.photoImg.setAdjustViewBounds(true);
             holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
-            if (datas.get(position).sex.equals("0")) {
+            if (datas.get(position).sex.equals("2")) {
+                holder.sex.setText("女");
                 Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.women).into(holder.photoImg);//加载网络图片
             } else {
+                holder.sex.setText("男");
                 Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.man).into(holder.photoImg);//加载网络图片
 
             }
         }
-        holder.sex.setText(datas.get(position).sex);
         holder.nickName.setText(datas.get(position).username);
         holder.commonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
