@@ -32,10 +32,6 @@ import cn.woblog.android.downloader.callback.DownloadManager;
 import cn.woblog.android.downloader.domain.DownloadInfo;
 
 
-/**
- * Created by renpingqing on 17/3/1.
- */
-
 public class DownloadingFragment extends BaseFragment {
 
     private RecyclerView recycler_view;

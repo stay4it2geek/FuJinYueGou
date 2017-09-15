@@ -34,7 +34,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final int isBlurType;
     private ArrayList<InterestPost> datas;
     private Activity activity;
-    int count = 0;
 
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
@@ -116,10 +115,8 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.putExtra(Constants.POST, post);
-                    intent.putExtra("count", count);
                     intent.setClass(activity, InfoInterestPersonActivity.class);
                     activity.startActivity(intent);
-                    count++;
                 }
             });
             if (post.user.sex.equals("2")) {

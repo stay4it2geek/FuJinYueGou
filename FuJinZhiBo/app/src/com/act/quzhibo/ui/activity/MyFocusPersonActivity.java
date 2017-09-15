@@ -8,29 +8,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Display;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.MyFocusShowerListAdapter;
+import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.entity.MyFocusShower;
-import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
-import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,13 +34,12 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
-import okhttp3.Call;
 
 
-public class MyFocusPersonActivity extends FragmentActivity{
+public class MyFocusPersonActivity extends FragmentActivity {
 
     private XRecyclerView recyclerView;
-    private MyFocusShowerListAdapter myFocusShowerListAdapter;
+    private MyFocusPersonListAdapter myFocusPersonListAdapter;
     private LoadNetView loadNetView;
     private String lastTime = "";
     private ArrayList<MyFocusCommonPerson> myFocusCommonPersons = new ArrayList<>();
@@ -154,11 +144,11 @@ public class MyFocusPersonActivity extends FragmentActivity{
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<MyFocusShower> showerses = (ArrayList<MyFocusShower>) msg.obj;
+            ArrayList<MyFocusCommonPerson> showerses = (ArrayList<MyFocusCommonPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
 
                 if (showerses != null) {
-//                    myFocusCommonPersons.addAll(showerses);
+                    myFocusCommonPersons.addAll(showerses);
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
@@ -169,65 +159,25 @@ public class MyFocusPersonActivity extends FragmentActivity{
                 display.getSize(size);
                 int screenWidth = size.x;
 
-                if (myFocusShowerListAdapter == null) {
-//                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons, screenWidth, "");
-                    recyclerView.setAdapter(myFocusShowerListAdapter);
-                    myFocusShowerListAdapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
+                if (myFocusPersonListAdapter == null) {
+                    myFocusPersonListAdapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons, screenWidth);
+                    recyclerView.setAdapter(myFocusPersonListAdapter);
+                    myFocusPersonListAdapter.setOnItemClickListener(new MyFocusPersonListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
-                        public void onItemClick(View view, int position, final MyFocusShower myFocusShower) {
-                            String url = CommonUtil.getToggle(MyFocusPersonActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", myFocusShower.userId);
-                            OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                    handler.sendEmptyMessage(Constants.NetWorkError);
-                                }
+                        public void onItemClick(View view, int position, final MyFocusCommonPerson myFocusCommonPerson) {
+                            Intent intent = new Intent();
+                            intent.putExtra(Constants.COMMON_USER_ID, myFocusCommonPerson.userId);
+                            if (myFocusCommonPerson.userType.equals(Constants.INTEREST)) {
+                                intent.setClass(MyFocusPersonActivity.this, IntersetPersonPostListActivity.class);
+                            } else {
+//                                intent.setClass(MyFocusPersonActivity.this, NearPersonPostListActivity.class);
+                            }
 
-                                @Override
-                                public void onResponse(String response, int id) {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        Room room = new Room();
-                                        room.screenType = jsonObject.getString("screenType");
-                                        room.roomId = jsonObject.getString("roomId");
-                                        room.nickname = jsonObject.getString("nickname");
-                                        room.userId = jsonObject.getString("userId");
-                                        room.gender = jsonObject.getString("gender");
-                                        room.liveStream = "http://pull.kktv8.com/livekktv/" + jsonObject.getString("roomId") + ".flv";
-                                        room.city = jsonObject.getString("city");
-                                        room.liveType = jsonObject.getString("liveType");
-                                        room.nickname = jsonObject.getString("nickname");
-                                        room.gender = jsonObject.getString("gender");
-                                        room.onlineCount = jsonObject.getString("onlineCount");
-                                        room.portrait_path_1280 = jsonObject.getString("portrait_path_1280");
-                                        Intent intent;
-                                        if (room.screenType.equals(Constants.LANSPACE)) {
-                                            if (room.liveType.equals(Constants.LANSPACE_IS_LIVE)) {
-                                                intent = new Intent(MyFocusPersonActivity.this, VideoPlayerActivity.class);
-                                            } else {
-                                                intent = new Intent(MyFocusPersonActivity.this, ShowerInfoActivity.class);
-                                                ToastUtil.showToast(MyFocusPersonActivity.this, "该主播未直播哦");
-                                            }
-                                        } else {
-                                            if (room.liveType.equals(Constants.PORTAIL_IS_LIVE)) {
-                                                intent = new Intent(MyFocusPersonActivity.this, VideoPlayerActivity.class);
-                                            } else {
-                                                intent = new Intent(MyFocusPersonActivity.this, ShowerInfoActivity.class);
-                                                ToastUtil.showToast(MyFocusPersonActivity.this, "该主播未直播哦");
-                                            }
-                                        }
-                                        intent.putExtra("room", room);
-                                        startActivity(intent);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-
-
+                            startActivity(intent);
                         }
                     });
-                    if (myFocusShowerListAdapter != null) {
-                        myFocusShowerListAdapter.setDelteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
+                    if (myFocusPersonListAdapter != null) {
+                        myFocusPersonListAdapter.setDelteListener(new MyFocusPersonListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
                                 FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
@@ -238,7 +188,7 @@ public class MyFocusPersonActivity extends FragmentActivity{
                                             public void done(BmobException e) {
                                                 if (e == null) {
                                                     myFocusCommonPersons.remove(position);
-                                                    myFocusShowerListAdapter.notifyDataSetChanged();
+                                                    myFocusPersonListAdapter.notifyDataSetChanged();
                                                     if (myFocusCommonPersons.size() == 0) {
                                                         loadNetView.setVisibility(View.VISIBLE);
                                                         loadNetView.setlayoutVisily(Constants.NO_DATA);
@@ -259,7 +209,7 @@ public class MyFocusPersonActivity extends FragmentActivity{
                         });
                     }
                 } else {
-                    myFocusShowerListAdapter.notifyDataSetChanged();
+                    myFocusPersonListAdapter.notifyDataSetChanged();
                 }
                 loadNetView.setVisibility(View.GONE);
 

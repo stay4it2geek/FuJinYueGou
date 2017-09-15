@@ -19,7 +19,6 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
-import com.act.quzhibo.entity.MyFocusShower;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.InterestPost;
@@ -300,7 +299,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.COMMON_USER_ID, post.user.userId);
-                                    intent.setClass(InfoInterestPersonActivity.this, CommonPersonPostListActivity.class);
+                                    intent.setClass(InfoInterestPersonActivity.this, IntersetPersonPostListActivity.class);
                                     startActivity(intent);
                                 }
                             });

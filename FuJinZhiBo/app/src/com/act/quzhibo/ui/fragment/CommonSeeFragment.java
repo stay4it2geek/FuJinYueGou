@@ -134,13 +134,6 @@ public class CommonSeeFragment extends BackHandledFragment {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (commonSeeAdapter != null) {
-            commonSeeAdapter.setCount();
-        }
-    }
 
     public static final class ComparatorValues implements Comparator<InterestPostPerson> {
 

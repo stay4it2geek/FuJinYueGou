@@ -28,6 +28,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bmob.v3.b.V;
+
 public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity activity;
     private List<InterestPostPerson> datas;
@@ -43,10 +45,6 @@ public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return holder;
     }
 
-    public void setCount() {
-        count = 0;
-    }
-    int  count = 0;
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
@@ -68,10 +66,9 @@ public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.putExtra(Constants.POST_USER_WHO_SEE_ME, datas.get(position));
-                    intent.putExtra("count", count);
                     intent.setClass(activity, InfoInterestPersonActivity.class);
                     activity.startActivity(intent);
-                    count++;
+
                 }
             });
             if (user.sex.equals("2")) {
@@ -152,10 +149,11 @@ public class CommonSeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             nickName = (TextView) view.findViewById(R.id.nick);
             createTime = (TextView) view.findViewById(R.id.createTime);
             arealocation = (TextView) view.findViewById(R.id.arealocation);
+            arealocation.setVisibility(View.VISIBLE);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             disMariState = (TextView) view.findViewById(R.id.disMariState);
             who_see_me_layout = (RelativeLayout) view.findViewById(R.id.who_see_me_layout);
-
+            view.findViewById(R.id.delete).setVisibility(View.GONE);
         }
     }
 

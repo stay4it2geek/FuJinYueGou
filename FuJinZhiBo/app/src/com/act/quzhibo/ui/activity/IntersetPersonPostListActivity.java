@@ -32,7 +32,7 @@ import cn.bmob.v3.BmobUser;
 import okhttp3.Call;
 
 
-public class CommonPersonPostListActivity extends FragmentActivity {
+public class IntersetPersonPostListActivity extends FragmentActivity {
 
     private XRecyclerView recyclerView;
     private ArrayList<InterestPost> posts = new ArrayList<>();
@@ -140,7 +140,7 @@ public class CommonPersonPostListActivity extends FragmentActivity {
                         } else {
                             isBlurType = 0;
                         }
-                        adapter = new InterestPostListAdapter(CommonPersonPostListActivity.this, posts, isBlurType);
+                        adapter = new InterestPostListAdapter(IntersetPersonPostListActivity.this, posts, isBlurType);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {
@@ -149,13 +149,13 @@ public class CommonPersonPostListActivity extends FragmentActivity {
                                     FragmentDialog.newInstance(false,"请确认您的权限", "你是否未注册或者登录？", "去注册", "去登录", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog,boolean needDelete) {
-                                            startActivity(new Intent(CommonPersonPostListActivity.this, RegisterActivity.class));
+                                            startActivity(new Intent(IntersetPersonPostListActivity.this, RegisterActivity.class));
 
                                         }
 
                                         @Override
                                         public void onNegtiveClick(Dialog dialog) {
-                                            startActivity(new Intent(CommonPersonPostListActivity.this, LoginActivity.class));
+                                            startActivity(new Intent(IntersetPersonPostListActivity.this, LoginActivity.class));
 
                                         }
                                     }).show(getSupportFragmentManager(),"");
@@ -163,7 +163,7 @@ public class CommonPersonPostListActivity extends FragmentActivity {
                                     FragmentDialog.newInstance(false,"请确认您的趣币数量", "您的趣币少于1000个了", "去充值", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog,boolean needDelete) {
-                                            startActivity(new Intent(CommonPersonPostListActivity.this, GetVipPayActivity.class));
+                                            startActivity(new Intent(IntersetPersonPostListActivity.this, GetVipPayActivity.class));
                                         }
 
                                         @Override
@@ -175,7 +175,7 @@ public class CommonPersonPostListActivity extends FragmentActivity {
                                 } else if (rootUser != null && rootUser.vipConis > 1000) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.POST, post);
-                                    intent.setClass(CommonPersonPostListActivity.this, PostDetailActivity.class);
+                                    intent.setClass(IntersetPersonPostListActivity.this, PostDetailActivity.class);
                                     startActivity(intent);
                                 }
                             }

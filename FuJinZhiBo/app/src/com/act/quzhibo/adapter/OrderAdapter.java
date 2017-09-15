@@ -21,7 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 
-public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
     ArrayList<VipOrders> vipOrderses;
     Activity mContext;
     private OnRecyclerViewListener mListener = null;
@@ -40,28 +40,28 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_order, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
-        if (viewHolder instanceof MyViewHolder) {
-            ((MyViewHolder) viewHolder).orderStatus.setText(vipOrderses.get(position).orderStatus ? "支付已完成" : "交易关闭");
-            ((MyViewHolder) viewHolder).orderDescription.setText("订单描述: " + vipOrderses.get(position).goodsDescription);
-            ((MyViewHolder) viewHolder).updatedTime.setText("下单时间:" + vipOrderses.get(position).getUpdatedAt());
-            ((MyViewHolder) viewHolder).orderPrice.setText("订单价格: ￥" + vipOrderses.get(position).orderPrice);
-            ((MyViewHolder) viewHolder).order_layout.setOnLongClickListener(new View.OnLongClickListener() {
+        if (holder instanceof MyViewHolder) {
+            holder.orderStatus.setText(vipOrderses.get(position).orderStatus ? "支付已完成" : "交易关闭");
+            holder.orderDescription.setText("订单描述: " + vipOrderses.get(position).goodsDescription);
+            holder.updatedTime.setText("下单时间:" + vipOrderses.get(position).getUpdatedAt());
+            holder.orderPrice.setText("订单价格: ￥" + vipOrderses.get(position).orderPrice);
+            holder.order_layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     mListener.onDelete(position);
                     return false;
                 }
             });
-            ((MyViewHolder) viewHolder).deleteOrder.setOnClickListener(new View.OnClickListener() {
+            holder.deleteOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mListener.onDelete(position);

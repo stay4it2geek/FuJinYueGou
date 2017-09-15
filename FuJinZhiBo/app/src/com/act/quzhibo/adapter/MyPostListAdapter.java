@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 import cn.bmob.v3.BmobUser;
 
-public class MyPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.MyViewHolder> {
     private ArrayList<MyPost> posts;
     private Activity activity;
     RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
@@ -48,49 +48,51 @@ public class MyPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(activity).inflate(R.layout.interest_post_list_item, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
 
-            ((MyViewHolder) holder).nickName.setText(rootUser.getUsername() + "");
+            holder.nickName.setText(rootUser.getUsername() + "");
 
             long l = System.currentTimeMillis() - Long.parseLong(posts.get(position).ctime);
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            ((MyViewHolder) holder).sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex + "");
+            holder.sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex + "");
             if (day < 365) {
-                ((MyViewHolder) holder).createTime.setText(day + "天" + hour + "时" + min + "分钟前");
+                holder.createTime.setText(day + "天" + hour + "时" + min + "分钟前");
+            }else{
+                holder.createTime.setText("N天" + hour + "时" + min + "分钟前");
             }
-            ((MyViewHolder) holder).title.setText(posts.get(position).title+"");
-            ((MyViewHolder) holder).absText.setText(posts.get(position).absText+"");
-            ((MyViewHolder) holder).viewNum.setText(posts.get(position).pageView+"");
-            ((MyViewHolder) holder).pinglunNum.setText(posts.get(position).totalComments+"");
-            ((MyViewHolder) holder).dashangNum.setText(posts.get(position).rewards+"");
+            holder.title.setText(posts.get(position).title+"");
+            holder.absText.setText(posts.get(position).absText+"");
+            holder.viewNum.setText(posts.get(position).pageView+"");
+            holder.pinglunNum.setText(posts.get(position).totalComments+"");
+            holder.dashangNum.setText(posts.get(position).rewards+"");
 
             if (posts.get(position).totalImages != null && Integer.parseInt(posts.get(position).totalImages) > 0) {
-                ((MyViewHolder) holder).imgGridview.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgVideo.setVisibility(View.GONE);
-                ((MyViewHolder) holder).imgtotal.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).imgGridview.setAdapter(new PostImageAdapter(activity, posts.get(position).images, 0, 1));
-                ((MyViewHolder) holder).imgtotal.setText("共" + posts.get(position).totalImages + "张");
+                holder.imgGridview.setVisibility(View.VISIBLE);
+                holder.imgVideo.setVisibility(View.GONE);
+                holder.imgtotal.setVisibility(View.VISIBLE);
+                holder.imgGridview.setAdapter(new PostImageAdapter(activity, posts.get(position).images, 0, 1));
+                holder.imgtotal.setText("共" + posts.get(position).totalImages + "张");
             } else {
-                ((MyViewHolder) holder).imgtotal.setVisibility(View.GONE);
-                ((MyViewHolder) holder).imgGridview.setVisibility(View.GONE);
+                holder.imgtotal.setVisibility(View.GONE);
+                holder.imgGridview.setVisibility(View.GONE);
             }
-            ((MyViewHolder) holder).postlayout.setOnClickListener(new View.OnClickListener() {
+            holder.postlayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mOnItemClickListener.onItemClick(posts.get(position));
                 }
             });
-            ((MyViewHolder) holder).imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            holder.imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int gridPosition, long id) {
                     mOnItemClickListener.onItemClick(posts.get(position));
@@ -102,7 +104,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Glide.with(activity).load(rootUser.photoUrlFile.getUrl()).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                            holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
                         }
 
                         @Override
@@ -114,7 +116,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     Glide.with(activity).load(rootUser.photoUrlFile.getUrl()).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            ((MyViewHolder) holder).photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                            holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
                         }
 
                         @Override
@@ -125,7 +127,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 }
             }
 
-            ((MyViewHolder) holder).arealocation.setText(rootUser.provinceAndcity+"");
+            holder.arealocation.setText(rootUser.provinceAndcity+"");
 
         }
     }

@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class MediaAuthorListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MediaAuthorListAdapter extends RecyclerView.Adapter<MediaAuthorListAdapter.MyViewHolder> {
     private ArrayList<MediaAuthor> medias;
     private Activity activity;
 
@@ -36,25 +36,24 @@ public class MediaAuthorListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.media_list_item, parent, false);//这个布局就是一个imageview用来显示图片
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(activity).inflate(R.layout.media_list_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            ((MyViewHolder) holder).nickName.setText(medias.get(position).nickName + "");
-            ((MyViewHolder) holder).introduce.setText(medias.get(position).introduce + "");
-            ((MyViewHolder) holder).media_layout.setOnClickListener(new View.OnClickListener() {
+            holder.nickName.setText(medias.get(position).nickName + "");
+            holder.introduce.setText(medias.get(position).introduce + "");
+            holder.media_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mOnItemClickListener.onItemClick(medias.get(position));
                 }
             });
-            Glide.with(activity).load(medias.get(position).authorFile.getUrl()+"").placeholder(R.drawable.women).into(((MyViewHolder) holder).photoImg);//加载网络图片
-
+            Glide.with(activity).load(medias.get(position).authorFile.getUrl()+"").placeholder(R.drawable.women).into(holder.photoImg);
         }
     }
 
@@ -79,6 +78,5 @@ public class MediaAuthorListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             media_layout = (RelativeLayout) view.findViewById(R.id.media_layout);
         }
     }
-
 
 }

@@ -15,52 +15,54 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
-public class InterestPlatesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+public class InterestPlatesListAdapter extends RecyclerView.Adapter<InterestPlatesListAdapter.MyViewHolder> {
     private Context mContext;
-    private ArrayList<InterestPlates> datas;//数据
+    private ArrayList<InterestPlates> datas;
+
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(View view, int position,String plateId);
+        void onItemClick(View view, int position, String plateId);
     }
+
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         mOnItemClickListener = listener;
     }
+
     public InterestPlatesListAdapter(Context context, ArrayList<InterestPlates> datas) {
         mContext = context;
         this.datas = datas;
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_interest_plates, parent, false);//这个布局就是一个imageview用来显示图片
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_interest_plates, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
-
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            Glide.with(mContext).load(datas.get(position).imgUrl).placeholder(R.drawable.xiangjiao).diskCacheStrategy(DiskCacheStrategy.RESULT).into(((MyViewHolder) holder).plateImg);//加载网络图片
-            ((MyViewHolder) holder).pAbstract.setText(datas.get(position).pAbstract);
-            ((MyViewHolder) holder).pName.setText(datas.get(position).pName);
-            ((MyViewHolder) holder).plateLayout.setOnClickListener(new View.OnClickListener() {
+            Glide.with(mContext).load(datas.get(position).imgUrl).placeholder(R.drawable.xiangjiao).diskCacheStrategy(DiskCacheStrategy.RESULT).into(holder.plateImg);//加载网络图片
+            holder.pAbstract.setText(datas.get(position).pAbstract);
+            holder.pName.setText(datas.get(position).pName);
+            holder.plateLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(v, position,datas.get(position).pid);
+                    mOnItemClickListener.onItemClick(v, position, datas.get(position).pid);
                 }
             });
-        }else {
-
         }
     }
+
 
     @Override
     public int getItemCount() {
         return datas.size();
     }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView plateImg;
         private TextView pAbstract;

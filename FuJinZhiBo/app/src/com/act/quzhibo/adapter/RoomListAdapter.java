@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyViewHolder> {
 
     private final String cataTitle;
     private int screenWidth;
@@ -44,44 +44,44 @@ public class RoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.grid_shower_room_item, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             if (!TextUtils.equals("手机达人", cataTitle)) {
-                ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                holder.showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
             } else {
-                ((MyViewHolder) holder).showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                holder.showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
             }
 
             if (Integer.parseInt(datas.get(position).onlineCount) > 1 && datas.get(position).liveType != null && (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)
                     || datas.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE))) {
-                ((MyViewHolder) holder).onlineCount.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).isRelax.setVisibility(View.GONE);
-                ((MyViewHolder) holder).onlineCount.setText(datas.get(position).onlineCount + "人");
+                holder.onlineCount.setVisibility(View.VISIBLE);
+                holder.isRelax.setVisibility(View.GONE);
+                holder.onlineCount.setText(datas.get(position).onlineCount + "人");
             } else {
-                ((MyViewHolder) holder).isRelax.setVisibility(View.VISIBLE);
-                ((MyViewHolder) holder).isRelax.setText("休息中");
-                ((MyViewHolder) holder).onlineCount.setVisibility(View.GONE);
+                holder.isRelax.setVisibility(View.VISIBLE);
+                holder.isRelax.setText("休息中");
+                holder.onlineCount.setVisibility(View.GONE);
             }
 
-            ((MyViewHolder) holder).showerAvtar.setAdjustViewBounds(true);
-            ((MyViewHolder) holder).showerAvtar.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.showerAvtar.setAdjustViewBounds(true);
+            holder.showerAvtar.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).gender.equals("0")) {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).into(holder.showerAvtar);//加载网络图片
             } else {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).into(((MyViewHolder) holder).showerAvtar);//加载网络图片
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).into(holder.showerAvtar);//加载网络图片
 
             }
         }
 
-        ((MyViewHolder) holder).nickName.setText(datas.get(position).nickname);
-        ((MyViewHolder) holder).showerAvtar.setOnClickListener(new View.OnClickListener() {
+        holder.nickName.setText(datas.get(position).nickname);
+        holder.showerAvtar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onItemClick(v, position);
