@@ -54,9 +54,9 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             if (!TextUtils.equals("手机达人", cataTitle)) {
-                holder.showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                holder.photoImg.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
             } else {
-                holder.showerAvtar.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                holder.photoImg.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
             }
 
             if (Integer.parseInt(datas.get(position).onlineCount) > 1 && datas.get(position).liveType != null && (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)
@@ -70,18 +70,18 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
                 holder.onlineCount.setVisibility(View.GONE);
             }
 
-            holder.showerAvtar.setAdjustViewBounds(true);
-            holder.showerAvtar.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.photoImg.setAdjustViewBounds(true);
+            holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).gender.equals("0")) {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).into(holder.showerAvtar);//加载网络图片
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).into(holder.photoImg);//加载网络图片
             } else {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).into(holder.showerAvtar);//加载网络图片
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).into(holder.photoImg);//加载网络图片
 
             }
         }
 
         holder.nickName.setText(datas.get(position).nickname);
-        holder.showerAvtar.setOnClickListener(new View.OnClickListener() {
+        holder.photoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onItemClick(v, position);
@@ -97,13 +97,13 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView isRelax;
-        private ImageView showerAvtar;
+        private ImageView photoImg;
         private TextView nickName;
         private TextView onlineCount;
 
         public MyViewHolder(View view) {
             super(view);
-            showerAvtar = (ImageView) view.findViewById(R.id.showerAvtar);
+            photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
             onlineCount = (TextView) view.findViewById(R.id.onlineCount);
             isRelax = (TextView) view.findViewById(R.id.isRelax);

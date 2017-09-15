@@ -20,8 +20,6 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
     private int screenWidth;
     private Context mContext;
     private ArrayList<MyFocusCommonPerson> datas;//数据
-
-
     private OnDeleteListener mListener = null;
 
     public interface OnDeleteListener {
@@ -70,7 +68,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         }
         holder.sex.setText(datas.get(position).sex);
         holder.nickName.setText(datas.get(position).username);
-        holder.showerLayout.setOnClickListener(new View.OnClickListener() {
+        holder.commonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onItemClick(v, position, datas.get(position));
@@ -91,7 +89,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         return datas.size();//获取数据的个数
     }
     class MyViewHolder extends RecyclerView.ViewHolder {
-        private RelativeLayout showerLayout;
+        private RelativeLayout commonLayout;
         private TextView sex;
         private TextView delete;
         private ImageView photoImg;
@@ -99,12 +97,13 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
 
         public MyViewHolder(View view) {
             super(view);
-            showerLayout = (RelativeLayout) view.findViewById(R.id.showerLayout);
+            commonLayout = (RelativeLayout) view.findViewById(R.id.commonLayout);
             delete = (TextView) view.findViewById(R.id.delete);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
             sex = (TextView) view.findViewById(R.id.sex);
             sex.setVisibility(View.VISIBLE);
+            delete.setVisibility(View.VISIBLE);
         }
     }
 

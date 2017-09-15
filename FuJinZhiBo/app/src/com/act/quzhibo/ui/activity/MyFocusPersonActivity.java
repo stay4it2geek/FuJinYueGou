@@ -17,7 +17,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
-import com.act.quzhibo.entity.MyFocusShower;
+import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
@@ -104,7 +104,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
     }
 
     private void queryData(final int actionType) {
-        final BmobQuery<MyFocusShower> query = new BmobQuery<>();
+        final BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
         query.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             // 只查询小于最后一个item发表时间的数据
@@ -118,9 +118,9 @@ public class MyFocusPersonActivity extends FragmentActivity {
             query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
         }
         query.order("-updatedAt");
-        query.findObjects(new FindListener<MyFocusShower>() {
+        query.findObjects(new FindListener<MyFocusCommonPerson>() {
             @Override
-            public void done(List<MyFocusShower> list, BmobException e) {
+            public void done(List<MyFocusCommonPerson> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
@@ -158,7 +158,6 @@ public class MyFocusPersonActivity extends FragmentActivity {
                 Point size = new Point();
                 display.getSize(size);
                 int screenWidth = size.x;
-
                 if (myFocusPersonListAdapter == null) {
                     myFocusPersonListAdapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons, screenWidth);
                     recyclerView.setAdapter(myFocusPersonListAdapter);
@@ -204,7 +203,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
                                     public void onNegtiveClick(Dialog dialog) {
                                         dialog.dismiss();
                                     }
-                                });
+                                }).show(getSupportFragmentManager(),"");
                             }
                         });
                     }

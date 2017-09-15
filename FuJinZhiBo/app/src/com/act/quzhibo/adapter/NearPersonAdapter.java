@@ -27,7 +27,7 @@ import java.util.List;
 
 public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity activity;
-    private List<NearPerson> datas;//数据
+    private List<NearPerson> datas;
     public NearPersonAdapter(Activity context, List<NearPerson> datas) {
         activity = context;
         this.datas = datas;
@@ -94,7 +94,6 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-
     @Override
     public int getItemCount() {
         return datas.size();
@@ -114,7 +113,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
             arealocation = (TextView) view.findViewById(R.id.arealocation);
-            near_layout = (RelativeLayout) view.findViewById(R.id.near_layout);
+            near_layout = (RelativeLayout) view.findViewById(R.id.commonLayout);
             introduce = (TextView) view.findViewById(R.id.introduce);
         }
     }

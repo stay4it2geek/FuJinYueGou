@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Display;
@@ -169,7 +168,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
                 int screenWidth = size.x;
 
                 if (myFocusShowerListAdapter == null) {
-                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses, screenWidth, "");
+                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses, screenWidth);
                     recyclerView.setAdapter(myFocusShowerListAdapter);
                     myFocusShowerListAdapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
@@ -253,7 +252,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
                                     public void onNegtiveClick(Dialog dialog) {
                                         dialog.dismiss();
                                     }
-                                });
+                                }).show(getSupportFragmentManager(),"");
                             }
                         });
                     }

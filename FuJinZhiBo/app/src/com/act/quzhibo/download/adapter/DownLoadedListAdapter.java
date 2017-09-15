@@ -135,7 +135,7 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                     }
                 });
                 if (myDownloadInfoById.getType().equals(Constants.PHOTO_ALBUM)) {
-                    Glide.with(activity).load(myDownloadInfoById.getUrl()).thumbnail(0.1f).placeholder(R.drawable.xiangjiao).into(holder.photoImg);//加载网络图片
+                    Glide.with(activity).load(myDownloadInfoById.getUrl()).thumbnail(0.1f).placeholder(R.drawable.xiangjiao).into(holder.imgThumb);//加载网络图片
                 } else {
                     holder.videoLayout.setVisibility(View.VISIBLE);
                     Glide.with(activity).load(myDownloadInfoById.getIcon()).skipMemoryCache(false).into(holder.videoImg);//加载网络图片
@@ -155,13 +155,13 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView delete;
         private ImageView videoImg;
-        private ImageView photoImg;
+        private ImageView imgThumb;
         private FrameLayout videoLayout;
         private FrameLayout download_item_layout;
 
         public MyViewHolder(View view) {
             super(view);
-            photoImg = (ImageView) view.findViewById(R.id.ImgThumb);
+            imgThumb = (ImageView) view.findViewById(R.id.ImgThumb);
             videoImg = (ImageView) view.findViewById(R.id.videoImg);
             delete = (TextView) view.findViewById(R.id.delete);
             videoLayout = (FrameLayout) view.findViewById(R.id.videoLayout);

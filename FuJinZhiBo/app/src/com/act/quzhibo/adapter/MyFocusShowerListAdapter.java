@@ -17,13 +17,9 @@ import java.util.ArrayList;
 
 public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShowerListAdapter.MyViewHolder> {
 
-    private final String cataTitle;
     private int screenWidth;
     private Context mContext;
-    private String pathPrefix;
-    private ArrayList<MyFocusShower> datas;//数据
-
-
+    private ArrayList<MyFocusShower> datas;
     private OnDeleteListener mListener = null;
 
     public interface OnDeleteListener {
@@ -34,21 +30,17 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
         mListener = listener;
     }
 
-    //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position, MyFocusShower myFocusShower);
     }
 
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
-
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         mOnItemClickListener = listener;
     }
 
-    //适配器初始化
-    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShower> datas, int screenWidth, String cataTitle) {
+    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShower> datas, int screenWidth) {
         mContext = context;
-        this.cataTitle = cataTitle;
         this.datas = datas;
         this.screenWidth = screenWidth;
     }
@@ -66,20 +58,18 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
             holder.photoImg.setAdjustViewBounds(true);
             holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).gender.equals("0")) {
-                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.women).into(holder.photoImg);//加载网络图片
+                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.women).into(holder.photoImg);
             } else {
-                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.man).into(holder.photoImg);//加载网络图片
-
+                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.man).into(holder.photoImg);
             }
         }
         holder.nickName.setText(datas.get(position).nickname);
-        holder.showerLayout.setOnClickListener(new View.OnClickListener() {
+        holder.commonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnItemClickListener.onItemClick(v, position, datas.get(position));
             }
         });
-
         holder.delete.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -94,22 +84,19 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
         return datas.size();//获取数据的个数
     }
 
-
-    //自定义ViewHolder，用于加载图片
     class MyViewHolder extends RecyclerView.ViewHolder {
-        private RelativeLayout showerLayout;
+        private RelativeLayout commonLayout;
         private ImageView photoImg;
         private TextView nickName;
         private TextView delete;
 
         public MyViewHolder(View view) {
             super(view);
-            showerLayout = (RelativeLayout) view.findViewById(R.id.showerLayout);
+            commonLayout = (RelativeLayout) view.findViewById(R.id.commonLayout);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
             delete = (TextView) view.findViewById(R.id.delete);
             delete.setVisibility(View.VISIBLE);
         }
     }
-
 }

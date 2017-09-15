@@ -90,7 +90,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
         />
-        <!--    android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth" -->
         <activity
             android:name="com.act.quzhibo.ui.activity.TabMainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -222,5 +221,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
