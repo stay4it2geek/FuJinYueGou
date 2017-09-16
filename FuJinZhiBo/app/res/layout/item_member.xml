@@ -14,6 +14,7 @@
 
     <com.act.quzhibo.view.CircleImageView
         android:id="@+id/categoryImg"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:layout_width="@dimen/avatar_size36"
         android:layout_height="@dimen/avatar_size36"
