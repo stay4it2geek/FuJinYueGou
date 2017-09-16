@@ -152,7 +152,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                             }
                         });
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
                                 if (myFocusShower != null) {
