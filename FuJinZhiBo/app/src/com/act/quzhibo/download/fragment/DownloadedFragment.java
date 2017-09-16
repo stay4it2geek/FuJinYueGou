@@ -1,20 +1,16 @@
 package com.act.quzhibo.download.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.download.adapter.DownLoadedListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.fragment.BaseFragment;
+import com.act.quzhibo.download.adapter.DownLoadedListAdapter;
 import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
