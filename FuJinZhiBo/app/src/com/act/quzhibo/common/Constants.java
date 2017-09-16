@@ -55,4 +55,5 @@ public class Constants {
 
     public static final String COURSE_CATOGERY_INFO = "courseCategoryInfo";
     public static final String VIDEO_COURSE = "1";
+    public static final String COURSE_CATOGERY_ID = "course_category_id";
 }

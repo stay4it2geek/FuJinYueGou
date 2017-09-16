@@ -33,12 +33,10 @@ public class SquareActivity extends TabSlideBaseActivity implements InterestPlat
 
     @Override
     protected ArrayList<Fragment> getFragments() {
-        ArrayList<Fragment> mFragments = new ArrayList<>();
         mFragments.add(new InterestPlatesFragment());
         mFragments.add(new NearFragment());
         mFragments.add(new PhotoAlbumAuthorsFragment());
         mFragments.add(new VideoAlbumAuthorsFragment());
-
         return mFragments;
     }
 

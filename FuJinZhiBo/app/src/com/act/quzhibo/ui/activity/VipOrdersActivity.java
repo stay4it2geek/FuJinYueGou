@@ -1,6 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -98,6 +99,12 @@ public class VipOrdersActivity extends FragmentActivity {
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
                 queryDatas(Constants.REFRESH);
+            }
+        });
+        loadNetView.setBuyButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(VipOrdersActivity.this,GetVipPayActivity.class));
             }
         });
         queryRootUserData();

@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eee">
 
-    <com.act.quzhibo.view.HorizontialListView
-        android:id="@+id/course_tab_lv"
-        android:layout_width="match_parent"
-        android:layout_height="70dp" />
-
     <FrameLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
+        android:id="@+id/courseContainer"
         android:layout_height="match_parent"
-        android:layout_below="@+id/course_tab_lv"
         android:background="@color/white">
 
         <com.jcodecraeer.xrecyclerview.XRecyclerView
@@ -21,11 +15,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.act.quzhibo.view.LoadNetView
-            android:id="@+id/loadview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
     </FrameLayout>
 
-</RelativeLayout>
+    <com.act.quzhibo.view.LoadNetView
+        android:id="@+id/loadview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white" />
+</FrameLayout>

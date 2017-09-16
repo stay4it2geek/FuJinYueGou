@@ -1,46 +1,67 @@
 package com.act.quzhibo.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.view.Window;
 
-import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.entity.CourseCategoryInfo;
+import com.act.quzhibo.entity.PuaCourses;
 import com.act.quzhibo.ui.fragment.CoursesCenterFragment;
+import com.act.quzhibo.util.CommonUtil;
 
 import java.util.ArrayList;
 
 
+public class CoursesActivity extends TabSlideSameBaseActivity implements CoursesCenterFragment.OnCallCourseDetailListner{
+    ArrayList<CourseCategoryInfo> courseCategoryInfos;
 
-public class CoursesActivity extends TabSlideBaseActivity {
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        String info = CommonUtil.getToggle(this, Constants.COURSE_CATOGERY_INFO).getToggleObject().toString();
+        courseCategoryInfos = CommonUtil.jsonToArrayList(info, CourseCategoryInfo.class);
         super.onCreate(savedInstanceState);
-        findViewById(R.id.isLogin).setVisibility(View.GONE);
     }
 
     @Override
-    public boolean getActivityType() {
-        return true;
+    public void onCallDetail(PuaCourses puaCourse) {
+        Intent intent = new Intent(this, CourseDetailActivity.class);
+        intent.putExtra(Constants.COURSE, puaCourse);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public ArrayList<Fragment> getFragments() {
+        ArrayList<Fragment> mFragments = new ArrayList<>();
+        for (CourseCategoryInfo categoryInfo : courseCategoryInfos) {
+            CoursesCenterFragment fragment = new CoursesCenterFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.COURSE_CATOGERY_ID, categoryInfo.courseCategoryId);
+            fragment.setArguments(bundle);
+            mFragments.add(fragment);
+        }
+        return mFragments;
     }
 
     @Override
-    protected boolean isNeedShowBackDialog() {
-        return true;
+    public String getDialogTitle() {
+        return "自嗨不如大胆撩";
     }
 
     @Override
-    protected String[] getTitles() {
-        return new String[]{"课程中心"};
-    }
-
-    @Override
-    protected ArrayList<Fragment> getFragments() {
-
-        ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new CoursesCenterFragment());
-        return fragments;
+    public ArrayList<String> getTabTitles() {
+        ArrayList<String> tabTitles = new ArrayList<>();
+        for (CourseCategoryInfo categoryInfo : courseCategoryInfos) {
+            tabTitles.add(categoryInfo.coursesCategoryName);
+        }
+        return tabTitles;
     }
 
 

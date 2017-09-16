@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.PuaCourses;
-import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -28,7 +27,15 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.MyViewHo
         activity = context;
         this.courses = courses;
     }
+    public interface OnRecyclerViewItemClickListener {
+        void onItemClick(PuaCourses course);
+    }
 
+    private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        mOnItemClickListener = listener;
+    }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(activity).inflate(R.layout.course_item, parent, false);//这个布局就是一个imageview用来显示图片
@@ -49,10 +56,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.MyViewHo
         holder.courseLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(Constants.COURSE, courses.get(position));
-//                intent.setClass(activity, InfoInterestPersonActivity.class);
-//                activity.startActivity(intent);
+                mOnItemClickListener.onItemClick(course);
             }
         });
         if (course.courseTag.equals(Constants.VIDEO_COURSE)) {

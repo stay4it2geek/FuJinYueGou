@@ -28,7 +28,7 @@
          android:id="@+id/courseTag"
          android:textSize="14sp"
          android:layout_gravity="top|left"
-         android:text="视频"/>
+         android:text=""/>
  </FrameLayout>
 
     <RelativeLayout
@@ -61,9 +61,8 @@
             android:id="@+id/selectionNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/courseName"
+            android:layout_below="@+id/leanerCount"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/leanerCount"
             android:text=""
             android:textColor="@color/light_gray" />
 
@@ -73,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:layout_below="@+id/leanerCount"
+            android:layout_below="@+id/selectionNum"
             android:layout_marginLeft="10dp"
             android:text=""
             android:layout_marginBottom="15dp"
@@ -87,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="bottom"
-            android:layout_below="@+id/leanerCount"
+            android:layout_below="@+id/selectionNum"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/courseAppPrice"
             android:text=""

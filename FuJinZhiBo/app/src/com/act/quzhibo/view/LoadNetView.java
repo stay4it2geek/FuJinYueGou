@@ -46,9 +46,13 @@ public class LoadNetView extends LinearLayout {
 
     }
 
-    // 为左侧返回按钮添加自定义点击事件
     public void setReloadButtonListener(OnClickListener listener) {
         reloadbutton.setOnClickListener(listener);
+    }
+
+
+    public void setBuyButtonListener(OnClickListener listener) {
+        buybutton.setOnClickListener(listener);
     }
 
     public void setlayoutVisily(int loadType) {

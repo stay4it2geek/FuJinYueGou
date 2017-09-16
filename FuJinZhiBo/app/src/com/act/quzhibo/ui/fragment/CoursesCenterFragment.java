@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,17 +11,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.CourseCategoryAdapter;
 import com.act.quzhibo.adapter.CoursesAdapter;
-import com.act.quzhibo.adapter.MemberAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.CourseCategoryInfo;
 import com.act.quzhibo.entity.PuaCourses;
-import com.act.quzhibo.entity.MyPost;
-import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.ui.activity.CoursesActivity;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.HorizontialListView;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -41,11 +39,9 @@ public class CoursesCenterFragment extends Fragment {
     private CoursesAdapter courseCenterAdapter;
     private LoadNetView loadNetView;
     private String lastTime = "";
-    ArrayList<CourseCategoryInfo> courseCategoryInfos;
     private ArrayList<PuaCourses> puaCoursesList = new ArrayList<>();
     private int puaCourseSize;
     private View view;
-    HorizontialListView courseHorizontialListView;
     String courseCategoryId = "1";
 
     @Nullable
@@ -53,21 +49,9 @@ public class CoursesCenterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_course, null, false);
-        courseHorizontialListView = (HorizontialListView) view.findViewById(R.id.course_tab_lv);
-
-        String catogeryInfos = CommonUtil.getToggle(getActivity(), Constants.COURSE_CATOGERY_INFO).getToggleObject().toString();
-        courseCategoryInfos = CommonUtil.jsonToArrayList(catogeryInfos, CourseCategoryInfo.class);
-        CourseCategoryAdapter courseCategoryAdapter = new CourseCategoryAdapter(courseCategoryInfos, getActivity());
-
-        courseHorizontialListView.setAdapter(courseCategoryAdapter);
-        courseHorizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                courseCategoryId=courseCategoryInfos.get(position).courseCategoryId;
-                queryCourseData(courseCategoryId, Constants.REFRESH);
-            }
-        });
-
+        if(getArguments()!=null){
+            courseCategoryId=getArguments().getString(Constants.COURSE_CATOGERY_ID);
+        }
         recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
@@ -114,6 +98,7 @@ public class CoursesCenterFragment extends Fragment {
             }
         });
 
+        ToastUtil.showToast(getContext(),courseCategoryId);
         queryCourseData(courseCategoryId, Constants.REFRESH);
         return view;
     }
@@ -151,11 +136,11 @@ public class CoursesCenterFragment extends Fragment {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         puaCoursesList.clear();
-                        if(courseCenterAdapter!=null){
+                        if (courseCenterAdapter != null) {
                             courseCenterAdapter.notifyDataSetChanged();
                         }
                     }
-                    if(list.size()>0){
+                    if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                     }
                     Message message = new Message();
@@ -185,6 +170,12 @@ public class CoursesCenterFragment extends Fragment {
                 if (courseCenterAdapter == null) {
                     courseCenterAdapter = new CoursesAdapter(getActivity(), puaCoursesList);
                     recyclerView.setAdapter(courseCenterAdapter);
+                    courseCenterAdapter.setOnItemClickListener(new CoursesAdapter.OnRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(PuaCourses course) {
+                            listner.onCallDetail(course);
+                        }
+                    });
                 } else {
                     courseCenterAdapter.notifyDataSetChanged();
                 }
@@ -203,4 +194,17 @@ public class CoursesCenterFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof CoursesActivity) {
+            listner = (OnCallCourseDetailListner) context;
+        }
+    }
+
+    OnCallCourseDetailListner listner;
+
+    public interface OnCallCourseDetailListner {
+        void onCallDetail(PuaCourses puaCourse);
+    }
 }

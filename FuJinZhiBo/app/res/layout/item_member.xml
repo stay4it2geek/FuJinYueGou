@@ -12,17 +12,4 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"/>
 
-    <com.act.quzhibo.view.CircleImageView
-        android:id="@+id/categoryImg"
-        android:visibility="gone"
-        android:layout_marginTop="10dp"
-        android:layout_width="@dimen/avatar_size36"
-        android:layout_height="@dimen/avatar_size36"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"/>
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/categoryName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 </LinearLayout>

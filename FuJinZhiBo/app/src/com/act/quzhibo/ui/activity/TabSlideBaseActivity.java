@@ -21,11 +21,13 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
     protected MyPagerAdapter mAdapter;
     protected View decorView;
     private BackHandledFragment mBackHandedFragment;
+    ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_tab);
+        mFragments=getFragments();
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
         CommonUtil.initView(getTitles(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter, getActivityType());
@@ -43,7 +45,7 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
 
         @Override
         public int getCount() {
-            return getFragments().size();
+            return mFragments.size();
         }
 
         @Override
@@ -53,7 +55,7 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
 
         @Override
         public Fragment getItem(int position) {
-            return getFragments().get(position);
+            return mFragments.get(position);
         }
     }
 
@@ -61,6 +63,7 @@ public abstract class TabSlideBaseActivity extends FragmentActivity implements B
     public void setSelectedFragment(BackHandledFragment selectedFragment) {
         this.mBackHandedFragment = selectedFragment;
     }
+
 
     @Override
     public void onBackPressed() {
