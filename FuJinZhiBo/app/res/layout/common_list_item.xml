@@ -14,18 +14,33 @@
         android:layout_height="wrap_content">
 
 
-        <ImageView
-            android:id="@+id/photoImg"
+        <FrameLayout
+            android:id="@+id/photoImglayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/photoImg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/delete"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right|bottom"
+                android:layout_margin="5dp"
+                android:background="@drawable/delete"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <RelativeLayout
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/photoImg"
-            android:layout_alignRight="@+id/photoImg"
-            android:layout_below="@+id/photoImg"
+            android:layout_alignLeft="@+id/photoImglayout"
+            android:layout_alignRight="@+id/photoImglayout"
+            android:layout_below="@+id/photoImglayout"
             android:layout_marginTop="5dp">
 
             <TextView
@@ -73,12 +88,5 @@
               />
         </RelativeLayout>
     </RelativeLayout>
-    <TextView
-        android:id="@+id/delete"
-        android:visibility="gone"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="right|bottom"
-        android:layout_margin="5dp"
-        android:background="@drawable/delete" />
+
 </FrameLayout>

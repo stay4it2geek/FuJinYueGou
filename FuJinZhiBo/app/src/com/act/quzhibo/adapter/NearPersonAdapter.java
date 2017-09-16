@@ -11,6 +11,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             Display display = activity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
-            ((MyViewHolder) holder).photoImg.setLayoutParams(new RelativeLayout.LayoutParams((size.x / 2) - 5, (size.x / 2) - 5));
+            ((MyViewHolder) holder).photoImg.setLayoutParams(new FrameLayout.LayoutParams((size.x / 2) - 5, (size.x / 2) - 5));
             ((MyViewHolder) holder).nickName.setText(user.username);
             ((MyViewHolder) holder).introduce.setText(user.introduce);
             ((MyViewHolder) holder).near_layout.setOnClickListener(new View.OnClickListener() {

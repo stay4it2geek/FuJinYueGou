@@ -23,7 +23,6 @@ import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
-import com.act.quzhibo.ui.activity.FullScreenActivity;
 import com.act.quzhibo.ui.activity.XImageActivity;
 import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
@@ -70,19 +69,19 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentDialog.newInstance(true,"确定删除?", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(true, "确定删除?", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
-                            public void onPositiveClick(Dialog dialog ,boolean needDelete) {
-                                deleteListner.onDelete(downloadInfo, position,needDelete);
+                            public void onPositiveClick(Dialog dialog, boolean needDelete) {
+                                deleteListner.onDelete(downloadInfo, position, needDelete);
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         downloadManager.remove(downloadInfo);
-                                            try {
-                                                dbController.deleteMyDownloadInfo(downloadInfo.getUri().hashCode());
-                                            } catch (SQLException e) {
-                                                e.printStackTrace();
-                                            }
+                                        try {
+                                            dbController.deleteMyDownloadInfo(downloadInfo.getUri().hashCode());
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
 
                                     }
                                 }, 500);
@@ -145,7 +144,7 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                     public void run() {
                         holder.delete.setVisibility(View.VISIBLE);
                     }
-                },500);
+                }, 500);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,7 +160,7 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
 
         public MyViewHolder(View view) {
             super(view);
-            imgThumb = (ImageView) view.findViewById(R.id.ImgThumb);
+            imgThumb = (ImageView) view.findViewById(R.id.imgThumb);
             videoImg = (ImageView) view.findViewById(R.id.videoImg);
             delete = (TextView) view.findViewById(R.id.delete);
             videoLayout = (FrameLayout) view.findViewById(R.id.videoLayout);

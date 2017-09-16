@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,9 +55,9 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             if (!TextUtils.equals("手机达人", cataTitle)) {
-                holder.photoImg.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth / 2 - 20), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), FrameLayout.LayoutParams.WRAP_CONTENT));
             } else {
-                holder.photoImg.setLayoutParams(new RelativeLayout.LayoutParams((screenWidth), RelativeLayout.LayoutParams.WRAP_CONTENT));
+                holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth), FrameLayout.LayoutParams.WRAP_CONTENT));
             }
 
             if (Integer.parseInt(datas.get(position).onlineCount) > 1 && datas.get(position).liveType != null && (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)
