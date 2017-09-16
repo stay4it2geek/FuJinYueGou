@@ -267,5 +267,16 @@ public class MyFocusShowerActivity extends FragmentActivity {
             }
         }
     };
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(myFocusShowerListAdapter!=null){
+            myFocusShowerListAdapter.notifyDataSetChanged();
+            if (myFocusShowerses.size() == 0) {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                return;
+            }
+        }
+    }
 }

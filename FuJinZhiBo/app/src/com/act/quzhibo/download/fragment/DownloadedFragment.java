@@ -124,4 +124,16 @@ public class DownloadedFragment extends BaseFragment {
         super.onDestroy();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (downLoadListAdapter != null) {
+            downLoadListAdapter.setData(uiDownLoadInfos);
+            if (uiDownLoadInfos.size() == 0) {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
+            }
+        }
+    }
 }

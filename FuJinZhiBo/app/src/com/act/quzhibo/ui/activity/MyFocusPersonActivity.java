@@ -219,4 +219,16 @@ public class MyFocusPersonActivity extends FragmentActivity {
         }
     };
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(myFocusPersonListAdapter!=null){
+            myFocusPersonListAdapter.notifyDataSetChanged();
+            if (myFocusCommonPersons.size() == 0) {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                return;
+            }
+        }
+    }
 }
