@@ -50,4 +50,9 @@ public class Constants {
     public static final int NO_DATA = 22;
     public static final String INTEREST ="1" ;
     public static final String NEAR ="2" ;
+    public static final String COURSE = "course";
+    public static final String MEMBER = "member";
+
+    public static final String COURSE_CATOGERY_INFO = "courseCategoryInfo";
+    public static final String VIDEO_COURSE = "1";
 }

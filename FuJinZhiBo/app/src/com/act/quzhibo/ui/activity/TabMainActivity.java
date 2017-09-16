@@ -31,12 +31,12 @@ public class TabMainActivity extends TabActivity {
     private String[] mTitles = {"课堂", "直播", "广场", "财富", "我的"};
     private String[] mTitlesSpecial = {"课堂", "广场", "我的"};
 
-    private int[] mIconUnselectIds = {R.drawable.home, R.drawable.zhibo, R.drawable.square, R.drawable.money, R.drawable.mine};
+    private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.money, R.drawable.mine};
 
-    private int[] mIconSelectIds = {R.drawable.home_s, R.drawable.zhibo_s, R.drawable.square_s, R.drawable.money_s, R.drawable.mine_s};
+    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.money_s, R.drawable.mine_s};
 
-    private int[] mIconUnselectIdsSpecial = {R.drawable.home, R.drawable.money, R.drawable.mine};
-    private int[] mIconSelectIdsSpecial = {R.drawable.home_s, R.drawable.money_s, R.drawable.mine_s};
+    private int[] mIconUnselectIdsSpecial = {R.drawable.courses, R.drawable.money, R.drawable.mine};
+    private int[] mIconSelectIdsSpecial = {R.drawable.courses_s, R.drawable.money_s, R.drawable.mine_s};
 
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
@@ -55,7 +55,7 @@ public class TabMainActivity extends TabActivity {
         if (CommonUtil.getToggle(this, Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
             tabHost.addTab(tabHost.newTabSpec("课堂")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, MultipleMeideaActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, CoursesActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("直播")
                     .setIndicator(null, null)
                     .setContent(showListIntent));
@@ -71,7 +71,7 @@ public class TabMainActivity extends TabActivity {
         } else {
             tabHost.addTab(tabHost.newTabSpec("课堂")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, MultipleMeideaActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, CoursesActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("广场")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));

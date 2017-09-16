@@ -1,7 +1,7 @@
 <resources>
     <dimen name="activity_horizontal_margin">0dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
-    <dimen name="avatar_size36">36dp</dimen>
+    <dimen name="avatar_size36">38dp</dimen>
     <dimen name="commonViewHeight">45dp</dimen>
     <dimen name="buttonheight">40dp</dimen>
 

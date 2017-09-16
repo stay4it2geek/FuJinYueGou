@@ -53,6 +53,7 @@ public class LoadNetView extends LinearLayout {
 
     public void setlayoutVisily(int loadType) {
         if (loadType == Constants.LOAD) {
+            noDataText.setVisibility(GONE);
             reloadlayout.setVisibility(View.GONE);
             loadlayout.setVisibility(View.VISIBLE);
         } else if(loadType == Constants.RELOAD){
