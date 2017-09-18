@@ -15,14 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.MyStandardVideoController;
-import com.act.quzhibo.entity.ProvinceAndCityEntify;
+import com.act.quzhibo.entity.ProvinceAndCityEntity;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
@@ -39,6 +38,8 @@ import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.util.ArrayList;
 
+import io.github.rockerhieu.emojicon.EmojiconEditText;
+
 public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final LayoutInflater mLayoutInflater;
     private final InterestPost post;
@@ -51,13 +52,11 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
         ITEM3,
     }
 
-    //适配器初始化
     public InteretstPostPageAdapter(InterestPost post, Activity context, InterestPostPageDetailAndComments data) {
         this.data = data;
         this.activity = context;
         this.post = post;
         mLayoutInflater = LayoutInflater.from(context);
-
     }
 
     @Override
@@ -76,9 +75,9 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE.ITEM1.ordinal()) {
-            return new Item1ViewHolder(mLayoutInflater.inflate(R.layout.post_header_layout, parent, false));
+            return new Item1ViewHolder(mLayoutInflater.inflate(R.layout.post_detail_header_layout, parent, false));
         } else if (viewType == ITEM_TYPE.ITEM2.ordinal()) {
-            return new Item2ViewHolder(mLayoutInflater.inflate(R.layout.post_imglist_layout, parent, false));
+            return new Item2ViewHolder(mLayoutInflater.inflate(R.layout.post_detail_imgs_layout, parent, false));
         } else {
             return new Item3ViewHolder(mLayoutInflater.inflate(R.layout.comments_layout, parent, false));
         }
@@ -120,7 +119,6 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                         super.onLoadStarted(placeholder);
                     }
                 });
-
             }
 
             ((Item1ViewHolder) holder).userImage.setOnClickListener(new View.OnClickListener() {
@@ -142,11 +140,10 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 ((Item1ViewHolder) holder).sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
             }
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
-            if (day < 365) {
+            if (day <50) {
                 ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
             } else {
-                ((Item1ViewHolder) holder).createTime.setText(day + "N天" + hour + "小时" + min + "分钟前");
-
+                ((Item1ViewHolder) holder).createTime.setText("N天" + hour + "小时" + min + "分钟前");
             }
             String nick = data.detail.user.nick.replaceAll("\r|\n", "");
             ((Item1ViewHolder) holder).nickName.setText(nick);
@@ -185,11 +182,11 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             new AsyncTask<Void, Void, String>() {
                 @Override
                 protected String doInBackground(Void... params) {
-                    ArrayList<ProvinceAndCityEntify> datas = CommonUtil.parseLocation(activity).data;
+                    ArrayList<ProvinceAndCityEntity> datas = CommonUtil.parseLocation(activity).data;
                     if (null != datas) {
-                        for (ProvinceAndCityEntify entify : datas) {
+                        for (ProvinceAndCityEntity entify : datas) {
                             if (TextUtils.equals(data.detail.user.proCode, entify.proId + "")) {
-                                for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
+                                for (ProvinceAndCityEntity.CitySub citySub : entify.citySub) {
                                     if (TextUtils.equals(data.detail.user.cityCode, citySub.cityId + "")) {
                                         return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
                                     }
@@ -207,7 +204,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
             }.execute();
         } else if (holder instanceof Item2ViewHolder) {
-            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, 1, 1));
+            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, Constants.ITEM_POST_DETAIL_IMG));
         } else {
             PostCommentAdapter adapter = new PostCommentAdapter(activity, data.comments);
             ((Item3ViewHolder) holder).commentsList.setAdapter(adapter);
@@ -256,7 +253,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             super(view);
             nickName = (TextView) view.findViewById(R.id.nickName);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.arealocation);
+            arealocation = (TextView) view.findViewById(R.id.locaiton);
             userImage = (ImageView) view.findViewById(R.id.userImage);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             nickName = (TextView) view.findViewById(R.id.nickName);
@@ -269,8 +266,6 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             title = (TextView) view.findViewById(R.id.title);
             content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.content);
         }
-
-
     }
 
     class Item2ViewHolder extends RecyclerView.ViewHolder {
@@ -286,13 +281,13 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     class Item3ViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout pinglunlayout;
         private MyListView commentsList;
-        private EditText talk;
+        private EmojiconEditText talk;
         private TextView pinglun;
 
         public Item3ViewHolder(View view) {
             super(view);
             pinglunlayout = (LinearLayout) view.findViewById(R.id.pinglunlayout);
-            talk = (EditText) view.findViewById(R.id.talk);
+            talk = (EmojiconEditText) view.findViewById(R.id.talk);
             pinglun = (TextView) view.findViewById(R.id.pinglun);
             commentsList = (MyListView) view.findViewById(R.id.comments_lv);
         }

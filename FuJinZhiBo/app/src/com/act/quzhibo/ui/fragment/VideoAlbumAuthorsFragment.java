@@ -76,7 +76,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                         if (mediasSize > 0) {
                             queryData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
-
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -117,7 +116,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
         List<BmobQuery<MediaAuthor>> queries = new ArrayList<>();
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -156,8 +154,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
         });
     }
 
-    public static final class ComparatorValues implements Comparator<MediaAuthor> {
-
+    public static class ComparatorValues implements Comparator<MediaAuthor> {
         @Override
         public int compare(MediaAuthor mediaAuthor1, MediaAuthor mediaAuthor2) {
             int m1 = Integer.parseInt(TextUtils.isEmpty(mediaAuthor1.age) ? "0" : mediaAuthor1.age);
@@ -186,7 +183,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                     mediasSize = 0;
                 }
                 Collections.sort(medias, new ComparatorValues());
-
                 if (mediaAuthorListAdapter == null) {
                     mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthor);
                     recyclerView.setAdapter(mediaAuthorListAdapter);

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
 import com.bumptech.glide.Glide;
@@ -79,7 +79,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                 holder.imgGridview.setVisibility(View.VISIBLE);
                 holder.imgVideo.setVisibility(View.GONE);
                 holder.imgtotal.setVisibility(View.VISIBLE);
-                holder.imgGridview.setAdapter(new PostImageAdapter(activity, posts.get(position).images, 0, 1));
+                holder.imgGridview.setAdapter(new PostImageAdapter(activity, posts.get(position).images, Constants.ITEM_POST_DETAIL_IMG));
                 holder.imgtotal.setText("共" + posts.get(position).totalImages + "张");
             } else {
                 holder.imgtotal.setVisibility(View.GONE);
@@ -160,7 +160,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             title = (TextView) view.findViewById(R.id.title);
             absText = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.absText);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.arealocation);
+            arealocation = (TextView) view.findViewById(R.id.locaiton);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             viewNum = (TextView) view.findViewById(R.id.viewNum);
             pinglunNum = (TextView) view.findViewById(R.id.pinglunNum);

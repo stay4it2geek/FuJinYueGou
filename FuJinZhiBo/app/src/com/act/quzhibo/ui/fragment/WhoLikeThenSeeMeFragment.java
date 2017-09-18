@@ -11,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.CommonSeeAdapter;
+import com.act.quzhibo.adapter.WhoLikeMeAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.InterestPostPerson;
+import com.act.quzhibo.entity.InterestParentPerson;
+import com.act.quzhibo.entity.InterestSubPerson;
+import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -29,10 +31,13 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class CommonSeeFragment extends BackHandledFragment {
-
+public class WhoLikeThenSeeMeFragment extends BackHandledFragment {
+    private ArrayList<InterestSubPerson> interestPersonList = new ArrayList<>();
+    private WhoLikeMeAdapter whoLikeMeAdapter;
     private XRecyclerView recyclerView;
-    private CommonSeeAdapter commonSeeAdapter;
+    private LoadNetView loadNetView;
+    private int liekThenSeeMeSize;
+    private String lastTime = "";
     private View view;
 
     @Nullable
@@ -40,6 +45,7 @@ public class CommonSeeFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_common, null, false);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -62,14 +68,9 @@ public class CommonSeeFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (seeMeSize > 0) {
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    queryData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                }
-                            }, 1000);
+                        if (liekThenSeeMeSize > 0) {
+                            queryData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
                         }
@@ -81,66 +82,55 @@ public class CommonSeeFragment extends BackHandledFragment {
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         queryData(Constants.REFRESH);
-
         return view;
     }
 
-
-    private int limit = 10; // 每页的数据是10条
-    String lastTime = "";
-    ArrayList<InterestPostPerson> interestPostPersons = new ArrayList<>();
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void queryData(final int actionType) {
-        final BmobQuery<InterestPostPerson> query = new BmobQuery<>();
-        query.setLimit(limit);
-        // 如果是加载更多
+        List<BmobQuery<InterestSubPerson>> queries = new ArrayList<>();
+        BmobQuery<InterestSubPerson> query = new BmobQuery<>();
+        query.setLimit(10);
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
-            Date date = null;
+            Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
                 date = sdf.parse(lastTime);
+                query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
+                queries.add(query);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
         }
+        BmobQuery<InterestSubPerson> query2 = new BmobQuery<>();
+        query2.addWhereEqualTo("seeMeFlag", true);
+        queries.add(query2);
+        query.and(queries);
         query.order("-updatedAt");
-        query.findObjects(new FindListener<InterestPostPerson>() {
+        query.findObjects(new FindListener<InterestSubPerson>() {
             @Override
-            public void done(List<InterestPostPerson> list, BmobException e) {
+            public void done(List<InterestSubPerson> list, BmobException e) {
                 if (e == null) {
-                    if (list.size() > 0) {
-                        if (actionType == Constants.REFRESH) {
-                            // 当是下拉刷新操作时，将当前页的编号重置为0，并把bankCards清空，重新添加
-                            interestPostPersons.clear();
-                        }
-                        interestPostPersons.addAll(list);
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = interestPostPersons;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        handler.sendEmptyMessage(Constants.NO_MORE);
+                    if (actionType == Constants.REFRESH) {
+                        interestPersonList.clear();
                     }
+                    if (list.size() > 0) {
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
+                } else {
+                    handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });
     }
 
-
-    public static final class ComparatorValues implements Comparator<InterestPostPerson> {
-
+    public static class ComparatorValues implements Comparator<InterestParentPerson> {
         @Override
-        public int compare(InterestPostPerson post1, InterestPostPerson post2) {
-            int m1 = Integer.parseInt(post1.viewTime != null ? post1.viewTime : "0");
-            int m2 = Integer.parseInt(post2.viewTime != null ? post2.viewTime : "0");
+        public int compare(InterestParentPerson person1, InterestParentPerson person2) {
+            int m1 = Integer.parseInt(person1.viewTime != null ? person1.viewTime : "0");
+            int m2 = Integer.parseInt(person2.viewTime != null ? person2.viewTime : "0");
             int result = 0;
             if (m1 > m2) {
                 result = 1;
@@ -150,37 +140,36 @@ public class CommonSeeFragment extends BackHandledFragment {
             }
             return result;
         }
-
     }
 
-    private int seeMeSize;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<InterestPostPerson> interestPostPersons = (ArrayList<InterestPostPerson>) msg.obj;
+            ArrayList<InterestSubPerson> interestSubPersonsn = (ArrayList<InterestSubPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what != Constants.NO_MORE) {
-                    if (interestPostPersons != null) {
-                        seeMeSize = interestPostPersons.size();
-                    } else {
-                        seeMeSize = 0;
-                    }
-                    Collections.sort(interestPostPersons, new ComparatorValues());
-                    if (seeMeSize > 0) {
-                        if (commonSeeAdapter == null) {
-                            commonSeeAdapter = new CommonSeeAdapter(getActivity(), interestPostPersons);
-                            recyclerView.setAdapter(commonSeeAdapter);
-                        } else {
-                            commonSeeAdapter.notifyDataSetChanged();
-                        }
-                    }
-                    recyclerView.setHasFixedSize(true);
+                if (interestSubPersonsn != null) {
+                    interestPersonList.addAll(interestSubPersonsn);
+                    liekThenSeeMeSize = interestPersonList.size();
                 } else {
-                    recyclerView.setNoMore(true);
+                    liekThenSeeMeSize = 0;
+                }
+                Collections.sort(interestPersonList, new ComparatorValues());
+                if (whoLikeMeAdapter == null) {
+                    whoLikeMeAdapter = new WhoLikeMeAdapter(getActivity(), interestPersonList);
+                    recyclerView.setAdapter(whoLikeMeAdapter);
+                } else {
+                    whoLikeMeAdapter.notifyDataSetChanged();
+                }
+                loadNetView.setVisibility(View.GONE);
+                if (interestPersonList.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
                 }
             } else {
-
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
             }
         }
     };

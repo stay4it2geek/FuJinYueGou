@@ -13,7 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.act.quzhibo.entity.ProvinceAndCityEntify;
+import com.act.quzhibo.entity.ProvinceAndCityEntity;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.InterestPostPageCommentDetail;
 import com.act.quzhibo.util.CommonUtil;
@@ -59,7 +59,7 @@ public class PostCommentAdapter extends BaseAdapter {
             view = LayoutInflater.from(activity).inflate(R.layout.item_comment_layout, parent, false);
             viewHolder.nickName = (TextView) view.findViewById(R.id.nickName);
             viewHolder.createTime = (TextView) view.findViewById(R.id.createTime);
-            viewHolder.arealocation = (TextView) view.findViewById(R.id.arealocation);
+            viewHolder.arealocation = (TextView) view.findViewById(R.id.locaiton);
             viewHolder.userImage = (ImageView) view.findViewById(R.id.userImage);
             viewHolder.sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             viewHolder.content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.re_content);
@@ -116,11 +116,11 @@ public class PostCommentAdapter extends BaseAdapter {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                ArrayList<ProvinceAndCityEntify> datas = CommonUtil.parseLocation(activity).data;
+                ArrayList<ProvinceAndCityEntity> datas = CommonUtil.parseLocation(activity).data;
                 if (null != datas) {
-                    for (ProvinceAndCityEntify entify : datas) {
+                    for (ProvinceAndCityEntity entify : datas) {
                         if (TextUtils.equals(commentDetails.get(position).user.proCode, entify.proId + "")) {
-                            for (ProvinceAndCityEntify.CitySub citySub : entify.citySub) {
+                            for (ProvinceAndCityEntity.CitySub citySub : entify.citySub) {
                                 if (TextUtils.equals(commentDetails.get(position).user.cityCode, citySub.cityId + "")) {
                                     return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
                                 }

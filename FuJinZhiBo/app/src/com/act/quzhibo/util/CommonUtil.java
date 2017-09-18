@@ -63,7 +63,6 @@ public class CommonUtil {
         transaction.commitAllowingStateLoss();
     }
 
-
     public static String SceneList2String(List SceneList) {
         String SceneListString = "";
         try { // 实例化一个ByteArrayOutputStream对象，用来装载压缩后的字节文件。
@@ -284,7 +283,6 @@ public class CommonUtil {
             try {
                 retriever.release();
             } catch (RuntimeException ex) {
-                // Ignore failures while cleaning up.
             }
         }
         if (kind == MediaStore.Images.Thumbnails.MICRO_KIND && bitmap != null) {
@@ -293,4 +291,5 @@ public class CommonUtil {
         }
         return bitmap;
     }
+
 }

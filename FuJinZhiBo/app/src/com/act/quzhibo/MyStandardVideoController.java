@@ -117,10 +117,10 @@ public class MyStandardVideoController extends StandardVideoController implement
         super.initView();
         if (viewGone) {
             findViewById(R.id.more_menu).setVisibility(GONE);
-//            findViewById(R.id.fullscreen).setVisibility(GONE);
+            findViewById(R.id.fullscreen).setVisibility(GONE);
         } else {
             findViewById(R.id.more_menu).setVisibility(VISIBLE);
-//            findViewById(R.id.fullscreen).setVisibility(VISIBLE);
+            findViewById(R.id.fullscreen).setVisibility(VISIBLE);
         }
         this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
         this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_list, this.popupMenu.getMenu());

@@ -10,17 +10,12 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 
 public class WomenSoureceFragment extends Fragment {
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_common,null,false);
-
         return view;
     }
-
-
-
+    
 }

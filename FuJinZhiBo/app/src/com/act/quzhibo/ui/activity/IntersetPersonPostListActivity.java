@@ -126,8 +126,6 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what != Constants.NetWorkError) {
-                RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
-
                 final InterestPostListInfoPersonParentData data =
                         CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
                 if (data != null && data.result != null) {
@@ -144,13 +142,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                 if (posts != null && interestPostSize > 0) {
                     posts.addAll(data.result.posts);
                     if (adapter == null) {
-                        int isBlurType = 0;
-                        if (rootUser != null && rootUser.vipConis > 1000) {
-                            isBlurType = 1;
-                        } else {
-                            isBlurType = 0;
-                        }
-                        adapter = new InterestPostListAdapter(IntersetPersonPostListActivity.this, posts, isBlurType);
+                        adapter = new InterestPostListAdapter(IntersetPersonPostListActivity.this, posts);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {

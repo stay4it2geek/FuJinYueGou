@@ -319,15 +319,9 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                 imgs.addAll(post.images);
                             }
                         }
-                        RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
-                        int isBlurType = 0;
-                        if (rootUser != null && rootUser.vipConis > 1000) {
-                            isBlurType = 1;
-                        } else {
-                            isBlurType = 0;
-                        }
+
                         if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                            gridView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, 2, isBlurType));
+                            gridView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG));
                             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

@@ -34,14 +34,11 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class MyPostListActivity extends AppCompatActivity {
-
-
+    private ArrayList<MyPost> myPostList = new ArrayList<>();
     private XRecyclerView recyclerView;
     private MyPostListAdapter myPostListAdapter;
     private LoadNetView loadNetView;
-    private int limit = 10; // 每页的数据是10条
     private String lastTime = "";
-    private ArrayList<MyPost> myPostList = new ArrayList<>();
     private int myPostsSize;
 
     @Override
@@ -68,7 +65,6 @@ public class MyPostListActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -94,8 +90,6 @@ public class MyPostListActivity extends AppCompatActivity {
                 queryData(Constants.REFRESH);
             }
         });
-
-
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
         findViewById(R.id.postButton).setVisibility(View.VISIBLE);
@@ -108,18 +102,11 @@ public class MyPostListActivity extends AppCompatActivity {
         });
     }
 
-
-    /**
-     * 分页获取数据
-     *
-     * @param actionType
-     */
     private void queryData(final int actionType) {
         BmobQuery<MyPost> query = new BmobQuery<>();
         BmobQuery<MyPost> query2 = new BmobQuery<>();
         List<BmobQuery<MyPost>> queries = new ArrayList<>();
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -156,8 +143,7 @@ public class MyPostListActivity extends AppCompatActivity {
         });
     }
 
-    public static final class ComparatorValues implements Comparator<MyPost> {
-
+    public static  class ComparatorValues implements Comparator<MyPost> {
         @Override
         public int compare(MyPost post1, MyPost post2) {
             int m1 = Integer.parseInt(post1.ctime != null ? post1.ctime : "0");
@@ -171,7 +157,6 @@ public class MyPostListActivity extends AppCompatActivity {
             }
             return result;
         }
-
     }
 
     Handler handler = new Handler() {
@@ -196,7 +181,7 @@ public class MyPostListActivity extends AppCompatActivity {
                         public void onItemClick(MyPost post) {
                             Intent intent = new Intent();
                             intent.putExtra(Constants.POST, post);
-                            intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
+                            intent.setClass(MyPostListActivity.this, MyPostPageActivity.class);
                             startActivity(intent);
                         }
                     });

@@ -22,7 +22,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.event.FocusChangeEvent;
 import com.act.quzhibo.entity.Member;
 import com.act.quzhibo.entity.MyFocusShower;
-import com.act.quzhibo.entity.NearPerson;
+import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.ui.activity.LoginActivity;
@@ -59,7 +59,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     private View view;
     private int onlineCount = 0;
     private String photoUrl;
-    private ArrayList<NearPerson> nearPersonArrayList = new ArrayList<>();
+    private ArrayList<InterestSubPerson> interestSubPersonArrayList = new ArrayList<>();
     public String lastTime;
     private UPMarqueeView upview1;
     private List<String> data = new ArrayList<>();
@@ -134,20 +134,20 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     };
 
     private void queryData() {
-        final BmobQuery<NearPerson> query = new BmobQuery<>();
+        final BmobQuery<InterestSubPerson> query = new BmobQuery<>();
         query.setLimit(20);
         query.order("-updatedAt");
-        query.findObjects(new FindListener<NearPerson>() {
+        query.findObjects(new FindListener<InterestSubPerson>() {
 
             @Override
-            public void done(List<NearPerson> list, BmobException e) {
+            public void done(List<InterestSubPerson> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
-                        nearPersonArrayList.clear();
+                        interestSubPersonArrayList.clear();
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        nearPersonArrayList.addAll(list);
+                        interestSubPersonArrayList.addAll(list);
                         Message message = new Message();
-                        message.obj = nearPersonArrayList;
+                        message.obj = interestSubPersonArrayList;
                         memberHandler.sendMessage(message);
                     } else {
                         memberHandler.sendEmptyMessage(Constants.NO_MORE);
@@ -162,10 +162,10 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<NearPerson> nearPersonArrayList = (ArrayList<NearPerson>) msg.obj;
+            ArrayList<InterestSubPerson> interestSubPersonArrayList = (ArrayList<InterestSubPerson>) msg.obj;
             ArrayList<String> views = new ArrayList<>();
             if (msg.what != Constants.NetWorkError) {
-                for (NearPerson person : nearPersonArrayList) {
+                for (InterestSubPerson person : interestSubPersonArrayList) {
                     views.add(person.viewUsers);
                 }
             }

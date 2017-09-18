@@ -1,7 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -13,12 +13,11 @@ import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
-
-public class MyPostDetailActivity extends AppCompatActivity {
+public class MyPostPageActivity extends FragmentActivity {
     private MyPostPageAdapter adapter;
     private XRecyclerView recyclerview;
-    private MyPost post;
     private LoadNetView loadNetView;
+    private MyPost post;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class MyPostDetailActivity extends AppCompatActivity {
             if (post == null) {
                 return;
             }
-            adapter = new MyPostPageAdapter(post, MyPostDetailActivity.this);
+            adapter = new MyPostPageAdapter(post, MyPostPageActivity.this);
             recyclerview.setAdapter(adapter);
             loadNetView.setVisibility(View.GONE);
         }
@@ -48,7 +47,7 @@ public class MyPostDetailActivity extends AppCompatActivity {
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyPostDetailActivity.this.finish();
+                MyPostPageActivity.this.finish();
             }
         });
     }

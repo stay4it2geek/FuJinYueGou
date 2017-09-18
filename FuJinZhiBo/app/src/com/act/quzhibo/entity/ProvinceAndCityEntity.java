@@ -2,7 +2,7 @@ package com.act.quzhibo.entity;
 
 import java.util.ArrayList;
 
-public class ProvinceAndCityEntify {
+public class ProvinceAndCityEntity {
     public int proId;// 7,
     public String name;//
     public int ProSort; ///5,

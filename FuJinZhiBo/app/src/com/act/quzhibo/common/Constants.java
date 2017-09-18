@@ -1,12 +1,4 @@
 package com.act.quzhibo.common;
-
-import android.os.Bundle;
-import android.view.View;
-
-/**
- *
- */
-
 public class Constants {
     public static final String TOGGLES = "toggles";
     public static final String SAVE = "save";
@@ -50,10 +42,16 @@ public class Constants {
     public static final int NO_DATA = 22;
     public static final String INTEREST ="1" ;
     public static final String NEAR ="2" ;
+
     public static final String COURSE = "course";
     public static final String MEMBER = "member";
 
     public static final String COURSE_CATOGERY_INFO = "courseCategoryInfo";
     public static final String VIDEO_COURSE = "1";
     public static final String COURSE_CATOGERY_ID = "course_category_id";
+
+    public static final int ITEM_POST_LIST_IMG = 0;
+    public static final int ITEM_POST_DETAIL_IMG = 1;
+    public static final int ITEM_USER_INFO_IMG = 2;
+
 }

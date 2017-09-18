@@ -107,10 +107,9 @@ public class MyFocusShowerActivity extends FragmentActivity {
     }
 
     private void queryData(final int actionType) {
-        final BmobQuery<MyFocusShower> query = new BmobQuery<>();
+        BmobQuery<MyFocusShower> query = new BmobQuery<>();
         query.setLimit(10);
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -155,14 +154,8 @@ public class MyFocusShowerActivity extends FragmentActivity {
                 } else {
                     myfocusSize = 0;
                 }
-
-                Display display = MyFocusShowerActivity.this.getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                int screenWidth = size.x;
-
                 if (myFocusShowerListAdapter == null) {
-                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses, screenWidth);
+                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses);
                     recyclerView.setAdapter(myFocusShowerListAdapter);
                     myFocusShowerListAdapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
@@ -214,18 +207,15 @@ public class MyFocusShowerActivity extends FragmentActivity {
                                     }
                                 }
                             });
-
-
                         }
                     });
                     if (myFocusShowerListAdapter != null) {
-                        myFocusShowerListAdapter.setDelteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
+                        myFocusShowerListAdapter.setDeleteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
                                 FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "取消", "确定", -1, false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-
                                         dialog.dismiss();
                                     }
 
@@ -254,7 +244,6 @@ public class MyFocusShowerActivity extends FragmentActivity {
                 } else {
                     myFocusShowerListAdapter.notifyDataSetChanged();
                 }
-
                 loadNetView.setVisibility(View.GONE);
                 if (myFocusShowerses.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);

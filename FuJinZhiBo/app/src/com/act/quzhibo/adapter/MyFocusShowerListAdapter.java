@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShowerListAdapter.MyViewHolder> {
 
-    private int screenWidth;
     private Context mContext;
     private ArrayList<MyFocusShower> datas;
     private OnDeleteListener mListener = null;
@@ -26,7 +25,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
         void onDelete(int position);
     }
 
-    public void setDelteListener(OnDeleteListener listener) {
+    public void setDeleteListener(OnDeleteListener listener) {
         mListener = listener;
     }
 
@@ -39,10 +38,10 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
         mOnItemClickListener = listener;
     }
 
-    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShower> datas, int screenWidth) {
+    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShower> datas) {
         mContext = context;
         this.datas = datas;
-        this.screenWidth = screenWidth;
+
     }
 
     @Override

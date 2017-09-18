@@ -54,7 +54,6 @@ public class PostDetailFragment extends BackHandledFragment {
             }
         });
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
-
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

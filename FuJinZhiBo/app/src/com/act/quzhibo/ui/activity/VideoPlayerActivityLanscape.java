@@ -70,7 +70,6 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
         viewPager.setCurrentItem(0);
     }
 
-
     @Override
     public void finishVideo() {
         videoView.stopPlayback();

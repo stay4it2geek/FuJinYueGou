@@ -97,7 +97,6 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
         }
     }
 
-
     private class MyPagerAdapter extends FragmentPagerAdapter {
         private String[] tabTitles;
 

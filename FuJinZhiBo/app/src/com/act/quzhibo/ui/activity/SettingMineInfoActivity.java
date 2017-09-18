@@ -632,12 +632,12 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
 
     private void getDisPurposeData() {
-
+        disPurposeItems.add(new CardBean("离异多年了"));
         disPurposeItems.add(new CardBean("已经结婚了"));
         disPurposeItems.add(new CardBean("刚刚交往中"));
         disPurposeItems.add(new CardBean("正在分手期"));
         disPurposeItems.add(new CardBean("正在热恋期"));
-        disPurposeItems.add(new CardBean("单身狗一枚"));
+        disPurposeItems.add(new CardBean("未婚单身狗"));
     }
 
 

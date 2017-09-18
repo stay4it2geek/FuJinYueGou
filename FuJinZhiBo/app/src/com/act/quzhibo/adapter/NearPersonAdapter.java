@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.NearPerson;
+import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.ui.activity.InfonNearPersonActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -28,8 +28,8 @@ import java.util.List;
 
 public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity activity;
-    private List<NearPerson> datas;
-    public NearPersonAdapter(Activity context, List<NearPerson> datas) {
+    private List<InterestSubPerson> datas;
+    public NearPersonAdapter(Activity context, List<InterestSubPerson> datas) {
         activity = context;
         this.datas = datas;
     }
@@ -45,7 +45,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            final NearPerson user = datas.get(position);
+            final InterestSubPerson user = datas.get(position);
             Display display = activity.getWindowManager().getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
@@ -113,7 +113,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
-            arealocation = (TextView) view.findViewById(R.id.arealocation);
+            arealocation = (TextView) view.findViewById(R.id.locaiton);
             near_layout = (RelativeLayout) view.findViewById(R.id.commonLayout);
             introduce = (TextView) view.findViewById(R.id.introduce);
         }

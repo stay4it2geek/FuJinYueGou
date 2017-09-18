@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -29,7 +30,7 @@
         android:background="#eee"
         android:orientation="horizontal">
 
-        <EditText
+        <io.github.rockerhieu.emojicon.EmojiconEditText
             android:id="@+id/talk"
             style="@android:style/TextAppearance.Widget.EditText"
             android:layout_width="0dp"
@@ -37,7 +38,10 @@
             android:layout_weight="2"
             android:gravity="center"
             android:hint="点击这里评论她/他"
-            android:textSize="16sp" />
+            android:text="I \ue32d emojicon"
+            android:textSize="16sp"
+            emojicon:emojiconSize="28sp" />
+
 
         <TextView
             android:id="@+id/pinglun"

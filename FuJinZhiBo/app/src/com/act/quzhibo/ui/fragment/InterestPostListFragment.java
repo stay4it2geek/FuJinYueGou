@@ -88,7 +88,6 @@ public class InterestPostListFragment extends BackHandledFragment {
                 return true;     //截断事件的传递
             }
         });
-
         view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +118,7 @@ public class InterestPostListFragment extends BackHandledFragment {
         super.onResume();
     }
 
-    public static final class ComparatorValues implements Comparator<InterestPost> {
+    public static  class ComparatorValues implements Comparator<InterestPost> {
         @Override
         public int compare(InterestPost post1, InterestPost post2) {
             long m1 = Long.parseLong(post1.ctime != null ? post1.ctime : "0l");
@@ -156,7 +155,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     ctime = data.result.get(interestPostSize - 1).ctime;
                 }
                 if (adapter == null) {
-                    adapter = new InterestPostListAdapter(getActivity(), posts, 1);
+                    adapter = new InterestPostListAdapter(getActivity(), posts);
                     adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(InterestPost post) {

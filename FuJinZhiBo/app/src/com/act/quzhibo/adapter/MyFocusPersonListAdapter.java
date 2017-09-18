@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.bumptech.glide.Glide;
 
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 
 public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPersonListAdapter.MyViewHolder> {
 
-    private int screenWidth;
     private Context mContext;
     private ArrayList<MyFocusCommonPerson> datas;//数据
     private OnDeleteListener mListener = null;
@@ -26,11 +26,10 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         void onDelete(int position);
     }
 
-    public void setDelteListener(OnDeleteListener listener) {
+    public void setDeleteListener(OnDeleteListener listener) {
         mListener = listener;
     }
 
-    //自定义监听事件
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position, MyFocusCommonPerson myFocusCommonPerson);
     }
@@ -41,10 +40,9 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         mOnItemClickListener = listener;
     }
 
-    public MyFocusPersonListAdapter(Context context, ArrayList<MyFocusCommonPerson> datas, int screenWidth) {
+    public MyFocusPersonListAdapter(Context context, ArrayList<MyFocusCommonPerson> datas) {
         mContext = context;
         this.datas = datas;
-        this.screenWidth = screenWidth;
     }
 
     @Override
@@ -68,6 +66,13 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
 
             }
         }
+        if(datas.get(position).userType.equals(Constants.INTEREST)){
+            holder.locaitonDistance.setText("距离你太远了");
+        }else{
+            holder.locaitonDistance.setText("距离你"+datas.get(position).distance+"千米");
+        }
+        holder.locaitonDistance.setText(datas.get(position).username);
+
         holder.nickName.setText(datas.get(position).username);
         holder.commonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +95,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         return datas.size();//获取数据的个数
     }
     class MyViewHolder extends RecyclerView.ViewHolder {
+        private TextView locaitonDistance;
         private RelativeLayout commonLayout;
         private TextView sex;
         private TextView delete;
@@ -101,10 +107,12 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
             commonLayout = (RelativeLayout) view.findViewById(R.id.commonLayout);
             delete = (TextView) view.findViewById(R.id.delete);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
+            locaitonDistance = (TextView) view.findViewById(R.id.locaiton);
             nickName = (TextView) view.findViewById(R.id.nickName);
             sex = (TextView) view.findViewById(R.id.sex);
             sex.setVisibility(View.VISIBLE);
             delete.setVisibility(View.VISIBLE);
+            locaitonDistance.setVisibility(View.VISIBLE);
         }
     }
 

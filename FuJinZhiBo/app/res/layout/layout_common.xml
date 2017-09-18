@@ -30,7 +30,30 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/sort"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right"
+            android:orientation="vertical">
 
+            <View
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:background="@android:drawable/ic_menu_sort_by_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="日期排序"
+                android:textColor="@color/colorAccent"
+                android:textSize="10sp" />
+
+        </LinearLayout>
         <com.act.quzhibo.view.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"

@@ -15,7 +15,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
-import com.act.quzhibo.entity.NearPerson;
+import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
@@ -41,7 +41,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class InfonNearPersonActivity extends AppCompatActivity {
 
     private Banner banner;
-    private NearPerson user;
+    private InterestSubPerson user;
     private int second;
     private LoadNetView loadNetView;
     private MyFocusCommonPerson mMyFocusCommonPerson;
@@ -74,7 +74,7 @@ public class InfonNearPersonActivity extends AppCompatActivity {
 
     private void initView() {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-        user = (NearPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
+        user = (InterestSubPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
         findViewById(R.id.audio_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_zipai_img_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_zipai_video_layout).setVisibility(View.VISIBLE);
@@ -104,20 +104,16 @@ public class InfonNearPersonActivity extends AppCompatActivity {
         display.getSize(size);
         banner = (Banner) findViewById(R.id.banner);
         banner.setLayoutParams(new FrameLayout.LayoutParams(size.x - 10, size.x - 10));
-        if (user.vipType.equals("1")) {
-            ((TextView) findViewById(R.id.level)).setText("VIP");
-        } else {
-            ((TextView) findViewById(R.id.level)).setText("普通");
-        }
 
-        if (user.vipType.equals("1")) {
-            ((TextView) findViewById(R.id.level)).setText("初级趣会员");
-        } else if (user.vipType.equals("2")) {
-            ((TextView) findViewById(R.id.level)).setText("中级趣会员");
-        } else if (user.vipType.equals("3")) {
-            ((TextView) findViewById(R.id.level)).setText("超级趣会员");
-        } else {
+        int vip = Integer.parseInt(user.vipType);
+        if (vip < 1) {
             ((TextView) findViewById(R.id.level)).setText("非会员");
+        } else if (vip >= 1 && vip < 5) {
+            ((TextView) findViewById(R.id.level)).setText("初级趣会员");
+        } else if (vip >= 5 && vip < 7) {
+            ((TextView) findViewById(R.id.level)).setText("中级趣会员");
+        } else if (vip >= 7) {
+            ((TextView) findViewById(R.id.level)).setText("超级趣会员");
         }
 
         if (Integer.parseInt(user.userId) != CommonUtil.loadData(this, "userId")) {
@@ -142,7 +138,7 @@ public class InfonNearPersonActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.nickName)).setText(user.username == null ? "" : user.username);
 
         if (getIntent() != null) {
-            user = (NearPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
+            user = (InterestSubPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
             findViewById(R.id.brocast).setVisibility(View.VISIBLE);
             findViewById(R.id.brocast).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -200,7 +196,6 @@ public class InfonNearPersonActivity extends AppCompatActivity {
                 }
             });
         }
-
 
         findViewById(R.id.focus).setOnClickListener(new View.OnClickListener() {
             @Override

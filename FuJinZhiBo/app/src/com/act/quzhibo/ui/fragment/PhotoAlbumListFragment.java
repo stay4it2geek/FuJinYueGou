@@ -29,14 +29,14 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-
 public class PhotoAlbumListFragment extends BackHandledFragment {
+
+    private ArrayList<MediaInfo> medias = new ArrayList<>();
+    private PhotoAlbumListAdapter mInfoListAdapter;
+    private XRecyclerView recycleview;
+    private LoadNetView loadNetView;
     private String lastTime = "";
     private int mediasSize;
-    private ArrayList<MediaInfo> medias = new ArrayList<>();
-    private XRecyclerView recycleview;
-    private PhotoAlbumListAdapter mInfoListAdapter;
-    private LoadNetView loadNetView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                         public void run() {
                             recycleview.setNoMore(false);
                             recycleview.setLoadingMoreEnabled(true);
-                            initPhotoListData(Constants.REFRESH);
+                            getPhotoListData(Constants.REFRESH);
                             recycleview.refreshComplete();
                         }
                     }, 1000);
@@ -64,10 +64,8 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                         @Override
                         public void run() {
                             if (mediasSize > 0) {
-
-                                        initPhotoListData(Constants.LOADMORE);
-                                        recycleview.loadMoreComplete();
-
+                                getPhotoListData(Constants.LOADMORE);
+                                recycleview.loadMoreComplete();
                             } else {
                                 recycleview.setNoMore(true);
                             }
@@ -81,21 +79,21 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                 @Override
                 public void onClick(View v) {
                     loadNetView.setlayoutVisily(Constants.LOAD);
-                    initPhotoListData(Constants.REFRESH);
+                    getPhotoListData(Constants.REFRESH);
                 }
             });
-            initPhotoListData(Constants.REFRESH);
+            getPhotoListData(Constants.REFRESH);
         }
         rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return true;     //截断事件的传递
+                return true;
             }
         });
         return rootView;
     }
 
-    private void initPhotoListData(final int actionType) {
+    private void getPhotoListData(final int actionType) {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
         List<BmobQuery<MediaInfo>> queries = new ArrayList<>();
@@ -124,16 +122,16 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
             @Override
             public void done(List<MediaInfo> list, BmobException e) {
                 if (e == null) {
-                        if (actionType == Constants.REFRESH) {
-                            medias.clear();
-                        }
-                        if(list.size()>0){
-                            lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        }
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
+                    if (actionType == Constants.REFRESH) {
+                        medias.clear();
+                    }
+                    if (list.size() > 0) {
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }

@@ -58,7 +58,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 initMediaVideoListData(Constants.REFRESH);
             }
         });
-
         initView();
         return view;
     }
@@ -152,7 +151,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             @Override
             public void done(List<MediaInfo> list, BmobException e) {
                 if (e == null) {
-
                     if (actionType == Constants.REFRESH) {
                         medias.clear();
                     }
@@ -163,14 +161,12 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     message.obj = list;
                     message.what = actionType;
                     handler.sendMessage(message);
-
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });
     }
-
 
     Handler handler = new Handler() {
         @Override
@@ -201,12 +197,9 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                             }
                         }
                     });
-
-
                 } else {
                     mInfoListAdapter.notifyDataSetChanged();
                 }
-
                 loadNetView.setVisibility(View.GONE);
                 if (medias.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
@@ -217,7 +210,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
-
         }
     };
+
 }

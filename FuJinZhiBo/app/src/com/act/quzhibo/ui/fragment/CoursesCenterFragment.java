@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,9 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.CoursesAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CourseCategoryInfo;
 import com.act.quzhibo.entity.PuaCourses;
 import com.act.quzhibo.ui.activity.CoursesActivity;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.HorizontialListView;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -42,7 +41,7 @@ public class CoursesCenterFragment extends Fragment {
     private ArrayList<PuaCourses> puaCoursesList = new ArrayList<>();
     private int puaCourseSize;
     private View view;
-    String courseCategoryId = "1";
+    String courseCategoryId = "";
 
     @Nullable
     @Override
@@ -88,7 +87,6 @@ public class CoursesCenterFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -97,12 +95,9 @@ public class CoursesCenterFragment extends Fragment {
                 queryCourseData(courseCategoryId, Constants.REFRESH);
             }
         });
-
-        ToastUtil.showToast(getContext(),courseCategoryId);
         queryCourseData(courseCategoryId, Constants.REFRESH);
         return view;
     }
-
 
     private void queryCourseData(String courseCategoryId, final int actionType) {
         loadNetView.setVisibility(View.VISIBLE);
@@ -110,7 +105,6 @@ public class CoursesCenterFragment extends Fragment {
         List<BmobQuery<PuaCourses>> querise = new ArrayList<>();
         BmobQuery<PuaCourses> query = new BmobQuery<>();
         BmobQuery<PuaCourses> query3 = new BmobQuery<>();
-
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -190,7 +184,6 @@ public class CoursesCenterFragment extends Fragment {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
-
         }
     };
 

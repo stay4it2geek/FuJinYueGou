@@ -2,7 +2,6 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,13 +9,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.Display;
 import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
@@ -98,11 +95,9 @@ public class MyFocusPersonActivity extends FragmentActivity {
         queryData(Constants.REFRESH);
     }
 
-    private void queryData(final int actionType) {
-        final BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+    private void queryData(final int actionType) {BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
         query.setLimit(10);
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -118,7 +113,6 @@ public class MyFocusPersonActivity extends FragmentActivity {
             public void done(List<MyFocusCommonPerson> list, BmobException e) {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
-                        // 当是下拉刷新操作时，将当前页的编号重置为0，并清空，重新添加
                         myFocusCommonPersons.clear();
                     }
                     if (list.size() > 0) {
@@ -150,13 +144,8 @@ public class MyFocusPersonActivity extends FragmentActivity {
                 } else {
                     myfocusSize = 0;
                 }
-
-                Display display = MyFocusPersonActivity.this.getWindowManager().getDefaultDisplay();
-                Point size = new Point();
-                display.getSize(size);
-                int screenWidth = size.x;
                 if (myFocusPersonListAdapter == null) {
-                    myFocusPersonListAdapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons, screenWidth);
+                    myFocusPersonListAdapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons);
                     recyclerView.setAdapter(myFocusPersonListAdapter);
                     myFocusPersonListAdapter.setOnItemClickListener(new MyFocusPersonListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
@@ -173,7 +162,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
                         }
                     });
                     if (myFocusPersonListAdapter != null) {
-                        myFocusPersonListAdapter.setDelteListener(new MyFocusPersonListAdapter.OnDeleteListener() {
+                        myFocusPersonListAdapter.setDeleteListener(new MyFocusPersonListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
                                 FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {

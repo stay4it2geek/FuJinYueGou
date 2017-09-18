@@ -100,7 +100,6 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                 return true;     //截断事件的传递
             }
         });
-
         return view;
     }
 
@@ -115,7 +114,6 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
         List<BmobQuery<MediaAuthor>> queries = new ArrayList<>();
         if (actionType == Constants.LOADMORE) {
-            // 只查询小于最后一个item发表时间的数据
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             try {
@@ -155,7 +153,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
         });
     }
 
-    public static final class ComparatorValues implements Comparator<MediaAuthor> {
+    public static class ComparatorValues implements Comparator<MediaAuthor> {
 
         @Override
         public int compare(MediaAuthor mediaAuthor1, MediaAuthor mediaAuthor2) {

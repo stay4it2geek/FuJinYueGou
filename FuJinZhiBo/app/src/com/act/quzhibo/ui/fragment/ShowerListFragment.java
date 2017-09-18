@@ -91,7 +91,6 @@ public class ShowerListFragment extends BackHandledFragment {
             }
         });
 
-
         cataId = getArguments().getString(Constants.CATAID);
         cataTitle = getArguments().getString(Constants.CATATITLE);
         if (cataTitle.equals("手机达人")) {
@@ -113,6 +112,7 @@ public class ShowerListFragment extends BackHandledFragment {
                 getData(cataId, "0", Constants.REFRESH);
             }
         });
+
         view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,9 +127,7 @@ public class ShowerListFragment extends BackHandledFragment {
                 }
             }
         });
-
         getData(cataId, "0", Constants.REFRESH);
-
         return view;
     }
 
@@ -187,7 +185,7 @@ public class ShowerListFragment extends BackHandledFragment {
 
     };
 
-    public static final class ComparatorValues implements Comparator<Room> {
+    public static class ComparatorValues implements Comparator<Room> {
         @Override
         public int compare(Room room1, Room room2) {
             int m1 = Integer.parseInt(room1.onlineCount != null && !room1.onlineCount.equals("0") ? room1.onlineCount : "0");

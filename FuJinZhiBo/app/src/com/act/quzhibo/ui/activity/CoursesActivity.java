@@ -12,16 +12,8 @@ import com.act.quzhibo.util.CommonUtil;
 
 import java.util.ArrayList;
 
-
 public class CoursesActivity extends TabSlideSameBaseActivity implements CoursesCenterFragment.OnCallCourseDetailListner{
     ArrayList<CourseCategoryInfo> courseCategoryInfos;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String info = CommonUtil.getToggle(this, Constants.COURSE_CATOGERY_INFO).getToggleObject().toString();
@@ -35,7 +27,6 @@ public class CoursesActivity extends TabSlideSameBaseActivity implements Courses
         intent.putExtra(Constants.COURSE, puaCourse);
         startActivity(intent);
     }
-
 
     @Override
     public ArrayList<Fragment> getFragments() {
@@ -63,6 +54,5 @@ public class CoursesActivity extends TabSlideSameBaseActivity implements Courses
         }
         return tabTitles;
     }
-
 
 }

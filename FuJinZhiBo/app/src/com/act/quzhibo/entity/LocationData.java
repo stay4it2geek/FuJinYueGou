@@ -4,5 +4,5 @@ import java.util.ArrayList;
 
 
 public class LocationData {
-    public ArrayList<ProvinceAndCityEntify> data;
+    public ArrayList<ProvinceAndCityEntity> data;
 }

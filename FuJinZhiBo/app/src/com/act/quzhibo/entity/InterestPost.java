@@ -10,7 +10,7 @@ public class InterestPost implements Serializable{
     public String absText;
     public ArrayList<String> images;
     public String totalImages;
-    public InterestPostPerson user;
+    public InterestParentPerson user;
     public String elite;//false,
     public String top;//false,
     public String ctime;

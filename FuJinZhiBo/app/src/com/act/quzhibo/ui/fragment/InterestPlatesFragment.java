@@ -49,7 +49,6 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 callback.onNear();
             }
         });
-        recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -59,10 +58,9 @@ public class InterestPlatesFragment extends BackHandledFragment {
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return true;     //截断事件的传递
+                return true;
             }
         });
-
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

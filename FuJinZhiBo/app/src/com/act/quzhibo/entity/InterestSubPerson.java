@@ -1,15 +1,9 @@
 package com.act.quzhibo.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
-import cn.bmob.v3.BmobObject;
-
-public class NearSeePerson extends BmobObject implements Serializable{
-    public String disMariState;//,
-    public String disPurpose;//短期public String   ,
-    public String vipType;//280,
-    public String viewTime;//1258
-    public String userId;
+public class InterestSubPerson extends InterestParentPerson implements Serializable {
     public String absCoverPic;
     public String soundUrl;
     public String photoLibraries;
@@ -19,12 +13,12 @@ public class NearSeePerson extends BmobObject implements Serializable{
     public String introduce;
     public String soundLen;
     public String tagList;
-    public String connectSuccessNums;
     public String viewUsers;
     public String viewHomePages;
     public String headUrl;
     public String pics;
-    public String isVerify;
+    public String vipType;
     public String distance;
-    public String sex;
+    public String userType;
+    public String seeMeFlag;
 }

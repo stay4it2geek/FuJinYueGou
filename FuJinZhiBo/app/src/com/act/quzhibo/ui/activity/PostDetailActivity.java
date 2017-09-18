@@ -53,8 +53,6 @@ public class PostDetailActivity extends AppCompatActivity {
                 getData();
             }
         });
-
-
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("状 态 详 情");
         titlebar.setBackButtonListener(new View.OnClickListener() {

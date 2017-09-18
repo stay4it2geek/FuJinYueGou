@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <FrameLayout
             android:id="@+id/photoImglayout"
             android:layout_width="match_parent"
@@ -21,10 +20,10 @@
 
             <ImageView
                 android:id="@+id/photoImg"
-                android:scaleType="fitXY"
-                android:adjustViewBounds="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/delete"
@@ -33,7 +32,7 @@
                 android:layout_gravity="right|bottom"
                 android:layout_margin="5dp"
                 android:background="@drawable/delete"
-                android:visibility="gone"  />
+                android:visibility="gone" />
         </FrameLayout>
 
         <RelativeLayout
@@ -66,7 +65,7 @@
                 android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/arealocation"
+                android:id="@+id/locaiton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/introduce"
@@ -80,14 +79,13 @@
                 android:id="@+id/sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingTop="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="15dp"
-                android:visibility="gone"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
                 android:textColor="#EA99"
                 android:textSize="10sp"
-              />
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 

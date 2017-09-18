@@ -6,5 +6,5 @@ import java.util.ArrayList;
 public class RewardUsers implements Serializable {
    public long totalPages;
     public long  totalNums;
-    ArrayList<InterestPostPerson> users;
+    ArrayList<InterestParentPerson> users;
 }

@@ -7,7 +7,6 @@ import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
 import com.act.quzhibo.ui.fragment.NearFragment;
 import com.act.quzhibo.ui.fragment.PhotoAlbumAuthorsFragment;
 import com.act.quzhibo.ui.fragment.VideoAlbumAuthorsFragment;
-import com.act.quzhibo.util.ToastUtil;
 
 import java.util.ArrayList;
 
