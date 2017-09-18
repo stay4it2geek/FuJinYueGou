@@ -113,7 +113,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
-            arealocation = (TextView) view.findViewById(R.id.locaiton);
+            arealocation = (TextView) view.findViewById(R.id.location);
             near_layout = (RelativeLayout) view.findViewById(R.id.commonLayout);
             introduce = (TextView) view.findViewById(R.id.introduce);
         }

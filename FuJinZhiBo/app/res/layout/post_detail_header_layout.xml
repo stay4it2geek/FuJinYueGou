@@ -68,7 +68,7 @@
             android:background="@drawable/location" />
 
         <TextView
-            android:id="@+id/locaiton"
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/createTime"

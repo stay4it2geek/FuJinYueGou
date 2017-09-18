@@ -157,6 +157,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
                 cleanInternalCache(SettingMineInfoActivity.this);
                 cleanExternalCache(SettingMineInfoActivity.this);
+                ToastUtil.showToast(SettingMineInfoActivity.this, "清除完成！");
 
 
             }

@@ -127,7 +127,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             super(view);
             nickName = (TextView) view.findViewById(R.id.nickName);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.locaiton);
+            arealocation = (TextView) view.findViewById(R.id.location);
             userImage = (ImageView) view.findViewById(R.id.userImage);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             nickName = (TextView) view.findViewById(R.id.nickName);

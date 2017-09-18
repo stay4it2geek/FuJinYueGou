@@ -1,28 +1,25 @@
-package com.act.quzhibo.ui.fragment;
+package com.act.quzhibo.ui.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.WhoLikeMeAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.InterestParentPerson;
 import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -31,21 +28,29 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class WhoLikeThenSeeMeFragment extends BackHandledFragment {
+public class WhoLikeThenSeeMeActivity extends FragmentActivity {
     private ArrayList<InterestSubPerson> interestPersonList = new ArrayList<>();
     private WhoLikeMeAdapter whoLikeMeAdapter;
     private XRecyclerView recyclerView;
     private LoadNetView loadNetView;
     private int liekThenSeeMeSize;
     private String lastTime = "";
-    private View view;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_common, null, false);
-        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
-        loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.layout_common);
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setVisibility(View.VISIBLE);
+        titlebar.setBarTitle("谁来看过我");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WhoLikeThenSeeMeActivity.this.finish();
+            }
+        });
+        recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
+        loadNetView = (LoadNetView) findViewById(R.id.loadview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -78,17 +83,26 @@ public class WhoLikeThenSeeMeFragment extends BackHandledFragment {
                 }, 1000);
             }
         });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         queryData(Constants.REFRESH);
-        return view;
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
     }
+
+    
 
     private void queryData(final int actionType) {
         List<BmobQuery<InterestSubPerson>> queries = new ArrayList<>();
         BmobQuery<InterestSubPerson> query = new BmobQuery<>();
-        query.setLimit(10);
+        BmobQuery<InterestSubPerson> query3 = new BmobQuery<>();
+
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -103,9 +117,10 @@ public class WhoLikeThenSeeMeFragment extends BackHandledFragment {
         BmobQuery<InterestSubPerson> query2 = new BmobQuery<>();
         query2.addWhereEqualTo("seeMeFlag", true);
         queries.add(query2);
-        query.and(queries);
-        query.order("-updatedAt");
-        query.findObjects(new FindListener<InterestSubPerson>() {
+        query3.and(queries);
+        query3.setLimit(10);
+        query3.order("-distance");
+        query3.findObjects(new FindListener<InterestSubPerson>() {
             @Override
             public void done(List<InterestSubPerson> list, BmobException e) {
                 if (e == null) {
@@ -126,21 +141,6 @@ public class WhoLikeThenSeeMeFragment extends BackHandledFragment {
         });
     }
 
-    public static class ComparatorValues implements Comparator<InterestParentPerson> {
-        @Override
-        public int compare(InterestParentPerson person1, InterestParentPerson person2) {
-            int m1 = Integer.parseInt(person1.viewTime != null ? person1.viewTime : "0");
-            int m2 = Integer.parseInt(person2.viewTime != null ? person2.viewTime : "0");
-            int result = 0;
-            if (m1 > m2) {
-                result = 1;
-            }
-            if (m1 < m2) {
-                result = -1;
-            }
-            return result;
-        }
-    }
 
     Handler handler = new Handler() {
         @Override
@@ -154,9 +154,8 @@ public class WhoLikeThenSeeMeFragment extends BackHandledFragment {
                 } else {
                     liekThenSeeMeSize = 0;
                 }
-                Collections.sort(interestPersonList, new ComparatorValues());
                 if (whoLikeMeAdapter == null) {
-                    whoLikeMeAdapter = new WhoLikeMeAdapter(getActivity(), interestPersonList);
+                    whoLikeMeAdapter = new WhoLikeMeAdapter(WhoLikeThenSeeMeActivity.this, interestPersonList);
                     recyclerView.setAdapter(whoLikeMeAdapter);
                 } else {
                     whoLikeMeAdapter.notifyDataSetChanged();
@@ -173,9 +172,4 @@ public class WhoLikeThenSeeMeFragment extends BackHandledFragment {
             }
         }
     };
-
-    @Override
-    public boolean onBackPressed() {
-        return false;
-    }
 }

@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import cn.bmob.v3.BmobObject;
 
-/**
- * Created by weiminglin on 17/8/25.
- */
+
 
 public class MyPost extends BmobObject{
 
@@ -15,7 +13,6 @@ public class MyPost extends BmobObject{
     public String absText;  //很伤啊。。。。,
     public ArrayList<String> images;
     public String totalImages;// 2,
-
     public String elite;//false,
     public String top;//false,
     public String ctime;//1495951626640,

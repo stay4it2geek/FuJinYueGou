@@ -27,7 +27,7 @@ import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
-import com.act.quzhibo.ui.activity.WhoSeeMeActivity;
+import com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
 
 import cn.bmob.v3.BmobUser;
@@ -116,7 +116,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
                         break;
                     case R.id.who_see_me:
-                        getActivity().startActivity(new Intent(getActivity(), WhoSeeMeActivity.class));
+                        getActivity().startActivity(new Intent(getActivity(), WhoLikeThenSeeMeActivity.class));
                         break;
                     case R.id.myfocus_shower:
                         getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));

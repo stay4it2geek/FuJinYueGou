@@ -59,7 +59,7 @@ public class PostCommentAdapter extends BaseAdapter {
             view = LayoutInflater.from(activity).inflate(R.layout.item_comment_layout, parent, false);
             viewHolder.nickName = (TextView) view.findViewById(R.id.nickName);
             viewHolder.createTime = (TextView) view.findViewById(R.id.createTime);
-            viewHolder.arealocation = (TextView) view.findViewById(R.id.locaiton);
+            viewHolder.arealocation = (TextView) view.findViewById(R.id.location);
             viewHolder.userImage = (ImageView) view.findViewById(R.id.userImage);
             viewHolder.sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             viewHolder.content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.re_content);

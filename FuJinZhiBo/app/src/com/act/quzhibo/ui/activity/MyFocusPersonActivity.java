@@ -154,11 +154,12 @@ public class MyFocusPersonActivity extends FragmentActivity {
                             intent.putExtra(Constants.COMMON_USER_ID, myFocusCommonPerson.userId);
                             if (myFocusCommonPerson.userType.equals(Constants.INTEREST)) {
                                 intent.setClass(MyFocusPersonActivity.this, IntersetPersonPostListActivity.class);
+                                startActivity(intent);
                             } else {
 //                                intent.setClass(MyFocusPersonActivity.this, NearPersonPostListActivity.class);
                             }
 
-                            startActivity(intent);
+//                            startActivity(intent);
                         }
                     });
                     if (myFocusPersonListAdapter != null) {

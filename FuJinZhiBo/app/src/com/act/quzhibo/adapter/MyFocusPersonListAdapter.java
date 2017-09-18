@@ -107,7 +107,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
             commonLayout = (RelativeLayout) view.findViewById(R.id.commonLayout);
             delete = (TextView) view.findViewById(R.id.delete);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
-            locaitonDistance = (TextView) view.findViewById(R.id.locaiton);
+            locaitonDistance = (TextView) view.findViewById(R.id.location);
             nickName = (TextView) view.findViewById(R.id.nickName);
             sex = (TextView) view.findViewById(R.id.sex);
             sex.setVisibility(View.VISIBLE);

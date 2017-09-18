@@ -33,7 +33,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/photoImg"
-            android:text="nickName"
+            android:text=""
             android:textColor="#000"
             android:textSize="17sp" />
 
@@ -43,15 +43,29 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/nick"
-            android:background="@color/colorAccent"
+            android:background="@drawable/bg_round_yellow"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:text="eeee"
-            android:textColor="#fff"
+            android:textColor="#000"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/disMariState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="13dp"
+            android:layout_toRightOf="@+id/sexAndAge"
+            android:background="@drawable/bg_round_yellow"
+            android:paddingLeft="4dp"
+            android:visibility="gone"
+            android:paddingRight="4dp"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="14sp" />
         <TextView
             android:id="@+id/createTime"
             android:layout_width="wrap_content"
@@ -64,25 +78,26 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="15dp"
-            android:layout_height="17dp"
+            android:layout_width="18dp"
+            android:layout_height="19dp"
             android:layout_alignTop="@+id/createTime"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/createTime"
             android:background="@drawable/location" />
 
         <TextView
-            android:id="@+id/locaiton"
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/createTime"
-            android:layout_alignTop="@+id/createTime"
+            android:layout_alignBottom="@+id/imageView"
             android:layout_below="@+id/sexAndAge"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="12dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:layout_toRightOf="@+id/imageView"
-            android:text=""
+            android:background="@drawable/bg_round_yellow"
             android:textSize="12sp" />
-
 
     </RelativeLayout>
 
@@ -132,9 +147,9 @@
 
             <FrameLayout
                 android:id="@+id/imgVideolayout"
-                android:visibility="gone"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/imgVideo"
@@ -214,25 +229,6 @@
                 android:layout_toRightOf="@+id/pinglun"
                 android:text="" />
 
-            <TextView
-                android:id="@+id/dashang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/pinglunNum"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/pinglunNum"
-                android:text="打赏"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/dashangNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/dashang"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@+id/dashang"
-                android:text=""
-                android:visibility="gone" />
         </RelativeLayout>
 
     </RelativeLayout>

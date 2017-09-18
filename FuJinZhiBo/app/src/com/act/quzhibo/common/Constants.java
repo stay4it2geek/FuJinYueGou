@@ -54,4 +54,5 @@ public class Constants {
     public static final int ITEM_POST_DETAIL_IMG = 1;
     public static final int ITEM_USER_INFO_IMG = 2;
 
+    public static final String USER = "interseUser";
 }

@@ -22,13 +22,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyViewHolder> {
     private Activity activity;
-    private List<InterestSubPerson> datas;
+    private ArrayList<InterestSubPerson> datas;
 
-    public WhoLikeMeAdapter(Activity context, List<InterestSubPerson> datas) {
+    public WhoLikeMeAdapter(Activity context, ArrayList<InterestSubPerson> datas) {
         activity = context;
         this.datas = datas;
     }
@@ -54,6 +54,8 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         }
         holder.sexAndAge.setText(datas.get(position).sex.equals("2") ? "女" : "男");
         holder.createTime.setText(hour + "时" + min + "分钟前看过你");
+        holder.arealocation.setText("  距离你" + datas.get(position).distance + "公里");
+
         holder.who_see_me_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,11 +70,11 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
                 activity.startActivity(intent);
             }
         });
-        String photoUrl="";
-        if(user.userType.equals(Constants.INTEREST)){
-            photoUrl=user.photoUrl;
-        }else{
-            photoUrl=user.headUrl;
+        String photoUrl = "";
+        if (user.userType.equals(Constants.INTEREST)) {
+            photoUrl = user.photoUrl;
+        } else {
+            photoUrl = user.headUrl;
         }
         if (user.sex.equals("2")) {
 
@@ -123,11 +125,10 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nick);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.locaiton);
+            arealocation = (TextView) view.findViewById(R.id.location);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             disMariState = (TextView) view.findViewById(R.id.disMariState);
             who_see_me_layout = (RelativeLayout) view.findViewById(R.id.who_see_me_layout);
-            view.findViewById(R.id.delete).setVisibility(View.GONE);
             arealocation.setVisibility(View.VISIBLE);
         }
     }

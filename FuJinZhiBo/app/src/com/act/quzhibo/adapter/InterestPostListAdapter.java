@@ -7,7 +7,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +78,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         holder.absText.setText(datas.get(position).absText + "");
         holder.viewNum.setText(datas.get(position).pageView + "");
         holder.pinglunNum.setText(datas.get(position).totalComments + "");
-        holder.dashangNum.setText(datas.get(position).rewards + "");
 
         if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
             holder.imgGridview.setVisibility(View.VISIBLE);
@@ -194,7 +192,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         private GridView imgGridview;
         private TextView viewNum;
         private TextView pinglunNum;
-        private TextView dashangNum;
         private TextView nickName;
         private TextView title;
         private ImageView photoImg;
@@ -214,11 +211,10 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             title = (TextView) view.findViewById(R.id.title);
             absText = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.absText);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.locaiton);
+            arealocation = (TextView) view.findViewById(R.id.location);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             viewNum = (TextView) view.findViewById(R.id.viewNum);
             pinglunNum = (TextView) view.findViewById(R.id.pinglunNum);
-            dashangNum = (TextView) view.findViewById(R.id.dashangNum);
             imgtotal = (TextView) view.findViewById(R.id.imgtotal);
             postlayout = (RelativeLayout) view.findViewById(R.id.postlayout);
             imgGridview = (GridView) view.findViewById(R.id.imgGridview);

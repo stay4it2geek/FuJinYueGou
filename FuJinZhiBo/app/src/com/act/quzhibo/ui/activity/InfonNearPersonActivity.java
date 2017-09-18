@@ -62,7 +62,7 @@ public class InfonNearPersonActivity extends AppCompatActivity {
 
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        titlebar.setBarTitle("附近情趣达人档案");
+        titlebar.setBarTitle("情趣达人档案");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

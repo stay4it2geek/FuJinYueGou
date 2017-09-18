@@ -58,7 +58,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             String nick = rootUser.getUsername().replaceAll("\r|\n", "");
-            holder.nickName.setText(rootUser.getUsername() + "");
+            holder.nickName.setText(nick);
             long l = System.currentTimeMillis() - Long.parseLong(posts.get(position).ctime);
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
@@ -73,7 +73,6 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             holder.absText.setText(posts.get(position).absText + "");
             holder.viewNum.setText(posts.get(position).pageView + "");
             holder.pinglunNum.setText(posts.get(position).totalComments + "");
-            holder.dashangNum.setText(posts.get(position).rewards + "");
 
             if (posts.get(position).totalImages != null && Integer.parseInt(posts.get(position).totalImages) > 0) {
                 holder.imgGridview.setVisibility(View.VISIBLE);
@@ -160,11 +159,10 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             title = (TextView) view.findViewById(R.id.title);
             absText = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.absText);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.locaiton);
+            arealocation = (TextView) view.findViewById(R.id.location);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             viewNum = (TextView) view.findViewById(R.id.viewNum);
             pinglunNum = (TextView) view.findViewById(R.id.pinglunNum);
-            dashangNum = (TextView) view.findViewById(R.id.dashangNum);
             imgtotal = (TextView) view.findViewById(R.id.imgtotal);
             postlayout = (RelativeLayout) view.findViewById(R.id.postlayout);
             imgGridview = (GridView) view.findViewById(R.id.imgGridview);
