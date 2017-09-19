@@ -89,6 +89,14 @@ public class NearFragment extends BackHandledFragment {
                 queryData(Constants.REFRESH);
             }
         });
+
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
         return view;
     }
 

@@ -96,6 +96,13 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
             }
         });
 
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

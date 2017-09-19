@@ -7,31 +7,29 @@ import android.support.v4.app.Fragment;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.CategoryInfo;
 import com.act.quzhibo.entity.MoneyCourse;
-import com.act.quzhibo.entity.PuaCourse;
 import com.act.quzhibo.ui.fragment.MoneyCoursesCenterFragment;
-import com.act.quzhibo.ui.fragment.PuaCoursesCenterFragment;
 import com.act.quzhibo.util.CommonUtil;
 
 import java.util.ArrayList;
 
-public class MoneyActivity  extends TabSlideSameBaseActivity implements MoneyCoursesCenterFragment.OnCallCourseDetailListner{
-    ArrayList<CategoryInfo> categoryInfos;
+public class MoneyActivity extends TabSlideSameBaseActivity implements MoneyCoursesCenterFragment.OnCallCourseDetailListner {
+
+    ArrayList<CategoryInfo> categoryInfos = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String info = CommonUtil.getToggle(this, Constants.MONEY_CATOGERY_INFO).getToggleObject().toString();
-        categoryInfos = CommonUtil.jsonToArrayList(info, CategoryInfo.class);
+        categoryInfos.addAll(CommonUtil.jsonToArrayList(info, CategoryInfo.class));
         super.onCreate(savedInstanceState);
     }
-
-
 
     @Override
     public ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> mFragments = new ArrayList<>();
         for (CategoryInfo categoryInfo : categoryInfos) {
-            PuaCoursesCenterFragment fragment = new PuaCoursesCenterFragment();
+            MoneyCoursesCenterFragment fragment = new MoneyCoursesCenterFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(Constants.COURSE_CATOGERY_ID, categoryInfo.courseCategoryId);
+            bundle.putString(Constants.COURSE_CATOGERY_ID, categoryInfo.categoryId);
             fragment.setArguments(bundle);
             mFragments.add(fragment);
         }
@@ -47,7 +45,7 @@ public class MoneyActivity  extends TabSlideSameBaseActivity implements MoneyCou
     public ArrayList<String> getTabTitles() {
         ArrayList<String> tabTitles = new ArrayList<>();
         for (CategoryInfo categoryInfo : categoryInfos) {
-            tabTitles.add(categoryInfo.coursesCategoryName);
+            tabTitles.add(categoryInfo.categoryName);
         }
         return tabTitles;
     }
@@ -58,4 +56,5 @@ public class MoneyActivity  extends TabSlideSameBaseActivity implements MoneyCou
         intent.putExtra(Constants.COURSE, moneyCourse);
         startActivity(intent);
     }
+
 }

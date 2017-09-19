@@ -13,6 +13,7 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,11 +23,11 @@
             android:textSize="16sp" />
 
         <Button
-
             android:id="@+id/relaodbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             android:background="@color/tabline"
             android:paddingBottom="10dp"
             android:paddingLeft="40dp"
@@ -102,14 +103,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
-            android:layout_marginBottom="20dp"
             android:layout_width="90dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
             android:background="@drawable/cover" />
 
         <TextView
@@ -144,14 +145,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <ImageView
-            android:layout_marginBottom="10dp"
             android:layout_width="90dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/video_paly_cover" />
 
         <TextView
@@ -181,36 +182,59 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/noDownloadedDataText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="您还没有保存过任何图片或视频哦"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/noDownloadingDataText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="您没有正在保存的任何图片或视频哦"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/noDataText"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
         <TextView
-            android:visibility="gone"
-            android:id="@+id/noDownloadedDataText"
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
+            android:background="@color/white"
             android:gravity="center"
-            android:text="您还没有保存过任何图片或视频哦"
+            android:text="没有数据哦"
             android:textSize="16sp" />
 
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/noDownloadingDataText"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="您没有正在保存的任何图片或视频哦"
-        android:textSize="16sp" />
 
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/noDataText"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="没有数据哦"
-        android:textSize="16sp" />
+        <Button
+            android:id="@+id/loadDataButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@color/tabline"
+            android:paddingBottom="10dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="10dp"
+            android:text="重新加载"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 </FrameLayout>

@@ -24,9 +24,10 @@ public class LoadNetView extends LinearLayout {
     private Button reloadbutton;
     private Button buybutton;
     private LinearLayout loadlayout;
-    private TextView  noDataText;
+    private LinearLayout  noDataText;
     private LinearLayout reloadlayout;
     private LinearLayout video_album_layout;
+    private Button loadDataButton;
     public LoadNetView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -37,9 +38,10 @@ public class LoadNetView extends LinearLayout {
         video_album_layout = (LinearLayout) findViewById(R.id.video_album_layout);
         reloadbutton = (Button) findViewById(R.id.relaodbutton);
         buybutton = (Button) findViewById(R.id.buybutton);
+        loadDataButton = (Button) findViewById(R.id.loadDataButton);
         photoalbum_layout = (LinearLayout) findViewById(R.id.photoalbum_layout);
         noDownloadingDataText= (TextView) findViewById(R.id.noDownloadingDataText);
-        noDataText= (TextView) findViewById(R.id.noDataText);
+        noDataText= (LinearLayout) findViewById(R.id.noDataText);
         loadlayout = (LinearLayout) findViewById(R.id.loadlayout);
         vipNulllayout = (LinearLayout) findViewById(R.id.VipNulllayout);
         video_album_layout = (LinearLayout) findViewById(R.id.video_album_layout);
@@ -48,6 +50,10 @@ public class LoadNetView extends LinearLayout {
 
     public void setReloadButtonListener(OnClickListener listener) {
         reloadbutton.setOnClickListener(listener);
+    }
+
+    public void setLoadButtonListener(OnClickListener listener) {
+        loadDataButton.setOnClickListener(listener);
     }
 
 

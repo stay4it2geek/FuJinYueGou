@@ -84,6 +84,15 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
             });
             getPhotoListData(Constants.REFRESH);
         }
+
+
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getPhotoListData(Constants.REFRESH);
+            }
+        });
         rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

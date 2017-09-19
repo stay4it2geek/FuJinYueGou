@@ -94,6 +94,15 @@ public class PuaCoursesCenterFragment extends Fragment {
             }
         });
         queryCourseData(courseCategoryId, Constants.REFRESH);
+
+
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryCourseData(courseCategoryId, Constants.REFRESH);
+            }
+        });
         return view;
     }
 

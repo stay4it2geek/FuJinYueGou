@@ -94,6 +94,13 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
                 queryData(Constants.REFRESH);
             }
         });
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
     }
 
     

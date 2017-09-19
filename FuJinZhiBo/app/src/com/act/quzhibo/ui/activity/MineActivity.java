@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
@@ -17,19 +18,18 @@ import cn.bmob.v3.BmobUser;
 
 
 public class MineActivity extends TabSlideBaseActivity {
-    Button isLogin;
+    ImageView message;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isLogin = (Button) findViewById(R.id.isLogin);
-        isLogin.setVisibility(View.VISIBLE);
-
-        isLogin.setOnClickListener(new View.OnClickListener() {
+        message = (ImageView) findViewById(R.id.message);
+        message.setVisibility(View.VISIBLE);
+        message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
                 if (rootUser == null) {
-                    startActivity(new Intent(MineActivity.this, LoginActivity.class));
+                    startActivity(new Intent(MineActivity.this, MessageActivity.class));
                 }
                 return;
 
@@ -65,9 +65,9 @@ public class MineActivity extends TabSlideBaseActivity {
         RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
         if (rootUser != null) {
             CommonUtil.fecth(this);
-            isLogin.setText("已登录");
+
         } else {
-            isLogin.setText("去登录");
+
         }
     }
 }

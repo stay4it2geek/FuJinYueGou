@@ -128,6 +128,14 @@ public class ShowerListFragment extends BackHandledFragment {
             }
         });
         getData(cataId, "0", Constants.REFRESH);
+
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData(cataId, "0", Constants.REFRESH);
+            }
+        });
         return view;
     }
 

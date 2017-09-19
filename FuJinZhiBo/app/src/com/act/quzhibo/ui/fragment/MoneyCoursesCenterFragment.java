@@ -36,7 +36,7 @@ public class MoneyCoursesCenterFragment extends Fragment {
     private LoadNetView loadNetView;
     private String lastTime = "";
     private ArrayList<MoneyCourse> moneyCourseList = new ArrayList<>();
-    private int MoneyCourseSize;
+    private int moneyCourseSize;
     private View view;
     String courseCategoryId = "";
 
@@ -53,6 +53,7 @@ public class MoneyCoursesCenterFragment extends Fragment {
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
         recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
@@ -71,7 +72,7 @@ public class MoneyCoursesCenterFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (MoneyCourseSize > 0) {
+                        if (moneyCourseSize > 0) {
                             queryCourseData(courseCategoryId, Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -86,6 +87,15 @@ public class MoneyCoursesCenterFragment extends Fragment {
         recyclerView.setLayoutManager(gridLayoutManager);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryCourseData(courseCategoryId, Constants.REFRESH);
+            }
+        });
+
+
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
@@ -150,13 +160,13 @@ public class MoneyCoursesCenterFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<MoneyCourse> MoneyCourses = (ArrayList<MoneyCourse>) msg.obj;
+            ArrayList<MoneyCourse> moneyCourses = (ArrayList<MoneyCourse>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (MoneyCourses != null) {
-                    moneyCourseList.addAll(MoneyCourses);
-                    MoneyCourseSize = MoneyCourses.size();
+                if (moneyCourses != null) {
+                    moneyCourseList.addAll(moneyCourses);
+                    moneyCourseSize = moneyCourses.size();
                 } else {
-                    MoneyCourseSize = 0;
+                    moneyCourseSize = 0;
                 }
 
                 if (courseCenterAdapter == null) {

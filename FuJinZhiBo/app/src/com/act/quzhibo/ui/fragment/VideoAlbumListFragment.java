@@ -58,6 +58,15 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 initMediaVideoListData(Constants.REFRESH);
             }
         });
+
+
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                initMediaVideoListData(Constants.REFRESH);
+            }
+        });
         initView();
         return view;
     }

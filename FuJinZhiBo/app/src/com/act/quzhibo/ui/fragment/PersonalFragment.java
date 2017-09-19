@@ -16,6 +16,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.ui.activity.MakeMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
@@ -105,6 +106,12 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 switch (view.getId()) {
+                    case R.id.makemoneyLayout:
+                        getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
+                        break;
+                    case  R.id.checkoutWalletLayout:
+                        getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
+                        break;
                     case R.id.vip_policy:
                         getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
                         break;

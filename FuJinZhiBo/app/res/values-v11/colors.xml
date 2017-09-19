@@ -29,4 +29,6 @@
     <color name="transparent">#50000000</color>
     <color name="yellow">#ecdd3e</color>
     <color name="lightpink">#FFF6F7</color>
+    <color name="textColor">#4A4A4A</color>
+
 </resources>

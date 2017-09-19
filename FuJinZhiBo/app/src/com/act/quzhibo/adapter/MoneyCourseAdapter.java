@@ -27,6 +27,9 @@ public class MoneyCourseAdapter extends RecyclerView.Adapter<MoneyCourseAdapter.
     public MoneyCourseAdapter(Activity context, ArrayList<MoneyCourse> courses) {
         activity = context;
         this.courses = courses;
+        if(courses==null||courses.size()==0){
+            return;
+        }
     }
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(MoneyCourse course);
@@ -40,7 +43,7 @@ public class MoneyCourseAdapter extends RecyclerView.Adapter<MoneyCourseAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.course_item, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(activity).inflate(R.layout.money_course_item, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MoneyCourseAdapter.MyViewHolder(view);
         return holder;
     }
@@ -50,7 +53,7 @@ public class MoneyCourseAdapter extends RecyclerView.Adapter<MoneyCourseAdapter.
         final MoneyCourse course = courses.get(position);
         holder.courseName.setText(course.courseName);
         holder.courseDetail.setText(Html.fromHtml(course.courseDetail));
-        Glide.with(activity).load(course.courseImage.getUrl()).into(holder.courseImage);
+        Glide.with(activity).load(course.courseImage.getFileUrl()).into(holder.courseImage);
         holder.courseLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +65,7 @@ public class MoneyCourseAdapter extends RecyclerView.Adapter<MoneyCourseAdapter.
             holder.courseAppPrice.setVisibility(View.VISIBLE);
             holder.courseMarketPrice.setVisibility(View.VISIBLE);
             holder.courseAppPrice.setText("¥" + course.courseAppPrice);
+            holder.courseMarketPrice.setText("¥" + course.courseMarketPrice);
             holder.courseMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  //
         } else {
             holder.courseTag.setText("免费");

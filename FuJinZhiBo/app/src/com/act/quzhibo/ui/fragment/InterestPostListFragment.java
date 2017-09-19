@@ -110,6 +110,14 @@ public class InterestPostListFragment extends BackHandledFragment {
                 getData(pid, "0", Constants.REFRESH);
             }
         });
+
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData(pid, "0", Constants.REFRESH);
+            }
+        });
         return view;
     }
 
