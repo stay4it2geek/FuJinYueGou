@@ -8,17 +8,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.CoursesAdapter;
+import com.act.quzhibo.adapter.MoneyCourseAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.PuaCourses;
+import com.act.quzhibo.entity.MoneyCourse;
 import com.act.quzhibo.ui.activity.CoursesActivity;
-import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -33,13 +31,12 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class CoursesCenterFragment extends Fragment {
+public class MoneyCoursesCenterFragment extends Fragment {
     private XRecyclerView recyclerView;
-    private CoursesAdapter courseCenterAdapter;
     private LoadNetView loadNetView;
     private String lastTime = "";
-    private ArrayList<PuaCourses> puaCoursesList = new ArrayList<>();
-    private int puaCourseSize;
+    private ArrayList<MoneyCourse> moneyCourseList = new ArrayList<>();
+    private int MoneyCourseSize;
     private View view;
     String courseCategoryId = "";
 
@@ -74,7 +71,7 @@ public class CoursesCenterFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (puaCourseSize > 0) {
+                        if (MoneyCourseSize > 0) {
                             queryCourseData(courseCategoryId, Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -102,9 +99,9 @@ public class CoursesCenterFragment extends Fragment {
     private void queryCourseData(String courseCategoryId, final int actionType) {
         loadNetView.setVisibility(View.VISIBLE);
         loadNetView.setlayoutVisily(Constants.LOAD);
-        List<BmobQuery<PuaCourses>> querise = new ArrayList<>();
-        BmobQuery<PuaCourses> query = new BmobQuery<>();
-        BmobQuery<PuaCourses> query3 = new BmobQuery<>();
+        List<BmobQuery<MoneyCourse>> querise = new ArrayList<>();
+        BmobQuery<MoneyCourse> query = new BmobQuery<>();
+        BmobQuery<MoneyCourse> query3 = new BmobQuery<>();
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -116,7 +113,7 @@ public class CoursesCenterFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        BmobQuery<PuaCourses> query2 = new BmobQuery<>();
+        BmobQuery<MoneyCourse> query2 = new BmobQuery<>();
         query2.addWhereEqualTo("courseCategoryId", courseCategoryId);
         querise.add(query2);
 
@@ -124,12 +121,12 @@ public class CoursesCenterFragment extends Fragment {
         query3.setLimit(10);
         query3.order("courseAppPrice");
 
-        query3.findObjects(new FindListener<PuaCourses>() {
+        query3.findObjects(new FindListener<MoneyCourse>() {
             @Override
-            public void done(List<PuaCourses> list, BmobException e) {
+            public void done(List<MoneyCourse> list, BmobException e) {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
-                        puaCoursesList.clear();
+                        moneyCourseList.clear();
                         if (courseCenterAdapter != null) {
                             courseCenterAdapter.notifyDataSetChanged();
                         }
@@ -148,25 +145,26 @@ public class CoursesCenterFragment extends Fragment {
         });
     }
 
+    private MoneyCourseAdapter courseCenterAdapter;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<PuaCourses> puaCourses = (ArrayList<PuaCourses>) msg.obj;
+            ArrayList<MoneyCourse> MoneyCourses = (ArrayList<MoneyCourse>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (puaCourses != null) {
-                    puaCoursesList.addAll(puaCourses);
-                    puaCourseSize = puaCourses.size();
+                if (MoneyCourses != null) {
+                    moneyCourseList.addAll(MoneyCourses);
+                    MoneyCourseSize = MoneyCourses.size();
                 } else {
-                    puaCourseSize = 0;
+                    MoneyCourseSize = 0;
                 }
 
                 if (courseCenterAdapter == null) {
-                    courseCenterAdapter = new CoursesAdapter(getActivity(), puaCoursesList);
+                    courseCenterAdapter = new MoneyCourseAdapter(getActivity(), moneyCourseList);
                     recyclerView.setAdapter(courseCenterAdapter);
-                    courseCenterAdapter.setOnItemClickListener(new CoursesAdapter.OnRecyclerViewItemClickListener() {
+                    courseCenterAdapter.setOnItemClickListener(new MoneyCourseAdapter.OnRecyclerViewItemClickListener() {
                         @Override
-                        public void onItemClick(PuaCourses course) {
+                        public void onItemClick(MoneyCourse course) {
                             listner.onCallDetail(course);
                         }
                     });
@@ -175,7 +173,7 @@ public class CoursesCenterFragment extends Fragment {
                 }
 
                 loadNetView.setVisibility(View.GONE);
-                if (puaCoursesList.size() == 0) {
+                if (moneyCourseList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
@@ -198,6 +196,6 @@ public class CoursesCenterFragment extends Fragment {
     OnCallCourseDetailListner listner;
 
     public interface OnCallCourseDetailListner {
-        void onCallDetail(PuaCourses puaCourse);
+        void onCallDetail(MoneyCourse moneyCourse);
     }
 }

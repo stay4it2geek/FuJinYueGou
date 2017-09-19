@@ -2,7 +2,6 @@ package com.act.quzhibo.adapter;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,21 +13,21 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.PuaCourses;
+import com.act.quzhibo.entity.PuaCourse;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.MyViewHolder> {
+public class PuaCoursesAdapter extends RecyclerView.Adapter<PuaCoursesAdapter.MyViewHolder> {
     private Activity activity;
-    private ArrayList<PuaCourses> courses;
+    private ArrayList<PuaCourse> courses;
 
-    public CoursesAdapter(Activity context, ArrayList<PuaCourses> courses) {
+    public PuaCoursesAdapter(Activity context, ArrayList<PuaCourse> courses) {
         activity = context;
         this.courses = courses;
     }
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(PuaCourses course);
+        void onItemClick(PuaCourse course);
     }
 
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -39,13 +38,13 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(activity).inflate(R.layout.course_item, parent, false);//这个布局就是一个imageview用来显示图片
-        MyViewHolder holder = new CoursesAdapter.MyViewHolder(view);
+        MyViewHolder holder = new PuaCoursesAdapter.MyViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final PuaCourses course = courses.get(position);
+        final PuaCourse course = courses.get(position);
         holder.courseName.setText(course.courseName);
         holder.leanerCount.setText(course.leanerCount + "个付费学员");
         holder.selectionNum.setText("总共"+course.selectionNum + "章节");

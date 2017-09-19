@@ -28,8 +28,8 @@ import java.util.List;
 public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
-    private String[] mTitles = {"课堂", "直播", "广场", "财富", "我的"};
-    private String[] mTitlesSpecial = {"课堂", "广场", "我的"};
+    private String[] mTitles = {"课程", "直播", "广场", "钱袋子", "我的"};
+    private String[] mTitlesSpecial = {"课程", "广场", "我的"};
 
     private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.money, R.drawable.mine};
 
@@ -53,7 +53,7 @@ public class TabMainActivity extends TabActivity {
         Intent showListIntent = new Intent(TabMainActivity.this, ShowerListActivity.class);
         showListIntent.putExtra(Constants.TAB_PLATE_LIST, getIntent().getStringExtra(Constants.TAB_PLATE_LIST));
         if (CommonUtil.getToggle(this, Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
-            tabHost.addTab(tabHost.newTabSpec("课堂")
+            tabHost.addTab(tabHost.newTabSpec("课程")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, CoursesActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("直播")
@@ -62,7 +62,7 @@ public class TabMainActivity extends TabActivity {
             tabHost.addTab(tabHost.newTabSpec("广场")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
-            tabHost.addTab(tabHost.newTabSpec("财富")
+            tabHost.addTab(tabHost.newTabSpec("钱袋子")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MoneyActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("我的")

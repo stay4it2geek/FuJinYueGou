@@ -6,7 +6,7 @@ import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 
 
-public class PuaCourses extends BmobObject implements Serializable {
+public class MoneyCourse extends BmobObject implements Serializable {
 
     public String courseCategoryId;
     public String courseTag;
@@ -14,8 +14,5 @@ public class PuaCourses extends BmobObject implements Serializable {
     public String courseAppPrice;
     public String courseMarketPrice;
     public String courseDetail;
-    public String leanerCount;
     public BmobFile courseImage;
-    public String selectionNum;
-    public CourseSection courseSection;
 }

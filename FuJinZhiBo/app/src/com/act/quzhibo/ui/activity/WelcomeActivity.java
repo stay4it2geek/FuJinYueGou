@@ -1,10 +1,8 @@
 package com.act.quzhibo.ui.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,8 +11,6 @@ import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -31,7 +27,6 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.FindListener;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -39,8 +34,7 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
 import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
-import static com.act.quzhibo.R.id.imageView;
-import static com.act.quzhibo.common.Constants.REQUEST_PERMISSION_SETTING;
+import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
 
 public class WelcomeActivity extends ActivityManagePermission {
 
@@ -75,7 +69,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                        startActivityForResult(intent, REQUEST_SETTING);
                     }
                 }).setDuration(50000).show();
             }
@@ -89,7 +83,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                        startActivityForResult(intent, REQUEST_SETTING);
                     }
                 }).setDuration(50000).show();
 

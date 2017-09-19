@@ -1,9 +1,8 @@
 package com.act.quzhibo.entity;
 
 
-public class CourseCategoryInfo {
+public class CategoryInfo {
     public String courseCategoryId;
-    public String courseCategoryImgPath;
     public String coursesCategoryName;
 
 }

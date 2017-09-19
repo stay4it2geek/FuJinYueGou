@@ -51,7 +51,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
             view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
         }
-        view.findViewById(R.id.get_vip).setVisibility(View.GONE);
 
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
