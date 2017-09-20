@@ -173,7 +173,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 @Override
                 public Drawable getDrawable(String source) {
                     Drawable drawable = null;
-                    if (source != null) {
+                    if (!TextUtils.isEmpty(source)&&!source.equals("null")) {
                         int id = Integer.parseInt(source);
                         drawable = activity.getResources().getDrawable(id);
                         if(drawable!=null){

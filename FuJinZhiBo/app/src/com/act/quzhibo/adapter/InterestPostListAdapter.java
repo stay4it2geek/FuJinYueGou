@@ -86,20 +86,23 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         while (matcher.find()) {
             newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
         }
-        holder.absText.setText(Html.fromHtml(newString, new Html.ImageGetter() {
-            @Override
-            public Drawable getDrawable(String source) {
-                Drawable drawable = null;
-                if (source != null) {
-                    int id = Integer.parseInt(source);
-                    drawable = activity.getResources().getDrawable(id);
-                    if(drawable!=null){
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-                            drawable.getIntrinsicHeight());}
+
+            holder.absText.setText(Html.fromHtml(newString, new Html.ImageGetter() {
+                @Override
+                public Drawable getDrawable(String source) {
+                    Drawable drawable = null;
+                    if (!TextUtils.isEmpty(source)&&!source.equals("null")) {
+                        int id = Integer.parseInt(source);
+                        drawable = activity.getResources().getDrawable(id);
+                        if(drawable!=null){
+                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                                    drawable.getIntrinsicHeight());}
+                    }
+                    return drawable;
                 }
-                return drawable;
-            }
-        }, null));
+            }, null));
+
+
         holder.viewNum.setText(datas.get(position).pageView + "");
         holder.pinglunNum.setText(datas.get(position).totalComments + "");
 
