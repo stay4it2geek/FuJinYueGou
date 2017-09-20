@@ -9,7 +9,9 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.MyStandardVideoController;
+import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.entity.ProvinceAndCityEntity;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -36,6 +39,8 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 
@@ -139,7 +144,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 ((Item1ViewHolder) holder).sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
             }
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
-            if (day <50) {
+            if (day < 50) {
                 ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
             } else {
                 ((Item1ViewHolder) holder).createTime.setText("N天" + hour + "小时" + min + "分钟前");
@@ -152,7 +157,32 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             for (String s : contentList) {
                 sb.append(s);
             }
-            ((Item1ViewHolder) holder).content.setText(sb.toString());
+            String newString = sb.toString();
+            Pattern pattern = Pattern.compile("[a-z_]{1,}", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(newString);
+            while (matcher.find()) {
+                newString = newString.replaceAll(":"+matcher.group().trim()+":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":"+matcher.group().trim()+":") + "'>");
+            }
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+            ((Item1ViewHolder) holder).content.setText(Html.fromHtml(newString, new Html.ImageGetter() {
+                @Override
+                public Drawable getDrawable(String source) {
+                    Drawable drawable = null;
+                    if (source != null) {
+                        int id = Integer.parseInt(source);
+                        drawable = activity.getResources().getDrawable(id);
+                        if(drawable!=null){
+                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                                    drawable.getIntrinsicHeight());}
+                    }
+                    return drawable;
+                }
+            }, null));
             if (!TextUtils.isEmpty(post.vedioUrl)) {
                 new AsyncTask<Void, Void, Bitmap>() {
                     @Override

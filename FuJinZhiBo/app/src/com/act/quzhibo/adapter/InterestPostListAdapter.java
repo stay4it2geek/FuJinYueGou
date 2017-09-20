@@ -7,7 +7,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.entity.ProvinceAndCityEntity;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -30,6 +33,8 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostListAdapter.MyViewHolder> {
     private ArrayList<InterestPost> datas;
@@ -75,7 +80,26 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             holder.createTime.setText("N天" + hour + "时" + min + "分钟前");
         }
         holder.title.setText(datas.get(position).title + "");
-        holder.absText.setText(datas.get(position).absText + "");
+        String newString = datas.get(position).absText;
+        Pattern pattern = Pattern.compile("[a-z_]{1,}", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(newString);
+        while (matcher.find()) {
+            newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
+        }
+        holder.absText.setText(Html.fromHtml(newString, new Html.ImageGetter() {
+            @Override
+            public Drawable getDrawable(String source) {
+                Drawable drawable = null;
+                if (source != null) {
+                    int id = Integer.parseInt(source);
+                    drawable = activity.getResources().getDrawable(id);
+                    if(drawable!=null){
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                            drawable.getIntrinsicHeight());}
+                }
+                return drawable;
+            }
+        }, null));
         holder.viewNum.setText(datas.get(position).pageView + "");
         holder.pinglunNum.setText(datas.get(position).totalComments + "");
 

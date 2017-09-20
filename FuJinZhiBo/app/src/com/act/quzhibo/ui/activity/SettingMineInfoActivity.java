@@ -633,7 +633,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
 
     private void getDisPurposeData() {
-        disPurposeItems.add(new CardBean("离异多年了"));
+        disPurposeItems.add(new CardBean("已经离异了"));
         disPurposeItems.add(new CardBean("已经结婚了"));
         disPurposeItems.add(new CardBean("刚刚交往中"));
         disPurposeItems.add(new CardBean("正在分手期"));
@@ -643,11 +643,13 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
 
     private void getDatingThoughtData() {
-
+        datingThoughtItems.add(new CardBean("极易兴奋"));
+        datingThoughtItems.add(new CardBean("认真婚恋"));
         datingThoughtItems.add(new CardBean("来者不拒"));
         datingThoughtItems.add(new CardBean("长期交往"));
         datingThoughtItems.add(new CardBean("短期交往"));
         datingThoughtItems.add(new CardBean("o－n－s"));
+        datingThoughtItems.add(new CardBean("其他"));
     }
 
     private void getCanDatingThingData() {
