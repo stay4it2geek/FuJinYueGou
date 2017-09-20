@@ -1,35 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" 
-    android:layout_width="match_parent"
-    android:layout_margin="5dp"
     android:id="@+id/courseLayout"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:layout_margin="5dp"
     android:background="@drawable/background_card"
-    android:layout_height="140dp">
+    android:orientation="horizontal">
 
-    
- <FrameLayout
-     android:layout_width="0dp"
-     android:layout_weight="1"
-     android:layout_margin="10dp"
-     android:layout_gravity="center_vertical"
-     android:layout_height="match_parent">
-     <ImageView
-         android:id="@+id/courseImage"
-         android:scaleType="fitXY"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent" />
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:background="@drawable/bg_circle_yellowdark"
-         android:textColor="@color/red"
-         android:padding="2dp"
-         android:id="@+id/courseTag"
-         android:textSize="14sp"
-         android:layout_gravity="top|left"
-         android:text=""/>
- </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/courseImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/courseTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:background="@drawable/bg_circle_yellowdark"
+                android:padding="2dp"
+                android:text=""
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/needPay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/bg_circle_yellowdark"
+                android:padding="2dp"
+                android:text=""
+                android:textColor="@color/red"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="0dp"
@@ -40,12 +61,13 @@
             android:id="@+id/courseName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text=""
-            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:maxLines="2"
+            android:text=""
             android:textColor="@color/black"
-            android:textSize="19sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -54,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/courseName"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:text=""
             android:textColor="@color/light_gray" />
 
@@ -67,31 +90,42 @@
             android:textColor="@color/light_gray" />
 
         <TextView
+            android:id="@+id/courseDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/courseName"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text=""
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/courseAppPrice"
-            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
             android:layout_below="@+id/selectionNum"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
+            android:gravity="bottom"
             android:text=""
-            android:layout_marginBottom="15dp"
-            android:textSize="18sp"
-            android:textColor="@color/darkorange" />
+            android:textColor="@color/darkorange"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/courseMarketPrice"
-            android:layout_marginBottom="15dp"
-            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="bottom"
+            android:layout_alignParentBottom="true"
             android:layout_below="@+id/selectionNum"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/courseAppPrice"
+            android:gravity="bottom"
             android:text=""
-            android:textSize="15sp"
-            android:textColor="@color/light_gray" />
+            android:textColor="@color/light_gray"
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -64,6 +64,7 @@ public class PostDetailFragment extends BackHandledFragment {
         return view;
     }
 
+
     private void getData() {
         OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.POST).getToggleObject().replace(Constants.POST, post.postId)).build().execute(new StringCallback() {
             @Override

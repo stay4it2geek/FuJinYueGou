@@ -13,10 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.PuaCoursesAdapter;
+import com.act.quzhibo.adapter.CommonCoursesAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.PuaCourse;
-import com.act.quzhibo.ui.activity.CoursesActivity;
+import com.act.quzhibo.entity.CommonCourse;
+import com.act.quzhibo.ui.activity.MoneyCourseActivity;
+import com.act.quzhibo.ui.activity.PuaCoursesActivity;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -31,13 +32,13 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-public class PuaCoursesCenterFragment extends Fragment {
+public class CoursesCenterFragment extends Fragment {
     private XRecyclerView recyclerView;
-    private PuaCoursesAdapter courseCenterAdapter;
+    private CommonCoursesAdapter courseCenterAdapter;
     private LoadNetView loadNetView;
     private String lastTime = "";
-    private ArrayList<PuaCourse> puaCourseList = new ArrayList<>();
-    private int puaCourseSize;
+    private ArrayList<CommonCourse> commonCourseList = new ArrayList<>();
+    private int courseSize;
     private View view;
     String courseCategoryId = "";
 
@@ -72,7 +73,7 @@ public class PuaCoursesCenterFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (puaCourseSize > 0) {
+                        if (courseSize > 0) {
                             queryCourseData(courseCategoryId, Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -109,9 +110,9 @@ public class PuaCoursesCenterFragment extends Fragment {
     private void queryCourseData(String courseCategoryId, final int actionType) {
         loadNetView.setVisibility(View.VISIBLE);
         loadNetView.setlayoutVisily(Constants.LOAD);
-        List<BmobQuery<PuaCourse>> querise = new ArrayList<>();
-        BmobQuery<PuaCourse> query = new BmobQuery<>();
-        BmobQuery<PuaCourse> query3 = new BmobQuery<>();
+        List<BmobQuery<CommonCourse>> querise = new ArrayList<>();
+        BmobQuery<CommonCourse> query = new BmobQuery<>();
+        BmobQuery<CommonCourse> query3 = new BmobQuery<>();
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -123,20 +124,24 @@ public class PuaCoursesCenterFragment extends Fragment {
                 e.printStackTrace();
             }
         }
-        BmobQuery<PuaCourse> query2 = new BmobQuery<>();
+        BmobQuery<CommonCourse> query2 = new BmobQuery<>();
         query2.addWhereEqualTo("courseCategoryId", courseCategoryId);
         querise.add(query2);
+
+        BmobQuery<CommonCourse> query4 = new BmobQuery<>();
+        query4.addWhereEqualTo("courseUiType", getArguments().getString("courseUiType"));
+        querise.add(query4);
 
         query3.and(querise);
         query3.setLimit(10);
         query3.order("courseAppPrice");
 
-        query3.findObjects(new FindListener<PuaCourse>() {
+        query3.findObjects(new FindListener<CommonCourse>() {
             @Override
-            public void done(List<PuaCourse> list, BmobException e) {
+            public void done(List<CommonCourse> list, BmobException e) {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
-                        puaCourseList.clear();
+                        commonCourseList.clear();
                         if (courseCenterAdapter != null) {
                             courseCenterAdapter.notifyDataSetChanged();
                         }
@@ -159,30 +164,31 @@ public class PuaCoursesCenterFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<PuaCourse> puaCourses = (ArrayList<PuaCourse>) msg.obj;
+            ArrayList<CommonCourse> commonCourses = (ArrayList<CommonCourse>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (puaCourses != null) {
-                    puaCourseList.addAll(puaCourses);
-                    puaCourseSize = puaCourses.size();
+                if (commonCourses != null) {
+                    commonCourseList.addAll(commonCourses);
+                    courseSize = commonCourses.size();
                 } else {
-                    puaCourseSize = 0;
+                    courseSize = 0;
                 }
 
                 if (courseCenterAdapter == null) {
-                    courseCenterAdapter = new PuaCoursesAdapter(getActivity(), puaCourseList);
-                    recyclerView.setAdapter(courseCenterAdapter);
-                    courseCenterAdapter.setOnItemClickListener(new PuaCoursesAdapter.OnRecyclerViewItemClickListener() {
-                        @Override
-                        public void onItemClick(PuaCourse course) {
-                            listner.onCallDetail(course);
-                        }
-                    });
+                        courseCenterAdapter = new CommonCoursesAdapter(getActivity(), commonCourseList,getArguments().getString("courseUiType"));
+                        recyclerView.setAdapter(courseCenterAdapter);
+                        courseCenterAdapter.setOnItemClickListener(new CommonCoursesAdapter.OnRecyclerViewItemClickListener() {
+                            @Override
+                            public void onItemClick(CommonCourse course) {
+                                listner.onCallDetail(course);
+                            }
+                        });
                 } else {
                     courseCenterAdapter.notifyDataSetChanged();
+
                 }
 
                 loadNetView.setVisibility(View.GONE);
-                if (puaCourseList.size() == 0) {
+                if (commonCourseList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
@@ -197,7 +203,7 @@ public class PuaCoursesCenterFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof CoursesActivity) {
+        if (context instanceof PuaCoursesActivity||context instanceof MoneyCourseActivity) {
             listner = (OnCallCourseDetailListner) context;
         }
     }
@@ -205,6 +211,6 @@ public class PuaCoursesCenterFragment extends Fragment {
     OnCallCourseDetailListner listner;
 
     public interface OnCallCourseDetailListner {
-        void onCallDetail(PuaCourse puaCourse);
+        void onCallDetail(CommonCourse commonCourse);
     }
 }

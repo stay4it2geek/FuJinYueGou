@@ -4,6 +4,7 @@ package com.act.quzhibo.adapter;
 import android.app.Activity;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +14,24 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.PuaCourse;
+import com.act.quzhibo.entity.CommonCourse;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class PuaCoursesAdapter extends RecyclerView.Adapter<PuaCoursesAdapter.MyViewHolder> {
+public class CommonCoursesAdapter extends RecyclerView.Adapter<CommonCoursesAdapter.MyViewHolder> {
+    private String courseUiType;
     private Activity activity;
-    private ArrayList<PuaCourse> courses;
+    private ArrayList<CommonCourse> courses;
 
-    public PuaCoursesAdapter(Activity context, ArrayList<PuaCourse> courses) {
+    public CommonCoursesAdapter(Activity context, ArrayList<CommonCourse> courses,String courseUiType) {
         activity = context;
         this.courses = courses;
+        this.courseUiType = courseUiType;
+
     }
     public interface OnRecyclerViewItemClickListener {
-        void onItemClick(PuaCourse course);
+        void onItemClick(CommonCourse course);
     }
 
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -37,17 +41,31 @@ public class PuaCoursesAdapter extends RecyclerView.Adapter<PuaCoursesAdapter.My
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.course_item, parent, false);//这个布局就是一个imageview用来显示图片
-        MyViewHolder holder = new PuaCoursesAdapter.MyViewHolder(view);
+        View view = LayoutInflater.from(activity).inflate(R.layout.course_item, parent, false);
+        MyViewHolder holder = new CommonCoursesAdapter.MyViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final PuaCourse course = courses.get(position);
+        final CommonCourse course = courses.get(position);
         holder.courseName.setText(course.courseName);
-        holder.leanerCount.setText(course.leanerCount + "个付费学员");
-        holder.selectionNum.setText("总共"+course.selectionNum + "章节");
+        if( courseUiType.equals("money")){
+            holder.courseDetail.setVisibility(View.VISIBLE);
+            holder.leanerCount.setVisibility(View.GONE);
+            holder.selectionNum.setVisibility(View.GONE);
+            holder.courseDetail.setText(Html.fromHtml(course.courseDetail));
+        }else {
+            holder.courseTag.setVisibility(View.VISIBLE);
+            if (course.courseTag.equals(Constants.VIDEO_COURSE)) {
+                holder.courseTag.setText("视频");
+            } else {
+                holder.courseTag.setText("课程");
+            }
+            holder.leanerCount.setText(course.leanerCount + "个付费学员");
+            holder.selectionNum.setText("总共"+course.selectionNum + "章节");
+        }
+
         holder.courseAppPrice.setText("¥" + course.courseAppPrice);
         holder.courseMarketPrice.setText("¥" + course.courseMarketPrice);
         holder.courseMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
@@ -58,11 +76,18 @@ public class PuaCoursesAdapter extends RecyclerView.Adapter<PuaCoursesAdapter.My
                 mOnItemClickListener.onItemClick(course);
             }
         });
-        if (course.courseTag.equals(Constants.VIDEO_COURSE)) {
-            holder.courseTag.setText("视频");
-        } else {
-            holder.courseTag.setText("课程");
 
+        if(course.needPay){
+            holder.needPay.setText("付费");
+        } else {
+            holder.needPay.setText(course.freePromotion);
+            holder.courseAppPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
+        }
+        if(courseUiType.equals("money")){
+            holder.courseDetail.setVisibility(View.VISIBLE);
+            holder.leanerCount.setVisibility(View.GONE);
+            holder.selectionNum.setVisibility(View.GONE);
+            holder.courseDetail.setText(Html.fromHtml(course.courseDetail));
         }
 
     }
@@ -74,6 +99,7 @@ public class PuaCoursesAdapter extends RecyclerView.Adapter<PuaCoursesAdapter.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+        private TextView needPay;
         private TextView courseName;
         private TextView leanerCount;
         private TextView selectionNum;
@@ -82,9 +108,11 @@ public class PuaCoursesAdapter extends RecyclerView.Adapter<PuaCoursesAdapter.My
         private TextView courseAppPrice;
         private ImageView courseImage;
         private LinearLayout courseLayout;
+        private TextView courseDetail;
 
         public MyViewHolder(View view) {
             super(view);
+            needPay = (TextView) view.findViewById(R.id.needPay);
             courseTag = (TextView) view.findViewById(R.id.courseTag);
             courseName = (TextView) view.findViewById(R.id.courseName);
             leanerCount = (TextView) view.findViewById(R.id.leanerCount);
@@ -93,6 +121,7 @@ public class PuaCoursesAdapter extends RecyclerView.Adapter<PuaCoursesAdapter.My
             courseMarketPrice = (TextView) view.findViewById(R.id.courseMarketPrice);
             courseImage = (ImageView) view.findViewById(R.id.courseImage);
             courseLayout = (LinearLayout) view.findViewById(R.id.courseLayout);
+            courseDetail = (TextView) view.findViewById(R.id.courseDetail);
         }
     }
 }

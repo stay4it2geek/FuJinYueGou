@@ -55,7 +55,7 @@ public class TabMainActivity extends TabActivity {
         if (CommonUtil.getToggle(this, Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
             tabHost.addTab(tabHost.newTabSpec("课程")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, CoursesActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, PuaCoursesActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("直播")
                     .setIndicator(null, null)
                     .setContent(showListIntent));
@@ -64,14 +64,14 @@ public class TabMainActivity extends TabActivity {
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("钱袋子")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, MoneyActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, MoneyCourseActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("我的")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MineActivity.class)));
         } else {
             tabHost.addTab(tabHost.newTabSpec("课堂")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, CoursesActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, PuaCoursesActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("广场")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));

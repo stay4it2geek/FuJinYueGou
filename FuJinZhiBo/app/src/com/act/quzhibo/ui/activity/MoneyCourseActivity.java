@@ -6,13 +6,13 @@ import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.CategoryInfo;
-import com.act.quzhibo.entity.MoneyCourse;
-import com.act.quzhibo.ui.fragment.MoneyCoursesCenterFragment;
+import com.act.quzhibo.entity.CommonCourse;
+import com.act.quzhibo.ui.fragment.CoursesCenterFragment;
 import com.act.quzhibo.util.CommonUtil;
 
 import java.util.ArrayList;
 
-public class MoneyActivity extends TabSlideSameBaseActivity implements MoneyCoursesCenterFragment.OnCallCourseDetailListner {
+public class MoneyCourseActivity extends TabSlideSameBaseActivity implements CoursesCenterFragment.OnCallCourseDetailListner {
 
     ArrayList<CategoryInfo> categoryInfos = new ArrayList<>();
 
@@ -27,8 +27,9 @@ public class MoneyActivity extends TabSlideSameBaseActivity implements MoneyCour
     public ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> mFragments = new ArrayList<>();
         for (CategoryInfo categoryInfo : categoryInfos) {
-            MoneyCoursesCenterFragment fragment = new MoneyCoursesCenterFragment();
+            CoursesCenterFragment fragment = new CoursesCenterFragment();
             Bundle bundle = new Bundle();
+            bundle.putString("courseUiType","money");
             bundle.putString(Constants.COURSE_CATOGERY_ID, categoryInfo.categoryId);
             fragment.setArguments(bundle);
             mFragments.add(fragment);
@@ -51,8 +52,9 @@ public class MoneyActivity extends TabSlideSameBaseActivity implements MoneyCour
     }
 
     @Override
-    public void onCallDetail(MoneyCourse moneyCourse) {
+    public void onCallDetail(CommonCourse moneyCourse) {
         Intent intent = new Intent(this, CourseDetailActivity.class);
+        intent.putExtra("courseUiType","money");
         intent.putExtra(Constants.COURSE, moneyCourse);
         startActivity(intent);
     }

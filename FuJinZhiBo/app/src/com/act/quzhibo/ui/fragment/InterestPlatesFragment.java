@@ -42,7 +42,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_square_interest_paltes, null, false);
         recyclerview = (XRecyclerView) view.findViewById(R.id.recycler_view);
-        loadNetView= (LoadNetView) view.findViewById(R.id.loadview);
+        loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         view.findViewById(R.id.nearby_extran_img).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
-        getData();
+
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -70,6 +70,13 @@ public class InterestPlatesFragment extends BackHandledFragment {
         });
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -77,7 +84,9 @@ public class InterestPlatesFragment extends BackHandledFragment {
             callback = (OnNearByListner) context;
         }
     }
+
     OnNearByListner callback;
+
     public interface OnNearByListner {
         void onNear();
     }
@@ -88,11 +97,12 @@ public class InterestPlatesFragment extends BackHandledFragment {
             public void onError(Call call, Exception e, int id) {
                 handler.sendEmptyMessage(Constants.NetWorkError);
             }
+
             @Override
             public void onResponse(String response, int id) {
                 InterestPlatesParentData interestPlatesParentData = CommonUtil.parseJsonWithGson(response, InterestPlatesParentData.class);
-                for (InterestPlates plate : interestPlatesParentData.result.plates ) {
-                    if (!plate.pName.contains("视频")){
+                for (InterestPlates plate : interestPlatesParentData.result.plates) {
+                    if (!plate.pName.contains("视频")) {
                         interestPlates.add(plate);
                     }
                 }
@@ -109,24 +119,24 @@ public class InterestPlatesFragment extends BackHandledFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what != Constants.NetWorkError) {
-            details.addAll((ArrayList<InterestPlates>) msg.obj);
-            adapter = new InterestPlatesListAdapter(getContext(), details);
-            adapter.setOnItemClickListener(new InterestPlatesListAdapter.OnRecyclerViewItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position, String pid) {
-                    ((SquareActivity) getActivity()).setPid(pid);
-                    CommonUtil.switchFragment(new InterestPostListFragment(), R.id.square_interest_plates_layout, getActivity());
-                }
-            });
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerview.setLayoutManager(linearLayoutManager);
-            recyclerview.setAdapter(adapter);
-            loadNetView.setVisibility(View.GONE);
-        } else {
-            loadNetView.setVisibility(View.VISIBLE);
-            loadNetView.setlayoutVisily(Constants.RELOAD);
-        }
+                details.addAll((ArrayList<InterestPlates>) msg.obj);
+                adapter = new InterestPlatesListAdapter(getContext(), details);
+                adapter.setOnItemClickListener(new InterestPlatesListAdapter.OnRecyclerViewItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position, String pid) {
+                        ((SquareActivity) getActivity()).setPid(pid);
+                        CommonUtil.switchFragment(new InterestPostListFragment(), R.id.square_interest_plates_layout, getActivity());
+                    }
+                });
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerview.setLayoutManager(linearLayoutManager);
+                recyclerview.setAdapter(adapter);
+                loadNetView.setVisibility(View.GONE);
+            } else {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.RELOAD);
+            }
         }
     };
 

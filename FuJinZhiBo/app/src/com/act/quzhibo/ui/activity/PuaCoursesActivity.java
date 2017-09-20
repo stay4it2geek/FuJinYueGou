@@ -6,13 +6,13 @@ import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.CategoryInfo;
-import com.act.quzhibo.entity.PuaCourse;
-import com.act.quzhibo.ui.fragment.PuaCoursesCenterFragment;
+import com.act.quzhibo.entity.CommonCourse;
+import com.act.quzhibo.ui.fragment.CoursesCenterFragment;
 import com.act.quzhibo.util.CommonUtil;
 
 import java.util.ArrayList;
 
-public class CoursesActivity extends TabSlideSameBaseActivity implements PuaCoursesCenterFragment.OnCallCourseDetailListner{
+public class PuaCoursesActivity extends TabSlideSameBaseActivity implements CoursesCenterFragment.OnCallCourseDetailListner{
     ArrayList<CategoryInfo> categoryInfos=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +22,10 @@ public class CoursesActivity extends TabSlideSameBaseActivity implements PuaCour
     }
 
     @Override
-    public void onCallDetail(PuaCourse puaCourse) {
+    public void onCallDetail(CommonCourse commonCourse) {
         Intent intent = new Intent(this, CourseDetailActivity.class);
-        intent.putExtra(Constants.COURSE, puaCourse);
+        intent.putExtra(Constants.COURSE, commonCourse);
+        intent.putExtra("courseUiType","pua");
         startActivity(intent);
     }
 
@@ -32,8 +33,9 @@ public class CoursesActivity extends TabSlideSameBaseActivity implements PuaCour
     public ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> mFragments = new ArrayList<>();
         for (CategoryInfo categoryInfo : categoryInfos) {
-            PuaCoursesCenterFragment fragment = new PuaCoursesCenterFragment();
+            CoursesCenterFragment fragment = new CoursesCenterFragment();
             Bundle bundle = new Bundle();
+            bundle.putString("courseUiType","pua");
             bundle.putString(Constants.COURSE_CATOGERY_ID, categoryInfo.categoryId);
             fragment.setArguments(bundle);
             mFragments.add(fragment);

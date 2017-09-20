@@ -23,7 +23,7 @@
             android:scaleType="fitXY" />
 
         <TextView
-            android:id="@+id/courseTag"
+            android:id="@+id/needPay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|left"
@@ -54,15 +54,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/courseDetail"
-            android:layout_below="@+id/courseName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="40dp"
-            android:text="" />
+
 
         <TextView
             android:visibility="gone"
