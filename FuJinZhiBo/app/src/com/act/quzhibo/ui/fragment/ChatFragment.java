@@ -103,7 +103,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
         onlineCount = Integer.parseInt(room.onlineCount);
         ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
-        ((TextView) view.findViewById(R.id.starValue)).setText("星光值：" + (Integer.parseInt(room.roomId) - 52015634));
+        ((TextView) view.findViewById(R.id.starValue)).setText("星光值：" + (Long.parseLong(room.roomId) - 9952015634l));
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);

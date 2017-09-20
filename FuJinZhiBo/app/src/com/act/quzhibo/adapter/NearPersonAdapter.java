@@ -36,7 +36,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.common_list_item, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(activity).inflate(R.layout.common_list_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -109,8 +109,6 @@ public class NearPersonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public MyViewHolder(View view) {
             super(view);
-            view.findViewById(R.id.delete).setVisibility(View.GONE);
-
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
             arealocation = (TextView) view.findViewById(R.id.location);

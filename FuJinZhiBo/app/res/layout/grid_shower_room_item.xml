@@ -25,14 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/delete"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="right|bottom"
-                android:layout_margin="5dp"
-                android:background="@drawable/delete"
-                android:visibility="gone"/>
         </FrameLayout>
 
         <RelativeLayout
@@ -78,4 +70,12 @@
         </RelativeLayout>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/delete"
+        android:visibility="gone"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="right|bottom"
+        android:layout_margin="5dp"
+        android:background="@drawable/delete" />
 </FrameLayout>

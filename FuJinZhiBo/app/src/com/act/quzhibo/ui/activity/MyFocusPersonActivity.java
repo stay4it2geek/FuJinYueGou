@@ -2,6 +2,7 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Display;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -159,7 +161,11 @@ public class MyFocusPersonActivity extends FragmentActivity {
                     myfocusSize = 0;
                 }
                 if (myFocusPersonListAdapter == null) {
-                    myFocusPersonListAdapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons);
+                    Display display = MyFocusPersonActivity.this.getWindowManager().getDefaultDisplay();
+                    Point size = new Point();
+                    display.getSize(size);
+                    int screenWidth = size.x;
+                    myFocusPersonListAdapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons,screenWidth);
                     recyclerView.setAdapter(myFocusPersonListAdapter);
                     myFocusPersonListAdapter.setOnItemClickListener(new MyFocusPersonListAdapter.OnRecyclerViewItemClickListener() {
                         @Override

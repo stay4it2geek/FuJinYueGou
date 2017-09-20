@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 
 public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShowerListAdapter.MyViewHolder> {
 
+    private  int screenWidth;
     private Context mContext;
     private ArrayList<MyFocusShower> datas;
     private OnDeleteListener mListener = null;
@@ -38,30 +40,29 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
         mOnItemClickListener = listener;
     }
 
-    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShower> datas) {
+    public MyFocusShowerListAdapter(Context context, ArrayList<MyFocusShower> datas, int screenWidth) {
         mContext = context;
         this.datas = datas;
-
+        this.screenWidth = screenWidth;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_shower_room_item, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_shower_room_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        if (holder instanceof MyViewHolder) {
-            holder.photoImg.setAdjustViewBounds(true);
-            holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), (screenWidth / 2) - 5));
+        holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).gender.equals("0")) {
                 Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.women).into(holder.photoImg);
             } else {
                 Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.man).into(holder.photoImg);
             }
-        }
+
         holder.nickName.setText(datas.get(position).nickname);
         holder.commonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +81,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
 
     @Override
     public int getItemCount() {
-        return datas.size();//获取数据的个数
+        return datas.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

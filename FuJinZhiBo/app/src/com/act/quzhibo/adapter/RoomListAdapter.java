@@ -55,7 +55,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             if (!TextUtils.equals("手机达人", cataTitle)) {
-                holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), FrameLayout.LayoutParams.WRAP_CONTENT));
+                holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), (screenWidth / 2) - 5));
             } else {
                 holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth), FrameLayout.LayoutParams.WRAP_CONTENT));
             }
