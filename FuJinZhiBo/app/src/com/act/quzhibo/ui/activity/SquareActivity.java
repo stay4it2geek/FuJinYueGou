@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.activity;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.ui.fragment.InterestPlatesFragment;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 /**
  * 广场
  */
-public class SquareActivity extends TabSlideBaseActivity implements InterestPlatesFragment.OnNearByListner {
+public class SquareActivity extends TabSlideDifferentBaseActivity implements InterestPlatesFragment.OnNearByListner {
 
     @Override
     public boolean getActivityType() {

@@ -52,4 +52,6 @@ public class Constants {
     public static final String COURSE_CATOGERY_ID = "course_category_id";
     public static final String COURSE_CATOGERY_INFO = "courseCategoryInfo";
     public static final String MONEY_CATOGERY_INFO = "moneyCategoryInfo";
+
+    public static final String MONEY_GROUP="moneygroup";
 }

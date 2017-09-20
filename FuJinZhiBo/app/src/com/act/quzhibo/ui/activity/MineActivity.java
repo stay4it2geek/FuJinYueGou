@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.act.quzhibo.R;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import cn.bmob.v3.BmobUser;
 
 
-public class MineActivity extends TabSlideBaseActivity {
+public class MineActivity extends TabSlideDifferentBaseActivity {
     ImageView message;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +27,11 @@ public class MineActivity extends TabSlideBaseActivity {
             @Override
             public void onClick(View v) {
                 RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
-                if (rootUser == null) {
+                if (rootUser != null) {
                     startActivity(new Intent(MineActivity.this, MessageActivity.class));
+                }else{
+                    startActivity(new Intent(MineActivity.this, LoginActivity.class));
+
                 }
                 return;
 

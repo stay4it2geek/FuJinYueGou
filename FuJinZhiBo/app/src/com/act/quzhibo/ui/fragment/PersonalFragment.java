@@ -16,6 +16,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.ui.activity.CheckOutMoneyActivity;
 import com.act.quzhibo.ui.activity.MakeMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
@@ -52,7 +53,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
             view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
         }
-
+        view.findViewById(R.id.makemoneyLayout).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
@@ -109,8 +110,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     case R.id.makemoneyLayout:
                         getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
                         break;
-                    case  R.id.checkoutWalletLayout:
-                        getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
+                    case  R.id.checkoutMoneyLayout:
+                        getActivity().startActivity(new Intent(getActivity(), CheckOutMoneyActivity.class));
                         break;
                     case R.id.vip_policy:
                         getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));

@@ -10,12 +10,6 @@
         android:layout_height="@dimen/commonViewHeight"
         android:textStyle="normal" />
 
-    <com.act.quzhibo.view.LoadNetView
-        android:id="@+id/loadview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/commonViewHeight"
-        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/activity_pay"
@@ -152,4 +146,11 @@
         </ScrollView>
 
     </LinearLayout>
+
+    <com.act.quzhibo.view.LoadNetView
+        android:id="@+id/loadview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/commonViewHeight"
+     />
 </FrameLayout>

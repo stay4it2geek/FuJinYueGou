@@ -3,15 +3,14 @@ package com.act.quzhibo.download.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.fragment.DownloadedFragment;
 import com.act.quzhibo.download.fragment.DownloadingFragment;
-import com.act.quzhibo.ui.activity.TabSlideBaseActivity;
+import com.act.quzhibo.ui.activity.TabSlideDifferentBaseActivity;
 
 import java.util.ArrayList;
 
-public class DownloadManagerActivity extends TabSlideBaseActivity {
+public class DownloadManagerActivity extends TabSlideDifferentBaseActivity {
 
     @Override
     public boolean getActivityType() {

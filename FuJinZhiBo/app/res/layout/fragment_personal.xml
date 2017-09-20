@@ -130,12 +130,12 @@
                 </RelativeLayout>
 
                 <View
-                    android:layout_width="2dp"
+                    android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:background="#eee" />
 
                 <RelativeLayout
-                    android:id="@+id/checkoutWalletLayout"
+                    android:id="@+id/checkoutMoneyLayout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -191,7 +191,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -225,7 +225,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -259,7 +259,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -302,7 +302,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -336,7 +336,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
 
             </RelativeLayout>
 
@@ -371,7 +371,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -405,7 +405,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -439,7 +439,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -473,7 +473,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -507,7 +507,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -542,7 +542,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/rightarr" />
+                    android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
             <RelativeLayout

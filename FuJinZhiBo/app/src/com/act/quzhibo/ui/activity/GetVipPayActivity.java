@@ -376,7 +376,7 @@ public class GetVipPayActivity extends FragmentActivity {
                     }
                 } else {
                     loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.RELOAD);
+                    loadNetView.setlayoutVisily(Constants.NetWorkError);
                 }
             }
         });
