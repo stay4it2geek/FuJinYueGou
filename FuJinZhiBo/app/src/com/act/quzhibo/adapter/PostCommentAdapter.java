@@ -111,46 +111,52 @@ public class PostCommentAdapter extends BaseAdapter {
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        if(commentDetails.get(position).user.sex!=null)
-        viewHolder.sexAndAge.setText(commentDetails.get(position).user.sex.equals("2") ? "女" : "男");
+        if (commentDetails.get(position).user.sex != null)
+            viewHolder.sexAndAge.setText(commentDetails.get(position).user.sex.equals("2") ? "女" : "男");
         viewHolder.createTime.setText(hour + "小时" + min + "分钟前");
         viewHolder.nickName.setText(commentDetails.get(position).user.nick);
-        String newString = commentDetails.get(position).message ;
-        Pattern pattern = Pattern.compile("[a-z_]{1,}", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(newString);
-        while (matcher.find()) {
-            newString = newString.replaceAll(":"+matcher.group().trim()+":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":"+matcher.group().trim()+":") + "'>");
-        }
-        viewHolder.content.setText(Html.fromHtml(newString, new Html.ImageGetter() {
-            @Override
-            public Drawable getDrawable(String source) {
-                Drawable drawable = null;
-                    if (!TextUtils.isEmpty(source)&&!source.equals("null")) {
-                    int id = Integer.parseInt(source);
-                    drawable = activity.getResources().getDrawable(id);
-                    if(drawable!=null){
-                        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-                                drawable.getIntrinsicHeight());}
-                }
-                return drawable;
-            }
-        }, null));
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                ArrayList<ProvinceAndCityEntity> datas = CommonUtil.parseLocation(activity).data;
-                if (null != datas) {
-                    for (ProvinceAndCityEntity entify : datas) {
-                        if (TextUtils.equals(commentDetails.get(position).user.proCode, entify.proId + "")) {
-                            for (ProvinceAndCityEntity.CitySub citySub : entify.citySub) {
-                                if (TextUtils.equals(commentDetails.get(position).user.cityCode, citySub.cityId + "")) {
-                                    return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
-                                }
+                String newString = commentDetails.get(position).message;
+                Pattern pattern = Pattern.compile("[a-z_]{1,}", Pattern.CASE_INSENSITIVE);
+                final Matcher matcher = pattern.matcher(newString);
+                while (matcher.find()) {
+                    newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
+                }
+                if (newString.contains("null")) {
+                    newString= newString.replaceAll("null",R.drawable.smile+"");
+                }
+                return newString;
+            }
+
+            @Override
+            protected void onPostExecute(String newString) {
+                super.onPostExecute(newString);
+
+                viewHolder.content.setText(Html.fromHtml(newString, new Html.ImageGetter() {
+                    @Override
+                    public Drawable getDrawable(String source) {
+                        Drawable drawable = null;
+                        if (!TextUtils.isEmpty(source) && !source.equals("null")) {
+                            int id = Integer.parseInt(source);
+                            drawable = activity.getResources().getDrawable(id);
+                            if (drawable != null) {
+                                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                                        drawable.getIntrinsicHeight());
                             }
                         }
+                        return drawable;
                     }
-                }
-                return "----";
+                }, null));
+            }
+        }.execute();
+
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String text = MyApplicaition.proKeySrc.get(commentDetails.get(position).user.proCode) + MyApplicaition.cityKeySrc.get(commentDetails.get(position).user.cityCode);
+                return text;
             }
 
             @Override

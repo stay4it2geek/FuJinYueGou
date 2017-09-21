@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
@@ -80,27 +82,41 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             holder.createTime.setText("N天" + hour + "时" + min + "分钟前");
         }
         holder.title.setText(datas.get(position).title + "");
-        String newString = datas.get(position).absText;
-        Pattern pattern = Pattern.compile("[a-z_]{1,}", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(newString);
-        while (matcher.find()) {
-            newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
-        }
-
-            holder.absText.setText(Html.fromHtml(newString, new Html.ImageGetter() {
-                @Override
-                public Drawable getDrawable(String source) {
-                    Drawable drawable = null;
-                    if (!TextUtils.isEmpty(source)&&!source.equals("null")) {
-                        int id = Integer.parseInt(source);
-                        drawable = activity.getResources().getDrawable(id);
-                        if(drawable!=null){
-                            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-                                    drawable.getIntrinsicHeight());}
-                    }
-                    return drawable;
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String newString = datas.get(position).absText;
+                Pattern pattern = Pattern.compile("[a-z_]{1,}", Pattern.CASE_INSENSITIVE);
+                final Matcher matcher = pattern.matcher(newString);
+                while (matcher.find()) {
+                    newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
                 }
-            }, null));
+                if(newString.contains("null")){
+                    newString= newString.replaceAll("null",R.drawable.smile+"");
+                }
+                return newString;
+            }
+
+            @Override
+            protected void onPostExecute(String newString) {
+                super.onPostExecute(newString);
+                holder.absText.setText(Html.fromHtml(newString, new Html.ImageGetter() {
+                    @Override
+                    public Drawable getDrawable(String source) {
+                        Drawable drawable = null;
+                        if (!TextUtils.isEmpty(source) && !source.equals("null")) {
+                            int id = Integer.parseInt(source);
+                            drawable = activity.getResources().getDrawable(id);
+                            if (drawable != null) {
+                                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                                        drawable.getIntrinsicHeight());
+                            }
+                        }
+                        return drawable;
+                    }
+                }, null));
+            }
+        }.execute();
 
 
         holder.viewNum.setText(datas.get(position).pageView + "");
@@ -186,19 +202,8 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
-                ArrayList<ProvinceAndCityEntity> data_ = CommonUtil.parseLocation(activity).data;
-                if (null != datas) {
-                    for (ProvinceAndCityEntity entify : data_) {
-                        if (TextUtils.equals(datas.get(position).user.proCode + "", entify.proId + "")) {
-                            for (ProvinceAndCityEntity.CitySub citySub : entify.citySub) {
-                                if (TextUtils.equals(datas.get(position).user.cityCode, citySub.cityId + "")) {
-                                    return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
-                                }
-                            }
-                        }
-                    }
-                }
-                return "";
+                String text = MyApplicaition.proKeySrc.get(datas.get(position).user.proCode) + MyApplicaition.cityKeySrc.get(datas.get(position).user.cityCode);
+                return text;
             }
 
             @Override
@@ -209,11 +214,11 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         }.execute();
     }
 
-
     @Override
     public int getItemCount() {
         return datas.size();
     }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private GridView imgGridview;

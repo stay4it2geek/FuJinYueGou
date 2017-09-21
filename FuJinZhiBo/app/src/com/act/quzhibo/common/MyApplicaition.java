@@ -4,12 +4,8 @@ package com.act.quzhibo.common;
 import android.app.Application;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.ProvinceAndCityEntity;
-import com.act.quzhibo.util.CommonUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import c.b.BP;
@@ -20,7 +16,7 @@ public class MyApplicaition extends Application {
 
     public static HashMap<String, Long> map;
     public static final LinkedHashMap<String, Integer> emotionsKeySrc = new LinkedHashMap();
-    public static final LinkedHashMap<String, LinkedHashMap<String, String>> locationKeySrc = new LinkedHashMap();
+    public static final LinkedHashMap<String, String> proKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, String> cityKeySrc = new LinkedHashMap();
 
 
@@ -36,13 +32,49 @@ public class MyApplicaition extends Application {
         BP.init("e37264d2646046d9158d3800afd548f3");
     }
 
+    static {
+
+        proKeySrc.put("7", "河北省");
+        proKeySrc.put("18", "山西省");
+        proKeySrc.put("61", "内蒙古自治区");
+        proKeySrc.put("15", "辽宁省");
+        proKeySrc.put("12", "吉林省");
+        proKeySrc.put("9", "黑龙江省");
+        proKeySrc.put("13", "江苏省");
+        proKeySrc.put("22", "浙江省");
+        proKeySrc.put("1", "安徽省");
+        proKeySrc.put("2", "福建省");
+        proKeySrc.put("14", "江西省");
+        proKeySrc.put("17", "山东省");
+        proKeySrc.put("8", "河南省");
+        proKeySrc.put("10", "湖北省");
+        proKeySrc.put("11", "湖南省");
+        proKeySrc.put("4", "广东省");
+        proKeySrc.put("6", "海南省");
+        proKeySrc.put("60", "广西壮族自治区");
+        proKeySrc.put("3", "甘肃省");
+        proKeySrc.put("19", "陕西省");
+        proKeySrc.put("64", "新疆维吾尔自治区");
+        proKeySrc.put("16", "青海省");
+        proKeySrc.put("62", "宁夏回族自治区");
+        proKeySrc.put("20", "四川省");
+        proKeySrc.put("5", "贵州省");
+        proKeySrc.put("21", "云南省");
+        proKeySrc.put("63", "西藏自治区");
+        proKeySrc.put("82", "澳门特别行政区");
+        proKeySrc.put("81", "香港特别行政区");
+        proKeySrc.put("51", "上海市");
+        proKeySrc.put("53", "重庆市");
+        proKeySrc.put("52", "天津市");
+        proKeySrc.put("50", "北京市");
+    }
 
     static {
         emotionsKeySrc.put(":joy:", R.drawable.joy);
+        emotionsKeySrc.put(":heart_eyes:", R.drawable.heart_eyes);
         emotionsKeySrc.put(":kissing_heart:", R.drawable.kissing_heart);
         emotionsKeySrc.put(":kissing_smiling_eyes:", R.drawable.kissing_smiling_eyes);
         emotionsKeySrc.put(":laughing:", R.drawable.laughing);
-        emotionsKeySrc.put(":logo_uc:", R.drawable.logo_uc);
         emotionsKeySrc.put(":lollipop:", R.drawable.lollipop);
         emotionsKeySrc.put(":mask:", R.drawable.mask);
         emotionsKeySrc.put(":muscle:", R.drawable.muscle);
@@ -93,9 +125,6 @@ public class MyApplicaition extends Application {
         emotionsKeySrc.put(":yum:", R.drawable.yum);
     }
 
-    static {
-        locationKeySrc.put("7",cityKeySrc);
-    }
     static {
         cityKeySrc.put("187", "保定市");
         cityKeySrc.put("188", "沧州市");
@@ -298,386 +327,215 @@ public class MyApplicaition extends Application {
         cityKeySrc.put("206", "濮阳市");
         cityKeySrc.put("206", "濮阳市");
         cityKeySrc.put("206", "濮阳市");
-
-        cityKeySrc.put("236",
-                "武汉市");
-
-        cityKeySrc.put("238",
-                "襄樊市");
-        cityKeySrc.put("228",
-                "鄂州市");
-        cityKeySrc.put("239",
-                "孝感市");
-        cityKeySrc.put("230",
-                "黄冈市");
-        cityKeySrc.put("231",
-                "黄石市");
-        cityKeySrc.put("237",
-                "咸宁市");
-        cityKeySrc.put("233",
-                "荆州市");
-        cityKeySrc.put("240",
-                "宜昌市");
-        cityKeySrc.put("229",
-                "恩施土家族苗族自治州");
-        cityKeySrc.put("246",
-                "神农架");
-        cityKeySrc.put("234",
-                "十堰市");
-        cityKeySrc.put("235",
-                "随州市");
-        cityKeySrc.put("232",
-                "荆门市");
-        cityKeySrc.put("245",
-                "仙桃市");
-        cityKeySrc.put("242",
-                "天门市");
-        cityKeySrc.put("243",
-                "潜江市");
-        cityKeySrc.put("241",
-                "江汉市");
-        cityKeySrc.put("244",
-                "洪湖市");
-
-        cityKeySrc.put("253",
-                "岳阳市");
-        cityKeySrc.put("242",
-                "长沙市");
-        cityKeySrc.put("249",
-                "湘潭市");
-        cityKeySrc.put("255",
-                "株洲市");
-        cityKeySrc.put("245",
-                "衡阳市");
-        cityKeySrc.put("244",
-                "郴州市");
-        cityKeySrc.put("243",
-                "常德市");
-        cityKeySrc.put("251",
-                "益阳市");
-        cityKeySrc.put("247",
-                "娄底市");
-        cityKeySrc.put("248",
-                "邵阳市");
-        cityKeySrc.put("250",
-                "湘西土家族苗族自治州");
-        cityKeySrc.put("254",
-                "张家界市");
-        cityKeySrc.put("246",
-                "怀化市");
-        cityKeySrc.put("252",
-                "永州市");
-        cityKeySrc.put("144",
-                "广州市");
-        cityKeySrc.put("153",
-                "汕尾市");
-        cityKeySrc.put("156",
-                "阳江市");
-        cityKeySrc.put("148",
-                "揭阳市");
-        cityKeySrc.put("149",
-                "茂名市");
-        cityKeySrc.put("146",
-                "惠州市");
-        cityKeySrc.put("147",
-                "江门市");
-        cityKeySrc.put("154",
-                "韶关市");
-        cityKeySrc.put("150",
-                "梅州市");
-        cityKeySrc.put("152",
-                "汕头市");
-        cityKeySrc.put("155",
-                "深圳市");
-        cityKeySrc.put("161",
-                "珠海市");
-        cityKeySrc.put("143",
-                "佛山市");
-        cityKeySrc.put("159",
-                "肇庆市");
-        cityKeySrc.put("158",
-                "湛江市");
-        cityKeySrc.put("160",
-                "中山市");
-        cityKeySrc.put("145",
-                "河源市");
-        cityKeySrc.put("151",
-                "清远市");
-        cityKeySrc.put("157",
-                "云浮市");
-        cityKeySrc.put("141",
-                "潮州市");
-        cityKeySrc.put("142",
-                "东莞市");
-        cityKeySrc.put("185",
-                "海口市");
-        cityKeySrc.put("186",
-                "三亚市");
+        cityKeySrc.put("236", "武汉市");
+        cityKeySrc.put("238", "襄樊市");
+        cityKeySrc.put("228", "鄂州市");
+        cityKeySrc.put("239", "孝感市");
+        cityKeySrc.put("230", "黄冈市");
+        cityKeySrc.put("231", "黄石市");
+        cityKeySrc.put("237", "咸宁市");
+        cityKeySrc.put("233", "荆州市");
+        cityKeySrc.put("240", "宜昌市");
+        cityKeySrc.put("229", "恩施土家族苗族自治州");
+        cityKeySrc.put("246", "神农架");
+        cityKeySrc.put("234", "十堰市");
+        cityKeySrc.put("235", "随州市");
+        cityKeySrc.put("232", "荆门市");
+        cityKeySrc.put("245", "仙桃市");
+        cityKeySrc.put("242", "天门市");
+        cityKeySrc.put("243", "潜江市");
+        cityKeySrc.put("241", "江汉市");
+        cityKeySrc.put("244", "洪湖市");
+        cityKeySrc.put("253", "岳阳市");
+        cityKeySrc.put("242", "长沙市");
+        cityKeySrc.put("249", "湘潭市");
+        cityKeySrc.put("255", "株洲市");
+        cityKeySrc.put("245", "衡阳市");
+        cityKeySrc.put("244", "郴州市");
+        cityKeySrc.put("243", "常德市");
+        cityKeySrc.put("251", "益阳市");
+        cityKeySrc.put("247", "娄底市");
+        cityKeySrc.put("248", "邵阳市");
+        cityKeySrc.put("250", "湘西土家族苗族自治州");
+        cityKeySrc.put("254", "张家界市");
+        cityKeySrc.put("246", "怀化市");
+        cityKeySrc.put("252", "永州市");
 
 
-        cityKeySrc.put("165",
-                "防城港市");
-        cityKeySrc.put("172",
-                "南宁市");
-        cityKeySrc.put("164",
-                "崇左市");
-        cityKeySrc.put("170",
-                "来宾市");
-        cityKeySrc.put("171",
-                "柳州市");
-        cityKeySrc.put("167",
-                "桂林市");
-        cityKeySrc.put("174",
-                "梧州市");
-        cityKeySrc.put("169",
-                "贺州市");
-        cityKeySrc.put("166",
-                "贵港市");
-        cityKeySrc.put("175",
-                "玉林市");
-        cityKeySrc.put("162",
-                "百色市");
-        cityKeySrc.put("173",
-                "钦州市");
-        cityKeySrc.put("168",
-                "河池市");
+        cityKeySrc.put("144", "广州市");
+        cityKeySrc.put("153", "汕尾市");
+        cityKeySrc.put("156", "阳江市");
+        cityKeySrc.put("148", "揭阳市");
+        cityKeySrc.put("149", "茂名市");
+        cityKeySrc.put("146", "惠州市");
+        cityKeySrc.put("147", "江门市");
+        cityKeySrc.put("154", "韶关市");
+        cityKeySrc.put("150", "梅州市");
+        cityKeySrc.put("152", "汕头市");
+        cityKeySrc.put("155", "深圳市");
+        cityKeySrc.put("161", "珠海市");
+        cityKeySrc.put("143", "佛山市");
+        cityKeySrc.put("159", "肇庆市");
+        cityKeySrc.put("158", "湛江市");
+        cityKeySrc.put("160", "中山市");
+        cityKeySrc.put("145", "河源市");
+        cityKeySrc.put("151", "清远市");
+        cityKeySrc.put("157", "云浮市");
+        cityKeySrc.put("141", "潮州市");
+        cityKeySrc.put("142", "东莞市");
+        cityKeySrc.put("185", "海口市");
+        cityKeySrc.put("186", "三亚市");
 
-        cityKeySrc.put("163",
-                "北海市");
-        cityKeySrc.put("133",
-                "兰州市");
-        cityKeySrc.put("131",
-                "金昌市");
-        cityKeySrc.put("127",
-                "白银市");
-        cityKeySrc.put("138",
-                "天水市");
-        cityKeySrc.put("130",
-                "嘉峪关市");
-        cityKeySrc.put("139",
-                "武威市");
-        cityKeySrc.put("140",
-                "张掖市");
-        cityKeySrc.put("136",
-                "平凉市");
-        cityKeySrc.put("132",
-                "酒泉市");
-        cityKeySrc.put("137",
-                "庆阳市");
-        cityKeySrc.put("128",
-                "定西市");
-        cityKeySrc.put("135",
-                "陇南市");
-        cityKeySrc.put("134",
-                "临夏回族自治州");
-        cityKeySrc.put("129",
-                "甘南藏族自治州");
-        cityKeySrc.put("362",
-                "西安市");
-        cityKeySrc.put("363",
-                "咸阳市");
-        cityKeySrc.put("364",
-                "延安市");
-        cityKeySrc.put("365",
-                "榆林市");
-        cityKeySrc.put("361",
-                "渭南市");
-        cityKeySrc.put("359",
-                "商洛市");
-        cityKeySrc.put("356",
-                "安康市");
-        cityKeySrc.put("358",
-                "汉中市");
-        cityKeySrc.put("357",
-                "宝鸡市");
-        cityKeySrc.put("360",
-                "铜川市");
-        cityKeySrc.put("406",
-                "塔城地区");
-        cityKeySrc.put("401",
-                "哈密地区");
-        cityKeySrc.put("402",
-                "和田地区");
-        cityKeySrc.put("397",
-                "阿勒泰地区");
-        cityKeySrc.put("405",
-                "克孜勒苏柯尔克孜自治州");
-        cityKeySrc.put("399",
-                "博尔塔拉蒙古自治州");
-        cityKeySrc.put("404",
-                "克拉玛依市");
-        cityKeySrc.put("408",
-                "乌鲁木齐市");
-        cityKeySrc.put("411",
-                "石河子市");
-        cityKeySrc.put("400",
-                "昌吉回族自治州");
-        cityKeySrc.put("412",
-                "沙湾");
-        cityKeySrc.put("407",
-                "吐鲁番地区");
-        cityKeySrc.put("398",
-                "巴音郭楞蒙古自治州");
-        cityKeySrc.put("396",
-                "阿克苏地区");
-        cityKeySrc.put("347",
-                "阿拉尔市");
-        cityKeySrc.put("403",
-                "喀什地区");
-        cityKeySrc.put("349",
-                "图木舒克市");
-        cityKeySrc.put("409",
-                "伊犁哈萨克自治州");
-        cityKeySrc.put("321",
-                "海北藏族自治州");
-        cityKeySrc.put("290",
-                "西宁市");
-        cityKeySrc.put("326",
-                "海东地区");
-        cityKeySrc.put("325",
-                "黄南藏族自治州");
-        cityKeySrc.put("323",
-                "海南藏族自治州");
-        cityKeySrc.put("320",
-                "果洛藏族自治州");
-        cityKeySrc.put("327",
-                "玉树藏族自治州");
-        cityKeySrc.put("324",
-                "海西蒙古族藏族自治州");
-        cityKeySrc.put("318",
-                "银川市");
-        cityKeySrc.put("316",
-                "石嘴山市");
-        cityKeySrc.put("317",
-                "吴忠市");
-        cityKeySrc.put("315",
-                "固原市");
-        cityKeySrc.put("319",
-                "中卫市");
-        cityKeySrc.put("369",
-                "成都市");
-        cityKeySrc.put("382",
-                "攀枝花市");
-        cityKeySrc.put("387",
-                "自贡市");
-        cityKeySrc.put("379",
-                "绵阳市");
-        cityKeySrc.put("381",
-                "南充市");
-        cityKeySrc.put("370",
-                "达州市");
-        cityKeySrc.put("383",
-                "遂宁市");
-        cityKeySrc.put("373",
-                "广安市");
-        cityKeySrc.put("368",
-                "巴中市");
-        cityKeySrc.put("377",
-                "泸州市");
-        cityKeySrc.put("385",
-                "宜宾市");
-        cityKeySrc.put("386",
-                "资阳市");
-        cityKeySrc.put("380",
-                "内江市");
-        cityKeySrc.put("375",
-                "乐山市");
-        cityKeySrc.put("378",
-                "眉山市");
-        cityKeySrc.put("376",
-                "凉山彝族自治州");
-        cityKeySrc.put("384",
-                "雅安市");
-        cityKeySrc.put("372",
-                "甘孜藏族自治州");
-        cityKeySrc.put("367",
-                "阿坝藏族羌族自治州");
-        cityKeySrc.put("371",
-                "德阳市");
-        cityKeySrc.put("374",
-                "广元市");
-        cityKeySrc.put("178",
-                "贵阳市");
-        cityKeySrc.put("184",
-                "遵义市");
-        cityKeySrc.put("176",
-                "安顺市");
-        cityKeySrc.put("180",
-                "黔南布依族苗族自治州");
-        cityKeySrc.put("181",
-                "黔东南苗族侗族自治州");
-        cityKeySrc.put("183",
-                "铜仁地区");
-        cityKeySrc.put("177",
-                "毕节地区");
-        cityKeySrc.put("179",
-                "六盘水市");
-        cityKeySrc.put("182",
-                "黔西南布依族苗族自治州");
-        cityKeySrc.put("423",
-                "西双版纳傣族自治州");
-        cityKeySrc.put("413",
-                "德宏傣族景颇族自治州");
-        cityKeySrc.put("425",
-                "昭通市");
-        cityKeySrc.put("416",
-                "昆明市");
-        cityKeySrc.put("412",
-                "大理白族自治州");
-        cityKeySrc.put("415",
-                "红河哈尼族彝族自治州");
-        cityKeySrc.put("420",
-                "曲靖市");
-        cityKeySrc.put("410",
-                "保山市");
-        cityKeySrc.put("422",
-                "文山壮族苗族自治州");
-        cityKeySrc.put("424",
-                "玉溪市");
-        cityKeySrc.put("411",
-                "楚雄彝族自治州");
-        cityKeySrc.put("284",
-                "普洱市");
-        cityKeySrc.put("418",
-                "临沧市");
-        cityKeySrc.put("419",
-                "怒江傈傈族自治州");
-        cityKeySrc.put("414",
-                "迪庆藏族自治州");
-        cityKeySrc.put("417",
-                "丽江市");
-        cityKeySrc.put("421",
-                "思茅市");
-        cityKeySrc.put("391",
-                "拉萨市");
-        cityKeySrc.put("394",
-                "日喀则地区");
-        cityKeySrc.put("395",
-                "山南地区");
-        cityKeySrc.put("392",
-                "林芝地区");
-        cityKeySrc.put("390",
-                "昌都地区");
-        cityKeySrc.put("393",
-                "那曲地区");
-        cityKeySrc.put("389",
-                "阿里地区");
-        cityKeySrc.put("443",
-                "高雄市");
-        cityKeySrc.put("438",
-                "基隆市");
-        cityKeySrc.put("442",
-                "台中市");
-        cityKeySrc.put("439",
-                "台南市");
-        cityKeySrc.put("444",
-                "新竹市");
-        cityKeySrc.put("445",
-                "嘉义市");
-        cityKeySrc.put("440",
-                "台东");
-        cityKeySrc.put("441",
-                "台北市");
+
+        cityKeySrc.put("165", "防城港市");
+        cityKeySrc.put("172", "南宁市");
+        cityKeySrc.put("164", "崇左市");
+        cityKeySrc.put("170", "来宾市");
+        cityKeySrc.put("171", "柳州市");
+        cityKeySrc.put("167", "桂林市");
+        cityKeySrc.put("174", "梧州市");
+        cityKeySrc.put("169", "贺州市");
+        cityKeySrc.put("166", "贵港市");
+        cityKeySrc.put("175", "玉林市");
+        cityKeySrc.put("162", "百色市");
+        cityKeySrc.put("173", "钦州市");
+        cityKeySrc.put("168", "河池市");
+        cityKeySrc.put("163", "北海市");
+        cityKeySrc.put("133", "兰州市");
+        cityKeySrc.put("131", "金昌市");
+        cityKeySrc.put("127", "白银市");
+        cityKeySrc.put("138", "天水市");
+        cityKeySrc.put("130", "嘉峪关市");
+        cityKeySrc.put("139", "武威市");
+        cityKeySrc.put("140", "张掖市");
+        cityKeySrc.put("136", "平凉市");
+        cityKeySrc.put("132", "酒泉市");
+        cityKeySrc.put("137", "庆阳市");
+        cityKeySrc.put("128", "定西市");
+        cityKeySrc.put("135", "陇南市");
+        cityKeySrc.put("134", "临夏回族自治州");
+        cityKeySrc.put("129", "甘南藏族自治州");
+
+
+        cityKeySrc.put("362", "西安市");
+        cityKeySrc.put("363", "咸阳市");
+        cityKeySrc.put("364", "延安市");
+        cityKeySrc.put("365", "榆林市");
+        cityKeySrc.put("361", "渭南市");
+        cityKeySrc.put("359", "商洛市");
+        cityKeySrc.put("356", "安康市");
+        cityKeySrc.put("358", "汉中市");
+        cityKeySrc.put("357", "宝鸡市");
+        cityKeySrc.put("360", "铜川市");
+
+
+        cityKeySrc.put("406", "塔城地区");
+        cityKeySrc.put("401", "哈密地区");
+        cityKeySrc.put("402", "和田地区");
+        cityKeySrc.put("397", "阿勒泰地区");
+        cityKeySrc.put("405", "克孜勒苏柯尔克孜自治州");
+        cityKeySrc.put("399", "博尔塔拉蒙古自治州");
+        cityKeySrc.put("404", "克拉玛依市");
+        cityKeySrc.put("408", "乌鲁木齐市");
+        cityKeySrc.put("411", "石河子市");
+        cityKeySrc.put("400", "昌吉回族自治州");
+        cityKeySrc.put("412", "沙湾");
+        cityKeySrc.put("407", "吐鲁番地区");
+        cityKeySrc.put("398", "巴音郭楞蒙古自治州");
+        cityKeySrc.put("396", "阿克苏地区");
+        cityKeySrc.put("347", "阿拉尔市");
+        cityKeySrc.put("403", "喀什地区");
+        cityKeySrc.put("349", "图木舒克市");
+        cityKeySrc.put("409", "伊犁哈萨克自治州");
+        cityKeySrc.put("321", "海北藏族自治州");
+        cityKeySrc.put("290", "西宁市");
+        cityKeySrc.put("326", "海东地区");
+        cityKeySrc.put("325", "黄南藏族自治州");
+        cityKeySrc.put("323", "海南藏族自治州");
+        cityKeySrc.put("320", "果洛藏族自治州");
+        cityKeySrc.put("327", "玉树藏族自治州");
+        cityKeySrc.put("324", "海西蒙古族藏族自治州");
+
+
+        cityKeySrc.put("318", "银川市");
+        cityKeySrc.put("316", "石嘴山市");
+        cityKeySrc.put("317", "吴忠市");
+        cityKeySrc.put("315", "固原市");
+        cityKeySrc.put("319", "中卫市");
+        cityKeySrc.put("369", "成都市");
+        cityKeySrc.put("382", "攀枝花市");
+        cityKeySrc.put("387", "自贡市");
+        cityKeySrc.put("379", "绵阳市");
+        cityKeySrc.put("381", "南充市");
+        cityKeySrc.put("370", "达州市");
+        cityKeySrc.put("383", "遂宁市");
+        cityKeySrc.put("373", "广安市");
+        cityKeySrc.put("368", "巴中市");
+        cityKeySrc.put("377", "泸州市");
+        cityKeySrc.put("385", "宜宾市");
+        cityKeySrc.put("386", "资阳市");
+        cityKeySrc.put("380", "内江市");
+        cityKeySrc.put("375", "乐山市");
+        cityKeySrc.put("378", "眉山市");
+        cityKeySrc.put("376", "凉山彝族自治州");
+        cityKeySrc.put("384", "雅安市");
+        cityKeySrc.put("372", "甘孜藏族自治州");
+        cityKeySrc.put("367", "阿坝藏族羌族自治州");
+        cityKeySrc.put("371", "德阳市");
+        cityKeySrc.put("374", "广元市");
+
+
+        cityKeySrc.put("178", "贵阳市");
+        cityKeySrc.put("184", "遵义市");
+        cityKeySrc.put("176", "安顺市");
+        cityKeySrc.put("180", "黔南布依族苗族自治州");
+        cityKeySrc.put("181", "黔东南苗族侗族自治州");
+        cityKeySrc.put("183", "铜仁地区");
+        cityKeySrc.put("177", "毕节地区");
+        cityKeySrc.put("179", "六盘水市");
+        cityKeySrc.put("182", "黔西南布依族苗族自治州");
+        cityKeySrc.put("423", "西双版纳傣族自治州");
+        cityKeySrc.put("413", "德宏傣族景颇族自治州");
+        cityKeySrc.put("425", "昭通市");
+        cityKeySrc.put("416", "昆明市");
+        cityKeySrc.put("412", "大理白族自治州");
+        cityKeySrc.put("415", "红河哈尼族彝族自治州");
+        cityKeySrc.put("420", "曲靖市");
+        cityKeySrc.put("410", "保山市");
+        cityKeySrc.put("422", "文山壮族苗族自治州");
+        cityKeySrc.put("424", "玉溪市");
+        cityKeySrc.put("411", "楚雄彝族自治州");
+        cityKeySrc.put("284", "普洱市");
+        cityKeySrc.put("418", "临沧市");
+        cityKeySrc.put("419", "怒江傈傈族自治州");
+        cityKeySrc.put("414", "迪庆藏族自治州");
+        cityKeySrc.put("417", "丽江市");
+        cityKeySrc.put("421", "思茅市");
+
+        cityKeySrc.put("391", "拉萨市");
+        cityKeySrc.put("394", "日喀则地区");
+        cityKeySrc.put("395", "山南地区");
+        cityKeySrc.put("392", "林芝地区");
+        cityKeySrc.put("390", "昌都地区");
+        cityKeySrc.put("393", "那曲地区");
+        cityKeySrc.put("389", "阿里地区");
+
+
+        cityKeySrc.put("443", "高雄市");
+        cityKeySrc.put("438", "基隆市");
+        cityKeySrc.put("442", "台中市");
+        cityKeySrc.put("439", "台南市");
+        cityKeySrc.put("444", "新竹市");
+        cityKeySrc.put("445", "嘉义市");
+        cityKeySrc.put("440", "台东");
+        cityKeySrc.put("441", "台北市");
         cityKeySrc.put("446", "宜兰市");
+
+        cityKeySrc.put("445", "澳门特别行政区");
+        cityKeySrc.put("444", "香港特别行政区");
+        cityKeySrc.put("464", "上海市");
+        cityKeySrc.put("465", "重庆市");
+        cityKeySrc.put("684", "天津市");
+        cityKeySrc.put("467", "北京市");
     }
 }

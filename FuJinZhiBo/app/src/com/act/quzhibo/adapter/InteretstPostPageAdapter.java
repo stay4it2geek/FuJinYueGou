@@ -161,24 +161,22 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             Pattern pattern = Pattern.compile("[a-z_]{1,}", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(newString);
             while (matcher.find()) {
-                newString = newString.replaceAll(":"+matcher.group().trim()+":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":"+matcher.group().trim()+":") + "'>");
+                newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
             }
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-
-                }
-            });
+            if(newString.contains("null")){
+                newString= newString.replaceAll("null",R.drawable.smile+"");
+            }
             ((Item1ViewHolder) holder).content.setText(Html.fromHtml(newString, new Html.ImageGetter() {
                 @Override
                 public Drawable getDrawable(String source) {
                     Drawable drawable = null;
-                    if (!TextUtils.isEmpty(source)&&!source.equals("null")) {
+                    if (!TextUtils.isEmpty(source) && !source.equals("null")) {
                         int id = Integer.parseInt(source);
                         drawable = activity.getResources().getDrawable(id);
-                        if(drawable!=null){
+                        if (drawable != null) {
                             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-                                    drawable.getIntrinsicHeight());}
+                                    drawable.getIntrinsicHeight());
+                        }
                     }
                     return drawable;
                 }
@@ -207,23 +205,11 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             } else {
                 ((Item1ViewHolder) holder).ijkVideoView.setVisibility(View.GONE);
             }
-
             new AsyncTask<Void, Void, String>() {
                 @Override
                 protected String doInBackground(Void... params) {
-                    ArrayList<ProvinceAndCityEntity> datas = CommonUtil.parseLocation(activity).data;
-                    if (null != datas) {
-                        for (ProvinceAndCityEntity entify : datas) {
-                            if (TextUtils.equals(data.detail.user.proCode, entify.proId + "")) {
-                                for (ProvinceAndCityEntity.CitySub citySub : entify.citySub) {
-                                    if (TextUtils.equals(data.detail.user.cityCode, citySub.cityId + "")) {
-                                        return !TextUtils.equals("", entify.name + citySub.name + "") ? entify.name + citySub.name + "" : "----";
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return "";
+                    String text = MyApplicaition.proKeySrc.get(data.detail.user.proCode) + MyApplicaition.cityKeySrc.get(data.detail.user.cityCode);
+                    return text;
                 }
 
                 @Override
@@ -232,6 +218,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                     ((Item1ViewHolder) holder).arealocation.setText(text);
                 }
             }.execute();
+
         } else if (holder instanceof Item2ViewHolder) {
             ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, Constants.ITEM_POST_DETAIL_IMG));
         } else {
