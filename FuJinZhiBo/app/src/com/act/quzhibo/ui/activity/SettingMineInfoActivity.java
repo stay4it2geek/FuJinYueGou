@@ -272,6 +272,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 if (e == null) {
                                     openSecret_switch.setChecked(false);
                                     CommonUtil.fecth(SettingMineInfoActivity.this);
+                                    ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问已关闭");
                                 } else {
                                     openSecret_switch.setChecked(true);
                                     if (e.getErrorCode() == 206) {

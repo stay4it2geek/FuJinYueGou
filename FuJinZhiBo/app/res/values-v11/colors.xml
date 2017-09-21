@@ -30,5 +30,8 @@
     <color name="yellow">#ecdd3e</color>
     <color name="lightpink">#FFF6F7</color>
     <color name="textColor">#4A4A4A</color>
+    <color name="bg_gray_alt">#eeeeee</color>
+    <color name="T_26">#262626</color>
+    <color name="T_F50">#FF5060</color>
 
 </resources>

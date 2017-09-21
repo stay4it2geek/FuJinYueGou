@@ -175,9 +175,9 @@ public class InfonNearPersonActivity extends AppCompatActivity {
             }
 
             if (user.sex.equals("2")) {
-                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(user.vipLevel)));
+                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(user.vipType)));
             } else {
-                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(user.vipLevel)));
+                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(user.vipType)));
             }
             loadNetView.setVisibility(View.GONE);
         }

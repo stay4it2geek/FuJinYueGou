@@ -65,17 +65,17 @@ public class MyPostListActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (myPostsSize > 0) {
-                                    queryData(Constants.LOADMORE);
-                                    recyclerView.loadMoreComplete();
-                                } else {
-                                    recyclerView.setNoMore(true);
-                                }
-                            }
-                        }, 1000);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (myPostsSize > 0) {
+                            queryData(Constants.LOADMORE);
+                            recyclerView.loadMoreComplete();
+                        } else {
+                            recyclerView.setNoMore(true);
+                        }
+                    }
+                }, 1000);
             }
         });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
@@ -100,6 +100,13 @@ public class MyPostListActivity extends AppCompatActivity {
                 MyPostListActivity.this.finish();
             }
         });
+        findViewById(R.id.postButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                startActivity(new Intent(MyPostListActivity.this, SendPostActivity.class));
+            }
+        });
+
     }
 
     private void queryData(final int actionType) {
@@ -128,14 +135,14 @@ public class MyPostListActivity extends AppCompatActivity {
             @Override
             public void done(List<MyPost> list, BmobException e) {
                 if (e == null) {
-                        if (actionType == Constants.REFRESH) {
-                            myPostList.clear();
-                        }
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
+                    if (actionType == Constants.REFRESH) {
+                        myPostList.clear();
+                    }
+                    lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
@@ -143,7 +150,7 @@ public class MyPostListActivity extends AppCompatActivity {
         });
     }
 
-    public static  class ComparatorValues implements Comparator<MyPost> {
+    public static class ComparatorValues implements Comparator<MyPost> {
         @Override
         public int compare(MyPost post1, MyPost post2) {
             int m1 = Integer.parseInt(post1.ctime != null ? post1.ctime : "0");
@@ -171,7 +178,7 @@ public class MyPostListActivity extends AppCompatActivity {
                     myPostsSize = myPosts.size();
                 } else {
                     myPostsSize = 0;
-                    if(msg.what==Constants.LOADMORE){
+                    if (msg.what == Constants.LOADMORE) {
                         recyclerView.setNoMore(true);
                     }
                 }

@@ -2,6 +2,7 @@ package com.act.quzhibo.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
@@ -31,10 +33,19 @@ import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
 import com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.bumptech.glide.Glide;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import cn.bmob.v3.BmobUser;
+import me.nereo.multi_image_selector.MultiImageSelector;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
+    private static final int REQUEST_IMAGE = 123;
     RootUser rootUser;
     View view;
 
@@ -53,6 +64,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
             view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
         }
+        view.findViewById(R.id.uploadImg).setOnClickListener(this);
         view.findViewById(R.id.makemoneyLayout).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.vip_policy).setOnClickListener(this);
@@ -78,8 +90,20 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    private void queryWhoSeeMe() {
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                ArrayList<String> paths = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                File file = new File(paths.get(0));
+                Glide.with(getContext()).load(file).into(((ImageView) view.findViewById(R.id.userAvtar)));
+                view.findViewById(R.id.userAvtar).setVisibility(View.GONE);
+            }
+        }
     }
+
 
     @Override
     public void onClick(final View view) {
@@ -107,10 +131,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 switch (view.getId()) {
+                    case R.id.uploadImg:
+
+                        break;
+
                     case R.id.makemoneyLayout:
                         getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
                         break;
-                    case  R.id.checkoutMoneyLayout:
+                    case R.id.checkoutMoneyLayout:
                         getActivity().startActivity(new Intent(getActivity(), CheckOutMoneyActivity.class));
                         break;
                     case R.id.vip_policy:
@@ -132,15 +160,15 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         getActivity().startActivity(new Intent(getActivity(), MyFocusPersonActivity.class));
                         break;
                     case R.id.myVideo_download_layout:
-                        Intent videoIntent=new Intent();
-                        videoIntent.putExtra(Constants.DOWN_LOAD_TYPE,Constants.VIDEO_ALBUM);
-                        videoIntent.setClass(getActivity(),DownloadManagerActivity.class);
+                        Intent videoIntent = new Intent();
+                        videoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.VIDEO_ALBUM);
+                        videoIntent.setClass(getActivity(), DownloadManagerActivity.class);
                         getActivity().startActivity(videoIntent);
                         break;
                     case R.id.myIMG_download_layout:
-                        Intent photoIntent=new Intent();
-                        photoIntent.putExtra(Constants.DOWN_LOAD_TYPE,Constants.PHOTO_ALBUM);
-                        photoIntent.setClass(getActivity(),DownloadManagerActivity.class);
+                        Intent photoIntent = new Intent();
+                        photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
+                        photoIntent.setClass(getActivity(), DownloadManagerActivity.class);
                         getActivity().startActivity(photoIntent);
                         break;
                     case R.id.settingDetailayout:
@@ -193,6 +221,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }
     }
+
 
 
 }
