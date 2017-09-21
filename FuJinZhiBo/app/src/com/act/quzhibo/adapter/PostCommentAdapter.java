@@ -125,7 +125,7 @@ public class PostCommentAdapter extends BaseAdapter {
                     newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
                 }
                 if (newString.contains("null")) {
-                    newString= newString.replaceAll("null",R.drawable.smile+"");
+                    newString= newString.replaceAll("null",R.drawable.kissing_heart+"");
                 }
                 return newString;
             }

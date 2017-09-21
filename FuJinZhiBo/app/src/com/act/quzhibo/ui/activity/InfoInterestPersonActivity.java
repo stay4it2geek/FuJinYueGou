@@ -13,11 +13,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
@@ -114,9 +116,11 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                 urls.add(post.user.photoUrl);
             }
             if (post.user.sex.equals("2")) {
+                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(post.user.vipLevel)));
                 banner.setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
                 Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.women).into((CircleImageView) findViewById(R.id.userImage));
             } else {
+                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(post.user.vipLevel)));
                 banner.setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
                 Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.man).into((CircleImageView) findViewById(R.id.userImage));
 
@@ -133,10 +137,10 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.level)).setText("超级趣会员");
         }
 
-        if (post.user.vipLevel.equals("1")) {
-            ((TextView) findViewById(R.id.isCanDate)).setText("见面一起做爱做的事");
-        } else {
+        if (post.user.vipLevel.equals("0")) {
             ((TextView) findViewById(R.id.isCanDate)).setText("先在软件里聊天试试");
+        } else {
+            ((TextView) findViewById(R.id.isCanDate)).setText("见面一起做爱做的事");
         }
         ((TextView) findViewById(R.id.disPurpose)).setText(post.user.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(post.user.disMariState);

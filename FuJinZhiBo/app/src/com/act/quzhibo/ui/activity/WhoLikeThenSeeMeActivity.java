@@ -160,6 +160,9 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
                     liekThenSeeMeSize = interestPersonList.size();
                 } else {
                     liekThenSeeMeSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 if (whoLikeMeAdapter == null) {
                     whoLikeMeAdapter = new WhoLikeMeAdapter(WhoLikeThenSeeMeActivity.this, interestPersonList);

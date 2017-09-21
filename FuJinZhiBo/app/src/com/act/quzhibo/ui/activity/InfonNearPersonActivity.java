@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
@@ -75,6 +77,7 @@ public class InfonNearPersonActivity extends AppCompatActivity {
     private void initView() {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         user = (InterestSubPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
+
         findViewById(R.id.audio_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_zipai_img_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_zipai_video_layout).setVisibility(View.VISIBLE);
@@ -161,15 +164,20 @@ public class InfonNearPersonActivity extends AppCompatActivity {
                     banner.setImages(bannerUrls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
                 } else {
                     banner.setImages(bannerUrls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
-                    banner.setImages(Arrays.asList(new String[]{"http://file.nidong.com//" + user.pics})).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
                 }
             } else {
                 if (user.sex.equals("2")) {
                     banner.setImages(Arrays.asList(new String[]{user.pics})).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
                 } else {
-                    banner.setImages(Arrays.asList(new String[]{user.pics})).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
+                    banner.setImages(Arrays.asList(new String[]{"http://file.nidong.com//" + user.pics})).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
                 }
 
+            }
+
+            if (user.sex.equals("2")) {
+                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(user.vipLevel)));
+            } else {
+                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(user.vipLevel)));
             }
             loadNetView.setVisibility(View.GONE);
         }
@@ -202,75 +210,75 @@ public class InfonNearPersonActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
                     if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
-                   if(mMyFocusCommonPerson ==null){
-                       MyFocusCommonPerson myFcPerson = new MyFocusCommonPerson();
-                       myFcPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
-                       myFcPerson.username = user.username;
-                       myFcPerson.userId = user.userId;
-                       myFcPerson.photoUrl = user.absCoverPic;
-                       myFcPerson.sex = user.sex;
-                       myFcPerson.userType = Constants.NEAR;
-                       myFcPerson.save(new SaveListener<String>() {
-                           @Override
-                           public void done(String objectId, BmobException e) {
-                               if (e == null) {
-                                   ((TextView) findViewById(R.id.focus)).setText("已关注");
-                                   if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                                       BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
-                                       query.setLimit(1);
-                                       query.addWhereEqualTo("userId", user.userId);
-                                       query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
-                                       query.findObjects(new FindListener<MyFocusCommonPerson>() {
-                                           @Override
-                                           public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
-                                               if (e == null) {
-                                                   if (myFcPersons.size() >= 1) {
-                                                       InfonNearPersonActivity.this.mMyFocusCommonPerson = myFcPersons.get(0);
-                                                       ((TextView) findViewById(R.id.focus)).setText("已关注");
-                                                   }
-                                               }
-                                           }
-                                       });
-                                   }
-                                   ToastUtil.showToast(InfonNearPersonActivity.this, "关注成功");
-                               } else {
-                                   ToastUtil.showToast(InfonNearPersonActivity.this, "关注失败");
-                               }
-                           }
-                       });
-                   }else{
-                       mMyFocusCommonPerson.update(mMyFocusCommonPerson.getObjectId(),new UpdateListener() {
-                           @Override
-                           public void done(BmobException e) {
-                               if (e == null) {
-                                   ((TextView) findViewById(R.id.focus)).setText("已关注");
-                                   if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                                       BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
-                                       query.setLimit(1);
-                                       query.addWhereEqualTo("userId", user.userId);
-                                       query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
-                                       query.findObjects(new FindListener<MyFocusCommonPerson>() {
-                                           @Override
-                                           public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
-                                               if (e == null) {
-                                                   if (myFcPersons.size() >= 1) {
-                                                       InfonNearPersonActivity.this.mMyFocusCommonPerson = myFcPersons.get(0);
-                                                       ((TextView) findViewById(R.id.focus)).setText("已关注");
-                                                   }
-                                               }
-                                           }
-                                       });
-                                   }
-                                   ToastUtil.showToast(InfonNearPersonActivity.this, "关注成功");
-                               } else {
-                                   ToastUtil.showToast(InfonNearPersonActivity.this, "关注失败");
-                               }
-                           }
-                       });
-                   }
+                        if (mMyFocusCommonPerson == null) {
+                            MyFocusCommonPerson myFcPerson = new MyFocusCommonPerson();
+                            myFcPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                            myFcPerson.username = user.username;
+                            myFcPerson.userId = user.userId;
+                            myFcPerson.photoUrl = user.absCoverPic;
+                            myFcPerson.sex = user.sex;
+                            myFcPerson.userType = Constants.NEAR;
+                            myFcPerson.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String objectId, BmobException e) {
+                                    if (e == null) {
+                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+                                            query.setLimit(1);
+                                            query.addWhereEqualTo("userId", user.userId);
+                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                                                @Override
+                                                public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
+                                                    if (e == null) {
+                                                        if (myFcPersons.size() >= 1) {
+                                                            InfonNearPersonActivity.this.mMyFocusCommonPerson = myFcPersons.get(0);
+                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        ToastUtil.showToast(InfonNearPersonActivity.this, "关注成功");
+                                    } else {
+                                        ToastUtil.showToast(InfonNearPersonActivity.this, "关注失败");
+                                    }
+                                }
+                            });
+                        } else {
+                            mMyFocusCommonPerson.update(mMyFocusCommonPerson.getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+                                            query.setLimit(1);
+                                            query.addWhereEqualTo("userId", user.userId);
+                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                                                @Override
+                                                public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
+                                                    if (e == null) {
+                                                        if (myFcPersons.size() >= 1) {
+                                                            InfonNearPersonActivity.this.mMyFocusCommonPerson = myFcPersons.get(0);
+                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        ToastUtil.showToast(InfonNearPersonActivity.this, "关注成功");
+                                    } else {
+                                        ToastUtil.showToast(InfonNearPersonActivity.this, "关注失败");
+                                    }
+                                }
+                            });
+                        }
 
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗？","继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗？", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
                                 dialog.dismiss();
@@ -283,14 +291,15 @@ public class InfonNearPersonActivity extends AppCompatActivity {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
-                                                mMyFocusCommonPerson=null;
+                                                mMyFocusCommonPerson = null;
                                                 ((TextView) findViewById(R.id.focus)).setText("关注ta");
                                                 ToastUtil.showToast(InfonNearPersonActivity.this, "取消关注成功");
                                             }
 
                                         }
                                     });
-                                }dialog.dismiss();
+                                }
+                                dialog.dismiss();
                             }
                         }).show(getSupportFragmentManager(), "");
                     }

@@ -50,7 +50,7 @@ public class PostDetailFragment extends BackHandledFragment {
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return true;     //截断事件的传递
+                return true;
             }
         });
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);

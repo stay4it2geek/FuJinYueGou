@@ -18,6 +18,8 @@ public class MyApplicaition extends Application {
     public static final LinkedHashMap<String, Integer> emotionsKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, String> proKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, String> cityKeySrc = new LinkedHashMap();
+    public static final LinkedHashMap<String, Integer> femaleKeySrc = new LinkedHashMap();
+    public static final LinkedHashMap<String, Integer> maleKeySrc = new LinkedHashMap();
 
 
     public void onCreate() {
@@ -32,6 +34,33 @@ public class MyApplicaition extends Application {
         BP.init("e37264d2646046d9158d3800afd548f3");
     }
 
+    static {
+        femaleKeySrc.put("0", R.drawable.level_female_0);
+        femaleKeySrc.put("1", R.drawable.level_female_1);
+        femaleKeySrc.put("2", R.drawable.level_female_2);
+        femaleKeySrc.put("3", R.drawable.level_female_3);
+        femaleKeySrc.put("4", R.drawable.level_female_4);
+        femaleKeySrc.put("5", R.drawable.level_female_5);
+        femaleKeySrc.put("6", R.drawable.level_female_6);
+        femaleKeySrc.put("7", R.drawable.level_female_7);
+        femaleKeySrc.put("8", R.drawable.level_female_8);
+        femaleKeySrc.put("9", R.drawable.level_female_9);
+        femaleKeySrc.put("10", R.drawable.level_female_10);
+    }
+
+    static {
+        maleKeySrc.put("0", R.drawable.level_male_0);
+        maleKeySrc.put("1", R.drawable.level_male_1);
+        maleKeySrc.put("2", R.drawable.level_male_2);
+        maleKeySrc.put("3", R.drawable.level_male_3);
+        maleKeySrc.put("4", R.drawable.level_male_4);
+        maleKeySrc.put("5", R.drawable.level_male_5);
+        maleKeySrc.put("6", R.drawable.level_male_6);
+        maleKeySrc.put("7", R.drawable.level_male_7);
+        maleKeySrc.put("8", R.drawable.level_male_8);
+        maleKeySrc.put("9", R.drawable.level_male_9);
+        maleKeySrc.put("10", R.drawable.level_male_10);
+    }
     static {
 
         proKeySrc.put("7", "河北省");
@@ -67,6 +96,7 @@ public class MyApplicaition extends Application {
         proKeySrc.put("53", "重庆市");
         proKeySrc.put("52", "天津市");
         proKeySrc.put("50", "北京市");
+        proKeySrc.put("80", "台湾省");
     }
 
     static {
@@ -529,13 +559,13 @@ public class MyApplicaition extends Application {
         cityKeySrc.put("445", "嘉义市");
         cityKeySrc.put("440", "台东");
         cityKeySrc.put("441", "台北市");
-        cityKeySrc.put("446", "宜兰市");
+        cityKeySrc.put("447", "宜兰市");
 
         cityKeySrc.put("445", "澳门特别行政区");
         cityKeySrc.put("444", "香港特别行政区");
         cityKeySrc.put("464", "上海市");
-        cityKeySrc.put("465", "重庆市");
+        cityKeySrc.put("683", "重庆市");
         cityKeySrc.put("684", "天津市");
-        cityKeySrc.put("467", "北京市");
+        cityKeySrc.put("446", "北京市");
     }
 }

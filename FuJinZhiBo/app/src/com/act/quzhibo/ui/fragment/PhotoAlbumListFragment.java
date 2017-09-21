@@ -159,6 +159,9 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                     medias.addAll(mediaInfos);
                 } else {
                     mediasSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recycleview.setNoMore(true);
+                    }
                 }
                 if (mInfoListAdapter == null) {
                     mInfoListAdapter = new PhotoAlbumListAdapter(getActivity(), mediaInfos);

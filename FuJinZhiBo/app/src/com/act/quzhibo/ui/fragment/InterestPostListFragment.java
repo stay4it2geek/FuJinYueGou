@@ -158,6 +158,9 @@ public class InterestPostListFragment extends BackHandledFragment {
                     posts.addAll(data.result);
                 } else {
                     interestPostSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 if (interestPostSize > 0) {
                     ctime = data.result.get(interestPostSize - 1).ctime;

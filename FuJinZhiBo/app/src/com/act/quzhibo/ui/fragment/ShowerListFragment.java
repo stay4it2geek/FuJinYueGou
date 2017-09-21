@@ -159,6 +159,11 @@ public class ShowerListFragment extends BackHandledFragment {
                 }
 
                 rooms.addAll(roomParentList.roomList);
+                if (roomParentList == null || roomParentList.roomList == null || roomParentList.roomList.size() == 0) {
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
+                }
                 if (adapter == null) {
                     Display display = getActivity().getWindowManager().getDefaultDisplay();
                     Point size = new Point();
@@ -182,6 +187,8 @@ public class ShowerListFragment extends BackHandledFragment {
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
                 }
+
+
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);

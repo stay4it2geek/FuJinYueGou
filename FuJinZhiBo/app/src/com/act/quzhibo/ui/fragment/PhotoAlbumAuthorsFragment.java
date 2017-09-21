@@ -198,6 +198,9 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                     mediaAuthors.addAll(mediaAuthor);
                 } else {
                     mediasSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 Collections.sort(mediaAuthors, new ComparatorValues());
                 if (mediasSize > 0) {

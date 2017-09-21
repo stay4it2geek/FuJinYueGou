@@ -22,7 +22,7 @@
             android:layout_height="22dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/yinsi" />
+            android:background="@drawable/secret" />
 
         <TextView
             android:id="@+id/openSecret_txt"

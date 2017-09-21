@@ -171,6 +171,9 @@ public class MyPostListActivity extends AppCompatActivity {
                     myPostsSize = myPosts.size();
                 } else {
                     myPostsSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 Collections.sort(myPosts, new ComparatorValues());
                 if (myPostListAdapter == null) {

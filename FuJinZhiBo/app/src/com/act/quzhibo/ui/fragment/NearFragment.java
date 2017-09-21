@@ -152,17 +152,20 @@ public class NearFragment extends BackHandledFragment {
                     nearPersonList.addAll(interestSubPersonList);
                 } else {
                     nearPersonSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
-                if (nearPersonSize > 0) {
                     if (nearPersonAdapter == null) {
                         nearPersonAdapter = new NearPersonAdapter(getActivity(), nearPersonList);
                         recyclerView.setAdapter(nearPersonAdapter);
                     } else {
                         nearPersonAdapter.notifyDataSetChanged();
                     }
-                }
+
                 loadNetView.setVisibility(View.GONE);
                 if (nearPersonList.size() == 0) {
+
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;

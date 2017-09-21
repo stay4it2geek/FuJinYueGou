@@ -167,6 +167,9 @@ public class MyFocusShowerActivity extends FragmentActivity {
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 if (myFocusShowerListAdapter == null) {
                     Display display = MyFocusShowerActivity.this.getWindowManager().getDefaultDisplay();

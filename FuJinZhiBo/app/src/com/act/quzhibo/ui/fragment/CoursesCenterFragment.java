@@ -171,6 +171,9 @@ public class CoursesCenterFragment extends Fragment {
                     courseSize = commonCourses.size();
                 } else {
                     courseSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
 
                 if (courseCenterAdapter == null) {

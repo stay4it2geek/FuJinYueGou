@@ -164,7 +164,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                 newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
             }
             if(newString.contains("null")){
-                newString= newString.replaceAll("null",R.drawable.smile+"");
+                newString= newString.replaceAll("null",R.drawable.kissing_heart+"");
             }
             ((Item1ViewHolder) holder).content.setText(Html.fromHtml(newString, new Html.ImageGetter() {
                 @Override

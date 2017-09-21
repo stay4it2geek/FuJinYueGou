@@ -159,6 +159,9 @@ public class MyFocusPersonActivity extends FragmentActivity {
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 if (myFocusPersonListAdapter == null) {
                     Display display = MyFocusPersonActivity.this.getWindowManager().getDefaultDisplay();
@@ -189,7 +192,6 @@ public class MyFocusPersonActivity extends FragmentActivity {
                                 FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-
                                         dialog.dismiss();
                                     }
 

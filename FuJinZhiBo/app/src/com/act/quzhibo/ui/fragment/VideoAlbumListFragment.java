@@ -188,6 +188,9 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     medias.addAll(mediaInfos);
                 } else {
                     mediasSize = 0;
+                    if(msg.what==Constants.LOADMORE){
+                        recyclerView.setNoMore(true);
+                    }
                 }
 
                 if (mInfoListAdapter == null) {
