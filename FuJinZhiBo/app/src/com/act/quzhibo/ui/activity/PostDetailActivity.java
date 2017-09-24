@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.InteretstPostPageAdapter;
+import com.act.quzhibo.adapter.InteretstPostDetailAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostPageParentData;
@@ -24,7 +24,7 @@ import okhttp3.Call;
 
 
 public class PostDetailActivity extends AppCompatActivity {
-    private InteretstPostPageAdapter adapter;
+    private InteretstPostDetailAdapter adapter;
     private XRecyclerView recyclerview;
     private InterestPost post;
     private LoadNetView loadNetView;
@@ -87,7 +87,7 @@ public class PostDetailActivity extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what != Constants.NetWorkError) {
                 InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
-                adapter = new InteretstPostPageAdapter(post, PostDetailActivity.this, data.result);
+                adapter = new InteretstPostDetailAdapter(post, PostDetailActivity.this, data.result);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PostDetailActivity.this);
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerview.setLayoutManager(linearLayoutManager);

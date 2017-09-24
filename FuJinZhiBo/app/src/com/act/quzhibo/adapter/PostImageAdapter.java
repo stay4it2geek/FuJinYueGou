@@ -36,7 +36,7 @@ public class PostImageAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return imgs.size();
+        return imgs.size() > 9 ? 9 : imgs.size();
     }
 
     public Object getItem(int item) {
@@ -55,12 +55,12 @@ public class PostImageAdapter extends BaseAdapter {
             viewHolder = new ViewHolder();
             if (viewHodlerType == Constants.ITEM_POST_LIST_IMG) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_post_list_img, parent, false);
-            } else if (viewHodlerType ==  Constants.ITEM_POST_DETAIL_IMG) {
+            } else if (viewHodlerType == Constants.ITEM_POST_DETAIL_IMG) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_post_detail_img, parent, false);
             } else {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_info_common_user_img, parent, false);
             }
-            viewHolder.avatar = (ImageView) convertView.findViewById(R.id.postimg);
+            viewHolder.avatar = (ImageView) convertView.findViewById(R.id.postImg);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

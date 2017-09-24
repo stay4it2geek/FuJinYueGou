@@ -6,11 +6,10 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginTop="30dp"
-        android:padding="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
         android:text="最新回复"
         android:textColor="@color/colorAccent" />
 
@@ -18,12 +17,12 @@
         android:id="@+id/comments_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="45dp"
         android:listSelector="@android:color/transparent" />
 
     <LinearLayout
-        android:id="@+id/pinglunlayout"
+        android:id="@+id/commentLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
@@ -31,7 +30,7 @@
         android:orientation="horizontal">
 
         <io.github.rockerhieu.emojicon.EmojiconEditText
-            android:id="@+id/talk"
+            android:id="@+id/comment_et"
             style="@android:style/TextAppearance.Widget.EditText"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -40,18 +39,19 @@
             android:hint="点击这里评论她/他"
             android:text=""
             android:textSize="16sp"
-            emojicon:emojiconSize="28sp" />
+            emojicon:emojiconSize="20sp" />
 
 
         <TextView
-            android:id="@+id/pinglun"
+            android:id="@+id/commentBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/background_card"
+            android:background="@drawable/button_common_selector"
             android:gravity="center"
             android:text="评论"
+            android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>
 

@@ -1,7 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,25 +8,19 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.Moment;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
-import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;
-import com.cjj.library.CircleProgressBar;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
@@ -46,7 +39,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class MomentAddActivity extends FragmentActivity implements EasyPermissions.PermissionCallbacks, BGASortableNinePhotoLayout.Delegate, View.OnClickListener {
+public class PostAddActivity extends FragmentActivity implements EasyPermissions.PermissionCallbacks, BGASortableNinePhotoLayout.Delegate, View.OnClickListener {
     private static final int REQUEST_CODE_PERMISSION_PHOTO_PICKER = 1;
     private static final int REQUEST_CODE_CHOOSE_PHOTO = 1;
     private static final int REQUEST_CODE_PHOTO_PREVIEW = 2;
@@ -72,7 +65,7 @@ public class MomentAddActivity extends FragmentActivity implements EasyPermissio
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MomentAddActivity.this.finish();
+                PostAddActivity.this.finish();
             }
         });
         findViewById(R.id.tv_moment_add_publish).setOnClickListener(this);
@@ -168,7 +161,7 @@ public class MomentAddActivity extends FragmentActivity implements EasyPermissio
                             if (filePaths != null) {
                                 filePaths.clear();
                             }
-                            ToastUtil.showToast(MomentAddActivity.this, "yasuochenggong");
+                            ToastUtil.showToast(PostAddActivity.this, "yasuochenggong");
                             for (int i = 0; i < fileList.size(); i++) {
                                 filePaths.add(fileList.get(i).getAbsolutePath());
                             }
@@ -211,7 +204,7 @@ public class MomentAddActivity extends FragmentActivity implements EasyPermissio
                             setResult(RESULT_OK, intent);
                             finish();
                         } else {
-                            ToastUtil.showToast(MomentAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                            ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
                         }
                     }
                 });
@@ -241,7 +234,7 @@ public class MomentAddActivity extends FragmentActivity implements EasyPermissio
                                         setResult(RESULT_OK, intent);
                                         finish();
                                     } else {
-                                        ToastUtil.showToast(MomentAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                                        ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
                                     }
                                 }
                             });
@@ -250,7 +243,7 @@ public class MomentAddActivity extends FragmentActivity implements EasyPermissio
 
                     @Override
                     public void onError(int statuscode, String errormsg) {
-                        ToastUtil.showToast(MomentAddActivity.this, "错误码" + statuscode + ",错误描述：" + errormsg);
+                        ToastUtil.showToast(PostAddActivity.this, "错误码" + statuscode + ",错误描述：" + errormsg);
                     }
 
                     @Override
@@ -259,7 +252,7 @@ public class MomentAddActivity extends FragmentActivity implements EasyPermissio
                         //2、curPercent--表示当前上传文件的进度值（百分比）
                         //3、total--表示总的上传文件数
                         //4、totalPercent--表示总的上传进度（百分比）
-                        final ProgressDialog dialog = new ProgressDialog(MomentAddActivity.this);
+                        final ProgressDialog dialog = new ProgressDialog(PostAddActivity.this);
                         dialog.setMessage("正在发布");
                         dialog.show();
                         if(totalPercent==100){

@@ -71,50 +71,52 @@ public class PostCommentAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        if (viewHolder.userImage.getTag() == null || (viewHolder.userImage.getTag()).equals(commentDetails.get(position).user.photoUrl)) {
+//        if (viewHolder.userImage.getTag() == null || (viewHolder.userImage.getTag()).equals(commentDetails.get(position).user.photoUrl)) {
 
-            if (commentDetails.get(position).user.sex.equals("2")) {
-                viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
-                Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        viewHolder.userImage.setBackground(new BitmapDrawable(resource));
-                        viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
-                    }
+        if (commentDetails.get(position).user.sex.equals("2")) {
+            viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
+            Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    viewHolder.userImage.setBackground(new BitmapDrawable(resource));
+                    viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
+                }
 
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                        viewHolder.userImage.setBackgroundDrawable(placeholder);
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);
+                    viewHolder.userImage.setBackgroundDrawable(placeholder);
 
-                    }
-                });
-            } else {
-                Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        viewHolder.userImage.setBackground(new BitmapDrawable(resource));
-                        viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
+                }
+            });
+        } else {
+            Glide.with(activity).load(commentDetails.get(position).user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    viewHolder.userImage.setBackground(new BitmapDrawable(resource));
+                    viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
 
-                    }
+                }
 
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                        viewHolder.userImage.setBackgroundDrawable(placeholder);
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);
+                    viewHolder.userImage.setBackgroundDrawable(placeholder);
 
-                    }
-                });
-            }
+                }
+            });
         }
+//        }
         long l = System.currentTimeMillis() - commentDetails.get(position).ctime;
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        if (commentDetails.get(position).user.sex != null)
+        if (commentDetails.get(position).user.sex != null) {
             viewHolder.sexAndAge.setText(commentDetails.get(position).user.sex.equals("2") ? "女" : "男");
+        }
         viewHolder.createTime.setText(hour + "小时" + min + "分钟前");
         viewHolder.nickName.setText(commentDetails.get(position).user.nick);
+
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -125,7 +127,7 @@ public class PostCommentAdapter extends BaseAdapter {
                     newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
                 }
                 if (newString.contains("null")) {
-                    newString= newString.replaceAll("null",R.drawable.kissing_heart+"");
+                    newString = newString.replaceAll("null", R.drawable.kissing_heart + "");
                 }
                 return newString;
             }

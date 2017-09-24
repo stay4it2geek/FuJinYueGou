@@ -73,7 +73,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             holder.title.setText(posts.get(position).title + "");
             holder.absText.setText(posts.get(position).absText + "");
             holder.viewNum.setText(posts.get(position).pageView + "");
-            holder.pinglunNum.setText(posts.get(position).totalComments + "");
+            holder.commentNum.setText(posts.get(position).totalComments + "");
 
             if (posts.get(position).images != null && posts.get(position).images.size()> 0) {
                 holder.imgGridview.setVisibility(View.VISIBLE);
@@ -126,7 +126,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                 }
             }
 
-            holder.arealocation.setText(rootUser.provinceAndcity + "");
+            holder.areaLocation.setText(rootUser.provinceAndcity + "");
 
         }
     }
@@ -140,8 +140,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
     class MyViewHolder extends RecyclerView.ViewHolder {
         private GridView imgGridview;
         private TextView viewNum;
-        private TextView pinglunNum;
-        private TextView dashangNum;
+        private TextView commentNum;
         private TextView nickName;
         private TextView title;
         private ImageView photoImg;
@@ -149,7 +148,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         private TextView absText;
         private TextView imgtotal;
         private ImageView imgVideo;
-        private TextView arealocation;
+        private TextView areaLocation;
         private TextView createTime;
         private TextView sexAndAge;
 
@@ -160,10 +159,10 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             title = (TextView) view.findViewById(R.id.title);
             absText = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.absText);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.location);
+            areaLocation = (TextView) view.findViewById(R.id.location);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             viewNum = (TextView) view.findViewById(R.id.viewNum);
-            pinglunNum = (TextView) view.findViewById(R.id.pinglunNum);
+            commentNum = (TextView) view.findViewById(R.id.pinglunNum);
             imgtotal = (TextView) view.findViewById(R.id.imgtotal);
             postlayout = (RelativeLayout) view.findViewById(R.id.postlayout);
             imgGridview = (GridView) view.findViewById(R.id.imgGridview);

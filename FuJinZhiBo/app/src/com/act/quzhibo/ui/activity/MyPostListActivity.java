@@ -35,7 +35,7 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-import static com.act.quzhibo.ui.activity.MomentAddActivity.EXTRA_MOMENT;
+import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
 
 public class MyPostListActivity extends AppCompatActivity {
     private static final int UPLOAD_POST = 1;
@@ -108,7 +108,7 @@ public class MyPostListActivity extends AppCompatActivity {
         findViewById(R.id.postButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(MyPostListActivity.this, MomentAddActivity.class);
+                Intent intent= new Intent(MyPostListActivity.this, PostAddActivity.class);
                 startActivityForResult(intent,UPLOAD_POST);
             }
         });
@@ -204,7 +204,7 @@ public class MyPostListActivity extends AppCompatActivity {
                         public void onItemClick(MyPost post) {
                             Intent intent = new Intent();
                             intent.putExtra(Constants.POST, post);
-                            intent.setClass(MyPostListActivity.this, MyPostPageActivity.class);
+                            intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
                             startActivity(intent);
                         }
                     });
@@ -230,10 +230,8 @@ public class MyPostListActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == UPLOAD_POST && resultCode == RESULT_OK) {
-            MyPost mYPost = (MyPost) data.getSerializableExtra(EXTRA_MOMENT);
-
-            myPostList.add(0, mYPost);
-
+            MyPost myPost = (MyPost) data.getSerializableExtra(EXTRA_MOMENT);
+            myPostList.add(0, myPost);
             if (myPostListAdapter == null) {
                 myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
                 recyclerView.setAdapter(myPostListAdapter);
@@ -242,7 +240,7 @@ public class MyPostListActivity extends AppCompatActivity {
                     public void onItemClick(MyPost post) {
                         Intent intent = new Intent();
                         intent.putExtra(Constants.POST, post);
-                        intent.setClass(MyPostListActivity.this, MyPostPageActivity.class);
+                        intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
                         startActivityForResult(intent, UPLOAD_POST);
                     }
                 });

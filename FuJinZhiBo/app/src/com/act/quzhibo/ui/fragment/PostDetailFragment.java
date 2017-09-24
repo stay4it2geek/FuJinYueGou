@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.InteretstPostPageAdapter;
+import com.act.quzhibo.adapter.InteretstPostDetailAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostPageParentData;
@@ -25,7 +25,7 @@ import okhttp3.Call;
 
 
 public class PostDetailFragment extends BackHandledFragment {
-    private InteretstPostPageAdapter adapter;
+    private InteretstPostDetailAdapter adapter;
     private XRecyclerView recyclerview;
     private InterestPost post;
     private View view;
@@ -89,7 +89,7 @@ public class PostDetailFragment extends BackHandledFragment {
             super.handleMessage(msg);
             if (msg.what != Constants.NetWorkError) {
                 InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
-                adapter = new InteretstPostPageAdapter(post, getActivity(), data.result);
+                adapter = new InteretstPostDetailAdapter(post, getActivity(), data.result);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerview.setLayoutManager(linearLayoutManager);

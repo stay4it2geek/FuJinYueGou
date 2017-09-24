@@ -3,6 +3,7 @@ package com.act.quzhibo.adapter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,21 +13,36 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import java.io.File;
+import java.util.List;
+
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
+import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 import cn.bmob.v3.BmobUser;
 
-public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements BGANinePhotoLayout.Delegate {
     private LayoutInflater mLayoutInflater;
     private MyPost post;
     private FragmentActivity activity;
+    private File downloadDir;
+
+    @Override
+    public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int position, String model, List<String> models) {
+        if (ninePhotoLayout.getItemCount() == 1) {
+            // 预览单张图片
+            activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, downloadDir, ninePhotoLayout.getCurrentClickItem()));
+        } else if (ninePhotoLayout.getItemCount() > 1) {
+            // 预览多张图片
+            activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, downloadDir, ninePhotoLayout.getData(), ninePhotoLayout.getCurrentClickItemPosition()));
+        }
+    }
 
     public enum ITEM_TYPE {
         ITEM1,
@@ -47,10 +63,14 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
-    public MyPostPageAdapter(MyPost post, FragmentActivity context) {
+    public MyPostDetailAdapter(MyPost post, FragmentActivity context) {
         this.activity = context;
         this.post = post;
         mLayoutInflater = LayoutInflater.from(context);
+        downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
+        if (!downloadDir.exists()) {
+            downloadDir.mkdir();
+        }
     }
 
     @Override
@@ -63,6 +83,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return new Item3ViewHolder(mLayoutInflater.inflate(R.layout.comments_layout, parent, false));
         }
     }
+
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int positon) {
         if (holder instanceof Item1ViewHolder) {
@@ -72,6 +93,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
                     }
+
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
@@ -83,6 +105,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
                     }
+
                     @Override
                     public void onLoadStarted(Drawable placeholder) {
                         super.onLoadStarted(placeholder);
@@ -95,7 +118,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            if (day <50) {
+            if (day < 50) {
                 ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
             } else {
                 ((Item1ViewHolder) holder).createTime.setText("N天" + hour + "小时" + min + "分钟前");
@@ -103,9 +126,10 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ((Item1ViewHolder) holder).nickName.setText(BmobUser.getCurrentUser(RootUser.class).getUsername());
             ((Item1ViewHolder) holder).title.setText(post.title + "");
             ((Item1ViewHolder) holder).content.setText(post.absText + "");
-            ((Item1ViewHolder) holder).arealocation.setText(BmobUser.getCurrentUser(RootUser.class).provinceAndcity + "");
+            ((Item1ViewHolder) holder).areaLocation.setText(BmobUser.getCurrentUser(RootUser.class).provinceAndcity + "");
         } else if (holder instanceof Item2ViewHolder) {
-            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, post.images, Constants.ITEM_POST_DETAIL_IMG));
+            ((MyPostDetailAdapter.Item2ViewHolder) holder).ninePhotoLayout.setDelegate(this);
+            ((MyPostDetailAdapter.Item2ViewHolder) holder).ninePhotoLayout.setData(post.images);
         }
     }
 
@@ -116,7 +140,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     class Item1ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView arealocation;
+        private TextView areaLocation;
         private TextView createTime;
         private ImageView userImage;
         private TextView sexAndAge;
@@ -128,7 +152,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             super(view);
             nickName = (TextView) view.findViewById(R.id.nickName);
             createTime = (TextView) view.findViewById(R.id.createTime);
-            arealocation = (TextView) view.findViewById(R.id.location);
+            areaLocation = (TextView) view.findViewById(R.id.location);
             userImage = (ImageView) view.findViewById(R.id.userImage);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             nickName = (TextView) view.findViewById(R.id.nickName);
@@ -140,11 +164,11 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     class Item2ViewHolder extends RecyclerView.ViewHolder {
-        private MyListView listView;
+        private BGANinePhotoLayout ninePhotoLayout;
 
         public Item2ViewHolder(View view) {
             super(view);
-            listView = (MyListView) view.findViewById(R.id.imglistview);
+            ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);
         }
     }
 
@@ -152,7 +176,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public Item3ViewHolder(View view) {
             super(view);
-            view.findViewById(R.id.pinglunlayout).setVisibility(View.GONE);
+            view.findViewById(R.id.commentLayout).setVisibility(View.GONE);
         }
     }
 }

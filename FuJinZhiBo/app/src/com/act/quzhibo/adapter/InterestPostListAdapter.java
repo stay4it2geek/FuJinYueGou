@@ -148,6 +148,9 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                         }
                     }.execute();
                 }
+            }else{
+                holder.imgVideolayout.setVisibility(View.GONE);
+
             }
         }
         holder.postlayout.setOnClickListener(new View.OnClickListener() {

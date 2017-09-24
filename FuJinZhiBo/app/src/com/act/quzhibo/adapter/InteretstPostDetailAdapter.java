@@ -7,11 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.common.MyApplicaition;
-import com.act.quzhibo.entity.ProvinceAndCityEntity;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestPost;
@@ -38,17 +37,34 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
+import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 
-public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements BGANinePhotoLayout.Delegate {
     private final LayoutInflater mLayoutInflater;
     private final InterestPost post;
-    private InterestPostPageDetailAndComments data;//数据
+    private InterestPostPageDetailAndComments data;
     private Activity activity;
+    File downloadDir;
+
+    @Override
+    public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int position, String model, List<String> models) {
+
+        if (ninePhotoLayout.getItemCount() == 1) {
+            // 预览单张图片
+            activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, downloadDir, ninePhotoLayout.getCurrentClickItem()));
+        } else if (ninePhotoLayout.getItemCount() > 1) {
+            // 预览多张图片
+            activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, downloadDir, ninePhotoLayout.getData(), ninePhotoLayout.getCurrentClickItemPosition()));
+        }
+    }
 
     public enum ITEM_TYPE {
         ITEM1,
@@ -56,11 +72,15 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
         ITEM3,
     }
 
-    public InteretstPostPageAdapter(InterestPost post, Activity context, InterestPostPageDetailAndComments data) {
+    public InteretstPostDetailAdapter(InterestPost post, Activity context, InterestPostPageDetailAndComments data) {
         this.data = data;
         this.activity = context;
         this.post = post;
         mLayoutInflater = LayoutInflater.from(context);
+        downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
+        if (!downloadDir.exists()) {
+            downloadDir.mkdir();
+        }
     }
 
     @Override
@@ -140,9 +160,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            if (!data.detail.user.sex.equals("2")) {
-                ((Item1ViewHolder) holder).sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
-            }
+
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
             if (day < 50) {
                 ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
@@ -163,8 +181,8 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             while (matcher.find()) {
                 newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
             }
-            if(newString.contains("null")){
-                newString= newString.replaceAll("null",R.drawable.kissing_heart+"");
+            if (newString.contains("null")) {
+                newString = newString.replaceAll("null", R.drawable.kissing_heart + "");
             }
             ((Item1ViewHolder) holder).content.setText(Html.fromHtml(newString, new Html.ImageGetter() {
                 @Override
@@ -181,6 +199,7 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
                     return drawable;
                 }
             }, null));
+
             if (!TextUtils.isEmpty(post.vedioUrl)) {
                 new AsyncTask<Void, Void, Bitmap>() {
                     @Override
@@ -220,11 +239,11 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
             }.execute();
 
         } else if (holder instanceof Item2ViewHolder) {
-            ((Item2ViewHolder) holder).listView.setAdapter(new PostImageAdapter(activity, pageImgeList, Constants.ITEM_POST_DETAIL_IMG));
+            ((Item2ViewHolder) holder).ninePhotoLayout.setDelegate(this);
+            ((Item2ViewHolder) holder).ninePhotoLayout.setData(pageImgeList);
         } else {
             PostCommentAdapter adapter = new PostCommentAdapter(activity, data.comments);
             ((Item3ViewHolder) holder).commentsList.setAdapter(adapter);
-            ((Item3ViewHolder) holder).pinglunlayout.setVisibility(View.VISIBLE);
             ((Item3ViewHolder) holder).pinglun.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -285,11 +304,11 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     class Item2ViewHolder extends RecyclerView.ViewHolder {
-        private MyListView listView;
+        private BGANinePhotoLayout ninePhotoLayout;
 
         public Item2ViewHolder(View view) {
             super(view);
-            listView = (MyListView) view.findViewById(R.id.imglistview);
+            ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);
         }
 
     }
@@ -302,14 +321,13 @@ public class InteretstPostPageAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public Item3ViewHolder(View view) {
             super(view);
-            pinglunlayout = (LinearLayout) view.findViewById(R.id.pinglunlayout);
-            talk = (EmojiconEditText) view.findViewById(R.id.talk);
-            pinglun = (TextView) view.findViewById(R.id.pinglun);
+            pinglunlayout = (LinearLayout) view.findViewById(R.id.commentLayout);
+            talk = (EmojiconEditText) view.findViewById(R.id.comment_et);
+            pinglun = (TextView) view.findViewById(R.id.commentBtn);
             commentsList = (MyListView) view.findViewById(R.id.comments_lv);
         }
 
 
     }
-
 
 }
