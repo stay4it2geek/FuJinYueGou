@@ -18,6 +18,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -59,7 +60,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         if (holder instanceof MyViewHolder) {
             String nick = rootUser.getUsername().replaceAll("\r|\n", "");
             holder.nickName.setText(nick);
-            long l = System.currentTimeMillis() - Long.parseLong(posts.get(position).ctime);
+            long l = System.currentTimeMillis() - Long.parseLong(CommonUtil.dateToStamp(posts.get(position).getCreatedAt()));
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
@@ -74,7 +75,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             holder.viewNum.setText(posts.get(position).pageView + "");
             holder.pinglunNum.setText(posts.get(position).totalComments + "");
 
-            if (posts.get(position).totalImages != null && Integer.parseInt(posts.get(position).totalImages) > 0) {
+            if (posts.get(position).images != null && posts.get(position).images.size()> 0) {
                 holder.imgGridview.setVisibility(View.VISIBLE);
                 holder.imgVideo.setVisibility(View.GONE);
                 holder.imgtotal.setVisibility(View.VISIBLE);

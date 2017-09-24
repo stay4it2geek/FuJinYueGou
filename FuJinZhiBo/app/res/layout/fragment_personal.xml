@@ -13,13 +13,12 @@
             android:id="@+id/avaterlayout"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_margin="10dp">
+            android:layout_margin="5dp">
 
             <ImageView
                 android:id="@+id/userAvtar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
                 android:background="@drawable/man"
                 android:src="@drawable/layerlist_circle_mask_personnal" />
 

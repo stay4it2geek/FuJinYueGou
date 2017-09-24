@@ -15,6 +15,8 @@ import com.act.quzhibo.adapter.MyPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -33,7 +35,10 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
+import static com.act.quzhibo.ui.activity.MomentAddActivity.EXTRA_MOMENT;
+
 public class MyPostListActivity extends AppCompatActivity {
+    private static final int UPLOAD_POST = 1;
     private ArrayList<MyPost> myPostList = new ArrayList<>();
     private XRecyclerView recyclerView;
     private MyPostListAdapter myPostListAdapter;
@@ -81,7 +86,7 @@ public class MyPostListActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        queryData(Constants.REFRESH);
+
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -103,9 +108,17 @@ public class MyPostListActivity extends AppCompatActivity {
         findViewById(R.id.postButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(MyPostListActivity.this, SendPostActivity.class));
+                Intent intent= new Intent(MyPostListActivity.this, MomentAddActivity.class);
+                startActivityForResult(intent,UPLOAD_POST);
             }
         });
+        queryData(Constants.REFRESH);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ToastUtil.showToast(this, "onRESUME");
 
     }
 
@@ -153,8 +166,8 @@ public class MyPostListActivity extends AppCompatActivity {
     public static class ComparatorValues implements Comparator<MyPost> {
         @Override
         public int compare(MyPost post1, MyPost post2) {
-            int m1 = Integer.parseInt(post1.ctime != null ? post1.ctime : "0");
-            int m2 = Integer.parseInt(post2.ctime != null ? post2.ctime : "0");
+            long m1 = Long.parseLong(CommonUtil.dateToStamp(post1.getCreatedAt()) != null ? CommonUtil.dateToStamp(post1.getCreatedAt()) : "0");
+            long m2 = Long.parseLong(CommonUtil.dateToStamp(post2.getCreatedAt()) != null ? CommonUtil.dateToStamp(post2.getCreatedAt()) : "0");
             int result = 0;
             if (m1 > m2) {
                 result = 1;
@@ -213,5 +226,29 @@ public class MyPostListActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UPLOAD_POST && resultCode == RESULT_OK) {
+            MyPost mYPost = (MyPost) data.getSerializableExtra(EXTRA_MOMENT);
 
+            myPostList.add(0, mYPost);
+
+            if (myPostListAdapter == null) {
+                myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
+                recyclerView.setAdapter(myPostListAdapter);
+                myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
+                    @Override
+                    public void onItemClick(MyPost post) {
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.POST, post);
+                        intent.setClass(MyPostListActivity.this, MyPostPageActivity.class);
+                        startActivityForResult(intent, UPLOAD_POST);
+                    }
+                });
+            } else {
+                myPostListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 }

@@ -60,7 +60,7 @@ public class XImageActivity extends AppCompatActivity {
     private DBController dbController;
     private LoadNetView loadNetView;
     private ArrayList<MediaInfo> mediaInfos;
-    private int pageCurrent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

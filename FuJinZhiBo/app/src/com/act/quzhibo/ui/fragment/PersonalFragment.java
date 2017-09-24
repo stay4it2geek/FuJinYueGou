@@ -39,8 +39,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cn.bmob.v3.BmobUser;
-import me.nereo.multi_image_selector.MultiImageSelector;
-import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -95,12 +93,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                ArrayList<String> paths = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
-                File file = new File(paths.get(0));
-                Glide.with(getContext()).load(file).into(((ImageView) view.findViewById(R.id.userAvtar)));
-                view.findViewById(R.id.userAvtar).setVisibility(View.GONE);
-            }
+
         }
     }
 
@@ -109,6 +102,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     public void onClick(final View view) {
         if (view.getId() == R.id.vipLevel) {
             startActivity(new Intent(getActivity(), VIPConisTableActivity.class));
+            return;
+        } else if (view.getId() == R.id.uploadImg) {
             return;
         }
         view.setBackgroundColor(getResources().getColor(R.color.colorbg));
@@ -131,9 +126,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 switch (view.getId()) {
-                    case R.id.uploadImg:
 
-                        break;
 
                     case R.id.makemoneyLayout:
                         getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
@@ -221,7 +214,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }
     }
-
 
 
 }

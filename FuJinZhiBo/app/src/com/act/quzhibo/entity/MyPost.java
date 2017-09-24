@@ -1,12 +1,13 @@
 package com.act.quzhibo.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 
 
-
-public class MyPost extends BmobObject{
+public class MyPost extends BmobObject  implements Serializable{
 
     public String postId;   //592a690a0cf2faf25876ae67 public String   ,
     public String title;
@@ -28,4 +29,5 @@ public class MyPost extends BmobObject{
     public String hot;//41,
     public String hasbuy;//false
     public String vedioUrl;//http://video.91xunai.com/1479210529331
+    public BmobUser user;
 }

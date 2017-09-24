@@ -38,7 +38,7 @@
             android:layout_weight="2"
             android:gravity="center"
             android:hint="点击这里评论她/他"
-            android:text="I \ue32d emojicon"
+            android:text=""
             android:textSize="16sp"
             emojicon:emojiconSize="28sp" />
 

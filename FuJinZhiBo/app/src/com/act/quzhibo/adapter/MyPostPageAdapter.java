@@ -15,6 +15,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -90,7 +91,7 @@ public class MyPostPageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
 
             ((Item1ViewHolder) holder).sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex);
-            long l = System.currentTimeMillis() - Long.parseLong(post.ctime);
+            long l = System.currentTimeMillis() - Long.parseLong(CommonUtil.dateToStamp(post.getCreatedAt()));
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
