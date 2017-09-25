@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,6 +19,8 @@ import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.view.SelfDialog;
 import com.act.quzhibo.view.TitleBarView;
 
 import java.io.File;
@@ -80,9 +83,12 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
 
     @Override
     public void onClickAddNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, ArrayList<String> models) {
-        grantPermission();
+        File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "QuPhotoPickerTakePhoto");
+        if (!takePhotoDir.exists()) {
+            takePhotoDir.mkdirs();
+        }
+        startActivityForResult(BGAPhotoPickerActivity.newIntent(PostAddActivity.this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
     }
-
     @Override
     public void onClickDeleteNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
         mPhotosSnpl.removeItem(position);
@@ -94,60 +100,10 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     }
 
 
-    private void grantPermission() {
-
-        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA,  PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
-            @Override
-            public void permissionGranted() {
-                // 拍照后照片的存放目录,如果不传递该参数的话就没有拍照功能
-                File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "QuPhotoPickerTakePhoto");
-                if (!takePhotoDir.exists()) {
-                    takePhotoDir.mkdir();
-                }
-                startActivityForResult(BGAPhotoPickerActivity.newIntent(PostAddActivity.this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
-            }
-
-            @Override
-            public void permissionDenied() {
-                findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_SETTING);
-                    }
-                }).setDuration(50000).show();
-            }
-
-            @Override
-            public void permissionForeverDenied() {
-                findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_SETTING);
-                    }
-                }).setDuration(50000).show();
-
-            }
-        });
-    }
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        grantPermission();
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
-//            if (mSingleChoiceCb.isChecked()) {
-//                mPhotosSnpl.setData(BGAPhotoPickerActivity.getSelectedImages(data));
-//            }
+       if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
             ArrayList<File> fileList = new ArrayList<>();
             if (BGAPhotoPickerActivity.getSelectedImages(data) != null)
                 for (String path : BGAPhotoPickerActivity.getSelectedImages(data)) {
@@ -177,18 +133,14 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                         @Override
                         public void call(List<File> fileList) {
                             ArrayList<String> filePaths = new ArrayList<>();
-                            if (filePaths != null) {
-                                filePaths.clear();
-                            }
-                            ToastUtil.showToast(PostAddActivity.this, "yasuochenggong");
                             for (int i = 0; i < fileList.size(); i++) {
                                 filePaths.add(fileList.get(i).getAbsolutePath());
                             }
                             mPhotosSnpl.addMoreData(filePaths);
-                            dialog.dismiss();
                         }
                     });
 
+            dialog.dismiss();
         } else if (requestCode == REQUEST_CODE_PHOTO_PREVIEW) {
             mPhotosSnpl.setData(BGAPhotoPickerPreviewActivity.getSelectedImages(data));
         }
@@ -232,11 +184,9 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
                     @Override
                     public void onSuccess(List<BmobFile> files, List<String> urls) {
-                        //1、files-上传完成后的BmobFile集合，是为了方便大家对其上传后的数据进行操作，例如你可以将该文件保存到表中
-                        //2、urls-上传文件的完整url地址
-                        if (urls.size() == filePaths.length) {//如果数量相等，则代表文件全部上传完成
+                        if (urls.size() == filePaths.length) {
                             mYPost.images = new ArrayList<>();
-                            mYPost.images.addAll(urls);   // 添加多个String
+                            mYPost.images.addAll(urls);
                             mYPost.title = title;
                             mYPost.absText = content;
                             mYPost.pageView = "0";
@@ -274,7 +224,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                         final ProgressDialog dialog = new ProgressDialog(PostAddActivity.this);
                         dialog.setMessage("正在发布");
                         dialog.show();
-                        if(totalPercent==100){
+                        if (totalPercent == 100) {
                             dialog.dismiss();
                         }
                     }

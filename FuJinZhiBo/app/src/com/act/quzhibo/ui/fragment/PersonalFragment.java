@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,10 +19,12 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.luban.Luban;
 import com.act.quzhibo.ui.activity.CheckOutMoneyActivity;
 import com.act.quzhibo.ui.activity.MakeMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
+import com.act.quzhibo.ui.activity.PostAddActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
@@ -33,17 +36,30 @@ import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
 import com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
+import com.hss01248.photoouter.PhotoCallback;
+import com.hss01248.photoouter.PhotoUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UploadFileListener;
+import me.iwf.photopicker.utils.Initer;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
-    private static final int REQUEST_IMAGE = 123;
+    private static final int UPLOAD_AVATAR_REQUEST_CODE = 1;
     RootUser rootUser;
     View view;
 
@@ -51,6 +67,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        PhotoUtil.init(getActivity(),new Initer());
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
         if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("false")) {
             view.findViewById(R.id.vip_policy).setVisibility(View.GONE);
@@ -85,17 +102,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 return true;     //截断事件的传递
             }
         });
+        Glide.with(getActivity()).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile.getFileUrl()).into(((ImageView) view.findViewById(R.id.userAvtar)));
+
         return view;
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE) {
 
-        }
-    }
 
 
     @Override
@@ -104,6 +117,74 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             startActivity(new Intent(getActivity(), VIPConisTableActivity.class));
             return;
         } else if (view.getId() == R.id.uploadImg) {
+            PhotoUtil.cropAvatar(true)
+                    .start(getActivity(),UPLOAD_AVATAR_REQUEST_CODE ,new PhotoCallback() {
+                        @Override
+                        public void onFail(String s, Throwable throwable, int i) {
+
+                        }
+
+                        @Override
+                        public void onSuccessSingle(String s, String s1, int i) {
+                            final ProgressDialog dialog = new ProgressDialog(getActivity());
+                            dialog.show();
+                            Luban.get(getActivity())
+                                    .load(new File(s))
+                                    .putGear(Luban.THIRD_GEAR)
+                                    .asObservable()
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .doOnError(new Action1<Throwable>() {
+                                        @Override
+                                        public void call(Throwable throwable) {
+                                            throwable.printStackTrace();
+                                        }
+                                    })
+                                    .onErrorResumeNext(new Func1<Throwable, Observable<? extends File>>() {
+                                        @Override
+                                        public Observable<? extends File> call(Throwable throwable) {
+                                            return Observable.empty();
+                                        }
+                                    })
+                                    .subscribe(new Action1<File>() {
+                                        @Override
+                                        public void call(File file) {
+                                            if (file != null) {
+                                                final BmobFile bmobFile = new BmobFile(new File(file.getAbsolutePath()));
+
+                                                bmobFile.uploadblock(new UploadFileListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                        if (e == null) {
+                                                            Glide.with(getActivity()).load(bmobFile.getFileUrl()).into(((ImageView) view.findViewById(R.id.userAvtar)));
+                                                            view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
+                                                        }else{
+                                                            ToastUtil.showToast(getActivity(),"头像上传失败, 请稍后重试");
+                                                        }
+                                                    }
+                                                    @Override
+                                                    public void onProgress(Integer value) {
+                                                        dialog.setProgress(value);
+                                                    }
+                                                });
+                                                dialog.dismiss();
+                                            }
+
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onSuccessMulti(List<String> list, List<String> list1, int i) {
+
+                        }
+
+                        @Override
+                        public void onCancel(int i) {
+
+                        }
+                    });
+
             return;
         }
         view.setBackgroundColor(getResources().getColor(R.color.colorbg));
@@ -126,7 +207,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 switch (view.getId()) {
-
 
                     case R.id.makemoneyLayout:
                         getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));

@@ -2,8 +2,10 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -38,11 +40,15 @@ import cn.woblog.android.downloader.callback.DownloadListener;
 import cn.woblog.android.downloader.callback.DownloadManager;
 import cn.woblog.android.downloader.domain.DownloadInfo;
 import cn.woblog.android.downloader.exception.DownloadException;
+import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
+import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
+import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
+import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
 
 
-public class FullScreenActivity extends FragmentActivity {
+public class FullScreenActivity extends ActivityManagePermission {
 
     private IjkVideoView ijkVideoView;
     boolean isSdCardExist;
@@ -155,10 +161,8 @@ public class FullScreenActivity extends FragmentActivity {
                         dialog.dismiss();
                     }
                 }).show(getSupportFragmentManager(), "");
-
             }
         }
-
     }
 
 

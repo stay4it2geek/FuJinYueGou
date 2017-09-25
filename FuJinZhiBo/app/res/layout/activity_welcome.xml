@@ -14,7 +14,6 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="40dp" />
 
-
     <RelativeLayout
         android:id="@+id/psdInputViewLayout"
         android:layout_width="match_parent"
@@ -41,11 +40,4 @@
             android:background="@null"
             android:inputType="numberDecimal" />
     </RelativeLayout>
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/container"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"/>
 </FrameLayout>

@@ -21,10 +21,6 @@ import com.act.quzhibo.R;
 
 
 public class FragmentDialog extends DialogFragment {
-    /**
-     * 显示的图片
-     */
-    private ImageView imageIv;
 
     /**
      * 显示的标题
@@ -47,7 +43,7 @@ public class FragmentDialog extends DialogFragment {
     private View columnLineView;
 
     /**
-     * 都是内容数据
+     * 内容数据
      */
     private String message;
     private String title;
@@ -80,7 +76,6 @@ public class FragmentDialog extends DialogFragment {
         positiveBn = (Button) rootView.findViewById(R.id.positive);
         titleTv = (TextView) rootView.findViewById(R.id.title);
         messageTv = (TextView) rootView.findViewById(R.id.message);
-        imageIv = (ImageView) rootView.findViewById(R.id.image);
         delete_cb = (CheckBox) rootView.findViewById(R.id.delete_cb);
         delete_confirm_layout = (RelativeLayout) rootView.findViewById(R.id.delete_confirm_layout);
         columnLineView = rootView.findViewById(R.id.column_line);
@@ -160,12 +155,6 @@ public class FragmentDialog extends DialogFragment {
             negtiveBn.setText("取消");
         }
 
-        if (imageResId != -1) {
-            imageIv.setImageResource(imageResId);
-            imageIv.setVisibility(View.VISIBLE);
-        } else {
-            imageIv.setVisibility(View.GONE);
-        }
         /**
          * 只显示一个按钮的时候隐藏取消按钮，回掉只执行确定的事件
          */

@@ -62,14 +62,10 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 getData();
             }
         });
+        getData();
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getData();
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -95,6 +91,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            interestPlates.clear();
             if (msg.what != Constants.NetWorkError) {
                 InterestPlatesParentData interestPlatesParentData = CommonUtil.parseJsonWithGson((String) msg.obj, InterestPlatesParentData.class);
                 for (InterestPlates plate : interestPlatesParentData.result.plates) {

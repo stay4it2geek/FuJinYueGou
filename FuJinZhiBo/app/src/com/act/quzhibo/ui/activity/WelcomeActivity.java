@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +20,9 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.PsdInputView;
+import com.act.quzhibo.view.SelfDialog;
 
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class WelcomeActivity extends ActivityManagePermission {
     }
 
     private void grantPermission() {
-
+        final SelfDialog selfDialog = new SelfDialog(WelcomeActivity.this);
         askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
             public void permissionGranted() {
@@ -56,38 +59,45 @@ public class WelcomeActivity extends ActivityManagePermission {
 
             @Override
             public void permissionDenied() {
-                findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照\n\n3. 获取您的大概位置", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                selfDialog.setTitle("同意权限后才能正常使用哦");
+                selfDialog.setMessage("您需要同意以下权限:\n   1. 访问设备上的照片\n   2. 访问手机存储功能\n   3. 获取您的大概位置\n   4. 拍照");
+                selfDialog.setYesOnclickListener("立即同意", new SelfDialog.onYesOnclickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_SETTING);
+                    public void onYesClick() {
+                        grantPermission();
+                        selfDialog.dismiss();
                     }
-                }).setDuration(50000).show();
+                });
+                selfDialog.setNoOnclickListener("取消", new SelfDialog.onNoOnclickListener() {
+                    @Override
+                    public void onNoClick() {
+                        finish();
+                    }
+                });
+                selfDialog.show();
             }
 
             @Override
             public void permissionForeverDenied() {
-                findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照\n\n3. 获取您的大概位置", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                selfDialog.setTitle("同意权限后才能正常使用哦");
+                selfDialog.setMessage("您需要同意以下权限:\n   1. 访问设备上的照片\n   2. 访问手机存储功能\n   3. 获取您的大概位置\n   4. 拍照");
+                selfDialog.setYesOnclickListener("立即同意", new SelfDialog.onYesOnclickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        intent.setData(uri);
-                        startActivityForResult(intent, REQUEST_SETTING);
+                    public void onYesClick() {
+                        grantPermission();
+                        selfDialog.dismiss();
                     }
-                }).setDuration(50000).show();
-
+                });
+                selfDialog.setNoOnclickListener("取消", new SelfDialog.onNoOnclickListener() {
+                    @Override
+                    public void onNoClick() {
+                        selfDialog.dismiss();
+                        finish();
+                    }
+                });
+                selfDialog.show();
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        grantPermission();
     }
 
     private void doRequest() {

@@ -1,8 +1,11 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,8 +19,10 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MediaAuthor;
+import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.SelfDialog;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -32,7 +37,11 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
+import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
+import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
+import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
 import static com.act.quzhibo.common.Constants.VIDEO_ALBUM;
 
 
@@ -160,22 +169,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
         });
     }
 
-    public static class ComparatorValues implements Comparator<MediaAuthor> {
-        @Override
-        public int compare(MediaAuthor mediaAuthor1, MediaAuthor mediaAuthor2) {
-            int m1 = Integer.parseInt(TextUtils.isEmpty(mediaAuthor1.age) ? "0" : mediaAuthor1.age);
-            int m2 = Integer.parseInt(TextUtils.isEmpty(mediaAuthor2.age) ? "0" : mediaAuthor2.age);
-            int result = 0;
-            if (m1 > m2) {
-                result = 1;
-            }
-            if (m1 < m2) {
-                result = -1;
-            }
-            return result;
-        }
-    }
-
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -191,7 +184,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                         recyclerView.setNoMore(true);
                     }
                 }
-                Collections.sort(medias, new ComparatorValues());
                 if (mediaAuthorListAdapter == null) {
                     mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), medias);
                     recyclerView.setAdapter(mediaAuthorListAdapter);
