@@ -29,6 +29,7 @@ dependencies {
     compile 'cn.bingoogolapple:bga-photopicker:1.2.3@aar'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
     compile'com.github.hss01248:PhotoOut:1.0.3'
+    compile'com.github.hss01248.PhotoPicker:glide:1.0.8'
     compile files('libs/okhttp-3.8.1.jar')
 }
 

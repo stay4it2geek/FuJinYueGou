@@ -3,7 +3,6 @@ package com.act.quzhibo.ui.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,42 +20,39 @@ import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
 import com.act.quzhibo.ui.activity.CheckOutMoneyActivity;
+import com.act.quzhibo.ui.activity.GetVipPayActivity;
+import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.MakeMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
+import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
-import com.act.quzhibo.ui.activity.PostAddActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
 import com.act.quzhibo.ui.activity.VIPConisTableActivity;
-import com.act.quzhibo.ui.activity.VipPolicyActivity;
-import com.act.quzhibo.ui.activity.LoginActivity;
-import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
-import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
+import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
+import com.hss01248.glidepicker.GlideIniter;
 import com.hss01248.photoouter.PhotoCallback;
 import com.hss01248.photoouter.PhotoUtil;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadFileListener;
-import me.iwf.photopicker.utils.Initer;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import static android.app.Activity.RESULT_OK;
 
 public class PersonalFragment extends Fragment implements View.OnClickListener {
     private static final int UPLOAD_AVATAR_REQUEST_CODE = 1;
@@ -67,7 +63,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        PhotoUtil.init(getActivity(),new Initer());
+        PhotoUtil.init(getActivity(), new GlideIniter());
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
         if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("false")) {
             view.findViewById(R.id.vip_policy).setVisibility(View.GONE);
@@ -102,13 +98,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 return true;     //截断事件的传递
             }
         });
-        Glide.with(getActivity()).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile.getFileUrl()).into(((ImageView) view.findViewById(R.id.userAvtar)));
-
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+            Glide.with(getActivity()).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile.getFileUrl()).into(((ImageView) view.findViewById(R.id.userAvtar)));
+        }
         return view;
     }
-
-
-
 
 
     @Override
@@ -118,7 +112,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             return;
         } else if (view.getId() == R.id.uploadImg) {
             PhotoUtil.cropAvatar(true)
-                    .start(getActivity(),UPLOAD_AVATAR_REQUEST_CODE ,new PhotoCallback() {
+                    .start(getActivity(), UPLOAD_AVATAR_REQUEST_CODE, new PhotoCallback() {
                         @Override
                         public void onFail(String s, Throwable throwable, int i) {
 
@@ -151,17 +145,30 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                                         public void call(File file) {
                                             if (file != null) {
                                                 final BmobFile bmobFile = new BmobFile(new File(file.getAbsolutePath()));
-
                                                 bmobFile.uploadblock(new UploadFileListener() {
                                                     @Override
                                                     public void done(BmobException e) {
                                                         if (e == null) {
-                                                            Glide.with(getActivity()).load(bmobFile.getFileUrl()).into(((ImageView) view.findViewById(R.id.userAvtar)));
-                                                            view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
-                                                        }else{
-                                                            ToastUtil.showToast(getActivity(),"头像上传失败, 请稍后重试");
+                                                            BmobUser.getCurrentUser(RootUser.class).photoUrlFile = bmobFile;
+                                                            BmobUser.getCurrentUser(RootUser.class).save(new SaveListener() {
+                                                                @Override
+                                                                public void done(Object o, BmobException e) {
+                                                                    if (e == null) {
+                                                                        Glide.with(getActivity()).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile).into(((ImageView) view.findViewById(R.id.userAvtar)));
+                                                                        view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
+                                                                    }
+                                                                }
+
+                                                                @Override
+                                                                public void done(Object o, Object o2) {
+
+                                                                }
+                                                            });
+                                                        } else {
+                                                            ToastUtil.showToast(getActivity(), "头像上传失败, 请稍后重试");
                                                         }
                                                     }
+
                                                     @Override
                                                     public void onProgress(Integer value) {
                                                         dialog.setProgress(value);
