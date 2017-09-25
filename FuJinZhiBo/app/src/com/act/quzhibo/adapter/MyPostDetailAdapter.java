@@ -69,7 +69,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mLayoutInflater = LayoutInflater.from(context);
         downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
         if (!downloadDir.exists()) {
-            downloadDir.mkdir();
+            downloadDir.mkdirs();
         }
     }
 

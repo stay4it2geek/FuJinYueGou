@@ -17,7 +17,6 @@ import com.flyco.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
 
-
 public abstract class TabSlideSameBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface {
 
     protected MyPagerAdapter mAdapter;

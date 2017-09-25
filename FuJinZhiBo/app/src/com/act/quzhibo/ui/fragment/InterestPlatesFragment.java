@@ -14,12 +14,9 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPlatesListAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.InterestPlates;
 import com.act.quzhibo.entity.InterestPlatesParentData;
-import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
-import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
@@ -27,13 +24,10 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
 
-import okhttp3.Call;
-
 public class InterestPlatesFragment extends BackHandledFragment {
     private XRecyclerView recyclerview;
     private ArrayList<InterestPlates> interestPlates = new ArrayList<>();
     private InterestPlatesListAdapter adapter;
-    private ArrayList<InterestPlates> details = new ArrayList<>();
     private LoadNetView loadNetView;
 
     @Nullable
@@ -92,26 +86,9 @@ public class InterestPlatesFragment extends BackHandledFragment {
     }
 
     private void getData() {
-        OkHttpUtils.get().url(CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_TAB).getToggleObject()).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                handler.sendEmptyMessage(Constants.NetWorkError);
-            }
+        String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_TAB).getToggleObject();
+        OkHttpClientManager.parseRequest(getActivity(), url, handler, Constants.REFRESH);
 
-            @Override
-            public void onResponse(String response, int id) {
-                InterestPlatesParentData interestPlatesParentData = CommonUtil.parseJsonWithGson(response, InterestPlatesParentData.class);
-                for (InterestPlates plate : interestPlatesParentData.result.plates) {
-                    if (!plate.pName.contains("视频")) {
-                        interestPlates.add(plate);
-                    }
-                }
-                Message message = handler.obtainMessage();
-                message.obj = interestPlates;
-                message.what = 0;
-                handler.sendMessage(message);
-            }
-        });
     }
 
     Handler handler = new Handler() {
@@ -119,8 +96,13 @@ public class InterestPlatesFragment extends BackHandledFragment {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what != Constants.NetWorkError) {
-                details.addAll((ArrayList<InterestPlates>) msg.obj);
-                adapter = new InterestPlatesListAdapter(getContext(), details);
+                InterestPlatesParentData interestPlatesParentData = CommonUtil.parseJsonWithGson((String) msg.obj, InterestPlatesParentData.class);
+                for (InterestPlates plate : interestPlatesParentData.result.plates) {
+                    if (!plate.pName.contains("视频")) {
+                        interestPlates.add(plate);
+                    }
+                }
+                adapter = new InterestPlatesListAdapter(getContext(), interestPlates);
                 adapter.setOnItemClickListener(new InterestPlatesListAdapter.OnRecyclerViewItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position, String pid) {

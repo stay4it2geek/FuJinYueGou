@@ -45,25 +45,12 @@ public class Luban {
         mCacheDir = cacheDir;
     }
 
-    /**
-     * Returns a directory with a default name in the private cache directory of the application to use to store
-     * retrieved media and thumbnails.
-     *
-     * @param context A context.
-     * @see #getPhotoCacheDir(Context, String)
-     */
+
     private static synchronized File getPhotoCacheDir(Context context) {
         return getPhotoCacheDir(context, Luban.DEFAULT_DISK_CACHE_DIR);
     }
 
-    /**
-     * Returns a directory with the given name in the private cache directory of the application to use to store
-     * retrieved media and thumbnails.
-     *
-     * @param context   A context.
-     * @param cacheName The name of the subdirectory in which to store the cache.
-     * @see #getPhotoCacheDir(Context)
-     */
+
     private static File getPhotoCacheDir(Context context, String cacheName) {
         File cacheDir = context.getExternalCacheDir();
         if (cacheDir != null) {

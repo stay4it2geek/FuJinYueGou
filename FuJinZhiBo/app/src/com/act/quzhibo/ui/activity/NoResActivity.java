@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.act.quzhibo.R;
 
-
 public class NoResActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

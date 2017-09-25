@@ -16,13 +16,12 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.download.event.FocusChangeEvent;
 import com.act.quzhibo.entity.MyFocusShower;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
@@ -47,7 +46,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import okhttp3.Call;
 
 
 public class ShowerInfoActivity extends FragmentActivity {
@@ -223,20 +221,8 @@ public class ShowerInfoActivity extends FragmentActivity {
 
     public void getData(String userId) {
         String url = CommonUtil.getToggle(this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", userId);
-        OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                handler.sendEmptyMessage(Constants.NetWorkError);
-            }
+        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
 
-            @Override
-            public void onResponse(String response, int id) {
-                Message message = handler.obtainMessage();
-                message.obj = response;
-                message.what = Constants.REFRESH;
-                handler.sendMessage(message);
-            }
-        });
     }
 
     Handler handler = new Handler() {

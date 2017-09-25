@@ -33,7 +33,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
     private WhoLikeMeAdapter whoLikeMeAdapter;
     private XRecyclerView recyclerView;
     private LoadNetView loadNetView;
-    private int liekThenSeeMeSize;
+    private int handlerLiekThenSeeMeSize;
     private String lastTime = "";
 
     @Override
@@ -73,7 +73,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (liekThenSeeMeSize > 0) {
+                        if (handlerLiekThenSeeMeSize > 0) {
                             queryData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -157,9 +157,9 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
             if (msg.what != Constants.NetWorkError) {
                 if (interestSubPersonsn != null) {
                     interestPersonList.addAll(interestSubPersonsn);
-                    liekThenSeeMeSize = interestPersonList.size();
+                    handlerLiekThenSeeMeSize = interestSubPersonsn.size();
                 } else {
-                    liekThenSeeMeSize = 0;
+                    handlerLiekThenSeeMeSize = 0;
                     if(msg.what==Constants.LOADMORE){
                         recyclerView.setNoMore(true);
                     }

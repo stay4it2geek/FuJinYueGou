@@ -11,8 +11,8 @@ public class InterestPost implements Serializable{
     public ArrayList<String> images;
     public String totalImages;
     public InterestParentPerson user;
-    public String elite;//false,
-    public String top;//false,
+    public String elite;
+    public String top;
     public String ctime;
     public String htime;
     public String sName;

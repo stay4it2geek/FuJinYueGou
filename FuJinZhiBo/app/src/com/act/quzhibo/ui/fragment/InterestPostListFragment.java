@@ -14,10 +14,9 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostListInfoParentData;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
@@ -26,8 +25,6 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import okhttp3.Call;
 
 public class InterestPostListFragment extends BackHandledFragment {
     private XRecyclerView recyclerView;
@@ -194,27 +191,14 @@ public class InterestPostListFragment extends BackHandledFragment {
         }
     };
 
-
-    public void getData(String pid, String htime, final int what) {
+    public void getData(String pid, String htime, int what) {
         if (pid == null) {
             handler.sendEmptyMessage(Constants.NetWorkError);
             return;
         }
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
-        OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                handler.sendEmptyMessage(Constants.NetWorkError);
-            }
+        OkHttpClientManager.parseRequest(getActivity(), url, handler,what);
 
-            @Override
-            public void onResponse(String response, int id) {
-                Message message = handler.obtainMessage();
-                message.obj = response;
-                message.what = what;
-                handler.sendMessage(message);
-            }
-        });
     }
 
     @Override

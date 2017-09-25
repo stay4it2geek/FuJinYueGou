@@ -2,8 +2,6 @@ package com.act.quzhibo.entity;
 
 import java.io.Serializable;
 
-
-
 public class InterestItemModel implements Serializable{
   public String  itemId;
     public String title;

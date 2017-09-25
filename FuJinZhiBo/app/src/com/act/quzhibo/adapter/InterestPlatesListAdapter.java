@@ -45,7 +45,7 @@ public class InterestPlatesListAdapter extends RecyclerView.Adapter<InterestPlat
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            Glide.with(mContext).load(datas.get(position).imgUrl).placeholder(R.drawable.xiangjiao).diskCacheStrategy(DiskCacheStrategy.RESULT).into(holder.plateImg);//加载网络图片
+            Glide.with(mContext).load(datas.get(position).imgUrl).placeholder(R.drawable.placehoder_img).diskCacheStrategy(DiskCacheStrategy.RESULT).into(holder.plateImg);//加载网络图片
             holder.pAbstract.setText(datas.get(position).pAbstract);
             holder.pName.setText(datas.get(position).pName);
             holder.plateLayout.setOnClickListener(new View.OnClickListener() {

@@ -8,21 +8,21 @@ import cn.bmob.v3.BmobObject;
  * 趣味帖子的用户实体模型
  */
 public class InterestParentPerson extends BmobObject implements Serializable{
-    public String userId;//10087,
-    public String photoUrl;//http://image.91xunai.com/1495951658306-small200Pweb,
+    public String userId;
+    public String photoUrl;
     public String nick;
-    public String disMariState;//,
+    public String disMariState;
     public String disPurpose;
-    public String proCode;//14,
-    public String cityCode;//280,
-    public String areaCode;//2458,
-    public String vipLevel;//1,
-    public String hxNick;//s10087
-    public String birth;//740203200000,
-    public String sex;//2,
-    public String official;//false,
-    public String exp;//1258
-    public String viewTime;//1258
+    public String proCode;
+    public String cityCode;
+    public String areaCode;
+    public String vipLevel;
+    public String hxNick;
+    public String birth;
+    public String sex;
+    public String official;
+    public String exp;
+    public String viewTime;
 
 
 }

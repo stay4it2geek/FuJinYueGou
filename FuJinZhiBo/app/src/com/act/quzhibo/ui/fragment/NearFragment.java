@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NearPersonAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -21,8 +20,6 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -36,7 +33,7 @@ public class NearFragment extends BackHandledFragment {
     private NearPersonAdapter nearPersonAdapter;
     private XRecyclerView recyclerView;
     private LoadNetView loadNetView;
-    private int nearPersonSize;
+    private int nearPersonSizeHandler;
     public String lastTime;
     private View view;
 
@@ -68,7 +65,7 @@ public class NearFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (nearPersonSize > 0) {
+                        if (nearPersonSizeHandler > 0) {
                             queryData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -148,10 +145,10 @@ public class NearFragment extends BackHandledFragment {
             ArrayList<InterestSubPerson> interestSubPersonList = (ArrayList<InterestSubPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
                 if (nearPersonList != null) {
-                    nearPersonSize = interestSubPersonList.size();
+                    nearPersonSizeHandler = interestSubPersonList.size();
                     nearPersonList.addAll(interestSubPersonList);
                 } else {
-                    nearPersonSize = 0;
+                    nearPersonSizeHandler = 0;
                     if(msg.what==Constants.LOADMORE){
                         recyclerView.setNoMore(true);
                     }

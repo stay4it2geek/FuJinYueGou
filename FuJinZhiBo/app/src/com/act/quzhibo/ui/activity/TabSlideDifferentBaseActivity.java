@@ -98,4 +98,5 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
     protected abstract String[] getTitles();
 
     protected abstract ArrayList<Fragment> getFragments();
+
 }

@@ -70,7 +70,7 @@ public class PhotoAlbumListAdapter extends RecyclerView.Adapter<PhotoAlbumListAd
         if (TextUtils.isEmpty(mediaInfo.getIcon())) {
             holder.mIvMediaCover.setImageResource(R.drawable.ic_launcher);
         } else {
-            Glide.with(activity).load(mediaInfo.getIcon()).placeholder(R.drawable.xiangjiao).into(holder.mIvMediaCover);//加载网络图片
+            Glide.with(activity).load(mediaInfo.getIcon()).placeholder(R.drawable.placehoder_img).into(holder.mIvMediaCover);//加载网络图片
         }
         holder.mTvMediaTtile.setText(mediaInfo.getTitle());
 

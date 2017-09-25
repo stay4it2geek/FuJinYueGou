@@ -43,7 +43,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
     private LoadNetView loadNetView;
     private String lastTime = "";
     private ArrayList<MediaAuthor> mediaAuthors = new ArrayList<>();
-    private int mediasSize;
+    private int handlerMediaAuthorSize;
 
     @Nullable
     @Override
@@ -72,7 +72,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (mediasSize > 0) {
+                        if (handlerMediaAuthorSize > 0) {
                             queryData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -194,16 +194,16 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
             ArrayList<MediaAuthor> mediaAuthor = (ArrayList<MediaAuthor>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
                 if (mediaAuthor != null) {
-                    mediasSize = mediaAuthor.size();
+                    handlerMediaAuthorSize = mediaAuthor.size();
                     mediaAuthors.addAll(mediaAuthor);
                 } else {
-                    mediasSize = 0;
+                    handlerMediaAuthorSize = 0;
                     if(msg.what==Constants.LOADMORE){
                         recyclerView.setNoMore(true);
                     }
                 }
                 Collections.sort(mediaAuthors, new ComparatorValues());
-                if (mediasSize > 0) {
+                if (handlerMediaAuthorSize > 0) {
                     if (mediaAuthorListAdapter == null) {
                         mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthors);
                         recyclerView.setAdapter(mediaAuthorListAdapter);
@@ -223,7 +223,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                 }
                 loadNetView.setVisibility(View.GONE);
 
-                if (mediasSize == 0) {
+                if (handlerMediaAuthorSize == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;

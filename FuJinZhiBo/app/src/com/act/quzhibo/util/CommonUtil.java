@@ -15,17 +15,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.act.quzhibo.entity.LocationData;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.TabEntity;
 import com.act.quzhibo.entity.Toggle;
-import com.act.quzhibo.ui.activity.WelcomeActivity;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -231,11 +227,6 @@ public class CommonUtil {
             e.printStackTrace();
         }
         return stringBuilder.toString();
-    }
-
-    public static LocationData parseLocation(Context context) {
-        LocationData data = parseJsonWithGson(getJson("json.txt", context), LocationData.class);
-        return data;
     }
 
     public static void saveData(Context context,int value,String key){

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MatchMatch"
     android:orientation="vertical">
@@ -24,7 +24,9 @@
     </com.act.quzhibo.view.TitleBarView>
 
 
-    <ScrollView style="@style/MatchMatch">
+    <ScrollView
+        style="@style/MatchMatch"
+        android:layout_marginTop="@dimen/commonViewHeight">
 
         <LinearLayout style="@style/MatchMatch.Vertical">
 
@@ -74,4 +76,10 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom" />
+</FrameLayout>

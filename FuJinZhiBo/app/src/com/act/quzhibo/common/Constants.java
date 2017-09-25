@@ -5,14 +5,13 @@ public class Constants {
     public static final String SQUARE_AND_MONEY = "squareAndmoney";
     public static final String TAB_PLATE_LIST ="tab_plate_list" ;
     public static final String COMMON_TAB_DETAIL ="common_tab_detail" ;
-    public static final String CATAID = "cataId";
-    public static final String CATATITLE = "catatitle";
+    public static final String CATEGORY_ID = "CATEGORY_ID";
+    public static final String CATEGORY_TITLE = "CATEGORY_TITLE";
     public static final String SQUARE_INTERES_TAB = "squareInterestTab";
     public static final String SQUARE_INTERES_POST= "squareInterestPost";
 
     public static final String TEXT_IMG_POST = "text_img_post";
     public static final String SHOWER_INFO = "showerInfo";
-    public static final String POST_USER_WHO_SEE_ME = "POST_USER_WHO_SEE_ME";
     public static final String NEAR_USER = "near_user";
     public static final String AUDIO = "AUDIO";
     public static final String POST = "post_id";
@@ -45,7 +44,6 @@ public class Constants {
     public static final String NEAR ="2" ;
     public static final String LANSPACE = "1";
     public static final String VIDEO_COURSE = "1";
-    public static final String PAY_COURSE = "1";
     public static final String LANSPACE_IS_LIVE = "1";
     public static final String PORTAIL_IS_LIVE = "2";
     public static final String COURSE = "course";

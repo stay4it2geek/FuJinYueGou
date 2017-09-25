@@ -35,6 +35,7 @@ public class MyFullScreenController extends FullScreenController {
     public MyFullScreenController(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
     public OnVideoControllerListner onVideoControllerListner;
 
     public void setOnVideoControllerListner(OnVideoControllerListner onVideoControllerListner) {
@@ -60,9 +61,13 @@ public class MyFullScreenController extends FullScreenController {
 
         this.mediaPlayer.setLock(this.isLocked);
     }
+
     protected PopupMenu popupMenu;
 
     public void onClick(View v) {
+        if (!isLocal) {
+            findViewById(R.id.more_menu).setVisibility(VISIBLE);
+        }
         int i = v.getId();
         if (i == com.devlin_n.videoplayer.R.id.lock) {
             this.doLockUnlock();
@@ -84,9 +89,9 @@ public class MyFullScreenController extends FullScreenController {
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.pause();
         } else {
-            if (BmobUser.getCurrentUser(RootUser.class)!=null && BmobUser.getCurrentUser(RootUser.class).vipConis > 14000) {
+            if (BmobUser.getCurrentUser(RootUser.class) != null && BmobUser.getCurrentUser(RootUser.class).vipConis > 14000) {
                 this.mediaPlayer.start();
-            }else{
+            } else {
                 ToastUtil.showToast(getContext(), "积分不足");
             }
         }
@@ -95,19 +100,20 @@ public class MyFullScreenController extends FullScreenController {
     @Override
     protected void initView() {
         super.initView();
-        if(!isLocal){
+        if (!isLocal) {
             findViewById(R.id.more_menu).setVisibility(VISIBLE);
-            ImageView more_menu= (ImageView) findViewById(R.id.more_menu);
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) more_menu.getLayoutParams();
-            lp.setMargins(0, 0, 150, 0);
-            more_menu.setLayoutParams(lp);
         }
+        ImageView more_menu = (ImageView) findViewById(R.id.more_menu);
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) more_menu.getLayoutParams();
+        lp.setMargins(0, 0, 150, 0);
+        more_menu.setLayoutParams(lp);
+
         this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
         this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_download, this.popupMenu.getMenu());
         this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 int itemId = item.getItemId();
-                if(itemId == R.id.download) {
+                if (itemId == R.id.download) {
                     onVideoControllerListner.onMyVideoController(Constants.DOWNLAOD_VIDEO);
                 }
 
@@ -118,8 +124,8 @@ public class MyFullScreenController extends FullScreenController {
     }
 
     public boolean isLocal;
-    public void setIslocal(boolean isLocal) {
-        this.isLocal=isLocal;
 
+    public void setIslocal(boolean isLocal) {
+        this.isLocal = isLocal;
     }
 }

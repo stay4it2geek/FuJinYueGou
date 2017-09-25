@@ -42,7 +42,7 @@ public class VipOrdersActivity extends FragmentActivity {
     private LoadNetView loadNetView;
     private ArrayList<VipOrders> vipOrderSList = new ArrayList<>();
     private String lastTime = "";
-    private int orderSize;
+    private int handlerOrderSize;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +80,7 @@ public class VipOrdersActivity extends FragmentActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (orderSize > 0) {
+                        if (handlerOrderSize > 0) {
                             queryDatas(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -189,9 +189,9 @@ public class VipOrdersActivity extends FragmentActivity {
             if (msg.what != Constants.NetWorkError) {
                 if (vipOrderses != null) {
                     vipOrderSList.addAll(vipOrderses);
-                    orderSize = vipOrderses.size();
+                    handlerOrderSize = vipOrderses.size();
                 } else {
-                    orderSize = 0;
+                    handlerOrderSize = 0;
                 }
 
                 if (orderAdapter == null) {

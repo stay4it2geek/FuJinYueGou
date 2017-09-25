@@ -38,7 +38,7 @@ public class CoursesCenterFragment extends Fragment {
     private LoadNetView loadNetView;
     private String lastTime = "";
     private ArrayList<CommonCourse> commonCourseList = new ArrayList<>();
-    private int courseSize;
+    private int handlerCourseSize;
     private View view;
     String courseCategoryId = "";
 
@@ -73,7 +73,7 @@ public class CoursesCenterFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (courseSize > 0) {
+                        if (handlerCourseSize > 0) {
                             queryCourseData(courseCategoryId, Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -168,9 +168,9 @@ public class CoursesCenterFragment extends Fragment {
             if (msg.what != Constants.NetWorkError) {
                 if (commonCourses != null) {
                     commonCourseList.addAll(commonCourses);
-                    courseSize = commonCourses.size();
+                    handlerCourseSize = commonCourses.size();
                 } else {
-                    courseSize = 0;
+                    handlerCourseSize = 0;
                     if(msg.what==Constants.LOADMORE){
                         recyclerView.setNoMore(true);
                     }

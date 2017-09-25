@@ -14,11 +14,10 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
@@ -31,6 +30,7 @@ import java.util.Comparator;
 
 import cn.bmob.v3.BmobUser;
 import okhttp3.Call;
+import okhttp3.Request;
 
 
 public class IntersetPersonPostListActivity extends FragmentActivity {
@@ -132,7 +132,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                     interestPostSize = data.result.posts.size();
                 } else {
                     interestPostSize = 0;
-                    if(msg.what==Constants.LOADMORE){
+                    if (msg.what == Constants.LOADMORE) {
                         recyclerView.setNoMore(true);
                     }
                 }
@@ -221,28 +221,13 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
 
     }
 
-    public void getData(String ctime, final int what) {
-
+    public void getData(String ctime,int what) {
         if (userId == null) {
             handler.sendEmptyMessage(Constants.NetWorkError);
             return;
         }
         String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", userId).replace("CTIME", ctime);
-        Log.e("url", url);
-        OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                handler.sendEmptyMessage(Constants.NetWorkError);
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                Message message = handler.obtainMessage();
-                message.obj = response;
-                message.what = what;
-                handler.sendMessage(message);
-            }
-        });
+        OkHttpClientManager.parseRequest(this, url, handler, what);
     }
 
 }

@@ -8,12 +8,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +23,6 @@ import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
-import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
@@ -35,8 +32,6 @@ import com.act.quzhibo.view.xImageView.XImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -130,7 +125,7 @@ public class XImageActivity extends AppCompatActivity {
                     xImageView.setInitType(IXImageView.InitType.FIT_VIEW_MIN_IMAGE_MIN);
                     xImageView.setActionListener(new MyActionListner(mediaInfos.get(position), downloadInfo, url));
 
-                    Glide.with(XImageActivity.this).load(url).asBitmap().skipMemoryCache(false).placeholder(R.drawable.xiangjiao).into(new SimpleTarget<Bitmap>() {
+                    Glide.with(XImageActivity.this).load(url).asBitmap().skipMemoryCache(false).placeholder(R.drawable.placehoder_img).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             xImageView.setImage(resource);

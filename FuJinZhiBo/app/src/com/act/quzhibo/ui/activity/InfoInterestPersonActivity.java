@@ -20,13 +20,12 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.MyApplicaition;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostListInfoPersonParentData;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
@@ -47,6 +46,8 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class InfoInterestPersonActivity extends AppCompatActivity {
 
@@ -289,19 +290,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
 
     private void getTextAndImageData() {
         String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", post.user.userId).replace("CTIME", "0");
-        OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                handler.sendEmptyMessage(Constants.NetWorkError);
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                Message message = handler.obtainMessage();
-                message.obj = response;
-                handler.sendMessage(message);
-            }
-        });
+        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
     }
 
     Handler handler = new Handler() {

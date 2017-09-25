@@ -94,4 +94,5 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Cha
         videoView.stopPlayback();
         finish();
     }
+
 }

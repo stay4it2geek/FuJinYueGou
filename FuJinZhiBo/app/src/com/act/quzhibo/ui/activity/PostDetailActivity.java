@@ -10,17 +10,13 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InteretstPostDetailAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.InterestPost;
-import com.act.quzhibo.entity.InterestPostPageParentData;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
+import com.act.quzhibo.entity.InterestPostDetailParentData;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-
-import okhttp3.Call;
-
 
 
 public class PostDetailActivity extends AppCompatActivity {
@@ -34,7 +30,7 @@ public class PostDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_postdetail);
         recyclerview = (XRecyclerView) findViewById(R.id.postRecyleview);
-       findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
+        findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
         recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
@@ -64,21 +60,8 @@ public class PostDetailActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        OkHttpUtils.get().url(CommonUtil.getToggle(this, Constants.POST).getToggleObject().replace(Constants.POST, post.postId)).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                handler.sendEmptyMessage(Constants.NetWorkError);
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                InterestPostPageParentData interestPostPageParentData =
-                        CommonUtil.parseJsonWithGson(response, InterestPostPageParentData.class);
-                Message message = handler.obtainMessage();
-                message.obj = interestPostPageParentData;
-                handler.sendMessage(message);
-            }
-        });
+        String url = CommonUtil.getToggle(this, Constants.POST).getToggleObject().replace(Constants.POST, post.postId);
+        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
     }
 
     Handler handler = new Handler() {
@@ -86,7 +69,7 @@ public class PostDetailActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what != Constants.NetWorkError) {
-                InterestPostPageParentData data = (InterestPostPageParentData) msg.obj;
+                InterestPostDetailParentData data = CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostDetailParentData.class);
                 adapter = new InteretstPostDetailAdapter(post, PostDetailActivity.this, data.result);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PostDetailActivity.this);
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);

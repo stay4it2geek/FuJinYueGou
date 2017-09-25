@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 
 public class StackBlurManager {
 	static Context _context;
-
 	static final int EXECUTOR_THREADS = Runtime.getRuntime().availableProcessors();
 	static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(EXECUTOR_THREADS);
 

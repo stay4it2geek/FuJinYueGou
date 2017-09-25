@@ -15,10 +15,9 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.RoomListAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.entity.RoomParentList;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
@@ -28,10 +27,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import okhttp3.Call;
-
 public class ShowerListFragment extends BackHandledFragment {
-    private String cataId;
+    private String categoryId;
     private OnCallShowViewListner onCallShowViewListner;
     private XRecyclerView recyclerView;
     private ArrayList<Room> rooms = new ArrayList<>();
@@ -41,7 +38,7 @@ public class ShowerListFragment extends BackHandledFragment {
     private RoomListAdapter adapter;
     private int page;
     private String offset;
-    private String cataTitle;
+    private String categoryTitle;
     private View view;
     private LoadNetView loadNetView;
 
@@ -69,7 +66,7 @@ public class ShowerListFragment extends BackHandledFragment {
                     public void run() {
                         recyclerView.setNoMore(false);
                         recyclerView.setLoadingMoreEnabled(true);
-                        getData(cataId, "0", Constants.REFRESH);
+                        getData(categoryId, "0", Constants.REFRESH);
                         recyclerView.refreshComplete();
                     }
                 }, 1000);
@@ -81,7 +78,7 @@ public class ShowerListFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (mCurrentCounter < roomTotal && mLastRequstRoomListSize == 0) {
-                            getData(cataId, String.valueOf(page), Constants.LOADMORE);
+                            getData(categoryId, String.valueOf(page), Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
                             recyclerView.setNoMore(true);
@@ -91,9 +88,9 @@ public class ShowerListFragment extends BackHandledFragment {
             }
         });
 
-        cataId = getArguments().getString(Constants.CATAID);
-        cataTitle = getArguments().getString(Constants.CATATITLE);
-        if (cataTitle.equals("手机达人")) {
+        categoryId = getArguments().getString(Constants.CATEGORY_ID);
+        categoryTitle = getArguments().getString(Constants.CATEGORY_TITLE);
+        if (categoryTitle.equals("手机达人")||categoryTitle.contains("手机")) {
             offset = "20";
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
             gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -109,7 +106,7 @@ public class ShowerListFragment extends BackHandledFragment {
             @Override
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
-                getData(cataId, "0", Constants.REFRESH);
+                getData(categoryId, "0", Constants.REFRESH);
             }
         });
 
@@ -127,13 +124,13 @@ public class ShowerListFragment extends BackHandledFragment {
                 }
             }
         });
-        getData(cataId, "0", Constants.REFRESH);
+        getData(categoryId, "0", Constants.REFRESH);
 
         loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
-                getData(cataId, "0", Constants.REFRESH);
+                getData(categoryId, "0", Constants.REFRESH);
             }
         });
         return view;
@@ -169,7 +166,7 @@ public class ShowerListFragment extends BackHandledFragment {
                     Point size = new Point();
                     display.getSize(size);
                     int screenWidth = size.x;
-                    adapter = new RoomListAdapter(getActivity(), rooms, roomParentList.pathPrefix, screenWidth, cataTitle);
+                    adapter = new RoomListAdapter(getActivity(), rooms, roomParentList.pathPrefix, screenWidth, categoryTitle);
                     adapter.setOnItemClickListener(new RoomListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
@@ -216,22 +213,9 @@ public class ShowerListFragment extends BackHandledFragment {
         }
     }
 
-    public void getData(String cataId, String startPage, final int what) {
-        String url = CommonUtil.getToggle(getActivity(), Constants.COMMON_TAB_DETAIL).getToggleObject().replace("CATAID", cataId).replace("NUM", String.valueOf(startPage)).replace("OFFSET", offset);
-        OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                handler.sendEmptyMessage(Constants.NetWorkError);
-            }
-
-            @Override
-            public void onResponse(String response, int id) {
-                Message message = handler.obtainMessage();
-                message.obj = response;
-                message.what = what;
-                handler.sendMessage(message);
-            }
-        });
+    public void getData(String categoryId, String startPage, int what) {
+        String url = CommonUtil.getToggle(getActivity(), Constants.COMMON_TAB_DETAIL).getToggleObject().replace("CATEID", categoryId).replace("NUM", String.valueOf(startPage)).replace("OFFSET", offset);
+        OkHttpClientManager.parseRequest(getActivity(), url, handler, what);
     }
 
 

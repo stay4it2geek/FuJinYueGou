@@ -8,11 +8,11 @@ public class InterestPostPageContentDetail implements Serializable {
     public ArrayList<PostContentAndImageDesc> desc;
     public InterestParentPerson user;
     public long ctime;
-    public boolean elite;// false,
-    public boolean top;//false,
-    public long pageView;// 331,
-    public long rewards;//0,
-    public long type;//0,
-    public long heat;//0,
-    public boolean hasbuy;//false
+    public boolean elite;
+    public boolean top;
+    public long pageView;
+    public long rewards;
+    public long type;
+    public long heat;
+    public boolean hasbuy;
 }

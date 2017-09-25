@@ -36,7 +36,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
     private XRecyclerView recycleview;
     private LoadNetView loadNetView;
     private String lastTime = "";
-    private int mediasSize;
+    private int handlerMediaInfoSize;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if (mediasSize > 0) {
+                            if (handlerMediaInfoSize > 0) {
                                 getPhotoListData(Constants.LOADMORE);
                                 recycleview.loadMoreComplete();
                             } else {
@@ -154,17 +154,17 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
             super.handleMessage(msg);
             ArrayList<MediaInfo> mediaInfos = (ArrayList<MediaInfo>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (mediaInfos != null) {
-                    mediasSize = mediaInfos.size();
+                if (mediaInfos != null ||mediaInfos.size()>0) {
+                    handlerMediaInfoSize = mediaInfos.size();
                     medias.addAll(mediaInfos);
                 } else {
-                    mediasSize = 0;
+                    handlerMediaInfoSize = 0;
                     if(msg.what==Constants.LOADMORE){
                         recycleview.setNoMore(true);
                     }
                 }
                 if (mInfoListAdapter == null) {
-                    mInfoListAdapter = new PhotoAlbumListAdapter(getActivity(), mediaInfos);
+                    mInfoListAdapter = new PhotoAlbumListAdapter(getActivity(), medias);
                     recycleview.setAdapter(mInfoListAdapter);
                 } else {
                     mInfoListAdapter.notifyDataSetChanged();

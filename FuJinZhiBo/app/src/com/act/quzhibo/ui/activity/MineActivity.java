@@ -67,9 +67,6 @@ public class MineActivity extends TabSlideDifferentBaseActivity {
         RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
         if (rootUser != null) {
             CommonUtil.fecth(this);
-
-        } else {
-
         }
     }
 }

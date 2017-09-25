@@ -4,15 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.TitleBarView;
-
 
 public class TermOfUseActivity extends AppCompatActivity {
     @Override
@@ -32,4 +29,5 @@ public class TermOfUseActivity extends AppCompatActivity {
             }
         });
     }
+
 }

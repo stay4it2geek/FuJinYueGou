@@ -16,10 +16,9 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusShowerListAdapter;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.MyFocusShower;
 import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.StringCallback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
@@ -167,7 +166,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
-                    if(msg.what==Constants.LOADMORE){
+                    if (msg.what == Constants.LOADMORE) {
                         recyclerView.setNoMore(true);
                     }
                 }
@@ -176,58 +175,12 @@ public class MyFocusShowerActivity extends FragmentActivity {
                     Point size = new Point();
                     display.getSize(size);
                     int screenWidth = size.x;
-                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses,screenWidth);
+                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses, screenWidth);
                     recyclerView.setAdapter(myFocusShowerListAdapter);
                     myFocusShowerListAdapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position, final MyFocusShower myFocusShower) {
-                            String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", myFocusShower.userId);
-                            OkHttpUtils.get().url(url).build().execute(new StringCallback() {
-                                @Override
-                                public void onError(Call call, Exception e, int id) {
-                                    handler.sendEmptyMessage(Constants.NetWorkError);
-                                }
-
-                                @Override
-                                public void onResponse(String response, int id) {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        Room room = new Room();
-                                        room.screenType = jsonObject.getString("screenType");
-                                        room.roomId = jsonObject.getString("roomId");
-                                        room.nickname = jsonObject.getString("nickname");
-                                        room.userId = jsonObject.getString("userId");
-                                        room.gender = jsonObject.getString("gender");
-                                        room.liveStream = "http://pull.kktv8.com/livekktv/" + jsonObject.getString("roomId") + ".flv";
-                                        room.city = jsonObject.getString("city");
-                                        room.liveType = jsonObject.getString("liveType");
-                                        room.nickname = jsonObject.getString("nickname");
-                                        room.gender = jsonObject.getString("gender");
-                                        room.onlineCount = jsonObject.getString("onlineCount");
-                                        room.portrait_path_1280 = jsonObject.getString("portrait_path_1280");
-                                        Intent intent;
-                                        if (room.screenType.equals(Constants.LANSPACE)) {
-                                            if (room.liveType.equals(Constants.LANSPACE_IS_LIVE)) {
-                                                intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
-                                            } else {
-                                                intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
-                                                ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");
-                                            }
-                                        } else {
-                                            if (room.liveType.equals(Constants.PORTAIL_IS_LIVE)) {
-                                                intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
-                                            } else {
-                                                intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
-                                                ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");
-                                            }
-                                        }
-                                        intent.putExtra("room", room);
-                                        startActivity(intent);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
+                            requestInfo(myFocusShower.userId);
                         }
                     });
                     if (myFocusShowerListAdapter != null) {
@@ -290,4 +243,54 @@ public class MyFocusShowerActivity extends FragmentActivity {
             }
         }
     }
+
+    Handler infoHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            try {
+                JSONObject jsonObject = new JSONObject((String) msg.obj);
+                Room room = new Room();
+                room.screenType = jsonObject.getString("screenType");
+                room.roomId = jsonObject.getString("roomId");
+                room.nickname = jsonObject.getString("nickname");
+                room.userId = jsonObject.getString("userId");
+                room.gender = jsonObject.getString("gender");
+                room.liveStream = "http://pull.kktv8.com/livekktv/" + jsonObject.getString("roomId") + ".flv";
+                room.city = jsonObject.getString("city");
+                room.liveType = jsonObject.getString("liveType");
+                room.nickname = jsonObject.getString("nickname");
+                room.gender = jsonObject.getString("gender");
+                room.onlineCount = jsonObject.getString("onlineCount");
+                room.portrait_path_1280 = jsonObject.getString("portrait_path_1280");
+                Intent intent;
+                if (room.screenType.equals(Constants.LANSPACE)) {
+                    if (room.liveType.equals(Constants.LANSPACE_IS_LIVE)) {
+                        intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
+                    } else {
+                        intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
+                        ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");
+                    }
+                } else {
+                    if (room.liveType.equals(Constants.PORTAIL_IS_LIVE)) {
+                        intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
+                    } else {
+                        intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
+                        ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");
+                    }
+                }
+                intent.putExtra("room", room);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private void requestInfo(String showerId) {
+        String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", showerId);
+        OkHttpClientManager.parseRequest(this, url, infoHandler, Constants.REFRESH);
+    }
+
+
 }

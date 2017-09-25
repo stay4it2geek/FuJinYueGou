@@ -21,10 +21,6 @@ import com.devlin_n.videoplayer.controller.StandardVideoController;
 
 import cn.bmob.v3.BmobUser;
 
-/**
- * Created by weiminglin on 17/9/2.
- */
-
 public class MyStandardVideoController extends StandardVideoController implements View.OnClickListener {
     public MyStandardVideoController(@NonNull Context context) {
         super(context);
@@ -70,6 +66,10 @@ public class MyStandardVideoController extends StandardVideoController implement
 
 
     public void onClick(View v) {
+        if (viewGone) {
+            findViewById(R.id.more_menu).setVisibility(GONE);
+            findViewById(R.id.fullscreen).setVisibility(GONE);
+        }
         int i = v.getId();
         if (i != com.devlin_n.videoplayer.R.id.fullscreen && i != com.devlin_n.videoplayer.R.id.back) {
             if (i == com.devlin_n.videoplayer.R.id.lock) {
@@ -91,6 +91,7 @@ public class MyStandardVideoController extends StandardVideoController implement
 
     @Override
     protected void doPauseResume() {
+
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.pause();
         } else {
@@ -115,13 +116,9 @@ public class MyStandardVideoController extends StandardVideoController implement
     @Override
     protected void initView() {
         super.initView();
-        if (viewGone) {
-            findViewById(R.id.more_menu).setVisibility(GONE);
-            findViewById(R.id.fullscreen).setVisibility(GONE);
-        } else {
-            findViewById(R.id.more_menu).setVisibility(VISIBLE);
-            findViewById(R.id.fullscreen).setVisibility(VISIBLE);
-        }
+
+        findViewById(R.id.more_menu).setVisibility(VISIBLE);
+        findViewById(R.id.fullscreen).setVisibility(VISIBLE);
         this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
         this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_list, this.popupMenu.getMenu());
         this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -136,6 +133,8 @@ public class MyStandardVideoController extends StandardVideoController implement
                 return false;
             }
         });
+
+
     }
 
     public boolean viewGone;

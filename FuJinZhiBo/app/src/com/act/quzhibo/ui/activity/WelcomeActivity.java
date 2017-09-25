@@ -14,10 +14,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.Toggle;
-import com.act.quzhibo.okhttp.OkHttpUtils;
-import com.act.quzhibo.okhttp.callback.Callback;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.PsdInputView;
@@ -28,8 +27,6 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import okhttp3.Call;
-import okhttp3.Response;
 import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
 import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
 import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
@@ -42,19 +39,16 @@ public class WelcomeActivity extends ActivityManagePermission {
     RootUser user;
     PsdInputView psdInputView;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         grantPermission();
-
-
     }
 
     private void grantPermission() {
 
-        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_READ_PHONE_STATE, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
+        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
             public void permissionGranted() {
                 doRequest();
@@ -63,7 +57,7 @@ public class WelcomeActivity extends ActivityManagePermission {
             @Override
             public void permissionDenied() {
                 findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make(findViewById(R.id.container), "您需要同意权限", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照\n\n3. 获取您的大概位置", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -77,7 +71,7 @@ public class WelcomeActivity extends ActivityManagePermission {
             @Override
             public void permissionForeverDenied() {
                 findViewById(R.id.container).setVisibility(View.VISIBLE);
-                Snackbar.make(findViewById(R.id.container), "您需要同意权限", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照\n\n3. 获取您的大概位置", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -128,7 +122,6 @@ public class WelcomeActivity extends ActivityManagePermission {
 
     private void request() {
         BmobQuery<Toggle> query = new BmobQuery<>();
-
         query.findObjects(new FindListener<Toggle>() {
             @Override
             public void done(List<Toggle> Toggles, BmobException bmobException) {
@@ -150,30 +143,11 @@ public class WelcomeActivity extends ActivityManagePermission {
                 }
             }
         });
-
-
     }
 
     private void getPlateList() {
-        OkHttpUtils.get().url(CommonUtil.getToggle(this, "tabCatagory").getToggleObject()).build().execute(new Callback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                getPlateList();
-            }
-
-            @Override
-            public void onResponse(Object response, int id) {
-            }
-
-            @Override
-            public Object parseNetworkResponse(Response response, int id) throws Exception {
-                plateListStr = response.body().string();
-                Message message = handler.obtainMessage();
-                message.obj = plateListStr;
-                handler.sendMessage(message);
-                return null;
-            }
-        });
+        String url = CommonUtil.getToggle(this, "tabCatagory").getToggleObject();
+        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
     }
 
     Handler handler = new Handler() {
@@ -181,7 +155,7 @@ public class WelcomeActivity extends ActivityManagePermission {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             plateListStr = (String) msg.obj;
-            this.postDelayed(runnable, 2000);
+            this.postDelayed(runnable, 1000);
         }
     };
 

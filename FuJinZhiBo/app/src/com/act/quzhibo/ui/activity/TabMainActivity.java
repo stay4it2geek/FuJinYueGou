@@ -41,8 +41,7 @@ public class TabMainActivity extends TabActivity {
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
     private StringBuffer catagory;
-    private PlateCatagory plateCatagory;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);

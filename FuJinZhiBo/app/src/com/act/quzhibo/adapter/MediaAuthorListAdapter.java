@@ -29,7 +29,6 @@ public class MediaAuthorListAdapter extends RecyclerView.Adapter<MediaAuthorList
         mOnItemClickListener = listener;
     }
 
-    //适配器初始化
     public MediaAuthorListAdapter(Activity context, ArrayList<MediaAuthor> medias) {
         activity = context;
         this.medias = medias;
@@ -47,7 +46,7 @@ public class MediaAuthorListAdapter extends RecyclerView.Adapter<MediaAuthorList
         if (holder instanceof MyViewHolder) {
             holder.nickName.setText(medias.get(position).nickName + "");
             holder.introduce.setText(medias.get(position).introduce + "");
-            holder.media_layout.setOnClickListener(new View.OnClickListener() {
+            holder.mediaLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mOnItemClickListener.onItemClick(medias.get(position));
@@ -68,14 +67,14 @@ public class MediaAuthorListAdapter extends RecyclerView.Adapter<MediaAuthorList
         private TextView nickName;
         private TextView introduce;
         private ImageView photoImg;
-        private RelativeLayout media_layout;
+        private RelativeLayout mediaLayout;
 
         public MyViewHolder(View view) {
             super(view);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nickName);
             introduce = (TextView) view.findViewById(R.id.introduce);
-            media_layout = (RelativeLayout) view.findViewById(R.id.media_layout);
+            mediaLayout = (RelativeLayout) view.findViewById(R.id.media_layout);
         }
     }
 

@@ -79,7 +79,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
         mLayoutInflater = LayoutInflater.from(context);
         downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
         if (!downloadDir.exists()) {
-            downloadDir.mkdir();
+            downloadDir.mkdirs();
         }
     }
 
@@ -244,10 +244,10 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
         } else {
             PostCommentAdapter adapter = new PostCommentAdapter(activity, data.comments);
             ((Item3ViewHolder) holder).commentsList.setAdapter(adapter);
-            ((Item3ViewHolder) holder).pinglun.setOnClickListener(new View.OnClickListener() {
+            ((Item3ViewHolder) holder).commentBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (((Item3ViewHolder) holder).talk.getText().equals("点击这里评论她/他") || ((Item3ViewHolder) holder).talk.getText().length() == 0) {
+                    if (((Item3ViewHolder) holder).commentET.getText().equals("点击这里评论她/他") || ((Item3ViewHolder) holder).commentET.getText().length() == 0) {
                         ToastUtil.showToast(activity, "您是否忘记了评论内容?");
                     } else {
                         ToastUtil.showToast(activity, "正在评论...");
@@ -255,9 +255,9 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
                             @Override
                             public void run() {
                                 ToastUtil.showToast(activity, "评论已提交审核");
-                                ((Item3ViewHolder) holder).talk.setText("");
+                                ((Item3ViewHolder) holder).commentET.setText("");
                                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.hideSoftInputFromWindow(((Item3ViewHolder) holder).pinglun.getWindowToken(), 0);
+                                imm.hideSoftInputFromWindow(((Item3ViewHolder) holder).commentBtn.getWindowToken(), 0);
                             }
                         }, 1000);
                     }
@@ -314,16 +314,14 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class Item3ViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout pinglunlayout;
         private MyListView commentsList;
-        private EmojiconEditText talk;
-        private TextView pinglun;
+        private EmojiconEditText commentET;
+        private TextView commentBtn;
 
         public Item3ViewHolder(View view) {
             super(view);
-            pinglunlayout = (LinearLayout) view.findViewById(R.id.commentLayout);
-            talk = (EmojiconEditText) view.findViewById(R.id.comment_et);
-            pinglun = (TextView) view.findViewById(R.id.commentBtn);
+            commentET = (EmojiconEditText) view.findViewById(R.id.comment_et);
+            commentBtn = (TextView) view.findViewById(R.id.commentBtn);
             commentsList = (MyListView) view.findViewById(R.id.comments_lv);
         }
 

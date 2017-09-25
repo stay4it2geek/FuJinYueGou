@@ -1,5 +1,5 @@
 package com.act.quzhibo.entity;
-public class InterestPostPageParentData {
+public class InterestPostDetailParentData {
     public boolean ok;
     public boolean relogin;
     public boolean needRegister;

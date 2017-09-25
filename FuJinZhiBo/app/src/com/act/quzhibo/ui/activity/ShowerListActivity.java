@@ -31,11 +31,11 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
             return new ArrayList<>();
         }
         for (PlateCatagory plateCatagory : plates.plateList) {
-            if (plateCatagory.getTitleName().contains("VR") || plateCatagory.getTitleName().contains("游戏") ||
-                    plateCatagory.getTitleName().contains("交友") || plateCatagory.getTitleName().contains("非遗")) {
+            if (plateCatagory.titleName.contains("VR") || plateCatagory.titleName.contains("游戏") ||
+                    plateCatagory.titleName.contains("交友") || plateCatagory.titleName.contains("非遗")) {
                 continue;
             } else {
-                tabTitles.add(plateCatagory.getTitleName());
+                tabTitles.add(plateCatagory.titleName);
             }
         }
         return tabTitles;
@@ -46,14 +46,14 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
         ArrayList<Fragment> mFragments = new ArrayList<>();
 
         for (PlateCatagory plateCatagory : plates.plateList) {
-            if (plateCatagory.getTitleName().contains("VR") || plateCatagory.getTitleName().contains("游戏") ||
-                    plateCatagory.getTitleName().contains("交友") || plateCatagory.getTitleName().contains("非遗")) {
+            if (plateCatagory.titleName.contains("VR") || plateCatagory.titleName.contains("游戏") ||
+                    plateCatagory.titleName.contains("交友") || plateCatagory.titleName.contains("非遗")) {
                 continue;
             } else {
                 ShowerListFragment fragment = new ShowerListFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.CATAID, plateCatagory.getTitleId());
-                bundle.putString(Constants.CATATITLE, plateCatagory.getTitleName());
+                bundle.putString(Constants.CATEGORY_ID, plateCatagory.titleId);
+                bundle.putString(Constants.CATEGORY_TITLE, plateCatagory.titleName);
                 fragment.setArguments(bundle);
                 mFragments.add(fragment);
             }

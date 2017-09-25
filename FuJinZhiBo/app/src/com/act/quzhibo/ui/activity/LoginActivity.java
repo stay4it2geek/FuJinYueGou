@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.RootUser;
@@ -20,7 +19,6 @@ import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.LogInListener;
 
 import static android.text.InputType.TYPE_CLASS_TEXT;
@@ -111,9 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                     LoginActivity.this.finish();
                 } else {
                     ToastUtil.showToast(LoginActivity.this, "登录失败,原因是：" + e.getLocalizedMessage());
-
                 }
-
             }
         });
     }

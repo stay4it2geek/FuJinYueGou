@@ -1,13 +1,14 @@
 package com.act.quzhibo.ui.activity;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,16 +32,18 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
+import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
+import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
+import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class PostAddActivity extends FragmentActivity implements EasyPermissions.PermissionCallbacks, BGASortableNinePhotoLayout.Delegate, View.OnClickListener {
-    private static final int REQUEST_CODE_PERMISSION_PHOTO_PICKER = 1;
+import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
+
+public class PostAddActivity extends ActivityManagePermission implements BGASortableNinePhotoLayout.Delegate, View.OnClickListener {
     private static final int REQUEST_CODE_CHOOSE_PHOTO = 1;
     private static final int REQUEST_CODE_PHOTO_PREVIEW = 2;
     public static final String EXTRA_MOMENT = "EXTRA_MOMENT";
@@ -77,7 +80,7 @@ public class PostAddActivity extends FragmentActivity implements EasyPermissions
 
     @Override
     public void onClickAddNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, ArrayList<String> models) {
-        choicePhotoWrapper();
+        grantPermission();
     }
 
     @Override
@@ -90,41 +93,57 @@ public class PostAddActivity extends FragmentActivity implements EasyPermissions
         startActivityForResult(BGAPhotoPickerPreviewActivity.newIntent(this, mPhotosSnpl.getMaxItemCount(), models, models, position, false), REQUEST_CODE_PHOTO_PREVIEW);
     }
 
-    @AfterPermissionGranted(REQUEST_CODE_PERMISSION_PHOTO_PICKER)
-    private void choicePhotoWrapper() {
-        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-        if (EasyPermissions.hasPermissions(this, perms)) {
-            // 拍照后照片的存放目录，改成你自己拍照后要存放照片的目录。如果不传递该参数的话就没有拍照功能
-            File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "QuPhotoPickerTakePhoto");
-            if (!takePhotoDir.exists()) {
-                takePhotoDir.mkdir();
+
+    private void grantPermission() {
+
+        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA,  PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
+            @Override
+            public void permissionGranted() {
+                // 拍照后照片的存放目录,如果不传递该参数的话就没有拍照功能
+                File takePhotoDir = new File(Environment.getExternalStorageDirectory(), "QuPhotoPickerTakePhoto");
+                if (!takePhotoDir.exists()) {
+                    takePhotoDir.mkdir();
+                }
+                startActivityForResult(BGAPhotoPickerActivity.newIntent(PostAddActivity.this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
             }
-            startActivityForResult(BGAPhotoPickerActivity.newIntent(this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
-        } else {
-            EasyPermissions.requestPermissions(this, "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", REQUEST_CODE_PERMISSION_PHOTO_PICKER, perms);
-        }
+
+            @Override
+            public void permissionDenied() {
+                findViewById(R.id.container).setVisibility(View.VISIBLE);
+                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_SETTING);
+                    }
+                }).setDuration(50000).show();
+            }
+
+            @Override
+            public void permissionForeverDenied() {
+                findViewById(R.id.container).setVisibility(View.VISIBLE);
+                Snackbar.make(findViewById(R.id.container), "图片选择需要以下权限:\n\n1.访问设备上的照片\n\n2.拍照", Snackbar.LENGTH_LONG).setAction("去设置", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivityForResult(intent, REQUEST_SETTING);
+                    }
+                }).setDuration(50000).show();
+
+            }
+        });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
 
-    @Override
-    public void onPermissionsGranted(int requestCode, List<String> perms) {
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, List<String> perms) {
-        if (requestCode == REQUEST_CODE_PERMISSION_PHOTO_PICKER) {
-            Toast.makeText(this, "您拒绝了「图片选择」所需要的相关权限!", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        grantPermission();
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
 //            if (mSingleChoiceCb.isChecked()) {
 //                mPhotosSnpl.setData(BGAPhotoPickerActivity.getSelectedImages(data));

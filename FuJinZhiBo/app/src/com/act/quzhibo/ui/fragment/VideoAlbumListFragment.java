@@ -1,7 +1,5 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,6 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.entity.MediaAuthor;
 import com.act.quzhibo.view.LoadNetView;
-import com.act.quzhibo.view.RecycleViewDivider;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 import com.devlin_n.videoplayer.player.VideoViewManager;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -42,7 +38,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
     private LoadNetView loadNetView;
     private XRecyclerView recyclerView;
     private String lastTime = "";
-    private int mediasSize;
+    private int handlerMediaInfoSize;
     private ArrayList<MediaInfo> medias = new ArrayList<>();
     private VideoRecyclerViewAdapter mInfoListAdapter;
 
@@ -58,7 +54,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 initMediaVideoListData(Constants.REFRESH);
             }
         });
-
 
         loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
@@ -95,7 +90,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (mediasSize > 0) {
+                        if (handlerMediaInfoSize > 0) {
 
                             initMediaVideoListData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
@@ -184,10 +179,10 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             ArrayList<MediaInfo> mediaInfos = (ArrayList<MediaInfo>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
                 if (mediaInfos != null) {
-                    mediasSize = mediaInfos.size();
+                    handlerMediaInfoSize = mediaInfos.size();
                     medias.addAll(mediaInfos);
                 } else {
-                    mediasSize = 0;
+                    handlerMediaInfoSize = 0;
                     if(msg.what==Constants.LOADMORE){
                         recyclerView.setNoMore(true);
                     }

@@ -20,7 +20,6 @@ public class BitmapUtil {
 
     public static Bitmap rotateBitmap(Bitmap img, int rotation) {
         try {
-            // Detect rotation
             if (rotation != 0) {
                 Matrix matrix = new Matrix();
                 matrix.postRotate(rotation);
