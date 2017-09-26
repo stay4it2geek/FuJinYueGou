@@ -22,7 +22,7 @@ public class MyPostDetailActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_postdetail);
+        setContentView(R.layout.interest_post_detail_layout);
         recyclerview = (XRecyclerView) findViewById(R.id.postRecyleview);
         findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
         recyclerview.setHasFixedSize(true);

@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InteretstPostDetailAdapter;
@@ -17,22 +20,28 @@ import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostDetailParentData;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import io.github.rockerhieu.emojicon.EmojiconEditText;
 
-public class PostDetailFragment extends BackHandledFragment {
+
+public class IntersetPostDetailFragment extends BackHandledFragment {
     private InteretstPostDetailAdapter adapter;
     private XRecyclerView recyclerview;
     private InterestPost post;
     private View view;
     private LoadNetView loadNetView;
+    private EmojiconEditText commentET;
+    private TextView commentBtn;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_postdetail, null, false);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.interest_post_detail_layout, null, false);
         recyclerview = (XRecyclerView) view.findViewById(R.id.postRecyleview);
         recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
@@ -56,6 +65,27 @@ public class PostDetailFragment extends BackHandledFragment {
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
                 getData();
+            }
+        });
+        commentBtn = (TextView) view.findViewById(R.id.commentBtn);
+        commentET = (EmojiconEditText) view.findViewById(R.id.comment_et);
+        commentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((commentET.getText().equals("点击这里评论她/他") || commentET.getText().length() == 0)) {
+                    ToastUtil.showToast(getActivity(), "您是否忘记了评论内容?");
+                } else {
+                    ToastUtil.showToast(getActivity(), "正在评论...");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.showToast(getActivity(), "评论已提交审核");
+                            commentET.setText("");
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(commentBtn.getWindowToken(), 0);
+                        }
+                    }, 1000);
+                }
             }
         });
         return view;

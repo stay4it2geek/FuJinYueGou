@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -29,8 +28,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import cn.bmob.v3.BmobUser;
-import okhttp3.Call;
-import okhttp3.Request;
 
 
 public class IntersetPersonPostListActivity extends FragmentActivity {
@@ -180,7 +177,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                                 } else if (rootUser != null && rootUser.vipConis > 1000) {
                                     Intent intent = new Intent();
                                     intent.putExtra(Constants.POST, post);
-                                    intent.setClass(IntersetPersonPostListActivity.this, PostDetailActivity.class);
+                                    intent.setClass(IntersetPersonPostListActivity.this, IntersetPostDetailActivity.class);
                                     startActivity(intent);
                                 }
                             }

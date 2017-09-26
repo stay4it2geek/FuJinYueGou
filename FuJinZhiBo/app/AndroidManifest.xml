@@ -162,7 +162,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.PostDetailActivity"
+            android:name="com.act.quzhibo.ui.activity.IntersetPostDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

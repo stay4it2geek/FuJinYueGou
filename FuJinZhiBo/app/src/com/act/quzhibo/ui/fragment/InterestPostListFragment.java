@@ -167,7 +167,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(InterestPost post) {
-                            PostDetailFragment fragment = new PostDetailFragment();
+                            IntersetPostDetailFragment fragment = new IntersetPostDetailFragment();
                             Bundle bundle = new Bundle();
                             bundle.putSerializable(Constants.POST, post);
                             fragment.setArguments(bundle);

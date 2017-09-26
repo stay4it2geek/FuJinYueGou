@@ -77,8 +77,6 @@ public class PostImageAdapter extends BaseAdapter {
                 }
             }
         }
-
-
         return convertView;
     }
 

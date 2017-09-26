@@ -13,11 +13,11 @@
         android:layout_alignParentTop="true">
 
         <ImageView
-            android:src="@drawable/layerlist_circle_mask"
             android:id="@+id/userImage"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_margin="5dp" />
+            android:layout_margin="5dp"
+            android:src="@drawable/layerlist_circle_mask" />
 
         <TextView
             android:id="@+id/nickName"
@@ -60,9 +60,9 @@
             android:id="@+id/imageView"
             android:layout_width="15dp"
             android:layout_height="17dp"
+            android:layout_alignTop="@+id/createTime"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_alignTop="@+id/createTime"
             android:layout_toRightOf="@+id/createTime"
             android:background="@drawable/location" />
 
@@ -73,22 +73,22 @@
             android:layout_alignBottom="@+id/createTime"
             android:layout_alignTop="@+id/createTime"
             android:layout_below="@+id/sexAndAge"
-            android:background="@drawable/bg_round_yellow"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/imageView"
+            android:background="@drawable/bg_round_yellow"
             android:text="" />
 
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_marginLeft="65dp"
         android:id="@+id/contentlayout"
-        android:layout_marginRight="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/header">
+        android:layout_below="@+id/header"
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="5dp">
 
         <TextView
             android:id="@+id/title"
@@ -106,11 +106,28 @@
             android:paddingTop="5dp"
             android:textSize="15sp" />
 
-            <com.devlin_n.videoplayer.player.IjkVideoView
-                android:layout_below="@+id/content"
-                android:id="@+id/video_player"
-                android:background="@color/black"
-                android:layout_width="match_parent"
-                android:layout_height="40dp" />
+        <com.devlin_n.videoplayer.player.IjkVideoView
+            android:id="@+id/video_player"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/content"
+            android:background="@color/black"
+            android:visibility="gone" />
     </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="68dp"
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout
+            android:id="@+id/imglistview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:dividerHeight="0dp" />
+    </LinearLayout>
 </LinearLayout>

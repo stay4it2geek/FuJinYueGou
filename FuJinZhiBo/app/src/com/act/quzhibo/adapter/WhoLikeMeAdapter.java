@@ -49,7 +49,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         holder.disMariState.setText(user.disMariState);
         int minute ;
         if (CommonUtil.loadData(activity, "see_time") > 0) {
-            if (Integer.parseInt(user.userId) != CommonUtil.loadData(activity, "userId")) {
+            if (Integer.parseInt(user.userId) != CommonUtil.loadData(activity, "see_userId ")) {
                 int max = 800;
                 int min = 30;
                 Random random = new Random();

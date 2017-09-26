@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
@@ -17,42 +16,7 @@
         android:id="@+id/comments_lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
         android:layout_marginTop="45dp"
         android:listSelector="@android:color/transparent" />
-
-    <LinearLayout
-        android:id="@+id/commentLayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:background="#eee"
-        android:orientation="horizontal">
-
-        <io.github.rockerhieu.emojicon.EmojiconEditText
-            android:id="@+id/comment_et"
-            style="@android:style/TextAppearance.Widget.EditText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="center"
-            android:hint="点击这里评论她/他"
-            android:text=""
-            android:textSize="16sp"
-            emojicon:emojiconSize="20sp" />
-
-
-        <TextView
-            android:id="@+id/commentBtn"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/button_common_selector"
-            android:gravity="center"
-            android:text="评论"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-    </LinearLayout>
 
 </FrameLayout>
