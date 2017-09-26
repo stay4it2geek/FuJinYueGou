@@ -18,11 +18,13 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.ui.activity.InfonNearPersonActivity;
 import com.act.quzhibo.ui.activity.IntersetPersonPostListActivity;
+import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyViewHolder> {
     private Activity activity;
@@ -45,17 +47,35 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         final InterestSubPerson user = datas.get(position);
         holder.nickName.setText(user.username);
         holder.disMariState.setText(user.disMariState);
-        long l = System.currentTimeMillis() - (position * 100 + 100);
-        long day = l / (24 * 60 * 60 * 1000);
-        long hour = (l / (60 * 60 * 1000) - day * 24);
-        long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        if (!datas.get(position).sex.equals("2")) {
-            holder.sexAndAge.setBackgroundColor(activity.getResources().getColor(R.color.blue));
+        int minute ;
+        if (CommonUtil.loadData(activity, "see_time") > 0) {
+            if (Integer.parseInt(user.userId) != CommonUtil.loadData(activity, "userId")) {
+                int max = 800;
+                int min = 30;
+                Random random = new Random();
+                minute = random.nextInt(max) +  random.nextInt(min) ;
+                CommonUtil.saveData(activity, minute, "see_time");
+                CommonUtil.saveData(activity, Integer.parseInt(user.userId), "see_userId");
+            } else {
+                minute = CommonUtil.loadData(activity, "see_time");
+            }
+        } else {
+            int max = 800;
+            int min = 30;
+            Random random = new Random();
+            minute = random.nextInt(max) +  random.nextInt(min) ;
+            CommonUtil.saveData(activity, minute, "see_time");
+            CommonUtil.saveData(activity, Integer.parseInt(user.userId), "see_userId");
         }
-        holder.sexAndAge.setText(datas.get(position).sex.equals("2") ? "女" : "男");
-        holder.createTime.setText(hour + "时" + min + "分钟前看过你");
+        if (minute != 0) {
+            if (minute % 60 == 0) {
+                holder.createTime.setText(minute / 60 + "小时前看过你");
+            } else {
+                holder.createTime.setText((minute - (minute % 60)) / 60 + "小时" + minute % 60 + "分钟前看过你");
+            }
+        }
         holder.arealocation.setText("  距离你" + datas.get(position).distance + "公里");
-
+        holder.sexAndAge.setText(datas.get(position).sex.equals("2") ? "女" : "男");
         holder.who_see_me_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

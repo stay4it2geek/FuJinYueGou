@@ -44,7 +44,6 @@ public class InfonNearPersonActivity extends AppCompatActivity {
 
     private Banner banner;
     private InterestSubPerson user;
-    private int second;
     private LoadNetView loadNetView;
     private MyFocusCommonPerson mMyFocusCommonPerson;
 
@@ -119,27 +118,38 @@ public class InfonNearPersonActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.level)).setText("超级趣会员");
         }
 
-        if (Integer.parseInt(user.userId) != CommonUtil.loadData(this, "userId")) {
-            int max = 400;
-            int min = 50;
-            Random random = new Random();
-            second = random.nextInt(max) % (max - min + 4) + min;
-            CommonUtil.saveData(this, second, "time");
-            CommonUtil.saveData(this, Integer.parseInt(user.userId), "userId");
-        } else {
-            second = CommonUtil.loadData(this, "time");
-        }
-        if (second != 0) {
-            if (second % 60 == 0) {
-                ((TextView) findViewById(R.id.online_time)).setText(second / 60 + "时前在线");
+        int minute;
+        if (CommonUtil.loadData(this, "near_time") > 0) {
+            if (Integer.parseInt(user.userId) != CommonUtil.loadData(this, "near_userId")) {
+                int max = 800;
+                int min = 30;
+                Random random = new Random();
+                minute = random.nextInt(max) +  random.nextInt(min) ;
+                CommonUtil.saveData(this, minute, "near_time");
+                CommonUtil.saveData(this, Integer.parseInt(user.userId), "near_userId");
             } else {
-                ((TextView) findViewById(R.id.online_time)).setText((second - (second % 60)) / 60 + "分" + second % 60 + "秒前在线");
+                minute = CommonUtil.loadData(this, "near_time");
+            }
+        } else {
+            int max = 800;
+            int min = 30;
+            Random random = new Random();
+            minute = random.nextInt(max) +  random.nextInt(min) ;
+            CommonUtil.saveData(this, minute, "near_time");
+            CommonUtil.saveData(this, Integer.parseInt(user.userId), "near_userId");
+        }
+
+        if (minute != 0) {
+            if (minute % 60 == 0) {
+                ((TextView) findViewById(R.id.online_time)).setText(minute / 60 + "小时前在线");
+            } else {
+                ((TextView) findViewById(R.id.online_time)).setText((minute - (minute % 60)) / 60 + "小时" + minute % 60 + "分前在线");
             }
         }
+
         ((TextView) findViewById(R.id.disPurpose)).setText(user.disPurpose == null ? "" : user.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(user.disMariState == null ? "" : user.disMariState);
         ((TextView) findViewById(R.id.nickName)).setText(user.username == null ? "" : user.username);
-
         if (getIntent() != null) {
             user = (InterestSubPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
             findViewById(R.id.brocast).setVisibility(View.VISIBLE);

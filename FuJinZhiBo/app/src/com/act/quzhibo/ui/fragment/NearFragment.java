@@ -98,8 +98,10 @@ public class NearFragment extends BackHandledFragment {
     }
 
     private void queryData(final int actionType) {
-        final BmobQuery<InterestSubPerson> query = new BmobQuery<>();
         List<BmobQuery<InterestSubPerson>> queries = new ArrayList<>();
+        BmobQuery<InterestSubPerson> query = new BmobQuery<>();
+        BmobQuery<InterestSubPerson> query3 = new BmobQuery<>();
+
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -114,10 +116,11 @@ public class NearFragment extends BackHandledFragment {
         BmobQuery<InterestSubPerson> query2 = new BmobQuery<>();
         query2.addWhereEqualTo("userType", Constants.NEAR);
         queries.add(query2);
-        query.and(queries);
-        query.setLimit(10);
-        query.order("distance");
-        query.findObjects(new FindListener<InterestSubPerson>() {
+
+        query3.and(queries);
+        query3.setLimit(10);
+        query3.order("-distance");
+        query3.findObjects(new FindListener<InterestSubPerson>() {
             @Override
             public void done(List<InterestSubPerson> list, BmobException e) {
                 if (e == null) {
@@ -142,27 +145,26 @@ public class NearFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<InterestSubPerson> interestSubPersonList = (ArrayList<InterestSubPerson>) msg.obj;
+            ArrayList<InterestSubPerson> personList = (ArrayList<InterestSubPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
                 if (nearPersonList != null) {
-                    nearPersonSizeHandler = interestSubPersonList.size();
-                    nearPersonList.addAll(interestSubPersonList);
+                    nearPersonSizeHandler = personList.size();
+                    nearPersonList.addAll(personList);
                 } else {
                     nearPersonSizeHandler = 0;
-                    if(msg.what==Constants.LOADMORE){
+                    if (msg.what == Constants.LOADMORE) {
                         recyclerView.setNoMore(true);
                     }
                 }
-                    if (nearPersonAdapter == null) {
-                        nearPersonAdapter = new NearPersonAdapter(getActivity(), nearPersonList);
-                        recyclerView.setAdapter(nearPersonAdapter);
-                    } else {
-                        nearPersonAdapter.notifyDataSetChanged();
-                    }
+                if (nearPersonAdapter == null) {
+                    nearPersonAdapter = new NearPersonAdapter(getActivity(), nearPersonList);
+                    recyclerView.setAdapter(nearPersonAdapter);
+                } else {
+                    nearPersonAdapter.notifyDataSetChanged();
+                }
 
                 loadNetView.setVisibility(View.GONE);
                 if (nearPersonList.size() == 0) {
-
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;

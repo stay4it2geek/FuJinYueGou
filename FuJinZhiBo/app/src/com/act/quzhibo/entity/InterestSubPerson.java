@@ -1,9 +1,6 @@
 package com.act.quzhibo.entity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
-public class InterestSubPerson extends InterestParentPerson implements Serializable {
+public class InterestSubPerson extends InterestParentPerson {
     public String absCoverPic;
     public String soundUrl;
     public String photoLibraries;

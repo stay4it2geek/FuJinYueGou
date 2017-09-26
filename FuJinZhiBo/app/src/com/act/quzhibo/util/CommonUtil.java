@@ -83,7 +83,7 @@ public class CommonUtil {
 
     @SuppressWarnings("unchecked")
     public static List String2SceneList(String SceneListString) {
-        byte[] mobileBytes = Base64.decode(SceneListString.getBytes(),Base64.DEFAULT);
+        byte[] mobileBytes = Base64.decode(SceneListString.getBytes(), Base64.DEFAULT);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(mobileBytes);
         ObjectInputStream objectInputStream;
         List<Toggle> SceneList = null;
@@ -120,17 +120,19 @@ public class CommonUtil {
         T result = gson.fromJson(jsonData, type);
         return result;
     }
-    public static <T> ArrayList<T> jsonToArrayList(String json, Class<T> clazz){
-        Type type = new TypeToken<ArrayList<JsonObject>>()
-        {}.getType();
+
+    public static <T> ArrayList<T> jsonToArrayList(String json, Class<T> clazz) {
+        Type type = new TypeToken<ArrayList<JsonObject>>() {
+        }.getType();
         ArrayList<JsonObject> jsonObjects = new Gson().fromJson(json, type);
         ArrayList<T> arrayList = new ArrayList<>();
-        for (JsonObject jsonObject : jsonObjects){
+        for (JsonObject jsonObject : jsonObjects) {
             arrayList.add(new Gson().fromJson(jsonObject, clazz));
         }
         return arrayList;
     }
-    public static void initView(String[] mTitles,View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter, boolean activityType) {
+
+    public static void initView(String[] mTitles, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter, boolean activityType) {
         final CommonTabLayout commonTabLayout;
         viewPager.setAdapter(mAdapter);
         if (activityType) {
@@ -149,6 +151,7 @@ public class CommonUtil {
             public void onTabSelect(int position) {
                 viewPager.setCurrentItem(position);
             }
+
             @Override
             public void onTabReselect(int position) {
             }
@@ -157,10 +160,12 @@ public class CommonUtil {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
+
             @Override
             public void onPageSelected(int position) {
                 commonTabLayout.setCurrentTab(position);
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
             }
@@ -229,27 +234,32 @@ public class CommonUtil {
         return stringBuilder.toString();
     }
 
-    public static void saveData(Context context,int value,String key){
-        SharedPreferences sp = context.getSharedPreferences("config",Context.MODE_PRIVATE );
+    public static void saveData(Context context, int value, String key) {
+        SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(key, value);
         editor.commit();
     }
 
-    public static int loadData(Context context,String key) {
+    public static int loadData(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
-        return sp.getInt(key,0);
+        return sp.getInt(key, 0);
     }
 
+    public static void clearData(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().commit();
+    }
 
-    public static void  fecth(final Activity activity) {
+    public static void fecth(final Activity activity) {
         BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {
             @Override
             public void done(RootUser user, BmobException e) {
                 if (e == null) {
                     ToastUtil.showToast(activity, "同步成功");
                 } else {
-                    ToastUtil.showToast(activity, "同步失败,原因是："+e.getLocalizedMessage());
+                    ToastUtil.showToast(activity, "同步失败,原因是：" + e.getLocalizedMessage());
                 }
             }
         });

@@ -92,25 +92,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
         banner.setLayoutParams(new FrameLayout.LayoutParams(size.x - 10, size.x - 10));
         if (getIntent() != null) {
             post = (InterestPost) getIntent().getSerializableExtra(Constants.POST);
-            if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
-                int max = 5000;
-                int min = 600;
-                Random random = new Random();
-                second = random.nextInt(max) % (max - min + 4) + min;
-                CommonUtil.saveData(this, second, "time");
-                CommonUtil.saveData(this, Integer.parseInt(post.user.userId), "userId");
-            } else {
-                second = CommonUtil.loadData(this, "time");
-            }
-            if (second != 0) {
-                if (second % 60 == 0) {
-                    ((TextView) findViewById(R.id.online_time)).setText(second / 60 + "时前在线");
-                } else {
-                    ((TextView) findViewById(R.id.online_time)).setText((second - (second % 60)) / 60 + "分" + second % 60 + "秒前在线");
-                }
-            }
             ArrayList<String> urls = new ArrayList<>();
-
             if (post.images != null && post.images.size() > 0) {
                 urls.addAll(post.images);
             } else {
@@ -126,7 +108,38 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                 Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.man).into((CircleImageView) findViewById(R.id.userImage));
 
             }
+
+            int minute;
+            if (CommonUtil.loadData(this, "time") > 0) {
+                if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
+                    int max = 800;
+                    int min = 30;
+                    Random random = new Random();
+                    minute = random.nextInt(max) +  random.nextInt(min) ;
+                    CommonUtil.saveData(this, minute, "time");
+                    CommonUtil.saveData(this, Integer.parseInt(post.user.userId), "userId");
+                } else {
+                    minute = CommonUtil.loadData(this, "time");
+                }
+            } else {
+                int max = 800;
+                int min = 30;
+                Random random = new Random();
+                minute = random.nextInt(max) +  random.nextInt(min) ;
+                CommonUtil.saveData(this, minute, "time");
+                CommonUtil.saveData(this, Integer.parseInt(post.user.userId), "userId");
+            }
+
+            if (minute != 0) {
+                if (minute % 60 == 0) {
+                    ((TextView) findViewById(R.id.online_time)).setText(minute / 60 + "小时前在线");
+                } else {
+                    ((TextView) findViewById(R.id.online_time)).setText((minute - (minute % 60)) / 60 + "小时" + minute % 60 + "分前在线");
+                }
+            }
+
         }
+
         int vip = Integer.parseInt(post.user.vipLevel);
         if (vip < 1) {
             ((TextView) findViewById(R.id.level)).setText("非会员");

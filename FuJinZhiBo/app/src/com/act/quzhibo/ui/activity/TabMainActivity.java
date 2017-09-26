@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
@@ -136,5 +137,9 @@ public class TabMainActivity extends TabActivity {
         super.onResume();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CommonUtil.clearData(this);
+    }
 }
