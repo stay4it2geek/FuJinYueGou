@@ -370,7 +370,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         startActivityForResult(intent, REQUEST_CAPTURE);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
@@ -392,14 +391,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         return;
                     }
                     String cropImagePath = FileUtil.getRealFilePathFromUri(getActivity().getApplicationContext(), uri);
-                    final ProgressDialog dialog = new ProgressDialog(getActivity());
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            dialog.show();
-                        }
-                    });
+                    ToastUtil.showToast(getActivity(), "正在上传");
                     Luban.get(getActivity())
                             .load(new File(cropImagePath))
                             .putGear(Luban.THIRD_GEAR)
@@ -423,6 +415,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                                 public void call(File file) {
                                     if (file != null) {
                                         Glide.with(getActivity()).load(file.getAbsolutePath()).into(circleImageView);
+                                        view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
                                         final BmobFile bmobFile = new BmobFile(new File(file.getAbsolutePath()));
                                         bmobFile.uploadblock(new UploadFileListener() {
                                             @Override
@@ -435,7 +428,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                                                         public void done(BmobException e) {
                                                             if (e == null) {
                                                                 CommonUtil.fecth(getActivity());
-                                                                view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
+                                                                ToastUtil.showToast(getActivity(), "头像上传成功");
                                                             } else {
                                                                 ToastUtil.showToast(getActivity(), "头像上传失败");
                                                             }
@@ -451,7 +444,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
                                             }
                                         });
-                                        dialog.dismiss();
+
                                     }
                                 }
                             });
