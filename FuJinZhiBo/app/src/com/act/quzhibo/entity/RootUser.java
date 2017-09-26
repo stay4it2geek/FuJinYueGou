@@ -12,7 +12,7 @@ public class RootUser extends BmobUser {
     public String provinceAndcity;
     public boolean secretScan;
     public String secretPassword;
-    public BmobFile photoUrlFile;
+    public String photoFileUrl;
     public String lastLoginTime;
     public String canDateThing;
 }

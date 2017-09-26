@@ -98,9 +98,9 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                 }
             });
 
-            if (rootUser.photoUrlFile != null) {
+            if (rootUser.photoFileUrl != null) {
                 if (rootUser.sex.equals("女")) {
-                    Glide.with(activity).load(rootUser.photoUrlFile.getUrl()).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                    Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -112,7 +112,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                         }
                     });
                 } else {
-                    Glide.with(activity).load(rootUser.photoUrlFile.getUrl()).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                    Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));

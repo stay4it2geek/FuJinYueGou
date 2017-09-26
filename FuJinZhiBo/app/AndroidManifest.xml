@@ -36,7 +36,7 @@
         android:grantUriPermissions="true">
         <meta-data
             android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/paths" />
+            android:resource="@xml/file_paths" />
     </provider>
 
     <application
@@ -62,17 +62,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
-        <activity android:name="me.iwf.photopicker.PhotoPickerActivity"
-            android:theme="@style/customTheme"
-            />
-
-        <activity android:name="me.iwf.photopicker.PhotoPagerActivity"
-            android:theme="@style/customTheme"/>
-
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/customTheme"/>
+            android:name="com.act.quzhibo.ui.activity.ClipImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.VipOrdersActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

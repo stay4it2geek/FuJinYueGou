@@ -1,25 +1,38 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.act.quzhibo.BuildConfig;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
 import com.act.quzhibo.ui.activity.CheckOutMoneyActivity;
+import com.act.quzhibo.ui.activity.ClipImageActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.MakeMoneyActivity;
@@ -34,19 +47,17 @@ import com.act.quzhibo.ui.activity.VipOrdersActivity;
 import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
-import com.hss01248.glidepicker.GlideIniter;
-import com.hss01248.photoouter.PhotoCallback;
-import com.hss01248.photoouter.PhotoUtil;
 
 import java.io.File;
-import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -54,16 +65,28 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
+import static android.app.Activity.RESULT_OK;
+
 public class PersonalFragment extends Fragment implements View.OnClickListener {
-    private static final int UPLOAD_AVATAR_REQUEST_CODE = 1;
-    RootUser rootUser;
-    View view;
+
+    private RootUser rootUser;
+    private View view;
+    private CircleImageView circleImageView;
+    //请求相机
+    private static final int REQUEST_CAPTURE = 100;
+    //请求相册
+    private static final int REQUEST_PICK = 101;
+    //请求截图
+    private static final int REQUEST_CROP_PHOTO = 102;
+    private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
+    private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
+    private File tempFile;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        PhotoUtil.init(getActivity(), new GlideIniter());
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_personal, null, false);
         if (CommonUtil.getToggle(getActivity(), Constants.SQUARE_AND_MONEY).getIsOpen().equals("false")) {
             view.findViewById(R.id.vip_policy).setVisibility(View.GONE);
@@ -98,9 +121,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 return true;     //截断事件的传递
             }
         });
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
-            Glide.with(getActivity()).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile.getFileUrl()).into(((ImageView) view.findViewById(R.id.userAvtar)));
-        }
+
+
         return view;
     }
 
@@ -111,88 +133,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             startActivity(new Intent(getActivity(), VIPConisTableActivity.class));
             return;
         } else if (view.getId() == R.id.uploadImg) {
-            PhotoUtil.cropAvatar(true)
-                    .start(getActivity(), UPLOAD_AVATAR_REQUEST_CODE, new PhotoCallback() {
-                        @Override
-                        public void onFail(String s, Throwable throwable, int i) {
-
-                        }
-
-                        @Override
-                        public void onSuccessSingle(String s, String s1, int i) {
-                            final ProgressDialog dialog = new ProgressDialog(getActivity());
-                            dialog.show();
-                            Luban.get(getActivity())
-                                    .load(new File(s))
-                                    .putGear(Luban.THIRD_GEAR)
-                                    .asObservable()
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .doOnError(new Action1<Throwable>() {
-                                        @Override
-                                        public void call(Throwable throwable) {
-                                            throwable.printStackTrace();
-                                        }
-                                    })
-                                    .onErrorResumeNext(new Func1<Throwable, Observable<? extends File>>() {
-                                        @Override
-                                        public Observable<? extends File> call(Throwable throwable) {
-                                            return Observable.empty();
-                                        }
-                                    })
-                                    .subscribe(new Action1<File>() {
-                                        @Override
-                                        public void call(File file) {
-                                            if (file != null) {
-                                                final BmobFile bmobFile = new BmobFile(new File(file.getAbsolutePath()));
-                                                bmobFile.uploadblock(new UploadFileListener() {
-                                                    @Override
-                                                    public void done(BmobException e) {
-                                                        if (e == null) {
-                                                            BmobUser.getCurrentUser(RootUser.class).photoUrlFile = bmobFile;
-                                                            BmobUser.getCurrentUser(RootUser.class).save(new SaveListener() {
-                                                                @Override
-                                                                public void done(Object o, BmobException e) {
-                                                                    if (e == null) {
-                                                                        Glide.with(getActivity()).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile).into(((ImageView) view.findViewById(R.id.userAvtar)));
-                                                                        view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void done(Object o, Object o2) {
-
-                                                                }
-                                                            });
-                                                        } else {
-                                                            ToastUtil.showToast(getActivity(), "头像上传失败, 请稍后重试");
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onProgress(Integer value) {
-                                                        dialog.setProgress(value);
-                                                    }
-                                                });
-                                                dialog.dismiss();
-                                            }
-
-                                        }
-                                    });
-                        }
-
-                        @Override
-                        public void onSuccessMulti(List<String> list, List<String> list1, int i) {
-
-                        }
-
-                        @Override
-                        public void onCancel(int i) {
-
-                        }
-                    });
-
-            return;
+            if (rootUser == null) {
+                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                return;
+            } else {
+                uploadHeadImage();
+                return;
+            }
         }
         view.setBackgroundColor(getResources().getColor(R.color.colorbg));
         new Handler().postDelayed(new Runnable() {
@@ -214,7 +161,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 switch (view.getId()) {
-
                     case R.id.makemoneyLayout:
                         getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
                         break;
@@ -293,7 +239,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 ((TextView) view.findViewById(R.id.vipLevel)).setText("超级趣会员");
 
             }
+            circleImageView = (CircleImageView) view.findViewById(R.id.circle_avatar);
+            if (!TextUtils.isEmpty(rootUser.photoFileUrl)) {
+                view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
+                Glide.with(getActivity()).load(rootUser.photoFileUrl).into(circleImageView);
+            }
         } else {
+            view.findViewById(R.id.uploadImg).setVisibility(View.VISIBLE);
             view.findViewById(R.id.registerLayout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.logout).setVisibility(View.GONE);
             ((TextView) view.findViewById(R.id.nickName)).setText("未设置昵称");
@@ -302,5 +254,224 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+    /**
+     * 上传头像
+     */
+    private void uploadHeadImage() {
+        View viewSub = LayoutInflater.from(getActivity()).inflate(R.layout.layout_popupwindow, null);
+        TextView btnCarema = (TextView) viewSub.findViewById(R.id.btn_camera);
+        TextView btnPhoto = (TextView) viewSub.findViewById(R.id.btn_photo);
+        TextView btnCancel = (TextView) viewSub.findViewById(R.id.btn_cancel);
+        final PopupWindow popupWindow = new PopupWindow(viewSub, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+        //popupWindow在弹窗的时候背景半透明
+        final WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
+        params.alpha = 0.5f;
+        getActivity().getWindow().setAttributes(params);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                params.alpha = 1.0f;
+                getActivity().getWindow().setAttributes(params);
+            }
+        });
+
+        btnCarema.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //权限判断
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    //申请WRITE_EXTERNAL_STORAGE权限
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+                } else {
+                    //跳转到调用系统相机
+                    gotoCamera();
+                }
+                popupWindow.dismiss();
+            }
+        });
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //权限判断
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    //申请READ_EXTERNAL_STORAGE权限
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            READ_EXTERNAL_STORAGE_REQUEST_CODE);
+                } else {
+                    //跳转到相册
+                    gotoPhoto();
+                }
+                popupWindow.dismiss();
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+    }
+
+
+    /**
+     * 外部存储权限申请返回
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                gotoCamera();
+            }
+        } else if (requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission Granted
+                gotoPhoto();
+            }
+        }
+    }
+
+
+    /**
+     * 跳转到相册
+     */
+    private void gotoPhoto() {
+        //跳转到调用系统图库
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "请选择图片"), REQUEST_PICK);
+    }
+
+
+    /**
+     * 跳转到照相机
+     */
+    private void gotoCamera() {
+        //创建拍照存储的图片文件
+        tempFile = new File(FileUtil.checkDirPath(Environment.getExternalStorageDirectory().getPath() + "/image/"), System.currentTimeMillis() + ".jpg");
+
+        //跳转到调用系统相机
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //设置7.0中共享文件，分享路径定义在xml/file_paths.xml
+            intent.setFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".FileProvider", tempFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
+        } else {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+        }
+        startActivityForResult(intent, REQUEST_CAPTURE);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+            case REQUEST_CAPTURE: //调用系统相机返回
+                if (resultCode == RESULT_OK) {
+                    gotoClipActivity(Uri.fromFile(tempFile));
+                }
+                break;
+            case REQUEST_PICK:  //调用系统相册返回
+                if (resultCode == RESULT_OK) {
+                    Uri uri = intent.getData();
+                    gotoClipActivity(uri);
+                }
+                break;
+            case REQUEST_CROP_PHOTO:  //剪切图片返回
+                if (resultCode == RESULT_OK) {
+                    final Uri uri = intent.getData();
+                    if (uri == null) {
+                        return;
+                    }
+                    String cropImagePath = FileUtil.getRealFilePathFromUri(getActivity().getApplicationContext(), uri);
+                    final ProgressDialog dialog = new ProgressDialog(getActivity());
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.show();
+                        }
+                    });
+                    Luban.get(getActivity())
+                            .load(new File(cropImagePath))
+                            .putGear(Luban.THIRD_GEAR)
+                            .asObservable()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnError(new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    throwable.printStackTrace();
+                                }
+                            })
+                            .onErrorResumeNext(new Func1<Throwable, Observable<? extends File>>() {
+                                @Override
+                                public Observable<? extends File> call(Throwable throwable) {
+                                    return Observable.empty();
+                                }
+                            })
+                            .subscribe(new Action1<File>() {
+                                @Override
+                                public void call(File file) {
+                                    if (file != null) {
+                                        Glide.with(getActivity()).load(file.getAbsolutePath()).into(circleImageView);
+                                        final BmobFile bmobFile = new BmobFile(new File(file.getAbsolutePath()));
+                                        bmobFile.uploadblock(new UploadFileListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    RootUser updateUser = new RootUser();
+                                                    updateUser.photoFileUrl = bmobFile.getFileUrl();
+                                                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                                                        @Override
+                                                        public void done(BmobException e) {
+                                                            if (e == null) {
+                                                                CommonUtil.fecth(getActivity());
+                                                                view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
+                                                            } else {
+                                                                ToastUtil.showToast(getActivity(), "头像上传失败");
+                                                            }
+                                                        }
+                                                    });
+                                                } else {
+                                                    ToastUtil.showToast(getActivity(), "头像上传失败, 请稍后重试");
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onProgress(Integer value) {
+
+                                            }
+                                        });
+                                        dialog.dismiss();
+                                    }
+                                }
+                            });
+                }
+                break;
+        }
+    }
+
+
+    /**
+     * 打开截图界面
+     */
+    public void gotoClipActivity(Uri uri) {
+        if (uri == null) {
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ClipImageActivity.class);
+        intent.setData(uri);
+        startActivityForResult(intent, REQUEST_CROP_PHOTO);
+    }
 
 }

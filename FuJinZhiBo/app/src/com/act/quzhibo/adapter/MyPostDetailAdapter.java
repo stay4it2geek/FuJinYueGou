@@ -88,7 +88,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int positon) {
         if (holder instanceof Item1ViewHolder) {
             if (BmobUser.getCurrentUser(RootUser.class).sex.equals("女")) {
-                Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile.getUrl() + "").asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -100,7 +100,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 });
             } else {
-                Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoUrlFile.getUrl() + "").asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));

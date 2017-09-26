@@ -103,27 +103,32 @@ public class WelcomeActivity extends ActivityManagePermission {
     private void doRequest() {
         psdInputView = (PsdInputView) findViewById(R.id.psdInputView);
         user = BmobUser.getCurrentUser(RootUser.class);
-        if (user != null && user.secretScan) {
+        if (user != null) {
             CommonUtil.fecth(this);
-            findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
-            final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (!imm.isActive(psdInputView)) {
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-            psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
-                @Override
-                public void onSettingMode(String text) {
-                    if (text.equals(user.secretPassword)) {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                        }
-                        findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
-                        request();
-                    } else {
-                        ToastUtil.showToast(WelcomeActivity.this, "密码不正确");
-                    }
+            if (user.secretScan) {
+                findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (!imm.isActive(psdInputView)) {
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 }
-            });
+                psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
+                    @Override
+                    public void onSettingMode(String text) {
+                        if (text.equals(user.secretPassword)) {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                            }
+                            findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
+                            request();
+                        } else {
+                            ToastUtil.showToast(WelcomeActivity.this, "密码不正确");
+                        }
+                    }
+                });
+            } else {
+                findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
+                request();
+            }
         } else {
             findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
             request();

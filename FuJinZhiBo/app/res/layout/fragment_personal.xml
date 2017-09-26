@@ -15,18 +15,16 @@
             android:layout_height="80dp"
             android:layout_margin="5dp">
 
-            <ImageView
-                android:id="@+id/userAvtar"
+            <com.act.quzhibo.view.CircleImageView
+                android:id="@+id/circle_avatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/man"
-                android:src="@drawable/layerlist_circle_mask_personnal" />
+                android:background="@drawable/man" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="20dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="请上传头像"
                 android:id="@+id/uploadImg"
