@@ -52,7 +52,7 @@ public class MediaAuthorListAdapter extends RecyclerView.Adapter<MediaAuthorList
                     mOnItemClickListener.onItemClick(medias.get(position));
                 }
             });
-            Glide.with(activity).load(medias.get(position).authorFile.getUrl()+"").placeholder(R.drawable.women).into(holder.photoImg);
+            Glide.with(activity).load(medias.get(position).authorFile.getUrl()+"").placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(holder.photoImg);
         }
     }
 

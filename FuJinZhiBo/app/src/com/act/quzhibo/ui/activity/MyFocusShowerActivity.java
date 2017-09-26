@@ -40,7 +40,6 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
-import okhttp3.Call;
 
 
 public class MyFocusShowerActivity extends FragmentActivity {
@@ -102,7 +101,6 @@ public class MyFocusShowerActivity extends FragmentActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MyFocusShowerActivity.this, 2);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        queryData(Constants.REFRESH);
         loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,14 +232,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (myFocusShowerListAdapter != null) {
-            myFocusShowerListAdapter.notifyDataSetChanged();
-            if (myFocusShowerses.size() == 0) {
-                loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NO_DATA);
-                return;
-            }
-        }
+        queryData(Constants.REFRESH);
     }
 
     Handler infoHandler = new Handler() {
@@ -286,6 +277,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
             }
         }
     };
+
 
     private void requestInfo(String showerId) {
         String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", showerId);

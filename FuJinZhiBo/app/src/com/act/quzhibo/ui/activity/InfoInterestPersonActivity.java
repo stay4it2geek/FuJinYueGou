@@ -101,11 +101,11 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             if (post.user.sex.equals("2")) {
                 ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(post.user.vipLevel)));
                 banner.setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
-                Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.women).into((CircleImageView) findViewById(R.id.userImage));
+                Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into((CircleImageView) findViewById(R.id.userImage));
             } else {
                 ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(post.user.vipLevel)));
                 banner.setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
-                Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.man).into((CircleImageView) findViewById(R.id.userImage));
+                Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.man).error(R.drawable.error_img).into((CircleImageView) findViewById(R.id.userImage));
 
             }
 
@@ -351,6 +351,5 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             }
         }
     };
-
 
 }

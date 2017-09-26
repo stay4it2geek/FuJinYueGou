@@ -73,7 +73,7 @@ public class PostImageAdapter extends BaseAdapter {
                 if (rootUser.vipConis < 14000) {
                     blurImage(position, viewHolder);
                 } else {
-                    Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).into(viewHolder.avatar);//加载网络图片
+                    Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(viewHolder.avatar);//加载网络图片
                 }
             }
         }
@@ -83,7 +83,7 @@ public class PostImageAdapter extends BaseAdapter {
     }
 
     private void blurImage(int position, final ViewHolder viewHolder) {
-        Glide.with(context).load(imgs.get(position)).asBitmap().placeholder(R.drawable.placehoder_img).into(new SimpleTarget<Bitmap>() {
+        Glide.with(context).load(imgs.get(position)).asBitmap().placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(final Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 new AsyncTask<Void, Void, StackBlurManager>() {

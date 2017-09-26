@@ -36,7 +36,7 @@ public class MemberAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (!TextUtils.isEmpty(members.get(position).headUrl)) {
-            Glide.with(context).load(members.get(position).headUrl).into(viewHolder.avatar);
+            Glide.with(context).load(members.get(position).headUrl).error(R.drawable.error_img).into(viewHolder.avatar);
         }
         return convertView;
     }

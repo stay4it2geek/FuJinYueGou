@@ -86,7 +86,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         } else {
             photoUrl = room.portrait_path_1280;
         }
-        Glide.with(getActivity()).load(photoUrl).into(zhuboAvatar);//加载网络图片
+        Glide.with(getActivity()).load(photoUrl).error(R.drawable.error_img).into(zhuboAvatar);//加载网络图片
 
         zhuboAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +103,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
 
         onlineCount = Integer.parseInt(room.onlineCount);
         ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
-        ((TextView) view.findViewById(R.id.starValue)).setText("星光值：" + (Long.parseLong(room.roomId) - 92015634l));
+        ((TextView) view.findViewById(R.id.starValue)).setText(("星光值：" + (Long.parseLong(room.roomId) - 92015634l)).toString().replaceAll("-", ""));
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
         ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
         view.findViewById(R.id.close).setOnClickListener(this);
@@ -208,7 +208,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     Random random = new Random();
                 }
             });
-            heartHandler.postDelayed(this, 1000* mRandom.nextInt(5));
+            heartHandler.postDelayed(this, 1000 * mRandom.nextInt(5));
         }
     };
     Handler countHandler = new Handler();

@@ -202,7 +202,6 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                 ((TextView) findViewById(R.id.focus)).setText("关注ta");
                                                 ToastUtil.showToast(ShowerInfoActivity.this, "取消关注成功");
                                                 EventBus.getDefault().post(new FocusChangeEvent(false));
-
                                             }
 
                                         }
@@ -262,7 +261,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                         final ImageView zhuboAvatar = (ImageView) findViewById(R.id.userImage);
 
                         if (gender.equals("0")) {
-                            Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                            Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                                     zhuboAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -275,7 +274,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                             });
                             ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
                         } else {
-                            Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                            Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.man).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                                     zhuboAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -306,4 +305,10 @@ public class ShowerInfoActivity extends FragmentActivity {
         }
     };
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setResult(RESULT_OK);
+        finish();
+    }
 }

@@ -106,9 +106,13 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                             holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
                         }
 
+
+
                         @Override
-                        public void onLoadStarted(Drawable placeholder) {
-                            super.onLoadStarted(placeholder);
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            super.onLoadFailed(e, errorDrawable);
+                            holder.photoImg.setBackgroundDrawable(errorDrawable);
+
                         }
                     });
                 } else {
@@ -117,10 +121,11 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
                         }
-
                         @Override
-                        public void onLoadStarted(Drawable placeholder) {
-                            super.onLoadStarted(placeholder);
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            super.onLoadFailed(e, errorDrawable);
+                            holder.photoImg.setBackgroundDrawable(errorDrawable);
+
                         }
                     });
                 }

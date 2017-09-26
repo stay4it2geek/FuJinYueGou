@@ -81,7 +81,7 @@ public class InfonNearPersonActivity extends AppCompatActivity {
         findViewById(R.id.rl_zipai_img_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_zipai_video_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.last_see_20_rl).setVisibility(View.VISIBLE);
-        Glide.with(this).load(user.absCoverPic).asBitmap().placeholder(R.drawable.women).into((CircleImageView) findViewById(R.id.userImage));
+        Glide.with(this).load(user.absCoverPic).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into((CircleImageView) findViewById(R.id.userImage));
         findViewById(R.id.rl_zipai_img_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

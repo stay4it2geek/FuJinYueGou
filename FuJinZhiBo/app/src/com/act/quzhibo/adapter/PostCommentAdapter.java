@@ -83,9 +83,9 @@ public class PostCommentAdapter extends BaseAdapter {
                 }
 
                 @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                    viewHolder.userImage.setBackgroundDrawable(placeholder);
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    viewHolder.userImage.setBackgroundDrawable(errorDrawable);
 
                 }
             });
@@ -97,7 +97,12 @@ public class PostCommentAdapter extends BaseAdapter {
                     viewHolder.userImage.setTag(commentDetails.get(position).user.photoUrl);
 
                 }
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    viewHolder.userImage.setBackgroundDrawable(errorDrawable);
 
+                }
                 @Override
                 public void onLoadStarted(Drawable placeholder) {
                     super.onLoadStarted(placeholder);

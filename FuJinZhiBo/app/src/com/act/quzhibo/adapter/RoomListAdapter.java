@@ -73,9 +73,9 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
             holder.photoImg.setAdjustViewBounds(true);
             holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).gender.equals("0")) {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).into(holder.photoImg);//加载网络图片
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.women).error(R.drawable.error_img).into(holder.photoImg);//加载网络图片
             } else {
-                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).into(holder.photoImg);//加载网络图片
+                Glide.with(mContext).load(pathPrefix + datas.get(position).poster_path_400).placeholder(R.drawable.man).error(R.drawable.error_img).into(holder.photoImg);//加载网络图片
 
             }
         }

@@ -3,6 +3,7 @@ package com.act.quzhibo.adapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -29,6 +30,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestParentPerson;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
+import com.act.quzhibo.ui.activity.XImageActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -176,7 +178,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             }
         });
         if (post.user.sex.equals("2")) {
-            Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+            Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -186,6 +188,13 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                 public void onLoadStarted(Drawable placeholder) {
                     super.onLoadStarted(placeholder);
                     holder.photoImg.setBackgroundDrawable(placeholder);
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    holder.photoImg.setBackgroundDrawable(errorDrawable);
+
                 }
             });
         } else {
@@ -198,7 +207,13 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                 @Override
                 public void onLoadStarted(Drawable placeholder) {
                     super.onLoadStarted(placeholder);
-                    holder.photoImg.setBackgroundDrawable(placeholder);
+                }
+
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    holder.photoImg.setBackgroundDrawable(errorDrawable);
+
                 }
             });
         }

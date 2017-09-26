@@ -108,7 +108,6 @@ public class MyFocusPersonActivity extends FragmentActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(MyFocusPersonActivity.this, 2);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        queryData(Constants.REFRESH);
     }
 
     private void queryData(final int actionType) {BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
@@ -236,13 +235,6 @@ public class MyFocusPersonActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (myFocusPersonListAdapter != null) {
-            myFocusPersonListAdapter.notifyDataSetChanged();
-            if (myFocusCommonPersons.size() == 0) {
-                loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NO_DATA);
-                return;
-            }
-        }
+       queryData(Constants.REFRESH);
     }
 }

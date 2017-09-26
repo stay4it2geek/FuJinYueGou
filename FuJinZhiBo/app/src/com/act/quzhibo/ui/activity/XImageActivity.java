@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class XImageActivity extends AppCompatActivity {
     private DBController dbController;
     private LoadNetView loadNetView;
     private ArrayList<MediaInfo> mediaInfos;
+    private int photoIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +73,13 @@ public class XImageActivity extends AppCompatActivity {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setPageMargin((int) (getResources().getDisplayMetrics().density * 15));
-        final Snackbar snackbar = Snackbar.make(findViewById(R.id.container), "长按保存,双击或双指按住拉伸放大", Snackbar.LENGTH_LONG);
+        final Snackbar snackbar = Snackbar.make(findViewById(R.id.container), "双击或双指按住拉伸可放大", Snackbar.LENGTH_LONG);
         snackbar.setAction("知道了", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 snackbar.dismiss();
             }
-        }).setDuration(7000).show();
+        }).setDuration(3000).show();
 
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -86,8 +88,84 @@ public class XImageActivity extends AppCompatActivity {
                 onResume();
             }
         });
-    }
+        photoIndex = getIntent().getIntExtra("position", 0);
+        mPager.setCurrentItem(photoIndex);
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                photoIndex = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        findViewById(R.id.download_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                MediaInfo mediaInfo = mediaInfos.get(photoIndex);
+                String url = mediaInfos.get(photoIndex).getUrl();
+                DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
+
+                if (isSdCardExist) {
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.PHOTO_DOWNLOAD);
+                    if (!file.exists()) {
+                        file.mkdirs();
+                    }
+                    String path = file.getAbsolutePath().concat("/").concat(mediaInfo.getName());
+                    File localFile = new File(path);
+
+                    if (localFile.exists() && localFile.isFile() && downloadInfo != null) {
+                        switch (downloadInfo.getStatus()) {
+                            case DownloadInfo.STATUS_NONE:
+                            case DownloadInfo.STATUS_PAUSED:
+                            case DownloadInfo.STATUS_ERROR:
+                                downloadManager.resume(downloadInfo);
+                                break;
+                            case DownloadInfo.STATUS_DOWNLOADING:
+                            case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
+                            case STATUS_WAIT:
+                                downloadManager.pause(downloadInfo);
+                                break;
+                            case DownloadInfo.STATUS_COMPLETED:
+                                ToastUtil.showToast(XImageActivity.this, "您已经保存过该照片");
+                                break;
+                        }
+                    } else {
+                        if (downloadManager.findAllDownloading().size() > 10) {
+                            ToastUtil.showToast(XImageActivity.this, "下载任务最多10个,请稍后下载");
+                            if (downloadManager.findAllDownloaded().size() > 20) {
+                                FragmentDialog.newInstance(false, "", "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    @Override
+                                    public void onPositiveClick(Dialog dialog, boolean needDelete) {
+                                        Intent photoIntent = new Intent();
+                                        photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
+                                        photoIntent.setClass(XImageActivity.this, DownloadManagerActivity.class);
+                                        startActivity(photoIntent);
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onNegtiveClick(Dialog dialog) {
+                                        dialog.dismiss();
+                                    }
+                                }).show(getSupportFragmentManager(), "");
+                            }
+                        } else {
+                            createDownload(mediaInfo, url);
+                        }
+                    }
+                }
+            }
+        });
+    }
 
 
     @Override
@@ -118,12 +196,10 @@ public class XImageActivity extends AppCompatActivity {
                 @Override
                 public Object instantiateItem(ViewGroup container, final int position) {
                     String url = mediaInfos.get(position).getUrl();
-                    DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
                     View view = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.imglayout, null);
                     final XImageView xImageView = (XImageView) view.findViewById(R.id.ximageview);
                     xImageView.setDoubleTapScaleType(IXImageView.DoubleType.FIT_VIEW_MIN_VIEW_MAX);
                     xImageView.setInitType(IXImageView.InitType.FIT_VIEW_MIN_IMAGE_MIN);
-                    xImageView.setActionListener(new MyActionListner(mediaInfos.get(position), downloadInfo, url));
 
                     Glide.with(XImageActivity.this).load(url).asBitmap().skipMemoryCache(false).placeholder(R.drawable.placehoder_img).into(new SimpleTarget<Bitmap>() {
                         @Override
@@ -139,6 +215,8 @@ public class XImageActivity extends AppCompatActivity {
                         @Override
                         public void onLoadFailed(Exception e, Drawable errorDrawable) {
                             super.onLoadFailed(e, errorDrawable);
+                            xImageView.setImage(BitmapFactory.decodeResource(XImageActivity.this.getResources(),R.drawable.error_img));
+
                             loadNetView.setlayoutVisily(Constants.RELOAD);
                         }
                     });
@@ -153,89 +231,10 @@ public class XImageActivity extends AppCompatActivity {
                 }
             });
         }
-        mPager.setCurrentItem(getIntent().getIntExtra("position", 0));
+        mPager.setCurrentItem(photoIndex);
         loadNetView.setVisibility(View.GONE);
     }
 
-    class MyActionListner implements XImageView.OnActionListener {
-        DownloadInfo downloadInfo;
-        MediaInfo mediaInfo;
-        String url;
-
-        public MyActionListner(MediaInfo mediaInfo, DownloadInfo downloadInfo, String url) {
-            this.downloadInfo = downloadInfo;
-            this.mediaInfo = mediaInfo;
-            this.url = url;
-        }
-
-        @Override
-        public void onSingleTapped(XImageView view, MotionEvent event, boolean onImage) {
-        }
-
-        @Override
-        public boolean onDoubleTapped(XImageView view, MotionEvent event) {
-            return false;
-        }
-
-        @Override
-        public void onLongPressed(XImageView view, MotionEvent event) {
-            if (isSdCardExist) {
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.PHOTO_DOWNLOAD);
-                if (!file.exists()) {
-                    file.mkdirs();
-                }
-                String path = file.getAbsolutePath().concat("/").concat(mediaInfo.getName());
-                File localFile = new File(path);
-                if (downloadInfo != null) {
-                    ToastUtil.showToast(XImageActivity.this, downloadInfo.getStatus() + "");
-                }
-
-                if (localFile.exists() && localFile.isFile() && downloadInfo != null) {
-                    switch (downloadInfo.getStatus()) {
-                        case DownloadInfo.STATUS_NONE:
-                        case DownloadInfo.STATUS_PAUSED:
-                        case DownloadInfo.STATUS_ERROR:
-                            downloadManager.resume(downloadInfo);
-                            break;
-                        case DownloadInfo.STATUS_DOWNLOADING:
-                        case DownloadInfo.STATUS_PREPARE_DOWNLOAD:
-                        case STATUS_WAIT:
-                            downloadManager.pause(downloadInfo);
-                            break;
-                        case DownloadInfo.STATUS_COMPLETED:
-                            ToastUtil.showToast(XImageActivity.this, "您已经保存过该照片");
-                            break;
-                    }
-                } else {
-                    if (downloadManager.findAllDownloading().size() > 10) {
-                        ToastUtil.showToast(XImageActivity.this, "下载任务最多10个,请稍后下载");
-                        if (downloadManager.findAllDownloaded().size() >20) {
-                            FragmentDialog.newInstance(false,"",  "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
-                                @Override
-                                public void onPositiveClick(Dialog dialog,boolean needDelete) {
-                                    Intent photoIntent = new Intent();
-                                    photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
-                                    photoIntent.setClass(XImageActivity.this, DownloadManagerActivity.class);
-                                    startActivity(photoIntent);
-                                    dialog.dismiss();
-                                }
-                                @Override
-                                public void onNegtiveClick(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            }).show(getSupportFragmentManager(), "");
-                        }
-                    } else {
-                        createDownload(mediaInfo, url);
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onSetImageFinished(XImageView view, boolean success, Rect image) {
-        }
-    }
 
     class MyDownloadListener implements DownloadListener {
         DownloadInfo downloadInfo;
@@ -246,34 +245,33 @@ public class XImageActivity extends AppCompatActivity {
 
         @Override
         public void onStart() {
-            ToastUtil.showToast(XImageActivity.this, "开始保存");
+
         }
 
         @Override
         public void onWaited() {
-            ToastUtil.showToast(XImageActivity.this, "等待保存");
+
         }
 
         @Override
         public void onPaused() {
-            ToastUtil.showToast(XImageActivity.this, "暂停保存");
+
         }
 
         @Override
         public void onDownloading(long progress, long size) {
-            ToastUtil.showToast(XImageActivity.this, "正在保存");
+
         }
 
         @Override
         public void onRemoved() {
-            ToastUtil.showToast(XImageActivity.this, "已删除保存任务");
             downloadInfo = null;
         }
 
         @Override
         public void onDownloadSuccess() {
             adapter.notifyDataSetChanged();
-            ToastUtil.showToast(XImageActivity.this, "保存成功");
+            ToastUtil.showToast(XImageActivity.this, "图片已保存在" + downloadInfo.getPath());
         }
 
         @Override
@@ -301,7 +299,7 @@ public class XImageActivity extends AppCompatActivity {
             //save extra info to my database.
             MediaInfoLocal myBusinessInfLocal = new MediaInfoLocal(
                     mediaInfo.getUrl().hashCode(), mediaInfo.getName(),
-                    mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle(),mediaInfo.getLocalPath());
+                    mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle(), mediaInfo.getLocalPath());
             try {
                 dbController.createOrUpdateMyDownloadInfo(myBusinessInfLocal);
             } catch (SQLException e) {

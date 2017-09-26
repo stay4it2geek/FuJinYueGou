@@ -238,9 +238,9 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
 
         public void bindBaseInfo(MediaInfoLocal mediaInfoLocal) {
             if (mediaInfoLocal.getType().equals(Constants.VIDEO_ALBUM)) {
-                Glide.with(context).load(mediaInfoLocal.getIcon()).into(iv_icon);
+                Glide.with(context).load(mediaInfoLocal.getIcon()).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(iv_icon);
             } else {
-                Glide.with(context).load(mediaInfoLocal.getUrl()).into(iv_icon);
+                Glide.with(context).load(mediaInfoLocal.getUrl()).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(iv_icon);
             }
             tv_title.setText(mediaInfoLocal.getTitle());
         }

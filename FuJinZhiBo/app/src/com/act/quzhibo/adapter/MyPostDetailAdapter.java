@@ -95,8 +95,10 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
 
                     @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(errorDrawable);
+
                     }
                 });
             } else {
@@ -107,9 +109,12 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
 
                     @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        super.onLoadFailed(e, errorDrawable);
+                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(errorDrawable);
+
                     }
+
                 });
             }
 

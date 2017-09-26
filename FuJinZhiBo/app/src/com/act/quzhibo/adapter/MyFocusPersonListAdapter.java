@@ -61,10 +61,10 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
             holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).sex.equals("2")) {
                 holder.sex.setText("女");
-                Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.women).into(holder.photoImg);
+                Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.women).error(R.drawable.error_img).into(holder.photoImg);
             } else {
                 holder.sex.setText("男");
-                Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.man).into(holder.photoImg);
+                Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.man).error(R.drawable.error_img).into(holder.photoImg);
 
             }
         if(datas.get(position).userType.equals(Constants.INTEREST)){

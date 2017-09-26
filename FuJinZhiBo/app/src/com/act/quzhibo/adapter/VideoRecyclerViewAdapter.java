@@ -75,7 +75,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
                 .load(videoBean.getIcon())
                 .crossFade()
                 .placeholder(android.R.color.darker_gray)
-                .into(holder.controller.getThumb());
+                .error(R.drawable.error_img).into(holder.controller.getThumb());
         holder.ijkVideoView
                 .enableCache()
                 .addToPlayerManager()
