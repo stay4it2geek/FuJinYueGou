@@ -27,7 +27,7 @@ import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
 import cn.bmob.v3.BmobUser;
 
-public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements BGANinePhotoLayout.Delegate {
+public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapter.Item1ViewHolder> implements BGANinePhotoLayout.Delegate {
     private LayoutInflater mLayoutInflater;
     private MyPost post;
     private FragmentActivity activity;
@@ -36,31 +36,17 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onClickNinePhotoItem(BGANinePhotoLayout ninePhotoLayout, View view, int position, String model, List<String> models) {
         if (ninePhotoLayout.getItemCount() == 1) {
-            // 预览单张图片
             activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, downloadDir, ninePhotoLayout.getCurrentClickItem()));
         } else if (ninePhotoLayout.getItemCount() > 1) {
-            // 预览多张图片
             activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, downloadDir, ninePhotoLayout.getData(), ninePhotoLayout.getCurrentClickItemPosition()));
         }
     }
 
-    public enum ITEM_TYPE {
-        ITEM1,
-        ITEM2,
-        ITEM3
-    }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return ITEM_TYPE.ITEM1.ordinal();
-        } else if (position == 1) {
-            return ITEM_TYPE.ITEM2.ordinal();
-        } else if (position == 2) {
-            return ITEM_TYPE.ITEM3.ordinal();
-        } else {
-            return super.getItemViewType(position);
-        }
+        return super.getItemViewType(position);
+
     }
 
     public MyPostDetailAdapter(MyPost post, FragmentActivity context) {
@@ -74,73 +60,67 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM_TYPE.ITEM1.ordinal()) {
-            return new Item1ViewHolder(mLayoutInflater.inflate(R.layout.post_detail_header_layout, parent, false));
-        } else if (viewType == ITEM_TYPE.ITEM2.ordinal()) {
-            return new Item2ViewHolder(mLayoutInflater.inflate(R.layout.post_detail_imgs_layout, parent, false));
-        } else {
-            return new Item3ViewHolder(mLayoutInflater.inflate(R.layout.comments_layout, parent, false));
-        }
+    public Item1ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new Item1ViewHolder(mLayoutInflater.inflate(R.layout.post_detail_header_layout, parent, false));
+
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int positon) {
-        if (holder instanceof Item1ViewHolder) {
-            if (BmobUser.getCurrentUser(RootUser.class).sex.equals("女")) {
-                Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
-                    }
+    public void onBindViewHolder(final Item1ViewHolder holder, final int positon) {
 
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(errorDrawable);
+        if (BmobUser.getCurrentUser(RootUser.class).sex.equals("女")) {
+            Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    holder.userImage.setBackgroundDrawable(new BitmapDrawable(resource));
+                }
 
-                    }
-                });
-            } else {
-                Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
-                    }
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    holder.userImage.setBackgroundDrawable(errorDrawable);
 
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(errorDrawable);
+                }
+            });
+        } else {
+            Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    holder.userImage.setBackgroundDrawable(new BitmapDrawable(resource));
+                }
 
-                    }
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    holder.userImage.setBackgroundDrawable(errorDrawable);
+                }
 
-                });
-            }
-
-            ((Item1ViewHolder) holder).sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex);
-            long l = System.currentTimeMillis() - Long.parseLong(CommonUtil.dateToStamp(post.getCreatedAt()));
-            long day = l / (24 * 60 * 60 * 1000);
-            long hour = (l / (60 * 60 * 1000) - day * 24);
-            long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            if (day < 50) {
-                ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
-            } else {
-                ((Item1ViewHolder) holder).createTime.setText("N天" + hour + "小时" + min + "分钟前");
-            }
-            ((Item1ViewHolder) holder).nickName.setText(BmobUser.getCurrentUser(RootUser.class).getUsername());
-            ((Item1ViewHolder) holder).title.setText(post.title + "");
-            ((Item1ViewHolder) holder).content.setText(post.absText + "");
-            ((Item1ViewHolder) holder).areaLocation.setText(BmobUser.getCurrentUser(RootUser.class).provinceAndcity + "");
-        } else if (holder instanceof Item2ViewHolder) {
-            ((MyPostDetailAdapter.Item2ViewHolder) holder).ninePhotoLayout.setDelegate(this);
-            ((MyPostDetailAdapter.Item2ViewHolder) holder).ninePhotoLayout.setData(post.images);
+            });
         }
+
+        holder.sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex);
+        long l = System.currentTimeMillis() - Long.parseLong(CommonUtil.dateToStamp(post.getCreatedAt()));
+        long day = l / (24 * 60 * 60 * 1000);
+        long hour = (l / (60 * 60 * 1000) - day * 24);
+        long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+        if (day < 50) {
+            holder.createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
+        } else {
+            holder.createTime.setText("N天" + hour + "小时" + min + "分钟前");
+        }
+        holder.nickName.setText(BmobUser.getCurrentUser(RootUser.class).getUsername());
+        holder.title.setText(post.title + "");
+        holder.content.setText(post.absText + "");
+        holder.areaLocation.setText(BmobUser.getCurrentUser(RootUser.class).provinceAndcity + "");
+
+        holder.ninePhotoLayout.setDelegate(this);
+        holder.ninePhotoLayout.setData(post.images);
+
     }
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 1;
     }
 
     class Item1ViewHolder extends RecyclerView.ViewHolder {
@@ -152,6 +132,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         private TextView nickName;
         private TextView title;
         private io.github.rockerhieu.emojicon.EmojiconTextView content;
+        BGANinePhotoLayout ninePhotoLayout;
 
         public Item1ViewHolder(View view) {
             super(view);
@@ -163,25 +144,11 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             nickName = (TextView) view.findViewById(R.id.nickName);
             title = (TextView) view.findViewById(R.id.title);
             content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.content);
-        }
-
-
-    }
-
-    class Item2ViewHolder extends RecyclerView.ViewHolder {
-        private BGANinePhotoLayout ninePhotoLayout;
-
-        public Item2ViewHolder(View view) {
-            super(view);
             ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);
         }
+
     }
 
-    class Item3ViewHolder extends RecyclerView.ViewHolder {
+}
 
-        public Item3ViewHolder(View view) {
-            super(view);
-            view.findViewById(R.id.commentLayout).setVisibility(View.GONE);
-        }
-    }
 }
