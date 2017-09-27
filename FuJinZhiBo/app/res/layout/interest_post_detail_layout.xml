@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:background="#fff"
+    android:id="@+id/root_view"
     android:orientation="vertical">
     <com.act.quzhibo.view.TitleBarView
         android:visibility="gone"

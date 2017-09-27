@@ -151,4 +151,3 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
 
 }
 
-}

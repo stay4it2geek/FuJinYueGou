@@ -205,10 +205,9 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void run() {
                     heartLayout.addHeart(randomColor());
-                    Random random = new Random();
                 }
             });
-            heartHandler.postDelayed(this, 1000 * mRandom.nextInt(5));
+            heartHandler.postDelayed(this, 200 * mRandom.nextInt(5));
         }
     };
     Handler countHandler = new Handler();

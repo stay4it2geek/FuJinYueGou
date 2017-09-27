@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -55,6 +56,12 @@ public class IntersetPostDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
                 getData();
+            }
+        });
+        findViewById(R.id.root_view).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;     //截断事件的传递
             }
         });
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);

@@ -51,7 +51,7 @@ public class WelcomeActivity extends ActivityManagePermission {
 
     private void grantPermission() {
         final SelfDialog selfDialog = new SelfDialog(WelcomeActivity.this);
-        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
+        askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_RECORD_AUDIO, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
             public void permissionGranted() {
                 doRequest();
@@ -60,7 +60,7 @@ public class WelcomeActivity extends ActivityManagePermission {
             @Override
             public void permissionDenied() {
                 selfDialog.setTitle("同意权限后才能正常使用哦");
-                selfDialog.setMessage("您需要同意以下权限:\n   1. 访问设备上的照片\n   2. 访问手机存储功能\n   3. 获取您的大概位置\n   4. 拍照");
+                selfDialog.setMessage("您需要同意以下权限:\n   1. 访问设备上的照片\n   2. 访问手机存储功能\n   3. 获取您的大概位置\n   4. 拍照\n   5. 录像");
                 selfDialog.setYesOnclickListener("立即同意", new SelfDialog.onYesOnclickListener() {
                     @Override
                     public void onYesClick() {
@@ -80,7 +80,7 @@ public class WelcomeActivity extends ActivityManagePermission {
             @Override
             public void permissionForeverDenied() {
                 selfDialog.setTitle("同意权限后才能正常使用哦");
-                selfDialog.setMessage("您需要同意以下权限:\n   1. 访问设备上的照片\n   2. 访问手机存储功能\n   3. 获取您的大概位置\n   4. 拍照");
+                selfDialog.setMessage("您需要同意以下权限:\n   1. 访问设备上的照片\n   2. 访问手机存储功能\n   3. 获取您的大概位置\n   4. 拍照\n   5. 录像");
                 selfDialog.setYesOnclickListener("立即同意", new SelfDialog.onYesOnclickListener() {
                     @Override
                     public void onYesClick() {

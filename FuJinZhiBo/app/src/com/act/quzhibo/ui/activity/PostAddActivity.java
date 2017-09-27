@@ -1,26 +1,23 @@
 package com.act.quzhibo.ui.activity;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.RecordProgress;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.SelfDialog;
 import com.act.quzhibo.view.TitleBarView;
 
 import java.io.File;
@@ -36,15 +33,11 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
-import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
-import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
-
-import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
 
 public class PostAddActivity extends ActivityManagePermission implements BGASortableNinePhotoLayout.Delegate, View.OnClickListener {
     private static final int REQUEST_CODE_CHOOSE_PHOTO = 1;
@@ -54,10 +47,21 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private EditText mContentEt;
     private EditText mTitleEt;
 
+    private TextView mBtnVideo;
+    private TextView mTvTipOne;
+    private TextView mTvTipTwo;
+    private RecordProgress mRp;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_add);
+        mBtnVideo = (TextView) findViewById(R.id.btnVideo);
+        mTvTipOne = (TextView) findViewById(R.id.tvTipOne);
+        mTvTipTwo = (TextView) findViewById(R.id.tvTipTwo);
+        mRp = (RecordProgress) findViewById(R.id.rp);
+        mRp.setRecordTime(10);
+
         mTitleEt = (EditText) findViewById(R.id.et_moment_title);
         mContentEt = (EditText) findViewById(R.id.et_moment_add_content);
         mPhotosSnpl = (BGASortableNinePhotoLayout) findViewById(R.id.snpl_moment_add_photos);
@@ -66,6 +70,8 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         mPhotosSnpl.setPlusEnable(true);
         mPhotosSnpl.setSortable(true);
         mPhotosSnpl.setDelegate(this);
+
+
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("发 表 状 态");
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -75,11 +81,117 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
             }
         });
         findViewById(R.id.tv_moment_add_publish).setOnClickListener(this);
+        switch (getIntent().getIntExtra("postType", 0)) {
+            case 1:
+                findViewById(R.id.postNoVideo).setVisibility(View.VISIBLE);
+                mPhotosSnpl.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                findViewById(R.id.postNoVideo).setVisibility(View.GONE);
+                findViewById(R.id.tv_moment_add_publish).setVisibility(View.GONE);
+                findViewById(R.id.record_layout).setVisibility(View.VISIBLE);
+                break;
+
+
+        }
+        initListener();
         mYPost = new MyPost();
     }
 
-    MyPost mYPost;
 
+    private void initListener() {
+        mBtnVideo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mRp.start();
+                        mRp.setProgressColor(Color.parseColor("#1AAD19"));
+                        mTvTipOne.setVisibility(View.VISIBLE);
+                        mTvTipTwo.setVisibility(View.GONE);
+//                        mVrvVideo.record(PostAddActivity.this);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mRp.stop();
+                        mTvTipOne.setVisibility(View.GONE);
+                        mTvTipTwo.setVisibility(View.GONE);
+//                        //判断时间
+//                        if (mVrvVideo.getTimeCount() > 3) {
+//                            if (!isCancel(v, event)) {
+//                                onRecrodFinish();
+//                            }
+//                        } else {
+//                            if (!isCancel(v, event)) {
+//                                Toast.makeText(getApplicationContext(), "视频时长太短", Toast.LENGTH_SHORT).show();
+//                                if (mVrvVideo.getVecordFile() != null)
+//                                    mVrvVideo.getVecordFile().delete();
+//                            }
+//                        }
+//                        resetVideoRecord();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (isCancel(v, event)) {
+                            mTvTipOne.setVisibility(View.GONE);
+                            mTvTipTwo.setVisibility(View.VISIBLE);
+                            mRp.setProgressColor(Color.parseColor("#FF1493"));
+                        } else {
+                            mTvTipOne.setVisibility(View.VISIBLE);
+                            mTvTipTwo.setVisibility(View.GONE);
+                            mRp.setProgressColor(Color.parseColor("#1AAD19"));
+                        }
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    private boolean isCancel(View v, MotionEvent event) {
+        int[] location = new int[2];
+        v.getLocationOnScreen(location);
+        if (event.getRawX() < location[0] || event.getRawX() > location[0] + v.getWidth() || event.getRawY() < location[1] - 40) {
+            return true;
+        }
+        return false;
+    }
+//
+//    @Override
+//    public void onRecrodFinish() {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mTvTipOne.setVisibility(View.GONE);
+//                mTvTipTwo.setVisibility(View.GONE);
+////                resetVideoRecord();
+//                Toast.makeText(getApplicationContext(), "录制成功", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public void onRecording(int timeCount, int recordMaxTime) {
+//
+//    }
+//
+//    @Override
+//    public void onRecordStart() {
+//    }
+
+//    /**
+//     * 停止录制（释放相机后重新打开相机）
+//     */
+//    public void resetVideoRecord() {
+//        mVrvVideo.stop();
+//        mVrvVideo.openCamera();
+//    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    MyPost mYPost;
 
     @Override
     public void onClickAddNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, ArrayList<String> models) {
@@ -89,6 +201,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         }
         startActivityForResult(BGAPhotoPickerActivity.newIntent(PostAddActivity.this, takePhotoDir, mPhotosSnpl.getMaxItemCount() - mPhotosSnpl.getItemCount(), null, false), REQUEST_CODE_CHOOSE_PHOTO);
     }
+
     @Override
     public void onClickDeleteNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, String model, ArrayList<String> models) {
         mPhotosSnpl.removeItem(position);
@@ -103,7 +216,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-       if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
             ArrayList<File> fileList = new ArrayList<>();
             if (BGAPhotoPickerActivity.getSelectedImages(data) != null)
                 for (String path : BGAPhotoPickerActivity.getSelectedImages(data)) {
@@ -232,4 +345,6 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
             }
         }
     }
+
+
 }

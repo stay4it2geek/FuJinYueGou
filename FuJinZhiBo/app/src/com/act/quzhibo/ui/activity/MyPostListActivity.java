@@ -8,15 +8,17 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -24,8 +26,6 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +45,7 @@ public class MyPostListActivity extends AppCompatActivity {
     private LoadNetView loadNetView;
     private String lastTime = "";
     private int myPostsSize;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,22 +106,33 @@ public class MyPostListActivity extends AppCompatActivity {
                 MyPostListActivity.this.finish();
             }
         });
-        findViewById(R.id.postButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.textBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(MyPostListActivity.this, PostAddActivity.class);
-                startActivityForResult(intent,UPLOAD_POST);
+                Intent intent = new Intent(MyPostListActivity.this, PostAddActivity.class);
+                intent.putExtra("postType", 1);
+                startActivityForResult(intent, UPLOAD_POST);
             }
         });
+        findViewById(R.id.videoBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyPostListActivity.this, PostAddActivity.class);
+                intent.putExtra("postType", 2);
+                startActivityForResult(intent, UPLOAD_POST);
+            }
+        });
+        findViewById(R.id.photoBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyPostListActivity.this, PostAddActivity.class);
+                startActivityForResult(intent, UPLOAD_POST);
+            }
+        });
+
         queryData(Constants.REFRESH);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        ToastUtil.showToast(this, "onRESUME");
-
-    }
 
     private void queryData(final int actionType) {
         BmobQuery<MyPost> query = new BmobQuery<>();
@@ -163,22 +175,6 @@ public class MyPostListActivity extends AppCompatActivity {
         });
     }
 
-    public static class ComparatorValues implements Comparator<MyPost> {
-        @Override
-        public int compare(MyPost post1, MyPost post2) {
-            long m1 = Long.parseLong(CommonUtil.dateToStamp(post1.getCreatedAt()) != null ? CommonUtil.dateToStamp(post1.getCreatedAt()) : "0");
-            long m2 = Long.parseLong(CommonUtil.dateToStamp(post2.getCreatedAt()) != null ? CommonUtil.dateToStamp(post2.getCreatedAt()) : "0");
-            int result = 0;
-            if (m1 > m2) {
-                result = 1;
-            }
-            if (m1 < m2) {
-                result = -1;
-            }
-            return result;
-        }
-    }
-
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -195,7 +191,7 @@ public class MyPostListActivity extends AppCompatActivity {
                         recyclerView.setNoMore(true);
                     }
                 }
-                Collections.sort(myPosts, new ComparatorValues());
+
                 if (myPostListAdapter == null) {
                     myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
                     recyclerView.setAdapter(myPostListAdapter);

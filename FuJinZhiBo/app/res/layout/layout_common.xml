@@ -1,26 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eee">
-
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/titlebar">
 
+
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <LinearLayout
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/postButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="10dp"
             android:visibility="gone"
+            app:fab_addButtonColorNormal="@color/tabline"
+            app:fab_addButtonColorPressed="@color/lightorange"
+            app:fab_addButtonPlusIconColor="@color/darkorange"
+            app:fab_addButtonSize="normal"
+            app:fab_expandDirection="up"
+            app:fab_labelStyle="@style/menu_labels_style"
+            app:layout_anchorGravity="bottom">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/textBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                app:fab_colorNormal="@color/tabline"
+                app:fab_colorPressed="@color/lightorange"
+                app:fab_icon="@drawable/orderlist"
+                app:fab_size="normal"
+                app:fab_title="文本" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/videoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                app:fab_colorNormal="@color/tabline"
+                app:fab_colorPressed="@color/lightorange"
+                app:fab_icon="@android:drawable/presence_video_busy"
+                app:fab_size="normal"
+                app:fab_title="视频" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/photoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                app:fab_colorNormal="@color/tabline"
+                app:fab_colorPressed="@color/lightorange"
+                app:fab_icon="@drawable/ic_camera"
+                app:fab_size="normal"
+                app:fab_title="照片" />
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+        <LinearLayout
             android:id="@+id/sort"
             android:layout_width="50dp"
             android:layout_height="60dp"
             android:layout_gravity="right"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <View
                 android:layout_width="30dp"
@@ -38,6 +90,7 @@
                 android:textSize="10sp" />
 
         </LinearLayout>
+
         <com.act.quzhibo.view.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"
@@ -49,20 +102,11 @@
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
-        android:layout_alignParentStart="true">
+        android:visibility="gone">
 
-        <Button
-            android:id="@+id/postButton"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:visibility="gone"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginRight="15dp"
-            android:padding="15dp"
-            android:background="@drawable/post"
-             />
+
     </com.act.quzhibo.view.TitleBarView>
 
 </RelativeLayout>
