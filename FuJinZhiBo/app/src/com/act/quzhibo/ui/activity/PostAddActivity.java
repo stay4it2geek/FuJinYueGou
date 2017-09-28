@@ -2,23 +2,36 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.view.MotionEvent;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.RecordProgress;
+import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.entity.MyPost;
+import com.act.quzhibo.entity.RecordVideoEvent;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;
+import com.devlin_n.videoplayer.player.IjkVideoView;
+import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;
+import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,21 +59,14 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private BGASortableNinePhotoLayout mPhotosSnpl;
     private EditText mContentEt;
     private EditText mTitleEt;
-
-    private TextView mBtnVideo;
-    private TextView mTvTipOne;
-    private TextView mTvTipTwo;
-    private RecordProgress mRp;
+    MyPost myPost;
+    private ImageView videoThumb;
+    String videoLocalUri = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_add);
-        mBtnVideo = (TextView) findViewById(R.id.btnVideo);
-        mTvTipOne = (TextView) findViewById(R.id.tvTipOne);
-        mTvTipTwo = (TextView) findViewById(R.id.tvTipTwo);
-        mRp = (RecordProgress) findViewById(R.id.rp);
-        mRp.setRecordTime(10);
 
         mTitleEt = (EditText) findViewById(R.id.et_moment_title);
         mContentEt = (EditText) findViewById(R.id.et_moment_add_content);
@@ -70,9 +76,9 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         mPhotosSnpl.setPlusEnable(true);
         mPhotosSnpl.setSortable(true);
         mPhotosSnpl.setDelegate(this);
-
-
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+
+        videoThumb = (ImageView) findViewById(R.id.video_player);
         titlebar.setBarTitle("发 表 状 态");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
@@ -81,117 +87,53 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
             }
         });
         findViewById(R.id.tv_moment_add_publish).setOnClickListener(this);
+        findViewById(R.id.recordBtn).setOnClickListener(this);
         switch (getIntent().getIntExtra("postType", 0)) {
             case 1:
-                findViewById(R.id.postNoVideo).setVisibility(View.VISIBLE);
                 mPhotosSnpl.setVisibility(View.GONE);
                 break;
 
             case 2:
-                findViewById(R.id.postNoVideo).setVisibility(View.GONE);
-                findViewById(R.id.tv_moment_add_publish).setVisibility(View.GONE);
-                findViewById(R.id.record_layout).setVisibility(View.VISIBLE);
+                findViewById(R.id.recordBtn).setVisibility(View.VISIBLE);
                 break;
-
-
         }
-        initListener();
-        mYPost = new MyPost();
-    }
 
-
-    private void initListener() {
-        mBtnVideo.setOnTouchListener(new View.OnTouchListener() {
+        videoThumb.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mRp.start();
-                        mRp.setProgressColor(Color.parseColor("#1AAD19"));
-                        mTvTipOne.setVisibility(View.VISIBLE);
-                        mTvTipTwo.setVisibility(View.GONE);
-//                        mVrvVideo.record(PostAddActivity.this);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        mRp.stop();
-                        mTvTipOne.setVisibility(View.GONE);
-                        mTvTipTwo.setVisibility(View.GONE);
-//                        //判断时间
-//                        if (mVrvVideo.getTimeCount() > 3) {
-//                            if (!isCancel(v, event)) {
-//                                onRecrodFinish();
-//                            }
-//                        } else {
-//                            if (!isCancel(v, event)) {
-//                                Toast.makeText(getApplicationContext(), "视频时长太短", Toast.LENGTH_SHORT).show();
-//                                if (mVrvVideo.getVecordFile() != null)
-//                                    mVrvVideo.getVecordFile().delete();
-//                            }
-//                        }
-//                        resetVideoRecord();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (isCancel(v, event)) {
-                            mTvTipOne.setVisibility(View.GONE);
-                            mTvTipTwo.setVisibility(View.VISIBLE);
-                            mRp.setProgressColor(Color.parseColor("#FF1493"));
-                        } else {
-                            mTvTipOne.setVisibility(View.VISIBLE);
-                            mTvTipTwo.setVisibility(View.GONE);
-                            mRp.setProgressColor(Color.parseColor("#1AAD19"));
-                        }
-                        break;
+            public void onClick(View v) {
+                myPost = new MyPost();
+                EventBus.getDefault().register(this);
+                Intent intent = new Intent();
+                intent.setAction(android.content.Intent.ACTION_VIEW);
+                File file = new File(videoLocalUri);
+                Uri uri;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    Uri contentUri = FileProvider.getUriForFile(PostAddActivity.this, getApplicationContext().getPackageName() + ".FileProvider", file);
+                    intent.setDataAndType(contentUri, "video/*");
+                } else {
+                    uri = Uri.fromFile(file);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setDataAndType(uri, "video/*");
                 }
-                return true;
+                startActivity(intent);
             }
         });
     }
 
-    private boolean isCancel(View v, MotionEvent event) {
-        int[] location = new int[2];
-        v.getLocationOnScreen(location);
-        if (event.getRawX() < location[0] || event.getRawX() > location[0] + v.getWidth() || event.getRawY() < location[1] - 40) {
-            return true;
-        }
-        return false;
-    }
-//
-//    @Override
-//    public void onRecrodFinish() {
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                mTvTipOne.setVisibility(View.GONE);
-//                mTvTipTwo.setVisibility(View.GONE);
-////                resetVideoRecord();
-//                Toast.makeText(getApplicationContext(), "录制成功", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public void onRecording(int timeCount, int recordMaxTime) {
-//
-//    }
-//
-//    @Override
-//    public void onRecordStart() {
-//    }
-
-//    /**
-//     * 停止录制（释放相机后重新打开相机）
-//     */
-//    public void resetVideoRecord() {
-//        mVrvVideo.stop();
-//        mVrvVideo.openCamera();
-//    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
-    MyPost mYPost;
+    @Subscribe
+    public void onEventMainThread(RecordVideoEvent event) {
+        videoThumb.setVisibility(View.VISIBLE);
+        videoLocalUri = event.videoUri;
+        videoThumb.setImageBitmap(BitmapFactory.decodeFile(event.videoScreenshot));
+    }
 
     @Override
     public void onClickAddNinePhotoItem(BGASortableNinePhotoLayout sortableNinePhotoLayout, View view, int position, ArrayList<String> models) {
@@ -261,9 +203,10 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
 
     @Override
     public void onClick(View view) {
+        final String content = mContentEt.getText().toString().trim();
+        final String title = mTitleEt.getText().toString().trim();
+
         if (view.getId() == R.id.tv_moment_add_publish) {
-            final String content = mContentEt.getText().toString().trim();
-            final String title = mTitleEt.getText().toString().trim();
             if (title.length() == 0) {
                 Toast.makeText(this, "必须填写这一刻想法的标题！", Toast.LENGTH_SHORT).show();
                 return;
@@ -272,19 +215,19 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 return;
             }
             if (mPhotosSnpl.getData().size() == 0) {
-                mYPost.title = title;
-                mYPost.absText = content;
-                mYPost.pageView = "0";
-                mYPost.totalComments = "0";
-                mYPost.totalImages = "0";
-                mYPost.rewards = "0";
-                mYPost.user = BmobUser.getCurrentUser(RootUser.class);
-                mYPost.save(new SaveListener<String>() {
+                myPost.title = title;
+                myPost.absText = content;
+                myPost.pageView = "0";
+                myPost.totalComments = "0";
+                myPost.totalImages = "0";
+                myPost.rewards = "0";
+                myPost.user = BmobUser.getCurrentUser(RootUser.class);
+                myPost.save(new SaveListener<String>() {
                     @Override
                     public void done(String objectId, BmobException e) {
                         if (e == null) {
                             Intent intent = new Intent();
-                            intent.putExtra(EXTRA_MOMENT, mYPost);
+                            intent.putExtra(EXTRA_MOMENT, myPost);
                             setResult(RESULT_OK, intent);
                             finish();
                         } else {
@@ -298,21 +241,21 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                     @Override
                     public void onSuccess(List<BmobFile> files, List<String> urls) {
                         if (urls.size() == filePaths.length) {
-                            mYPost.images = new ArrayList<>();
-                            mYPost.images.addAll(urls);
-                            mYPost.title = title;
-                            mYPost.absText = content;
-                            mYPost.pageView = "0";
-                            mYPost.totalComments = "0";
-                            mYPost.totalImages = urls.size() + "";
-                            mYPost.rewards = "0";
-                            mYPost.user = BmobUser.getCurrentUser(RootUser.class);
-                            mYPost.save(new SaveListener<String>() {
+                            myPost.images = new ArrayList<>();
+                            myPost.images.addAll(urls);
+                            myPost.title = title;
+                            myPost.absText = content;
+                            myPost.pageView = "0";
+                            myPost.totalComments = "0";
+                            myPost.totalImages = urls.size() + "";
+                            myPost.rewards = "0";
+                            myPost.user = BmobUser.getCurrentUser(RootUser.class);
+                            myPost.save(new SaveListener<String>() {
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
                                         Intent intent = new Intent();
-                                        intent.putExtra(EXTRA_MOMENT, mYPost);
+                                        intent.putExtra(EXTRA_MOMENT, myPost);
                                         setResult(RESULT_OK, intent);
                                         finish();
                                     } else {
@@ -343,8 +286,21 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                     }
                 });
             }
+        } else if (R.id.recordBtn == view.getId()) {
+
+            MediaRecorderConfig config = new MediaRecorderConfig.Buidler()
+                    .fullScreen(true)
+                    .smallVideoWidth(360)
+                    .smallVideoHeight(480)
+                    .recordTimeMax(6000)
+                    .recordTimeMin(1500)
+                    .maxFrameRate(20)
+                    .videoBitrate(600000)
+                    .captureThumbnailsTime(1)
+                    .build();
+
+            MediaRecorderActivity.goSmallVideoRecorder(PostAddActivity.this, RecordConfirmActivity.class.getName(), config);
         }
     }
-
 
 }

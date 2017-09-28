@@ -30,6 +30,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <provider
         android:name="android.support.v4.content.FileProvider"
         android:authorities="com.act.quzhibo.FileProvider"
@@ -53,6 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.mabeijianxi.smallvideorecord2.MediaRecorderActivity" />
         <activity
             android:name="com.act.quzhibo.ui.activity.CourseDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -63,6 +65,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
+
         <activity
             android:name="com.act.quzhibo.ui.activity.ClipImageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -224,6 +227,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.VIPConisTableActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Holo.Dialog.CustomNoActionBar" />
+
+        <activity
+            android:name="com.act.quzhibo.ui.activity.RecordConfirmActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"

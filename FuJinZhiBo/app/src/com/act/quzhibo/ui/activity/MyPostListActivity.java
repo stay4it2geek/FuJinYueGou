@@ -8,11 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyPostListAdapter;
@@ -22,6 +18,8 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;
+import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,9 +34,11 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
+import static com.mabeijianxi.smallvideorecord2.MediaRecorderActivity.MEDIA_RECORDER_CONFIG_KEY;
+import static com.mabeijianxi.smallvideorecord2.MediaRecorderActivity.OVER_ACTIVITY_NAME;
 
 public class MyPostListActivity extends AppCompatActivity {
-    private static final int UPLOAD_POST = 1;
+    public static final int UPLOAD_POST = 1;
     private ArrayList<MyPost> myPostList = new ArrayList<>();
     private XRecyclerView recyclerView;
     private MyPostListAdapter myPostListAdapter;
@@ -120,6 +120,8 @@ public class MyPostListActivity extends AppCompatActivity {
                 Intent intent = new Intent(MyPostListActivity.this, PostAddActivity.class);
                 intent.putExtra("postType", 2);
                 startActivityForResult(intent, UPLOAD_POST);
+
+
             }
         });
         findViewById(R.id.photoBtn).setOnClickListener(new View.OnClickListener() {

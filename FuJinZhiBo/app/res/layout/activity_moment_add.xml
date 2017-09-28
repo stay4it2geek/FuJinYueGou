@@ -23,77 +23,7 @@
             android:textSize="16sp" />
     </com.act.quzhibo.view.TitleBarView>
 
-
-    <FrameLayout
-        android:visibility="gone"
-        android:id="@+id/record_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-
-            <TextView
-                android:id="@+id/tvTipOne"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="140dp"
-                android:background="#99cccccc"
-                android:padding="2dp"
-                android:text="上滑取消"
-                android:textColor="#fff"
-                android:textSize="10sp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvTipTwo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="140dp"
-                android:background="#99FF1493"
-                android:padding="2dp"
-                android:text="松开取消"
-                android:textColor="#fff"
-                android:textSize="10sp"
-                android:visibility="gone" />
-
-            <com.act.quzhibo.common.RecordProgress
-                android:id="@+id/rp"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_alignParentTop="true"
-                android:layout_margin="5dp" />
-
-        </RelativeLayout>
-
-
-        <TextView
-            android:id="@+id/btnVideo"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_margin="10dp"
-            android:background="@drawable/fab_bg_normal"
-            android:gravity="center"
-            android:text="按住拍"
-            android:paddingBottom="10dp"
-            android:textStyle="bold"
-            android:textColor="#1AAD19"
-            android:textSize="17sp" />
-
-    </FrameLayout>
-
-
-    <ScrollView
-        android:id="@+id/postNoVideo"
-        style="@style/MatchMatch">
+    <ScrollView style="@style/MatchMatch">
 
         <LinearLayout style="@style/MatchMatch.Vertical">
 
@@ -139,6 +69,25 @@
                 app:bga_snpl_plusDrawable="@mipmap/bga_pp_ic_plus"
                 app:bga_snpl_plusEnable="true"
                 app:bga_snpl_sortable="true" />
+
+
+            <ImageView
+                android:id="@+id/recordBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                android:background="@drawable/record_video_selector" />
+
+
+            <ImageView
+                android:id="@+id/video_player"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:visibility="gone"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside" />
         </LinearLayout>
 
     </ScrollView>

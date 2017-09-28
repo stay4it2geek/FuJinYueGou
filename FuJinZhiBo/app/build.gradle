@@ -28,6 +28,7 @@ dependencies {
     compile 'cn.bingoogolapple:bga-adapter:1.1.8@aar'
     compile 'cn.bingoogolapple:bga-photopicker:1.2.3@aar'
     compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile 'com.mabeijianxi:small-video-record2:2.0.3@aar'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
     compile files('libs/okhttp-3.8.1.jar')
 }
@@ -45,7 +46,7 @@ android {
         targetSdkVersion 24
         multiDexEnabled true
         ndk {
-            abiFilters "x86", "armeabi-v7a"
+            abiFilters "x86","armeabi-v7a"
         }
     }
 

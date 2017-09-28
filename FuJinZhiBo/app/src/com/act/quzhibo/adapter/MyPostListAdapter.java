@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
@@ -22,6 +25,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.util.ArrayList;
 
@@ -57,10 +61,10 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        if (holder instanceof MyViewHolder) {
             String nick = rootUser.getUsername().replaceAll("\r|\n", "");
+            final MyPost post=posts.get(position);
             holder.nickName.setText(nick);
-            long l = System.currentTimeMillis() - Long.parseLong(CommonUtil.dateToStamp(posts.get(position).getCreatedAt()));
+            long l = System.currentTimeMillis() - Long.parseLong(CommonUtil.dateToStamp(post.getCreatedAt()));
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
@@ -70,17 +74,17 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             } else {
                 holder.createTime.setText("N天" + hour + "时" + min + "分钟前");
             }
-            holder.title.setText(posts.get(position).title + "");
-            holder.absText.setText(posts.get(position).absText + "");
-            holder.viewNum.setText(posts.get(position).pageView + "");
-            holder.commentNum.setText(posts.get(position).totalComments + "");
+            holder.title.setText(post.title + "");
+            holder.absText.setText(post.absText + "");
+            holder.viewNum.setText(post.pageView + "");
+            holder.commentNum.setText(post.totalComments + "");
 
-            if (posts.get(position).images != null && posts.get(position).images.size()> 0) {
+            if (post.images != null && post.images.size()> 0) {
                 holder.imgGridview.setVisibility(View.VISIBLE);
                 holder.imgVideo.setVisibility(View.GONE);
                 holder.imgtotal.setVisibility(View.VISIBLE);
-                holder.imgGridview.setAdapter(new PostImageAdapter(activity, posts.get(position).images, Constants.ITEM_POST_DETAIL_IMG));
-                holder.imgtotal.setText("共" + posts.get(position).totalImages + "张");
+                holder.imgGridview.setAdapter(new PostImageAdapter(activity, post.images, Constants.ITEM_POST_DETAIL_IMG));
+                holder.imgtotal.setText("共" + post.totalImages + "张");
             } else {
                 holder.imgtotal.setVisibility(View.GONE);
                 holder.imgGridview.setVisibility(View.GONE);
@@ -88,13 +92,13 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             holder.postlayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(posts.get(position));
+                    mOnItemClickListener.onItemClick(post);
                 }
             });
             holder.imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int gridPosition, long id) {
-                    mOnItemClickListener.onItemClick(posts.get(position));
+                    mOnItemClickListener.onItemClick(post);
                 }
             });
 
@@ -105,8 +109,6 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
                         }
-
-
 
                         @Override
                         public void onLoadFailed(Exception e, Drawable errorDrawable) {
@@ -133,7 +135,33 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
 
             holder.areaLocation.setText(rootUser.provinceAndcity + "");
 
+        if (!TextUtils.isEmpty(post.vedioUrl)) {
+            holder.ijkVideoView.setVisibility(View.VISIBLE);
+            new AsyncTask<Void, Void, Bitmap>() {
+                @Override
+                protected Bitmap doInBackground(Void... params) {
+                    Bitmap bitmap = CommonUtil.createBitmapFromVideoPath(post.vedioUrl);
+                    return bitmap;
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    super.onPostExecute(bitmap);
+                    holder.controller.getThumb().setImageBitmap(bitmap);
+                    holder.ijkVideoView
+                            .enableCache()
+                            .addToPlayerManager()
+                            .setUrl(post.vedioUrl)
+                            .setTitle(post.title)
+                            .setVideoController(holder.controller);
+
+                }
+            }.execute();
+        } else {
+            holder.ijkVideoView.setVisibility(View.GONE);
         }
+
+       
     }
 
 
@@ -156,6 +184,8 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         private TextView areaLocation;
         private TextView createTime;
         private TextView sexAndAge;
+        private IjkVideoView ijkVideoView;
+        private MyStandardVideoController controller;
 
         public MyViewHolder(View view) {
             super(view);
@@ -170,6 +200,12 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             commentNum = (TextView) view.findViewById(R.id.pinglunNum);
             imgtotal = (TextView) view.findViewById(R.id.imgtotal);
             postlayout = (RelativeLayout) view.findViewById(R.id.postlayout);
+            ijkVideoView = (IjkVideoView) itemView.findViewById(R.id.video_player);
+            int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+            ijkVideoView.setLayoutParams(new RelativeLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
+            controller = new MyStandardVideoController(activity);
+            controller.setInitData(true, true);
+            ijkVideoView.setVideoController(controller);
             imgGridview = (GridView) view.findViewById(R.id.imgGridview);
             imgVideo = (ImageView) view.findViewById(R.id.imgVideo);
         }

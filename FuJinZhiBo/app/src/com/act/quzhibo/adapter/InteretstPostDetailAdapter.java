@@ -211,6 +211,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             }, null));
 
             if (!TextUtils.isEmpty(post.vedioUrl)) {
+                ((Item1ViewHolder) holder).ijkVideoView.setVisibility(View.VISIBLE);
                 new AsyncTask<Void, Void, Bitmap>() {
                     @Override
                     protected Bitmap doInBackground(Void... params) {

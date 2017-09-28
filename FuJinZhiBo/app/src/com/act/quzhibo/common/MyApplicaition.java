@@ -2,9 +2,13 @@ package com.act.quzhibo.common;
 
 
 import android.app.Application;
+import android.os.Environment;
 
 import com.act.quzhibo.R;
+import com.mabeijianxi.smallvideorecord2.DeviceUtils;
+import com.mabeijianxi.smallvideorecord2.JianXiCamera;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -14,7 +18,6 @@ import cn.bmob.v3.BmobConfig;
 
 public class MyApplicaition extends Application {
 
-    public static HashMap<String, Long> map;
     public static final LinkedHashMap<String, Integer> emotionsKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, String> proKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, String> cityKeySrc = new LinkedHashMap();
@@ -32,6 +35,22 @@ public class MyApplicaition extends Application {
                 .build();
         Bmob.initialize(config);
         BP.init("e37264d2646046d9158d3800afd548f3");
+
+        // 设置拍摄视频缓存路径
+        File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+        if (DeviceUtils.isZte()) {
+            if (dcim.exists()) {
+                JianXiCamera.setVideoCachePath(dcim + "/qushivideo/");
+            } else {
+                JianXiCamera.setVideoCachePath(dcim.getPath().replace("/sdcard/",
+                        "/sdcard-ext/")
+                        + "/qushivideo/");
+            }
+        } else {
+            JianXiCamera.setVideoCachePath(dcim + "/qushivideo/");
+        }
+        // 初始化拍摄，遇到问题可选择开启此标记，以方便生成日志
+        JianXiCamera.initialize(false,null);
     }
 
     static {
