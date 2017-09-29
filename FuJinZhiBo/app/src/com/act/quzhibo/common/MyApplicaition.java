@@ -3,6 +3,7 @@ package com.act.quzhibo.common;
 
 import android.app.Application;
 import android.os.Environment;
+import android.util.Log;
 
 import com.act.quzhibo.R;
 import com.mabeijianxi.smallvideorecord2.DeviceUtils;

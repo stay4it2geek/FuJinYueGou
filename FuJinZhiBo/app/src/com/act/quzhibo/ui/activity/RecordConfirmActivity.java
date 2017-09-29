@@ -19,26 +19,21 @@ public class RecordConfirmActivity extends FragmentActivity {
     private Button yes;
     private Button no;
     private TextView titleTv;
-    private TextView messageTv;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.common_dialog_layout);
         initView();
-
     }
-
 
     private void initView() {
         yes = (Button) findViewById(R.id.positive);
         no = (Button) findViewById(R.id.negtive);
         titleTv = (TextView) findViewById(R.id.title);
-        messageTv = (TextView) findViewById(R.id.message);
-        titleTv.setText("录制已完成，是否上传？");
-        messageTv.setText("");
-        yes.setText("上传");
-        no.setText("取消");
+        titleTv.setText("录制已经完成");
+        no.setVisibility(View.GONE);
+        yes.setText("确定");
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,13 +44,6 @@ public class RecordConfirmActivity extends FragmentActivity {
                 finish();
             }
         });
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RecordConfirmActivity.this.finish();
-            }
-        });
     }
-
 
 }

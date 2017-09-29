@@ -42,11 +42,9 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
         }
     }
 
-
     @Override
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
-
     }
 
     public MyPostDetailAdapter(MyPost post, FragmentActivity context) {
@@ -62,7 +60,6 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
     @Override
     public Item1ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new Item1ViewHolder(mLayoutInflater.inflate(R.layout.post_detail_header_layout, parent, false));
-
     }
 
     @Override

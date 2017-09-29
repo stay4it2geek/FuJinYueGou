@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -91,65 +92,58 @@ public class BitmapUtil {
         if (k == 0) return 1;
         else return k;
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////////
+
 
     /**
-     * 获取图片库中某张图片正方形略缩的终极方法
+     * 读取照片旋转角度
      *
-     * @param context
-     * @param imgId   图片ID，不可以为NULL
-     * @param ori     图片原来的旋转角度，默认是0
-     * @return
+     * @param path 照片路径
+     * @return 角度
      */
-    public static Bitmap getThumbnailFinal(Context context, String imgId, int ori) {
+    public static int readPictureDegree(String path) {
+        int degree = 0;
         try {
-            if (TextUtils.isEmpty(imgId)) {
-                return null;
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
             }
-
-            // 优先使用数据库中的略缩小图
-            Bitmap thumbnailBm = MediaStore.Images.Thumbnails.getThumbnail(
-                    context.getContentResolver(),
-                    Long.valueOf(imgId),
-                    MediaStore.Images.Thumbnails.MINI_KIND,
-                    null
-            );
-
-            // 如果读不到，读大图，然后裁剪
-            if( thumbnailBm==null){
-                Log.w("","db thumbnailBm==null ");
-                Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imgId);
-                thumbnailBm = BitmapUtil.getThumbnail(context, uri, 180);
-            }
-
-            // 如果旋转，就转回来
-            if (thumbnailBm != null && thumbnailBm.isRecycled() == false) {
-                if (ori != 0) {
-                    Log.w("","try ori="+ori);
-                    Bitmap rotateBm = BitmapUtil.rotateBitmap(thumbnailBm, ori);
-                    if (rotateBm != null && rotateBm.isRecycled() == false) {
-                        return rotateBm;
-                    }
-                }
-                return thumbnailBm;
-            }
-
-        } catch (OutOfMemoryError oom) {
-            oom.printStackTrace();
-        }/*catch(FileNotFoundException fnfe){
-            fnfe.printStackTrace();
-        }catch(IOException ioe){
-            ioe.printStackTrace();
-        }*/ catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        /*
-        if (DEBUG) {
-            Log.w("", "fetch thumbnail failed!!");
+        return degree;
+    }
+
+    /**
+     * 旋转图片
+     * @param angle 被旋转角度
+     * @param bitmap 图片对象
+     * @return 旋转后的图片
+     */
+    public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        Bitmap returnBm = null;
+        // 根据旋转角度，生成旋转矩阵
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        try {
+            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            returnBm = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        } catch (OutOfMemoryError e) {
         }
-        */
-        return null;
+        if (returnBm == null) {
+            returnBm = bitmap;
+        }
+        if (bitmap != returnBm) {
+            bitmap.recycle();
+        }
+        return returnBm;
     }
 }
