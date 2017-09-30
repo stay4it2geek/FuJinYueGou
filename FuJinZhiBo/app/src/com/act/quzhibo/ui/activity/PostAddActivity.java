@@ -65,12 +65,13 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private EditText mTitleEt;
     private MyPost myPost;
     private ImageView videoThumb;
+    int postType = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_add);
-
+        postType = getIntent().getIntExtra("postType", 0);
         mTitleEt = (EditText) findViewById(R.id.et_moment_title);
         mContentEt = (EditText) findViewById(R.id.et_moment_add_content);
         mPhotosSnpl = (BGASortableNinePhotoLayout) findViewById(R.id.snpl_moment_add_photos);
@@ -91,18 +92,19 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         });
         findViewById(R.id.tv_moment_add_publish).setOnClickListener(this);
         findViewById(R.id.recordBtn).setOnClickListener(this);
-        switch (getIntent().getIntExtra("postType", 0)) {
+        switch (postType) {
             case 1:
                 mPhotosSnpl.setVisibility(View.GONE);
                 break;
-
+            case 3:
+                mPhotosSnpl.setVisibility(View.VISIBLE);
+                break;
             case 2:
-                mPhotosSnpl.setVisibility(View.GONE);
                 findViewById(R.id.recordBtn).setVisibility(View.VISIBLE);
                 break;
         }
         EventBus.getDefault().register(this);
-
+        myPost=new MyPost();
     }
 
 
@@ -112,10 +114,13 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         EventBus.getDefault().unregister(this);
     }
 
+    String videoUrl = "";
+
     @Subscribe
     public void onEventMainThread(final RecordVideoEvent event) {
         findViewById(R.id.videoLayout).setVisibility(View.VISIBLE);
         findViewById(R.id.recordBtn).setVisibility(View.GONE);
+        videoUrl = event.videoUri;
         videoThumb.setImageBitmap(BitmapFactory.decodeFile(event.videoScreenshot));
         findViewById(R.id.videoLayout).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,94 +214,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     public void onClick(View view) {
         final String content = mContentEt.getText().toString().trim();
         final String title = mTitleEt.getText().toString().trim();
-
-        if (view.getId() == R.id.tv_moment_add_publish) {
-            if (title.length() == 0) {
-                Toast.makeText(this, "必须填写这一刻想法的标题！", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (content.length() == 0) {
-                Toast.makeText(this, "必须填写这一刻的想法！", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (mPhotosSnpl.getVisibility() == View.VISIBLE) {
-                if (mPhotosSnpl.getData().size() == 0) {
-                    myPost.title = title;
-                    myPost.absText = content;
-                    myPost.pageView = "0";
-                    myPost.totalComments = "0";
-                    myPost.totalImages = "0";
-                    myPost.rewards = "0";
-                    myPost.user = BmobUser.getCurrentUser(RootUser.class);
-                    myPost.save(new SaveListener<String>() {
-                        @Override
-                        public void done(String objectId, BmobException e) {
-                            if (e == null) {
-                                Intent intent = new Intent();
-                                intent.putExtra(EXTRA_MOMENT, myPost);
-                                setResult(RESULT_OK, intent);
-                                finish();
-                            } else {
-                                ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
-                            }
-                        }
-                    });
-                } else {
-                    final String[] filePaths = mPhotosSnpl.getData().toArray(new String[mPhotosSnpl.getData().size()]);
-                    BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
-                        @Override
-                        public void onSuccess(List<BmobFile> files, List<String> urls) {
-                            if (urls.size() == filePaths.length) {
-                                myPost.images = new ArrayList<>();
-                                myPost.images.addAll(urls);
-                                myPost.title = title;
-                                myPost.absText = content;
-                                myPost.pageView = "0";
-                                myPost.totalComments = "0";
-                                myPost.totalImages = urls.size() + "";
-                                myPost.rewards = "0";
-                                myPost.user = BmobUser.getCurrentUser(RootUser.class);
-                                myPost.save(new SaveListener<String>() {
-                                    @Override
-                                    public void done(String objectId, BmobException e) {
-                                        if (e == null) {
-                                            Intent intent = new Intent();
-                                            intent.putExtra(EXTRA_MOMENT, myPost);
-                                            setResult(RESULT_OK, intent);
-                                            finish();
-                                        } else {
-                                            ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
-                                        }
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onError(int statuscode, String errormsg) {
-                            ToastUtil.showToast(PostAddActivity.this, "错误码" + statuscode + ",错误描述：" + errormsg);
-                        }
-
-                        @Override
-                        public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
-                            //1、curIndex--表示当前第几个文件正在上传
-                            //2、curPercent--表示当前上传文件的进度值（百分比）
-                            //3、total--表示总的上传文件数
-                            //4、totalPercent--表示总的上传进度（百分比）
-                            final ProgressDialog dialog = new ProgressDialog(PostAddActivity.this);
-                            dialog.setMessage("正在发布");
-                            dialog.show();
-                            if (totalPercent == 100) {
-                                dialog.dismiss();
-                            }
-                        }
-                    });
-                }
-            } else {
-
-            }
-
-        } else if (R.id.recordBtn == view.getId()) {
-
+        if (view.getId() == R.id.recordBtn) {
             MediaRecorderConfig config = new MediaRecorderConfig.Buidler()
                     .fullScreen(true)
                     .smallVideoWidth(360)
@@ -307,9 +225,141 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                     .videoBitrate(600000)
                     .captureThumbnailsTime(1)
                     .build();
-
             MediaRecorderActivity.goSmallVideoRecorder(PostAddActivity.this, RecordConfirmActivity.class.getName(), config);
         }
-    }
+        if (view.getId() == R.id.tv_moment_add_publish) {
+            if (title.length() == 0) {
+                Toast.makeText(this, "必须填写这一刻想法的标题！", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (content.length() == 0) {
+                Toast.makeText(this, "必须填写这一刻的想法！", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            if (postType == 1) {
+                myPost.title = title;
+                myPost.absText = content;
+                myPost.pageView = "0";
+                myPost.totalComments = "0";
+                myPost.totalImages = "0";
+                myPost.rewards = "0";
+                myPost.user = BmobUser.getCurrentUser(RootUser.class);
+                myPost.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String objectId, BmobException e) {
+                        if (e == null) {
+                            Intent intent = new Intent();
+                            intent.putExtra(EXTRA_MOMENT, myPost);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else {
+                            ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                        }
+                    }
+                });
+            } else if (postType == 3) {
+                final String[] filePaths = mPhotosSnpl.getData().toArray(new String[mPhotosSnpl.getData().size()]);
+                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
+                    @Override
+                    public void onSuccess(List<BmobFile> files, List<String> urls) {
+                        if (urls.size() == filePaths.length) {
+                            myPost.images = new ArrayList<>();
+                            myPost.images.addAll(urls);
+                            myPost.title = title;
+                            myPost.absText = content;
+                            myPost.pageView = "0";
+                            myPost.totalComments = "0";
+                            myPost.totalImages = urls.size() + "";
+                            myPost.rewards = "0";
+                            myPost.user = BmobUser.getCurrentUser(RootUser.class);
+                            myPost.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String objectId, BmobException e) {
+                                    if (e == null) {
+                                        Intent intent = new Intent();
+                                        intent.putExtra(EXTRA_MOMENT, myPost);
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                    } else {
+                                        ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onError(int statuscode, String errormsg) {
+                        ToastUtil.showToast(PostAddActivity.this, "错误码" + statuscode + ",错误描述：" + errormsg);
+                    }
+
+                    @Override
+                    public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
+                        //1、curIndex--表示当前第几个文件正在上传
+                        //2、curPercent--表示当前上传文件的进度值（百分比）
+                        //3、total--表示总的上传文件数
+                        //4、totalPercent--表示总的上传进度（百分比）
+                        final ProgressDialog dialog = new ProgressDialog(PostAddActivity.this);
+                        dialog.setMessage("正在发布");
+                        dialog.show();
+                        if (totalPercent == 100) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+            } else if (postType == 2) {
+                final String[] filePaths = new String[]{videoUrl};
+                BmobFile.uploadBatch(filePaths, new UploadBatchListener() {
+                    @Override
+                    public void onSuccess(List<BmobFile> files, List<String> urls) {
+                        if (urls.size() == filePaths.length) {
+                            myPost.title = title;
+                            myPost.vedioUrl = urls.get(0);
+                            myPost.absText = content;
+                            myPost.pageView = "0";
+                            myPost.totalComments = "0";
+                            myPost.totalImages = "0";
+                            myPost.rewards = "0";
+                            myPost.user = BmobUser.getCurrentUser(RootUser.class);
+                            myPost.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String objectId, BmobException e) {
+                                    if (e == null) {
+                                        Intent intent = new Intent();
+                                        intent.putExtra(EXTRA_MOMENT, myPost);
+                                        setResult(RESULT_OK, intent);
+                                        finish();
+                                        ToastUtil.showToast(PostAddActivity.this, "发布成功，等待审核");
+                                    } else {
+                                        ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onError(int statuscode, String errormsg) {
+                        ToastUtil.showToast(PostAddActivity.this, "错误码" + statuscode + ",错误描述：" + errormsg);
+                    }
+
+                    @Override
+                    public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
+                        //1、curIndex--表示当前第几个文件正在上传
+                        //2、curPercent--表示当前上传文件的进度值（百分比）
+                        //3、total--表示总的上传文件数
+                        //4、totalPercent--表示总的上传进度（百分比）
+                        final ProgressDialog dialog = new ProgressDialog(PostAddActivity.this);
+                        dialog.setMessage("正在发布");
+                        dialog.show();
+                        if (totalPercent == 100) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+            }
+        }
+
+    }
 }
+

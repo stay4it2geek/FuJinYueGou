@@ -172,10 +172,15 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
 
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
-            if (day < 50) {
-                ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
-            } else {
-                ((Item1ViewHolder) holder).createTime.setText("N天" + hour + "小时" + min + "分钟前");
+
+            if (day <=1) {
+                ((Item1ViewHolder) holder).createTime.setText(hour + "小时前"+min+"分钟前");
+            } else if (day < 30) {
+                ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时前");
+            } else if (day > 30 && day < 60) {
+                ((Item1ViewHolder) holder).createTime.setText("2个月前");
+            } else if (day > 90) {
+                ((Item1ViewHolder) holder).createTime.setText("3个月前");
             }
             String nick = data.detail.user.nick.replaceAll("\r|\n", "");
             ((Item1ViewHolder) holder).nickName.setText(nick);

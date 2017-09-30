@@ -3,15 +3,19 @@ package com.act.quzhibo.adapter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
@@ -19,6 +23,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.io.File;
 import java.util.List;
@@ -100,10 +105,14 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        if (day < 50) {
-            holder.createTime.setText(day + "天" + hour + "小时" + min + "分钟前");
-        } else {
-            holder.createTime.setText("N天" + hour + "小时" + min + "分钟前");
+        if (day <= 1) {
+            holder.createTime.setText(hour + "小时前" + min + "分钟前");
+        } else if (day < 30) {
+            holder.createTime.setText(day + "天" + hour + "小时前");
+        } else if (day > 30 && day < 60) {
+            holder.createTime.setText("2个月前");
+        } else if (day > 90) {
+            holder.createTime.setText("3个月前");
         }
         holder.nickName.setText(BmobUser.getCurrentUser(RootUser.class).getUsername());
         holder.title.setText(post.title + "");
@@ -113,6 +122,31 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
         holder.ninePhotoLayout.setDelegate(this);
         holder.ninePhotoLayout.setData(post.images);
 
+        if (!TextUtils.isEmpty(post.vedioUrl)) {
+            holder.ijkVideoView.setVisibility(View.VISIBLE);
+            new AsyncTask<Void, Void, Bitmap>() {
+                @Override
+                protected Bitmap doInBackground(Void... params) {
+                    Bitmap bitmap = CommonUtil.createBitmapFromVideoPath(post.vedioUrl);
+                    return bitmap;
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap bitmap) {
+                    super.onPostExecute(bitmap);
+                     holder.controller.getThumb().setImageBitmap(bitmap);
+                     holder.ijkVideoView
+                            .enableCache()
+                            .addToPlayerManager()
+                            .setUrl(post.vedioUrl)
+                            .setTitle(post.title)
+                            .setVideoController( holder.controller);
+
+                }
+            }.execute();
+        } else {
+             holder.ijkVideoView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -129,7 +163,9 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
         private TextView nickName;
         private TextView title;
         private io.github.rockerhieu.emojicon.EmojiconTextView content;
-        BGANinePhotoLayout ninePhotoLayout;
+        private BGANinePhotoLayout ninePhotoLayout;
+        private IjkVideoView ijkVideoView;
+        private MyStandardVideoController controller;
 
         public Item1ViewHolder(View view) {
             super(view);
@@ -142,6 +178,12 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
             title = (TextView) view.findViewById(R.id.title);
             content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.content);
             ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);
+            ijkVideoView = (IjkVideoView) itemView.findViewById(R.id.video_player);
+            int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
+            ijkVideoView.setLayoutParams(new RelativeLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
+            controller = new MyStandardVideoController(activity);
+            controller.setInitData(false, true);
+            ijkVideoView.setVideoController(controller);
         }
 
     }

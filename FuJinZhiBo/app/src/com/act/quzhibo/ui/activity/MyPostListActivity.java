@@ -128,6 +128,7 @@ public class MyPostListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyPostListActivity.this, PostAddActivity.class);
+                intent.putExtra("postType", 3);
                 startActivityForResult(intent, UPLOAD_POST);
             }
         });
@@ -193,7 +194,6 @@ public class MyPostListActivity extends AppCompatActivity {
                         recyclerView.setNoMore(true);
                     }
                 }
-
                 if (myPostListAdapter == null) {
                     myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
                     recyclerView.setAdapter(myPostListAdapter);

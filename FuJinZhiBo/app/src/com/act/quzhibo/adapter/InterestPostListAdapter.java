@@ -78,10 +78,14 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
         holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
-        if (day < 50) {
-            holder.createTime.setText(day + "天" + hour + "时" + min + "分钟前");
-        } else {
-            holder.createTime.setText("N天" + hour + "时" + min + "分钟前");
+        if (day <= 1) {
+            holder.createTime.setText(hour + "小时前" + min + "分钟前");
+        } else if (day < 30) {
+            holder.createTime.setText(day + "天" + hour + "小时前");
+        } else if (day > 30 && day < 60) {
+            holder.createTime.setText("2个月前");
+        } else if (day > 90) {
+            holder.createTime.setText("3个月前");
         }
         holder.title.setText(datas.get(position).title + "");
         new AsyncTask<Void, Void, String>() {
@@ -93,8 +97,8 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                 while (matcher.find()) {
                     newString = newString.replaceAll(":" + matcher.group().trim() + ":", "<img src='" + MyApplicaition.emotionsKeySrc.get(":" + matcher.group().trim() + ":") + "'>");
                 }
-                if(newString.contains("null")){
-                    newString= newString.replaceAll("null",R.drawable.kissing_heart+"");
+                if (newString.contains("null")) {
+                    newString = newString.replaceAll("null", R.drawable.kissing_heart + "");
                 }
                 return newString;
             }
@@ -150,7 +154,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                         }
                     }.execute();
                 }
-            }else{
+            } else {
                 holder.imgVideolayout.setVisibility(View.GONE);
 
             }
@@ -161,13 +165,12 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                 mOnItemClickListener.onItemClick(post);
             }
         });
-        holder.imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        holder.imgGridview.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int gridPosition, long id) {
+            public void onClick(View v) {
                 mOnItemClickListener.onItemClick(post);
             }
         });
-
         holder.photoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -55,6 +55,7 @@
             <cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout
                 android:id="@+id/snpl_moment_add_photos"
                 style="@style/WrapWrap"
+                android:visibility="gone"
                 android:layout_margin="10dp"
                 app:bga_snpl_deleteDrawable="@mipmap/bga_pp_ic_delete"
                 app:bga_snpl_deleteDrawableOverlapQuarter="false"
