@@ -71,7 +71,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
         holder.sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex + "");
         if (day <=1) {
-            holder.createTime.setText(hour + "小时前"+min+"分钟前");
+            holder.createTime.setText(hour + "小时"+min+"分钟前");
         }   else  if (day < 30) {
             holder.createTime.setText(day + "天" + hour + "小时前");
         } else if (day > 30 && day < 60) {
@@ -135,7 +135,6 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         holder.photoImg.setBackgroundDrawable(errorDrawable);
-
                     }
                 });
             } else {
@@ -149,16 +148,15 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         super.onLoadFailed(e, errorDrawable);
                         holder.photoImg.setBackgroundDrawable(errorDrawable);
-
                     }
                 });
             }
         }
 
         holder.areaLocation.setText(rootUser.provinceAndcity + "");
-        holder.imgGridview.setOnClickListener(new View.OnClickListener() {
+        holder.imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 mOnItemClickListener.onItemClick(post);
             }
         });

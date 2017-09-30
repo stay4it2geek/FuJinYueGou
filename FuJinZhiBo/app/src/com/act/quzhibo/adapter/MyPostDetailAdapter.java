@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -106,7 +107,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
         if (day <= 1) {
-            holder.createTime.setText(hour + "小时前" + min + "分钟前");
+            holder.createTime.setText(hour + "小时" + min + "分钟前");
         } else if (day < 30) {
             holder.createTime.setText(day + "天" + hour + "小时前");
         } else if (day > 30 && day < 60) {
@@ -119,8 +120,11 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
         holder.content.setText(post.absText + "");
         holder.areaLocation.setText(BmobUser.getCurrentUser(RootUser.class).provinceAndcity + "");
 
+
         holder.ninePhotoLayout.setDelegate(this);
-        holder.ninePhotoLayout.setData(post.images);
+        if(post.images!=null&&post.images.size()>0){
+            holder.ninePhotoLayout.setData(post.images);
+        }
 
         if (!TextUtils.isEmpty(post.vedioUrl)) {
             holder.ijkVideoView.setVisibility(View.VISIBLE);
@@ -180,7 +184,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
             ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);
             ijkVideoView = (IjkVideoView) itemView.findViewById(R.id.video_player);
             int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
-            ijkVideoView.setLayoutParams(new RelativeLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
+            ijkVideoView.setLayoutParams(new LinearLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
             controller = new MyStandardVideoController(activity);
             controller.setInitData(false, true);
             ijkVideoView.setVideoController(controller);

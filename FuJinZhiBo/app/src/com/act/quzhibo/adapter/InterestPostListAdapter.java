@@ -79,7 +79,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
         holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
         if (day <= 1) {
-            holder.createTime.setText(hour + "小时前" + min + "分钟前");
+            holder.createTime.setText(hour + "小时" + min + "分钟前");
         } else if (day < 30) {
             holder.createTime.setText(day + "天" + hour + "小时前");
         } else if (day > 30 && day < 60) {
@@ -165,12 +165,13 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                 mOnItemClickListener.onItemClick(post);
             }
         });
-        holder.imgGridview.setOnClickListener(new View.OnClickListener() {
+        holder.imgGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 mOnItemClickListener.onItemClick(post);
             }
         });
+
         holder.photoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

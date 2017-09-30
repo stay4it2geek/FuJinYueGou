@@ -2,6 +2,7 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,8 +63,8 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
             } else {
                 Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.man).error(R.drawable.error_img).into(holder.photoImg);
             }
-
-        holder.nickName.setText(datas.get(position).nickname);
+        String nick = TextUtils.isEmpty(datas.get(position).nickname)?"":datas.get(position).nickname.replaceAll("\r|\n", "");
+        holder.nickName.setText(nick);
         holder.commonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -173,8 +173,8 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
 
             ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" : "男");
 
-            if (day <=1) {
-                ((Item1ViewHolder) holder).createTime.setText(hour + "小时前"+min+"分钟前");
+            if (day <= 1) {
+                ((Item1ViewHolder) holder).createTime.setText(hour + "小时前" + min + "分钟前");
             } else if (day < 30) {
                 ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时前");
             } else if (day > 30 && day < 60) {
@@ -254,7 +254,9 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
             }.execute();
             ((Item1ViewHolder) holder).ninePhotoLayout.setDelegate(this);
-            ((Item1ViewHolder) holder).ninePhotoLayout.setData(pageImgeList);
+            if (pageImgeList != null && pageImgeList.size() > 0) {
+                ((Item1ViewHolder) holder).ninePhotoLayout.setData(pageImgeList);
+            }
         } else if (holder instanceof Item2ViewHolder) {
             if (data.comments.size() == 0) {
                 return;
@@ -305,9 +307,17 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             if (commentDetail.user.sex != null) {
                 ((Item2ViewHolder) holder).sexAndAge.setText(commentDetail.user.sex.equals("2") ? "女" : "男");
             }
-            ((Item2ViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
-            ((Item2ViewHolder) holder).nickName.setText(commentDetail.user.nick);
 
+            ((Item2ViewHolder) holder).nickName.setText(commentDetail.user.nick);
+            if (day <= 1) {
+               ((Item2ViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
+            } else if (day < 30) {
+               ((Item2ViewHolder) holder).createTime.setText(day + "天" + hour + "小时前");
+            } else if (day > 30 && day < 60) {
+               ((Item2ViewHolder) holder).createTime.setText("2个月前");
+            } else if (day > 90) {
+               ((Item2ViewHolder) holder).createTime.setText("3个月前");
+            }
             new AsyncTask<Void, Void, String>() {
                 @Override
                 protected String doInBackground(Void... params) {
@@ -390,7 +400,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             nickName = (TextView) view.findViewById(R.id.nickName);
             ijkVideoView = (IjkVideoView) itemView.findViewById(R.id.video_player);
             int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
-            ijkVideoView.setLayoutParams(new RelativeLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
+            ijkVideoView.setLayoutParams(new LinearLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
             controller = new MyStandardVideoController(activity);
             controller.setInitData(false, true);
             ijkVideoView.setVideoController(controller);

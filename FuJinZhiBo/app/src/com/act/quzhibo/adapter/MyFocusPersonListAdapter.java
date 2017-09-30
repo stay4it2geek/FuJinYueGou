@@ -2,6 +2,7 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,8 +73,10 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         }else{
             holder.locaitonDistance.setText("距离你"+datas.get(position).distance+"千米");
         }
-        holder.introduce.setText(datas.get(position).introduce+"");
-        holder.nickName.setText(datas.get(position).username);
+        holder.introduce.setText(TextUtils.isEmpty(datas.get(position).introduce)?"":datas.get(position).introduce);
+        String nick = TextUtils.isEmpty(datas.get(position).username)?"":datas.get(position).username.replaceAll("\r|\n", "");
+        holder.nickName.setText(nick);
+
         holder.commonLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

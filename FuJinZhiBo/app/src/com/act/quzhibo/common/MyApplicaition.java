@@ -119,7 +119,7 @@ public class MyApplicaition extends Application {
         proKeySrc.put("51", "上海市");
         proKeySrc.put("53", "重庆市");
         proKeySrc.put("52", "天津市");
-        proKeySrc.put("22", "北京市");
+        proKeySrc.put("50", "北京市");
         proKeySrc.put("80", "台湾省");
     }
 
