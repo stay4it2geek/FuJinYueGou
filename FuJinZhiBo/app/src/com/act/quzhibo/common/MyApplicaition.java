@@ -43,14 +43,11 @@ public class MyApplicaition extends Application {
             if (dcim.exists()) {
                 JianXiCamera.setVideoCachePath(dcim + "/qushivideo/");
             } else {
-                JianXiCamera.setVideoCachePath(dcim.getPath().replace("/sdcard/",
-                        "/sdcard-ext/")
-                        + "/qushivideo/");
+                JianXiCamera.setVideoCachePath(dcim.getPath().replace("/sdcard/","/sdcard-ext/")+ "/qushivideo/");
             }
         } else {
             JianXiCamera.setVideoCachePath(dcim + "/qushivideo/");
         }
-        // 初始化拍摄，遇到问题可选择开启此标记，以方便生成日志
         JianXiCamera.initialize(false, null);
     }
 
@@ -105,7 +102,6 @@ public class MyApplicaition extends Application {
         proKeySrc.put("20", "四川省");
         proKeySrc.put("21", "云南省");
         proKeySrc.put("22", "浙江省");
-
 
         proKeySrc.put("60", "广西壮族自治区");
         proKeySrc.put("61", "内蒙古自治区");

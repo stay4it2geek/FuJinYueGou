@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
@@ -66,7 +67,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private MyPost myPost;
     private ImageView videoThumb;
     int postType = 0;
-
+    ProgressDialog dialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +105,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 break;
         }
         EventBus.getDefault().register(this);
-        myPost=new MyPost();
+        myPost = new MyPost();
     }
 
 
@@ -234,6 +235,15 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
             } else if (content.length() == 0) {
                 Toast.makeText(this, "必须填写这一刻的想法！", Toast.LENGTH_SHORT).show();
                 return;
+            }else{
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog= new ProgressDialog(PostAddActivity.this);
+                        dialog.setMessage("正在发布");
+                        dialog.show();
+                    }
+                });
             }
 
             if (postType == 1) {
@@ -247,6 +257,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 myPost.save(new SaveListener<String>() {
                     @Override
                     public void done(String objectId, BmobException e) {
+                        dialog.dismiss();
                         if (e == null) {
                             Intent intent = new Intent();
                             intent.putExtra(EXTRA_MOMENT, myPost);
@@ -276,10 +287,12 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
+                                        dialog.dismiss();
                                         Intent intent = new Intent();
                                         intent.putExtra(EXTRA_MOMENT, myPost);
                                         setResult(RESULT_OK, intent);
                                         finish();
+
                                     } else {
                                         ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
                                     }
@@ -295,16 +308,6 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
 
                     @Override
                     public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
-                        //1、curIndex--表示当前第几个文件正在上传
-                        //2、curPercent--表示当前上传文件的进度值（百分比）
-                        //3、total--表示总的上传文件数
-                        //4、totalPercent--表示总的上传进度（百分比）
-                        final ProgressDialog dialog = new ProgressDialog(PostAddActivity.this);
-                        dialog.setMessage("正在发布");
-                        dialog.show();
-                        if (totalPercent == 100) {
-                            dialog.dismiss();
-                        }
                     }
                 });
             } else if (postType == 2) {
@@ -325,6 +328,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
+                                        dialog.dismiss();
                                         Intent intent = new Intent();
                                         intent.putExtra(EXTRA_MOMENT, myPost);
                                         setResult(RESULT_OK, intent);
