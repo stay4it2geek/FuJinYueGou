@@ -236,11 +236,9 @@ public class SettingMineInfoActivity extends FragmentActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (rootUser != null) {
                     mLockIndicator.setAnswer(new int[]{});
-                    mLockViewGroup.setAnswer(null);
-                    mLockViewGroup.reset();
                     if (isChecked) {
                         if (!rootUser.secretScan) {
-
+                            mLockViewGroup.setAnswer(null);
                             secretView.setVisibility(View.VISIBLE);
                             secretView.setAnimation(AnimationUtils.makeInAnimation(SettingMineInfoActivity.this, true));
                         }
@@ -863,10 +861,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                         }
                     });
                 }
-
-
-                Log.e("truer222", rootUser.secretScan + "");
-
+                
             }
 
             @Override

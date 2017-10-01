@@ -127,11 +127,9 @@ public class WelcomeActivity extends ActivityManagePermission {
 
             }
 
-            // 验证密码时, 设置的原始密码少于4位的错误提示
             @Override
             public void onSetAnswerInit() {
-                mTvTips.setTextColor(Color.RED);
-                mTvTips.setText("验证密码不能少于4位");
+                mTvTips.setText("绘制解锁图案");
             }
         });
 

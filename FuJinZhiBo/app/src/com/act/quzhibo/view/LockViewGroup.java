@@ -72,9 +72,8 @@ public class LockViewGroup extends RelativeLayout {
     // 指引线的结束位置
     private Point mTmpTarget = new Point();
 
-
     //第一次绘制时 存储答案
-    private int[] mFirstAnswer;
+    private int[] mFirstAnswer = null;
 
     // 最大尝试次数
     private int mTryTimes = 4;
@@ -277,9 +276,6 @@ public class LockViewGroup extends RelativeLayout {
                 // 校验和保存结果
                 doSaveCheckResult();
 
-                Log.e(TAG, "mTryTimes=" + mTryTimes
-                        + ", mChoose=" + mChoose
-                        + ", mFirstAnswer=" + Arrays.toString(mFirstAnswer));
                 break;
         }
         invalidate();
@@ -316,8 +312,6 @@ public class LockViewGroup extends RelativeLayout {
                 for (int i = 0; i < mChoose.size(); i++) {
                     mFirstAnswer[i] = mChoose.get(i);
                 }
-                Log.e(TAG, "mChoose=" + mChoose
-                        + ", mFirstAnswer=" + Arrays.toString(mFirstAnswer));
                 // 执行保存回调
                 if (mLockListener != null) {
                     mLockListener.onSaveFirstAnswer(mFirstAnswer);
@@ -533,13 +527,9 @@ public class LockViewGroup extends RelativeLayout {
      * @param answer
      */
     public void setAnswer(int[] answer) {
-        if (answer != null && answer.length >= 4) {
-            this.mFirstAnswer = answer;
-        } else {
-            this.mFirstAnswer=new int[]{};
-            if (mLockListener != null)
-                mLockListener.onSetAnswerInit();
-        }
+        this.mFirstAnswer = answer;
+        mLockListener.onSetAnswerInit();
+
     }
 
     /**
