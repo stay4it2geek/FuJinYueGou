@@ -28,7 +28,7 @@ public class NearMediaVideoListActivity extends ActivityManagePermission {
         videoEntity = (NearVideoEntity) getIntent().getSerializableExtra(Constants.NEAR_USER_VIDEO);
         ijkVideoView = new IjkVideoView(this);
         setContentView(ijkVideoView);
-        if (TextUtils.isEmpty(getIntent().getStringExtra("videoUrl"))) {
+        if (TextUtils.isEmpty(videoEntity.url)) {
             ToastUtil.showToast(this, "视频地址未找到，无法播放");
             return;
         }
