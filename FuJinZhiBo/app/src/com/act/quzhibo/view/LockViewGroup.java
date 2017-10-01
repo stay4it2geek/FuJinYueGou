@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -436,7 +435,7 @@ public class LockViewGroup extends RelativeLayout {
     /**
      * 做一些必要的重置
      */
-    private void reset() {
+    public void reset() {
         mChoose.clear();
         mPath.reset();
         for (LockView lockView : mLockViews) {
@@ -536,6 +535,10 @@ public class LockViewGroup extends RelativeLayout {
     public void setAnswer(int[] answer) {
         if (answer != null && answer.length >= 4) {
             this.mFirstAnswer = answer;
+        } else {
+            this.mFirstAnswer=new int[]{};
+            if (mLockListener != null)
+                mLockListener.onSetAnswerInit();
         }
     }
 
@@ -584,6 +587,8 @@ public class LockViewGroup extends RelativeLayout {
         // 剩余次数提示回调
         void onFailed(int mTryTimes);
 
+        // 验证密码初始化
+        void onSetAnswerInit();
     }
 
 }

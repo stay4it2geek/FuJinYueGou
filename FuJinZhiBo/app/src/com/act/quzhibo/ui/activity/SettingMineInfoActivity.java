@@ -237,8 +237,10 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 if (rootUser != null) {
                     mLockIndicator.setAnswer(new int[]{});
                     mLockViewGroup.setAnswer(null);
+                    mLockViewGroup.reset();
                     if (isChecked) {
                         if (!rootUser.secretScan) {
+
                             secretView.setVisibility(View.VISIBLE);
                             secretView.setAnimation(AnimationUtils.makeInAnimation(SettingMineInfoActivity.this, true));
                         }
@@ -862,6 +864,9 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     });
                 }
 
+
+                Log.e("truer222", rootUser.secretScan + "");
+
             }
 
             @Override
@@ -884,6 +889,10 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
             }
 
+            @Override
+            public void onSetAnswerInit() {
+                mTvTips.setText("绘制解锁图案");
+            }
         });
 
     }
