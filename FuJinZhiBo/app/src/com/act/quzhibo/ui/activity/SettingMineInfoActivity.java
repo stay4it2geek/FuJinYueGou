@@ -862,9 +862,6 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     });
                 }
 
-
-                Log.e("truer222", rootUser.secretScan + "");
-
             }
 
             @Override
@@ -887,12 +884,6 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
             }
 
-            // 验证密码时, 设置的原始密码少于4位的错误提示
-            @Override
-            public void onSetAnswerLessError() {
-                mTvTips.setTextColor(Color.RED);
-                mTvTips.setText("验证密码不能少于4位");
-            }
         });
 
     }

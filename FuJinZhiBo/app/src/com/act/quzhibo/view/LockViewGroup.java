@@ -536,9 +536,6 @@ public class LockViewGroup extends RelativeLayout {
     public void setAnswer(int[] answer) {
         if (answer != null && answer.length >= 4) {
             this.mFirstAnswer = answer;
-        } else {
-            if (mLockListener != null)
-                mLockListener.onSetAnswerLessError();
         }
     }
 
@@ -587,8 +584,6 @@ public class LockViewGroup extends RelativeLayout {
         // 剩余次数提示回调
         void onFailed(int mTryTimes);
 
-        // 验证密码少于4位
-        void onSetAnswerLessError();
     }
 
 }
