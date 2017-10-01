@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.download.domain.MediaInfo;
+import com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity;
 import com.act.quzhibo.ui.activity.XImageActivity;
 import com.bumptech.glide.Glide;
 
@@ -71,17 +72,12 @@ public class PhotoAlbumListAdapter extends RecyclerView.Adapter<PhotoAlbumListAd
 
         holder.mTvMediaTtile.setText(mediaInfo.getTitle());
 
-
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra("position", position);
-                Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList("mediaList", mMediaInfos);//
-                intent.putExtras(bundle);
-                intent.setClass(activity, XImageActivity.class);
-                activity.startActivity(intent);
+                if (mMediaInfos.size() > 0) {
+                    activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, mMediaInfos, position));
+                }
             }
         });
     }

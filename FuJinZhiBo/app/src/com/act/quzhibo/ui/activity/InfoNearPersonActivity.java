@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
@@ -35,11 +36,13 @@ import com.act.quzhibo.view.TitleBarView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -54,6 +57,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
     private InterestSubPerson user;
     private LoadNetView loadNetView;
     private MyFocusCommonPerson mMyFocusCommonPerson;
+    private File downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,9 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                 InfoNearPersonActivity.this.finish();
             }
         });
+        if (!downloadDir.exists()) {
+            downloadDir.mkdirs();
+        }
     }
 
 
@@ -330,56 +337,30 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         });
     }
 
+    ArrayList<String> photoImgs = new ArrayList<>();
 
     private void getPhotoLibs() {
-//        [{"detailId":441341417,
-//                  "url":"http://file.nidong.com//upload/user/20170314/20/ff8080815acb421c015accc1a66d01f1/s.jpg",
-//                "urlValue":"/upload/user/20170314/20/ff8080815acb421c015accc1a66d01f1/s.jpg",
-//                "userId":2888336,
-//                  "videoDuration":0,
-//                   "videoSize":0},
-//        {"detailId":432845771,
-//                "url":"http://file.nidong.com//upload/user/20170307/22/ff8080815aa8cd06015aa935e12e00ca/s.jpg",
-//                "urlValue":"/upload/user/20170307/22/ff8080815aa8cd06015aa935e12e00ca/s.jpg",
-//                "userId":2888336,"videoDuration":0,"videoSize":0},
-//        {"detailId":424452840,
-//                  "url":"http://file.nidong.com//upload/user/20170302/11/ff8080815a8d1bb5015a8d2a6d260012/s.jpg",
-//                "urlValue":"/upload/user/20170302/11/ff8080815a8d1bb5015a8d2a6d260012/s.jpg",
-//                "userId":2888336,"videoDuration":0,"videoSize":0},
-//        {"detailId":423917164,
-//                 "url":"http://file.nidong.com//upload/user/20170301/21/ff8080815a89f44b015a8a21e47d006d/s.jpg",
-//                "urlValue":"/upload/user/20170301/21/ff8080815a89f44b015a8a21e47d006d/s.jpg",
-//                "userId":2888336,"videoDuration":0,"videoSize":0}]
 
         final ArrayList<NearPhotoEntity> nearPhotoEntities = CommonUtil.jsonToArrayList(user.photoLibraries, NearPhotoEntity.class);
         HorizontialListView listView = (HorizontialListView) findViewById(R.id.photoLibsList);
-        ArrayList<String> imgs = new ArrayList<>();
 
         for (NearPhotoEntity entity : nearPhotoEntities) {
-            imgs.add(entity.url);
+            photoImgs.add(entity.url);
         }
-        listView.setAdapter(new PostImageAdapter(InfoNearPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG, true, false));
+        listView.setAdapter(new PostImageAdapter(InfoNearPersonActivity.this, photoImgs, Constants.ITEM_USER_INFO_IMG, true, false));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent();
-                intent.putExtra(Constants.NEAR_PHOTO_USER, user);
-                intent.setClass(InfoNearPersonActivity.this, NearMediaPhotoListActivity.class);
-                startActivity(intent);
+                if (nearPhotoEntities.size() == 1) {
+                    startActivity(BGAPhotoPreviewActivity.newIntent(InfoNearPersonActivity.this, downloadDir,nearPhotoEntities.get(i).url));
+                } else if (nearPhotoEntities.size() > 1) {
+                    startActivity(BGAPhotoPreviewActivity.newIntent(InfoNearPersonActivity.this, downloadDir,photoImgs,i));
+                }
             }
         });
     }
 
     private void getVideoLibs() {
-//        [{"detailId":424655384,
-//                  "url":"http://file.nidong.com//upload/user/20170302/13/ff8080815a8d36fd015a8d7d8da1008f/psd.mp4",
-//                "urlValue":"/upload/user/20170302/13/ff8080815a8d36fd015a8d7d8da1008f/psd.mp4",
-//                "userId":2888336,
-//                 "videoDuration":0,
-//                "videoPic":"http://file.nidong.com//upload/user/20170302/13/ff8080815a8d36fd015a8d7d8da1008f/s.jpg",
-//                "videoPicValue":"/upload/user/20170302/13/ff8080815a8d36fd015a8d7d8da1008f/s.jpg",
-//                "videoSize":0}]
-
         final ArrayList<NearVideoEntity> nearVideoEntities = CommonUtil.jsonToArrayList(user.videoLibraries, NearVideoEntity.class);
         HorizontialListView listView = (HorizontialListView) findViewById(R.id.videoLibsList);
         ArrayList<String> imgs = new ArrayList<>();
@@ -393,7 +374,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent();
-                intent.putExtra(Constants.NEAR_VIDEO_USER, user);
+                intent.putExtra(Constants.NEAR_USER_VIDEO, nearVideoEntities.get(i));
                 intent.setClass(InfoNearPersonActivity.this, NearMediaVideoListActivity.class);
                 startActivity(intent);
             }
@@ -426,7 +407,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
 
         final ArrayList<NearSeeHerEntity> nearSeeHerEntities = CommonUtil.jsonToArrayList(user.viewUsers, NearSeeHerEntity.class);
         HorizontialListView listView = (HorizontialListView) findViewById(R.id.who_see_her_imglist);
-        NearSeeHer20Adapter mAdapter = new NearSeeHer20Adapter(nearSeeHerEntities, InfoNearPersonActivity.this,true);
+        NearSeeHer20Adapter mAdapter = new NearSeeHer20Adapter(nearSeeHerEntities, InfoNearPersonActivity.this, true);
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

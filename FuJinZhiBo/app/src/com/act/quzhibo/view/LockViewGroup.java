@@ -528,7 +528,7 @@ public class LockViewGroup extends RelativeLayout {
      */
     public void setAnswer(int[] answer) {
         this.mFirstAnswer = answer;
-        if(mLockListener!=null){
+        if (mLockListener != null) {
             mLockListener.onSetAnswerInit();
         }
     }

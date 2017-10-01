@@ -23,6 +23,8 @@ import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.domain.MediaInfo;
 import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity;
+import com.act.quzhibo.ui.activity.InfoNearPersonActivity;
 import com.act.quzhibo.ui.activity.XImageActivity;
 import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
@@ -69,7 +71,7 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FragmentDialog.newInstance(true, "确定删除?", "删除后不可恢复!", "确定", "取消","","", false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(true, "确定删除?", "删除后不可恢复!", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                 deleteListner.onDelete(downloadInfo, position, needDelete);
@@ -113,8 +115,11 @@ public class DownLoadedListAdapter extends BaseRecyclerViewAdapter<DownloadInfo,
                             Bundle bundle = new Bundle();
                             bundle.putParcelableArrayList("mediaList", mMediaInfos);//
                             intent.putExtras(bundle);
-                            intent.setClass(activity, XImageActivity.class);
+                            intent.setClass(activity, BGAPhotoPreviewActivity.class);
                             activity.startActivity(intent);
+                            if (mMediaInfos.size() > 0) {
+                                activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, mMediaInfos, position));
+                            }
                         } else {
                             Intent intent = new Intent();
                             intent.setAction(android.content.Intent.ACTION_VIEW);

@@ -1,7 +1,9 @@
 package com.act.quzhibo.entity;
 
 
-public class NearVideoEntity {
+import java.io.Serializable;
+
+public class NearVideoEntity implements Serializable{
     public int detailId;
     public String url;
     public String urlValue;

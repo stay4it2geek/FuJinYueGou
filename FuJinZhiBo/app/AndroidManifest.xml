@@ -82,6 +82,12 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:theme="@style/BGAPPTheme"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.PuaCoursesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"

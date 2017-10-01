@@ -52,6 +52,6 @@ public class Constants {
     public static final String MONEY_CATOGERY_INFO = "moneyCategoryInfo";
 
     public static final String MONEY_GROUP="moneygroup";
-    public static final String NEAR_VIDEO_USER = "1";
-    public static final String NEAR_PHOTO_USER = "2";
+    public static final String NEAR_USER_VIDEO = "1";
+    public static final String NEAR_USER_PHOTO = "2";
 }
