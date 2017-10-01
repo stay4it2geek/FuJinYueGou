@@ -184,7 +184,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
     };
 
     private void showDialog(Member m) {
-        FragmentDialog.newInstance(false, m.nickname, "", "关闭", "", -1, true, new FragmentDialog.OnClickBottomListener() {
+        FragmentDialog.newInstance(false, m.nickname,"","", "关闭",m.headUrl,"",true, new FragmentDialog.OnClickBottomListener() {
             @Override
             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                 dialog.dismiss();
@@ -332,7 +332,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                         }
 
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注","","",false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
                                 dialog.dismiss();

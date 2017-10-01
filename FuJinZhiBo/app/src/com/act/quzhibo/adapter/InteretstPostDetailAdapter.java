@@ -1,40 +1,32 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.MyStandardVideoController;
-import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.entity.InterestPost;
 import com.act.quzhibo.entity.InterestPostPageCommentDetail;
 import com.act.quzhibo.entity.InterestPostPageDetailAndComments;
 import com.act.quzhibo.entity.PostContentAndImageDesc;
 import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.MyListView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -48,7 +40,6 @@ import java.util.regex.Pattern;
 
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGANinePhotoLayout;
-import io.github.rockerhieu.emojicon.EmojiconEditText;
 
 public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements BGANinePhotoLayout.Delegate {
     private final LayoutInflater mLayoutInflater;

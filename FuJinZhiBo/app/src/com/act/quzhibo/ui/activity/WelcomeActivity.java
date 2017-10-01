@@ -1,17 +1,18 @@
 package com.act.quzhibo.ui.activity;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -20,8 +21,9 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.entity.Toggle;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.PsdInputView;
+import com.act.quzhibo.view.LockIndicatorView;
+import com.act.quzhibo.view.LockViewConfig;
+import com.act.quzhibo.view.LockViewGroup;
 import com.act.quzhibo.view.SelfDialog;
 
 import java.util.List;
@@ -34,19 +36,105 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
 import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
-import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
-
 public class WelcomeActivity extends ActivityManagePermission {
 
     private String plateListStr;
     RootUser user;
-    PsdInputView psdInputView;
+    private LockIndicatorView mLockIndicator;
+    private LockViewGroup mLockViewGroup;
+    private TextView mTvTips;
+    private LinearLayout secretView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        secretView = (LinearLayout) findViewById(R.id.secret_view);
+
+        mLockIndicator = (LockIndicatorView) findViewById(R.id.indicator);
+
+        mTvTips = (TextView) findViewById(R.id.tv_tips);
+
+        mLockViewGroup = (LockViewGroup) findViewById(R.id.lockgroup);
         grantPermission();
+
+    }
+
+    private void initData() {
+
+
+        String[] passWords = user.secretPassword.split(";");
+
+        int[] nums = new int[passWords.length];
+        for (int i = 0; i < passWords.length; i++) {
+            nums[i] = Integer.parseInt(passWords[i]);
+        }
+
+        mLockViewGroup.setAnswer(nums);
+
+        // 设置尝试次数
+        mLockViewGroup.setMaxTryTimes(5);
+
+        mLockViewGroup.setOnLockListener(new LockViewGroup.OnLockListener() {
+
+            @Override
+            public void onLockSelected(int id) {
+//                mTvTips.setText("当前连接的点是:" + id);
+            }
+
+            @Override
+            public void onLess4Points() {
+                mLockViewGroup.clear2ResetDelay(1200L); //清除错误
+
+                mTvTips.setTextColor(Color.RED);
+                mTvTips.setText("至少连接4个点 , 请重新输入");
+            }
+
+            @Override
+            public void onSaveFirstAnswer(int[] answer) {
+                mTvTips.setTextColor(Color.GRAY);
+                mTvTips.setText("再次绘制 , 确认解锁图案");
+                // 设置给指示器view
+                mLockIndicator.setAnswer(answer);
+            }
+
+            @Override
+            public void onSucessed(int[] answers) {
+                mTvTips.setTextColor(Color.BLACK);
+                mTvTips.setText("验证成功");
+                secretView.setVisibility(View.GONE);
+                secretView.setAnimation(AnimationUtils.makeOutAnimation(WelcomeActivity.this, true));
+                request();
+            }
+
+            @Override
+            public void onFailed(int mTryTimes) {
+                mLockViewGroup.clear2ResetDelay(1400L); //清除错误
+                mLockViewGroup.setHapticFeedbackEnabled(true); //手机振动
+                mTvTips.setTextColor(Color.RED);
+                mTvTips.setText("与上一次绘制不一致 , 请重新绘制");
+
+                if (mTryTimes > 0) {
+                    Toast.makeText(WelcomeActivity.this, "剩余尝试机会: " + mTryTimes + " 次", Toast.LENGTH_SHORT).show();
+                } else {
+                    ToastUtil.showToast(getApplicationContext(), "设置失败");
+                    finish();
+                }
+
+                // 左右移动动画
+                Animation shakeAnimation = AnimationUtils.loadAnimation(WelcomeActivity.this, R.anim.shake);
+                mTvTips.startAnimation(shakeAnimation);
+
+            }
+
+            // 验证密码时, 设置的原始密码少于4位的错误提示
+            @Override
+            public void onSetAnswerLessError() {
+                mTvTips.setTextColor(Color.RED);
+                mTvTips.setText("验证密码不能少于4位");
+            }
+        });
+
     }
 
     private void grantPermission() {
@@ -101,36 +189,19 @@ public class WelcomeActivity extends ActivityManagePermission {
     }
 
     private void doRequest() {
-        psdInputView = (PsdInputView) findViewById(R.id.psdInputView);
+
         user = BmobUser.getCurrentUser(RootUser.class);
         if (user != null) {
             CommonUtil.fecth(this);
             if (user.secretScan) {
-                findViewById(R.id.psdInputViewLayout).setVisibility(View.VISIBLE);
-                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (!imm.isActive(psdInputView)) {
-                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                psdInputView.setComparePassword(new PsdInputView.onPasswordListener() {
-                    @Override
-                    public void onSettingMode(String text) {
-                        if (text.equals(user.secretPassword)) {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                            }
-                            findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
-                            request();
-                        } else {
-                            ToastUtil.showToast(WelcomeActivity.this, "密码不正确");
-                        }
-                    }
-                });
+                secretView.setVisibility(View.VISIBLE);
+                initData();
             } else {
-                findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
+                secretView.setVisibility(View.GONE);
                 request();
             }
         } else {
-            findViewById(R.id.psdInputViewLayout).setVisibility(View.GONE);
+            secretView.setVisibility(View.GONE);
             request();
         }
     }
@@ -151,7 +222,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ToastUtil.showToast(getApplicationContext(), "请求超时,正在重试");
+                            ToastUtil.showToast(getApplicationContext(), "网络异常,正在重试");
                         }
                     });
                     request();

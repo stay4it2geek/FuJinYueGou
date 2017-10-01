@@ -134,7 +134,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             holder.imgGridview.setVisibility(View.VISIBLE);
             holder.imgVideolayout.setVisibility(View.GONE);
             holder.imgtotal.setVisibility(View.VISIBLE);
-            holder.imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, Constants.ITEM_POST_LIST_IMG,isNeedBlur));
+            holder.imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, Constants.ITEM_POST_LIST_IMG,isNeedBlur,false));
             holder.imgtotal.setText("共" + datas.get(position).totalImages + "张");
         } else {
             holder.imgVideolayout.setVisibility(View.VISIBLE);

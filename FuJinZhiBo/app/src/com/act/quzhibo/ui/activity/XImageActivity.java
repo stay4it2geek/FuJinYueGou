@@ -142,7 +142,7 @@ public class XImageActivity extends AppCompatActivity {
                         if (downloadManager.findAllDownloading().size() > 10) {
                             ToastUtil.showToast(XImageActivity.this, "下载任务最多10个,请稍后下载");
                             if (downloadManager.findAllDownloaded().size() > 20) {
-                                FragmentDialog.newInstance(false, "", "已下载任务最多20个，请清除掉一些吧", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧","" ,"确定", "取消","","",false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                         Intent photoIntent = new Intent();

@@ -90,7 +90,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
                     if (downloadManager.findAllDownloading().size() > 10) {
                         ToastUtil.showToast(context, "下载任务最多10个,请稍后下载");
                         if (downloadManager.findAllDownloaded().size() > 20) {
-                            FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                            FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧","", "确定", "取消","","", false, new FragmentDialog.OnClickBottomListener() {
                                 @Override
                                 public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                     Intent videoIntent = new Intent();
@@ -108,7 +108,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
                             ;
                         }
                     } else {
-                        FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "继续观看", "确认下载", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "继续观看", "确认下载","","", false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(Dialog dialog, boolean needDelete) {
 

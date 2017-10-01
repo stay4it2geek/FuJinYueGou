@@ -77,7 +77,7 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
         if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    FragmentDialog.newInstance(false, getDialogTitle(), "真的要离开人家吗？", "继续浏览", "有事要忙", -1, false, new FragmentDialog.OnClickBottomListener() {
+                    FragmentDialog.newInstance(false, getDialogTitle(), "真的要离开人家吗？", "继续浏览", "有事要忙","","",false, new FragmentDialog.OnClickBottomListener() {
                         @Override
                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                             dialog.dismiss();

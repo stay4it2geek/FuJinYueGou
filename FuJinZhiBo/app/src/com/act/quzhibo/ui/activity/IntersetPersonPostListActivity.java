@@ -148,7 +148,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                             public void onItemClick(InterestPost post) {
                                 RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
                                 if (rootUser == null) {
-                                    FragmentDialog.newInstance(false, "请确认您的权限", "你是否未注册或者登录？", "去注册", "去登录", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "请确认您的权限", "你是否未注册或者登录？", "去注册", "去登录","","",false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             startActivity(new Intent(IntersetPersonPostListActivity.this, RegisterActivity.class));
@@ -162,7 +162,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                                         }
                                     }).show(getSupportFragmentManager(), "");
                                 } else if (rootUser != null && rootUser.vipConis < 1000) {
-                                    FragmentDialog.newInstance(false, "请确认您的趣币数量", "您的趣币少于1000个了", "去充值", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "请确认您的趣币数量", "您的趣币少于1000个了", "去充值", "取消","","",false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             startActivity(new Intent(IntersetPersonPostListActivity.this, GetVipPayActivity.class));

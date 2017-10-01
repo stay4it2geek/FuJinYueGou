@@ -25,16 +25,18 @@ import cn.bmob.v3.BmobUser;
 
 public class PostImageAdapter extends BaseAdapter {
 
+    private boolean isShowVideoCover;
     private boolean isNeedBlur;
     private int viewHodlerType;
     private Context context;
     private ArrayList<String> imgs;
 
-    public PostImageAdapter(Context context, ArrayList<String> imgs, int viewHodlerType, boolean isNeedBlur) {
+    public PostImageAdapter(Context context, ArrayList<String> imgs, int viewHodlerType, boolean isNeedBlur,boolean isShowVideoCover) {
         this.context = context;
         this.imgs = imgs;
         this.isNeedBlur = isNeedBlur;
         this.viewHodlerType = viewHodlerType;
+        this.isShowVideoCover = isShowVideoCover;
     }
 
     public int getCount() {
@@ -61,6 +63,9 @@ public class PostImageAdapter extends BaseAdapter {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_post_detail_img, parent, false);
             } else {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_info_common_user_img, parent, false);
+                if(isShowVideoCover){
+                    convertView.findViewById(R.id.video_player_cover).setVisibility(View.VISIBLE);
+                }
             }
             viewHolder.showImg = (ImageView) convertView.findViewById(R.id.postImg);
             convertView.setTag(viewHolder);

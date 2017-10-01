@@ -30,6 +30,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.view.HorizontialListView;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.bumptech.glide.Glide;
@@ -45,14 +46,11 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 public class InfoInterestPersonActivity extends AppCompatActivity {
 
     private InterestPost post;
-    private GridView gridView;
+    private HorizontialListView listView;
     private Banner banner;
     private int second;
     private LoadNetView loadNetView;
@@ -267,7 +265,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                             });
                         }
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注","","",false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
 
@@ -318,7 +316,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                         ((TextView) findViewById(R.id.textpost)).setText("图文动态(" + data.result.totalNums + ")");
                     }
                     if (data.result.posts != null && data.result.posts.size() > 0) {
-                        gridView = (GridView) findViewById(R.id.txt_img_gridview);
+                        listView = (HorizontialListView) findViewById(R.id.txt_img_listview);
                         ArrayList<String> imgs = new ArrayList<>();
                         for (InterestPost post : data.result.posts) {
                             if (post.images != null && post.images.size() > 0) {
@@ -327,8 +325,8 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                         }
 
                         if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                            gridView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG,true));
-                            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            listView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG,true,false));
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                     Intent intent = new Intent();

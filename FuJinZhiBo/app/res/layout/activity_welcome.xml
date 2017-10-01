@@ -14,30 +14,35 @@
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="40dp" />
 
-    <RelativeLayout
-        android:id="@+id/psdInputViewLayout"
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/secret_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorbg"
-        android:visibility="gone">
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.act.quzhibo.view.LockIndicatorView
+            android:id="@+id/indicator"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="80dp" />
+
+        <com.act.quzhibo.view.LockViewGroup
+            android:id="@+id/lockgroup"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp" />
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_tips"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            android:gravity="center"
-            android:text="请输入私密访问密码"
-            android:textColor="#000"
-            android:textSize="18sp" />
+            android:layout_marginTop="15dp"
+            android:text="绘制解锁图案"
+            android:textSize="16sp" />
 
-        <com.act.quzhibo.view.PsdInputView
-            android:id="@+id/psdInputView"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_below="@+id/title"
-            android:layout_margin="20dp"
-            android:background="@null"
-            android:inputType="numberDecimal" />
-    </RelativeLayout>
+    </LinearLayout>
+
 </FrameLayout>

@@ -42,8 +42,8 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = getView();
         if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_preview, null);
-            recycleview = (XRecyclerView) rootView.findViewById(R.id.rvPreview);
+            rootView = inflater.inflate(R.layout.layout_common, null);
+            recycleview = (XRecyclerView) rootView.findViewById(R.id.recycler_view);
             recycleview.setLoadingListener(new XRecyclerView.LoadingListener() {
                 @Override
                 public void onRefresh() {

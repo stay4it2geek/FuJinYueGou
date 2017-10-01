@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestSubPerson;
-import com.act.quzhibo.ui.activity.InfonNearPersonActivity;
+import com.act.quzhibo.ui.activity.InfoNearPersonActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<NearPersonAdapter.My
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra(Constants.NEAR_USER, user);
-                intent.setClass(activity, InfonNearPersonActivity.class);
+                intent.setClass(activity, InfoNearPersonActivity.class);
                 activity.startActivity(intent);
             }
         });

@@ -188,7 +188,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
                         myFocusPersonListAdapter.setDeleteListener(new MyFocusPersonListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
-                                FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注","","",false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
                                         dialog.dismiss();

@@ -2,6 +2,7 @@ package com.act.quzhibo.view;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
@@ -18,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 
 public class FragmentDialog extends DialogFragment {
@@ -31,7 +34,10 @@ public class FragmentDialog extends DialogFragment {
      * 显示的消息
      */
     private TextView messageTv;
-
+    /**
+     * 显示的消息
+     */
+    private TextView createTime_tv;
     /**
      * 确认和取消按钮
      */
@@ -48,7 +54,7 @@ public class FragmentDialog extends DialogFragment {
     private String message;
     private String title;
     private String positive, negtive;
-    private int imageResId = -1;
+    private String imageUrl;
 
     /**
      * 底部是否只有一个按钮
@@ -60,35 +66,41 @@ public class FragmentDialog extends DialogFragment {
     private boolean deleteConfirm;
     private CheckBox delete_cb;
     private RelativeLayout delete_confirm_layout;
+    private CircleImageView userImage;
+    private String creatTime;
 
     private void initView(View rootView) {
         Bundle args = getArguments();
         if (args == null)
             return;
+        creatTime = args.getString("creatTime");
         title = args.getString("title");
         positive = args.getString("positive");
         negtive = args.getString("negtive");
         message = args.getString("message");
-        imageResId = args.getInt("imageResId");
+        imageUrl = args.getString("imageUrl");
         needShowDelete = args.getBoolean("needShowDelete");
         isSingle = args.getBoolean("isSingle");
         negtiveBn = (Button) rootView.findViewById(R.id.negtive);
         positiveBn = (Button) rootView.findViewById(R.id.positive);
+        createTime_tv = (TextView) rootView.findViewById(R.id.createTime_tv);
         titleTv = (TextView) rootView.findViewById(R.id.title);
+        userImage = (CircleImageView) rootView.findViewById(R.id.userImage);
         messageTv = (TextView) rootView.findViewById(R.id.message);
         delete_cb = (CheckBox) rootView.findViewById(R.id.delete_cb);
         delete_confirm_layout = (RelativeLayout) rootView.findViewById(R.id.delete_confirm_layout);
         columnLineView = rootView.findViewById(R.id.column_line);
     }
 
-    public static final FragmentDialog newInstance(boolean needShowDelete,String title, String message, String positive, String negtive, int imageResId, boolean isSingle, OnClickBottomListener onClickBottomListener) {
+    public static final FragmentDialog newInstance(boolean needShowDelete, String title, String message, String positive, String negtive, String imageUrl, String creatTime, boolean isSingle, OnClickBottomListener onClickBottomListener) {
         FragmentDialog fragment = new FragmentDialog();
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
         bundle.putString("message", message);
         bundle.putString("positive", positive);
         bundle.putString("negtive", negtive);
-        bundle.putInt("imageResId", imageResId);
+        bundle.putString("creatTime", creatTime);
+        bundle.putString("imageUrl", imageUrl);
         bundle.putBoolean("isSingle", isSingle);
         bundle.putBoolean("needShowDelete", needShowDelete);
         fragment.onClickBottomListener = onClickBottomListener;
@@ -119,12 +131,12 @@ public class FragmentDialog extends DialogFragment {
             }
         });
 
-            delete_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                    deleteConfirm = checked;
-                }
-            });
+        delete_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                deleteConfirm = checked;
+            }
+        });
 
 
     }
@@ -133,17 +145,44 @@ public class FragmentDialog extends DialogFragment {
      * 初始化界面控件的显示数据
      */
     private void refreshView() {
-        //如果用户自定了title和message
         if (!TextUtils.isEmpty(title)) {
             titleTv.setText(title);
             titleTv.setVisibility(View.VISIBLE);
         } else {
             titleTv.setVisibility(View.GONE);
         }
+        if (!TextUtils.isEmpty(creatTime)) {
+            createTime_tv.setVisibility(View.VISIBLE);
+            messageTv.setVisibility(View.GONE);
+            long l = System.currentTimeMillis() - Long.parseLong(creatTime);
+            long day = l / (24 * 60 * 60 * 1000);
+            long hour = (l / (60 * 60 * 1000) - day * 24);
+            long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+            if (day <= 1) {
+                createTime_tv.setText(hour + "小时" + min + "分钟前看过她");
+            } else if (day < 30) {
+                createTime_tv.setText(day + "天" + hour + "小时前看过她");
+            } else if (day > 30 && day < 60) {
+                createTime_tv.setText("2个月前看过她");
+            } else if (day > 90) {
+                createTime_tv.setText("3个月前看过她");
+            }
+        }
         if (!TextUtils.isEmpty(message)) {
             messageTv.setText(message);
         }
-        //如果设置按钮的文字
+        if (!TextUtils.isEmpty(imageUrl)) {
+            userImage.setVisibility(View.VISIBLE);
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    Glide.with(getActivity()).load(imageUrl).error(R.drawable.error_img).into(userImage);
+                }
+            });
+        } else {
+            userImage.setVisibility(View.GONE);
+        }
+
         if (!TextUtils.isEmpty(positive)) {
             positiveBn.setText(positive);
         } else {
@@ -155,9 +194,6 @@ public class FragmentDialog extends DialogFragment {
             negtiveBn.setText("取消");
         }
 
-        /**
-         * 只显示一个按钮的时候隐藏取消按钮，回掉只执行确定的事件
-         */
         if (isSingle) {
             columnLineView.setVisibility(View.GONE);
             negtiveBn.setVisibility(View.GONE);

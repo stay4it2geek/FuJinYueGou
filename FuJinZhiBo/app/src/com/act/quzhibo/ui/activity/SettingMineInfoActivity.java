@@ -1,9 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,8 +13,10 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +28,9 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.FragmentSecretDialog;
+import com.act.quzhibo.view.LockIndicatorView;
+import com.act.quzhibo.view.LockViewConfig;
+import com.act.quzhibo.view.LockViewGroup;
 import com.act.quzhibo.view.TitleBarView;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.listener.CustomListener;
@@ -42,7 +44,6 @@ import java.util.ArrayList;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FetchUserInfoListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 public class SettingMineInfoActivity extends FragmentActivity {
@@ -80,6 +81,12 @@ public class SettingMineInfoActivity extends FragmentActivity {
     private TextView candateThing_txt;
     private OptionsPickerView candateThingOptions;
 
+    private LockIndicatorView mLockIndicator;
+    private LockViewGroup mLockViewGroup;
+    private TextView mTvTips;
+    private LinearLayout secretView;
+    private int[] answers;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -99,6 +106,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
             datingThought_txt.setText(TextUtils.isEmpty(rootUser.datingthought) ? "交友想法未设置" : "您想要" + rootUser.datingthought);
             candateThing_txt.setText(TextUtils.isEmpty(rootUser.canDateThing) ? "是否可约未设置" : "您可以" + rootUser.canDateThing);
         }
+
     }
 
     @Override
@@ -113,10 +121,20 @@ public class SettingMineInfoActivity extends FragmentActivity {
         datingThought_txt = (TextView) findViewById(R.id.datingThought_txt);
         candateThing_txt = (TextView) findViewById(R.id.candateThing_txt);
         arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
+        arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
+        arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
+        secretView = (LinearLayout) findViewById(R.id.secret_view);
+
+        mLockIndicator = (LockIndicatorView) findViewById(R.id.indicator);
+
+        mTvTips = (TextView) findViewById(R.id.tv_tips);
+
+        mLockViewGroup = (LockViewGroup) findViewById(R.id.lockgroup);
 
 
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
 
+        initData();
 
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("资 料 设 置");
@@ -217,66 +235,30 @@ public class SettingMineInfoActivity extends FragmentActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (rootUser != null) {
-                    if (!rootUser.secretScan && isChecked) {
-
-                        FragmentSecretDialog.newInstance(new FragmentSecretDialog.OnClickBottomListener() {
-                            @Override
-                            public void onPositiveClick(Dialog dialog, final String secretText) {
-
-                                if (rootUser != null) {
-                                    updateUser.secretScan = true;
-                                    updateUser.secretPassword = secretText;
-                                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                openSecret_txt.setText("私密访问已开启");
-                                                CommonUtil.fecth(SettingMineInfoActivity.this);
-                                                ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问开启成功,请牢记密码");
-                                            } else {
-                                                openSecret_switch.setChecked(false);
-                                                if (e.getErrorCode() == 206) {
-                                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
-                                                        @Override
-                                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
-                                                            rootUser.logOut();
-                                                            dialog.dismiss();
-                                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
-                                                        }
-
-                                                        @Override
-                                                        public void onNegtiveClick(Dialog dialog) {
-                                                            dialog.dismiss();
-                                                        }
-                                                    }).show(getSupportFragmentManager(), "");
-                                                }
-
-                                            }
-                                        }
-                                    });
-                                }
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void onNegtiveClick(Dialog dialog) {
-                                openSecret_switch.setChecked(false);
-                                dialog.dismiss();
-                            }
-                        }).show(getSupportFragmentManager(), "secretDilog");
+                    mLockIndicator.setAnswer(new int[]{});
+                    mLockViewGroup.setAnswer(null);
+                    if (isChecked) {
+                        if (!rootUser.secretScan) {
+                            secretView.setVisibility(View.VISIBLE);
+                            secretView.setAnimation(AnimationUtils.makeInAnimation(SettingMineInfoActivity.this, true));
+                        }
                     } else {
+                        if (secretView.getVisibility() == View.VISIBLE) {
+                            secretView.setVisibility(View.INVISIBLE);
+                            secretView.setAnimation(AnimationUtils.makeOutAnimation(SettingMineInfoActivity.this, true));
+                        }
                         updateUser.secretScan = false;
+                        updateUser.secretPassword = "";
                         updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
                                 if (e == null) {
-                                    openSecret_switch.setChecked(false);
                                     CommonUtil.fecth(SettingMineInfoActivity.this);
                                     ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问已关闭");
+                                    rootUser = BmobUser.getCurrentUser(RootUser.class);
                                 } else {
-                                    openSecret_switch.setChecked(true);
                                     if (e.getErrorCode() == 206) {
-                                        FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                        FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                             @Override
                                             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                                 rootUser.logOut();
@@ -352,7 +334,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "年龄更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
@@ -392,7 +374,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 });
             }
         }).isDialog(true).build();
-        ageOptions.setPicker(ageItems);//添加数据
+        ageOptions.setPicker(ageItems);
     }
 
     private void initCanDatingThingOptionPicker() {
@@ -410,7 +392,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "是否可约更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
@@ -471,7 +453,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, rootUser.sex + "性更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
@@ -511,7 +493,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 });
             }
         }).isDialog(true).build();
-        sexOptions.setPicker(sexItems);//添加数据
+        sexOptions.setPicker(sexItems);
     }
 
 
@@ -530,7 +512,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "交友想法更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
@@ -589,7 +571,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "情感状态更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
@@ -644,12 +626,13 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
 
     private void getDatingThoughtData() {
+        datingThoughtItems.add(new CardBean("找异性闺蜜"));
+        datingThoughtItems.add(new CardBean("认真婚恋"));
         datingThoughtItems.add(new CardBean("极易兴奋"));
         datingThoughtItems.add(new CardBean("认真婚恋"));
         datingThoughtItems.add(new CardBean("来者不拒"));
         datingThoughtItems.add(new CardBean("长期交往"));
         datingThoughtItems.add(new CardBean("短期交往"));
-        datingThoughtItems.add(new CardBean("o－n－s"));
         datingThoughtItems.add(new CardBean("其他"));
     }
 
@@ -678,7 +661,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_LOAD_DATA:
-                    if (thread == null) {//如果已创建就不再重新创建子线程了
+                    if (thread == null) {
                         thread = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -719,7 +702,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                             } else {
                                 if (e.getErrorCode() == 206) {
                                     SettingMineInfoActivity.this.finish();
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                         @Override
                                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                             rootUser.logOut();
@@ -789,4 +772,128 @@ public class SettingMineInfoActivity extends FragmentActivity {
         return detail;
     }
 
+
+    private void initData() {
+
+        /**
+         * 可以设置自定义样式
+         */
+        /*
+        mConfig = new LockViewConfig();
+        //设置颜色
+        mConfig.setNormalColor(0xFF0F8EE8);
+        mConfig.setFingerOnColor(0xFF2177C7);
+        mConfig.setErrorColor(0xFFFF0000);
+        // LockView
+        mConfig.setRadiusRate(0.3f);
+        mConfig.setArrowRate(0.25f);
+        mConfig.setStrokeWidth(6);
+        // 设置自定义样式
+        mLockViewGroup.setConfig(mConfig);
+        */
+
+
+        mLockViewGroup.setMaxTryTimes(5);
+
+        mLockViewGroup.setOnLockListener(new LockViewGroup.OnLockListener() {
+
+            @Override
+            public void onLockSelected(int id) {
+
+            }
+
+            @Override
+            public void onLess4Points() {
+                mLockViewGroup.clear2ResetDelay(1200L); //清除错误
+                mTvTips.setTextColor(Color.RED);
+                mTvTips.setText("至少连接4个点 , 请重新输入");
+            }
+
+            @Override
+            public void onSaveFirstAnswer(int[] answer) {
+                mTvTips.setTextColor(Color.GRAY);
+                mTvTips.setText("再次绘制 , 确认解锁图案");
+                // 设置给指示器view
+                mLockIndicator.setAnswer(answer);
+
+            }
+
+            @Override
+            public void onSucessed(int[] answers) {
+                mTvTips.setTextColor(Color.BLACK);
+                mTvTips.setText("验证成功");
+                if (rootUser != null) {
+                    updateUser.secretScan = true;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int answer : answers) {
+                        stringBuilder.append(answer).append(";");
+                    }
+                    updateUser.secretPassword = stringBuilder.toString();
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                openSecret_txt.setText("私密访问已开启");
+                                CommonUtil.fecth(SettingMineInfoActivity.this);
+                                rootUser = BmobUser.getCurrentUser(RootUser.class);
+                                ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问开启成功,请牢记密码");
+                                secretView.setVisibility(View.INVISIBLE);
+                                secretView.setAnimation(AnimationUtils.makeOutAnimation(SettingMineInfoActivity.this, true));
+                            } else {
+                                openSecret_switch.setChecked(false);
+                                if (e.getErrorCode() == 206) {
+                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                                        @Override
+                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
+                                            rootUser.logOut();
+                                            dialog.dismiss();
+                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onNegtiveClick(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    }).show(getSupportFragmentManager(), "");
+                                }
+
+                            }
+                        }
+                    });
+                }
+
+
+                Log.e("truer222", rootUser.secretScan + "");
+
+            }
+
+            @Override
+            public void onFailed(int mTryTimes) {
+                mLockViewGroup.clear2ResetDelay(1400L); //清除错误
+                mLockViewGroup.setHapticFeedbackEnabled(true); //手机振动
+                mTvTips.setTextColor(Color.RED);
+                mTvTips.setText("与上一次绘制不一致 , 请重新绘制");
+
+                if (mTryTimes > 0) {
+                    Toast.makeText(SettingMineInfoActivity.this, "剩余尝试机会: " + mTryTimes + " 次", Toast.LENGTH_SHORT).show();
+                } else {
+                    ToastUtil.showToast(getApplicationContext(), "设置失败");
+                    finish();
+                }
+
+                // 左右移动动画
+                Animation shakeAnimation = AnimationUtils.loadAnimation(SettingMineInfoActivity.this, R.anim.shake);
+                mTvTips.startAnimation(shakeAnimation);
+
+            }
+
+            // 验证密码时, 设置的原始密码少于4位的错误提示
+            @Override
+            public void onSetAnswerLessError() {
+                mTvTips.setTextColor(Color.RED);
+                mTvTips.setText("验证密码不能少于4位");
+            }
+        });
+
+    }
 }

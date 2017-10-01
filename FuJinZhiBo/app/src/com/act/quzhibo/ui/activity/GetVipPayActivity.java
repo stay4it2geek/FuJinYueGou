@@ -185,7 +185,7 @@ public class GetVipPayActivity extends FragmentActivity {
         super.onResume();
         if (vipOrders.orderStatus && !hasShow) {
             hideDialog();
-            FragmentDialog.newInstance(false, "尊敬的用户您好,您" + mGoodsDescription + "已支付成功!", "", "我知道了!", "", -1, true, new FragmentDialog.OnClickBottomListener() {
+            FragmentDialog.newInstance(false, "尊敬的用户您好,您" + mGoodsDescription + "已支付成功!","", "我知道了!","","","",true, new FragmentDialog.OnClickBottomListener() {
                 @Override
                 public void onPositiveClick(Dialog dialog, boolean needDelete) {
                     dialog.dismiss();

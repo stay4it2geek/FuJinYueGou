@@ -161,7 +161,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.InfonNearPersonActivity"
+            android:name="com.act.quzhibo.ui.activity.InfoNearPersonActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
@@ -212,6 +212,16 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MyFocusPersonActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.NearMediaPhotoListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.NearMediaVideoListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />

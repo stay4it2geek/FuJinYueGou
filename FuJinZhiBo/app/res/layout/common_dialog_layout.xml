@@ -14,6 +14,13 @@
         android:orientation="vertical"
         android:paddingTop="16dp">
 
+        <com.act.quzhibo.view.CircleImageView
+            android:layout_width="50dp"
+            android:visibility="gone"
+            android:id="@+id/userImage"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="50dp" />
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -36,10 +43,19 @@
             android:gravity="left"
             android:lineSpacingExtra="2dp"
             android:lineSpacingMultiplier="1.2"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/createTime_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="left"
+            android:lineSpacingExtra="2dp"
+            android:lineSpacingMultiplier="1.2"
             android:text=""
             android:textSize="15dp"
-            android:visibility="visible" />
-
+            android:visibility="gone" />
         <RelativeLayout
             android:id="@+id/delete_confirm_layout"
             android:layout_width="wrap_content"

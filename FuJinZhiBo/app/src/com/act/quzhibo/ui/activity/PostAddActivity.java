@@ -88,11 +88,11 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
             case 1:
                 mPhotosSnpl.setVisibility(View.GONE);
                 break;
-            case 3:
-                mPhotosSnpl.setVisibility(View.VISIBLE);
-                break;
             case 2:
                 findViewById(R.id.recordBtn).setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                mPhotosSnpl.setVisibility(View.VISIBLE);
                 break;
         }
         EventBus.getDefault().register(this);
@@ -217,6 +217,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                     .captureThumbnailsTime(3)
                     .build();
             MediaRecorderActivity.goSmallVideoRecorder(PostAddActivity.this, RecordConfirmActivity.class.getName(), config);
+
         }
         if (view.getId() == R.id.tv_moment_add_publish) {
             if (title.length() == 0) {

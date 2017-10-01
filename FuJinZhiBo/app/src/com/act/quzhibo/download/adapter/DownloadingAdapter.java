@@ -174,7 +174,7 @@ public class DownloadingAdapter extends BaseRecyclerViewAdapter<DownloadInfo, Do
                         bt_delete.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                FragmentDialog.newInstance(false,"确定删除?", "删除后不可恢复!", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false,"确定删除?", "删除后不可恢复!", "确定", "取消","","", false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog ,boolean needDelete) {
                                         deleteListner.onDelete(downloadInfo, position ,true);

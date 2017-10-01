@@ -87,7 +87,7 @@ public class FullScreenActivity extends ActivityManagePermission {
                 if (downloadManager.findAllDownloading().size() > 10) {
                     ToastUtil.showToast(FullScreenActivity.this, "下载任务最多10个,请稍后下载");
                     if (downloadManager.findAllDownloaded().size() > 20) {
-                        FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧", "", "确定", "取消", -1, false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧","","", "确定", "取消","",false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                 Intent videoIntent = new Intent();
@@ -149,7 +149,7 @@ public class FullScreenActivity extends ActivityManagePermission {
                     ToastUtil.showToast(FullScreenActivity.this, "您已经保存过该视频");
                 }
             } else {
-                FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "继续观看", "确认下载", -1, false, new FragmentDialog.OnClickBottomListener() {
+                FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "继续观看", "确认下载","","",false, new FragmentDialog.OnClickBottomListener() {
                     @Override
                     public void onPositiveClick(Dialog dialog, boolean needDelete) {
                         dialog.dismiss();

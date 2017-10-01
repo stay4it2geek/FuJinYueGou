@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.InterestSubPerson;
-import com.act.quzhibo.ui.activity.InfonNearPersonActivity;
+import com.act.quzhibo.ui.activity.InfoNearPersonActivity;
 import com.act.quzhibo.ui.activity.IntersetPersonPostListActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
@@ -37,7 +37,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
 
     @Override
     public WhoLikeMeAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.item_who_like_me, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_who_like_me, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -85,7 +85,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
                     intent.setClass(activity, IntersetPersonPostListActivity.class);
                 } else {
                     intent.putExtra(Constants.NEAR_USER, datas.get(position));
-                    intent.setClass(activity, InfonNearPersonActivity.class);
+                    intent.setClass(activity, InfoNearPersonActivity.class);
                 }
                 activity.startActivity(intent);
             }
