@@ -104,11 +104,10 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
     protected void processLogic(Bundle savedInstanceState) {
 
         ArrayList<String> previewImages = new ArrayList<>();
-
+        previewImages.clear();
         for (MediaInfo mediaInfo : mediaInfos) {
             previewImages.add(mediaInfo.getUrl());
         }
-        previewImages.add(mediaInfos.get(0).getUrl());
         int currentPosition = getIntent().getIntExtra(EXTRA_CURRENT_POSITION, 0);
         mPhotoPageAdapter = new BGAPhotoPageAdapter(this, this, previewImages);
         mContentHvp.setAdapter(mPhotoPageAdapter);
