@@ -105,7 +105,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
         ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
         ((TextView) view.findViewById(R.id.starValue)).setText(("星光值：" + (Long.parseLong(room.roomId) - 92015634l)).toString().replaceAll("-", ""));
         ((TextView) view.findViewById(R.id.liveId)).setText("房间号:" + room.roomId);
-        ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname);
+        ((TextView) view.findViewById(R.id.userNickName)).setText(room.nickname.replaceAll("kk",""));
         view.findViewById(R.id.close).setOnClickListener(this);
         queryData();
         heartLayout = (HeartLayout) view.findViewById(R.id.heart_layout);
@@ -222,7 +222,7 @@ public class ChatFragment extends Fragment implements View.OnClickListener {
                     ((TextView) view.findViewById(R.id.onlineCount)).setText(onlineCount + "人");
                 }
             });
-            countHandler.postDelayed(this, 10000);
+            countHandler.postDelayed(this, 7000);
         }
     };
 

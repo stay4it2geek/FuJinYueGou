@@ -142,7 +142,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                 if (posts != null && interestPostSize > 0) {
                     posts.addAll(data.result.posts);
                     if (adapter == null) {
-                        adapter = new InterestPostListAdapter(IntersetPersonPostListActivity.this, posts);
+                        adapter = new InterestPostListAdapter(IntersetPersonPostListActivity.this, posts,true);
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {

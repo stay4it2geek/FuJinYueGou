@@ -25,13 +25,15 @@ import cn.bmob.v3.BmobUser;
 
 public class PostImageAdapter extends BaseAdapter {
 
+    private boolean isNeedBlur;
     private int viewHodlerType;
     private Context context;
     private ArrayList<String> imgs;
 
-    public PostImageAdapter(Context context, ArrayList<String> imgs, int viewHodlerType) {
+    public PostImageAdapter(Context context, ArrayList<String> imgs, int viewHodlerType, boolean isNeedBlur) {
         this.context = context;
         this.imgs = imgs;
+        this.isNeedBlur = isNeedBlur;
         this.viewHodlerType = viewHodlerType;
     }
 
@@ -60,7 +62,7 @@ public class PostImageAdapter extends BaseAdapter {
             } else {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_info_common_user_img, parent, false);
             }
-            viewHolder.avatar = (ImageView) convertView.findViewById(R.id.postImg);
+            viewHolder.showImg = (ImageView) convertView.findViewById(R.id.postImg);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -68,13 +70,17 @@ public class PostImageAdapter extends BaseAdapter {
         RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
         if (imgs != null && imgs.size() > 0) {
             if (BmobUser.getCurrentUser(RootUser.class) == null) {
-                blurImage(position, viewHolder);
-            } else {
-                if (rootUser.vipConis < 14000) {
+                if (isNeedBlur) {
                     blurImage(position, viewHolder);
                 } else {
-                    Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(viewHolder.avatar);//加载网络图片
+                    Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(viewHolder.showImg);
                 }
+            } else {
+                    if (rootUser.vipConis < 14000) {
+                        blurImage(position, viewHolder);
+                    } else {
+                        Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(viewHolder.showImg);
+                    }
             }
         }
         return convertView;
@@ -94,7 +100,7 @@ public class PostImageAdapter extends BaseAdapter {
                     @Override
                     protected void onPostExecute(StackBlurManager stackBlurManager) {
                         super.onPostExecute(stackBlurManager);
-                        viewHolder.avatar.setImageBitmap(stackBlurManager.process(15));
+                        viewHolder.showImg.setImageBitmap(stackBlurManager.process(12));
                     }
                 }.execute();
             }
@@ -102,13 +108,13 @@ public class PostImageAdapter extends BaseAdapter {
             @Override
             public void onLoadStarted(Drawable placeholder) {
                 super.onLoadStarted(placeholder);
-                viewHolder.avatar.setBackgroundDrawable(placeholder);
+                viewHolder.showImg.setBackgroundDrawable(placeholder);
             }
         });
     }
 
     public class ViewHolder {
-        ImageView avatar;
+        ImageView showImg;
     }
 
 }

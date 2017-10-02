@@ -163,7 +163,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     ctime = data.result.get(interestPostSize - 1).ctime;
                 }
                 if (adapter == null) {
-                    adapter = new InterestPostListAdapter(getActivity(), posts);
+                    adapter = new InterestPostListAdapter(getActivity(), posts,false);
                     adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(InterestPost post) {

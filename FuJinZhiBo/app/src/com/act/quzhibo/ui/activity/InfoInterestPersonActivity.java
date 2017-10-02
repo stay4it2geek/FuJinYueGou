@@ -327,7 +327,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                         }
 
                         if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                            gridView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG));
+                            gridView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG,true));
                             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

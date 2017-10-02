@@ -88,7 +88,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             holder.imgGridview.setVisibility(View.VISIBLE);
             holder.imgVideo.setVisibility(View.GONE);
             holder.imgtotal.setVisibility(View.VISIBLE);
-            holder.imgGridview.setAdapter(new PostImageAdapter(activity, post.images, Constants.ITEM_POST_DETAIL_IMG));
+            holder.imgGridview.setAdapter(new PostImageAdapter(activity, post.images, Constants.ITEM_POST_DETAIL_IMG,false));
             holder.imgtotal.setText("共" + post.totalImages + "张");
         } else {
             holder.imgtotal.setVisibility(View.GONE);

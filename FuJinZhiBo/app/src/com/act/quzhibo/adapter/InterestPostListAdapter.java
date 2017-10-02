@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostListAdapter.MyViewHolder> {
     private ArrayList<InterestPost> datas;
     private Activity activity;
-
+   private boolean isNeedBlur;
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
     }
@@ -54,14 +54,16 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         mOnItemClickListener = listener;
     }
 
-    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas) {
+    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas , boolean isNeedBlur) {
         activity = context;
         this.datas = datas;
+        this.isNeedBlur = isNeedBlur;
+
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.interest_post_list_item, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(activity).inflate(R.layout.interest_post_list_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -132,7 +134,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             holder.imgGridview.setVisibility(View.VISIBLE);
             holder.imgVideolayout.setVisibility(View.GONE);
             holder.imgtotal.setVisibility(View.VISIBLE);
-            holder.imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, Constants.ITEM_POST_LIST_IMG));
+            holder.imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, Constants.ITEM_POST_LIST_IMG,isNeedBlur));
             holder.imgtotal.setText("共" + datas.get(position).totalImages + "张");
         } else {
             holder.imgVideolayout.setVisibility(View.VISIBLE);

@@ -2,36 +2,26 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.RecordProgress;
-import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RecordVideoEvent;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
-import com.act.quzhibo.util.BitmapUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;
-import com.devlin_n.videoplayer.player.IjkVideoView;
 import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;
 import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig;
 
@@ -66,8 +56,9 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private EditText mTitleEt;
     private MyPost myPost;
     private ImageView videoThumb;
-    int postType = 0;
-    ProgressDialog dialog;
+    private int postType = 0;
+    private ProgressDialog dialog;
+    private String videoUrl = "";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +106,6 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         EventBus.getDefault().unregister(this);
     }
 
-    String videoUrl = "";
 
     @Subscribe
     public void onEventMainThread(final RecordVideoEvent event) {
@@ -220,11 +210,11 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                     .fullScreen(true)
                     .smallVideoWidth(360)
                     .smallVideoHeight(480)
-                    .recordTimeMax(6000)
+                    .recordTimeMax(8000)
                     .recordTimeMin(1500)
                     .maxFrameRate(20)
                     .videoBitrate(600000)
-                    .captureThumbnailsTime(1)
+                    .captureThumbnailsTime(3)
                     .build();
             MediaRecorderActivity.goSmallVideoRecorder(PostAddActivity.this, RecordConfirmActivity.class.getName(), config);
         }

@@ -80,7 +80,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
             }
         }
 
-        holder.nickName.setText(datas.get(position).nickname);
+        holder.nickName.setText(datas.get(position).nickname.replaceAll("kk",""));
         holder.photoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
