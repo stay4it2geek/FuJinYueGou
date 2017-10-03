@@ -123,12 +123,7 @@ public class GetVipPayActivity extends FragmentActivity {
                 alipay();
             }
         });
-        findViewById(R.id.promoteLayout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
 
         queryData();
     }

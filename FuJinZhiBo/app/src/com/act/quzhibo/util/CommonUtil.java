@@ -246,6 +246,18 @@ public class CommonUtil {
         return sp.getInt(key, 0);
     }
 
+    public static void saveLoginData(Context context, String account, String passWord) {
+        SharedPreferences sp = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("account", account);
+        editor.putString("passWord", passWord);
+        editor.commit();
+    }
+
+    public static String loadLoginData(Context context, String key) {
+        SharedPreferences sp = context.getSharedPreferences("login", Context.MODE_PRIVATE);
+        return sp.getString(key,"");
+    }
     public static void clearData(Context context) {
         SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();

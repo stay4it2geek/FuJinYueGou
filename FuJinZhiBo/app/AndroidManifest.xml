@@ -88,6 +88,16 @@
             android:theme="@style/BGAPPTheme"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.act.quzhibo.ui.activity.CheckOutMoneyActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.GetQuCoinsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.PuaCoursesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"

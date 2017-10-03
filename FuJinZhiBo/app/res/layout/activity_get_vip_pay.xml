@@ -111,34 +111,6 @@
                         android:textSize="17sp" />
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:id="@+id/promoteLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/bg_circle_orange">
-
-                    <ImageView
-                        android:id="@+id/tui"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:background="@drawable/tui" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/tui"
-                        android:background="@drawable/bg_circle_orange"
-                        android:gravity="center_vertical"
-                        android:text="支付宝余额不足，推广赚趣币"
-                        android:textColor="#fff"
-                        android:textSize="17sp" />
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

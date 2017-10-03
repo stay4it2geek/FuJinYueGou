@@ -30,7 +30,7 @@ public class MemberAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_member, null, false);
-            viewHolder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
+            viewHolder.avatar = (ImageView) convertView.findViewById(R.id.postImg);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

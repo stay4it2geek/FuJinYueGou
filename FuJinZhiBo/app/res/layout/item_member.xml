@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <com.act.quzhibo.view.CircleImageView
-        android:id="@+id/avatar"
+        android:id="@+id/postImg"
         android:layout_width="@dimen/avatar_size36"
         android:layout_height="@dimen/avatar_size36"
         android:layout_centerInParent="true"
