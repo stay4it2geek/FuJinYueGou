@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,6 +67,7 @@ public class MyStandardVideoController extends StandardVideoController implement
 
 
     public void onClick(View v) {
+        Log.e("viewGone",viewGone+"");
         if (viewGone) {
             findViewById(R.id.more_menu).setVisibility(GONE);
             findViewById(R.id.fullscreen).setVisibility(GONE);
@@ -143,5 +145,7 @@ public class MyStandardVideoController extends StandardVideoController implement
     public void setInitData(boolean needLoginToStart, boolean viewGone) {
         this.needLoginToStart = needLoginToStart;
         this.viewGone = viewGone;
+        Log.e("viewGone2",viewGone+"");
+
     }
 }

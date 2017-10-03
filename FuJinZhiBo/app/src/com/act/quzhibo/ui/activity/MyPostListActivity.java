@@ -17,9 +17,8 @@ import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;
-import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,8 +33,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
-import static com.mabeijianxi.smallvideorecord2.MediaRecorderActivity.MEDIA_RECORDER_CONFIG_KEY;
-import static com.mabeijianxi.smallvideorecord2.MediaRecorderActivity.OVER_ACTIVITY_NAME;
 
 public class MyPostListActivity extends AppCompatActivity {
     public static final int UPLOAD_POST = 1;
@@ -98,7 +95,7 @@ public class MyPostListActivity extends AppCompatActivity {
         });
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        findViewById(R.id.postButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.postMenuButton).setVisibility(View.VISIBLE);
         titlebar.setBarTitle("我 的 状 态");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
@@ -246,5 +243,13 @@ public class MyPostListActivity extends AppCompatActivity {
                 myPostListAdapter.notifyDataSetChanged();
             }
         }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.postMenuButton);
+        menu.collapse();
     }
 }

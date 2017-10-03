@@ -628,7 +628,6 @@ public class SettingMineInfoActivity extends FragmentActivity {
         datingThoughtItems.add(new CardBean("找异性闺蜜"));
         datingThoughtItems.add(new CardBean("认真婚恋"));
         datingThoughtItems.add(new CardBean("极易兴奋"));
-        datingThoughtItems.add(new CardBean("认真婚恋"));
         datingThoughtItems.add(new CardBean("来者不拒"));
         datingThoughtItems.add(new CardBean("长期交往"));
         datingThoughtItems.add(new CardBean("短期交往"));
@@ -773,23 +772,6 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
 
     private void initData() {
-
-        /**
-         * 可以设置自定义样式
-         */
-        /*
-        mConfig = new LockViewConfig();
-        //设置颜色
-        mConfig.setNormalColor(0xFF0F8EE8);
-        mConfig.setFingerOnColor(0xFF2177C7);
-        mConfig.setErrorColor(0xFFFF0000);
-        // LockView
-        mConfig.setRadiusRate(0.3f);
-        mConfig.setArrowRate(0.25f);
-        mConfig.setStrokeWidth(6);
-        // 设置自定义样式
-        mLockViewGroup.setConfig(mConfig);
-        */
 
 
         mLockViewGroup.setMaxTryTimes(5);

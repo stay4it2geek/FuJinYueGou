@@ -537,7 +537,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                                                     });
                                                 } else {
                                                     promptDialog.showError("源头像删除失败", true);
-                                                    promptDialog.dismiss();
                                                 }
                                             }
                                         });

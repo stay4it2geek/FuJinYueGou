@@ -74,10 +74,11 @@
         android:layout_alignBottom="@+id/createTime"
         android:layout_below="@+id/nick"
         android:layout_marginLeft="5dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
+        android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/createTime"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
         android:text="" />
 
 </RelativeLayout>

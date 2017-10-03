@@ -85,8 +85,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         holder.commentNum.setText(post.totalComments + "");
 
         if (post.images != null && post.images.size() > 0) {
-            holder.imgGridview.setVisibility(View.VISIBLE);
-            holder.imgVideo.setVisibility(View.GONE);
+            holder.imgVideolayout.setVisibility(View.GONE);
             holder.imgtotal.setVisibility(View.VISIBLE);
             holder.imgGridview.setAdapter(new PostImageAdapter(activity, post.images, Constants.ITEM_POST_DETAIL_IMG,false,false));
             holder.imgtotal.setText("共" + post.totalImages + "张");
@@ -95,7 +94,6 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             holder.imgGridview.setVisibility(View.GONE);
             holder.imgVideolayout.setVisibility(View.VISIBLE);
             holder.imgtotal.setVisibility(View.GONE);
-            holder.imgGridview.setVisibility(View.GONE);
             if (!TextUtils.isEmpty(post.vedioUrl)) {
                 if (!TextUtils.isEmpty(post.vedioUrl)) {
                     new AsyncTask<Void, Void, Bitmap>() {
@@ -201,7 +199,6 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             imgVideo = (ImageView) view.findViewById(R.id.imgVideo);
             imgVideolayout = (FrameLayout) view.findViewById(R.id.imgVideolayout);
             imgGridview = (GridView) view.findViewById(R.id.imgGridview);
-            imgVideo = (ImageView) view.findViewById(R.id.imgVideo);
         }
     }
 }
