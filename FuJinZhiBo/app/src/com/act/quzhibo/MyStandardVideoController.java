@@ -67,7 +67,6 @@ public class MyStandardVideoController extends StandardVideoController implement
 
 
     public void onClick(View v) {
-        Log.e("viewGone",viewGone+"");
         if (viewGone) {
             findViewById(R.id.more_menu).setVisibility(GONE);
             findViewById(R.id.fullscreen).setVisibility(GONE);
@@ -93,7 +92,10 @@ public class MyStandardVideoController extends StandardVideoController implement
 
     @Override
     protected void doPauseResume() {
-
+        if (viewGone) {
+            findViewById(R.id.more_menu).setVisibility(GONE);
+            findViewById(R.id.fullscreen).setVisibility(GONE);
+        }
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.pause();
         } else {
@@ -145,7 +147,6 @@ public class MyStandardVideoController extends StandardVideoController implement
     public void setInitData(boolean needLoginToStart, boolean viewGone) {
         this.needLoginToStart = needLoginToStart;
         this.viewGone = viewGone;
-        Log.e("viewGone2",viewGone+"");
 
     }
 }
