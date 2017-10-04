@@ -2,7 +2,6 @@ package com.act.quzhibo.ui.fragment;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -18,13 +17,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.act.quzhibo.BuildConfig;
@@ -46,11 +42,9 @@ import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
 import com.act.quzhibo.ui.activity.VIPConisTableActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
-import com.act.quzhibo.ui.activity.VipPolicyActivity;
 import com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.FileUtil;
-import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
 import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
@@ -165,9 +159,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             public void run() {
                 view.setBackgroundColor(getResources().getColor(R.color.white));
                 if (rootUser == null) {
-                    if (view.getId() == R.id.vip_policy) {
-                        getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
-                    } else if (view.getId() == R.id.get_vip) {
+                    if (view.getId() == R.id.get_vip) {
                         getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
                     } else if (view.getId() == R.id.noReslayout) {
                         getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));
@@ -185,9 +177,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     case R.id.checkoutMoneyLayout:
                         getActivity().startActivity(new Intent(getActivity(), CheckOutMoneyActivity.class));
                         break;
-                    case R.id.vip_policy:
-                        getActivity().startActivity(new Intent(getActivity(), VipPolicyActivity.class));
-                        break;
+
                     case R.id.vip_order_listlayout:
                         getActivity().startActivity(new Intent(getActivity(), VipOrdersActivity.class));
                         break;

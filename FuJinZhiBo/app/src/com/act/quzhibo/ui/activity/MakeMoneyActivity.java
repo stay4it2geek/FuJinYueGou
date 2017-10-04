@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.view.ExpanbleCommonView;
@@ -34,7 +33,6 @@ public class MakeMoneyActivity extends FragmentActivity {
             }
         });
         final ExpanbleCommonView expanbaleView = (ExpanbleCommonView) findViewById(R.id.expand_commonview);
-
         expanbaleView.setOnMoneyButtonTextListner(new ExpanbleCommonView.OnMoneyWayButtonTextListner() {
             @Override
             public void setText(String text) {

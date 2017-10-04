@@ -7,7 +7,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ListView;
 
-public class MyListView extends ListView{
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+
+public class MyListView extends SwipeMenuListView {
     public MyListView(Context context) {
         super(context);
     }
@@ -17,10 +19,7 @@ public class MyListView extends ListView{
     public MyListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public MyListView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int expandSpec = View.MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2, View.MeasureSpec.AT_MOST);

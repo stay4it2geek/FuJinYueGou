@@ -39,7 +39,7 @@
                 android:layout_marginTop="0.5dp"
                 android:orientation="vertical">
 
-                <com.baoyz.swipemenulistview.SwipeMenuListView
+                <com.act.quzhibo.view.MyListView
                     android:id="@+id/viplist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

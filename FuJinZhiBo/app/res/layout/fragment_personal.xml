@@ -160,38 +160,6 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/vip_policy"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="10dp"
-                android:background="#fff">
-
-                <ImageView
-                    android:id="@+id/vipimage"
-                    android:layout_width="30dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/supervip" />
-
-                <TextView
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/vipimage"
-                    android:paddingTop="5dp"
-                    android:text="趣会员特权" />
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/icon_main_more" />
-            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/get_vip"
