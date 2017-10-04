@@ -1,9 +1,11 @@
 package com.act.quzhibo.ui.fragment;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,6 +52,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
+import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -59,6 +62,9 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
+import me.leefeng.promptlibrary.PromptDialog;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -81,7 +87,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     private static final int READ_EXTERNAL_STORAGE_REQUEST_CODE = 103;
     private static final int WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 104;
     private File tempFile;
-
+    private PromptDialog promptDialog;
 
     @Nullable
     @Override
@@ -98,6 +104,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
             view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
         }
+        view.findViewById(R.id.circle_avatar).setOnClickListener(this);
         view.findViewById(R.id.uploadImg).setOnClickListener(this);
         view.findViewById(R.id.makemoneyLayout).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
@@ -121,8 +128,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 return true;     //截断事件的传递
             }
         });
-
-
+        promptDialog = new PromptDialog(getActivity());
         return view;
     }
 
@@ -136,11 +142,23 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             if (rootUser == null) {
                 getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                 return;
-            } else {
-                uploadHeadImage();
-                return;
             }
+        }else if(view.getId() == R.id.circle_avatar){
+                FragmentDialog.newInstance(false, "是否要替换头像", "亲，真的想要替换吗", "我要替换", "取消替换", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                        dialog.dismiss();
+                        uploadHeadImage();
+                    }
+
+                    @Override
+                    public void onNegtiveClick(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).show(getChildFragmentManager(), "");
+                return;
         }
+
         view.setBackgroundColor(getResources().getColor(R.color.colorbg));
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -210,6 +228,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         rootUser.logOut();
                         getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                         break;
+
                     default:
                         break;
                 }
@@ -259,30 +278,17 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
      * 上传头像
      */
     private void uploadHeadImage() {
-        View viewSub = LayoutInflater.from(getActivity()).inflate(R.layout.layout_popupwindow, null);
-        TextView btnCarema = (TextView) viewSub.findViewById(R.id.btn_camera);
-        TextView btnPhoto = (TextView) viewSub.findViewById(R.id.btn_photo);
-        TextView btnCancel = (TextView) viewSub.findViewById(R.id.btn_cancel);
-        final PopupWindow popupWindow = new PopupWindow(viewSub, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(android.R.color.transparent));
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-        //popupWindow在弹窗的时候背景半透明
-        final WindowManager.LayoutParams params = getActivity().getWindow().getAttributes();
-        params.alpha = 0.5f;
-        getActivity().getWindow().setAttributes(params);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        promptDialog.getAlertDefaultBuilder().sheetCellPad(0).round(0);
+        PromptButton cancle = new PromptButton("取消", new PromptButtonListener() {
             @Override
-            public void onDismiss() {
-                params.alpha = 1.0f;
-                getActivity().getWindow().setAttributes(params);
+            public void onClick(PromptButton promptButton) {
+                promptDialog.dismiss();
             }
         });
 
-        btnCarema.setOnClickListener(new View.OnClickListener() {
+        PromptButton btnCarema = new PromptButton("拍照", new PromptButtonListener() {
             @Override
-            public void onClick(View v) {
-                //权限判断
+            public void onClick(PromptButton promptButton) {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     //申请WRITE_EXTERNAL_STORAGE权限
@@ -292,12 +298,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     //跳转到调用系统相机
                     gotoCamera();
                 }
-                popupWindow.dismiss();
             }
         });
-        btnPhoto.setOnClickListener(new View.OnClickListener() {
+        PromptButton btnPhoto = new PromptButton("从相册选取", new PromptButtonListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(PromptButton promptButton) {
                 //权限判断
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -308,32 +313,22 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     //跳转到相册
                     gotoPhoto();
                 }
-                popupWindow.dismiss();
             }
         });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
+        cancle.setTextColor(Color.parseColor("#0076ff"));
+        promptDialog.showAlertSheet("", true, cancle, btnCarema, btnPhoto);
     }
 
 
-    /**
-     * 外部存储权限申请返回
-     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == WRITE_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission Granted
                 gotoCamera();
             }
         } else if (requestCode == READ_EXTERNAL_STORAGE_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission Granted
                 gotoPhoto();
             }
         }
@@ -348,7 +343,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "请选择图片"), REQUEST_PICK);
     }
-
 
     /**
      * 跳转到照相机
@@ -391,7 +385,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         return;
                     }
                     String cropImagePath = FileUtil.getRealFilePathFromUri(getActivity().getApplicationContext(), uri);
-                    ToastUtil.showToast(getActivity(), "正在上传");
+                    promptDialog.showLoading("正在上传", true);
                     Luban.get(getActivity())
                             .load(new File(cropImagePath))
                             .putGear(Luban.THIRD_GEAR)
@@ -417,33 +411,47 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                                         Glide.with(getActivity()).load(file.getAbsolutePath()).into(circleImageView);
                                         view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
                                         final BmobFile bmobFile = new BmobFile(new File(file.getAbsolutePath()));
-                                        bmobFile.uploadblock(new UploadFileListener() {
+                                        final BmobFile bmobOldFile = new BmobFile();
+                                        bmobOldFile.setUrl(rootUser.photoFileUrl);
+                                        bmobOldFile.delete(new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e == null) {
-                                                    RootUser updateUser = new RootUser();
-                                                    updateUser.photoFileUrl = bmobFile.getFileUrl();
-                                                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                                                    bmobFile.uploadblock(new UploadFileListener() {
                                                         @Override
                                                         public void done(BmobException e) {
                                                             if (e == null) {
-                                                                CommonUtil.fecth(getActivity());
-                                                                ToastUtil.showToast(getActivity(), "头像上传成功");
+                                                                RootUser updateUser = new RootUser();
+                                                                updateUser.photoFileUrl = bmobFile.getFileUrl();
+                                                                updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                                                                    @Override
+                                                                    public void done(BmobException e) {
+                                                                        if (e == null) {
+                                                                            CommonUtil.fecth(getActivity());
+                                                                            promptDialog.showSuccess("头像上传成功", true);
+                                                                        } else {
+                                                                            promptDialog.showError("头像上传失败", true);
+                                                                        }
+                                                                    }
+                                                                });
                                                             } else {
-                                                                ToastUtil.showToast(getActivity(), "头像上传失败");
+                                                                promptDialog.showError("头像上传失败", true);
                                                             }
+                                                            promptDialog.dismiss();
+                                                        }
+
+                                                        @Override
+                                                        public void onProgress(Integer value) {
+
                                                         }
                                                     });
                                                 } else {
-                                                    ToastUtil.showToast(getActivity(), "头像上传失败, 请稍后重试");
+                                                    promptDialog.showError("源头像删除失败", true);
+                                                    promptDialog.dismiss();
                                                 }
                                             }
-
-                                            @Override
-                                            public void onProgress(Integer value) {
-
-                                            }
                                         });
+
 
                                     }
                                 }
@@ -453,10 +461,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
-    /**
-     * 打开截图界面
-     */
     public void gotoClipActivity(Uri uri) {
         if (uri == null) {
             return;

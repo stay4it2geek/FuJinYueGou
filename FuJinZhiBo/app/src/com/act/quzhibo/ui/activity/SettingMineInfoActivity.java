@@ -85,7 +85,6 @@ public class SettingMineInfoActivity extends FragmentActivity {
     private LockViewGroup mLockViewGroup;
     private TextView mTvTips;
     private LinearLayout secretView;
-    private int[] answers;
 
     @Override
     protected void onResume() {

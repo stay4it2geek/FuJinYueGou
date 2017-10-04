@@ -40,6 +40,7 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
+import me.leefeng.promptlibrary.PromptDialog;
 import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -57,12 +58,14 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private MyPost myPost;
     private ImageView videoThumb;
     private int postType = 0;
-    private ProgressDialog dialog;
+    private PromptDialog promptDialog ;
     private String videoUrl = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_add);
+        promptDialog = new PromptDialog(PostAddActivity.this);
         postType = getIntent().getIntExtra("postType", 0);
         mTitleEt = (EditText) findViewById(R.id.et_moment_title);
         mContentEt = (EditText) findViewById(R.id.et_moment_add_content);
@@ -226,15 +229,8 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
             } else if (content.length() == 0) {
                 Toast.makeText(this, "必须填写这一刻的想法！", Toast.LENGTH_SHORT).show();
                 return;
-            }else{
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialog= new ProgressDialog(PostAddActivity.this);
-                        dialog.setMessage("正在发布");
-                        dialog.show();
-                    }
-                });
+            } else {
+                promptDialog.showLoading("正在发布");
             }
 
             if (postType == 1) {
@@ -248,14 +244,15 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 myPost.save(new SaveListener<String>() {
                     @Override
                     public void done(String objectId, BmobException e) {
-                        dialog.dismiss();
+                        promptDialog.dismiss();
                         if (e == null) {
                             Intent intent = new Intent();
                             intent.putExtra(EXTRA_MOMENT, myPost);
                             setResult(RESULT_OK, intent);
                             finish();
+                            promptDialog.showSuccess("发布成功,小编审核中", true);
                         } else {
-                            ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                            promptDialog.showError("发布失败", true);
                         }
                     }
                 });
@@ -278,14 +275,14 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
-                                        dialog.dismiss();
+                                        promptDialog.dismiss();
                                         Intent intent = new Intent();
                                         intent.putExtra(EXTRA_MOMENT, myPost);
                                         setResult(RESULT_OK, intent);
                                         finish();
-
+                                        promptDialog.showSuccess("发布成功，小编审核中", true);
                                     } else {
-                                        ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                                        promptDialog.showError("发布失败", true);
                                     }
                                 }
                             });
@@ -319,14 +316,15 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
-                                        dialog.dismiss();
                                         Intent intent = new Intent();
                                         intent.putExtra(EXTRA_MOMENT, myPost);
                                         setResult(RESULT_OK, intent);
                                         finish();
-                                        ToastUtil.showToast(PostAddActivity.this, "发布成功，等待审核");
+                                        promptDialog.showSuccess("发布成功，小编审核中", true);
+                                        promptDialog.dismiss();
                                     } else {
-                                        ToastUtil.showToast(PostAddActivity.this, "发布失败，原因是：" + e.getErrorCode());
+                                        promptDialog.showError("发布失败", true);
+                                        promptDialog.dismiss();
                                     }
                                 }
                             });
@@ -335,20 +333,15 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
 
                     @Override
                     public void onError(int statuscode, String errormsg) {
-                        ToastUtil.showToast(PostAddActivity.this, "错误码" + statuscode + ",错误描述：" + errormsg);
+                        promptDialog.showError("发布失败", true);
+                        promptDialog.dismiss();
                     }
 
                     @Override
                     public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
-                        //1、curIndex--表示当前第几个文件正在上传
-                        //2、curPercent--表示当前上传文件的进度值（百分比）
-                        //3、total--表示总的上传文件数
-                        //4、totalPercent--表示总的上传进度（百分比）
-                        final ProgressDialog dialog = new ProgressDialog(PostAddActivity.this);
-                        dialog.setMessage("正在发布");
-                        dialog.show();
+                        promptDialog.showLoading("正在发布", true);
                         if (totalPercent == 100) {
-                            dialog.dismiss();
+                            promptDialog.dismiss();
                         }
                     }
                 });

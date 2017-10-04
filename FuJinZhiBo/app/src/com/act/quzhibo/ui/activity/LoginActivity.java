@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.LogInListener;
+import me.leefeng.promptlibrary.PromptDialog;
 
 import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
@@ -28,7 +29,7 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
 public class LoginActivity extends AppCompatActivity {
     EditText et_userPhonenumber;
     EditText et_password;
-
+    PromptDialog promptDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-
         if (et_userPhonenumber.getText().toString().equals("手机号") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
             ToastUtil.showToast(this, "请输入正确位数的手机号码");
             return;
@@ -101,14 +101,15 @@ public class LoginActivity extends AppCompatActivity {
             ToastUtil.showToast(this, "请输入密码");
             return;
         }
+        promptDialog.showLoading("正在登录");
         BmobUser.loginByAccount(et_userPhonenumber.getText().toString(), et_password.getText().toString(), new LogInListener<RootUser>() {
             @Override
             public void done(RootUser user, BmobException e) {
                 if (user != null) {
-                    ToastUtil.showToast(LoginActivity.this, "登录成功");
+                    promptDialog.showSuccess("登录成功");
                     LoginActivity.this.finish();
                 } else {
-                    ToastUtil.showToast(LoginActivity.this, "登录失败,原因是：" + e.getLocalizedMessage());
+                    promptDialog.showSuccess("登录失败");
                 }
             }
         });
