@@ -1,16 +1,22 @@
 package com.act.quzhibo.ui.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -40,6 +46,8 @@ import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
+import me.leefeng.promptlibrary.PromptButton;
+import me.leefeng.promptlibrary.PromptButtonListener;
 import me.leefeng.promptlibrary.PromptDialog;
 import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
 import rx.Observable;
@@ -58,7 +66,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private MyPost myPost;
     private ImageView videoThumb;
     private int postType = 0;
-    private PromptDialog promptDialog ;
+    private PromptDialog promptDialog;
     private String videoUrl = "";
 
     @Override
@@ -76,7 +84,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         mPhotosSnpl.setSortable(true);
         mPhotosSnpl.setDelegate(this);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         videoThumb = (ImageView) findViewById(R.id.video_player);
         titlebar.setBarTitle("发 表 状 态");
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -100,6 +108,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         }
         EventBus.getDefault().register(this);
         myPost = new MyPost();
+        record();
     }
 
 
@@ -167,7 +176,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 for (String path : BGAPhotoPickerActivity.getSelectedImages(data)) {
                     fileList.add(new File(path));
                 }
-            final ProgressDialog dialog = new ProgressDialog(this);
+            ProgressDialog dialog = new ProgressDialog(this);
             dialog.show();
             Luban.get(this)
                     .load(fileList)
@@ -204,24 +213,51 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         }
     }
 
+    private void record() {
+
+        promptDialog.getAlertDefaultBuilder().sheetCellPad(5).round(10);
+        PromptButton cancle = new PromptButton("取消", new PromptButtonListener() {
+            @Override
+            public void onClick(PromptButton promptButton) {
+                promptDialog.dismiss();
+            }
+        });
+
+        PromptButton btnCarema = new PromptButton("录制视频", new PromptButtonListener() {
+            @Override
+            public void onClick(PromptButton promptButton) {
+                MediaRecorderConfig config = new MediaRecorderConfig.Buidler()
+                        .fullScreen(true)
+                        .smallVideoWidth(360)
+                        .smallVideoHeight(480)
+                        .recordTimeMax(8000)
+                        .recordTimeMin(1500)
+                        .maxFrameRate(20)
+                        .videoBitrate(600000)
+                        .captureThumbnailsTime(3)
+                        .build();
+                MediaRecorderActivity.goSmallVideoRecorder(PostAddActivity.this, RecordConfirmActivity.class.getName(), config);
+            }
+        });
+        PromptButton btnPhoto = new PromptButton("选取本地视频", new PromptButtonListener() {
+            @Override
+            public void onClick(PromptButton promptButton) {
+                promptDialog.dismiss();
+            }
+        });
+        btnPhoto.setTextColor(Color.parseColor("#D9D9D9"));
+        cancle.setTextColor(Color.parseColor("#0076ff"));
+        promptDialog.showAlertSheet("", true, cancle, btnCarema, btnPhoto);
+    }
+
     @Override
     public void onClick(View view) {
         final String content = mContentEt.getText().toString().trim();
         final String title = mTitleEt.getText().toString().trim();
         if (view.getId() == R.id.recordBtn) {
-            MediaRecorderConfig config = new MediaRecorderConfig.Buidler()
-                    .fullScreen(true)
-                    .smallVideoWidth(360)
-                    .smallVideoHeight(480)
-                    .recordTimeMax(8000)
-                    .recordTimeMin(1500)
-                    .maxFrameRate(20)
-                    .videoBitrate(600000)
-                    .captureThumbnailsTime(3)
-                    .build();
-            MediaRecorderActivity.goSmallVideoRecorder(PostAddActivity.this, RecordConfirmActivity.class.getName(), config);
-
+            record();
         }
+
         if (view.getId() == R.id.tv_moment_add_publish) {
             if (title.length() == 0) {
                 Toast.makeText(this, "必须填写这一刻想法的标题！", Toast.LENGTH_SHORT).show();
@@ -291,7 +327,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
 
                     @Override
                     public void onError(int statuscode, String errormsg) {
-                        ToastUtil.showToast(PostAddActivity.this, "错误码" + statuscode + ",错误描述：" + errormsg);
+                        promptDialog.showError("发布状态错误", true);
                     }
 
                     @Override

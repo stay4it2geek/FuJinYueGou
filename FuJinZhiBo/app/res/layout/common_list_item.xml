@@ -85,7 +85,8 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="right|bottom"
-        android:layout_margin="7dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginRight="7dp"
         android:background="@drawable/delete"
         android:visibility="gone" />
 </FrameLayout>

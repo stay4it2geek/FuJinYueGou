@@ -187,7 +187,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
             ijkVideoView.setLayoutParams(new LinearLayout.LayoutParams(widthPixels, widthPixels / 16 * 9));
             controller = new MyStandardVideoController(context);
-            controller.setInitData(true, false);
+            controller.setInitData(true, true);
             ijkVideoView.setVideoController(controller);
         }
     }

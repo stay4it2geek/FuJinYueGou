@@ -79,7 +79,6 @@ public class WelcomeActivity extends ActivityManagePermission {
 
             @Override
             public void onLockSelected(int id) {
-//                mTvTips.setText("当前连接的点是:" + id);
             }
 
             @Override

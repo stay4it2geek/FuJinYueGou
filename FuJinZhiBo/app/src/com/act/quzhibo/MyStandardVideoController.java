@@ -21,6 +21,7 @@ import com.act.quzhibo.util.ToastUtil;
 import com.devlin_n.videoplayer.controller.StandardVideoController;
 
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.b.V;
 
 public class MyStandardVideoController extends StandardVideoController implements View.OnClickListener {
     public MyStandardVideoController(@NonNull Context context) {
@@ -67,7 +68,10 @@ public class MyStandardVideoController extends StandardVideoController implement
 
 
     public void onClick(View v) {
-        if (viewGone) {
+        if (viewVisiable) {
+            findViewById(R.id.more_menu).setVisibility(VISIBLE);
+            findViewById(R.id.fullscreen).setVisibility(VISIBLE);
+        }else{
             findViewById(R.id.more_menu).setVisibility(GONE);
             findViewById(R.id.fullscreen).setVisibility(GONE);
         }
@@ -92,7 +96,10 @@ public class MyStandardVideoController extends StandardVideoController implement
 
     @Override
     protected void doPauseResume() {
-        if (viewGone) {
+        if (viewVisiable) {
+            findViewById(R.id.more_menu).setVisibility(VISIBLE);
+            findViewById(R.id.fullscreen).setVisibility(VISIBLE);
+        }else{
             findViewById(R.id.more_menu).setVisibility(GONE);
             findViewById(R.id.fullscreen).setVisibility(GONE);
         }
@@ -120,9 +127,13 @@ public class MyStandardVideoController extends StandardVideoController implement
     @Override
     protected void initView() {
         super.initView();
-
-        findViewById(R.id.more_menu).setVisibility(VISIBLE);
-        findViewById(R.id.fullscreen).setVisibility(VISIBLE);
+        if (viewVisiable) {
+            findViewById(R.id.more_menu).setVisibility(VISIBLE);
+            findViewById(R.id.fullscreen).setVisibility(VISIBLE);
+        }else{
+            findViewById(R.id.more_menu).setVisibility(GONE);
+            findViewById(R.id.fullscreen).setVisibility(GONE);
+        }
         this.popupMenu = new PopupMenu(this.getContext(), this.moreMenu, Gravity.RIGHT);
         this.popupMenu.getMenuInflater().inflate(R.menu.controller_menu_list, this.popupMenu.getMenu());
         this.popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -141,12 +152,12 @@ public class MyStandardVideoController extends StandardVideoController implement
 
     }
 
-    public boolean viewGone;
+    public boolean viewVisiable;
     public boolean needLoginToStart;
 
-    public void setInitData(boolean needLoginToStart, boolean viewGone) {
+    public void setInitData(boolean needLoginToStart, boolean viewVisiable) {
         this.needLoginToStart = needLoginToStart;
-        this.viewGone = viewGone;
+        this.viewVisiable = viewVisiable;
 
     }
 }

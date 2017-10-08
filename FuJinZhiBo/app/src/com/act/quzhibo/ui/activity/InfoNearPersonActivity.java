@@ -199,12 +199,8 @@ public class InfoNearPersonActivity extends AppCompatActivity {
             loadNetView.setVisibility(View.GONE);
         }
         getImageAndText();
-
         getPhotoLibs();
-
-
         getSeeHer20person();
-
         getVideoLibs();
 
 
@@ -364,10 +360,8 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         final ArrayList<NearVideoEntity> nearVideoEntities = CommonUtil.jsonToArrayList(user.videoLibraries, NearVideoEntity.class);
         HorizontialListView listView = (HorizontialListView) findViewById(R.id.videoLibsList);
         ArrayList<String> imgs = new ArrayList<>();
-
         for (NearVideoEntity entity : nearVideoEntities) {
             imgs.add(entity.videoPic);
-
         }
         listView.setAdapter(new PostImageAdapter(InfoNearPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG, true, true));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

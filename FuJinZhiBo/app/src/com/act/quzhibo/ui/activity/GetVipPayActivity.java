@@ -16,15 +16,12 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -35,6 +32,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.view.MyListView;
 import com.act.quzhibo.view.TitleBarView;
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -53,8 +51,6 @@ import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-import static android.widget.AbsListView.CHOICE_MODE_SINGLE;
-
 
 public class GetVipPayActivity extends FragmentActivity {
     private ProgressDialog dialog;
@@ -63,7 +59,7 @@ public class GetVipPayActivity extends FragmentActivity {
     private double mPayMoney = 0.01;
     private TextView userSelectText;
     private VipOrders vipOrders;
-    private SwipeMenuListView listView;
+    private MyListView listView;
     private MyAdapter mAdapter;
     boolean hasShow;
     private LoadNetView loadNetView;
@@ -87,22 +83,7 @@ public class GetVipPayActivity extends FragmentActivity {
             }
         });
         vipOrders = new VipOrders();
-        listView = (SwipeMenuListView) findViewById(R.id.viplist);
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-
-            @Override
-            public void create(SwipeMenu menu) {
-                // create "open" item
-                SwipeMenuItem openItem = new SwipeMenuItem(getApplicationContext());
-                openItem.setBackground(new ColorDrawable(Color.RED));
-                openItem.setWidth(300);
-                openItem.setTitle("选择");
-                openItem.setTitleSize(18);
-                openItem.setTitleColor(Color.WHITE);
-                menu.addMenuItem(openItem);
-
-            }
-        };
+        listView = (MyListView) findViewById(R.id.viplist);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,21 +91,13 @@ public class GetVipPayActivity extends FragmentActivity {
                 queryData();
             }
         });
-        listView.setMenuCreator(creator);
-        listView.setChoiceMode(CHOICE_MODE_SINGLE);
-        listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-
         userSelectText = (TextView) findViewById(R.id.userSelectText);
-
-
         findViewById(R.id.alipay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alipay();
             }
         });
-
-
         queryData();
     }
 
@@ -399,18 +372,13 @@ public class GetVipPayActivity extends FragmentActivity {
                         mPayConisCount = payConises.get(position).payConisCount + payConises.get(position).conisPresent;
                     }
                 });
-                listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(final int position, SwipeMenu menu, int index) {
-                        switch (index) {
-                            case 0:
-                                mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送" + payConises.get(position).conisPresent + "趣币";
-                                userSelectText.setText(mGoodsDescription);
-                                mPayMoney = payConises.get(position).priceConis;
-                                mPayConisCount = payConises.get(position).payConisCount + payConises.get(position).conisPresent;
-                                break;
-                        }
-                        return false;
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                        mGoodsDescription = "充值" + payConises.get(position).payConisCount + "趣币送" + payConises.get(position).conisPresent + "趣币";
+                        userSelectText.setText(mGoodsDescription);
+                        mPayMoney = payConises.get(position).priceConis;
+                        mPayConisCount = payConises.get(position).payConisCount + payConises.get(position).conisPresent;
                     }
                 });
             }

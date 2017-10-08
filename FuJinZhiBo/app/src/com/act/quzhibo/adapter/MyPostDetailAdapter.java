@@ -186,7 +186,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
             int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
             ijkVideoView.setLayoutParams(new LinearLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
             controller = new MyStandardVideoController(activity);
-            controller.setInitData(false, true);
+            controller.setInitData(false, false);
             ijkVideoView.setVideoController(controller);
         }
 

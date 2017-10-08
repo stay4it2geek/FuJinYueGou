@@ -141,7 +141,7 @@ public class ShowerListFragment extends BackHandledFragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            final RoomParentList roomParentList = CommonUtil.parseJsonWithGson((String) msg.obj, RoomParentList.class);
+            RoomParentList roomParentList = CommonUtil.parseJsonWithGson((String) msg.obj, RoomParentList.class);
             if (msg.what != Constants.NetWorkError) {
                 if (msg.what == Constants.REFRESH) {
                     page = 20;

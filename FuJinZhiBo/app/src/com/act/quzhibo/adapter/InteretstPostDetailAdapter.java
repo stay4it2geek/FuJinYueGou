@@ -393,7 +393,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;
             ijkVideoView.setLayoutParams(new LinearLayout.LayoutParams(widthPixels, widthPixels / 14 * 9));
             controller = new MyStandardVideoController(activity);
-            controller.setInitData(false, true);
+            controller.setInitData(false, false);
             ijkVideoView.setVideoController(controller);
             title = (TextView) view.findViewById(R.id.title);
             ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);

@@ -26,7 +26,8 @@ public class NearMediaVideoListActivity extends ActivityManagePermission {
         videoEntity = (NearVideoEntity) getIntent().getSerializableExtra(Constants.NEAR_USER_VIDEO);
         ijkVideoView = new IjkVideoView(this);
         MyStandardVideoController  controller = new MyStandardVideoController(this);
-        controller.setInitData(true, true);
+        controller.setInitData(false, false);
+        ijkVideoView.setVideoController(controller);
         setContentView(ijkVideoView);
         if (TextUtils.isEmpty(videoEntity.url)) {
             ToastUtil.showToast(this, "视频地址未找到，无法播放");
@@ -40,7 +41,6 @@ public class NearMediaVideoListActivity extends ActivityManagePermission {
         ijkVideoView
                 .autoRotate()
                 .enableCache()
-                .setVideoController(controller)
                 .setTitle("")
                 .setUrl(videoEntity.url)
                 .setScreenScale(IjkVideoView.SCREEN_SCALE_DEFAULT)

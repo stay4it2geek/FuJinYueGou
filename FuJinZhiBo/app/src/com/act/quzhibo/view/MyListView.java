@@ -1,15 +1,11 @@
 package com.act.quzhibo.view;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ListView;
 
-import com.baoyz.swipemenulistview.SwipeMenuListView;
-
-public class MyListView extends SwipeMenuListView {
+public class MyListView extends ListView {
     public MyListView(Context context) {
         super(context);
     }
