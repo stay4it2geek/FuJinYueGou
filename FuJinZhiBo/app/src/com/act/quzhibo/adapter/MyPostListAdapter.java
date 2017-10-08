@@ -39,6 +39,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
 
     public interface OnMyPostRecyclerViewItemClickListener {
         void onItemClick(MyPost post);
+        void onItemDelteClick(int position,MyPost post,ImageView imageView);
     }
 
     private OnMyPostRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -120,7 +121,12 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                 mOnItemClickListener.onItemClick(post);
             }
         });
-
+        holder.arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemDelteClick(position,post,holder.arrow);
+            }
+        });
         if (rootUser.photoFileUrl != null) {
             if (rootUser.sex.equals("女")) {
                 Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
@@ -181,10 +187,12 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         private TextView createTime;
         private TextView sexAndAge;
         private FrameLayout imgVideolayout;
-
+        private ImageView arrow;
 
         public MyViewHolder(View view) {
             super(view);
+            arrow = (ImageView) view.findViewById(R.id.arrow);
+            arrow.setVisibility(View.VISIBLE);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nick);
             title = (TextView) view.findViewById(R.id.title);

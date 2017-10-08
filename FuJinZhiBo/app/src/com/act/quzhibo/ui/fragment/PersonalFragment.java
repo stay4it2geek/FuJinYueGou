@@ -279,6 +279,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             CommonUtil.fecth(getActivity());
             view.findViewById(R.id.registerLayout).setVisibility(View.GONE);
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.loginLayout).setVisibility(View.GONE);
             ((TextView) view.findViewById(R.id.nickName)).setText(rootUser.getUsername() != null ? rootUser.getUsername() : "未设置昵称");
             ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis != null && rootUser.vipConis > 0 ? "已有" + rootUser.vipConis + "趣币" : "您趣币不足");
             String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex + "性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age + "岁");

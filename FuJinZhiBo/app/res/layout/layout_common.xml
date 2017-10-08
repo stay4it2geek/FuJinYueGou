@@ -10,9 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:visibility="gone">
-
+        android:layout_alignParentTop="true">
 
     </com.act.quzhibo.view.TitleBarView>
 

@@ -8,13 +8,20 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -29,8 +36,11 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
 
@@ -42,7 +52,6 @@ public class MyPostListActivity extends AppCompatActivity {
     private LoadNetView loadNetView;
     private String lastTime = "";
     private int myPostsSize;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -191,21 +200,7 @@ public class MyPostListActivity extends AppCompatActivity {
                         recyclerView.setNoMore(true);
                     }
                 }
-                if (myPostListAdapter == null) {
-                    myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
-                    recyclerView.setAdapter(myPostListAdapter);
-                    myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
-                        @Override
-                        public void onItemClick(MyPost post) {
-                            Intent intent = new Intent();
-                            intent.putExtra(Constants.POST, post);
-                            intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
-                            startActivity(intent);
-                        }
-                    });
-                } else {
-                    myPostListAdapter.notifyDataSetChanged();
-                }
+                setAdapterView();
 
                 loadNetView.setVisibility(View.GONE);
                 if (myPostList.size() == 0) {
@@ -227,23 +222,68 @@ public class MyPostListActivity extends AppCompatActivity {
         if (requestCode == UPLOAD_POST && resultCode == RESULT_OK) {
             MyPost myPost = (MyPost) data.getSerializableExtra(EXTRA_MOMENT);
             myPostList.add(0, myPost);
-            if (myPostListAdapter == null) {
-                myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
-                recyclerView.setAdapter(myPostListAdapter);
-                myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
-                    @Override
-                    public void onItemClick(MyPost post) {
-                        Intent intent = new Intent();
-                        intent.putExtra(Constants.POST, post);
-                        intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
-                        startActivityForResult(intent, UPLOAD_POST);
-                    }
-                });
-            } else {
-                myPostListAdapter.notifyDataSetChanged();
-            }
+            setAdapterView();
         }
 
+    }
+
+    private void setAdapterView() {
+        if (myPostListAdapter == null) {
+            myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
+            recyclerView.setAdapter(myPostListAdapter);
+            myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
+                @Override
+                public void onItemClick(MyPost post) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.POST, post);
+                    intent.setClass(MyPostListActivity.this, MyPostDetailActivity.class);
+                    startActivityForResult(intent, UPLOAD_POST);
+                }
+
+                @Override
+                public void onItemDelteClick(final int postion, final MyPost post, ImageView menu) {
+                    final PopupMenu popupMenu = new PopupMenu(MyPostListActivity.this, menu, Gravity.RIGHT);
+                    popupMenu.getMenuInflater().inflate(R.menu.post_manger_menu_list, popupMenu.getMenu());
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int itemId = item.getItemId();
+                            if (itemId == R.id.edite) {
+
+                            } else if (itemId == R.id.delete) {
+                                if (post.type.equals("2")) {
+                                    final BmobFile bmobOldFile = new BmobFile();
+                                    bmobOldFile.setUrl(post.vedioUrl+"");
+                                    bmobOldFile.delete(new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+
+                                        }
+                                    });
+                                }
+                                post.delete(new UpdateListener() {
+
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            myPostList.remove(postion);
+                                            myPostListAdapter.notifyDataSetChanged();
+                                        } else {
+
+                                        }
+                                    }
+                                });
+                            }
+                            popupMenu.dismiss();
+                            return false;
+                        }
+                    });
+                    popupMenu.show();
+                }
+
+            });
+        } else {
+            myPostListAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

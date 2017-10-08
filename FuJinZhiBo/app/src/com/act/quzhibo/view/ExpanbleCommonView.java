@@ -61,7 +61,6 @@ public class ExpanbleCommonView extends ExpandableListView {
         setCacheColorHint(Color.TRANSPARENT);
         setDividerHeight(2);
         setChildrenDrawnWithCacheEnabled(false);
-        setGroupIndicator(null);
         mAdapter = new MyAdapter(context);
         setAdapter(mAdapter);
         this.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {

@@ -4,83 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:background="@color/tabline">
-
-        <FrameLayout
-            android:id="@+id/avaterlayout"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_margin="5dp">
-
-            <com.act.quzhibo.view.CircleImageView
-                android:id="@+id/circle_avatar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/man" />
-
-            <TextView
-                android:id="@+id/uploadImg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="请上传头像"
-                android:textColor="@color/white" />
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/nickName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/avaterlayout"
-            android:layout_marginLeft="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@+id/avaterlayout"
-            android:layout_toRightOf="@+id/avaterlayout"
-            android:maxEms="20"
-            android:maxLength="20"
-            android:text="昵称"
-            android:textColor="@color/textColor"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/sexAndAge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/nickName"
-            android:layout_below="@+id/nickName"
-            android:layout_marginTop="17dp"
-            android:text="年龄/性别"
-            android:textColor="#4A4A4A"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/vipLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/avaterlayout"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="13dp"
-            android:layout_toEndOf="@+id/sexAndAge"
-            android:gravity="right"
-            android:text=""
-            android:textColor="@color/darkred"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/vip_levelimg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/sexAndAge"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/sexAndAge"
-            android:layout_marginRight="15dp" />
-    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -91,6 +14,83 @@
             android:layout_height="match_parent"
             android:background="#eee"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@color/tabline">
+
+                <FrameLayout
+                    android:id="@+id/avaterlayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp">
+
+                    <com.act.quzhibo.view.CircleImageView
+                        android:id="@+id/circle_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/man" />
+
+                    <TextView
+                        android:id="@+id/uploadImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="请上传头像"
+                        android:textColor="@color/white" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/avaterlayout"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/avaterlayout"
+                    android:layout_toRightOf="@+id/avaterlayout"
+                    android:maxEms="20"
+                    android:maxLength="20"
+                    android:text="昵称"
+                    android:textColor="@color/textColor"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/sexAndAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/nickName"
+                    android:layout_below="@+id/nickName"
+                    android:layout_marginTop="17dp"
+                    android:text="年龄/性别"
+                    android:textColor="#4A4A4A"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/vipLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/avaterlayout"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_toEndOf="@+id/sexAndAge"
+                    android:gravity="right"
+                    android:text=""
+                    android:textColor="@color/darkred"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/vip_levelimg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/sexAndAge"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/sexAndAge"
+                    android:layout_marginRight="15dp" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                         android:layout_alignParentBottom="true"
                         android:maxLength="40"
                         android:gravity="center_horizontal|bottom"
-                        android:text="各种赚钱通道"
+                        android:text="多种赚钱通道"
                         android:textColor="@color/darkorange"
                         android:textSize="13sp" />
                 </RelativeLayout>
@@ -627,6 +627,7 @@
                     android:id="@+id/loginImg"
                     android:layout_width="29dp"
                     android:layout_height="29dp"
+                    android:background="@drawable/phone"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="13dp" />
 
