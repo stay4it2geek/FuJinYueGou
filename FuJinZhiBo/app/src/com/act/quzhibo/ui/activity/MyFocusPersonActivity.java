@@ -158,10 +158,9 @@ public class MyFocusPersonActivity extends FragmentActivity {
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
-                    if(msg.what==Constants.LOADMORE){
-                        recyclerView.setNoMore(true);
-                    }
+
                 }
+
                 if (myFocusPersonListAdapter == null) {
                     Display display = MyFocusPersonActivity.this.getWindowManager().getDefaultDisplay();
                     Point size = new Point();
@@ -218,6 +217,10 @@ public class MyFocusPersonActivity extends FragmentActivity {
                     }
                 } else {
                     myFocusPersonListAdapter.notifyDataSetChanged();
+                }
+
+                if(msg.what==Constants.LOADMORE){
+                    recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
                 if (myFocusCommonPersons.size() == 0) {

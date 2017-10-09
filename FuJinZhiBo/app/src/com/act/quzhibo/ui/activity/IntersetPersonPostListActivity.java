@@ -129,10 +129,8 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                     interestPostSize = data.result.posts.size();
                 } else {
                     interestPostSize = 0;
-                    if (msg.what == Constants.LOADMORE) {
-                        recyclerView.setNoMore(true);
-                    }
                 }
+
                 if (data.result.posts != null && interestPostSize > 0) {
                     ctime = data.result.posts.get(interestPostSize - 1).ctime;
                 }
@@ -187,6 +185,10 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                         adapter.notifyDataSetChanged();
                     }
                 } else if (interestPostSize == 0) {
+                    recyclerView.setNoMore(true);
+                }
+
+                if (msg.what == Constants.LOADMORE) {
                     recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);

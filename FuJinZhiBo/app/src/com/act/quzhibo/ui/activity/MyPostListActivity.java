@@ -13,15 +13,12 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -38,9 +35,9 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.DeleteBatchListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
 
 import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
 
@@ -51,7 +48,7 @@ public class MyPostListActivity extends AppCompatActivity {
     private MyPostListAdapter myPostListAdapter;
     private LoadNetView loadNetView;
     private String lastTime = "";
-    private int myPostsSize;
+    private int handlerMyPostsSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +77,7 @@ public class MyPostListActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (myPostsSize > 0) {
+                        if (handlerMyPostsSize > 0) {
                             queryData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -172,7 +169,9 @@ public class MyPostListActivity extends AppCompatActivity {
                     if (actionType == Constants.REFRESH) {
                         myPostList.clear();
                     }
-                    lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    if(list.size()>0){
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                    }
                     Message message = new Message();
                     message.obj = list;
                     message.what = actionType;
@@ -193,19 +192,19 @@ public class MyPostListActivity extends AppCompatActivity {
 
                 if (myPosts != null) {
                     myPostList.addAll(myPosts);
-                    myPostsSize = myPosts.size();
+                    handlerMyPostsSize = myPosts.size();
                 } else {
-                    myPostsSize = 0;
-                    if (msg.what == Constants.LOADMORE) {
-                        recyclerView.setNoMore(true);
-                    }
+                    handlerMyPostsSize = 0;
                 }
-                setAdapterView();
 
+                setAdapterView();
+                if (msg.what == Constants.LOADMORE) {
+                    recyclerView.setNoMore(true);
+                }
                 loadNetView.setVisibility(View.GONE);
                 if (myPostList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
                 }
             } else {
@@ -241,25 +240,28 @@ public class MyPostListActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onItemDelteClick(final int postion, final MyPost post, ImageView menu) {
+                public void onItemDelteClick(final int postion, final MyPost post, ImageView menu, final ArrayList<String> imgs) {
                     final PopupMenu popupMenu = new PopupMenu(MyPostListActivity.this, menu, Gravity.RIGHT);
                     popupMenu.getMenuInflater().inflate(R.menu.post_manger_menu_list, popupMenu.getMenu());
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         public boolean onMenuItemClick(MenuItem item) {
                             int itemId = item.getItemId();
-                            if (itemId == R.id.edite) {
-
-                            } else if (itemId == R.id.delete) {
+                            if (itemId == R.id.delete) {
                                 if (post.type.equals("2")) {
                                     final BmobFile bmobOldFile = new BmobFile();
-                                    bmobOldFile.setUrl(post.vedioUrl+"");
+                                    bmobOldFile.setUrl(post.vedioUrl + "");
                                     bmobOldFile.delete(new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
 
                                         }
                                     });
+                                } else if (post.type.equals("3")) {
+                                    String[] urls = imgs.toArray(new String[imgs.size()]);
+
+                                    deleteImgFiles(urls);
                                 }
+
                                 post.delete(new UpdateListener() {
 
                                     @Override
@@ -284,6 +286,16 @@ public class MyPostListActivity extends AppCompatActivity {
         } else {
             myPostListAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void deleteImgFiles(String[] urls) {
+        BmobFile.deleteBatch(urls, new DeleteBatchListener() {
+
+            @Override
+            public void done(String[] failUrls, BmobException e) {
+                deleteImgFiles(failUrls);
+            }
+        });
     }
 
     @Override

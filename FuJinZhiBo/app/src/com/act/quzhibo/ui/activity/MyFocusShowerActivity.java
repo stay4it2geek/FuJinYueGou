@@ -164,10 +164,8 @@ public class MyFocusShowerActivity extends FragmentActivity {
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
-                    if (msg.what == Constants.LOADMORE) {
-                        recyclerView.setNoMore(true);
-                    }
                 }
+
                 if (myFocusShowerListAdapter == null) {
                     Display display = MyFocusShowerActivity.this.getWindowManager().getDefaultDisplay();
                     Point size = new Point();
@@ -215,6 +213,10 @@ public class MyFocusShowerActivity extends FragmentActivity {
                     }
                 } else {
                     myFocusShowerListAdapter.notifyDataSetChanged();
+                }
+
+                if (msg.what == Constants.LOADMORE) {
+                    recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
                 if (myFocusShowerses.size() == 0) {

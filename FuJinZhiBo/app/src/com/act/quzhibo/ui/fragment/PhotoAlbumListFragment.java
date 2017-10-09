@@ -159,10 +159,8 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                     medias.addAll(mediaInfos);
                 } else {
                     handlerMediaInfoSize = 0;
-                    if(msg.what==Constants.LOADMORE){
-                        recycleview.setNoMore(true);
-                    }
                 }
+
                 if (mInfoListAdapter == null) {
                     mInfoListAdapter = new PhotoAlbumListAdapter(getActivity(), medias);
                     recycleview.setAdapter(mInfoListAdapter);
@@ -170,11 +168,17 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                     mInfoListAdapter.notifyDataSetChanged();
                 }
                 loadNetView.setVisibility(View.GONE);
+
+                if(msg.what==Constants.LOADMORE){
+                    recycleview.setNoMore(true);
+                }
                 if (medias.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
                 }
+
+
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);

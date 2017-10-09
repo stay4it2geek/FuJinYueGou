@@ -168,10 +168,8 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                     medias.addAll(mediaAuthor);
                 } else {
                     handlerMediaAuthorSize = 0;
-                    if(msg.what==Constants.LOADMORE){
-                        recyclerView.setNoMore(true);
-                    }
                 }
+
                 if (mediaAuthorListAdapter == null) {
                     mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), medias);
                     recyclerView.setAdapter(mediaAuthorListAdapter);
@@ -189,6 +187,9 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                     mediaAuthorListAdapter.notifyDataSetChanged();
                 }
 
+                if(msg.what==Constants.LOADMORE){
+                    recyclerView.setNoMore(true);
+                }
                 loadNetView.setVisibility(View.GONE);
                 if (medias.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);

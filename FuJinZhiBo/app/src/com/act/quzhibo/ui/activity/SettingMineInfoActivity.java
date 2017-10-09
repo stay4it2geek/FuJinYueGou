@@ -257,7 +257,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                     rootUser = BmobUser.getCurrentUser(RootUser.class);
                                 } else {
                                     if (e.getErrorCode() == 206) {
-                                        FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                                        FragmentDialog.newInstance(false, "权限确认", "缓存即将过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                             @Override
                                             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                                 rootUser.logOut();

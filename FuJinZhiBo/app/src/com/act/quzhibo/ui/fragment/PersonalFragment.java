@@ -116,7 +116,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.getQuCoinsLayout).setOnClickListener(this);
         view.findViewById(R.id.loginLayout).setOnClickListener(this);
         view.findViewById(R.id.uploadImg).setOnClickListener(this);
-        view.findViewById(R.id.makemoneyText).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
         view.findViewById(R.id.get_vip).setOnClickListener(this);
         view.findViewById(R.id.vip_order_listlayout).setOnClickListener(this);

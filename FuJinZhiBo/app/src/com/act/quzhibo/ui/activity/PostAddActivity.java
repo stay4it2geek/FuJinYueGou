@@ -268,13 +268,14 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
             } else {
                 promptDialog.showLoading("正在发布");
             }
-
+            myPost.type = postType + "";
             if (postType == 1) {
                 myPost.title = title;
                 myPost.absText = content;
                 myPost.pageView = "0";
                 myPost.totalComments = "0";
                 myPost.totalImages = "0";
+                myPost.rewards = "0";
                 myPost.rewards = "0";
                 myPost.user = BmobUser.getCurrentUser(RootUser.class);
                 myPost.save(new SaveListener<String>() {

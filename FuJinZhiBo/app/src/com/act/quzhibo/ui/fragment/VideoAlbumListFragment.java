@@ -196,9 +196,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     medias.addAll(mediaInfos);
                 } else {
                     handlerMediaInfoSize = 0;
-                    if (msg.what == Constants.LOADMORE) {
-                        recyclerView.setNoMore(true);
-                    }
+
                 }
 
                 if (mInfoListAdapter == null) {
@@ -219,6 +217,10 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     });
                 } else {
                     mInfoListAdapter.notifyDataSetChanged();
+                }
+
+                if (msg.what == Constants.LOADMORE) {
+                    recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
                 if (medias.size() == 0) {

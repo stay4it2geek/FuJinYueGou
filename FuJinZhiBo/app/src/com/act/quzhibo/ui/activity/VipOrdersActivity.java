@@ -235,7 +235,9 @@ public class VipOrdersActivity extends FragmentActivity {
                 } else {
                     orderAdapter.notifyDataSetChanged();
                 }
-
+                if(msg.what==Constants.LOADMORE){
+                    recyclerView.setNoMore(true);
+                }
                 loadNetView.setVisibility(View.GONE);
                 if (vipOrderSList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);

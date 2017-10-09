@@ -198,12 +198,9 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                     mediaAuthors.addAll(mediaAuthor);
                 } else {
                     handlerMediaAuthorSize = 0;
-                    if(msg.what==Constants.LOADMORE){
-                        recyclerView.setNoMore(true);
-                    }
                 }
                 Collections.sort(mediaAuthors, new ComparatorValues());
-                if (handlerMediaAuthorSize > 0) {
+
                     if (mediaAuthorListAdapter == null) {
                         mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthors);
                         recyclerView.setAdapter(mediaAuthorListAdapter);
@@ -222,16 +219,15 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                     }
                 }
                 loadNetView.setVisibility(View.GONE);
-
+            if(msg.what==Constants.LOADMORE){
+                recyclerView.setNoMore(true);
+            }
                 if (handlerMediaAuthorSize == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
                 }
-            } else {
-                loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.RELOAD);
-            }
+
         }
     };
 }

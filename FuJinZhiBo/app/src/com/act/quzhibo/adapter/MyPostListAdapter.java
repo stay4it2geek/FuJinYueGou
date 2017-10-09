@@ -39,7 +39,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
 
     public interface OnMyPostRecyclerViewItemClickListener {
         void onItemClick(MyPost post);
-        void onItemDelteClick(int position,MyPost post,ImageView imageView);
+        void onItemDelteClick(int position,MyPost post,ImageView imageView,ArrayList<String> imgs);
     }
 
     private OnMyPostRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -124,7 +124,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         holder.arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.onItemDelteClick(position,post,holder.arrow);
+                mOnItemClickListener.onItemDelteClick(position,post,holder.arrow,post.images);
             }
         });
         if (rootUser.photoFileUrl != null) {

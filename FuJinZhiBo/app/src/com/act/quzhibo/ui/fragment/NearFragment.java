@@ -152,9 +152,9 @@ public class NearFragment extends BackHandledFragment {
                     nearPersonList.addAll(personList);
                 } else {
                     nearPersonSizeHandler = 0;
-                    if (msg.what == Constants.LOADMORE) {
-                        recyclerView.setNoMore(true);
-                    }
+                }
+                if (msg.what == Constants.LOADMORE) {
+                    recyclerView.setNoMore(true);
                 }
                 if (nearPersonAdapter == null) {
                     nearPersonAdapter = new NearPersonAdapter(getActivity(), nearPersonList);
