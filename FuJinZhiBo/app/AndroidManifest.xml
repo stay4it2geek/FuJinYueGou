@@ -233,11 +233,6 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.NoResActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.act.quzhibo.ui.activity.MyPostDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"

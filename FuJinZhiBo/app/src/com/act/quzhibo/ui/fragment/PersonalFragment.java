@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -23,7 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.BuildConfig;
@@ -43,7 +41,6 @@ import com.act.quzhibo.ui.activity.MakeMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
-import com.act.quzhibo.ui.activity.NoResActivity;
 import com.act.quzhibo.ui.activity.RegisterActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
@@ -58,15 +55,11 @@ import com.act.quzhibo.view.HorizontialListView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -162,9 +155,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             }).show(getChildFragmentManager(), "");
             return;
 
-        } else if (view.getId() == R.id.makemoneyLayoout) {
-            getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
-            return;
         } else if (view.getId() == R.id.checkoutMoneyLayout) {
             getActivity().startActivity(new Intent(getActivity(), CheckOutMoneyActivity.class));
             return;
@@ -172,7 +162,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             getActivity().startActivity(new Intent(getActivity(), GetQuCoinsActivity.class));
             return;
         } else if (view.getId() == R.id.noReslayout) {
-            getActivity().startActivity(new Intent(getActivity(), NoResActivity.class));
+            getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));
             return;
         } else if (view.getId() == R.id.registerLayout) {
             getActivity().startActivity(new Intent(getActivity(), RegisterActivity.class));
@@ -194,6 +184,10 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         }, 500);
 
         switch (view.getId()) {
+
+            case R.id.makemoneyLayoout:
+                getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
+                break;
             case R.id.get_vip:
                 getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
                 break;
