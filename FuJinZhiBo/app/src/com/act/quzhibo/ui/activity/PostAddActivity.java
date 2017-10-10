@@ -100,6 +100,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 mPhotosSnpl.setVisibility(View.GONE);
                 break;
             case 2:
+                record();
                 findViewById(R.id.recordBtn).setVisibility(View.VISIBLE);
                 break;
             case 3:
@@ -108,7 +109,6 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         }
         EventBus.getDefault().register(this);
         myPost = new MyPost();
-        record();
     }
 
 

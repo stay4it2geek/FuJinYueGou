@@ -15,11 +15,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:layout_marginRight="10dp"
+            android:paddingRight="10dp"
             android:gravity="center"
             android:paddingLeft="20dp"
             android:text="发布"
-            android:textColor="@color/black"
             android:textSize="16sp" />
     </com.act.quzhibo.view.TitleBarView>
 
@@ -34,7 +33,7 @@
                 android:layout_margin="10dp"
                 android:background="@android:color/transparent"
                 android:gravity="start"
-                android:hint="这一刻的想法标题..."
+                android:hint="这一刻的想法主题..."
                 android:lines="4"
                 android:textColor="#474747"
                 android:textColorHint="#C6C6C6" />

@@ -171,10 +171,10 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         } else if (view.getId() == R.id.getQuCoinsLayout) {
             getActivity().startActivity(new Intent(getActivity(), GetQuCoinsActivity.class));
             return;
-        }else if (view.getId() == R.id.noReslayout) {
-            getActivity().startActivity(new Intent(getActivity(),  NoResActivity.class));
+        } else if (view.getId() == R.id.noReslayout) {
+            getActivity().startActivity(new Intent(getActivity(), NoResActivity.class));
             return;
-        }else if (view.getId() == R.id.registerLayout) {
+        } else if (view.getId() == R.id.registerLayout) {
             getActivity().startActivity(new Intent(getActivity(), RegisterActivity.class));
             return;
         } else {
@@ -255,11 +255,11 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         personImgList.add(person.absCoverPic);
                     }
                     HorizontialListView listView = (HorizontialListView) view.findViewById(R.id.who_see_me_list);
-                    listView.setAdapter(new PostImageAdapter(getActivity(), personImgList,Constants.ITEM_POST_DETAIL_IMG, false, false));
+                    listView.setAdapter(new PostImageAdapter(getActivity(), personImgList, Constants.ITEM_POST_DETAIL_IMG, false, false));
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            startActivity(new Intent(getActivity(),WhoLikeThenSeeMeActivity.class));
+                            startActivity(new Intent(getActivity(), WhoLikeThenSeeMeActivity.class));
                         }
                     });
                 } else {

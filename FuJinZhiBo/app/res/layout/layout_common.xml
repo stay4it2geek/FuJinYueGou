@@ -47,7 +47,7 @@
                 android:padding="4dp"
                 app:fab_colorNormal="@color/tabline"
                 app:fab_colorPressed="@color/lightorange"
-                app:fab_icon="@drawable/orderlist"
+                app:fab_icon="@drawable/text"
                 app:fab_size="normal"
                 app:fab_title="文本" />
 

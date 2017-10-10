@@ -18,7 +18,7 @@ public class MakeMoneyActivity extends FragmentActivity {
         setContentView(R.layout.money_introduce);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        titlebar.setBarTitle("财富通道");
+        titlebar.setBarTitle("赚钱通道");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

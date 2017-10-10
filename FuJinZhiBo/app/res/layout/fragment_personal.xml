@@ -96,43 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:id="@+id/makemoneyLayoout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_weight="1"
-                    android:paddingBottom="5dp"
-                    android:background="#fff">
 
-                    <TextView
-                        android:id="@+id/makemoney"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:background="#fff"
-                        android:gravity="center_horizontal"
-                        android:text="赚取现金"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/makemoneyText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/makemoney"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="3dp"
-                        android:layout_alignParentBottom="true"
-                        android:maxLength="40"
-                        android:gravity="center_horizontal|bottom"
-                        android:text="多种赚钱通道"
-                        android:textColor="@color/darkorange"
-                        android:textSize="13sp" />
-                </RelativeLayout>
 
 
                 <View
@@ -155,13 +119,13 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="7dp"
                         android:layout_weight="1"
                         android:background="#fff"
+                        android:textColor="#424242"
                         android:gravity="center_horizontal"
-                        android:text="余额提现"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="申请余额提现"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/balance"
@@ -175,7 +139,7 @@
                         android:gravity="center_horizontal|bottom"
                         android:text="您有4000元未提现"
                         android:textColor="@color/darkorange"
-                        android:textSize="13sp" />
+                        android:textSize="11sp" />
                 </RelativeLayout>
 
 
@@ -199,13 +163,13 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="7dp"
                         android:layout_weight="1"
                         android:background="#fff"
+                        android:textColor="#424242"
                         android:gravity="center_horizontal"
-                        android:text="赢取趣币"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
+                        android:text="签到领取趣币"
+                        android:textSize="16sp"/>
 
                     <TextView
                         android:id="@+id/vip_coins"
@@ -219,7 +183,7 @@
                         android:gravity="center_horizontal|bottom"
                         android:text="您有1232趣币"
                         android:textColor="@color/darkorange"
-                        android:textSize="13sp" />
+                        android:textSize="11sp" />
                 </RelativeLayout>
 
 
@@ -228,9 +192,9 @@
 
             <RelativeLayout
                 android:id="@+id/get_vip"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="5dp"
                 android:background="#fff">
 
                 <ImageView
@@ -244,12 +208,48 @@
                 <TextView
                     android:id="@+id/orderstext"
                     style="@style/textStyle"
+                    android:textColor="@color/red_light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/orderstatus"
                     android:paddingTop="5dp"
                     android:text="获取趣会员特权" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/icon_main_more" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/makemoneyLayoout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/referee_img"
+                    android:layout_width="28dp"
+                    android:layout_height="27dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/sharemoney" />
+
+                <TextView
+                    android:id="@+id/refereetext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/referee_img"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/red_light"
+                    android:text="分享推荐领佣金" />
 
                 <View
                     android:layout_width="10dp"
@@ -303,10 +303,10 @@
 
                 <ImageView
                     android:id="@+id/whoseeimage"
-                    android:layout_width="25dp"
+                    android:layout_width="24dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="17dp"
                     android:background="@drawable/ganxingqu" />
 
                 <TextView
@@ -381,10 +381,10 @@
 
                 <ImageView
                     android:id="@+id/focus_person_img"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="17dp"
                     android:background="@drawable/qingqu" />
 
                 <TextView
@@ -486,7 +486,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="14dp"
+                    android:layout_marginLeft="16dp"
                     android:background="@drawable/sendpost" />
 
                 <TextView
@@ -518,9 +518,9 @@
                 <ImageView
                     android:id="@+id/detail_img"
                     android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_height="26dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="11dp"
+                    android:layout_marginLeft="16dp"
                     android:background="@drawable/detail" />
 
                 <TextView
@@ -552,9 +552,9 @@
                 <ImageView
                     android:id="@+id/noRes"
                     android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="14dp"
+                    android:layout_marginLeft="16dp"
                     android:background="@drawable/shengming" />
 
                 <TextView
@@ -582,16 +582,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
                 android:layout_marginTop="1dp"
-                android:background="#fff"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="#fff">
 
                 <ImageView
                     android:id="@+id/register_img"
                     android:layout_width="29dp"
                     android:layout_height="29dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="13dp"
-                    android:background="@drawable/phone" />
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/register" />
 
                 <TextView
                     android:id="@+id/registertxt"
@@ -620,16 +620,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
                 android:layout_marginTop="1dp"
-                android:background="#fff"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="#fff">
 
                 <ImageView
                     android:id="@+id/loginImg"
                     android:layout_width="29dp"
                     android:layout_height="29dp"
-                    android:background="@drawable/phone"
+                    android:background="@drawable/login"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="13dp" />
+                    android:layout_marginLeft="16dp" />
 
                 <TextView
                     android:id="@+id/loginTxt"
@@ -637,8 +637,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginStart="15dp"
                     android:layout_toEndOf="@+id/loginImg"
                     android:layout_toRightOf="@+id/loginImg"
                     android:paddingTop="3dp"
