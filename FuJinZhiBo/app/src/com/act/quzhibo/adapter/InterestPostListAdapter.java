@@ -130,6 +130,10 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         holder.viewNum.setText(datas.get(position).pageView + "");
         holder.pinglunNum.setText(datas.get(position).totalComments + "");
 
+        if(isNeedBlur){
+            holder.pName.setVisibility(View.VISIBLE);
+            holder.pName.setText("");
+        }
         if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
             holder.imgGridview.setVisibility(View.VISIBLE);
             holder.imgVideolayout.setVisibility(View.GONE);
@@ -245,6 +249,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+        private TextView pName;
         private GridView imgGridview;
         private TextView viewNum;
         private TextView pinglunNum;
@@ -259,9 +264,11 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         private TextView createTime;
         private TextView sexAndAge;
         private FrameLayout imgVideolayout;
-
+        private ImageView arrow;
         public MyViewHolder(View view) {
             super(view);
+            arrow = (ImageView) view.findViewById(R.id.arrow);
+            pName = (TextView) view.findViewById(R.id.pName);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nick);
             title = (TextView) view.findViewById(R.id.title);

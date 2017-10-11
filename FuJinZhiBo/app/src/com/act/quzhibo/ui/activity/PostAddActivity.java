@@ -1,6 +1,7 @@
 package com.act.quzhibo.ui.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,23 +12,37 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.adapter.InterestPlatesListAdapter;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
+import com.act.quzhibo.entity.CardBean;
+import com.act.quzhibo.entity.InterestPlates;
+import com.act.quzhibo.entity.InterestPlatesParentData;
 import com.act.quzhibo.entity.MyPost;
 import com.act.quzhibo.entity.RecordVideoEvent;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.luban.Luban;
+import com.act.quzhibo.ui.fragment.InterestPostListFragment;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.TitleBarView;
+import com.bigkoo.pickerview.OptionsPickerView;
+import com.bigkoo.pickerview.listener.CustomListener;
 import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;
 import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig;
 
@@ -45,6 +60,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 import me.leefeng.promptlibrary.PromptButton;
 import me.leefeng.promptlibrary.PromptButtonListener;
@@ -68,6 +84,8 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private int postType = 0;
     private PromptDialog promptDialog;
     private String videoUrl = "";
+    private OptionsPickerView interestPlatesOption;
+    private TextView plateText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +95,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         postType = getIntent().getIntExtra("postType", 0);
         mTitleEt = (EditText) findViewById(R.id.et_moment_title);
         mContentEt = (EditText) findViewById(R.id.et_moment_add_content);
+        plateText = (TextView) findViewById(R.id.plateText);
         mPhotosSnpl = (BGASortableNinePhotoLayout) findViewById(R.id.snpl_moment_add_photos);
         mPhotosSnpl.setMaxItemCount(9);
         mPhotosSnpl.setEditable(true);
@@ -95,6 +114,7 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         });
         findViewById(R.id.tv_moment_add_publish).setOnClickListener(this);
         findViewById(R.id.recordBtn).setOnClickListener(this);
+
         switch (postType) {
             case 1:
                 mPhotosSnpl.setVisibility(View.GONE);
@@ -109,8 +129,66 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
         }
         EventBus.getDefault().register(this);
         myPost = new MyPost();
+        getInterestPlatesData();
+
     }
 
+    private ArrayList<CardBean> interestPlatesItems = new ArrayList<>();
+
+    private void getInterestPlatesData() {
+        String url = CommonUtil.getToggle(this, Constants.SQUARE_INTERES_TAB).getToggleObject();
+        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
+    }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            InterestPlatesParentData interestPlatesParentData = CommonUtil.parseJsonWithGson((String) msg.obj, InterestPlatesParentData.class);
+            for (InterestPlates plate : interestPlatesParentData.result.plates) {
+                if (!plate.pName.contains("视频")) {
+                    interestPlatesItems.add(new CardBean(plate.pName));
+                }
+            }
+            initDisPurposeOptionPicker();
+            plateText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    interestPlatesOption.show();
+                }
+            });
+        }
+    };
+
+    private void initDisPurposeOptionPicker() {
+        interestPlatesOption = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                plateText.setText(interestPlatesItems.get(options1).getPickerViewText());
+
+            }
+        }).setDividerColor(Color.BLACK).setTitleText("版块选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+            @Override
+            public void customLayout(View v) {
+                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
+                tvSubmit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interestPlatesOption.returnData();
+                        interestPlatesOption.dismiss();
+                    }
+                });
+                ivCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        interestPlatesOption.dismiss();
+                    }
+                });
+            }
+        }).isDialog(true).build();
+        interestPlatesOption.setPicker(interestPlatesItems);//添加数据
+    }
 
     @Override
     protected void onDestroy() {
@@ -264,6 +342,9 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
                 return;
             } else if (content.length() == 0) {
                 Toast.makeText(this, "必须填写这一刻的想法！", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (plateText.getText().toString().equals("选择状态版块")) {
+                Toast.makeText(this, "必须选择版块！", Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 promptDialog.showLoading("正在发布");

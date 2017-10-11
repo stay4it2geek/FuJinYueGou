@@ -15,9 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:paddingRight="10dp"
             android:gravity="center"
             android:paddingLeft="20dp"
+            android:paddingRight="10dp"
             android:text="发布"
             android:textSize="16sp" />
     </com.act.quzhibo.view.TitleBarView>
@@ -26,15 +26,26 @@
 
         <LinearLayout style="@style/MatchMatch.Vertical">
 
+            <TextView
+                android:id="@+id/plateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/bg_round_yellow"
+                android:padding="15dp"
+                android:text="选择状态版块"
+                android:textSize="16sp" />
+
             <EditText
                 android:id="@+id/et_moment_title"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/yellowshape"
                 android:gravity="start"
                 android:hint="这一刻的想法主题..."
                 android:lines="4"
+                android:padding="5dp"
                 android:textColor="#474747"
                 android:textColorHint="#C6C6C6" />
 
@@ -43,10 +54,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/yellowshape"
                 android:gravity="start"
                 android:hint="这一刻的想法..."
                 android:lines="4"
+                android:padding="5dp"
                 android:textColor="#474747"
                 android:textColorHint="#C6C6C6" />
 
@@ -54,8 +66,8 @@
             <cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout
                 android:id="@+id/snpl_moment_add_photos"
                 style="@style/WrapWrap"
-                android:visibility="gone"
                 android:layout_margin="10dp"
+                android:visibility="gone"
                 app:bga_snpl_deleteDrawable="@mipmap/bga_pp_ic_delete"
                 app:bga_snpl_deleteDrawableOverlapQuarter="false"
                 app:bga_snpl_editable="true"

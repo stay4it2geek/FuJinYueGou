@@ -87,9 +87,22 @@
             android:id="@+id/arrow"
             android:layout_width="35dp"
             android:layout_height="20dp"
-            android:layout_margin="8dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/arrow_down" />
+            android:layout_margin="8dp"
+            android:background="@drawable/arrow_down"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/pName"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="13dp"
+            android:text=""
+            android:textColor="#000"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
