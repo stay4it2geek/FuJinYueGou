@@ -37,6 +37,7 @@ import com.act.quzhibo.ui.activity.ClipImageActivity;
 import com.act.quzhibo.ui.activity.GetQuCoinsActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
+import com.act.quzhibo.ui.activity.RegisterNormalActivity;
 import com.act.quzhibo.ui.activity.ShareForMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
@@ -165,7 +166,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));
             return;
         } else if (view.getId() == R.id.registerLayout) {
-            getActivity().startActivity(new Intent(getActivity(), RegisterActivity.class));
+            getActivity().startActivity(new Intent(getActivity(), RegisterNormalActivity.class));
             return;
         } else {
             if (rootUser == null) {
@@ -277,18 +278,21 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis != null && rootUser.vipConis > 0 ? "已有" + rootUser.vipConis + "趣币" : "您趣币不足");
             String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex + "性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age + "岁");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
-            if (0 < rootUser.vipConis && rootUser.vipConis < 3000) {
-                ((TextView) view.findViewById(R.id.vipLevel)).setText("初级趣会员");
-            } else if (3000 < rootUser.vipConis && rootUser.vipConis < 5000) {
-                ((TextView) view.findViewById(R.id.vipLevel)).setText("中级趣会员");
-            } else if (5000 < rootUser.vipConis && rootUser.vipConis < 8000) {
-                ((TextView) view.findViewById(R.id.vipLevel)).setText("特级趣会员");
-            } else if (rootUser.vipConis > 8000) {
-                ((TextView) view.findViewById(R.id.vipLevel)).setText("超级趣会员");
+            if(!TextUtils.isEmpty(rootUser.vipConis+"")){
+                if (0 < rootUser.vipConis && rootUser.vipConis < 3000) {
+                    ((TextView) view.findViewById(R.id.vipLevel)).setText("初级趣会员");
+                } else if (3000 < rootUser.vipConis && rootUser.vipConis < 5000) {
+                    ((TextView) view.findViewById(R.id.vipLevel)).setText("中级趣会员");
+                } else if (5000 < rootUser.vipConis && rootUser.vipConis < 8000) {
+                    ((TextView) view.findViewById(R.id.vipLevel)).setText("特级趣会员");
+                } else if (rootUser.vipConis > 8000) {
+                    ((TextView) view.findViewById(R.id.vipLevel)).setText("超级趣会员");
 
+                }
             }
 
-            if (rootUser.sex.equals("男")) {
+
+            if (!TextUtils.isEmpty(rootUser.sex)&&rootUser.sex.equals("男")) {
                 if (0 < rootUser.vipConis && rootUser.vipConis < 1000) {
                     view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_0);
                 } else if (1000 < rootUser.vipConis && rootUser.vipConis < 2000) {
@@ -314,7 +318,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
                 }
             }
-            if (rootUser.sex.equals("女")) {
+            if (!TextUtils.isEmpty(rootUser.sex)&&rootUser.sex.equals("女")) {
                 if (0 < rootUser.vipConis && rootUser.vipConis < 1000) {
                     view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_0);
                 } else if (1000 < rootUser.vipConis && rootUser.vipConis < 2000) {

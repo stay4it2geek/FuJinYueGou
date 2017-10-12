@@ -17,13 +17,16 @@ import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FetchUserInfoListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
@@ -37,10 +40,10 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
 public class RegisterNormalActivity extends AppCompatActivity {
 
     private EditText et_userPhonenumber;
-    private EditText et_sms_code;
     private EditText et_password;
     private CheckBox check_agree;
     private EditText et_userNick;
+    private EditText invite_code;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,10 +53,9 @@ public class RegisterNormalActivity extends AppCompatActivity {
         findViewById(R.id.verify_fail).setVisibility(View.GONE);
         ((TextView) findViewById(R.id.btn_verify_login)).setText("确 认 注 册");
         et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
-        et_sms_code = (EditText) findViewById(R.id.et_sms_code);
         check_agree = (CheckBox) findViewById(R.id.check_agree);
         et_userNick = (EditText) findViewById(R.id.et_userNick);
-
+        invite_code = (EditText) findViewById(R.id.invite_code);
         et_password = (EditText) findViewById(R.id.et_password);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("普 通 注 册");
@@ -118,6 +120,10 @@ public class RegisterNormalActivity extends AppCompatActivity {
             ToastUtil.showToast(this, "请输入密码");
             return;
         }
+        if (invite_code.getText().toString().equals("邀请码,务必要填") || et_password.getText().toString().equals("")) {
+            ToastUtil.showToast(this, "请输入邀请码");
+            return;
+        }
         if (et_userPhonenumber.getText().toString().equals("请输入手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
             ToastUtil.showToast(this, "请输入正确位数的手机号码");
             return;
@@ -131,26 +137,39 @@ public class RegisterNormalActivity extends AppCompatActivity {
             }
         }
 
-        RootUser rootUser = new RootUser();
-        rootUser.setUsername(et_userPhonenumber.getText().toString());
-        rootUser.setPassword(et_password.getText().toString());
-        rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
-        rootUser.setUsername(et_userNick.getText().toString());
-
-        rootUser.signUp(new SaveListener<RootUser>() {
+        BmobQuery<RootUser> query = new BmobQuery<>();
+        query.addWhereEqualTo("username", "18950060293");
+        query.findObjects(new FindListener<RootUser>() {
             @Override
-            public void done(RootUser rootUser, BmobException e) {
+            public void done(List<RootUser> list, BmobException e) {
                 if (e == null) {
-                    ToastUtil.showToast(RegisterNormalActivity.this, "注册成功");
-                    if (rootUser != null) {
-                        CommonUtil.fecth(RegisterNormalActivity.this);
-                        ;
-                        RegisterNormalActivity.this.finish();
-                        ToastUtil.showToast(RegisterNormalActivity.this, "登录成功");
+                    if (list != null&&list.size()>0) {
+                        RootUser rootUser = new RootUser();
+                        rootUser.setUsername(et_userPhonenumber.getText().toString());
+                        rootUser.setPassword(et_password.getText().toString());
+                        rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+                        rootUser.setUsername(et_userNick.getText().toString());
+                        rootUser.signUp(new SaveListener<RootUser>() {
+                            @Override
+                            public void done(RootUser rootUser, BmobException e) {
+                                if (e == null) {
+                                    ToastUtil.showToast(RegisterNormalActivity.this, "注册成功");
+                                    if (rootUser != null) {
+                                        CommonUtil.fecth(RegisterNormalActivity.this);
+                                        RegisterNormalActivity.this.finish();
+                                        ToastUtil.showToast(RegisterNormalActivity.this, "登录成功");
+                                    }
+                                } else {
+                                    ToastUtil.showToast(RegisterNormalActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
+
+                                }
+                            }
+                        });
+                    } else {
+                        ToastUtil.showToast(RegisterNormalActivity.this, "邀请码错误");
                     }
                 } else {
-                    ToastUtil.showToast(RegisterNormalActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
-
+                    ToastUtil.showToast(RegisterNormalActivity.this, "验证异常");
                 }
             }
         });

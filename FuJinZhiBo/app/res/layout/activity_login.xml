@@ -31,7 +31,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
-                android:src="@drawable/phone" />
+                android:src="@drawable/phone"
+                android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/et_userPhonenumber"
@@ -45,7 +46,8 @@
                 android:hint="手机号"
                 android:inputType="number"
                 android:text=""
-                android:textColor="@color/black">
+                android:textColor="@color/black"
+                android:textSize="15sp">
 
                 <requestFocus />
             </EditText>
@@ -92,7 +94,7 @@
                 android:layout_width="38dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:checked="false" />
+                android:checked="true" />
         </RelativeLayout>
     </LinearLayout>
 

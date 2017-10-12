@@ -17,6 +17,7 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/yellowshape"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/commonViewHeight">
@@ -24,25 +25,26 @@
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="23dp"
-                android:layout_marginTop="7dp"
+                android:layout_height="30dp"
                 android:layout_marginLeft="17dp"
-                android:layout_height="35dp"
+                android:layout_marginTop="7dp"
                 android:background="@drawable/user" />
 
             <EditText
                 android:id="@+id/et_userNick"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
                 android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/imageView3"
                 android:background="@null"
                 android:ems="11"
                 android:gravity="center_vertical"
                 android:hint="用户名"
-                android:inputType="number"
+                android:inputType="text"
                 android:text=""
-                android:textColor="@color/black">
+                android:textColor="@color/black"
+                android:textSize="15sp">
 
                 <requestFocus />
             </EditText>
@@ -54,6 +56,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@color/gray" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/commonViewHeight">
@@ -61,12 +64,12 @@
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:src="@drawable/phone"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+                android:src="@drawable/phone" />
 
             <EditText
                 android:id="@+id/et_userPhonenumber"
@@ -80,7 +83,8 @@
                 android:hint="手机号"
                 android:inputType="number"
                 android:text=""
-                android:textColor="@color/black">
+                android:textColor="@color/black"
+                android:textSize="15sp">
 
                 <requestFocus />
             </EditText>
@@ -120,14 +124,52 @@
                 android:hint="密码"
                 android:inputType="textPassword"
                 android:text=""
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
             <CheckBox
                 android:id="@+id/isSetPswVisi"
                 android:layout_width="38dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:checked="false" />
+                android:checked="true" />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/gray" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/commonViewHeight">
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/password" />
+
+            <EditText
+                android:id="@+id/invite_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/imageView6"
+                android:background="@null"
+                android:ems="20"
+                android:gravity="center_vertical"
+                android:hint="邀请码,务必要填"
+                android:inputType="text"
+                android:text=""
+                android:textColor="@color/black"
+                android:textColorHint="@color/red_fa4"
+                android:textSize="15sp" />
+
         </RelativeLayout>
     </LinearLayout>
 
@@ -169,31 +211,31 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp">
 
         <CheckBox
             android:id="@+id/check_agree"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:checked="true"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:text="我同意用户协议"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/termofuse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:text="查看用户协议"
-            android:textColor="@color/red"
-            android:textSize="16sp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/termofuse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:text="查看用户协议"
+        android:layout_marginTop="5dp"
+        android:textSize="13sp" />
 
     <Button
         android:id="@+id/btn_verify_login"
@@ -210,14 +252,16 @@
         android:textSize="18sp" />
 
     <TextView
-        android:layout_marginTop="25dp"
         android:id="@+id/verify_fail"
-        android:layout_width="match_parent"
+        android:drawableLeft="@android:drawable/ic_menu_help"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="right"
-        android:gravity="right"
+        android:layout_gravity="right|center_vertical|bottom"
         android:layout_marginRight="15dp"
-        android:text="短信注册失败请点击这里"
-        android:textSize="16sp" />
+        android:layout_marginTop="25dp"
+        android:gravity="right"
+        android:textColor="@color/red_fa4"
+        android:visibility="gone"
+        android:text="验证码注册失\n败请点击这里"
+        android:textSize="13sp"/>
 </LinearLayout>
