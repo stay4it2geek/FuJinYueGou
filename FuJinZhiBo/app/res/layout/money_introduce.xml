@@ -7,15 +7,9 @@
     <com.act.quzhibo.view.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight" />
+        android:layout_height="@dimen/commonViewHeight" >
+    </com.act.quzhibo.view.TitleBarView>
 
-    <!--<com.act.quzhibo.view.ExpanbleCommonView-->
-    <!--android:id="@+id/expand_commonview"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:listSelector="@color/colorbg"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_marginBottom="80dp"-->
-    <!--android:layout_marginTop="@dimen/commonViewHeight" />-->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,23 +18,23 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="185dp"
+        android:layout_height="155dp"
         android:layout_gravity="center">
 
         <Button
             android:id="@+id/moneyway_btn"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="32dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
             android:background="@drawable/bg_circle_red"
-            android:paddingBottom="7dp"
+            android:gravity="center"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:paddingTop="7dp"
-            android:textColor="@color/white"
             android:text="呼朋唤友来赚钱"
-            android:textSize="17sp" />
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
     </RelativeLayout>
 
 </FrameLayout>

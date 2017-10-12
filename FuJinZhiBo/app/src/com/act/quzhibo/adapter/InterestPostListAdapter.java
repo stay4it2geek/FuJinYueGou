@@ -74,7 +74,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         final InterestPost post = datas.get(position);
         String nick = user.nick.replaceAll("\r|\n", "");
         holder.nickName.setText(nick);
-
         long l = System.currentTimeMillis() - Long.parseLong(datas.get(position).ctime);
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
@@ -132,7 +131,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
 
         if(isNeedBlur){
             holder.pName.setVisibility(View.VISIBLE);
-            holder.pName.setText("");
+            holder.pName.setText(post.sName);
         }
         if (datas.get(position).totalImages != null && Integer.parseInt(datas.get(position).totalImages) > 0) {
             holder.imgGridview.setVisibility(View.VISIBLE);

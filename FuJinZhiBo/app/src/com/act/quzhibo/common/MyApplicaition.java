@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.act.quzhibo.R;
+import com.elbbbird.android.socialsdk.SocialSDK;
 import com.mabeijianxi.smallvideorecord2.DeviceUtils;
 import com.mabeijianxi.smallvideorecord2.JianXiCamera;
 
@@ -25,7 +26,6 @@ public class MyApplicaition extends Application {
     public static final LinkedHashMap<String, Integer> femaleKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, Integer> maleKeySrc = new LinkedHashMap();
 
-
     public void onCreate() {
         super.onCreate();
         BmobConfig config = new BmobConfig.Builder(this)
@@ -36,7 +36,6 @@ public class MyApplicaition extends Application {
                 .build();
         Bmob.initialize(config);
         BP.init("e37264d2646046d9158d3800afd548f3");
-
         // 设置拍摄视频缓存路径
         File dcim = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
         if (DeviceUtils.isZte()) {

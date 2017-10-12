@@ -101,8 +101,8 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="13dp"
             android:text=""
-            android:textColor="#000"
-            android:textSize="18sp" />
+            android:background="@drawable/bg_round_yellow"
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <RelativeLayout

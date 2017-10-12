@@ -39,7 +39,7 @@ public class InterestPostListFragment extends BackHandledFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_interest_post, null, false);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.interest_post_layout, null, false);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         pid = ((SquareActivity) getActivity()).getPid();
         recyclerView = (XRecyclerView) view.findViewById(R.id.interest_post_list);

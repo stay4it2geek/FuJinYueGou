@@ -43,7 +43,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_interest_post);
+        setContentView(R.layout.interest_post_layout);
         findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
@@ -56,7 +56,6 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
         });
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
-        userId = getIntent().getStringExtra("PLATES_NAME");
         recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);

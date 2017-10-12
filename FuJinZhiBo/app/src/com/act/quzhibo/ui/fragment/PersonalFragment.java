@@ -37,7 +37,7 @@ import com.act.quzhibo.ui.activity.ClipImageActivity;
 import com.act.quzhibo.ui.activity.GetQuCoinsActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
-import com.act.quzhibo.ui.activity.MakeMoneyActivity;
+import com.act.quzhibo.ui.activity.ShareForMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
@@ -186,7 +186,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
 
             case R.id.makemoneyLayoout:
-                getActivity().startActivity(new Intent(getActivity(), MakeMoneyActivity.class));
+                getActivity().startActivity(new Intent(getActivity(), ShareForMoneyActivity.class));
                 break;
             case R.id.get_vip:
                 getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
