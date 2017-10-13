@@ -14,8 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/commonViewHeight"
-        android:background="@drawable/promotion_bg" />
-
+        android:background="@drawable/promotion_bg"
+        android:id="@+id/imageView4" />
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="155dp"
@@ -36,5 +36,6 @@
             android:textSize="14sp" />
 
     </RelativeLayout>
+
 
 </FrameLayout>

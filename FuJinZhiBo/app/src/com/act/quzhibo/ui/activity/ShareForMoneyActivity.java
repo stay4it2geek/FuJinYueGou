@@ -73,14 +73,7 @@ public class ShareForMoneyActivity extends FragmentActivity {
         PromptButton btnQrcode = new PromptButton("分享到陌陌、探探、遇见、美丽约等", new PromptButtonListener() {
             @Override
             public void onClick(PromptButton promptButton) {
-//                String content = mEt.getText().toString().trim();
-//                Bitmap bitmap = null;
-//                try {
-//                    bitmap = BitmapUtils.create2DCode(content);
-//                    mImage.setImageBitmap(bitmap);
-//                } catch (WriterException e) {
-//                    e.printStackTrace();
-//                }
+//                public static Bitmap syncEncodeQRCode(String content, int size, int foregroundColor, Bitmap logo)
                 promptDialog.dismiss();
             }
         });
@@ -93,18 +86,9 @@ public class ShareForMoneyActivity extends FragmentActivity {
             }
         });
 
-        PromptButton btnWechatShare = new PromptButton("分享到微信", new PromptButtonListener() {
-            @Override
-            public void onClick(PromptButton promptButton) {
-//                SocialSDK.setDebugMode(false);
-//                SocialSDK.shareToWeChat(ShareForMoneyActivity.this, "wx3ecc7ffe590fd845", scene);
-                promptDialog.dismiss();
-            }
-        });
-        btnWechatShare.setTextColor(getResources().getColor(R.color.darkgray));
         btnQQShare.setTextColor(getResources().getColor(R.color.darkgray));
         cancle.setTextColor(Color.parseColor("#0076ff"));
-        promptDialog.showAlertSheet("", true, cancle, btnWechatShare,btnQQShare, btnQrcode);
+        promptDialog.showAlertSheet("", true, cancle, btnQQShare, btnQrcode);
     }
 
 
