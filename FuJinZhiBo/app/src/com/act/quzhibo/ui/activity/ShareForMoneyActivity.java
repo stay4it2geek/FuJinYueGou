@@ -57,7 +57,7 @@ public class ShareForMoneyActivity extends FragmentActivity {
             "http://cdn.v2ex.co/gravatar/becb0d5c59469a34a54156caef738e90?s=73&d=retro", "http://www.v2ex.com/t/238165");
 
     private void selectShareWay() {
-
+        promptDialog.getAlertDefaultBuilder().sheetCellPad(5).round(10);
         if(BmobUser.getCurrentUser(RootUser.class).vipConis<3000){
             promptDialog.showWarn("您趣币不足,不是中级趣会员以上级别",true);
             return;
@@ -70,14 +70,14 @@ public class ShareForMoneyActivity extends FragmentActivity {
             }
         });
 
-        PromptButton btnQrcode = new PromptButton("分享到陌陌、探探、遇见、美丽约等", new PromptButtonListener() {
+        PromptButton btnQrcode = new PromptButton("分享到陌陌、探探、遇见", new PromptButtonListener() {
             @Override
             public void onClick(PromptButton promptButton) {
 //                public static Bitmap syncEncodeQRCode(String content, int size, int foregroundColor, Bitmap logo)
                 promptDialog.dismiss();
             }
         });
-        PromptButton btnQQShare = new PromptButton("分享到QQ", new PromptButtonListener() {
+        PromptButton btnQQShare = new PromptButton("分享到老司机QQ群", new PromptButtonListener() {
             @Override
             public void onClick(PromptButton promptButton) {
                 SocialSDK.setDebugMode(false);
@@ -101,7 +101,7 @@ public class ShareForMoneyActivity extends FragmentActivity {
                 break;
             case ShareBusEvent.TYPE_FAILURE:
                 Exception e = event.getException();
-                Log.e("TAG", "onShareResult#ShareBusEvent.TYPE_FAILURE " + e.toString());
+//                Log.e("TAG", "onShareResult#ShareBusEvent.TYPE_FAILURE " + e.toString());
                 break;
 
             case ShareBusEvent.TYPE_CANCEL:

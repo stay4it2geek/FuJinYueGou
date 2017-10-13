@@ -228,52 +228,48 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         BmobQuery<RootUser> query=new BmobQuery<>();
-        query.addWhereEqualTo("objectId", invite_code.getText().toString().trim()+"");
-        query.findObjects(new FindListener<RootUser>() {
+        query.getObject(invite_code.getText().toString().toString(), new QueryListener<RootUser>() {
             @Override
-            public void done(List<RootUser> list, BmobException e) {
-                if(e==null){
-                    if(list!=null){
-                        BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    RootUser rootUser = new RootUser();
-                                    rootUser.setUsername(et_userNick.getText().toString());
-                                    rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
-                                    rootUser.setMobilePhoneNumberVerified(true);
-                                    ToastUtil.showToast(RegisterActivity.this, "验证成功，自动注册登录中......");
-                                    rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new LogInListener<RootUser>() {
+            public void done(RootUser user, BmobException e) {
+                if(user!=null){
+                    BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                RootUser rootUser = new RootUser();
+                                rootUser.setUsername(et_userNick.getText().toString());
+                                rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+                                rootUser.setMobilePhoneNumberVerified(true);
+                                ToastUtil.showToast(RegisterActivity.this, "验证成功，自动注册登录中......");
+                                rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new LogInListener<RootUser>() {
 
-                                        @Override
-                                        public void done(RootUser rootUser, BmobException e) {
-                                            if (rootUser != null) {
-                                                CommonUtil.fecth(RegisterActivity.this);
-                                                RegisterActivity.this.finish();
-                                                ToastUtil.showToast(RegisterActivity.this, "登录成功");
-                                            } else {
-                                                findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
-                                                ToastUtil.showToast(RegisterActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
+                                    @Override
+                                    public void done(RootUser user, BmobException e) {
+                                        if (user != null) {
+                                            CommonUtil.fecth(RegisterActivity.this);
+                                            ToastUtil.showToast(RegisterActivity.this, "登录成功");
+                                            RegisterActivity.this.finish();
+                                        } else {
+                                            findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
+                                            ToastUtil.showToast(RegisterActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
 
-                                            }
                                         }
+                                    }
 
-                                    });
-                                } else {
-                                    findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
-                                    ToastUtil.showToast(RegisterActivity.this, "验证失败，原因是：" + e.getLocalizedMessage());
+                                });
+                            } else {
+                                findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
+                                ToastUtil.showToast(RegisterActivity.this, "验证失败，原因是：" + e.getLocalizedMessage());
 
-                                }
                             }
-                        });
-                    }else{
-                        ToastUtil.showToast(RegisterActivity.this,"邀请码错误");
-                    }
+                        }
+                    });
                 }else{
                     ToastUtil.showToast(RegisterActivity.this,"邀请码错误");
                 }
             }
         });
+
 
 
 

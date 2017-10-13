@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#eeeeee"
     android:orientation="vertical">
 
@@ -20,30 +21,32 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <LinearLayout
-            android:id="@+id/sort"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:layout_gravity="right|bottom"
-            android:orientation="vertical">
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/showMenuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="5dp"
+            app:fab_addButtonColorNormal="@color/tabline"
+            app:fab_addButtonColorPressed="@color/lightorange"
+            app:fab_addButtonPlusIconColor="@color/darkorange"
+            app:fab_addButtonSize="mini"
+            app:fab_expandDirection="up"
+            app:fab_labelStyle="@style/menu_labels_style"
+            app:layout_anchorGravity="bottom">
 
-            <View
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:background="@android:drawable/ic_menu_sort_by_size" />
-
-            <TextView
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="日期排序"
-                android:textColor="@color/colorAccent"
-                android:textSize="10sp" />
+                android:padding="4dp"
+                app:fab_colorNormal="@color/tabline"
+                app:fab_colorPressed="@color/lightorange"
+                app:fab_icon="@android:drawable/ic_menu_sort_by_size"
+                app:fab_size="mini"
+                app:fab_title="排序" />
 
-        </LinearLayout>
-
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
         <com.act.quzhibo.view.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"

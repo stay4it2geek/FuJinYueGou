@@ -259,7 +259,13 @@ public class MyPostListActivity extends AppCompatActivity {
                                 } else if (post.type.equals("3")) {
                                     String[] urls = imgs.toArray(new String[imgs.size()]);
 
-                                    deleteImgFiles(urls);
+                                    BmobFile.deleteBatch(urls, new DeleteBatchListener() {
+
+                                        @Override
+                                        public void done(String[] failUrls, BmobException e) {
+
+                                        }
+                                    });
                                 }
 
                                 post.delete(new UpdateListener() {
@@ -288,15 +294,6 @@ public class MyPostListActivity extends AppCompatActivity {
         }
     }
 
-    private void deleteImgFiles(String[] urls) {
-        BmobFile.deleteBatch(urls, new DeleteBatchListener() {
-
-            @Override
-            public void done(String[] failUrls, BmobException e) {
-                deleteImgFiles(failUrls);
-            }
-        });
-    }
 
     @Override
     protected void onResume() {

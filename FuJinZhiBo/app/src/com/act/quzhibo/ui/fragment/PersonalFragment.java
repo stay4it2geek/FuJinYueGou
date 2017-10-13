@@ -257,8 +257,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                             startActivity(new Intent(getActivity(), WhoLikeThenSeeMeActivity.class));
                         }
                     });
-                } else {
-
                 }
             }
         });
@@ -278,7 +276,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis != null && rootUser.vipConis > 0 ? "已有" + rootUser.vipConis + "趣币" : "您趣币不足");
             String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex + "性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age + "岁");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
-            if(!TextUtils.isEmpty(rootUser.vipConis+"")){
+            if (rootUser.vipConis != null && rootUser.vipConis > 0) {
                 if (0 < rootUser.vipConis && rootUser.vipConis < 3000) {
                     ((TextView) view.findViewById(R.id.vipLevel)).setText("初级趣会员");
                 } else if (3000 < rootUser.vipConis && rootUser.vipConis < 5000) {
@@ -287,61 +285,64 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     ((TextView) view.findViewById(R.id.vipLevel)).setText("特级趣会员");
                 } else if (rootUser.vipConis > 8000) {
                     ((TextView) view.findViewById(R.id.vipLevel)).setText("超级趣会员");
-
                 }
             }
 
 
-            if (!TextUtils.isEmpty(rootUser.sex)&&rootUser.sex.equals("男")) {
-                if (0 < rootUser.vipConis && rootUser.vipConis < 1000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_0);
-                } else if (1000 < rootUser.vipConis && rootUser.vipConis < 2000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_1);
-                } else if (2000 < rootUser.vipConis && rootUser.vipConis < 3000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_2);
-                } else if (3000 < rootUser.vipConis && rootUser.vipConis < 4000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_3);
-                } else if (4000 < rootUser.vipConis && rootUser.vipConis < 5000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_4);
-                } else if (5000 < rootUser.vipConis && rootUser.vipConis < 6000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_5);
-                } else if (6000 < rootUser.vipConis && rootUser.vipConis < 7000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_6);
-                } else if (7000 < rootUser.vipConis && rootUser.vipConis < 7000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_7);
-                } else if (8000 < rootUser.vipConis && rootUser.vipConis < 9000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_8);
-                } else if (9000 < rootUser.vipConis && rootUser.vipConis < 10000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_9);
-                } else if (rootUser.vipConis > 10000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_10);
+            if (!TextUtils.isEmpty(rootUser.sex) && rootUser.sex.equals("男")) {
+                if (rootUser.vipConis != null && rootUser.vipConis > 0) {
+                    if (0 < rootUser.vipConis && rootUser.vipConis < 1000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_0);
+                    } else if (1000 < rootUser.vipConis && rootUser.vipConis < 2000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_1);
+                    } else if (2000 < rootUser.vipConis && rootUser.vipConis < 3000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_2);
+                    } else if (3000 < rootUser.vipConis && rootUser.vipConis < 4000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_3);
+                    } else if (4000 < rootUser.vipConis && rootUser.vipConis < 5000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_4);
+                    } else if (5000 < rootUser.vipConis && rootUser.vipConis < 6000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_5);
+                    } else if (6000 < rootUser.vipConis && rootUser.vipConis < 7000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_6);
+                    } else if (7000 < rootUser.vipConis && rootUser.vipConis < 7000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_7);
+                    } else if (8000 < rootUser.vipConis && rootUser.vipConis < 9000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_8);
+                    } else if (9000 < rootUser.vipConis && rootUser.vipConis < 10000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_9);
+                    } else if (rootUser.vipConis > 10000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_male_10);
 
+                    }
                 }
             }
-            if (!TextUtils.isEmpty(rootUser.sex)&&rootUser.sex.equals("女")) {
-                if (0 < rootUser.vipConis && rootUser.vipConis < 1000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_0);
-                } else if (1000 < rootUser.vipConis && rootUser.vipConis < 2000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_1);
-                } else if (2000 < rootUser.vipConis && rootUser.vipConis < 3000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_2);
-                } else if (3000 < rootUser.vipConis && rootUser.vipConis < 4000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_3);
-                } else if (4000 < rootUser.vipConis && rootUser.vipConis < 5000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_4);
-                } else if (5000 < rootUser.vipConis && rootUser.vipConis < 6000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_5);
-                } else if (6000 < rootUser.vipConis && rootUser.vipConis < 7000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_6);
-                } else if (7000 < rootUser.vipConis && rootUser.vipConis < 7000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_7);
-                } else if (8000 < rootUser.vipConis && rootUser.vipConis < 9000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_8);
-                } else if (9000 < rootUser.vipConis && rootUser.vipConis < 10000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_9);
-                } else if (rootUser.vipConis > 10000) {
-                    view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_10);
+            if (!TextUtils.isEmpty(rootUser.sex) && rootUser.sex.equals("女")) {
+                if (rootUser.vipConis != null && rootUser.vipConis > 0) {
+                    if (0 < rootUser.vipConis && rootUser.vipConis < 1000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_0);
+                    } else if (1000 < rootUser.vipConis && rootUser.vipConis < 2000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_1);
+                    } else if (2000 < rootUser.vipConis && rootUser.vipConis < 3000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_2);
+                    } else if (3000 < rootUser.vipConis && rootUser.vipConis < 4000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_3);
+                    } else if (4000 < rootUser.vipConis && rootUser.vipConis < 5000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_4);
+                    } else if (5000 < rootUser.vipConis && rootUser.vipConis < 6000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_5);
+                    } else if (6000 < rootUser.vipConis && rootUser.vipConis < 7000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_6);
+                    } else if (7000 < rootUser.vipConis && rootUser.vipConis < 7000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_7);
+                    } else if (8000 < rootUser.vipConis && rootUser.vipConis < 9000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_8);
+                    } else if (9000 < rootUser.vipConis && rootUser.vipConis < 10000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_9);
+                    } else if (rootUser.vipConis > 10000) {
+                        view.findViewById(R.id.vip_levelimg).setBackgroundResource(R.drawable.level_female_10);
 
+                    }
                 }
             }
             circleImageView = (CircleImageView) view.findViewById(R.id.circle_avatar);
@@ -379,11 +380,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             public void onClick(PromptButton promptButton) {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    //申请WRITE_EXTERNAL_STORAGE权限
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
                 } else {
-                    //跳转到调用系统相机
                     gotoCamera();
                 }
             }
@@ -391,14 +390,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         PromptButton btnPhoto = new PromptButton("从相册选取", new PromptButtonListener() {
             @Override
             public void onClick(PromptButton promptButton) {
-                //权限判断
+
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    //申请READ_EXTERNAL_STORAGE权限
+
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                             READ_EXTERNAL_STORAGE_REQUEST_CODE);
                 } else {
-                    //跳转到相册
+
                     gotoPhoto();
                 }
             }
@@ -423,18 +422,13 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    /**
-     * 跳转到相册
-     */
     private void gotoPhoto() {
         //跳转到调用系统图库
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "请选择图片"), REQUEST_PICK);
     }
 
-    /**
-     * 跳转到照相机
-     */
+
     private void gotoCamera() {
         //创建拍照存储的图片文件
         tempFile = new File(FileUtil.checkDirPath(Environment.getExternalStorageDirectory().getPath() + "/image/"), System.currentTimeMillis() + ".jpg");

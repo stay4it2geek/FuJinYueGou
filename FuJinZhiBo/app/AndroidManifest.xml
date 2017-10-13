@@ -30,10 +30,13 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+
     <provider
         android:name="android.support.v4.content.FileProvider"
         android:authorities="com.act.quzhibo.FileProvider"
@@ -49,6 +52,28 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <meta-data
+            android:name="Bmob_APP_KEY"
+            android:value="227399ddef86ccfa859443473306c43a" />
+
+        <receiver android:name="cn.bmob.newim.core.ConnectChangeReceiver" >
+            <intent-filter>
+                <action android:name="cn.bmob.action.RECONNECT" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="cn.bmob.newim.core.service.BmobIMService"
+            android:process=":bmobcore" />
+        <service
+            android:name="cn.bmob.newim.core.service.NotifyService"
+            android:process=":bmobcore" />
+        <service android:name="cn.bmob.newim.core.service.ReConnectService" />
+        <service android:name="cn.bmob.newim.core.service.HeartBeatService" />
+
+
         <activity
             android:name="com.act.quzhibo.ui.activity.WelcomeActivity"
             android:screenOrientation="portrait">
@@ -58,6 +83,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.mabeijianxi.smallvideorecord2.MediaRecorderActivity" />
+
         <activity
             android:name="com.act.quzhibo.ui.activity.CourseDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -70,8 +96,10 @@
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="tencent1104664609" />
             </intent-filter>
         </activity>
@@ -100,8 +128,8 @@
             android:name="com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
-            android:theme="@style/BGAPPTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/BGAPPTheme" />
         <activity
             android:name="com.act.quzhibo.ui.activity.CheckOutMoneyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
@@ -105,17 +106,10 @@ public class RegisterNormalActivity extends AppCompatActivity {
         }
 
         if (et_userNick.getText().toString().equals("用户名") || et_userNick.getText().toString().equals("") || et_userNick.getText().length() > 20) {
-            ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
+            ToastUtil.showToast(this, "用户名必须是少于20个文字或者数字的组合");
             return;
-        } else {
-            String regex = "^[0-9a-zA_Z]+$";
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(et_userNick.getText().toString());
-            if (!m.find()) {
-                ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
-                return;
-            }
         }
+
         if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
             ToastUtil.showToast(this, "请输入密码");
             return;
@@ -138,38 +132,33 @@ public class RegisterNormalActivity extends AppCompatActivity {
         }
 
         BmobQuery<RootUser> query = new BmobQuery<>();
-        query.addWhereEqualTo("username", "18950060293");
-        query.findObjects(new FindListener<RootUser>() {
+        query.getObject(invite_code.getText().toString().toString(), new QueryListener<RootUser>() {
             @Override
-            public void done(List<RootUser> list, BmobException e) {
-                if (e == null) {
-                    if (list != null&&list.size()>0) {
-                        RootUser rootUser = new RootUser();
-                        rootUser.setUsername(et_userPhonenumber.getText().toString());
-                        rootUser.setPassword(et_password.getText().toString());
-                        rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
-                        rootUser.setUsername(et_userNick.getText().toString());
-                        rootUser.signUp(new SaveListener<RootUser>() {
-                            @Override
-                            public void done(RootUser rootUser, BmobException e) {
-                                if (e == null) {
-                                    ToastUtil.showToast(RegisterNormalActivity.this, "注册成功");
-                                    if (rootUser != null) {
-                                        CommonUtil.fecth(RegisterNormalActivity.this);
-                                        RegisterNormalActivity.this.finish();
-                                        ToastUtil.showToast(RegisterNormalActivity.this, "登录成功");
-                                    }
-                                } else {
-                                    ToastUtil.showToast(RegisterNormalActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
-
+            public void done(RootUser user, BmobException e) {
+                if(user!=null){
+                    RootUser rootUser = new RootUser();
+                    rootUser.setUsername(et_userPhonenumber.getText().toString());
+                    rootUser.setPassword(et_password.getText().toString());
+                    rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+                    rootUser.setUsername(et_userNick.getText().toString());
+                    rootUser.signUp(new SaveListener<RootUser>() {
+                        @Override
+                        public void done(RootUser user, BmobException e) {
+                            if (e == null) {
+                                ToastUtil.showToast(RegisterNormalActivity.this, "注册成功");
+                                if (user != null) {
+                                    ToastUtil.showToast(RegisterNormalActivity.this, "登录成功");
+                                    CommonUtil.fecth(RegisterNormalActivity.this);
+                                    RegisterNormalActivity.this.finish();
                                 }
+                            } else {
+                                ToastUtil.showToast(RegisterNormalActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
+
                             }
-                        });
-                    } else {
-                        ToastUtil.showToast(RegisterNormalActivity.this, "邀请码错误");
-                    }
+                        }
+                    });
                 } else {
-                    ToastUtil.showToast(RegisterNormalActivity.this, "验证异常");
+                    ToastUtil.showToast(RegisterNormalActivity.this, "邀请码错误");
                 }
             }
         });

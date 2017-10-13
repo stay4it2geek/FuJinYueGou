@@ -1,6 +1,8 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +22,7 @@ import com.act.quzhibo.entity.Room;
 import com.act.quzhibo.entity.RoomParentList;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -90,7 +93,7 @@ public class ShowerListFragment extends BackHandledFragment {
 
         categoryId = getArguments().getString(Constants.CATEGORY_ID);
         categoryTitle = getArguments().getString(Constants.CATEGORY_TITLE);
-        if (categoryTitle.equals("手机达人")||categoryTitle.contains("手机")) {
+        if (categoryTitle.equals("手机达人") || categoryTitle.contains("手机")) {
             offset = "20";
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
             gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -122,6 +125,23 @@ public class ShowerListFragment extends BackHandledFragment {
                         }
                     });
                 }
+            }
+        });
+
+        view.findViewById(R.id.openShow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentDialog.newInstance(false, "温馨提示", "系统升级维护中,暂时关闭开播\n通道,开放时间请等待系统通知", "我知道了", "", "", "", true, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegtiveClick(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).show(getFragmentManager(),"");
             }
         });
         getData(categoryId, "0", Constants.REFRESH);

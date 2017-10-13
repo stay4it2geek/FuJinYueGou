@@ -74,7 +74,6 @@
                 app:fab_title="照片" />
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-
         <LinearLayout
             android:id="@+id/sort"
             android:layout_width="50dp"
@@ -102,6 +101,7 @@
 
         <com.act.quzhibo.view.LoadNetView
             android:id="@+id/loadview"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff" />

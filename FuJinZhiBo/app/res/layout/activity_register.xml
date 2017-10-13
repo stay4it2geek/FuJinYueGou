@@ -167,7 +167,7 @@
                 android:inputType="text"
                 android:text=""
                 android:textColor="@color/black"
-                android:textColorHint="@color/red_fa4"
+                android:textColorHint="@color/red_light"
                 android:textSize="15sp" />
 
         </RelativeLayout>
@@ -260,7 +260,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginTop="25dp"
         android:gravity="right"
-        android:textColor="@color/red_fa4"
+        android:textColor="@color/red_light"
         android:visibility="gone"
         android:text="验证码注册失\n败请点击这里"
         android:textSize="13sp"/>
