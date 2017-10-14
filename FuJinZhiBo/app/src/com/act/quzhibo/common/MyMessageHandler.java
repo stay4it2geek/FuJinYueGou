@@ -16,7 +16,7 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.model.UserModel;
 import com.act.quzhibo.model.i.UpdateCacheListener;
-import com.act.quzhibo.ui.activity.MainActivity;
+import com.act.quzhibo.ui.activity.ChatMainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import java.util.List;
@@ -102,7 +102,7 @@ public class MyMessageHandler extends BmobIMMessageHandler {
     private void processSDKMessage(BmobIMMessage msg, MessageEvent event) {
         if (BmobNotificationManager.getInstance(context).isShowNotification()) {
             //如果需要显示通知栏，SDK提供以下两种显示方式：
-            Intent pendingIntent = new Intent(context, MainActivity.class);
+            Intent pendingIntent = new Intent(context, ChatMainActivity.class);
             pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
@@ -155,7 +155,7 @@ public class MyMessageHandler extends BmobIMMessageHandler {
      * @param friend
      */
     private void showAddNotify(NewFriend friend) {
-        Intent pendingIntent = new Intent(context, MainActivity.class);
+        Intent pendingIntent = new Intent(context, ChatMainActivity.class);
         pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         //这里可以是应用图标，也可以将聊天头像转成bitmap
         Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
@@ -170,7 +170,7 @@ public class MyMessageHandler extends BmobIMMessageHandler {
      * @param agree
      */
     private void showAgreeNotify(BmobIMUserInfo info, AgreeAddFriendMessage agree) {
-        Intent pendingIntent = new Intent(context, MainActivity.class);
+        Intent pendingIntent = new Intent(context, ChatMainActivity.class);
         pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
         BmobNotificationManager.getInstance(context).showNotification(largeIcon, info.getName(), agree.getMsg(), agree.getMsg(), pendingIntent);

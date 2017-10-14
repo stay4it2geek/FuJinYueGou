@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 
@@ -53,8 +54,7 @@ public class SendVideoHolder extends BaseViewHolder implements View.OnClickListe
     final BmobIMMessage message = (BmobIMMessage)o;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     final BmobIMUserInfo info = message.getBmobIMUserInfo();
-//    ImageLoaderFactory.getLoader().loadAvator(iv_avatar,info != null ? info.getAvatar() : null, R.mipmap.head);
-
+    Glide.with(context).load(info != null ? info.getAvatar() : null).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_avatar);
     String time = dateFormat.format(message.getCreateTime());
     String content = message.getContent();
     tv_message.setText("发送的视频文件："+content);

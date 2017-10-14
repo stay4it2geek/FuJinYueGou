@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.model.UserModel;
 import com.act.quzhibo.ui.activity.ChatActivity;
+import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.orhanobut.logger.Logger;
@@ -34,16 +36,13 @@ import butterknife.ButterKnife;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMUserInfo;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * 联系人界面
- *
- * @author :smile
- * @project:ContactFragment
- * @date :2016-04-27-14:23
  */
 public class ContactFragment extends BaseFragment {
 
@@ -58,39 +57,45 @@ public class ContactFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_conversation, container, false);
-//        initNaviView();
         ButterKnife.bind(this, rootView);
-        IMutlipleItem<Friend> mutlipleItem = new IMutlipleItem<Friend>() {
+            IMutlipleItem<Friend> mutlipleItem = new IMutlipleItem<Friend>() {
 
-            @Override
-            public int getItemViewType(int postion, Friend friend) {
-                if (postion == 0) {
-                    return ContactAdapter.TYPE_NEW_FRIEND;
-                } else {
-                    return ContactAdapter.TYPE_ITEM;
+                @Override
+                public int getItemViewType(int postion, Friend friend) {
+                    if (postion == 0) {
+                        return ContactAdapter.TYPE_NEW_FRIEND;
+                    } else {
+                        return ContactAdapter.TYPE_ITEM;
+                    }
                 }
-            }
 
-            @Override
-            public int getItemLayoutId(int viewtype) {
-                if (viewtype == ContactAdapter.TYPE_NEW_FRIEND) {
-                    return R.layout.header_new_friend;
-                } else {
-                    return R.layout.item_contact;
+                @Override
+                public int getItemLayoutId(int viewtype) {
+                    if (viewtype == ContactAdapter.TYPE_NEW_FRIEND) {
+                        return R.layout.header_new_friend;
+                    } else {
+                        return R.layout.item_contact;
+                    }
                 }
-            }
 
+                @Override
+                public int getItemCount(List<Friend> list) {
+                    return list.size() + 1;
+                }
+            };
+            adapter = new ContactAdapter(getActivity(), mutlipleItem, null);
+            rc_view.setAdapter(adapter);
+            layoutManager = new LinearLayoutManager(getActivity());
+            rc_view.setLayoutManager(layoutManager);
+            sw_refresh.setEnabled(true);
+            setListener();
+
+        rootView.findViewById(R.id.goToLogin).setOnClickListener(new View.OnClickListener() {
             @Override
-            public int getItemCount(List<Friend> list) {
-                return list.size() + 1;
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
             }
-        };
-        adapter = new ContactAdapter(getActivity(), mutlipleItem, null);
-        rc_view.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(getActivity());
-        rc_view.setLayoutManager(layoutManager);
-        sw_refresh.setEnabled(true);
-        setListener();
+        });
         return rootView;
     }
 
@@ -112,18 +117,23 @@ public class ContactFragment extends BaseFragment {
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-                if (position == 0) {//跳转到新朋友页面
-                    startActivity(NewFriendActivity.class, null);
+                if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+                    if (position == 0) {//跳转到新朋友页面
+                        startActivity(NewFriendActivity.class, null);
+                    } else {
+                        Friend friend = adapter.getItem(position);
+                        RootUser user = friend.getFriendUser();
+                        BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
+                        //TODO 会话：4.1、创建一个常态会话入口，好友聊天
+                        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("chat", conversationEntrance);
+                        startActivity(ChatActivity.class, bundle);
+                    }
                 } else {
-                    Friend friend = adapter.getItem(position);
-                    RootUser user = friend.getFriendUser();
-                    BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
-                    //TODO 会话：4.1、创建一个常态会话入口，好友聊天
-                    BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("c", conversationEntrance);
-                    startActivity(ChatActivity.class, bundle);
+                    toast(BmobIM.getInstance().getCurrentStatus().getMsg());
                 }
+
             }
 
             @Override
@@ -154,8 +164,12 @@ public class ContactFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        sw_refresh.setRefreshing(true);
-        query();
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
+                rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            sw_refresh.setRefreshing(true);
+            query();
+        }
     }
 
     @Override

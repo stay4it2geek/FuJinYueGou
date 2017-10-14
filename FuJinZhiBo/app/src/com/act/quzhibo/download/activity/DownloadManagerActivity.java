@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class DownloadManagerActivity extends TabSlideDifferentBaseActivity {
 
     @Override
-    public boolean getActivityType() {
+    public boolean getIsMineActivityType() {
         return false;
     }
 

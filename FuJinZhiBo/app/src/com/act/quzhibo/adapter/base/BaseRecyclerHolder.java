@@ -1,11 +1,15 @@
 package com.act.quzhibo.adapter.base;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.act.quzhibo.R;
+import com.bumptech.glide.Glide;
 
 
 /**
@@ -15,17 +19,16 @@ import android.widget.TextView;
 public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
 
     private final SparseArray<View> mViews;
+    private final Context context;
     public  int layoutId;
 
-    public BaseRecyclerHolder(int layoutId,View itemView) {
+    public BaseRecyclerHolder(Context context, int layoutId, View itemView) {
         super(itemView);
         this.layoutId =layoutId;
+        this.context =context;
         this.mViews = new SparseArray<>(8);
     }
 
-    public SparseArray<View> getAllView() {
-        return mViews;
-    }
 
     /**
      * @param viewId
@@ -116,7 +119,8 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
      */
     public BaseRecyclerHolder setImageView(String avatar, int defaultRes, int viewId) {
         ImageView iv = getView(viewId);
-//        ImageLoaderFactory.getLoader().loadAvator(iv,avatar, defaultRes);
+        Glide.with(context).load(avatar).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv);
+
         return this;
     }
 }

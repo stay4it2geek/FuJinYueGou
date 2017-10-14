@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.util.TimeUtil;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -55,7 +56,8 @@ public class ConversationHolder extends BaseViewHolder {
           tv_recent_time.setText(TimeUtil.getChatTime(false, lastMsg.getCreateTime()));
       }
       //会话图标
-//      ViewUtil.setAvatar(conversation.getConversationIcon(), R.mipmap.head, iv_recent_avatar);
+      Glide.with(context).load(conversation.getConversationIcon()).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_recent_avatar);
+
       //会话标题
       tv_recent_name.setText(conversation.getConversationTitle());
       //TODO 会话：4.3、查询指定会话下的未读消息数

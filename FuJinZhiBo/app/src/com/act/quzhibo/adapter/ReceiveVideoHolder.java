@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 
@@ -45,7 +46,7 @@ public class ReceiveVideoHolder extends BaseViewHolder {
     String time = dateFormat.format(message.getCreateTime());
     tv_time.setText(time);
     final BmobIMUserInfo info = message.getBmobIMUserInfo();
-//    ImageLoaderFactory.getLoader().loadAvator(iv_avatar,info != null ? info.getAvatar() : null, R.mipmap.head);
+    Glide.with(context).load(info != null ? info.getAvatar() : null).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_avatar);
     String content =  message.getContent();
     tv_message.setText("接收到的视频文件："+content);
     iv_avatar.setOnClickListener(new View.OnClickListener() {

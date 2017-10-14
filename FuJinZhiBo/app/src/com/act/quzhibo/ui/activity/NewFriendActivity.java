@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.act.quzhibo.R;
@@ -24,14 +25,11 @@ import butterknife.Bind;
 /**
  * 新朋友
  *
- * @author :smile
- * @project:NewFriendActivity
- * @date :2016-01-25-18:23
  */
 public class NewFriendActivity extends BaseActivity {
 
     @Bind(R.id.ll_root)
-    LinearLayout ll_root;
+    FrameLayout ll_root;
     @Bind(R.id.rc_view)
     RecyclerView rc_view;
     @Bind(R.id.sw_refresh)

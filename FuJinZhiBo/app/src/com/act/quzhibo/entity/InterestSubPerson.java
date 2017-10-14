@@ -17,5 +17,5 @@ public class InterestSubPerson extends InterestParentPerson {
     public String vipType;
     public String distance;
     public String userType;
-    public String seeMeFlag;
+    public RootUser user;
 }

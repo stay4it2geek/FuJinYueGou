@@ -29,10 +29,10 @@ import java.util.List;
 public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
-    private String[] mTitles = {"课程", "直播", "广场", "钱袋子","聊天", "我的"};
+    private String[] mTitles = {"课程", "直播", "广场", "钱袋子", "聊天", "我的"};
     private String[] mTitlesSpecial = {"课程", "广场", "我的"};
 
-    private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.money, R.drawable.chat,R.drawable.mine};
+    private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.money, R.drawable.chat, R.drawable.mine};
 
     private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.money_s, R.drawable.chat_s, R.drawable.mine_s};
 
@@ -62,12 +62,12 @@ public class TabMainActivity extends TabActivity {
             tabHost.addTab(tabHost.newTabSpec("广场")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
-            tabHost.addTab(tabHost.newTabSpec("钱袋子")
+            tabHost.addTab(tabHost.newTabSpec("钱袋")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MoneyCourseActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("聊天")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, MainActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, ChatMainActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("我的")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MineActivity.class)));

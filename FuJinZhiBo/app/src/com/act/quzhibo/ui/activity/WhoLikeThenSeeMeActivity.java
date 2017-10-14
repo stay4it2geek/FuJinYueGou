@@ -122,7 +122,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
             }
         }
         BmobQuery<InterestSubPerson> query2 = new BmobQuery<>();
-        query2.addWhereEqualTo("seeMeFlag", true);
+        query2.addWhereEqualTo("userType", "2");
         queries.add(query2);
         query3.and(queries);
         query3.setLimit(10);

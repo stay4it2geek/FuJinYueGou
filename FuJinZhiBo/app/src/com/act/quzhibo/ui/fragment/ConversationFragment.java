@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +20,9 @@ import com.act.quzhibo.bean.NewFriendConversation;
 import com.act.quzhibo.bean.PrivateConversation;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
+import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
+import com.act.quzhibo.ui.activity.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,11 +37,10 @@ import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.event.OfflineMessageEvent;
+import cn.bmob.v3.BmobUser;
 
-/**会话界面
- * @author :smile
- * @project:ConversationFragment
- * @date :2016-01-25-18:23
+/**
+ * 会话界面
  */
 public class ConversationFragment extends BaseFragment {
 
@@ -53,37 +55,44 @@ public class ConversationFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView =inflater.inflate(R.layout.fragment_conversation, container, false);
-//        initNaviView();
+        rootView = inflater.inflate(R.layout.fragment_conversation, container, false);
         ButterKnife.bind(this, rootView);
-        //单一布局
-        IMutlipleItem<Conversation> mutlipleItem = new IMutlipleItem<Conversation>() {
+            //单一布局
+            IMutlipleItem<Conversation> mutlipleItem = new IMutlipleItem<Conversation>() {
 
-            @Override
-            public int getItemViewType(int postion, Conversation c) {
-                return 0;
-            }
+                @Override
+                public int getItemViewType(int postion, Conversation c) {
+                    return 0;
+                }
 
-            @Override
-            public int getItemLayoutId(int viewtype) {
-                return R.layout.item_conversation;
-            }
+                @Override
+                public int getItemLayoutId(int viewtype) {
+                    return R.layout.item_conversation;
+                }
 
+                @Override
+                public int getItemCount(List<Conversation> list) {
+                    return list.size();
+                }
+            };
+            adapter = new ConversationAdapter(getActivity(), mutlipleItem, null);
+            rc_view.setAdapter(adapter);
+            layoutManager = new LinearLayoutManager(getActivity());
+            rc_view.setLayoutManager(layoutManager);
+            sw_refresh.setEnabled(true);
+            setListener();
+
+
+        rootView.findViewById(R.id.goToLogin).setOnClickListener(new View.OnClickListener() {
             @Override
-            public int getItemCount(List<Conversation> list) {
-                return list.size();
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
             }
-        };
-        adapter = new ConversationAdapter(getActivity(),mutlipleItem,null);
-        rc_view.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(getActivity());
-        rc_view.setLayoutManager(layoutManager);
-        sw_refresh.setEnabled(true);
-        setListener();
+        });
         return rootView;
     }
 
-    private void setListener(){
+    private void setListener() {
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -111,13 +120,17 @@ public class ConversationFragment extends BaseFragment {
                 return true;
             }
         });
-}
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        sw_refresh.setRefreshing(true);
-        query();
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+            rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            sw_refresh.setRefreshing(true);
+            query();
+        }
     }
 
     @Override
@@ -138,9 +151,9 @@ public class ConversationFragment extends BaseFragment {
     }
 
     /**
-      查询本地会话
+     * 查询本地会话
      */
-    public void query(){
+    public void query() {
         adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();
         sw_refresh.setRefreshing(false);
@@ -148,17 +161,18 @@ public class ConversationFragment extends BaseFragment {
 
     /**
      * 获取会话列表的数据：增加新朋友会话
+     *
      * @return
      */
-    private List<Conversation> getConversations(){
+    private List<Conversation> getConversations() {
         //添加会话
         List<Conversation> conversationList = new ArrayList<>();
         conversationList.clear();
         //TODO 会话：4.2、查询全部会话
-        List<BmobIMConversation> list =BmobIM.getInstance().loadAllConversation();
-        if(list!=null && list.size()>0){
-            for (BmobIMConversation item:list){
-                switch (item.getConversationType()){
+        List<BmobIMConversation> list = BmobIM.getInstance().loadAllConversation();
+        if (list != null && list.size() > 0) {
+            for (BmobIMConversation item : list) {
+                switch (item.getConversationType()) {
                     case 1://私聊
                         conversationList.add(new PrivateConversation(item));
                         break;
@@ -169,7 +183,7 @@ public class ConversationFragment extends BaseFragment {
         }
         //添加新朋友会话-获取好友请求表中最新一条记录
         List<NewFriend> friends = NewFriendManager.getInstance(getActivity()).getAllNewFriend();
-        if(friends!=null && friends.size()>0){
+        if (friends != null && friends.size() > 0) {
             conversationList.add(new NewFriendConversation(friends.get(0)));
         }
         //重新排序
@@ -177,34 +191,39 @@ public class ConversationFragment extends BaseFragment {
         return conversationList;
     }
 
-    /**注册自定义消息接收事件
+    /**
+     * 注册自定义消息接收事件
+     *
      * @param event
      */
     @Subscribe
-    public void onEventMainThread(RefreshEvent event){
+    public void onEventMainThread(RefreshEvent event) {
 //        log("---会话页接收到自定义消息---");
         //因为新增`新朋友`这种会话类型
         adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();
     }
 
-    /**注册离线消息接收事件
+    /**
+     * 注册离线消息接收事件
+     *
      * @param event
      */
     @Subscribe
-    public void onEventMainThread(OfflineMessageEvent event){
+    public void onEventMainThread(OfflineMessageEvent event) {
         //重新刷新列表
         adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();
     }
 
-    /**注册消息接收事件
-     * @param event
-     * 1、与用户相关的由开发者自己维护，SDK内部只存储用户信息
-     * 2、开发者获取到信息后，可调用SDK内部提供的方法更新会话
+    /**
+     * 注册消息接收事件
+     *
+     * @param event 1、与用户相关的由开发者自己维护，SDK内部只存储用户信息
+     *              2、开发者获取到信息后，可调用SDK内部提供的方法更新会话
      */
     @Subscribe
-    public void onEventMainThread(MessageEvent event){
+    public void onEventMainThread(MessageEvent event) {
         //重新获取本地消息并刷新列表
         adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();

@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 
@@ -55,7 +56,7 @@ public class SendImageHolder extends BaseViewHolder {
     BmobIMMessage msg = (BmobIMMessage)o;
     //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
     final BmobIMUserInfo info = msg.getBmobIMUserInfo();
-//    ImageLoaderFactory.getLoader().loadAvator(iv_avatar,info != null ? info.getAvatar() : null,R.mipmap.head);
+    Glide.with(context).load(info != null ? info.getAvatar() : null).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_avatar);
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     String time = dateFormat.format(msg.getCreateTime());
     tv_time.setText(time);
@@ -77,10 +78,8 @@ public class SendImageHolder extends BaseViewHolder {
         progress_load.setVisibility(View.GONE);
     }
 
-    //发送的不是远程图片地址，则取本地地址 todo 去掉注释
-//    ImageLoaderFactory.getLoader().load(iv_picture, TextUtils.isEmpty(message.getRemoteUrl()) ? message.getLocalPath():message.getRemoteUrl(),R.mipmap.ic_launcher,null);
-
-//    ViewUtil.setPicture(TextUtils.isEmpty(message.getRemoteUrl()) ? message.getLocalPath():message.getRemoteUrl(), R.mipmap.ic_launcher, iv_picture,null);
+    //发送的不是远程图片地址，则取本地地址
+    Glide.with(context).load(TextUtils.isEmpty(message.getRemoteUrl()) ? message.getLocalPath():message.getRemoteUrl()).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_picture);
 
     iv_avatar.setOnClickListener(new View.OnClickListener() {
       @Override

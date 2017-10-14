@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 
@@ -57,7 +58,7 @@ public class SendLocationHolder extends BaseViewHolder {
     BmobIMMessage msg = (BmobIMMessage)o;
     //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
     final BmobIMUserInfo info = msg.getBmobIMUserInfo();
-//    ImageLoaderFactory.getLoader().loadAvator(iv_avatar,info != null ? info.getAvatar() : null, R.mipmap.head);
+    Glide.with(context).load(info != null ? info.getAvatar() : null).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_avatar);
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     String time = dateFormat.format(msg.getCreateTime());
     tv_time.setText(time);

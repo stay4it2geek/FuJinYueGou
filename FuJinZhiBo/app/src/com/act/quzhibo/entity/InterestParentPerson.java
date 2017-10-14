@@ -3,6 +3,7 @@ package com.act.quzhibo.entity;
 import java.io.Serializable;
 
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobUser;
 
 /**
  * 趣味帖子的用户实体模型

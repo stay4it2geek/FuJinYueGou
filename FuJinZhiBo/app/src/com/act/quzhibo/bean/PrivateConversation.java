@@ -102,7 +102,7 @@ public class PrivateConversation extends Conversation{
         Intent intent = new Intent();
         intent.setClass(context, ChatActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("c", conversation);
+        bundle.putSerializable("chat", conversation);
         if (bundle != null) {
             intent.putExtra(context.getPackageName(), bundle);
         }

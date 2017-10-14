@@ -239,7 +239,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
 
     private void querySeeMeData() {
         BmobQuery<InterestSubPerson> query = new BmobQuery<>();
-        query.addWhereEqualTo("seeMeFlag", true);
+        query.addWhereEqualTo("userType", "2");
         query.setLimit(40);
         query.order("-distance");
         query.findObjects(new FindListener<InterestSubPerson>() {
@@ -250,7 +250,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         personImgList.add(person.absCoverPic);
                     }
                     HorizontialListView listView = (HorizontialListView) view.findViewById(R.id.who_see_me_list);
-                    listView.setAdapter(new PostImageAdapter(getActivity(), personImgList, Constants.ITEM_POST_DETAIL_IMG, false, false));
+                    listView.setAdapter(new PostImageAdapter(getActivity(), personImgList, Constants.ITEM_USER_INFO_IMG, false, false));
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

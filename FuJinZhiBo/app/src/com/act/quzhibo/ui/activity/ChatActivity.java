@@ -112,10 +112,9 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        BmobIMConversation conversationEntrance = (BmobIMConversation) getBundle().getSerializable("c");
+        BmobIMConversation conversationEntrance = (BmobIMConversation) getBundle().getSerializable("chat");
         //TODO 消息：5.1、根据会话入口获取消息管理，聊天页面
         mConversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
-//        initNaviView();
         initSwipeLayout();
         initVoiceView();
         initBottomView();

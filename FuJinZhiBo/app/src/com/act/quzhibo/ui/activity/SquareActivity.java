@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class SquareActivity extends TabSlideDifferentBaseActivity implements InterestPlatesFragment.OnNearByListner {
 
     @Override
-    public boolean getActivityType() {
+    public boolean getIsMineActivityType() {
         return false;
     }
 

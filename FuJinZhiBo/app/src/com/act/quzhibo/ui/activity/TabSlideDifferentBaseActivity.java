@@ -18,7 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.base.BaseActivity;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
@@ -44,7 +43,7 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
         mFragments=getFragments();
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter, getActivityType());
+        CommonUtil.initView(getTitles(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter, getIsMineActivityType());
 
     }
 
@@ -105,7 +104,7 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
         }
     }
 
-    public abstract boolean getActivityType();
+    public abstract boolean getIsMineActivityType();
 
     protected abstract boolean isNeedShowBackDialog();
 

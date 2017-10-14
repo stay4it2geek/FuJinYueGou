@@ -40,7 +40,7 @@ public class MineActivity extends TabSlideDifferentBaseActivity {
     }
 
     @Override
-    public boolean getActivityType() {
+    public boolean getIsMineActivityType() {
         return true;
     }
 

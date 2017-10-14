@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/base_bg"
-    android:orientation="vertical" >
-
-
-    <com.act.quzhibo.view.TitleBarView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"/>
+    android:orientation="vertical">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/sw_refresh"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rc_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/tips_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="您还没有登录哦"
+            android:textColor="@color/red_light"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/goToLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/commonViewHeight"
+            android:layout_below="@+id/tips"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_common_selector"
+            android:text="去登录" />
+    </RelativeLayout>
+
+
+</FrameLayout>
