@@ -52,12 +52,16 @@ public class MainActivity extends BaseActivity {
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
+    RootUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_im_main);
-        final RootUser user = BmobUser.getCurrentUser(RootUser.class);
+        user = BmobUser.getCurrentUser(RootUser.class);
+        if (user == null) {
+            return;
+        }
         //TODO 连接：3.1、登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
         if (!TextUtils.isEmpty(user.getObjectId())) {
             BmobIM.connect(user.getObjectId(), new ConnectListener() {
@@ -94,6 +98,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+        if(user==null){
+            return;
+        }
         mTabs = new TextView[3];
         mTabs[0] = btn_conversation;
         mTabs[1] = btn_contact;
@@ -141,6 +148,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (user == null) {
+            return;
+        }
         //每次进来应用都检查会话和好友请求的情况
         checkRedPoint();
         //进入应用后，通知栏应取消
@@ -198,6 +208,7 @@ public class MainActivity extends BaseActivity {
         } else {
             iv_conversation_tips.setVisibility(View.GONE);
         }
+
         //TODO 好友管理：是否有好友添加的请求
         if (NewFriendManager.getInstance(this).hasNewFriendInvitation()) {
             iv_contact_tips.setVisibility(View.VISIBLE);

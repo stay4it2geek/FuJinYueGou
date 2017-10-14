@@ -32,9 +32,9 @@ public class TabMainActivity extends TabActivity {
     private String[] mTitles = {"课程", "直播", "广场", "钱袋子","聊天", "我的"};
     private String[] mTitlesSpecial = {"课程", "广场", "我的"};
 
-    private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.money, R.mipmap.icon_message_normal,R.drawable.mine};
+    private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.money, R.drawable.chat,R.drawable.mine};
 
-    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.money_s, R.mipmap.icon_message_press, R.drawable.mine_s};
+    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.money_s, R.drawable.chat_s, R.drawable.mine_s};
 
     private int[] mIconUnselectIdsSpecial = {R.drawable.courses, R.drawable.money, R.drawable.mine};
     private int[] mIconSelectIdsSpecial = {R.drawable.courses_s, R.drawable.money_s, R.drawable.mine_s};
@@ -62,11 +62,10 @@ public class TabMainActivity extends TabActivity {
             tabHost.addTab(tabHost.newTabSpec("广场")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
-
-            tabHost.addTab(tabHost.newTabSpec("聊天")
+            tabHost.addTab(tabHost.newTabSpec("钱袋子")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MoneyCourseActivity.class)));
-            tabHost.addTab(tabHost.newTabSpec("钱袋子")
+            tabHost.addTab(tabHost.newTabSpec("聊天")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MainActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("我的")
