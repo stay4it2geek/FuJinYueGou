@@ -69,10 +69,16 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.ChatActivity"
+            android:name="com.act.quzhibo.ui.activity.NewFriendActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Holo.Dialog.CustomNoActionBar" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -269,7 +275,11 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Holo.Dialog.CustomNoActionBar" />
-
+        <activity
+            android:name="com.act.quzhibo.ui.activity.ChatActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.RecordConfirmActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

@@ -33,17 +33,11 @@ import cn.bmob.newim.notification.BmobNotificationManager;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 
-/**
- * @author :smile
- * @project:MainActivity
- * @date :2016-01-15-18:23
- */
 public class MainActivity extends BaseActivity {
 
     @Bind(R.id.btn_conversation)
     TextView btn_conversation;
-    @Bind(R.id.btn_set)
-    TextView btn_set;
+
     @Bind(R.id.btn_contact)
     TextView btn_contact;
 
@@ -103,7 +97,6 @@ public class MainActivity extends BaseActivity {
         mTabs = new TextView[3];
         mTabs[0] = btn_conversation;
         mTabs[1] = btn_contact;
-        mTabs[2] = btn_set;
         mTabs[0].setSelected(true);
         initTab();
     }
@@ -126,9 +119,6 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.btn_contact:
                 index = 1;
-                break;
-            case R.id.btn_set:
-                index = 2;
                 break;
         }
         onTabIndex(index);

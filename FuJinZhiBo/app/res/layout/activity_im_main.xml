@@ -78,22 +78,6 @@
                 android:textSize="12sp"
                 android:visibility="visible"/>
         </RelativeLayout>
-
-        <TextView
-            android:id="@+id/btn_set"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/tab_set_btn"
-            android:gravity="center"
-            android:onClick="onTabSelect"
-            android:paddingBottom="2dip"
-            android:paddingTop="7dip"
-            android:scaleType="matrix"
-            android:text="@string/mian_tab_set"
-            android:textColor="@drawable/tab_textcolor"
-            android:textSize="12sp"/>
     </LinearLayout>
 
     <LinearLayout
