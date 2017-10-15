@@ -1,10 +1,12 @@
 package com.act.quzhibo.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ import com.act.quzhibo.db.NewFriendManager;
 import java.util.List;
 
 import butterknife.Bind;
+import cn.bmob.newim.BmobIM;
 
 
 /**
@@ -41,7 +44,10 @@ public class NewFriendActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_conversation);
-
+        if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+            findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
+        }
         //单一布局
         IMutlipleItem<NewFriend> mutlipleItem = new IMutlipleItem<NewFriend>() {
 
@@ -71,6 +77,12 @@ public class NewFriendActivity extends BaseActivity {
     }
 
     private void setListener() {
+        findViewById(R.id.goToLogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NewFriendActivity.this, LoginActivity.class));
+            }
+        });
         ll_root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {

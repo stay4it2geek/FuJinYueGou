@@ -57,6 +57,7 @@ public class ConversationFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_conversation, container, false);
         ButterKnife.bind(this, rootView);
+
             //单一布局
             IMutlipleItem<Conversation> mutlipleItem = new IMutlipleItem<Conversation>() {
 
@@ -82,7 +83,11 @@ public class ConversationFragment extends BaseFragment {
             sw_refresh.setEnabled(true);
             setListener();
 
+        if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+            rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
 
+        }
         rootView.findViewById(R.id.goToLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

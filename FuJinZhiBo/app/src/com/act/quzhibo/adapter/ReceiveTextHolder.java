@@ -46,7 +46,7 @@ public class ReceiveTextHolder extends BaseViewHolder {
     String time = dateFormat.format(message.getCreateTime());
     tv_time.setText(time);
     final BmobIMUserInfo info = message.getBmobIMUserInfo();
-    Glide.with(context).load(info != null ? info.getAvatar() : null).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_avatar);
+    Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.women).into(iv_avatar);
     String content =  message.getContent();
     tv_message.setText(content);
     iv_avatar.setOnClickListener(new View.OnClickListener() {

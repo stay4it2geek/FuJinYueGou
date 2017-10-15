@@ -58,6 +58,10 @@ public class ContactFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_conversation, container, false);
         ButterKnife.bind(this, rootView);
+        if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+            rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
+        }
             IMutlipleItem<Friend> mutlipleItem = new IMutlipleItem<Friend>() {
 
                 @Override
