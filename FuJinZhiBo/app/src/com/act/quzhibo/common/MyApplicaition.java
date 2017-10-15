@@ -10,11 +10,14 @@ import com.elbbbird.android.socialsdk.SocialSDK;
 import com.mabeijianxi.smallvideorecord2.DeviceUtils;
 import com.mabeijianxi.smallvideorecord2.JianXiCamera;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import c.b.BP;
+import cn.bmob.newim.BmobIM;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.BmobConfig;
 
@@ -28,6 +31,12 @@ public class MyApplicaition extends Application {
 
     public void onCreate() {
         super.onCreate();
+        setInstance(this);
+        //TODO 1.8、初始化IM SDK，并注册消息接收器，只有主进程运行的时候才需要初始化
+        if (getApplicationInfo().packageName.equals(getMyProcessName())) {
+            BmobIM.init(this);
+            BmobIM.registerDefaultMessageHandler(new MyMessageHandler(this));
+        }
         BmobConfig config = new BmobConfig.Builder(this)
                 .setApplicationId("227399ddef86ccfa859443473306c43a")
                 .setConnectTimeout(20)
@@ -601,5 +610,37 @@ public class MyApplicaition extends Application {
         cityKeySrc.put("702", "重庆市");
         cityKeySrc.put("684", "天津市");
         cityKeySrc.put("446", "北京市");
+    }
+    private static MyApplicaition INSTANCE;
+
+    public static MyApplicaition INSTANCE() {
+        return INSTANCE;
+    }
+
+    private void setInstance(MyApplicaition app) {
+        setBmobIMApplication(app);
+    }
+
+    private static void setBmobIMApplication(MyApplicaition a) {
+        MyApplicaition.INSTANCE = a;
+    }
+
+
+    /**
+     * 获取当前运行的进程名
+     *
+     * @return
+     */
+    public static String getMyProcessName() {
+        try {
+            File file = new File("/proc/" + android.os.Process.myPid() + "/" + "cmdline");
+            BufferedReader mBufferedReader = new BufferedReader(new FileReader(file));
+            String processName = mBufferedReader.readLine().trim();
+            mBufferedReader.close();
+            return processName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

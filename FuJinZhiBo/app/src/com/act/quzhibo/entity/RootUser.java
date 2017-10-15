@@ -1,5 +1,7 @@
 package com.act.quzhibo.entity;
 
+import com.act.quzhibo.db.NewFriend;
+
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 
@@ -15,4 +17,18 @@ public class RootUser extends BmobUser {
     public String photoFileUrl;
     public String lastLoginTime;
     public String canDateThing;
+    public RootUser(){}
+    public RootUser(NewFriend friend){
+        setObjectId(friend.getUid());
+        setUsername(friend.getName());
+        setAvatar(friend.getAvatar());
+    }
+
+    public String getAvatar() {
+        return photoFileUrl;
+    }
+
+    public void setAvatar(String photoFileUrl) {
+        this.photoFileUrl = photoFileUrl;
+    }
 }
