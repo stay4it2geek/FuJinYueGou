@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
@@ -29,11 +30,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-/**
- * @author :smile
- * @project:NewFriendAdapter
- * @date :2016-04-27-14:18
- */
+
 public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
 
     public NewFriendAdapter(Context context, IMutlipleItem<NewFriend> items, Collection<NewFriend> datas) {
@@ -111,7 +108,7 @@ public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
         BmobIMConversation messageManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
         //而AgreeAddFriendMessage的isTransient设置为false，表明我希望在对方的会话数据库中保存该类型的消息
         AgreeAddFriendMessage msg = new AgreeAddFriendMessage();
-        RootUser currentUser = BmobUser.getCurrentUser(RootUser.class);
+        final RootUser currentUser = BmobUser.getCurrentUser(RootUser.class);
         msg.setContent("我通过了你的好友验证请求，我们可以开始 聊天了!");//这句话是直接存储到对方的消息表中的
         Map<String, Object> map = new HashMap<>();
         map.put("msg", currentUser.getUsername() + "同意添加你为好友");//显示在通知栏上面的内容

@@ -41,7 +41,7 @@
 
     <color name="color_emote_divder">#ffa1a1a1</color>
     <color name="color_bottom_bg">#272a2e</color>
-    <color name="color_bottom_text_normal">#9da0a4</color>
+    <color name="color_bottom_text_normal">#000</color>
     <color name="color_bottom_text_press">#4f9ef6</color>
     <color name="text_gray">#969696</color>
     <color name="msg_chat_bg">#eceff4</color>

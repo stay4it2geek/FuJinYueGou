@@ -14,7 +14,8 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ContactAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.adapter.base.IMutlipleItem;
-import com.act.quzhibo.base.BaseFragment;
+import com.act.quzhibo.base.ParentWithNaviActivity;
+import com.act.quzhibo.base.ParentWithNaviFragment;
 import com.act.quzhibo.bean.Friend;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMUserInfo;
@@ -44,7 +46,7 @@ import cn.bmob.v3.listener.UpdateListener;
 /**
  * 联系人界面
  */
-public class ContactFragment extends BaseFragment {
+public class ContactFragment extends ParentWithNaviFragment {
 
     @Bind(R.id.rc_view)
     RecyclerView rc_view;
@@ -52,54 +54,24 @@ public class ContactFragment extends BaseFragment {
     SwipeRefreshLayout sw_refresh;
     ContactAdapter adapter;
     LinearLayoutManager layoutManager;
-    private View rootView;
+    private IMutlipleItem<Friend> mutlipleItem;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_conversation, container, false);
         ButterKnife.bind(this, rootView);
-        if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
             rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
             rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
         }
-            IMutlipleItem<Friend> mutlipleItem = new IMutlipleItem<Friend>() {
-
-                @Override
-                public int getItemViewType(int postion, Friend friend) {
-                    if (postion == 0) {
-                        return ContactAdapter.TYPE_NEW_FRIEND;
-                    } else {
-                        return ContactAdapter.TYPE_ITEM;
-                    }
-                }
-
-                @Override
-                public int getItemLayoutId(int viewtype) {
-                    if (viewtype == ContactAdapter.TYPE_NEW_FRIEND) {
-                        return R.layout.header_new_friend;
-                    } else {
-                        return R.layout.item_contact;
-                    }
-                }
-
-                @Override
-                public int getItemCount(List<Friend> list) {
-                    return list.size() + 1;
-                }
-            };
-            adapter = new ContactAdapter(getActivity(), mutlipleItem, null);
-            rc_view.setAdapter(adapter);
-            layoutManager = new LinearLayoutManager(getActivity());
-            rc_view.setLayoutManager(layoutManager);
-            sw_refresh.setEnabled(true);
-            setListener();
-
         rootView.findViewById(R.id.goToLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
+
         return rootView;
     }
 
@@ -121,28 +93,23 @@ public class ContactFragment extends BaseFragment {
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-                if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
-                    if (position == 0) {//跳转到新朋友页面
-                        startActivity(NewFriendActivity.class, null);
-                    } else {
-                        Friend friend = adapter.getItem(position);
-                        RootUser user = friend.getFriendUser();
-                        BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
-                        //TODO 会话：4.1、创建一个常态会话入口，好友聊天
-                        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("chat", conversationEntrance);
-                        startActivity(ChatActivity.class, bundle);
-                    }
+                if (position == 0) {//跳转到新朋友页面
+                    startActivity(NewFriendActivity.class, null);
                 } else {
-                    toast(BmobIM.getInstance().getCurrentStatus().getMsg());
+                    Friend friend = adapter.getItem(position);
+                    RootUser user = friend.getFriendUser();
+                    BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
+                    //TODO 会话：4.1、创建一个常态会话入口，好友聊天
+                    BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("c", conversationEntrance);
+                    startActivity(ChatActivity.class, bundle);
                 }
-
             }
 
             @Override
             public boolean onItemLongClick(final int position) {
-
+                log("长按" + position);
                 if (position == 0) {
                     return true;
                 }
@@ -169,8 +136,40 @@ public class ContactFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
-                rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            mutlipleItem = new IMutlipleItem<Friend>() {
+
+                @Override
+                public int getItemViewType(int postion, Friend friend) {
+                    if (postion == 0) {
+                        return ContactAdapter.TYPE_NEW_FRIEND;
+                    } else {
+                        return ContactAdapter.TYPE_ITEM;
+                    }
+                }
+
+                @Override
+                public int getItemLayoutId(int viewtype) {
+                    if (viewtype == ContactAdapter.TYPE_NEW_FRIEND) {
+                        return R.layout.header_new_friend;
+                    } else {
+                        return R.layout.item_contact;
+                    }
+                }
+
+                @Override
+                public int getItemCount(List<Friend> list) {
+                    return list.size() + 1;
+                }
+            };
+
+            adapter = new ContactAdapter(getActivity(), mutlipleItem, null);
+            rc_view.setAdapter(adapter);
+            layoutManager = new LinearLayoutManager(getActivity());
+            rc_view.setLayoutManager(layoutManager);
+            sw_refresh.setEnabled(true);
+            setListener();
             sw_refresh.setRefreshing(true);
             query();
         }
@@ -196,7 +195,7 @@ public class ContactFragment extends BaseFragment {
     @Subscribe
     public void onEventMainThread(RefreshEvent event) {
         //重新刷新列表
-//        log("---联系人界面接收到自定义消息---");
+        log("---联系人界面接收到自定义消息---");
         adapter.notifyDataSetChanged();
     }
 
@@ -234,6 +233,8 @@ public class ContactFragment extends BaseFragment {
                         }
                     }
                 }
+
+
         );
     }
 

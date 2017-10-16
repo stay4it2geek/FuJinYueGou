@@ -42,15 +42,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<BmobIMMessage> msgs = new ArrayList<>();
 
     private String currentUid="";
-    BmobIMConversation c;
+    BmobIMConversation conversation;
 
-    public ChatAdapter(Context context, BmobIMConversation c) {
+    public ChatAdapter(Context context, BmobIMConversation conversation) {
+        this.conversation=conversation;
         try {
             currentUid = BmobUser.getCurrentUser().getObjectId();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.c =c;
+
     }
     public int findPosition(BmobIMMessage message) {
         int index = this.getCount();
@@ -117,13 +118,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_SEND_TXT) {
-            return new SendTextHolder(parent.getContext(), parent,c,onRecyclerViewListener);
+            return new SendTextHolder(parent.getContext(), parent,conversation,onRecyclerViewListener);
         } else if (viewType == TYPE_SEND_IMAGE) {
-            return new SendImageHolder(parent.getContext(), parent,c,onRecyclerViewListener);
+            return new SendImageHolder(parent.getContext(), parent,conversation,onRecyclerViewListener);
         } else if (viewType == TYPE_SEND_LOCATION) {
-            return new SendLocationHolder(parent.getContext(), parent,c,onRecyclerViewListener);
+            return new SendLocationHolder(parent.getContext(), parent,conversation,onRecyclerViewListener);
         } else if (viewType == TYPE_SEND_VOICE) {
-            return new SendVoiceHolder(parent.getContext(), parent,c,onRecyclerViewListener);
+            return new SendVoiceHolder(parent.getContext(), parent,conversation,onRecyclerViewListener);
         } else if (viewType == TYPE_RECEIVER_TXT) {
             return new ReceiveTextHolder(parent.getContext(), parent,onRecyclerViewListener);
         } else if (viewType == TYPE_RECEIVER_IMAGE) {
@@ -133,7 +134,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         } else if (viewType == TYPE_RECEIVER_VOICE) {
             return new ReceiveVoiceHolder(parent.getContext(), parent,onRecyclerViewListener);
         } else if (viewType == TYPE_SEND_VIDEO) {
-            return new SendVideoHolder(parent.getContext(), parent,c,onRecyclerViewListener);
+            return new SendVideoHolder(parent.getContext(), parent,conversation,onRecyclerViewListener);
         } else if (viewType == TYPE_RECEIVER_VIDEO) {
             return new ReceiveVideoHolder(parent.getContext(), parent,onRecyclerViewListener);
         }else if(viewType ==TYPE_AGREE) {

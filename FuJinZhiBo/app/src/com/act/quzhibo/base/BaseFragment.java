@@ -9,6 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.act.quzhibo.common.Config;
+import com.orhanobut.logger.Logger;
+
+
 public class BaseFragment extends Fragment {
 
     protected void runOnMain(Runnable runnable) {
@@ -51,6 +55,15 @@ public class BaseFragment extends Fragment {
         if (bundle != null)
             intent.putExtra(getActivity().getPackageName(), bundle);
         getActivity().startActivity(intent);
+    }
+
+    /**Log日志
+     * @param msg
+     */
+    public void log(String msg){
+        if(Config.DEBUG){
+            Logger.i(msg);
+        }
     }
 
 }

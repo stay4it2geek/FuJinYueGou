@@ -1,55 +1,49 @@
 package com.act.quzhibo.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NewFriendAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.adapter.base.IMutlipleItem;
-import com.act.quzhibo.base.BaseActivity;
+import com.act.quzhibo.base.ParentWithNaviActivity;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
 
 import java.util.List;
 
 import butterknife.Bind;
-import cn.bmob.newim.BmobIM;
 
 
-/**
- * 新朋友
- *
+/**新朋友
+ * @author :smile
+ * @project:NewFriendActivity
+ * @date :2016-01-25-18:23
  */
-public class NewFriendActivity extends BaseActivity {
+public class NewFriendActivity extends ParentWithNaviActivity {
 
     @Bind(R.id.ll_root)
-    FrameLayout ll_root;
+    LinearLayout ll_root;
     @Bind(R.id.rc_view)
     RecyclerView rc_view;
     @Bind(R.id.sw_refresh)
     SwipeRefreshLayout sw_refresh;
     NewFriendAdapter adapter;
     LinearLayoutManager layoutManager;
+    private IMutlipleItem<NewFriend> mutlipleItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_conversation);
-        if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
-            findViewById(R.id.tips_rl).setVisibility(View.GONE);
-            findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
-        }
         //单一布局
-        IMutlipleItem<NewFriend> mutlipleItem = new IMutlipleItem<NewFriend>() {
+        mutlipleItem = new IMutlipleItem<NewFriend>() {
 
             @Override
             public int getItemViewType(int position, NewFriend c) {
@@ -57,7 +51,7 @@ public class NewFriendActivity extends BaseActivity {
             }
 
             @Override
-            public int getItemLayoutId(int viewtype) {
+           public int getItemLayoutId(int viewtype) {
                 return R.layout.item_new_friend;
             }
 
@@ -66,7 +60,7 @@ public class NewFriendActivity extends BaseActivity {
                 return list.size();
             }
         };
-        adapter = new NewFriendAdapter(this, mutlipleItem, null);
+        adapter = new NewFriendAdapter(this,mutlipleItem,null);
         rc_view.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(this);
         rc_view.setLayoutManager(layoutManager);
@@ -76,13 +70,7 @@ public class NewFriendActivity extends BaseActivity {
         setListener();
     }
 
-    private void setListener() {
-        findViewById(R.id.goToLogin).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(NewFriendActivity.this, LoginActivity.class));
-            }
-        });
+    private void setListener(){
         ll_root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -100,7 +88,7 @@ public class NewFriendActivity extends BaseActivity {
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-
+                log("点击："+position);
             }
 
             @Override
@@ -125,9 +113,9 @@ public class NewFriendActivity extends BaseActivity {
     }
 
     /**
-     * 查询本地会话
+      查询本地会话
      */
-    public void query() {
+    public void query(){
         adapter.bindDatas(NewFriendManager.getInstance(this).getAllNewFriend());
         adapter.notifyDataSetChanged();
         sw_refresh.setRefreshing(false);

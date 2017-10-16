@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -30,8 +29,9 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ChatAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
-import com.act.quzhibo.base.BaseActivity;
+import com.act.quzhibo.base.ParentWithNaviActivity;
 import com.act.quzhibo.util.Util;
+import com.act.quzhibo.view.TitleBarView;
 import com.orhanobut.logger.Logger;
 
 import java.util.HashMap;
@@ -48,6 +48,7 @@ import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMLocationMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMTextMessage;
+import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.bean.BmobIMVideoMessage;
 import cn.bmob.newim.core.BmobIMClient;
 import cn.bmob.newim.core.BmobRecordManager;
@@ -59,7 +60,10 @@ import cn.bmob.newim.listener.OnRecordChangeListener;
 import cn.bmob.newim.notification.BmobNotificationManager;
 import cn.bmob.v3.exception.BmobException;
 
-public class ChatActivity extends BaseActivity implements MessageListHandler {
+/**
+ * 聊天界面
+ */
+public class ChatActivity extends ParentWithNaviActivity implements MessageListHandler {
 
     @Bind(R.id.ll_chat)
     LinearLayout ll_chat;
@@ -112,9 +116,22 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        BmobIMConversation conversationEntrance = (BmobIMConversation) getBundle().getSerializable("chat");
+        BmobIMConversation conversationEntrance = (BmobIMConversation) getBundle().getSerializable("c");
         //TODO 消息：5.1、根据会话入口获取消息管理，聊天页面
         mConversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
+
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        String title = mConversationManager.getConversationTitle();
+        if (title != null && title.length() > 20) {
+            title = title.replaceAll(title.substring(5, 15), "......");
+        }
+        titlebar.setBarTitle("与" + title + "聊天中");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChatActivity.this.finish();
+            }
+        });
         initSwipeLayout();
         initVoiceView();
         initBottomView();
@@ -508,7 +525,7 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
     /**
      * 发送远程音频文件
      */
-    private void sendRemoteAudioMessage(){
+    private void sendRemoteAudioMessage() {
         //TODO 发送消息：6.5、发送本地音频文件消息
         BmobIMAudioMessage audio = new BmobIMAudioMessage();
         audio.setRemoteUrl("此处替换为你远程的音频文件地址");
@@ -527,7 +544,7 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
     /**
      * 发送远程视频文件
      */
-    private void sendRemoteVideoMessage(){
+    private void sendRemoteVideoMessage() {
         //TODO 发送消息：6.7、发送本地音频文件消息
         BmobIMAudioMessage audio = new BmobIMAudioMessage();
         audio.setRemoteUrl("此处替换为你远程的音频文件地址");
@@ -542,6 +559,7 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
         BmobIMFileMessage file = new BmobIMFileMessage("此处替换为你本地的文件地址");
         mConversationManager.sendMessage(file, listener);
     }
+
     /**
      * 发送远程文件
      */
@@ -551,6 +569,7 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
         file.setRemoteUrl("此处替换为你远程的文件地址");
         mConversationManager.sendMessage(file, listener);
     }
+
     /**
      * 发送语音消息
      *
@@ -643,7 +662,6 @@ public class ChatActivity extends BaseActivity implements MessageListHandler {
     private void scrollToBottom() {
         layoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, 0);
     }
-
 
 
     //TODO 消息接收：8.2、单个页面的自定义接收器

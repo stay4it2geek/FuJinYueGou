@@ -68,6 +68,7 @@ public class InfoNearPersonActivity extends BaseActivity {
     private MyFocusCommonPerson mMyFocusCommonPerson;
     private File downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
     private BmobIMUserInfo info;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,14 +99,31 @@ public class InfoNearPersonActivity extends BaseActivity {
         findViewById(R.id.addFriend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendAddFriendMessage();
+                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                    if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+                        sendAddFriendMessage();
+                    } else {
+                        ToastUtil.showToast(InfoNearPersonActivity.this, "通讯请求中");
+                    }
+                } else {
+                    startActivity(new Intent(InfoNearPersonActivity.this, LoginActivity.class));
+                }
             }
         });
 
         findViewById(R.id.comment_private).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chatPrivate();
+                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                    if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+                        chatPrivate();
+                    } else {
+                        ToastUtil.showToast(InfoNearPersonActivity.this, "通讯请求中");
+                    }
+                } else {
+                    startActivity(new Intent(InfoNearPersonActivity.this, LoginActivity.class));
+                }
+
             }
         });
 
@@ -115,13 +133,13 @@ public class InfoNearPersonActivity extends BaseActivity {
     private void initViews() {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         currentNearInfoUser = (InterestSubPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
-        BmobQuery<RootUser> rootUserBmobQuery=new BmobQuery<>();
+        BmobQuery<RootUser> rootUserBmobQuery = new BmobQuery<>();
 
-        if(currentNearInfoUser.user!=null){
+        if (currentNearInfoUser.user != null) {
             rootUserBmobQuery.getObject(currentNearInfoUser.user.getObjectId(), new QueryListener<RootUser>() {
                 @Override
                 public void done(RootUser dbRootUser, BmobException e) {
-                    if(dbRootUser!=null){
+                    if (dbRootUser != null) {
                         info = new BmobIMUserInfo(dbRootUser.getObjectId(), dbRootUser.getUsername(), dbRootUser.photoFileUrl);
                     }
                 }
@@ -191,7 +209,7 @@ public class InfoNearPersonActivity extends BaseActivity {
             ((TextView) findViewById(R.id.isCanDate)).setText("见面一起做爱做的事");
         }
 
-         ((TextView) findViewById(R.id.soundLen)).setText(currentNearInfoUser.soundLen == null ? "" : currentNearInfoUser.soundLen+"秒");
+        ((TextView) findViewById(R.id.soundLen)).setText(currentNearInfoUser.soundLen == null ? "" : currentNearInfoUser.soundLen + "秒");
         ((TextView) findViewById(R.id.disPurpose)).setText(currentNearInfoUser.disPurpose == null ? "" : currentNearInfoUser.disPurpose);
         ((TextView) findViewById(R.id.disMariState)).setText(currentNearInfoUser.disMariState == null ? "" : currentNearInfoUser.disMariState);
         ((TextView) findViewById(R.id.nickName)).setText(currentNearInfoUser.username == null ? "" : currentNearInfoUser.username);
@@ -386,9 +404,9 @@ public class InfoNearPersonActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (nearPhotoEntities.size() == 1) {
-                    startActivity(BGAPhotoPreviewActivity.newIntent(InfoNearPersonActivity.this, downloadDir,nearPhotoEntities.get(i).url));
+                    startActivity(BGAPhotoPreviewActivity.newIntent(InfoNearPersonActivity.this, downloadDir, nearPhotoEntities.get(i).url));
                 } else if (nearPhotoEntities.size() > 1) {
-                    startActivity(BGAPhotoPreviewActivity.newIntent(InfoNearPersonActivity.this, downloadDir,photoImgs,i));
+                    startActivity(BGAPhotoPreviewActivity.newIntent(InfoNearPersonActivity.this, downloadDir, photoImgs, i));
                 }
             }
         });
@@ -465,9 +483,6 @@ public class InfoNearPersonActivity extends BaseActivity {
     }
 
 
-
-
-
     /**
      * 发送添加好友的请求
      */
@@ -490,9 +505,9 @@ public class InfoNearPersonActivity extends BaseActivity {
             @Override
             public void done(BmobIMMessage msg, BmobException e) {
                 if (e == null) {//发送成功
-                    ToastUtil.showToast(InfoNearPersonActivity.this,"好友请求发送成功，等待验证");
+                    ToastUtil.showToast(InfoNearPersonActivity.this, "好友请求发送成功，等待验证");
                 } else {//发送失败
-                    ToastUtil.showToast(InfoNearPersonActivity.this,"发送失败:" + e.getMessage());
+                    ToastUtil.showToast(InfoNearPersonActivity.this, "发送失败:" + e.getMessage());
                 }
             }
         });
@@ -502,11 +517,11 @@ public class InfoNearPersonActivity extends BaseActivity {
      * 与陌生人私聊
      */
     private void chatPrivate() {
-
-        //TODO 会话：4.1、创建一个常态会话入口，陌生人聊天
+        //TODO 会话：4.1、创建一个常态会话入口，好友聊天
         BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+        //TODO 会话：4.1、创建一个常态会话入口，陌生人聊天
         Bundle bundle = new Bundle();
-        bundle.putSerializable("chat", conversationEntrance);
+        bundle.putSerializable("c", conversationEntrance);
         startActivity(ChatActivity.class, bundle, false);
     }
 }

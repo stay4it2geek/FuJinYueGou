@@ -1,6 +1,7 @@
 package com.act.quzhibo.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -46,7 +47,8 @@ public class ReceiveTextHolder extends BaseViewHolder {
     String time = dateFormat.format(message.getCreateTime());
     tv_time.setText(time);
     final BmobIMUserInfo info = message.getBmobIMUserInfo();
-    Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.women).into(iv_avatar);
+    Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.women).error(R.drawable.error_img).into(iv_avatar);
+
     String content =  message.getContent();
     tv_message.setText(content);
     iv_avatar.setOnClickListener(new View.OnClickListener() {

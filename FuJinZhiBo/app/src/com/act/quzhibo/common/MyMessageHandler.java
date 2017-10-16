@@ -3,11 +3,9 @@ package com.act.quzhibo.common;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.act.quzhibo.R;
 import com.act.quzhibo.bean.AddFriendMessage;
 import com.act.quzhibo.bean.AgreeAddFriendMessage;
 import com.act.quzhibo.db.NewFriend;
@@ -16,11 +14,17 @@ import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.model.UserModel;
 import com.act.quzhibo.model.i.UpdateCacheListener;
-import com.act.quzhibo.ui.activity.ChatMainActivity;
+import com.act.quzhibo.ui.activity.MainActivity;
+import com.act.quzhibo.util.ToastUtil;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 import java.util.Map;
+
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMMessageType;
 import cn.bmob.newim.bean.BmobIMUserInfo;
@@ -31,13 +35,7 @@ import cn.bmob.newim.notification.BmobNotificationManager;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-/**
- * 消息接收器
- *
- * @author smile
- * @project DemoMessageHandler
- * @date 2016-03-08-17:37
- */
+
 //TODO 集成：1.6、自定义消息接收器处理在线消息和离线消息
 //TODO 消息接收：8.1、自定义全局消息接收器
 public class MyMessageHandler extends BmobIMMessageHandler {
@@ -63,7 +61,7 @@ public class MyMessageHandler extends BmobIMMessageHandler {
         for (Map.Entry<String, List<MessageEvent>> entry : map.entrySet()) {
             List<MessageEvent> list = entry.getValue();
             int size = list.size();
-            Log.e("用户",entry.getKey() + "发来" + size + "条消息");
+            Log.e("用户", entry.getKey() + "发来" + size + "条消息");
             for (int i = 0; i < size; i++) {
                 //处理每条消息
                 executeMessage(list.get(i));
@@ -99,10 +97,10 @@ public class MyMessageHandler extends BmobIMMessageHandler {
      * @param msg
      * @param event
      */
-    private void processSDKMessage(BmobIMMessage msg, MessageEvent event) {
+    private void processSDKMessage(final BmobIMMessage msg, MessageEvent event) {
         if (BmobNotificationManager.getInstance(context).isShowNotification()) {
             //如果需要显示通知栏，SDK提供以下两种显示方式：
-            Intent pendingIntent = new Intent(context, ChatMainActivity.class);
+            final Intent pendingIntent = new Intent(context, MainActivity.class);
             pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 
@@ -110,11 +108,17 @@ public class MyMessageHandler extends BmobIMMessageHandler {
             //BmobNotificationManager.getInstance(context).showNotification(event, pendingIntent);
 
             //TODO 消息接收：8.6、自定义通知消息：始终只有一条通知，新消息覆盖旧消息
-            BmobIMUserInfo info = event.getFromUserInfo();
+            final BmobIMUserInfo info = event.getFromUserInfo();
             //这里可以是应用图标，也可以将聊天头像转成bitmap
-            Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
-            BmobNotificationManager.getInstance(context).showNotification(largeIcon,
-                    info.getName(), msg.getContent(), "您有一条新消息", pendingIntent);
+
+            Glide.with(context).load(info.getAvatar()).asBitmap().into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap largeIcon, GlideAnimation<? super Bitmap> glideAnimation) {
+                    BmobNotificationManager.getInstance(context).showNotification(largeIcon,
+                            info.getName(), msg.getContent(), "您有一条新消息", pendingIntent);
+                }
+            });
+
         } else {
             //直接发送消息事件
             EventBus.getDefault().post(event);
@@ -154,13 +158,17 @@ public class MyMessageHandler extends BmobIMMessageHandler {
      *
      * @param friend
      */
-    private void showAddNotify(NewFriend friend) {
-        Intent pendingIntent = new Intent(context, ChatMainActivity.class);
+    private void showAddNotify(final NewFriend friend) {
+        final Intent pendingIntent = new Intent(context, MainActivity.class);
         pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         //这里可以是应用图标，也可以将聊天头像转成bitmap
-        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
-        BmobNotificationManager.getInstance(context).showNotification(largeIcon,
-                friend.getName(), friend.getMsg(), friend.getName() + "请求添加你为朋友", pendingIntent);
+        Glide.with(context).load(friend.getAvatar()).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap largeIcon, GlideAnimation<? super Bitmap> glideAnimation) {
+                BmobNotificationManager.getInstance(context).showNotification(largeIcon,
+                        friend.getName(), friend.getMsg(), friend.getName() + "请求添加你为朋友", pendingIntent);
+            }
+        });
     }
 
     /**
@@ -169,11 +177,16 @@ public class MyMessageHandler extends BmobIMMessageHandler {
      * @param info
      * @param agree
      */
-    private void showAgreeNotify(BmobIMUserInfo info, AgreeAddFriendMessage agree) {
-        Intent pendingIntent = new Intent(context, ChatMainActivity.class);
+    private void showAgreeNotify(final BmobIMUserInfo info, final AgreeAddFriendMessage agree) {
+        final Intent pendingIntent = new Intent(context, MainActivity.class);
         pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
-        BmobNotificationManager.getInstance(context).showNotification(largeIcon, info.getName(), agree.getMsg(), agree.getMsg(), pendingIntent);
+        Glide.with(context).load(info.getAvatar()).asBitmap().into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap largeIcon, GlideAnimation<? super Bitmap> glideAnimation) {
+                BmobNotificationManager.getInstance(context).showNotification(largeIcon, info.getName(), agree.getMsg(), agree.getMsg(), pendingIntent);
+
+            }
+        });
     }
 
     /**
@@ -189,9 +202,10 @@ public class MyMessageHandler extends BmobIMMessageHandler {
                     @Override
                     public void done(String s, BmobException e) {
                         if (e == null) {
-//                            Loggerger.e("success");
+                            ToastUtil.showToast(context, "添加成功");
                         } else {
-//                            Logger.e(e.getMessage());
+                            ToastUtil.showToast(context, "添加失败");
+
                         }
                     }
                 });

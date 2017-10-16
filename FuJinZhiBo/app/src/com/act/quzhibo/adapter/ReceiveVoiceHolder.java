@@ -7,20 +7,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.act.quzhibo.R;
-import com.bumptech.glide.Glide;
-
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
+import com.act.quzhibo.R;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import com.act.quzhibo.R;
+import com.bumptech.glide.Glide;
+
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.core.BmobDownloadManager;
 import cn.bmob.newim.listener.FileDownloadListener;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-
 /**
  * 接收到的文本类型
  */
@@ -56,8 +56,9 @@ public class ReceiveVoiceHolder extends BaseViewHolder {
     BmobIMMessage msg = (BmobIMMessage)o;
     //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
     final BmobIMUserInfo info = msg.getBmobIMUserInfo();
-      Glide.with(context).load(info != null ? info.getAvatar() : null).error(R.drawable.error_img).placeholder(R.drawable.man).into(iv_avatar);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+      Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.women).error(R.drawable.error_img).into(iv_avatar);
+
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     String time = dateFormat.format(msg.getCreateTime());
     tv_time.setText(time);
     iv_avatar.setOnClickListener(new View.OnClickListener() {

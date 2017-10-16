@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import com.act.quzhibo.common.Config;
+import com.orhanobut.logger.Logger;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -115,6 +119,15 @@ public class BaseActivity extends FragmentActivity {
         if (token != null) {
             InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    /**Log日志
+     * @param msg
+     */
+    public void log(String msg){
+        if(Config.DEBUG){
+            Logger.i(msg);
         }
     }
 

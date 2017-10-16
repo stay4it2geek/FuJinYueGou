@@ -9,10 +9,12 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.util.TimeUtil;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
 import butterknife.Bind;
+
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
@@ -55,8 +57,8 @@ public class ConversationHolder extends BaseViewHolder {
           }
           tv_recent_time.setText(TimeUtil.getChatTime(false, lastMsg.getCreateTime()));
       }
-      //会话图标
-      Glide.with(context).load(conversation.getConversationIcon()).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_recent_avatar);
+
+      Glide.with(context).load(conversation.getConversationIcon()).error(R.drawable.error_img).into(iv_recent_avatar);
 
       //会话标题
       tv_recent_name.setText(conversation.getConversationTitle());

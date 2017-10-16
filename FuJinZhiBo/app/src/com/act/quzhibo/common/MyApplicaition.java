@@ -3,17 +3,14 @@ package com.act.quzhibo.common;
 
 import android.app.Application;
 import android.os.Environment;
-import android.util.Log;
 
 import com.act.quzhibo.R;
-import com.elbbbird.android.socialsdk.SocialSDK;
 import com.mabeijianxi.smallvideorecord2.DeviceUtils;
 import com.mabeijianxi.smallvideorecord2.JianXiCamera;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import c.b.BP;
@@ -37,6 +34,7 @@ public class MyApplicaition extends Application {
             BmobIM.init(this);
             BmobIM.registerDefaultMessageHandler(new MyMessageHandler(this));
         }
+
         BmobConfig config = new BmobConfig.Builder(this)
                 .setApplicationId("227399ddef86ccfa859443473306c43a")
                 .setConnectTimeout(20)

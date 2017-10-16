@@ -14,7 +14,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ConversationAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.adapter.base.IMutlipleItem;
-import com.act.quzhibo.base.BaseFragment;
+import com.act.quzhibo.base.ParentWithNaviFragment;
 import com.act.quzhibo.bean.Conversation;
 import com.act.quzhibo.bean.NewFriendConversation;
 import com.act.quzhibo.bean.PrivateConversation;
@@ -33,16 +33,14 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.event.OfflineMessageEvent;
 import cn.bmob.v3.BmobUser;
 
-/**
- * 会话界面
- */
-public class ConversationFragment extends BaseFragment {
+public class ConversationFragment extends ParentWithNaviFragment {
 
     @Bind(R.id.rc_view)
     RecyclerView rc_view;
@@ -50,43 +48,16 @@ public class ConversationFragment extends BaseFragment {
     SwipeRefreshLayout sw_refresh;
     ConversationAdapter adapter;
     LinearLayoutManager layoutManager;
-    private View rootView;
+    private IMutlipleItem<Conversation> mutlipleItem;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_conversation, container, false);
         ButterKnife.bind(this, rootView);
-
-            //单一布局
-            IMutlipleItem<Conversation> mutlipleItem = new IMutlipleItem<Conversation>() {
-
-                @Override
-                public int getItemViewType(int postion, Conversation c) {
-                    return 0;
-                }
-
-                @Override
-                public int getItemLayoutId(int viewtype) {
-                    return R.layout.item_conversation;
-                }
-
-                @Override
-                public int getItemCount(List<Conversation> list) {
-                    return list.size();
-                }
-            };
-            adapter = new ConversationAdapter(getActivity(), mutlipleItem, null);
-            rc_view.setAdapter(adapter);
-            layoutManager = new LinearLayoutManager(getActivity());
-            rc_view.setLayoutManager(layoutManager);
-            sw_refresh.setEnabled(true);
-            setListener();
-
-        if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
             rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
             rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
-
         }
         rootView.findViewById(R.id.goToLogin).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +104,29 @@ public class ConversationFragment extends BaseFragment {
         if (BmobUser.getCurrentUser(RootUser.class) != null) {
             rootView.findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
             rootView.findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            mutlipleItem = new IMutlipleItem<Conversation>() {
+
+                @Override
+                public int getItemViewType(int postion, Conversation c) {
+                    return 0;
+                }
+
+                @Override
+                public int getItemLayoutId(int viewtype) {
+                    return R.layout.item_conversation;
+                }
+
+                @Override
+                public int getItemCount(List<Conversation> list) {
+                    return list.size();
+                }
+            };
+            adapter = new ConversationAdapter(getActivity(), mutlipleItem, null);
+            rc_view.setAdapter(adapter);
+            layoutManager = new LinearLayoutManager(getActivity());
+            rc_view.setLayoutManager(layoutManager);
+            sw_refresh.setEnabled(true);
+            setListener();
             sw_refresh.setRefreshing(true);
             query();
         }
@@ -203,7 +197,7 @@ public class ConversationFragment extends BaseFragment {
      */
     @Subscribe
     public void onEventMainThread(RefreshEvent event) {
-//        log("---会话页接收到自定义消息---");
+        log("---会话页接收到自定义消息---");
         //因为新增`新朋友`这种会话类型
         adapter.bindDatas(getConversations());
         adapter.notifyDataSetChanged();

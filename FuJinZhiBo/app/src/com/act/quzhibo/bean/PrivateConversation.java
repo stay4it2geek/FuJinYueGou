@@ -15,6 +15,7 @@ import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMConversationType;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMMessageType;
+import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * 私聊会话
@@ -102,7 +103,8 @@ public class PrivateConversation extends Conversation{
         Intent intent = new Intent();
         intent.setClass(context, ChatActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("chat", conversation);
+        //TODO 会话：4.1、创建一个常态会话入口，好友聊天
+        bundle.putSerializable("c", conversation);
         if (bundle != null) {
             intent.putExtra(context.getPackageName(), bundle);
         }
