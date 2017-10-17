@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:background="#eee">
 
-    <com.act.quzhibo.view.TitleBarView
+    <com.act.quzhibo.custom.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight"
         android:visibility="gone"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
-    </com.act.quzhibo.view.TitleBarView>
+    </com.act.quzhibo.custom.TitleBarView>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:fab_addButtonColorNormal="@color/tabline"
+            app:fab_addButtonColorNormal="@color/commonColor"
             app:fab_addButtonColorPressed="@color/lightorange"
             app:fab_addButtonPlusIconColor="@color/darkorange"
             app:fab_addButtonSize="normal"
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                app:fab_colorNormal="@color/tabline"
+                app:fab_colorNormal="@color/commonColor"
                 app:fab_colorPressed="@color/lightorange"
                 app:fab_icon="@drawable/text"
                 app:fab_size="normal"
@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                app:fab_colorNormal="@color/tabline"
+                app:fab_colorNormal="@color/commonColor"
                 app:fab_colorPressed="@color/lightorange"
                 app:fab_icon="@android:drawable/presence_video_busy"
                 app:fab_size="normal"
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                app:fab_colorNormal="@color/tabline"
+                app:fab_colorNormal="@color/commonColor"
                 app:fab_colorPressed="@color/lightorange"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="normal"
@@ -94,12 +94,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="日期排序"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/red_light"
                 android:textSize="10sp" />
 
         </LinearLayout>
 
-        <com.act.quzhibo.view.LoadNetView
+        <com.act.quzhibo.custom.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

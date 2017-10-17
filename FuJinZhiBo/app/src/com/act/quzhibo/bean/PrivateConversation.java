@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 import com.act.quzhibo.ui.activity.ChatActivity;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 
 import java.util.List;
 
@@ -52,12 +52,12 @@ public class PrivateConversation extends Conversation{
         if (cType == BmobIMConversationType.PRIVATE){
             String avatar =  conversation.getConversationIcon();
             if (TextUtils.isEmpty(avatar)){//头像为空，使用默认头像
-                return R.mipmap.head;
+                return R.mipmap.default_head;
             }else{
                 return avatar;
             }
         }else{
-            return R.mipmap.head;
+            return R.mipmap.default_head;
         }
     }
 

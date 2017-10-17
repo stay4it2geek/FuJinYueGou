@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.act.quzhibo.MyStandardVideoController;
+import com.act.quzhibo.widget.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.MyPost;
 import com.act.quzhibo.bean.RootUser;

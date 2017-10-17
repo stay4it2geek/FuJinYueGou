@@ -138,5 +138,5 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:text="最新回复"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/red_light" />
 </LinearLayout>

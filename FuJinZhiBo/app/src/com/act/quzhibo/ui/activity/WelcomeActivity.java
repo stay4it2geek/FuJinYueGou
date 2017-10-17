@@ -21,9 +21,9 @@ import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.LockIndicatorView;
-import com.act.quzhibo.view.LockViewGroup;
-import com.act.quzhibo.view.SelfDialog;
+import com.act.quzhibo.lock_view.LockIndicatorView;
+import com.act.quzhibo.lock_view.LockViewGroup;
+import com.act.quzhibo.custom.SelfDialog;
 
 import java.util.List;
 

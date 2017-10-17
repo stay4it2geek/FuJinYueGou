@@ -21,7 +21,7 @@ import com.act.quzhibo.ui.fragment.ContactFragment;
 import com.act.quzhibo.ui.fragment.ConversationFragment;
 import com.act.quzhibo.util.IMMLeaks;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

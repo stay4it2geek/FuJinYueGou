@@ -30,10 +30,10 @@ import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.act.quzhibo.ui.activity.VideoPlayerActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.CircleImageView;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.HorizontialListView;
-import com.act.quzhibo.view.UPMarqueeView;
+import com.act.quzhibo.custom.CircleImageView;
+import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.custom.HorizontialListView;
+import com.act.quzhibo.custom.UPMarqueeView;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;

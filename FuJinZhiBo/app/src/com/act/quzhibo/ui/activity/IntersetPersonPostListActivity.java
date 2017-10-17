@@ -18,9 +18,9 @@ import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.bean.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.LoadNetView;
-import com.act.quzhibo.view.TitleBarView;
+import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.custom.LoadNetView;
+import com.act.quzhibo.custom.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;

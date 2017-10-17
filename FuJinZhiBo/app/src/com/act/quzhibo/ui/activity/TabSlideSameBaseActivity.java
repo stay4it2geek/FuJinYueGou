@@ -12,7 +12,7 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.ViewFindUtils;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 import com.flyco.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;

@@ -19,7 +19,7 @@ import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.bean.InterestPostListInfoParentData;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.custom.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;

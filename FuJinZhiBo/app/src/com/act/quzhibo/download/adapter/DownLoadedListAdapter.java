@@ -24,7 +24,7 @@ import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 import com.bumptech.glide.Glide;
 
 import java.io.File;

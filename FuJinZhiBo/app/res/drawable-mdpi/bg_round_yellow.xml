@@ -6,6 +6,6 @@
         android:radius="20dp"
         />
     <solid
-        android:color="@color/tabline"
+        android:color="@color/commonColor"
         />
 </shape>

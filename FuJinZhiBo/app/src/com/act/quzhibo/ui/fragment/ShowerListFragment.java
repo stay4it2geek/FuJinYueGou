@@ -21,8 +21,8 @@ import com.act.quzhibo.bean.Room;
 import com.act.quzhibo.bean.RoomParentList;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.custom.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;

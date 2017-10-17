@@ -16,7 +16,7 @@ import com.act.quzhibo.adapter.VideoRecyclerViewAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.bean.MediaAuthor;
-import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.custom.LoadNetView;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 import com.devlin_n.videoplayer.player.VideoViewManager;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;

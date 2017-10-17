@@ -16,7 +16,7 @@ import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.custom.LoadNetView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

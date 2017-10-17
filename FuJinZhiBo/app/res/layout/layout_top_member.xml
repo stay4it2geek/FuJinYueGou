@@ -49,7 +49,7 @@
             android:background="@drawable/bg_round_black30"
             android:orientation="horizontal">
 
-            <com.act.quzhibo.view.CircleImageView
+            <com.act.quzhibo.custom.CircleImageView
                 android:id="@+id/zhuboAvatar"
                 android:layout_width="@dimen/avatar_size36"
                 android:layout_height="@dimen/avatar_size36"
@@ -100,7 +100,7 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <com.act.quzhibo.view.HorizontialListView
+        <com.act.quzhibo.custom.HorizontialListView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="40dp"

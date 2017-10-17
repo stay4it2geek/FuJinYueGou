@@ -14,7 +14,7 @@
         android:orientation="vertical"
         android:paddingTop="16dp">
 
-        <com.act.quzhibo.view.CircleImageView
+        <com.act.quzhibo.custom.CircleImageView
             android:layout_width="50dp"
             android:visibility="gone"
             android:id="@+id/userImage"

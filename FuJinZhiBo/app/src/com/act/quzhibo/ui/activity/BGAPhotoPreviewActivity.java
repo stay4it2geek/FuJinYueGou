@@ -22,7 +22,7 @@ import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 
 import java.io.File;
 import java.sql.SQLException;

@@ -26,10 +26,10 @@ import com.act.quzhibo.bean.JsonBean;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.LockIndicatorView;
-import com.act.quzhibo.view.LockViewGroup;
-import com.act.quzhibo.view.TitleBarView;
+import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.lock_view.LockIndicatorView;
+import com.act.quzhibo.lock_view.LockViewGroup;
+import com.act.quzhibo.custom.TitleBarView;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bumptech.glide.Glide;
@@ -109,7 +109,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.setting_mine_info);
+        setContentView(R.layout.activity_setting_mine_info);
         age_txt = (TextView) findViewById(R.id.age_txt);
         openSecret_switch = (Switch) findViewById(R.id.openSecret_switch);
         openSecret_txt = (TextView) findViewById(R.id.openSecret_txt);

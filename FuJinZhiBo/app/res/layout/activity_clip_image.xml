@@ -6,13 +6,13 @@
     android:background="@android:color/black"
     android:orientation="vertical">
 
-    <com.act.quzhibo.view.TitleBarView
+    <com.act.quzhibo.custom.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight" />
 
 
-    <com.act.quzhibo.view.ClipViewLayout
+    <com.act.quzhibo.custom.ClipViewLayout
         android:id="@+id/clipViewLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"

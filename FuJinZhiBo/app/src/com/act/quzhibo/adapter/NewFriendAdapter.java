@@ -6,7 +6,7 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 import com.act.quzhibo.adapter.base.BaseRecyclerHolder;
-import com.act.quzhibo.adapter.base.IMutlipleItem;
+import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.AgreeAddFriendMessage;
 import com.act.quzhibo.common.Config;
 import com.act.quzhibo.db.NewFriend;

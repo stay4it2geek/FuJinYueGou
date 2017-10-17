@@ -13,12 +13,12 @@ import android.widget.FrameLayout;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NewFriendAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
-import com.act.quzhibo.adapter.base.IMutlipleItem;
+import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.TitleBarView;
+import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.custom.TitleBarView;
 
 import java.util.List;
 

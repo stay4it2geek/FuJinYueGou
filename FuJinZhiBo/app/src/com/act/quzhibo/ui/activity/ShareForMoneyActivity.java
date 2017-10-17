@@ -9,7 +9,7 @@ import android.widget.Button;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.view.TitleBarView;
+import com.act.quzhibo.custom.TitleBarView;
 import com.elbbbird.android.socialsdk.SocialSDK;
 import com.elbbbird.android.socialsdk.model.SocialShareScene;
 import com.elbbbird.android.socialsdk.otto.BusProvider;

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -22,7 +21,6 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * 接收到的视频类型--这是举个例子，并没有展示出视频缩略图等信息，开发者可自行设置

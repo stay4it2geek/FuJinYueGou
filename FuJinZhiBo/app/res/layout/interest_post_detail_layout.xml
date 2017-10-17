@@ -6,7 +6,7 @@
     android:background="#fff"
     android:id="@+id/root_view"
     android:orientation="vertical">
-    <com.act.quzhibo.view.TitleBarView
+    <com.act.quzhibo.custom.TitleBarView
         android:visibility="gone"
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
@@ -30,16 +30,22 @@
 
            <io.github.rockerhieu.emojicon.EmojiconEditText
                android:id="@+id/comment_et"
-               style="@android:style/TextAppearance.Widget.EditText"
+               emojicon:emojiconSize="20sp"
+               android:layout_marginTop="5dp"
+               android:textSize="@dimen/text_size_medium"
+               android:layout_marginLeft="6dp"
+               android:textColor="@color/color_1e1e1e"
+               android:hint="点击这里评论"
+               android:textColorHint="@color/color_b4"
                android:layout_width="0dp"
-               android:layout_height="match_parent"
-               android:layout_weight="2"
-               android:gravity="center"
-               android:hint="点击这里评论她/他"
-               android:text=""
-               android:textSize="16sp"
-               emojicon:emojiconSize="20sp" />
-
+               android:layout_height="wrap_content"
+               android:layout_weight="2.4"
+               android:gravity="left|center"
+               android:lineSpacingExtra="@dimen/margin_3"
+               android:background="@drawable/drawable_edit_normal"
+               android:imeOptions="flagNoExtractUi"
+               android:minHeight="@dimen/height_40"
+               android:padding="@dimen/margin_5"/>
 
            <TextView
                android:id="@+id/commentBtn"
@@ -54,8 +60,9 @@
                android:textSize="16sp" />
        </LinearLayout>
 
-       <com.act.quzhibo.view.LoadNetView
+       <com.act.quzhibo.custom.LoadNetView
            android:id="@+id/loadview"
+           android:visibility="gone"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:background="#fff" />

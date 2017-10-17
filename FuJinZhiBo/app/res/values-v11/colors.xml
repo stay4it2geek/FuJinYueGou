@@ -1,34 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#Ff0765</color>
+
+
     <color name="blue">#1E90FF</color>
-      <color name="tabline">#f6dd3e</color>
+    <color name="commonColor">#f6dd3e</color>
     <color name="colorbg">#eeeeee</color>
     <color name="linetabcolor">#231F20</color>
     <color name="commontextcolor"> #231F20</color>
     <color name="red">#DE0000</color>
     <color name="lightorange">#FE7D05</color>
     <color name="darkorange">#F24920</color>
-    <color name="loginred">#D80607</color>
     <color name="darkred">#C20000</color>
     <color name="red_light">#fb686c</color>
     <color name="middlegray">#E3E3E3</color>
     <color name="white">#fff</color>
     <color name="orange_white">#FED1AA</color>
     <color name="gray">#D9D9D9</color>
-    <color name="grayu">#F7F7F7</color>
-    <color name="gray_register">#CDCDCD</color>
     <color name="darkgray">#9E9E9E</color>
-    <color name="darkgray_editext">#5B5B5B</color>
     <color name="black">#000</color>
-    <color name="othergray">#D7D7D7</color>
     <color name="light_black">#4E4E4E</color>
     <color name="light_gray">#5C5C5C</color>
     <color name="transparent">#50000000</color>
     <color name="yellow">#ecdd3e</color>
-    <color name="lightpink">#FFF6F7</color>
     <color name="textColor">#4A4A4A</color>
     <color name="bg_gray_alt">#eeeeee</color>
     <color name="T_26">#262626</color>

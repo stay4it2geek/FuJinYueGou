@@ -31,11 +31,11 @@ import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.bean.InterestSubPerson;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.CircleImageView;
-import com.act.quzhibo.view.FragmentDialog;
-import com.act.quzhibo.view.HorizontialListView;
-import com.act.quzhibo.view.LoadNetView;
-import com.act.quzhibo.view.TitleBarView;
+import com.act.quzhibo.custom.CircleImageView;
+import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.custom.HorizontialListView;
+import com.act.quzhibo.custom.LoadNetView;
+import com.act.quzhibo.custom.TitleBarView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
 

@@ -16,7 +16,7 @@ import android.view.ViewTreeObserver;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ConversationAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
-import com.act.quzhibo.adapter.base.IMutlipleItem;
+import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Conversation;
 import com.act.quzhibo.bean.NewFriendConversation;
 import com.act.quzhibo.bean.PrivateConversation;

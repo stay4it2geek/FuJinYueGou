@@ -25,7 +25,7 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <com.act.quzhibo.view.LoadNetView
+    <com.act.quzhibo.custom.LoadNetView
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

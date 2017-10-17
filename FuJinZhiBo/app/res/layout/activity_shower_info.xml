@@ -15,7 +15,7 @@
             android:layout_marginBottom="50dp"
             android:orientation="vertical">
 
-            <com.act.quzhibo.view.TitleBarView
+            <com.act.quzhibo.custom.TitleBarView
                 android:id="@+id/titlebar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight" />
@@ -109,7 +109,7 @@
                     android:paddingRight="15dp"
                     android:paddingTop="10dp"
                     android:text="未直播"
-                    android:textColor="@color/darkgray_editext"
+                    android:textColor="@color/darkgray"
                     android:textSize="15sp"
                     android:visibility="gone" />
             </FrameLayout>
@@ -165,7 +165,7 @@
 
     </RelativeLayout>
 
-    <com.act.quzhibo.view.LoadNetView
+    <com.act.quzhibo.custom.LoadNetView
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,11 +1,9 @@
 package com.act.quzhibo.model;
 
-import android.text.TextUtils;
-
 import com.act.quzhibo.bean.Friend;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.model.i.QueryUserListener;
-import com.act.quzhibo.model.i.UpdateCacheListener;
+import com.act.quzhibo.i.QueryUserListener;
+import com.act.quzhibo.i.UpdateCacheListener;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -19,15 +17,10 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-/**
- * @author :smile
- * @project:UserModel
- * @date :2016-01-22-18:09
- */
+
 public class UserModel extends BaseModel {
 
     private static UserModel ourInstance = new UserModel();
@@ -39,128 +32,7 @@ public class UserModel extends BaseModel {
     private UserModel() {
     }
 
-    /**
-     * TODO 用户管理：2.1、注册
-     *
-     * @param username
-     * @param password
-     * @param pwdagain
-     * @param listener
-     */
-    public void register(String username, String password, String pwdagain, final LogInListener listener) {
-        if (TextUtils.isEmpty(username)) {
-            listener.done(null, new BmobException(CODE_NULL, "请填写用户名"));
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            listener.done(null, new BmobException(CODE_NULL, "请填写密码"));
-            return;
-        }
-        if (TextUtils.isEmpty(pwdagain)) {
-            listener.done(null, new BmobException(CODE_NULL, "请填写确认密码"));
-            return;
-        }
-        if (!password.equals(pwdagain)) {
-            listener.done(null, new BmobException(CODE_NULL, "两次输入的密码不一致，请重新输入"));
-            return;
-        }
-        final RootUser user = new RootUser();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.signUp(new SaveListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    listener.done(null, null);
-                } else {
-                    listener.done(null, e);
-                }
-            }
-        });
-    }
 
-    /**
-     * TODO 用户管理：2.2、登录
-     *
-     * @param username
-     * @param password
-     * @param listener
-     */
-    public void login(String username, String password, final LogInListener listener) {
-        if (TextUtils.isEmpty(username)) {
-            listener.done(null, new BmobException(CODE_NULL, "请填写用户名"));
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            listener.done(null, new BmobException(CODE_NULL, "请填写密码"));
-            return;
-        }
-        final RootUser user = new RootUser();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.login(new SaveListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (e == null) {
-                    listener.done(BmobUser.getCurrentUser(), null);
-                } else {
-                    listener.done(user, e);
-                }
-            }
-        });
-    }
-
-    /**
-     * TODO  用户管理：2.3、退出登录
-     */
-    public void logout() {
-        BmobUser.logOut();
-    }
-
-    /**
-     * TODO 用户管理：2.4、获取当前用户
-     *
-     * @return
-     */
-    public RootUser getCurrentUser() {
-        return BmobUser.getCurrentUser(RootUser.class);
-    }
-
-
-    /**
-     * TODO 用户管理：2.5、查询用户
-     *
-     * @param username
-     * @param limit
-     * @param listener
-     */
-    public void queryUsers(String username, final int limit, final FindListener<RootUser> listener) {
-        BmobQuery<RootUser> query = new BmobQuery<>();
-        //去掉当前用户
-        try {
-            BmobUser user = BmobUser.getCurrentUser();
-            query.addWhereNotEqualTo("username", user.getUsername());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        query.addWhereContains("username", username);
-        query.setLimit(limit);
-        query.order("-createdAt");
-        query.findObjects(new FindListener<RootUser>() {
-            @Override
-            public void done(List<RootUser> list, BmobException e) {
-                if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        listener.done(list, e);
-                    } else {
-                        listener.done(list, new BmobException(CODE_NULL, "查无此人"));
-                    }
-                } else {
-                    listener.done(list, e);
-                }
-            }
-        });
-    }
 
     /**
      * TODO 用户管理：2.6、查询指定用户信息
@@ -233,7 +105,7 @@ public class UserModel extends BaseModel {
     }
 
 
-    //TODO 好友管理：9.12、添加好友
+    //添加好友
     public void agreeAddFriend(RootUser friend, SaveListener<String> listener) {
         Friend f = new Friend();
         RootUser user = BmobUser.getCurrentUser(RootUser.class);
@@ -247,7 +119,6 @@ public class UserModel extends BaseModel {
      *
      * @param listener
      */
-    //TODO 好友管理：9.2、查询好友
     public void queryFriends(final FindListener<Friend> listener) {
         BmobQuery<Friend> query = new BmobQuery<>();
         RootUser user = BmobUser.getCurrentUser(RootUser.class);
@@ -276,7 +147,6 @@ public class UserModel extends BaseModel {
      * @param f
      * @param listener
      */
-    //TODO 好友管理：9.3、删除好友
     public void deleteFriend(Friend f, UpdateListener listener) {
         Friend friend = new Friend();
         friend.delete(f.getObjectId(), listener);

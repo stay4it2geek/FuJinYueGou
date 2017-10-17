@@ -21,7 +21,7 @@ import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.bean.InterestPostDetailParentData;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.custom.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import io.github.rockerhieu.emojicon.EmojiconEditText;

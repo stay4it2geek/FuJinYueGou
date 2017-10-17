@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.act.quzhibo.MyStandardVideoController;
+import com.act.quzhibo.widget.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
@@ -21,7 +21,7 @@ import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.ui.activity.FullScreenActivity;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 import com.bumptech.glide.Glide;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 

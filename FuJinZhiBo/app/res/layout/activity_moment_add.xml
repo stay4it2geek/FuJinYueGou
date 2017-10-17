@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
 
-    <com.act.quzhibo.view.TitleBarView
+    <com.act.quzhibo.custom.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight">
@@ -20,7 +20,7 @@
             android:paddingRight="10dp"
             android:text="发布"
             android:textSize="16sp" />
-    </com.act.quzhibo.view.TitleBarView>
+    </com.act.quzhibo.custom.TitleBarView>
 
     <ScrollView style="@style/MatchMatch">
 

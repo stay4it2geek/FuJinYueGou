@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentTop="true"
-        android:background="@color/tabline"
+        android:background="@color/commonColor"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

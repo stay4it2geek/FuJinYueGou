@@ -21,7 +21,7 @@
             android:id="@+id/fullscreen"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/bg_circle_black30"
+            android:background="@drawable/bg_circle_gray30"
             android:padding="5dp"
             android:src="@drawable/selector_full_screen_button" />
 

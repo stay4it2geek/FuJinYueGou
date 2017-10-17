@@ -17,7 +17,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:background="@color/tabline">
+                android:background="@color/commonColor">
 
                 <FrameLayout
                     android:id="@+id/avaterlayout"
@@ -25,7 +25,7 @@
                     android:layout_height="80dp"
                     android:layout_margin="5dp">
 
-                    <com.act.quzhibo.view.CircleImageView
+                    <com.act.quzhibo.custom.CircleImageView
                         android:id="@+id/circle_avatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -393,7 +393,7 @@
                     android:paddingTop="3dp"
                     android:text="谁对我感兴趣" />
 
-                <com.act.quzhibo.view.HorizontialListView
+                <com.act.quzhibo.custom.HorizontialListView
                     android:id="@+id/who_see_me_list"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

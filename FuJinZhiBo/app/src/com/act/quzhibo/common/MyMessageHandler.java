@@ -12,7 +12,7 @@ import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.model.UserModel;
-import com.act.quzhibo.model.i.UpdateCacheListener;
+import com.act.quzhibo.i.UpdateCacheListener;
 import com.act.quzhibo.ui.activity.ChatFriendsActivity;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;

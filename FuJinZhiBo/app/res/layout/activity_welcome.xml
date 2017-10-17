@@ -23,13 +23,13 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <com.act.quzhibo.view.LockIndicatorView
+        <com.act.quzhibo.lock_view.LockIndicatorView
             android:id="@+id/indicator"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="80dp" />
 
-        <com.act.quzhibo.view.LockViewGroup
+        <com.act.quzhibo.lock_view.LockViewGroup
             android:id="@+id/lockgroup"
             android:layout_width="300dp"
             android:layout_height="wrap_content"

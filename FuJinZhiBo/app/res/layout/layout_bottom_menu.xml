@@ -11,7 +11,7 @@
         android:id="@+id/send_message"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/bg_circle_black30"
+        android:background="@drawable/bg_circle_gray30"
         android:padding="5dp"
         android:src="@drawable/icon_send_message" />
 
@@ -26,7 +26,7 @@
             android:id="@+id/message"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/bg_circle_black30"
+            android:background="@drawable/bg_circle_gray30"
             android:padding="5dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/icon_message" />
@@ -35,7 +35,7 @@
             android:id="@+id/gift"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/bg_circle_black30"
+            android:background="@drawable/bg_circle_gray30"
             android:padding="5dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/icon_gift" />
@@ -45,14 +45,14 @@
             android:id="@+id/close"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/bg_circle_black30"
+            android:background="@drawable/bg_circle_gray30"
             android:padding="5dp"
             android:src="@drawable/icon_close" />
         <ImageView
             android:id="@+id/addherat"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/bg_circle_black30"
+            android:background="@drawable/bg_circle_gray30"
             android:padding="5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"

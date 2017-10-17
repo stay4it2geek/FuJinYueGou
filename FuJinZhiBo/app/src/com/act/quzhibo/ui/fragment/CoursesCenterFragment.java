@@ -18,7 +18,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.CommonCourse;
 import com.act.quzhibo.ui.activity.MoneyCourseActivity;
 import com.act.quzhibo.ui.activity.PuaCoursesActivity;
-import com.act.quzhibo.view.LoadNetView;
+import com.act.quzhibo.custom.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;

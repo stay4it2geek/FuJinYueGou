@@ -18,9 +18,6 @@ import java.util.List;
 import cn.bmob.v3.BmobUser;
 
 
-/**
- * Created by Administrator on 2016/4/27.
- */
 public class NewFriendManager {
 
     private DaoMaster.DevOpenHelper openHelper;

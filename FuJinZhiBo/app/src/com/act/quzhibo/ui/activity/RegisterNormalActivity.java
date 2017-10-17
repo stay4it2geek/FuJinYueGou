@@ -14,7 +14,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.TitleBarView;
+import com.act.quzhibo.custom.TitleBarView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

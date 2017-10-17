@@ -12,7 +12,7 @@ import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 
 
 /**

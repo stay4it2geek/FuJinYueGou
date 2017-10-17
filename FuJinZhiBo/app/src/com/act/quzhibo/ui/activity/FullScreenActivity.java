@@ -7,7 +7,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import com.act.quzhibo.MyFullScreenController;
+import com.act.quzhibo.widget.MyFullScreenController;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
@@ -15,7 +15,7 @@ import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.custom.FragmentDialog;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.io.File;
