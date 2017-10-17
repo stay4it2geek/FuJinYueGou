@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.PhotoAlbumListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.download.domain.MediaInfo;
-import com.act.quzhibo.entity.MediaAuthor;
+import com.act.quzhibo.download.bean.MediaInfo;
+import com.act.quzhibo.bean.MediaAuthor;
 import com.act.quzhibo.view.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 

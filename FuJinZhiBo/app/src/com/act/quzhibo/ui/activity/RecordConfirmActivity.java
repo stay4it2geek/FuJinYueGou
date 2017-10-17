@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.RecordVideoEvent;
+import com.act.quzhibo.bean.RecordVideoEvent;
 import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;
 
 import org.greenrobot.eventbus.EventBus;

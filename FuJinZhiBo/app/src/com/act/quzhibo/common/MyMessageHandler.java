@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.act.quzhibo.bean.AddFriendMessage;
 import com.act.quzhibo.bean.AgreeAddFriendMessage;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.model.UserModel;
 import com.act.quzhibo.model.i.UpdateCacheListener;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMMessageType;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.event.OfflineMessageEvent;

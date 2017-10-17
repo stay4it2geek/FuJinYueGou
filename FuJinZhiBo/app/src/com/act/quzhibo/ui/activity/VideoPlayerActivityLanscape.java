@@ -12,8 +12,7 @@ import android.widget.VideoView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ViewPlayerPageAdapter;
-import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.Room;
+import com.act.quzhibo.bean.Room;
 import com.act.quzhibo.ui.fragment.ChatFragment;
 import com.act.quzhibo.ui.fragment.NoViewFragment;
 

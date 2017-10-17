@@ -1,6 +1,9 @@
 package com.act.quzhibo.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,8 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.text.SimpleDateFormat;
 
@@ -56,7 +61,20 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
         final BmobIMMessage message = (BmobIMMessage) o;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final BmobIMUserInfo info = message.getBmobIMUserInfo();
-        Glide.with(context).load(info != null ? info.getAvatar() : null).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv_avatar);
+        Glide.with(context).load(info != null ? info.getAvatar() : null).asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                iv_avatar.setBackgroundDrawable(new BitmapDrawable(resource));
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+                iv_avatar.setBackgroundDrawable(errorDrawable);
+
+            }
+        });
+
         String time = dateFormat.format(message.getCreateTime());
         String content = message.getContent();
         tv_message.setText(content);

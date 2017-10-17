@@ -2,9 +2,9 @@ package com.act.quzhibo.download.db;
 
 import android.content.Context;
 
-import com.act.quzhibo.download.domain.MediaInfoLocal;
-import com.act.quzhibo.download.domain.MyDownloadInfLocal;
-import com.act.quzhibo.download.domain.MyDownloadThreadInfoLocal;
+import com.act.quzhibo.download.bean.MediaInfoLocal;
+import com.act.quzhibo.download.bean.MyDownloadInfLocal;
+import com.act.quzhibo.download.bean.MyDownloadThreadInfoLocal;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.UpdateBuilder;
 

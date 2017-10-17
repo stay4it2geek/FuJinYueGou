@@ -3,7 +3,7 @@ package com.act.quzhibo.model;
 import android.text.TextUtils;
 
 import com.act.quzhibo.bean.Friend;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.model.i.QueryUserListener;
 import com.act.quzhibo.model.i.UpdateCacheListener;
 import com.orhanobut.logger.Logger;
@@ -238,7 +238,6 @@ public class UserModel extends BaseModel {
         Friend f = new Friend();
         RootUser user = BmobUser.getCurrentUser(RootUser.class);
         f.setUser(user);
-        f.setFriendUserId(friend.getObjectId());
         f.setFriendUser(friend);
         f.save(listener);
     }

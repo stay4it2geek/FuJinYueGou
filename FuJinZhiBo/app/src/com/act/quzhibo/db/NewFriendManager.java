@@ -8,7 +8,7 @@ import com.act.quzhibo.common.Config;
 import com.act.quzhibo.db.dao.DaoMaster;
 import com.act.quzhibo.db.dao.DaoSession;
 import com.act.quzhibo.db.dao.NewFriendDao;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;

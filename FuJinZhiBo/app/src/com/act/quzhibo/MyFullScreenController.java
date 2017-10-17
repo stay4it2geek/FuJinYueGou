@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.util.ToastUtil;
 import com.devlin_n.videoplayer.controller.FullScreenController;
 import com.devlin_n.videoplayer.util.WindowUtil;

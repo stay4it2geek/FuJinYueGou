@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -22,15 +21,14 @@ import com.act.quzhibo.bean.AddFriendMessage;
 import com.act.quzhibo.bean.Friend;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.MyApplicaition;
-import com.act.quzhibo.entity.MyFocusCommonPerson;
-import com.act.quzhibo.entity.NearPhotoEntity;
-import com.act.quzhibo.entity.NearSeeHerEntity;
-import com.act.quzhibo.entity.NearVideoEntity;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.MyFocusCommonPerson;
+import com.act.quzhibo.bean.NearPhotoEntity;
+import com.act.quzhibo.bean.NearSeeHerEntity;
+import com.act.quzhibo.bean.NearVideoEntity;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
-import com.act.quzhibo.model.UserModel;
 import com.act.quzhibo.util.GlideImageLoader;
-import com.act.quzhibo.entity.InterestSubPerson;
+import com.act.quzhibo.bean.InterestSubPerson;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.CircleImageView;
@@ -39,8 +37,6 @@ import com.act.quzhibo.view.HorizontialListView;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.bumptech.glide.Glide;
-import com.github.promeg.pinyinhelper.Pinyin;
-import com.orhanobut.logger.Logger;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -285,7 +281,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         BmobQuery<Friend> query = new BmobQuery<>();
         RootUser user = BmobUser.getCurrentUser(RootUser.class);
         query.addWhereEqualTo("user", user);
-        query.addWhereEqualTo("friendUserId", currentNearInfoUser.getObjectId());
+        query.addWhereEqualTo("friendUser", currentNearInfoUser.user);
         query.order("-updatedAt");
         query.findObjects(new FindListener<Friend>() {
             @Override

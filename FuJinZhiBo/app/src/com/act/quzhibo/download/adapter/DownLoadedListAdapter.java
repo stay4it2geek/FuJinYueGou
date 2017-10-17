@@ -21,11 +21,9 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.adapter.BaseRecyclerViewAdapter;
 import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
-import com.act.quzhibo.download.domain.MediaInfo;
-import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.download.bean.MediaInfo;
+import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity;
-import com.act.quzhibo.ui.activity.InfoNearPersonActivity;
-import com.act.quzhibo.ui.activity.XImageActivity;
 import com.act.quzhibo.view.FragmentDialog;
 import com.bumptech.glide.Glide;
 

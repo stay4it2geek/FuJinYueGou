@@ -1,7 +1,5 @@
 package com.act.quzhibo.bean;
 
-import android.app.Activity;
-import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 
 import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;

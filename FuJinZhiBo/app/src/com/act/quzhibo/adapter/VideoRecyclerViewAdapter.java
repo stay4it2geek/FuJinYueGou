@@ -1,7 +1,6 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,8 +17,8 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
 import com.act.quzhibo.download.db.DBController;
-import com.act.quzhibo.download.domain.MediaInfo;
-import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.download.bean.MediaInfo;
+import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.ui.activity.FullScreenActivity;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
@@ -36,7 +35,6 @@ import cn.woblog.android.downloader.callback.DownloadManager;
 import cn.woblog.android.downloader.domain.DownloadInfo;
 import cn.woblog.android.downloader.exception.DownloadException;
 
-import static cn.woblog.android.downloader.DownloadService.downloadManager;
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
 
 public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecyclerViewAdapter.VideoHolder> {

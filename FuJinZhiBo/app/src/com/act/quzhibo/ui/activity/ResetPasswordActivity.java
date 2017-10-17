@@ -12,7 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.TitleBarView;

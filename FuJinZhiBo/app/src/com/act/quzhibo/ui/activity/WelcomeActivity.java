@@ -17,12 +17,11 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
-import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.entity.Toggle;
+import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LockIndicatorView;
-import com.act.quzhibo.view.LockViewConfig;
 import com.act.quzhibo.view.LockViewGroup;
 import com.act.quzhibo.view.SelfDialog;
 

@@ -2,6 +2,8 @@ package com.act.quzhibo.adapter.base;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
@@ -9,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 
 /**
@@ -29,7 +32,6 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         this.context =context;
         this.mViews = new SparseArray<>(8);
     }
-
 
     /**
      * @param viewId
@@ -90,37 +92,27 @@ public class BaseRecyclerHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    /**
-     * @param viewId
-     * @param drawableId
-     * @return
-     */
-    public BaseRecyclerHolder setImageResource(int viewId, int drawableId) {
-        ImageView view = getView(viewId);
-        view.setImageResource(drawableId);
-        return this;
-    }
-
-    /**
-     * @param viewId
-     * @param bm
-     * @return
-     */
-    public BaseRecyclerHolder setImageBitmap(int viewId, Bitmap bm) {
-        ImageView view = getView(viewId);
-        view.setImageBitmap(bm);
-        return this;
-    }
 
     /**
      * @param avatar
-     * @param defaultRes
      * @param viewId
      * @return
      */
-    public BaseRecyclerHolder setImageView(String avatar, int defaultRes, int viewId) {
-        ImageView iv = getView(viewId);
-        Glide.with(context).load(avatar).error(R.drawable.error_img).placeholder(R.drawable.women).into(iv);
+    public BaseRecyclerHolder setImageView(String avatar,int viewId) {
+        final ImageView iv_avatar = getView(viewId);
+        Glide.with(context).load(avatar).asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                iv_avatar.setBackgroundDrawable(new BitmapDrawable(resource));
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+                iv_avatar.setBackgroundDrawable(errorDrawable);
+
+            }
+        });
 
         return this;
     }

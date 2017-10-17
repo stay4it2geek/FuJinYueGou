@@ -1,10 +1,7 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,9 +10,8 @@ import android.widget.TextView;
 
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.download.domain.MediaInfo;
+import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity;
-import com.act.quzhibo.ui.activity.XImageActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

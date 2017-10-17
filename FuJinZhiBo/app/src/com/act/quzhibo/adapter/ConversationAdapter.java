@@ -1,7 +1,6 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -13,12 +12,8 @@ import com.act.quzhibo.util.TimeUtil;
 
 import java.util.Collection;
 
-
-import cn.bmob.newim.bean.BmobIMConversationType;
-
 /**
- * 使用进一步封装的Conversation,教大家怎么自定义会话列表
- * @author smile
+ * 使用进一步封装的Conversation
  */
 public class ConversationAdapter extends BaseRecyclerAdapter<Conversation> {
 
@@ -26,23 +21,6 @@ public class ConversationAdapter extends BaseRecyclerAdapter<Conversation> {
         super(activity,items,datas);
     }
 
-    /**
-     * 获取指定会话类型指定会话id的会话位置
-     * @param type
-     * @param targetId
-     * @return
-     */
-    public int findPosition(BmobIMConversationType type, String targetId) {
-        int index = this.getCount();
-        int position = -1;
-        while(index-- > 0) {
-            if((getItem(index)).getcType().equals(type) && (getItem(index)).getcId().equals(targetId)) {
-                position = index;
-                break;
-            }
-        }
-        return position;
-    }
 
     @Override
     public void bindView(BaseRecyclerHolder holder, Conversation conversation, int position) {
@@ -52,10 +30,10 @@ public class ConversationAdapter extends BaseRecyclerAdapter<Conversation> {
         Object obj = conversation.getAvatar();
         if(obj instanceof String){
             String avatar=(String)obj;
-            holder.setImageView(avatar, R.mipmap.head, R.id.iv_recent_avatar);
+            holder.setImageView(avatar,R.id.iv_recent_avatar);
         }else{
             int defaultRes = (int)obj;
-            holder.setImageView(null, defaultRes, R.id.iv_recent_avatar);
+            holder.setImageView(null, R.id.iv_recent_avatar);
         }
         //会话标题
         holder.setText(R.id.tv_recent_name, conversation.getcName());

@@ -1,16 +1,12 @@
 package com.act.quzhibo.bean;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
-import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.ui.activity.ChatActivity;
 import com.act.quzhibo.view.FragmentDialog;
 
@@ -21,7 +17,6 @@ import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMConversationType;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMMessageType;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * 私聊会话

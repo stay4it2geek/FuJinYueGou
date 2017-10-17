@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,17 +14,14 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.db.NewFriendManager;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.ContactFragment;
 import com.act.quzhibo.ui.fragment.ConversationFragment;
-import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.IMMLeaks;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.util.ViewFindUtils;
 import com.act.quzhibo.view.FragmentDialog;
-import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

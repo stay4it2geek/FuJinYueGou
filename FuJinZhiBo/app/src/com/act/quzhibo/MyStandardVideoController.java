@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,13 +14,12 @@ import android.widget.Toast;
 
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.util.ToastUtil;
 import com.devlin_n.videoplayer.controller.StandardVideoController;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.b.V;
 
 public class MyStandardVideoController extends StandardVideoController implements View.OnClickListener {
     public MyStandardVideoController(@NonNull Context context) {

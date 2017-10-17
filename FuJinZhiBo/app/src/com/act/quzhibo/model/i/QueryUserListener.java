@@ -1,6 +1,6 @@
 package com.act.quzhibo.model.i;
 
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 
 import cn.bmob.newim.listener.BmobListener1;
 import cn.bmob.v3.exception.BmobException;

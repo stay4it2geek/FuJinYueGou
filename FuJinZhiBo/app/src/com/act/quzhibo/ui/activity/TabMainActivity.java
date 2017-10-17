@@ -7,15 +7,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.PlateCatagory;
-import com.act.quzhibo.entity.TabEntity;
+import com.act.quzhibo.bean.TabEntity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
 import com.flyco.tablayout.CommonTabLayout;

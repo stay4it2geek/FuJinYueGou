@@ -4,13 +4,11 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NewFriendAdapter;
@@ -18,8 +16,7 @@ import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.adapter.base.IMutlipleItem;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
-import com.act.quzhibo.entity.NearPhotoEntity;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.TitleBarView;
 

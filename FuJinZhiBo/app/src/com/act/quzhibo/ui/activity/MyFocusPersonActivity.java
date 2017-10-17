@@ -16,7 +16,7 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.MyFocusCommonPerson;
+import com.act.quzhibo.bean.MyFocusCommonPerson;
 import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;

@@ -19,9 +19,9 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.RootUser;
-import com.act.quzhibo.entity.TabEntity;
-import com.act.quzhibo.entity.Toggle;
+import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.bean.TabEntity;
+import com.act.quzhibo.bean.Toggle;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;

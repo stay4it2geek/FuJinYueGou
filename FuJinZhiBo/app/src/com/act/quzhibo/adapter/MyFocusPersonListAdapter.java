@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.MyFocusCommonPerson;
+import com.act.quzhibo.bean.MyFocusCommonPerson;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

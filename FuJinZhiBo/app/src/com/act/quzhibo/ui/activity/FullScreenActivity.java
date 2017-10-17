@@ -2,34 +2,20 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.act.quzhibo.MyFullScreenController;
-import com.act.quzhibo.MyStandardVideoController;
-import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.VideoRecyclerViewAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.callback.OnVideoControllerListner;
 import com.act.quzhibo.download.db.DBController;
-import com.act.quzhibo.download.domain.MediaInfo;
-import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.download.bean.MediaInfo;
+import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.FragmentDialog;
-import com.devlin_n.floatWindowPermission.FloatWindowManager;
-import com.devlin_n.videoplayer.controller.FullScreenController;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.io.File;
@@ -41,11 +27,8 @@ import cn.woblog.android.downloader.callback.DownloadManager;
 import cn.woblog.android.downloader.domain.DownloadInfo;
 import cn.woblog.android.downloader.exception.DownloadException;
 import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission;
-import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
-import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
-import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
 
 
 public class FullScreenActivity extends ActivityManagePermission {

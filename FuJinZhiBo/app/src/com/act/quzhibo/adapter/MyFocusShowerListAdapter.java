@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.MyFocusShower;
+import com.act.quzhibo.bean.MyFocusShower;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package com.act.quzhibo.download.adapter;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,7 @@ import com.act.quzhibo.common.adapter.BaseRecyclerViewAdapter;
 import com.act.quzhibo.download.callback.MyDownloadListener;
 import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
-import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.download.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;

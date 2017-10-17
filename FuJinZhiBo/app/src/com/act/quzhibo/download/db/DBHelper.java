@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 
-import com.act.quzhibo.download.domain.MediaInfoLocal;
-import com.act.quzhibo.download.domain.MyDownloadInfLocal;
+import com.act.quzhibo.download.bean.MediaInfoLocal;
+import com.act.quzhibo.download.bean.MyDownloadInfLocal;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;

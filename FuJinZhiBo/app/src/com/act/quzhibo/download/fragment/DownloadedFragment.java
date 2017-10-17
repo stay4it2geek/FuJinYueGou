@@ -13,7 +13,7 @@ import com.act.quzhibo.common.fragment.BaseFragment;
 import com.act.quzhibo.download.adapter.DownLoadedListAdapter;
 import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
-import com.act.quzhibo.download.domain.MediaInfoLocal;
+import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.view.LoadNetView;

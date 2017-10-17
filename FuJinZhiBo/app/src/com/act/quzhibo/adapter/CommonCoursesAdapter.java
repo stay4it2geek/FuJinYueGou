@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CommonCourse;
+import com.act.quzhibo.bean.CommonCourse;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

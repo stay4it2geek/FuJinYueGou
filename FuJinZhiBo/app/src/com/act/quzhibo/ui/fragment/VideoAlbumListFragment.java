@@ -1,13 +1,8 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,34 +14,23 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.VideoRecyclerViewAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.download.domain.MediaInfo;
-import com.act.quzhibo.download.event.DownloadStatusChanged;
-import com.act.quzhibo.entity.MediaAuthor;
-import com.act.quzhibo.ui.activity.PostAddActivity;
-import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.download.bean.MediaInfo;
+import com.act.quzhibo.bean.MediaAuthor;
 import com.act.quzhibo.view.LoadNetView;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 import com.devlin_n.videoplayer.player.VideoViewManager;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
-import org.greenrobot.eventbus.Subscribe;
-
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
-import permission.auron.com.marshmallowpermissionhelper.PermissionResult;
-import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
-
-import static com.act.quzhibo.common.Constants.REQUEST_SETTING;
 
 
 public class VideoAlbumListFragment extends BackHandledFragment {

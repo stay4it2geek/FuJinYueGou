@@ -1,6 +1,9 @@
 package com.act.quzhibo.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.text.SimpleDateFormat;
 
@@ -58,7 +63,20 @@ public class SendImageHolder extends BaseViewHolder {
         BmobIMMessage msg = (BmobIMMessage) o;
         //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
         final BmobIMUserInfo info = msg.getBmobIMUserInfo();
-        Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(iv_avatar);
+        Glide.with(context).load(info != null ? info.getAvatar() : null).asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                iv_avatar.setBackgroundDrawable(new BitmapDrawable(resource));
+            }
+
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+                iv_avatar.setBackgroundDrawable(errorDrawable);
+
+            }
+        });
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         String time = dateFormat.format(msg.getCreateTime());
         tv_time.setText(time);

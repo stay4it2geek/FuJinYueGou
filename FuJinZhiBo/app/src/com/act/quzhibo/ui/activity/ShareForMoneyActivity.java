@@ -4,19 +4,16 @@ package com.act.quzhibo.ui.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.view.TitleBarView;
 import com.elbbbird.android.socialsdk.SocialSDK;
 import com.elbbbird.android.socialsdk.model.SocialShareScene;
 import com.elbbbird.android.socialsdk.otto.BusProvider;
 import com.elbbbird.android.socialsdk.otto.ShareBusEvent;
-import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;
-import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig;
 import com.squareup.otto.Subscribe;
 
 import cn.bmob.v3.BmobUser;

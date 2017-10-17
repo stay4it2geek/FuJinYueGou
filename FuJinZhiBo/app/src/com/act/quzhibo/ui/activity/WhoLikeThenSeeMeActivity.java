@@ -12,7 +12,7 @@ import android.view.View;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.WhoLikeMeAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.InterestSubPerson;
+import com.act.quzhibo.bean.InterestSubPerson;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;

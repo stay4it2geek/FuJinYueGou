@@ -13,13 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.MyPost;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.MyPost;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;

@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.CategoryInfo;
-import com.act.quzhibo.entity.CommonCourse;
+import com.act.quzhibo.bean.CategoryInfo;
+import com.act.quzhibo.bean.CommonCourse;
 import com.act.quzhibo.ui.fragment.CoursesCenterFragment;
 import com.act.quzhibo.util.CommonUtil;
 

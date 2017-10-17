@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.Member;
+import com.act.quzhibo.bean.Member;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

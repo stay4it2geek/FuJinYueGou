@@ -17,16 +17,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.MyPost;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.MyPost;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.util.ArrayList;
 

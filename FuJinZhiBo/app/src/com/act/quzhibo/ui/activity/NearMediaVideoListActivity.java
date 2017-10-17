@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.act.quzhibo.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.NearVideoEntity;
+import com.act.quzhibo.bean.NearVideoEntity;
 import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
 import com.devlin_n.videoplayer.player.IjkVideoView;

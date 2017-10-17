@@ -1,7 +1,5 @@
 package com.act.quzhibo.bean;
 
-import com.act.quzhibo.entity.RootUser;
-
 import cn.bmob.v3.BmobObject;
 
 /**好友表

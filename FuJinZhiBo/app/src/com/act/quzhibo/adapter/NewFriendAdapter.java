@@ -1,7 +1,6 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -12,7 +11,7 @@ import com.act.quzhibo.bean.AgreeAddFriendMessage;
 import com.act.quzhibo.common.Config;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.model.UserModel;
 import com.orhanobut.logger.Logger;
 
@@ -40,7 +39,7 @@ public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
 
     @Override
     public void bindView(final BaseRecyclerHolder holder, final NewFriend add, int position) {
-        holder.setImageView(add == null ? null : add.getAvatar(), R.mipmap.head, R.id.iv_recent_avatar);
+        holder.setImageView(add == null ? null : add.getAvatar(), R.id.iv_recent_avatar);
         holder.setText(R.id.tv_recent_name, add == null ? "未知" : add.getName());
         holder.setText(R.id.tv_recent_msg, add == null ? "未知" : add.getMsg());
         Integer status = add.getStatus();

@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.VipOrders;
+import com.act.quzhibo.bean.VipOrders;
 
 import java.util.ArrayList;
 

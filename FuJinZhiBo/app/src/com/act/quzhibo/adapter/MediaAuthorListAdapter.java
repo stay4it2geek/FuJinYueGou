@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.MediaAuthor;
+import com.act.quzhibo.bean.MediaAuthor;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;

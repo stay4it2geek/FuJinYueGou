@@ -130,9 +130,6 @@
             android:name="com.act.quzhibo.ui.activity.FullScreenActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.XImageActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.act.quzhibo.ui.activity.ShowerInfoActivity"
             android:screenOrientation="portrait" />
 

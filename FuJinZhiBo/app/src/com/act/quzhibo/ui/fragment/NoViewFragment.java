@@ -10,12 +10,8 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
-import com.act.quzhibo.ui.activity.ShowerInfoActivity;
-import com.act.quzhibo.ui.activity.VideoPlayerActivity;
+import com.act.quzhibo.bean.Room;
 import com.act.quzhibo.ui.activity.VideoPlayerActivityLanscape;
-import com.act.quzhibo.util.ToastUtil;
 
 public class NoViewFragment extends Fragment {
     @Nullable

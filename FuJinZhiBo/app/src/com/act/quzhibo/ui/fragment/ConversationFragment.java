@@ -23,7 +23,7 @@ import com.act.quzhibo.bean.PrivateConversation;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.ui.activity.LoginActivity;
 

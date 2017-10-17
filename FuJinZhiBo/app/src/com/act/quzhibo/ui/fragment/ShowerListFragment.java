@@ -2,7 +2,6 @@ package com.act.quzhibo.ui.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,8 +17,8 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.RoomListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
-import com.act.quzhibo.entity.Room;
-import com.act.quzhibo.entity.RoomParentList;
+import com.act.quzhibo.bean.Room;
+import com.act.quzhibo.bean.RoomParentList;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.view.FragmentDialog;

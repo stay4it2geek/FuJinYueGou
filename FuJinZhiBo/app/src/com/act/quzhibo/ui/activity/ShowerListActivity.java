@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.entity.PlateCatagory;
-import com.act.quzhibo.entity.PlateList;
-import com.act.quzhibo.entity.Room;
+import com.act.quzhibo.bean.PlateCatagory;
+import com.act.quzhibo.bean.PlateList;
+import com.act.quzhibo.bean.Room;
 import com.act.quzhibo.ui.fragment.ShowerListFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;

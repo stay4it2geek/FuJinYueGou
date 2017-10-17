@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.ui.fragment.PersonalFragment;
 import com.act.quzhibo.util.CommonUtil;
 
