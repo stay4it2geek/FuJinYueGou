@@ -1,34 +1,42 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NewFriendAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.adapter.base.IMutlipleItem;
-import com.act.quzhibo.base.ParentWithNaviActivity;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
+import com.act.quzhibo.entity.NearPhotoEntity;
+import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.view.FragmentDialog;
+import com.act.quzhibo.view.TitleBarView;
 
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
+import cn.bmob.v3.BmobUser;
 
 
-/**新朋友
- * @author :smile
- * @project:NewFriendActivity
- * @date :2016-01-25-18:23
+/**
+ * 新朋友
  */
-public class NewFriendActivity extends ParentWithNaviActivity {
+public class NewFriendActivity extends FragmentActivity {
 
     @Bind(R.id.ll_root)
-    LinearLayout ll_root;
+    FrameLayout ll_root;
     @Bind(R.id.rc_view)
     RecyclerView rc_view;
     @Bind(R.id.sw_refresh)
@@ -42,6 +50,13 @@ public class NewFriendActivity extends ParentWithNaviActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_conversation);
+        ButterKnife.bind(this);
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+            findViewById(R.id.tips_rl).setVisibility(View.GONE);
+            findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
+        }
+        findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
+
         //单一布局
         mutlipleItem = new IMutlipleItem<NewFriend>() {
 
@@ -51,7 +66,7 @@ public class NewFriendActivity extends ParentWithNaviActivity {
             }
 
             @Override
-           public int getItemLayoutId(int viewtype) {
+            public int getItemLayoutId(int viewtype) {
                 return R.layout.item_new_friend;
             }
 
@@ -60,7 +75,17 @@ public class NewFriendActivity extends ParentWithNaviActivity {
                 return list.size();
             }
         };
-        adapter = new NewFriendAdapter(this,mutlipleItem,null);
+
+        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
+        titlebar.setVisibility(View.VISIBLE);
+        titlebar.setBarTitle("新朋友");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NewFriendActivity.this.finish();
+            }
+        });
+        adapter = new NewFriendAdapter(this, mutlipleItem, null);
         rc_view.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(this);
         rc_view.setLayoutManager(layoutManager);
@@ -70,7 +95,7 @@ public class NewFriendActivity extends ParentWithNaviActivity {
         setListener();
     }
 
-    private void setListener(){
+    private void setListener() {
         ll_root.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -88,13 +113,25 @@ public class NewFriendActivity extends ParentWithNaviActivity {
         adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(int position) {
-                log("点击："+position);
+
             }
 
             @Override
-            public boolean onItemLongClick(int position) {
-                NewFriendManager.getInstance(NewFriendActivity.this).deleteNewFriend(adapter.getItem(position));
-                adapter.remove(position);
+            public boolean onItemLongClick(final int position) {
+
+                FragmentDialog.newInstance(false, "是否删除会话？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                        NewFriendManager.getInstance(NewFriendActivity.this).deleteNewFriend(adapter.getItem(position));
+                        adapter.remove(position);
+                    }
+
+                    @Override
+                    public void onNegtiveClick(Dialog dialog) {
+                        dialog.dismiss();
+
+                    }
+                }).show(NewFriendActivity.this.getSupportFragmentManager(), "");
                 return true;
             }
         });
@@ -113,9 +150,9 @@ public class NewFriendActivity extends ParentWithNaviActivity {
     }
 
     /**
-      查询本地会话
+     * 查询本地会话
      */
-    public void query(){
+    public void query() {
         adapter.bindDatas(NewFriendManager.getInstance(this).getAllNewFriend());
         adapter.notifyDataSetChanged();
         sw_refresh.setRefreshing(false);

@@ -2,9 +2,12 @@ package com.act.quzhibo.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,10 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ConversationAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.adapter.base.IMutlipleItem;
-import com.act.quzhibo.base.ParentWithNaviFragment;
 import com.act.quzhibo.bean.Conversation;
 import com.act.quzhibo.bean.NewFriendConversation;
 import com.act.quzhibo.bean.PrivateConversation;
+import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.entity.RootUser;
@@ -40,7 +43,7 @@ import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.event.OfflineMessageEvent;
 import cn.bmob.v3.BmobUser;
 
-public class ConversationFragment extends ParentWithNaviFragment {
+public class ConversationFragment extends Fragment {
 
     @Bind(R.id.rc_view)
     RecyclerView rc_view;
@@ -49,6 +52,7 @@ public class ConversationFragment extends ParentWithNaviFragment {
     ConversationAdapter adapter;
     LinearLayoutManager layoutManager;
     private IMutlipleItem<Conversation> mutlipleItem;
+    private View rootView;
 
 
     @Override
@@ -91,8 +95,8 @@ public class ConversationFragment extends ParentWithNaviFragment {
 
             @Override
             public boolean onItemLongClick(int position) {
-                adapter.getItem(position).onLongClick(getActivity());
-                adapter.remove(position);
+                adapter.getItem(position).onLongClick(getActivity(),adapter,position);
+
                 return true;
             }
         });
@@ -137,17 +141,6 @@ public class ConversationFragment extends ParentWithNaviFragment {
         super.onPause();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
 
     /**
      * 查询本地会话
@@ -190,17 +183,37 @@ public class ConversationFragment extends ParentWithNaviFragment {
         return conversationList;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
     /**
      * 注册自定义消息接收事件
      *
      * @param event
      */
     @Subscribe
-    public void onEventMainThread(RefreshEvent event) {
-        log("---会话页接收到自定义消息---");
+    public void onEventAsync(RefreshEvent event) {
+        Log.e("---RefreshEvent222---",MyApplicaition.handler.isChatting+"");
+
         //因为新增`新朋友`这种会话类型
-        adapter.bindDatas(getConversations());
-        adapter.notifyDataSetChanged();
+        if (!MyApplicaition.handler.isChatting) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.bindDatas(getConversations());
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     /**
@@ -209,10 +222,17 @@ public class ConversationFragment extends ParentWithNaviFragment {
      * @param event
      */
     @Subscribe
-    public void onEventMainThread(OfflineMessageEvent event) {
-        //重新刷新列表
-        adapter.bindDatas(getConversations());
-        adapter.notifyDataSetChanged();
+    public void onEventAsync(OfflineMessageEvent event) {
+        Log.e("---OfflineEvent---",MyApplicaition.handler.isChatting+"");
+        if (!MyApplicaition.handler.isChatting) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.bindDatas(getConversations());
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     /**
@@ -222,9 +242,16 @@ public class ConversationFragment extends ParentWithNaviFragment {
      *              2、开发者获取到信息后，可调用SDK内部提供的方法更新会话
      */
     @Subscribe
-    public void onEventMainThread(MessageEvent event) {
-        //重新获取本地消息并刷新列表
-        adapter.bindDatas(getConversations());
-        adapter.notifyDataSetChanged();
+    public void onEventAsync(MessageEvent event) {
+        Log.e("---MessageEvent---",MyApplicaition.handler.isChatting+"");
+        if (!MyApplicaition.handler.isChatting) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.bindDatas(getConversations());
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 }

@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,8 +18,8 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NearSeeHer20Adapter;
 import com.act.quzhibo.adapter.PostImageAdapter;
-import com.act.quzhibo.base.BaseActivity;
 import com.act.quzhibo.bean.AddFriendMessage;
+import com.act.quzhibo.bean.Friend;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.entity.MyFocusCommonPerson;
@@ -24,6 +27,8 @@ import com.act.quzhibo.entity.NearPhotoEntity;
 import com.act.quzhibo.entity.NearSeeHerEntity;
 import com.act.quzhibo.entity.NearVideoEntity;
 import com.act.quzhibo.entity.RootUser;
+import com.act.quzhibo.event.RefreshEvent;
+import com.act.quzhibo.model.UserModel;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.entity.InterestSubPerson;
 import com.act.quzhibo.util.CommonUtil;
@@ -34,7 +39,12 @@ import com.act.quzhibo.view.HorizontialListView;
 import com.act.quzhibo.view.LoadNetView;
 import com.act.quzhibo.view.TitleBarView;
 import com.bumptech.glide.Glide;
+import com.github.promeg.pinyinhelper.Pinyin;
+import com.orhanobut.logger.Logger;
 import com.youth.banner.Banner;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,7 +70,7 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 
-public class InfoNearPersonActivity extends BaseActivity {
+public class InfoNearPersonActivity extends AppCompatActivity {
 
     private Banner banner;
     private InterestSubPerson currentNearInfoUser;
@@ -68,6 +78,25 @@ public class InfoNearPersonActivity extends BaseActivity {
     private MyFocusCommonPerson mMyFocusCommonPerson;
     private File downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
     private BmobIMUserInfo info;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //清理导致内存泄露的资源
+        BmobIM.getInstance().clear();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 注册自定义消息接收事件
+     *
+     * @param event
+     */
+    //TODO 消息接收：8.5、通知有自定义消息接收
+    @Subscribe
+    public void onEventMain(RefreshEvent event) {
+        findViewById(R.id.addFriend).setVisibility(View.GONE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,21 +124,7 @@ public class InfoNearPersonActivity extends BaseActivity {
         if (!downloadDir.exists()) {
             downloadDir.mkdirs();
         }
-        findViewById(R.id.addFriend).setVisibility(View.VISIBLE);
-        findViewById(R.id.addFriend).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                    if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
-                        sendAddFriendMessage();
-                    } else {
-                        ToastUtil.showToast(InfoNearPersonActivity.this, "通讯请求中");
-                    }
-                } else {
-                    startActivity(new Intent(InfoNearPersonActivity.this, LoginActivity.class));
-                }
-            }
-        });
+
 
         findViewById(R.id.comment_private).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +146,7 @@ public class InfoNearPersonActivity extends BaseActivity {
 
 
     private void initViews() {
+
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         currentNearInfoUser = (InterestSubPerson) getIntent().getSerializableExtra(Constants.NEAR_USER);
         BmobQuery<RootUser> rootUserBmobQuery = new BmobQuery<>();
@@ -146,6 +162,8 @@ public class InfoNearPersonActivity extends BaseActivity {
             });
 
         }
+
+        initAddButton();
         findViewById(R.id.audio_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_zipai_img_layout).setVisibility(View.VISIBLE);
         findViewById(R.id.rl_self_video_layout).setVisibility(View.VISIBLE);
@@ -260,6 +278,41 @@ public class InfoNearPersonActivity extends BaseActivity {
         getVideoLibs();
 
 
+    }
+
+    private void initAddButton() {
+
+        BmobQuery<Friend> query = new BmobQuery<>();
+        RootUser user = BmobUser.getCurrentUser(RootUser.class);
+        query.addWhereEqualTo("user", user);
+        query.addWhereEqualTo("friendUserId", currentNearInfoUser.getObjectId());
+        query.order("-updatedAt");
+        query.findObjects(new FindListener<Friend>() {
+            @Override
+            public void done(List<Friend> list, BmobException e) {
+                if (e == null) {
+                    if (list != null && list.size() > 0) {
+                        findViewById(R.id.addFriend).setVisibility(View.GONE);
+                    } else {
+                        findViewById(R.id.addFriend).setVisibility(View.VISIBLE);
+                        findViewById(R.id.addFriend).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                    if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
+                                        sendAddFriendMessage();
+                                    } else {
+                                        ToastUtil.showToast(InfoNearPersonActivity.this, "通讯请求中");
+                                    }
+                                } else {
+                                    startActivity(new Intent(InfoNearPersonActivity.this, LoginActivity.class));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -489,28 +542,32 @@ public class InfoNearPersonActivity extends BaseActivity {
     //TODO 好友管理：9.7、发送添加好友请求
     private void sendAddFriendMessage() {
         //TODO 会话：4.1、创建一个暂态会话入口，发送好友请求
-        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, true, null);
-        //TODO 消息：5.1、根据会话入口获取消息管理，发送好友请求
-        BmobIMConversation messageManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
-        AddFriendMessage msg = new AddFriendMessage();
-        RootUser currentUser = BmobUser.getCurrentUser(RootUser.class);
-        msg.setContent("很高兴认识你，可以加个好友吗?");//给对方的一个留言信息
-        //TODO 这里只是举个例子，其实可以不需要传发送者的信息过去
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", currentUser.getUsername());//发送者姓名
-        map.put("avatar", currentUser.photoFileUrl);//发送者的头像
-        map.put("uid", currentUser.getObjectId());//发送者的uid
-        msg.setExtraMap(map);
-        messageManager.sendMessage(msg, new MessageSendListener() {
-            @Override
-            public void done(BmobIMMessage msg, BmobException e) {
-                if (e == null) {//发送成功
-                    ToastUtil.showToast(InfoNearPersonActivity.this, "好友请求发送成功，等待验证");
-                } else {//发送失败
-                    ToastUtil.showToast(InfoNearPersonActivity.this, "发送失败:" + e.getMessage());
+        Log.e("infofdofs", "dsfadsfs");
+        if (info != null) {
+            BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, true, null);
+            //TODO 消息：5.1、根据会话入口获取消息管理，发送好友请求
+            BmobIMConversation messageManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
+            AddFriendMessage msg = new AddFriendMessage();
+            RootUser currentUser = BmobUser.getCurrentUser(RootUser.class);
+            msg.setContent("很高兴认识你，可以加个好友吗?");//给对方的一个留言信息
+            //TODO 这里只是举个例子，其实可以不需要传发送者的信息过去
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", currentUser.getUsername());//发送者姓名
+            map.put("avatar", currentUser.photoFileUrl);//发送者的头像
+            map.put("uid", currentUser.getObjectId());//发送者的uid
+            msg.setExtraMap(map);
+            messageManager.sendMessage(msg, new MessageSendListener() {
+                @Override
+                public void done(BmobIMMessage msg, BmobException e) {
+                    if (e == null) {//发送成功
+                        ToastUtil.showToast(InfoNearPersonActivity.this, "好友请求发送成功，等待验证");
+                    } else {//发送失败
+                        ToastUtil.showToast(InfoNearPersonActivity.this, "发送失败:" + e.getMessage());
+                    }
                 }
-            }
-        });
+            });
+        }
+
     }
 
     /**
@@ -519,10 +576,9 @@ public class InfoNearPersonActivity extends BaseActivity {
     private void chatPrivate() {
         //TODO 会话：4.1、创建一个常态会话入口，好友聊天
         BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-        //TODO 会话：4.1、创建一个常态会话入口，陌生人聊天
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("c", conversationEntrance);
-        startActivity(ChatActivity.class, bundle, false);
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("c", conversationEntrance);
+        startActivity(intent);
     }
 }
 

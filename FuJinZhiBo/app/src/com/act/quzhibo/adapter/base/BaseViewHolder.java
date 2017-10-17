@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
-import com.act.quzhibo.base.BaseActivity;
 
 import butterknife.ButterKnife;
 
@@ -23,11 +22,11 @@ import butterknife.ButterKnife;
 public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
   public OnRecyclerViewListener onRecyclerViewListener;
-  protected Context context;
+  public Activity activity;
 
-  public BaseViewHolder(Context context, ViewGroup root, int layoutRes, OnRecyclerViewListener listener) {
-    super(LayoutInflater.from(context).inflate(layoutRes, root, false));
-    this.context=context;
+  public BaseViewHolder(Activity activity, ViewGroup root, int layoutRes, OnRecyclerViewListener listener) {
+    super(LayoutInflater.from(activity).inflate(layoutRes, root, false));
+    this.activity=activity;
     ButterKnife.bind(this, itemView);
     this.onRecyclerViewListener =listener;
     itemView.setOnClickListener(this);
@@ -43,12 +42,12 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implemen
   private Toast toast;
   public void toast(final Object obj) {
     try {
-      ((BaseActivity)context).runOnUiThread(new Runnable() {
+      activity.runOnUiThread(new Runnable() {
 
         @Override
         public void run() {
           if (toast == null)
-            toast = Toast.makeText(context,"", Toast.LENGTH_SHORT);
+            toast = Toast.makeText(activity,"", Toast.LENGTH_SHORT);
           toast.setText(obj.toString());
           toast.show();
         }

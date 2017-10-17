@@ -1,10 +1,14 @@
 package com.act.quzhibo.ui.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +18,17 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ContactAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.adapter.base.IMutlipleItem;
-import com.act.quzhibo.base.ParentWithNaviActivity;
-import com.act.quzhibo.base.ParentWithNaviFragment;
 import com.act.quzhibo.bean.Friend;
+import com.act.quzhibo.common.MyApplicaition;
+import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.model.UserModel;
 import com.act.quzhibo.ui.activity.ChatActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
+import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.view.FragmentDialog;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.orhanobut.logger.Logger;
 
@@ -34,7 +40,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMUserInfo;
@@ -46,7 +51,7 @@ import cn.bmob.v3.listener.UpdateListener;
 /**
  * 联系人界面
  */
-public class ContactFragment extends ParentWithNaviFragment {
+public class ContactFragment extends Fragment {
 
     @Bind(R.id.rc_view)
     RecyclerView rc_view;
@@ -55,6 +60,7 @@ public class ContactFragment extends ParentWithNaviFragment {
     ContactAdapter adapter;
     LinearLayoutManager layoutManager;
     private IMutlipleItem<Friend> mutlipleItem;
+    private View rootView;
 
 
     @Override
@@ -75,6 +81,7 @@ public class ContactFragment extends ParentWithNaviFragment {
         return rootView;
     }
 
+
     private void setListener() {
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -94,38 +101,48 @@ public class ContactFragment extends ParentWithNaviFragment {
             @Override
             public void onItemClick(int position) {
                 if (position == 0) {//跳转到新朋友页面
-                    startActivity(NewFriendActivity.class, null);
+                    startActivity(new Intent(getActivity(), NewFriendActivity.class));
                 } else {
                     Friend friend = adapter.getItem(position);
                     RootUser user = friend.getFriendUser();
                     BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
                     //TODO 会话：4.1、创建一个常态会话入口，好友聊天
                     BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("c", conversationEntrance);
-                    startActivity(ChatActivity.class, bundle);
+                    Intent intent = new Intent(getActivity(), ChatActivity.class);
+                    intent.putExtra("c", conversationEntrance);
+                    startActivity(intent);
                 }
             }
 
             @Override
             public boolean onItemLongClick(final int position) {
-                log("长按" + position);
                 if (position == 0) {
                     return true;
                 }
-                //TODO 【好友管理】删除指定好友
-                UserModel.getInstance().deleteFriend(adapter.getItem(position),
-                        new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    toast("好友删除成功");
-                                    adapter.remove(position);
-                                } else {
-                                    toast("好友删除失败：" + e.getErrorCode() + ",s =" + e.getMessage());
-                                }
-                            }
-                        });
+                FragmentDialog.newInstance(false, "是否删除好友？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                        UserModel.getInstance().deleteFriend(adapter.getItem(position),
+                                new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            ToastUtil.showToast(getActivity(), "好友删除成功");
+                                            adapter.remove(position);
+                                        } else {
+                                            ToastUtil.showToast(getActivity(), "好友删除失败：");
+                                        }
+                                    }
+                                });
+
+                    }
+
+                    @Override
+                    public void onNegtiveClick(Dialog dialog) {
+                        dialog.dismiss();
+
+                    }
+                }).show(getActivity().getSupportFragmentManager(), "");
 
                 return true;
             }
@@ -193,10 +210,16 @@ public class ContactFragment extends ParentWithNaviFragment {
      * @param event
      */
     @Subscribe
-    public void onEventMainThread(RefreshEvent event) {
-        //重新刷新列表
-        log("---联系人界面接收到自定义消息---");
-        adapter.notifyDataSetChanged();
+    public void onEventAsync(RefreshEvent event) {
+        Log.e("---11111---", MyApplicaition.handler.isChatting + "");
+        if (!MyApplicaition.handler.isChatting) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     /**

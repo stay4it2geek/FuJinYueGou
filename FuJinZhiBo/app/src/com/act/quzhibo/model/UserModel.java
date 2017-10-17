@@ -238,6 +238,7 @@ public class UserModel extends BaseModel {
         Friend f = new Friend();
         RootUser user = BmobUser.getCurrentUser(RootUser.class);
         f.setUser(user);
+        f.setFriendUserId(friend.getObjectId());
         f.setFriendUser(friend);
         f.save(listener);
     }

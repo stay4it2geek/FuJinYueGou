@@ -25,12 +25,13 @@
         android:id="@+id/btn_chat_emo"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:visibility="gone"
         android:layout_marginLeft="6dp"
         android:background="@drawable/btn_chat_emo_selector"
         android:gravity="center"
         android:onClick="toAction" />
 
-    <EditText
+    <io.github.rockerhieu.emojicon.EmojiconEditText
         android:id="@+id/edit_msg"
         android:textSize="@dimen/text_size_medium"
         android:layout_marginLeft="6dp"

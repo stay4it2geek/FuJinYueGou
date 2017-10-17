@@ -1,5 +1,6 @@
 package com.act.quzhibo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -33,8 +34,8 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
 
-    public NewFriendAdapter(Context context, IMutlipleItem<NewFriend> items, Collection<NewFriend> datas) {
-        super(context, items, datas);
+    public NewFriendAdapter(Activity activity, IMutlipleItem<NewFriend> items, Collection<NewFriend> datas) {
+        super(activity, items, datas);
     }
 
     @Override
@@ -120,7 +121,7 @@ public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
             public void done(BmobIMMessage msg, BmobException e) {
                 if (e == null) {//发送成功
                     //TODO 3、修改本地的好友请求记录
-                    NewFriendManager.getInstance(context).updateNewFriend(add, Config.STATUS_VERIFIED);
+                    NewFriendManager.getInstance(activity).updateNewFriend(add, Config.STATUS_VERIFIED);
                     listener.done(msg, e);
                 } else {//发送失败
                     Logger.e(e.getMessage());

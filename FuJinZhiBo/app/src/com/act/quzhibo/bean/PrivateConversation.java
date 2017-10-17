@@ -1,12 +1,18 @@
 package com.act.quzhibo.bean;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
+import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.ui.activity.ChatActivity;
+import com.act.quzhibo.view.FragmentDialog;
 
 import java.util.List;
 
@@ -19,7 +25,6 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * 私聊会话
- * Created by Administrator on 2016/5/25.
  */
 public class PrivateConversation extends Conversation{
 
@@ -99,22 +104,26 @@ public class PrivateConversation extends Conversation{
     }
 
     @Override
-    public void onClick(Context context) {
-        Intent intent = new Intent();
-        intent.setClass(context, ChatActivity.class);
-        Bundle bundle = new Bundle();
-        //TODO 会话：4.1、创建一个常态会话入口，好友聊天
-        bundle.putSerializable("c", conversation);
-        if (bundle != null) {
-            intent.putExtra(context.getPackageName(), bundle);
-        }
-        context.startActivity(intent);
+    public void onClick(FragmentActivity activity) {
+        Intent intent = new Intent(activity, ChatActivity.class);
+        intent.putExtra("c", conversation);
+        activity.startActivity(intent);
     }
 
     @Override
-    public void onLongClick(Context context) {
-        //TODO 会话：4.5、删除会话，以下两种方式均可以删除会话
-        //BmobIM.getInstance().deleteConversation(conversation.getConversationId());
-        BmobIM.getInstance().deleteConversation(conversation);
+    public void onLongClick(final FragmentActivity activity, final BaseRecyclerAdapter adapter, final int position) {
+        FragmentDialog.newInstance(false, "是否删除？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                BmobIM.getInstance().deleteConversation(conversation);
+                adapter.remove(position);
+            }
+
+            @Override
+            public void onNegtiveClick(Dialog dialog) {
+                dialog.dismiss();
+
+            }
+        }).show(activity.getSupportFragmentManager(), "");
     }
 }

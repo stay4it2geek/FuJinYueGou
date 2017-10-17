@@ -1,6 +1,7 @@
 package com.act.quzhibo.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +12,8 @@ import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import com.act.quzhibo.R;
+
+import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import com.act.quzhibo.R;
@@ -41,9 +44,11 @@ public class ReceiveVoiceHolder extends BaseViewHolder {
   protected ProgressBar progress_load;
 
   private String currentUid="";
+    private BmobIMConversation conversation;
 
-  public ReceiveVoiceHolder(Context context, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
+  public ReceiveVoiceHolder(Context context,  BmobIMConversation conversation,ViewGroup root,  OnRecyclerViewListener onRecyclerViewListener) {
     super(context, root, R.layout.item_chat_received_voice,onRecyclerViewListener);
+      this.conversation = conversation;
     try {
       currentUid = BmobUser.getCurrentUser().getObjectId();
     } catch (Exception e) {
@@ -56,7 +61,7 @@ public class ReceiveVoiceHolder extends BaseViewHolder {
     BmobIMMessage msg = (BmobIMMessage)o;
     //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
     final BmobIMUserInfo info = msg.getBmobIMUserInfo();
-      Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.women).error(R.drawable.error_img).into(iv_avatar);
+      Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").placeholder(R.drawable.women).error(R.drawable.error_img).into(iv_avatar);
 
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     String time = dateFormat.format(msg.getCreateTime());
@@ -64,7 +69,7 @@ public class ReceiveVoiceHolder extends BaseViewHolder {
     iv_avatar.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        toast("点击" + info.getName() + "的头像");
+
       }
     });
     //显示特有属性

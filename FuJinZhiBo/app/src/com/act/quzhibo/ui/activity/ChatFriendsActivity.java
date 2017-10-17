@@ -1,25 +1,37 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.base.BaseActivity;
 import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.entity.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
+import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.ui.fragment.ContactFragment;
 import com.act.quzhibo.ui.fragment.ConversationFragment;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.IMMLeaks;
+import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.util.ViewFindUtils;
+import com.act.quzhibo.view.FragmentDialog;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.core.ConnectionStatus;
@@ -33,7 +45,13 @@ import cn.bmob.v3.exception.BmobException;
 import me.leefeng.promptlibrary.PromptDialog;
 
 
-public class MainActivity extends BaseActivity {
+public class ChatFriendsActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface {
+
+    private MyPagerAdapter mAdapter;
+    private BackHandledFragment mBackHandedFragment;
+    private ViewPager viewPager;
+
+
 
     @Bind(R.id.btn_conversation)
     TextView btn_conversation;
@@ -54,10 +72,21 @@ public class MainActivity extends BaseActivity {
     RootUser user;
     PromptDialog promptDialog;
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //清理导致内存泄露的资源
+        BmobIM.getInstance().clear();
+        EventBus.getDefault().unregister(this);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_im_main);
+        ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
+        initTab();
         user = BmobUser.getCurrentUser(RootUser.class);
         promptDialog = new PromptDialog(this);
         if (user == null) {
@@ -79,7 +108,7 @@ public class MainActivity extends BaseActivity {
                                             user.getUsername(), user.photoFileUrl));
 
                         } else {
-                            toast(e.getMessage());
+                            ToastUtil.showToast(ChatFriendsActivity.this, e.getMessage());
                         }
                     }
                 });
@@ -89,7 +118,7 @@ public class MainActivity extends BaseActivity {
                 BmobIM.getInstance().setOnConnectStatusChangeListener(new ConnectStatusChangeListener() {
                     @Override
                     public void onChange(ConnectionStatus status) {
-                        toast(status.getMsg());
+                        ToastUtil.showToast(ChatFriendsActivity.this, status.getMsg());
                         if (!status.getMsg().equals("connecting")) {
                             promptDialog.dismissImmediately();
                         }
@@ -97,30 +126,39 @@ public class MainActivity extends BaseActivity {
                 });
             }
         }
-        //解决leancanary提示InputMethodManager内存泄露的问题
         IMMLeaks.fixFocusedViewLeak(getApplication());
     }
 
 
-    @Override
-    protected void initView() {
-        super.initView();
+    private void initTab() {
         mTabs = new TextView[2];
         mTabs[0] = btn_conversation;
         mTabs[1] = btn_contact;
         mTabs[0].setSelected(true);
-        initTab();
-    }
-
-    private void initTab() {
         conversationFragment = new ConversationFragment();
         contactFragment = new ContactFragment();
         fragments = new Fragment[]{conversationFragment, contactFragment};
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, conversationFragment)
-                .add(R.id.fragment_container, contactFragment)
-                .hide(contactFragment)
-                .show(conversationFragment).commit();
+        mAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        viewPager = ((ViewPager) findViewById(R.id.viewpager));
+        viewPager.setCurrentItem(0);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                viewPager.setCurrentItem(position);
+                onTabIndex(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        viewPager.setAdapter(mAdapter);
     }
 
     public void onTabSelect(View view) {
@@ -139,16 +177,11 @@ public class MainActivity extends BaseActivity {
 
     private void onTabIndex(int index) {
         if (currentTabIndex != index) {
-            FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
-            trx.hide(fragments[currentTabIndex]);
-            if (!fragments[index].isAdded()) {
-                trx.add(R.id.fragment_container, fragments[index]);
-            }
-            trx.show(fragments[index]).commit();
+            mTabs[currentTabIndex].setSelected(false);
+            mTabs[index].setSelected(true);
         }
-        mTabs[currentTabIndex].setSelected(false);
-        mTabs[index].setSelected(true);
         currentTabIndex = index;
+        viewPager.setCurrentItem(index);
     }
 
     @Override
@@ -169,7 +202,7 @@ public class MainActivity extends BaseActivity {
                             BmobIM.getInstance().updateUserInfo(new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.photoFileUrl));
 
                         } else {
-                            toast(e.getMessage());
+                            ToastUtil.showToast(ChatFriendsActivity.this, e.getMessage());
                         }
                     }
                 });
@@ -183,11 +216,50 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+
+    private class MyPagerAdapter extends FragmentPagerAdapter {
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments[position];
+        }
+    }
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //清理导致内存泄露的资源
-        BmobIM.getInstance().clear();
+    public void setSelectedFragment(BackHandledFragment selectedFragment) {
+        this.mBackHandedFragment = selectedFragment;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+
+                FragmentDialog.newInstance(false, "客官再看一会儿呗", "还是留下来再看看吧", "再欣赏下", "有事要忙", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, boolean needDelete) {
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNegtiveClick(Dialog dialog) {
+                        dialog.dismiss();
+                        ChatFriendsActivity.this.finish();
+                    }
+                }).show(getSupportFragmentManager(), "");
+            }
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
     /**
@@ -197,8 +269,13 @@ public class MainActivity extends BaseActivity {
      */
     //TODO 消息接收：8.3、通知有在线消息接收
     @Subscribe
-    public void onEventMainThread(MessageEvent event) {
-        checkRedPoint();
+    public void onEventAsync(MessageEvent event) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                checkRedPoint();
+            }
+        });
     }
 
     /**
@@ -208,8 +285,13 @@ public class MainActivity extends BaseActivity {
      */
     //TODO 消息接收：8.4、通知有离线消息接收
     @Subscribe
-    public void onEventMainThread(OfflineMessageEvent event) {
-        checkRedPoint();
+    public void onEventAsync(OfflineMessageEvent event) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                checkRedPoint();
+            }
+        });
     }
 
     /**
@@ -219,8 +301,13 @@ public class MainActivity extends BaseActivity {
      */
     //TODO 消息接收：8.5、通知有自定义消息接收
     @Subscribe
-    public void onEventMainThread(RefreshEvent event) {
-        checkRedPoint();
+    public void onEventAsync(RefreshEvent event) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                checkRedPoint();
+            }
+        });
     }
 
     /**
@@ -238,8 +325,7 @@ public class MainActivity extends BaseActivity {
         //TODO 好友管理：是否有好友添加的请求
         if (NewFriendManager.getInstance(this).hasNewFriendInvitation()) {
             tv_contact_tips.setVisibility(View.VISIBLE);
-            tv_contact_tips.setText(count + "");
-
+            tv_contact_tips.setText(count + "1");
         } else {
             tv_contact_tips.setVisibility(View.GONE);
         }

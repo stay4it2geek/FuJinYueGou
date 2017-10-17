@@ -1,5 +1,6 @@
 package com.act.quzhibo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -22,8 +23,8 @@ public class ContactAdapter extends BaseRecyclerAdapter<Friend> {
     public static final int TYPE_NEW_FRIEND = 0;
     public static final int TYPE_ITEM = 1;
 
-    public ContactAdapter(Context context, IMutlipleItem<Friend> items, Collection<Friend> datas) {
-        super(context,items,datas);
+    public ContactAdapter(Activity activity, IMutlipleItem<Friend> items, Collection<Friend> datas) {
+        super(activity,items,datas);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class ContactAdapter extends BaseRecyclerAdapter<Friend> {
             //好友名称
             holder.setText(R.id.tv_recent_name,user==null?"未知":user.getUsername());
         }else if(holder.layoutId==R.layout.header_new_friend){
-            if(NewFriendManager.getInstance(context).hasNewFriendInvitation()){
+            if(NewFriendManager.getInstance(activity).hasNewFriendInvitation()){
                 holder.setVisible(R.id.iv_msg_tips, View.VISIBLE);
             }else{
                 holder.setVisible(R.id.iv_msg_tips, View.GONE);

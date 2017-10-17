@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 
 

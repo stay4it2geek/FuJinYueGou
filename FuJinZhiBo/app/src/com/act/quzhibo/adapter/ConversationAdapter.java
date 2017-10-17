@@ -1,5 +1,6 @@
 package com.act.quzhibo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -21,8 +22,8 @@ import cn.bmob.newim.bean.BmobIMConversationType;
  */
 public class ConversationAdapter extends BaseRecyclerAdapter<Conversation> {
 
-    public ConversationAdapter(Context context, IMutlipleItem<Conversation> items, Collection<Conversation> datas) {
-        super(context,items,datas);
+    public ConversationAdapter(Activity activity, IMutlipleItem<Conversation> items, Collection<Conversation> datas) {
+        super(activity,items,datas);
     }
 
     /**

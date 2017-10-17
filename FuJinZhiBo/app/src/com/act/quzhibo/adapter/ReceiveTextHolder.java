@@ -8,12 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 
@@ -22,6 +24,7 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
  */
 public class ReceiveTextHolder extends BaseViewHolder {
 
+  private BmobIMConversation conversation;
   @Bind(R.id.iv_avatar)
   protected ImageView iv_avatar;
 
@@ -31,8 +34,9 @@ public class ReceiveTextHolder extends BaseViewHolder {
   @Bind(R.id.tv_message)
   protected TextView tv_message;
 
-  public ReceiveTextHolder(Context context, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
+  public ReceiveTextHolder(Context context,  BmobIMConversation conversation,ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
     super(context, root, R.layout.item_chat_received_message,onRecyclerViewListener);
+    this.conversation =conversation;
   }
 
   @OnClick({R.id.iv_avatar})
@@ -47,20 +51,19 @@ public class ReceiveTextHolder extends BaseViewHolder {
     String time = dateFormat.format(message.getCreateTime());
     tv_time.setText(time);
     final BmobIMUserInfo info = message.getBmobIMUserInfo();
-    Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.women).error(R.drawable.error_img).into(iv_avatar);
+    Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").placeholder(R.drawable.women).error(R.drawable.error_img).into(iv_avatar);
 
     String content =  message.getContent();
     tv_message.setText(content);
     iv_avatar.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        toast("点击" + info.getName() + "的头像");
+
       }
     });
     tv_message.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          toast("点击"+message.getContent());
           if(onRecyclerViewListener!=null){
             onRecyclerViewListener.onItemClick(getAdapterPosition());
           }

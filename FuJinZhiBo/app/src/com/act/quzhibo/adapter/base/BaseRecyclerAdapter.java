@@ -1,5 +1,6 @@
 package com.act.quzhibo.adapter.base;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,12 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
-import com.act.quzhibo.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.TreeSet;
 
 
 /**
@@ -42,7 +42,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      */
     private final int TYPE_MUTIPLE_HEADER = 3;
 
-    protected final Context context;
+    protected Activity activity;
     protected List<T> lists;
     protected IMutlipleItem<T> items;
     protected OnRecyclerViewListener listener;
@@ -50,14 +50,14 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     /**
      * 支持一种或多种Item布局
      *
-     * @param context
+     * @param activity
      * @param items
      * @param datas
      */
-    public BaseRecyclerAdapter(Context context, IMutlipleItem<T> items, Collection<T> datas) {
-        this.context = context;
+    public BaseRecyclerAdapter(Activity activity, IMutlipleItem<T> items, Collection<T> datas) {
+        this.activity = activity;
         this.items = items;
-        this.lists = datas == null ? new ArrayList<T>() : new ArrayList<T>(datas);
+        this.lists = datas == null ? new ArrayList<T>() : new ArrayList<>(new TreeSet(datas));
     }
 
     /**
@@ -102,9 +102,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     @Override
     public BaseRecyclerHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int layoutId = items.getItemLayoutId(viewType);
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(activity);
         View root = inflater.inflate(layoutId, parent, false);
-        return new BaseRecyclerHolder(context,layoutId, root);
+        return new BaseRecyclerHolder(activity,layoutId, root);
     }
 
     @Override
@@ -213,12 +213,12 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
     private Toast toast;
     public void toast(final Object obj) {
         try {
-            ((BaseActivity)context).runOnUiThread(new Runnable() {
+            activity.runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
                     if (toast == null)
-                        toast = Toast.makeText(context,"", Toast.LENGTH_SHORT);
+                        toast = Toast.makeText(activity,"", Toast.LENGTH_SHORT);
                     toast.setText(obj.toString());
                     toast.show();
                 }

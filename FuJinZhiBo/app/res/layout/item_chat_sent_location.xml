@@ -28,7 +28,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_5"
-            android:background="@mipmap/head"
+            android:src="@drawable/layerlist_circle_mask_conversation"
             android:scaleType="fitXY" />
 
          <LinearLayout

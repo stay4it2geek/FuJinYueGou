@@ -8,6 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
@@ -98,7 +99,7 @@ public class SendVoiceHolder extends BaseViewHolder {
     iv_avatar.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        toast("点击" + info.getName() + "的头像");
+
       }
     });
     //重发

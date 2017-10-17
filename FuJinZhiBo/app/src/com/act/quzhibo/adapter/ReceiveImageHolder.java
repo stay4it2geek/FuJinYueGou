@@ -2,15 +2,17 @@ package com.act.quzhibo.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import com.act.quzhibo.R;
+import com.act.quzhibo.ui.activity.ShowerInfoActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -18,6 +20,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
+import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMUserInfo;
@@ -37,9 +40,12 @@ public class ReceiveImageHolder extends BaseViewHolder {
     protected ImageView iv_picture;
     @Bind(R.id.progress_load)
     protected ProgressBar progress_load;
+    BmobIMConversation conversation;
 
-    public ReceiveImageHolder(Context context, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
+
+    public ReceiveImageHolder(Context context, BmobIMConversation conversation, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
         super(context, root, R.layout.item_chat_received_image, onRecyclerViewListener);
+        this.conversation = conversation;
     }
 
     @Override
@@ -47,9 +53,17 @@ public class ReceiveImageHolder extends BaseViewHolder {
         BmobIMMessage msg = (BmobIMMessage) o;
         //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
         final BmobIMUserInfo info = msg.getBmobIMUserInfo();
+        Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                iv_avatar.setBackgroundDrawable(new BitmapDrawable(resource));
+            }
 
-        Glide.with(context).load(info != null ? info.getAvatar() : null).placeholder(R.drawable.women).into(iv_avatar);
-
+            @Override
+            public void onLoadStarted(Drawable placeholder) {
+                super.onLoadStarted(placeholder);
+            }
+        });
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         String time = dateFormat.format(msg.getCreateTime());
         tv_time.setText(time);
@@ -92,14 +106,12 @@ public class ReceiveImageHolder extends BaseViewHolder {
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toast("点击" + info.getName() + "的头像");
             }
         });
 
         iv_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toast("点击图片:" + message.getRemoteUrl() + "");
                 if (onRecyclerViewListener != null) {
                     onRecyclerViewListener.onItemClick(getAdapterPosition());
                 }

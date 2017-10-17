@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.view.CircleImageView;
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
@@ -79,14 +80,14 @@ public class SendLocationHolder extends BaseViewHolder {
     iv_avatar.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        toast("点击" + info.getName() + "的头像");
+
       }
     });
 
     tv_location.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        toast("经度：" + message.getLongitude() + ",维度：" + message.getLatitude());
+
         if(onRecyclerViewListener!=null){
           onRecyclerViewListener.onItemClick(getAdapterPosition());
         }

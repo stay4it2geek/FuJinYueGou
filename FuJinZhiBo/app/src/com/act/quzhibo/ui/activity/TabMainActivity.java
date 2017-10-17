@@ -67,7 +67,7 @@ public class TabMainActivity extends TabActivity {
                     .setContent(new Intent(TabMainActivity.this, MoneyCourseActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("聊天")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, MainActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, ChatFriendsActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("我的")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MineActivity.class)));

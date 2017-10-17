@@ -1,15 +1,17 @@
 package com.act.quzhibo.bean;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+
+import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 
 import java.io.Serializable;
 
 import cn.bmob.newim.bean.BmobIMConversationType;
 
 /**
- * 对BmobIMConversation的抽象封装,方便开发者扩展会话类型
- * @author smile
- * @date 2016-05-25
+ * 对BmobIMConversation的抽象封装
  */
 public abstract class Conversation implements Serializable,Comparable {
 
@@ -55,15 +57,15 @@ public abstract class Conversation implements Serializable,Comparable {
 
     /**
      * 点击事件
-     * @param context
+     * @param activity
      */
-    abstract public void onClick(Context context);
+    abstract public void onClick(FragmentActivity activity);
 
     /**
      * 长按事件
      * @param context
      */
-    abstract public void onLongClick(Context context);
+    abstract public void onLongClick(FragmentActivity context,BaseRecyclerAdapter adapter,int position);
 
     public String getcName() {
         return cName;

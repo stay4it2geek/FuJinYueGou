@@ -7,9 +7,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/height_message">
+        android:minHeight="@dimen/height_message"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
+
             android:id="@+id/iv_recent_avatar"
             android:layout_width="@dimen/height_50"
             android:layout_height="@dimen/height_50"
@@ -18,7 +21,7 @@
             android:layout_marginTop="@dimen/margin_12"
             android:layout_marginBottom="@dimen/margin_12"
             android:layout_marginLeft="@dimen/margin_16"
-            android:src="@mipmap/head"
+            android:src="@drawable/layerlist_circle_mask_conversation"
             />
 
         <TextView
@@ -78,7 +81,7 @@
             android:paddingRight="@dimen/margin_5"
             android:paddingTop="@dimen/margin_3"
             android:paddingBottom="@dimen/margin_3"
-            android:visibility="gone"
+            android:text=""
             android:background="@drawable/list_newmessage2"
             android:textSize="13.0dip" />
     </RelativeLayout>

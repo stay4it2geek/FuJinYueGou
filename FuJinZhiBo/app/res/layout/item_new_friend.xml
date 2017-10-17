@@ -17,9 +17,9 @@
             android:layout_gravity="center_vertical"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/margin_12"
+            android:src="@drawable/layerlist_circle_mask_conversation"
             android:layout_marginBottom="@dimen/margin_12"
             android:layout_marginLeft="@dimen/margin_16"
-            android:src="@mipmap/head"
             />
 
         <LinearLayout
@@ -70,10 +70,8 @@
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:text="@string/agree"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:gravity="center"
-            android:textSize="19sp"
+            android:textSize="14sp"
             android:background="@drawable/button_common_selector"
             />
 

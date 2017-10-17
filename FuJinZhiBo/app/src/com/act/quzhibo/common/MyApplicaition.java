@@ -25,14 +25,16 @@ public class MyApplicaition extends Application {
     public static final LinkedHashMap<String, String> cityKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, Integer> femaleKeySrc = new LinkedHashMap();
     public static final LinkedHashMap<String, Integer> maleKeySrc = new LinkedHashMap();
+    public static  MyMessageHandler handler;
 
     public void onCreate() {
         super.onCreate();
         setInstance(this);
+        handler= new MyMessageHandler(this);
         //TODO 1.8、初始化IM SDK，并注册消息接收器，只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())) {
             BmobIM.init(this);
-            BmobIM.registerDefaultMessageHandler(new MyMessageHandler(this));
+            BmobIM.registerDefaultMessageHandler(handler);
         }
 
         BmobConfig config = new BmobConfig.Builder(this)

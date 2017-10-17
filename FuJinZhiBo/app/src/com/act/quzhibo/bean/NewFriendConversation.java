@@ -1,54 +1,59 @@
 package com.act.quzhibo.bean;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 import com.act.quzhibo.common.Config;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.db.NewFriend;
 import com.act.quzhibo.db.NewFriendManager;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
+import com.act.quzhibo.view.FragmentDialog;
 
 
 /**
  * 新朋友会话
  * Created by Administrator on 2016/5/25.
  */
-public class NewFriendConversation extends Conversation{
+public class NewFriendConversation extends Conversation {
 
     NewFriend lastFriend;
 
-    public NewFriendConversation(NewFriend friend){
-        this.lastFriend=friend;
-        this.cName="新朋友";
+    public NewFriendConversation(NewFriend friend) {
+        this.lastFriend = friend;
+        this.cName = "新朋友";
     }
 
     @Override
     public String getLastMessageContent() {
-        if(lastFriend!=null){
-            Integer status =lastFriend.getStatus();
+        if (lastFriend != null) {
+            Integer status = lastFriend.getStatus();
             String name = lastFriend.getName();
-            if(TextUtils.isEmpty(name)){
+            if (TextUtils.isEmpty(name)) {
                 name = lastFriend.getUid();
             }
             //目前的好友请求都是别人发给我的
-            if(status==null || status== Config.STATUS_VERIFY_NONE||status ==Config.STATUS_VERIFY_READED){
-                return name+"请求添加好友";
-            }else{
-                return "我已添加"+name;
+            if (status == null || status == Config.STATUS_VERIFY_NONE || status == Config.STATUS_VERIFY_READED) {
+                return name + "请求添加好友";
+            } else {
+                return "我已添加" + name;
             }
-        }else{
+        } else {
             return "";
         }
     }
 
     @Override
     public long getLastMessageTime() {
-        if(lastFriend!=null){
+        if (lastFriend != null) {
             return lastFriend.getTime();
-        }else{
+        } else {
             return 0;
         }
     }
@@ -70,14 +75,26 @@ public class NewFriendConversation extends Conversation{
     }
 
     @Override
-    public void onClick(Context context) {
+    public void onClick(FragmentActivity context) {
         Intent intent = new Intent();
         intent.setClass(context, NewFriendActivity.class);
         context.startActivity(intent);
     }
 
     @Override
-    public void onLongClick(Context context) {
-        NewFriendManager.getInstance(context).deleteNewFriend(lastFriend);
+    public void onLongClick(final FragmentActivity activity, final BaseRecyclerAdapter adapter, final int position) {
+        FragmentDialog.newInstance(false, "是否删除？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                NewFriendManager.getInstance(activity).deleteNewFriend(lastFriend);
+                adapter.remove(position);
+            }
+
+            @Override
+            public void onNegtiveClick(Dialog dialog) {
+                dialog.dismiss();
+
+            }
+        }).show(activity.getSupportFragmentManager(), "");
     }
 }

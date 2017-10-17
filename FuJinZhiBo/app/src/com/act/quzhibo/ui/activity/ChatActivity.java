@@ -1,15 +1,19 @@
 package com.act.quzhibo.ui.activity;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,16 +33,23 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ChatAdapter;
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
-import com.act.quzhibo.base.ParentWithNaviActivity;
+import com.act.quzhibo.common.MyApplicaition;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.Util;
+import com.act.quzhibo.view.FragmentDialog;
 import com.act.quzhibo.view.TitleBarView;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMAudioMessage;
@@ -48,12 +59,10 @@ import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMLocationMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMTextMessage;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.bean.BmobIMVideoMessage;
 import cn.bmob.newim.core.BmobIMClient;
 import cn.bmob.newim.core.BmobRecordManager;
 import cn.bmob.newim.event.MessageEvent;
-import cn.bmob.newim.listener.MessageListHandler;
 import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.newim.listener.MessagesQueryListener;
 import cn.bmob.newim.listener.OnRecordChangeListener;
@@ -63,7 +72,21 @@ import cn.bmob.v3.exception.BmobException;
 /**
  * 聊天界面
  */
-public class ChatActivity extends ParentWithNaviActivity implements MessageListHandler {
+public class ChatActivity extends FragmentActivity {
+
+    /**
+     * 注册消息接收事件
+     *
+     * @param event
+     */
+    //通知有在线消息接收
+    @Subscribe
+    public void onEventMain(final MessageEvent event) {
+        Log.e("---息ChatActivity---", MyApplicaition.handler.isChatting + "");
+        if (MyApplicaition.handler.isChatting) {
+            addMessage2Chat(event);
+        }
+    }
 
     @Bind(R.id.ll_chat)
     LinearLayout ll_chat;
@@ -116,10 +139,10 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        BmobIMConversation conversationEntrance = (BmobIMConversation) getBundle().getSerializable("c");
+        ButterKnife.bind(this);
+        BmobIMConversation conversationEntrance = (BmobIMConversation) getIntent().getSerializableExtra("c");
         //TODO 消息：5.1、根据会话入口获取消息管理，聊天页面
         mConversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
-
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         String title = mConversationManager.getConversationTitle();
         if (title != null && title.length() > 20) {
@@ -129,19 +152,20 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatActivity.this.finish();
+                onBackPressed();
             }
         });
         initSwipeLayout();
         initVoiceView();
         initBottomView();
+        EventBus.getDefault().register(this);
     }
 
     private void initSwipeLayout() {
         sw_refresh.setEnabled(true);
         layoutManager = new LinearLayoutManager(this);
         rc_view.setLayoutManager(layoutManager);
-        adapter = new ChatAdapter(this, mConversationManager);
+        adapter = new ChatAdapter(mConversationManager);
         rc_view.setAdapter(adapter);
         ll_chat.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -292,7 +316,7 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (!Util.checkSdCard()) {
-                        toast("发送语音需要sdcard支持！");
+                        ToastUtil.showToast(ChatActivity.this,"发送语音需要sdcard支持！");
                         return false;
                     }
                     try {
@@ -429,7 +453,8 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
 
     @OnClick(R.id.tv_camera)
     public void onCameraClick(View view) {
-        sendRemoteImageMessage();
+//        sendRemoteImageMessage();
+        sendRemoteVideoMessage();
     }
 
     @OnClick(R.id.tv_location)
@@ -478,7 +503,7 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
     private void sendMessage() {
         String text = edit_msg.getText().toString();
         if (TextUtils.isEmpty(text.trim())) {
-            toast("请输入内容");
+            ToastUtil.showToast(ChatActivity.this,"请输入内容");
             return;
         }
         //TODO 发送消息：6.1、发送文本消息
@@ -513,26 +538,6 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
 
 
     /**
-     * 发送本地音频文件
-     */
-    private void sendLocalAudioMessage() {
-        //TODO 发送消息：6.4、发送本地音频文件消息
-        BmobIMAudioMessage audio = new BmobIMAudioMessage("此处替换为你本地的音频文件地址");
-        mConversationManager.sendMessage(audio, listener);
-    }
-
-
-    /**
-     * 发送远程音频文件
-     */
-    private void sendRemoteAudioMessage() {
-        //TODO 发送消息：6.5、发送本地音频文件消息
-        BmobIMAudioMessage audio = new BmobIMAudioMessage();
-        audio.setRemoteUrl("此处替换为你远程的音频文件地址");
-        mConversationManager.sendMessage(audio, listener);
-    }
-
-    /**
      * 发送本地视频文件
      */
     private void sendLocalVideoMessage() {
@@ -546,8 +551,8 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
      */
     private void sendRemoteVideoMessage() {
         //TODO 发送消息：6.7、发送本地音频文件消息
-        BmobIMAudioMessage audio = new BmobIMAudioMessage();
-        audio.setRemoteUrl("此处替换为你远程的音频文件地址");
+        BmobIMVideoMessage audio = new BmobIMVideoMessage();
+        audio.setRemoteUrl("http://file.nidong.com//upload/user/20170430/14/ff8080815bbd7636015bbd79ea90000e/psd.mp4");
         mConversationManager.sendMessage(audio, listener);
     }
 
@@ -631,7 +636,7 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
             edit_msg.setText("");
             scrollToBottom();
             if (e != null) {
-                toast(e.getMessage());
+                ToastUtil.showToast(ChatActivity.this,e.getMessage());
             }
         }
     };
@@ -653,7 +658,7 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
                         layoutManager.scrollToPositionWithOffset(list.size() - 1, 0);
                     }
                 } else {
-                    toast(e.getMessage() + "(" + e.getErrorCode() + ")");
+                    ToastUtil.showToast(ChatActivity.this,e.getMessage() + "(" + e.getErrorCode() + ")");
                 }
             }
         });
@@ -663,16 +668,6 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
         layoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, 0);
     }
 
-
-    //TODO 消息接收：8.2、单个页面的自定义接收器
-    @Override
-    public void onMessageReceive(List<MessageEvent> list) {
-        Logger.i("聊天页面接收到消息：" + list.size());
-        //当注册页面消息监听时候，有消息（包含离线消息）到来时会回调该方法
-        for (int i = 0; i < list.size(); i++) {
-            addMessage2Chat(list.get(i));
-        }
-    }
 
     /**
      * 添加消息到聊天界面中
@@ -689,8 +684,6 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
                 mConversationManager.updateReceiveStatus(msg);
             }
             scrollToBottom();
-        } else {
-            Logger.i("不是与当前聊天对象的消息");
         }
     }
 
@@ -708,12 +701,13 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
         }
     }
 
+
     @Override
     protected void onResume() {
         //锁屏期间的收到的未读消息需要添加到聊天界面中
         addUnReadMessage();
         //添加页面消息监听器
-        BmobIM.getInstance().addMessageListHandler(this);
+        MyApplicaition.handler.isChatting = true;
         // 有可能锁屏期间，在聊天界面出现通知栏，这时候需要清除通知
         BmobNotificationManager.getInstance(this).cancelNotification();
         super.onResume();
@@ -736,8 +730,6 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
 
     @Override
     protected void onPause() {
-        //移除页面消息监听器
-        BmobIM.getInstance().removeMessageListHandler(this);
         super.onPause();
     }
 
@@ -747,12 +739,32 @@ public class ChatActivity extends ParentWithNaviActivity implements MessageListH
         if (recordManager != null) {
             recordManager.clear();
         }
+        MyApplicaition.handler.isChatting = false;
+
         //TODO 消息：5.4、更新此会话的所有消息为已读状态
         if (mConversationManager != null) {
             mConversationManager.updateLocalCache();
         }
         hideSoftInputView();
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
+
+    /**
+     * 隐藏软键盘
+     */
+    public void hideSoftInputView() {
+        InputMethodManager manager = ((InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE));
+        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null)
+                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+     super.onBackPressed();
+
+    }
 }

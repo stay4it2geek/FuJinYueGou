@@ -37,6 +37,7 @@ import com.act.quzhibo.ui.activity.ClipImageActivity;
 import com.act.quzhibo.ui.activity.GetQuCoinsActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
+import com.act.quzhibo.ui.activity.ChatFriendsActivity;
 import com.act.quzhibo.ui.activity.RegisterNormalActivity;
 import com.act.quzhibo.ui.activity.ShareForMoneyActivity;
 import com.act.quzhibo.ui.activity.MyFocusPersonActivity;

@@ -1,6 +1,7 @@
 package com.act.quzhibo.view;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -214,6 +215,8 @@ public class FragmentDialog extends DialogFragment {
      * 设置确定取消按钮的回调
      */
     public OnClickBottomListener onClickBottomListener;
+
+
 
     public interface OnClickBottomListener {
         /**
