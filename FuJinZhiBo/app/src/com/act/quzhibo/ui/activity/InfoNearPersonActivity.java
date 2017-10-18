@@ -326,7 +326,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                     if (e == null) {
                         if (myFcPersons.size() >= 1) {
                             mMyFocusCommonPerson = myFcPersons.get(0);
-                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                         }
                     }
                 }
@@ -337,7 +337,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
+                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("取消关注")) {
                         if (mMyFocusCommonPerson == null) {
                             MyFocusCommonPerson myFcPerson = new MyFocusCommonPerson();
                             myFcPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
@@ -350,7 +350,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
@@ -362,7 +362,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                                                     if (e == null) {
                                                         if (myFcPersons.size() >= 1) {
                                                             InfoNearPersonActivity.this.mMyFocusCommonPerson = myFcPersons.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                                         }
                                                     }
                                                 }
@@ -379,7 +379,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
@@ -391,7 +391,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                                                     if (e == null) {
                                                         if (myFcPersons.size() >= 1) {
                                                             InfoNearPersonActivity.this.mMyFocusCommonPerson = myFcPersons.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                                         }
                                                     }
                                                 }

@@ -11,6 +11,7 @@ import com.act.quzhibo.R;
 
 public class SelfDialog extends Dialog {
 
+    private boolean isSingle;
     private Button yes;//确定按钮
     private Button no;//取消按钮
     private TextView titleTv;//消息标题文本
@@ -49,8 +50,10 @@ public class SelfDialog extends Dialog {
         this.yesOnclickListener = onYesOnclickListener;
     }
 
-    public SelfDialog(Context context) {
+    public SelfDialog(Context context, boolean isSingle) {
         super(context, R.style.CustomDialog);
+        this.isSingle = isSingle;
+
     }
 
     @Override
@@ -118,6 +121,10 @@ public class SelfDialog extends Dialog {
     private void initView() {
         yes = (Button) findViewById(R.id.positive);
         no = (Button) findViewById(R.id.negtive);
+        if (isSingle) {
+            no.setVisibility(View.GONE);
+            findViewById(R.id.column_line).setVisibility(View.GONE);
+        }
         titleTv = (TextView) findViewById(R.id.title);
         messageTv = (TextView) findViewById(R.id.message);
     }
@@ -144,10 +151,10 @@ public class SelfDialog extends Dialog {
      * 设置确定按钮和取消被点击的接口
      */
     public interface onYesOnclickListener {
-         void onYesClick();
+        void onYesClick();
     }
 
     public interface onNoOnclickListener {
-         void onNoClick();
+        void onNoClick();
     }
 }

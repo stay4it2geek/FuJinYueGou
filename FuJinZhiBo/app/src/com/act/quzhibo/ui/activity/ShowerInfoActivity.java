@@ -93,7 +93,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                     if (e == null) {
                         if (myFocusShowers.size() >= 1) {
                             mMyFocusShower = myFocusShowers.get(0);
-                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                         }
                     }
                 }
@@ -105,7 +105,7 @@ public class ShowerInfoActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
+                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("取消关注")) {
 
                         if (mMyFocusShower == null) {
                             MyFocusShower myFocusShower = new MyFocusShower();
@@ -128,7 +128,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                         EventBus.getDefault().post(new FocusChangeEvent(true));
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
@@ -141,7 +141,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
                                                             ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                                         }
                                                     }
                                                 }
@@ -158,7 +158,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.setLimit(1);
@@ -170,7 +170,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
                                                             ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                                         }
                                                     }
                                                 }
@@ -258,13 +258,13 @@ public class ShowerInfoActivity extends FragmentActivity {
                             urls.clear();
                             urls.add(portrait_img);
                         }
-                        final ImageView zhuboAvatar = (ImageView) findViewById(R.id.userImage);
+                        final ImageView showerAvatar = (ImageView) findViewById(R.id.userImage);
 
                         if (gender.equals("0")) {
                             Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                    zhuboAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
+                                    showerAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
                                 }
 
                                 @Override
@@ -277,7 +277,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                             Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.man).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                    zhuboAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
+                                    showerAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
                                 }
 
                                 @Override

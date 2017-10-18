@@ -17,10 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp"
+            android:padding="10dp"
             android:text="正在重试连接"
             android:textColor="@color/red_light"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <ProgressBar
             style="@android:style/Widget.ProgressBar.Small.Inverse"
@@ -36,8 +36,8 @@
         android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:paddingLeft="10dp"
+        android:padding="10dp"
         android:text="消息连接超时，点击这里重试！"
         android:textColor="@color/red_light"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 </LinearLayout>

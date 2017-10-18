@@ -102,14 +102,15 @@ public class MyStandardVideoController extends StandardVideoController implement
             findViewById(R.id.more_menu).setVisibility(GONE);
             findViewById(R.id.fullscreen).setVisibility(GONE);
         }
+
         if (this.mediaPlayer.isPlaying()) {
             this.mediaPlayer.pause();
         } else {
-            if (BmobUser.getCurrentUser(RootUser.class) == null) {
-
-                getContext().startActivity(new Intent(getContext(), LoginActivity.class));
-            } else {
                 if (needLoginToStart) {
+                    if (BmobUser.getCurrentUser(RootUser.class) == null) {
+                        getContext().startActivity(new Intent(getContext(), LoginActivity.class));
+                        return;
+                    }
                     if (BmobUser.getCurrentUser(RootUser.class).vipConis > 14000) {
                         this.mediaPlayer.start();
                     } else {
@@ -118,8 +119,6 @@ public class MyStandardVideoController extends StandardVideoController implement
                 } else {
                     this.mediaPlayer.start();
                 }
-
-            }
         }
     }
 

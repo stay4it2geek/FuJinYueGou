@@ -45,7 +45,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_shower_room_item, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_shower_room_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -53,12 +53,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            if (!TextUtils.equals("手机达人", cataTitle)) {
-                holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), (screenWidth / 2) - 5));
-            } else {
-                holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth), FrameLayout.LayoutParams.WRAP_CONTENT));
-            }
-
+            holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), (screenWidth / 2) - 5));
             if (Integer.parseInt(datas.get(position).onlineCount) > 1 && datas.get(position).liveType != null && (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)
                     || datas.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE))) {
                 holder.onlineCount.setVisibility(View.VISIBLE);
@@ -80,7 +75,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
             }
         }
 
-        holder.nickName.setText(datas.get(position).nickname.replaceAll("kk",""));
+        holder.nickName.setText(datas.get(position).nickname.replace("k", ""));
         holder.photoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

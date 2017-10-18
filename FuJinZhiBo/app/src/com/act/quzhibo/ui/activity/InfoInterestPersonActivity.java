@@ -51,7 +51,6 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
     private InterestPost post;
     private HorizontialListView listView;
     private Banner banner;
-    private int second;
     private LoadNetView loadNetView;
 
     MyFocusCommonPerson myFocusCommonPerson;
@@ -184,7 +183,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                     if (e == null) {
                         if (myFocusCommonPersons.size() >= 1) {
                             myFocusCommonPerson = myFocusCommonPersons.get(0);
-                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                         }
                     }
                 }
@@ -196,7 +195,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("已关注")) {
+                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("取消关注")) {
                         if (myFocusCommonPerson == null) {
                             MyFocusCommonPerson myFocusCommonPerson = new MyFocusCommonPerson();
                             myFocusCommonPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
@@ -209,7 +208,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
@@ -221,7 +220,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                                     if (e == null) {
                                                         if (myFocusCommonPersons.size() >= 1) {
                                                             InfoInterestPersonActivity.this.myFocusCommonPerson = myFocusCommonPersons.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                                         }
                                                     }
                                                 }
@@ -238,7 +237,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
@@ -250,7 +249,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                                     if (e == null) {
                                                         if (myFocusCommonPersons.size() >= 1) {
                                                             InfoInterestPersonActivity.this.myFocusCommonPerson = myFocusCommonPersons.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("已关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
                                                         }
                                                     }
                                                 }

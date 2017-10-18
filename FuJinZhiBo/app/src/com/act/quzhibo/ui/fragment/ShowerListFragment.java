@@ -94,16 +94,13 @@ public class ShowerListFragment extends BackHandledFragment {
         categoryTitle = getArguments().getString(Constants.CATEGORY_TITLE);
         if (categoryTitle.equals("手机达人") || categoryTitle.contains("手机")) {
             offset = "20";
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-            gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(gridLayoutManager);
         } else {
             offset = "40";
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-            gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(gridLayoutManager);
-        }
 
+        }
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(gridLayoutManager);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +137,7 @@ public class ShowerListFragment extends BackHandledFragment {
                     public void onNegtiveClick(Dialog dialog) {
                         dialog.dismiss();
                     }
-                }).show(getFragmentManager(),"");
+                }).show(getFragmentManager(), "");
             }
         });
         getData(categoryId, "0", Constants.REFRESH);

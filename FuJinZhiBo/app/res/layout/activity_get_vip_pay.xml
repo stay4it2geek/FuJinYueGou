@@ -135,7 +135,7 @@
                         android:layout_toRightOf="@+id/share"
                         android:background="@drawable/bg_circle_orange"
                         android:gravity="center_vertical"
-                        android:text="不用付钱,推广300人领取会员资格"
+                        android:text="无需支付, 推荐400人可领会员资格"
                         android:textColor="#fff"
                         android:textSize="17sp" />
                 </RelativeLayout>

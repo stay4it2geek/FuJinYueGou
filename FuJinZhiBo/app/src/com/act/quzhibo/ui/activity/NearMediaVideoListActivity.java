@@ -24,11 +24,11 @@ public class NearMediaVideoListActivity extends ActivityManagePermission {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         videoEntity = (NearVideoEntity) getIntent().getSerializableExtra(Constants.NEAR_USER_VIDEO);
-        ijkVideoView = new IjkVideoView(this);
+        setContentView(R.layout.activity_near_video);
+        ijkVideoView= (IjkVideoView) findViewById(R.id.videoview);
         MyStandardVideoController  controller = new MyStandardVideoController(this);
-        controller.setInitData(false, false);
+        controller.setInitData(true, false);
         ijkVideoView.setVideoController(controller);
-        setContentView(ijkVideoView);
         if (TextUtils.isEmpty(videoEntity.url)) {
             ToastUtil.showToast(this, "视频地址未找到，无法播放");
             return;

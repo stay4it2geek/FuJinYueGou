@@ -377,10 +377,10 @@
                 <ImageView
                     android:id="@+id/whoseeimage"
                     android:layout_width="24dp"
-                    android:layout_height="25dp"
+                    android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="17dp"
-                    android:background="@drawable/ganxingqu" />
+                    android:background="@drawable/whoseeme" />
 
                 <TextView
                     android:id="@+id/whoseenum"
@@ -391,7 +391,7 @@
                     android:layout_toRightOf="@+id/whoseeimage"
                     android:gravity="center_vertical"
                     android:paddingTop="3dp"
-                    android:text="谁对我感兴趣" />
+                    android:text="谁来看过我" />
 
                 <com.act.quzhibo.custom.HorizontialListView
                     android:id="@+id/who_see_me_list"
@@ -410,6 +410,49 @@
                     android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
+
+            <RelativeLayout
+                android:id="@+id/who_focus_me"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/whofocusimage"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="17dp"
+                    android:background="@drawable/ganxingqu" />
+
+                <TextView
+                    android:id="@+id/whofocusnum"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/whofocusimage"
+                    android:gravity="center_vertical"
+                    android:paddingTop="3dp"
+                    android:text="谁关注了我" />
+
+                <com.act.quzhibo.custom.HorizontialListView
+                    android:id="@+id/who_focus_me_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_toRightOf="@+id/whofocusnum" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/icon_main_more" />
+            </RelativeLayout>
 
 
             <RelativeLayout

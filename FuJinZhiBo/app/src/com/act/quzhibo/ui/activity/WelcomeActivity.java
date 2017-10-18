@@ -55,15 +55,15 @@ public class WelcomeActivity extends ActivityManagePermission {
         mTvTips = (TextView) findViewById(R.id.tv_tips);
 
         mLockViewGroup = (LockViewGroup) findViewById(R.id.lockgroup);
+
         grantPermission();
 
     }
 
+
     private void initData() {
 
-
         String[] passWords = user.secretPassword.split(";");
-
         int[] nums = new int[passWords.length];
         for (int i = 0; i < passWords.length; i++) {
             nums[i] = Integer.parseInt(passWords[i]);
@@ -134,7 +134,7 @@ public class WelcomeActivity extends ActivityManagePermission {
     }
 
     private void grantPermission() {
-        final SelfDialog selfDialog = new SelfDialog(WelcomeActivity.this);
+        final SelfDialog selfDialog = new SelfDialog(WelcomeActivity.this, false);
         askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_RECORD_AUDIO, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
             public void permissionGranted() {
