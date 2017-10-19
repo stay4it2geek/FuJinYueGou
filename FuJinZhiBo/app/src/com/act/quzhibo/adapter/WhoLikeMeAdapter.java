@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +48,13 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         final InterestSubPerson user = datas.get(position);
         holder.nickName.setText(user.username);
         holder.disMariState.setText(user.disMariState);
-        int minute ;
+        int minute;
         if (CommonUtil.loadData(activity, "see_time") > 0) {
             if (Integer.parseInt(user.userId) != CommonUtil.loadData(activity, "see_userId ")) {
                 int max = 800;
                 int min = 30;
                 Random random = new Random();
-                minute = random.nextInt(max) +  random.nextInt(min) ;
+                minute = random.nextInt(max) + random.nextInt(min);
                 CommonUtil.saveData(activity, minute, "see_time");
                 CommonUtil.saveData(activity, Integer.parseInt(user.userId), "see_userId");
             } else {
@@ -63,7 +64,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
             int max = 800;
             int min = 30;
             Random random = new Random();
-            minute = random.nextInt(max) +  random.nextInt(min) ;
+            minute = random.nextInt(max) + random.nextInt(min);
             CommonUtil.saveData(activity, minute, "see_time");
             CommonUtil.saveData(activity, Integer.parseInt(user.userId), "see_userId");
         }
@@ -75,12 +76,14 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
             }
         }
         holder.arealocation.setText("  距离你" + datas.get(position).distance + "公里");
-        holder.sexAndAge.setText(datas.get(position).sex.equals("2") ? "女" : "男");
+        if (datas.get(position).user != null && !TextUtils.isEmpty(datas.get(position).user.sex)) {
+            holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
+        }
         holder.who_see_me_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                if (user.userType.equals(Constants.INTEREST)) {
+                if (user.photoUrl != null) {
                     intent.putExtra(Constants.COMMON_USER_ID, datas.get(position).userId);
                     intent.setClass(activity, IntersetPersonPostListActivity.class);
                 } else {
@@ -91,39 +94,40 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
             }
         });
         String photoUrl = "";
-        if (user.userType.equals(Constants.INTEREST)) {
+        if (user.photoUrl != null) {
             photoUrl = user.photoUrl;
         } else {
             photoUrl = user.headUrl;
         }
-        if (user.sex.equals("2")) {
+//        if (user.user != null) {
+//            if (user.user.sex.equals("2")) {
+        Glide.with(activity).load(photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+            }
 
-            Glide.with(activity).load(photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                }
-
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                    holder.photoImg.setBackgroundDrawable(placeholder);
-                }
-            });
-        } else {
-            Glide.with(activity).load(photoUrl).asBitmap().placeholder(R.drawable.man).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                }
-
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                    holder.photoImg.setBackgroundDrawable(placeholder);
-                }
-            });
-        }
+            @Override
+            public void onLoadStarted(Drawable placeholder) {
+                super.onLoadStarted(placeholder);
+                holder.photoImg.setBackgroundDrawable(placeholder);
+            }
+        });
+//            } else {
+//                Glide.with(activity).load(photoUrl).asBitmap().placeholder(R.drawable.man).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+//                        holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+//                    }
+//
+//                    @Override
+//                    public void onLoadStarted(Drawable placeholder) {
+//                        super.onLoadStarted(placeholder);
+//                        holder.photoImg.setBackgroundDrawable(placeholder);
+//                    }
+//                });
+//            }
+//        }
     }
 
     @Override

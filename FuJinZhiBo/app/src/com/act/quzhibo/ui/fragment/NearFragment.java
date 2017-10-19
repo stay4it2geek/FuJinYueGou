@@ -114,9 +114,8 @@ public class NearFragment extends BackHandledFragment {
             }
         }
         BmobQuery<InterestSubPerson> query2 = new BmobQuery<>();
-        query2.addWhereEqualTo("userType", Constants.NEAR);
+        query2.addWhereLessThanOrEqualTo("distance", "50");
         queries.add(query2);
-
         query3.and(queries);
         query3.setLimit(10);
         query3.order("-distance");

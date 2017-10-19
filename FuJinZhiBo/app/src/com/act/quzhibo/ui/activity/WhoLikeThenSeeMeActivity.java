@@ -42,7 +42,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
         setContentView(R.layout.layout_common);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        titlebar.setBarTitle("谁来看过我");
+        titlebar.setBarTitle(getIntent().getBooleanExtra("userType", false) ? "谁来看过我" : "谁关注了我");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,8 +103,6 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
         });
     }
 
-    
-
     private void queryData(final int actionType) {
         List<BmobQuery<InterestSubPerson>> queries = new ArrayList<>();
         BmobQuery<InterestSubPerson> query = new BmobQuery<>();
@@ -122,7 +120,11 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
             }
         }
         BmobQuery<InterestSubPerson> query2 = new BmobQuery<>();
-        query2.addWhereEqualTo("userType", "2");
+        if (getIntent().getBooleanExtra("userType", false)) {
+            query2.addWhereEqualTo("userSeeFlag", "1");
+        } else {
+            query2.addWhereEqualTo("userFocusFlag", "2");
+        }
         queries.add(query2);
         query3.and(queries);
         query3.setLimit(10);
@@ -160,7 +162,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
                     handlerLiekThenSeeMeSize = interestSubPersonsn.size();
                 } else {
                     handlerLiekThenSeeMeSize = 0;
-                    if(msg.what==Constants.LOADMORE){
+                    if (msg.what == Constants.LOADMORE) {
                         recyclerView.setNoMore(true);
                     }
                 }

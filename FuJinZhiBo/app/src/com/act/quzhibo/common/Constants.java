@@ -54,4 +54,6 @@ public class Constants {
     public static final String MONEY_GROUP="moneygroup";
     public static final String NEAR_USER_VIDEO = "1";
 
+    public static final boolean SEE_ME_FLAG = true;
+    public static final boolean FOCUS_ME_FLAG = false;
 }

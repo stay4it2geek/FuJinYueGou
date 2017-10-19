@@ -247,25 +247,31 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                     url = "http://file.nidong.com//" + url;
                     bannerUrls.add(url);
                 }
-                if (currentNearInfoUser.sex.equals("2")) {
-                    banner.setImages(bannerUrls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
-                } else {
-                    banner.setImages(bannerUrls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
-                }
-            } else {
-                if (currentNearInfoUser.sex.equals("2")) {
-                    banner.setImages(Arrays.asList(new String[]{currentNearInfoUser.pics})).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
-                } else {
-                    banner.setImages(Arrays.asList(new String[]{"http://file.nidong.com//" + currentNearInfoUser.pics})).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
-                }
+//                if (currentNearInfoUser.user != null) {
+//                    if (currentNearInfoUser.user.sex.equals("2")) {
+                banner.setImages(bannerUrls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
+//                    } else {
+//                        banner.setImages(bannerUrls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
+//                    }
 
-            }
-
-            if (currentNearInfoUser.sex.equals("2")) {
+//                    if (currentNearInfoUser.sex.equals("2")) {
                 ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(currentNearInfoUser.vipType)));
+//                    } else {
+//                        ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(currentNearInfoUser.vipType)));
+//                    }
+//                }
+
             } else {
-                ((ImageView) findViewById(R.id.level_img)).setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(currentNearInfoUser.vipType)));
+//                if (currentNearInfoUser.user != null) {
+//                    if (currentNearInfoUser.sex.equals("2")) {
+                banner.setImages(Arrays.asList(new String[]{currentNearInfoUser.pics})).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
+//                    } else {
+//                        banner.setImages(Arrays.asList(new String[]{"http://file.nidong.com//" + currentNearInfoUser.pics})).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
+//                    }
+//                }
             }
+
+
             loadNetView.setVisibility(View.GONE);
         }
         getImageAndText();
@@ -281,7 +287,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         BmobQuery<Friend> query = new BmobQuery<>();
         RootUser user = BmobUser.getCurrentUser(RootUser.class);
         query.addWhereEqualTo("user", user);
-        query.addWhereEqualTo("friendUser", currentNearInfoUser.user);
+        query.addWhereEqualTo("friendUser", currentNearInfoUser.user == null ? "123" : currentNearInfoUser.user);
         query.order("-updatedAt");
         query.findObjects(new FindListener<Friend>() {
             @Override
@@ -344,7 +350,9 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                             myFcPerson.username = currentNearInfoUser.username;
                             myFcPerson.userId = currentNearInfoUser.userId;
                             myFcPerson.photoUrl = currentNearInfoUser.absCoverPic;
-                            myFcPerson.sex = currentNearInfoUser.sex;
+                            if (currentNearInfoUser.user != null) {
+                                myFcPerson.sex = currentNearInfoUser.user.sex;
+                            }
                             myFcPerson.userType = Constants.NEAR;
                             myFcPerson.save(new SaveListener<String>() {
                                 @Override

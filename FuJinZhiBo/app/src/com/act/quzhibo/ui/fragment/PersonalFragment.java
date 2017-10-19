@@ -113,6 +113,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.get_vip).setOnClickListener(this);
         view.findViewById(R.id.vip_order_listlayout).setOnClickListener(this);
         view.findViewById(R.id.who_see_me).setOnClickListener(this);
+        view.findViewById(R.id.who_focus_me).setOnClickListener(this);
         view.findViewById(R.id.myfocus_person).setOnClickListener(this);
         view.findViewById(R.id.myfocus_shower).setOnClickListener(this);
         view.findViewById(R.id.settingDetailayout).setOnClickListener(this);
@@ -195,7 +196,14 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 getActivity().startActivity(new Intent(getActivity(), VipOrdersActivity.class));
                 break;
             case R.id.who_see_me:
-                getActivity().startActivity(new Intent(getActivity(), WhoLikeThenSeeMeActivity.class));
+                Intent seeIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
+                seeIntent.putExtra("userType",Constants.SEE_ME_FLAG);
+                getActivity().startActivity(seeIntent);
+                break;
+            case R.id.who_focus_me:
+                Intent focusIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
+                focusIntent.putExtra("userType", Constants.FOCUS_ME_FLAG);
+                getActivity().startActivity(focusIntent);
                 break;
             case R.id.myfocus_shower:
                 getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));
@@ -351,7 +359,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             } else {
                 circleImageView.setBackgroundResource(R.drawable.man);
             }
-            querySeeMeData();
+//            querySeeMeData();
         } else {
             view.findViewById(R.id.who_see_me_list).setVisibility(View.GONE);
             view.findViewById(R.id.uploadImg).setVisibility(View.VISIBLE);

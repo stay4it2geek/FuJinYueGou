@@ -91,7 +91,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     @Override
                     public void run() {
                         if (handlerMediaInfoSize > 0) {
-
                             initMediaVideoListData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
 
