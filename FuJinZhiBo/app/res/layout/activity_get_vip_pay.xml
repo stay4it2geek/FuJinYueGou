@@ -141,21 +141,18 @@
                 </RelativeLayout>
 
 
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="20dp"
-                    android:background="#eee">
+                    android:background="#eee"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="会员能力特权"
+                    android:textColor="@color/red"
+                    android:textSize="18sp" />
 
-
-                    <TextView
-                        style="@style/textStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="会员专属特权: "
-                        android:textColor="@color/red" />
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -171,10 +168,11 @@
                         style="@style/textStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/red_light"
                         android:layout_centerVertical="true"
-                        android:text="◉  可推广课程/专辑/视频赚佣金" />
+                        android:text="◉  可推广课程/专辑/视频赚佣金"
+                        android:textColor="@color/red_light" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
@@ -211,6 +209,18 @@
                         android:text="◉  阅读赚钱特定版块内容" />
                 </RelativeLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/shuomingheight"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="20dp"
+                    android:background="#eee"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="会员社交特权"
+                    android:textColor="@color/red"
+                    android:textSize="18sp" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
@@ -228,6 +238,7 @@
                         android:layout_centerVertical="true"
                         android:text="◉  查看谁看过我" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
@@ -243,8 +254,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="◉  查看谁对我对我感兴趣" />
+                        android:text="◉  查看谁关注我" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
@@ -315,6 +327,55 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:text="◉  查看情趣详情" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/shuomingheight"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorbg" />
+
+                    <TextView
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="◉  评论情趣状态" />
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/shuomingheight"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="20dp"
+                    android:background="#eee"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="会员视听特权"
+                    android:textColor="@color/red"
+                    android:textSize="18sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/shuomingheight"
+                    android:background="#fff">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorbg" />
+
+                    <TextView
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:text="◉  浏览深夜福利秘播" />
                 </RelativeLayout>
 
@@ -357,42 +418,17 @@
                 </RelativeLayout>
 
 
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
-                    android:background="#fff">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorbg" />
-
-                    <TextView
-                        style="@style/textStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="◉  查看情趣状态" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/shuomingheight"
-                    android:background="#fff">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorbg" />
-
-                    <TextView
-                        style="@style/textStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="◉  评论情趣状态" />
-                </RelativeLayout>
-
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="20dp"
+                    android:background="#eee"
+                    android:gravity="left|center_vertical"
+                    android:paddingLeft="15dp"
+                    android:text="会员荣誉特权"
+                    android:textColor="@color/red"
+                    android:textSize="18sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -409,7 +445,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="◉  更多福利特权等待你来" />
+                        android:text="◉  VIP级别标识" />
                 </RelativeLayout>
 
 
@@ -422,8 +458,8 @@
 
     <com.act.quzhibo.custom.LoadNetView
         android:id="@+id/loadview"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/commonViewHeight" />
+        android:layout_marginTop="@dimen/commonViewHeight"
+        android:visibility="gone" />
 </FrameLayout>

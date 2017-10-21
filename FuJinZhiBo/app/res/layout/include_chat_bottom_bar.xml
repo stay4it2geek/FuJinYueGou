@@ -69,7 +69,7 @@
         android:layout_marginLeft="6dp"
         android:background="@drawable/btn_chat_voice_selector"
         android:gravity="center"
-        android:textColor="@color/base_color_text_black" >
+        android:textColor="@color/black" >
     </Button>
 
     <Button
@@ -79,7 +79,7 @@
         android:visibility="gone"
         android:background="@drawable/btn_chat_keyboard_selector"
         android:gravity="center"
-        android:textColor="@color/base_color_text_black" >
+        android:textColor="@color/black" >
     </Button>
 
     <Button

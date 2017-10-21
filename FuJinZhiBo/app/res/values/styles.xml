@@ -71,7 +71,7 @@
 	</style>
 
 	<style name="style_text_black" parent="style_text">
-		<item name="android:textColor">@color/base_color_text_black</item>
+		<item name="android:textColor">@color/black</item>
 	</style>
 
 	<style name="style_text_white" parent="style_text">
