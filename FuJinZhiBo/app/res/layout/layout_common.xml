@@ -35,7 +35,7 @@
             app:fab_addButtonColorNormal="@color/commonColor"
             app:fab_addButtonColorPressed="@color/lightorange"
             app:fab_addButtonPlusIconColor="@color/darkorange"
-            app:fab_addButtonSize="normal"
+            app:fab_addButtonSize="mini"
             app:fab_expandDirection="up"
             app:fab_labelStyle="@style/menu_labels_style"
             app:layout_anchorGravity="bottom">
@@ -48,7 +48,7 @@
                 app:fab_colorNormal="@color/commonColor"
                 app:fab_colorPressed="@color/lightorange"
                 app:fab_icon="@drawable/text"
-                app:fab_size="normal"
+                app:fab_size="mini"
                 app:fab_title="文本" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
@@ -59,7 +59,7 @@
                 app:fab_colorNormal="@color/commonColor"
                 app:fab_colorPressed="@color/lightorange"
                 app:fab_icon="@android:drawable/presence_video_busy"
-                app:fab_size="normal"
+                app:fab_size="mini"
                 app:fab_title="视频" />
 
             <com.getbase.floatingactionbutton.FloatingActionButton
@@ -70,7 +70,7 @@
                 app:fab_colorNormal="@color/commonColor"
                 app:fab_colorPressed="@color/lightorange"
                 app:fab_icon="@drawable/ic_camera"
-                app:fab_size="normal"
+                app:fab_size="mini"
                 app:fab_title="照片" />
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 

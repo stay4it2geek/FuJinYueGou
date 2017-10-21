@@ -62,14 +62,13 @@ public class GetVipPayActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_vip_pay);
-        //解决Android 7.0 FileUriExposedException url异常
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
         }
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-        titlebar.setBarTitle(" 充值趣币,享受VIP特权");
+        titlebar.setBarTitle("VIP会员中心");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

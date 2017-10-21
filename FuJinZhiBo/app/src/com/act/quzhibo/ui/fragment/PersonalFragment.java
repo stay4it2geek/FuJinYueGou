@@ -41,6 +41,7 @@ import com.act.quzhibo.ui.activity.MyFocusPersonActivity;
 import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
+import com.act.quzhibo.ui.activity.ShareManagerActivty;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
 import com.act.quzhibo.ui.activity.VIPConisTableActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
@@ -104,7 +105,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.circle_avatar).setOnClickListener(this);
         view.findViewById(R.id.makemoneyLayoout).setOnClickListener(this);
         view.findViewById(R.id.checkoutMoneyLayout).setOnClickListener(this);
-        view.findViewById(R.id.getQuCoinsLayout).setOnClickListener(this);
+        view.findViewById(R.id.shareManagerLayoout).setOnClickListener(this);
         view.findViewById(R.id.loginLayout).setOnClickListener(this);
         view.findViewById(R.id.uploadImg).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
@@ -149,6 +150,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             return;
         } else if (view.getId() == R.id.getVipLayout) {
             startActivity(view, GetVipPayActivity.class);
+            return;
+        } else if (view.getId() == R.id.shareManagerLayoout) {
+            startActivity(view, ShareManagerActivty.class);
             return;
         } else {
             if (rootUser == null) {
@@ -228,7 +232,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 }, 300);
             }
         }
-
 
 
     }
@@ -342,7 +345,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.registerLayout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.logout).setVisibility(View.GONE);
             ((TextView) view.findViewById(R.id.nickName)).setText("未设置昵称");
-            ((TextView) view.findViewById(R.id.vip_coins)).setText("您趣币不足");
+            ((TextView) view.findViewById(R.id.vip_coins)).setText("(0趣币)");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText("性别/年龄");
         }
     }

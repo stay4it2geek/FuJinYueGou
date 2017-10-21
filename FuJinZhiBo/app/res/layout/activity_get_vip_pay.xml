@@ -135,7 +135,7 @@
                         android:layout_toRightOf="@+id/share"
                         android:background="@drawable/bg_circle_orange"
                         android:gravity="center_vertical"
-                        android:text="无需支付, 推荐400人可领会员资格"
+                        android:text="无需支付, 推荐200人可领会员资格"
                         android:textColor="#fff"
                         android:textSize="17sp" />
                 </RelativeLayout>
@@ -157,24 +157,6 @@
                         android:textColor="@color/red" />
                 </RelativeLayout>
 
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/shuomingheight"
-                    android:background="#fff">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorbg" />
-
-                    <TextView
-                        style="@style/textStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="◉  每天登录签到 , 领取趣币翻倍" />
-                </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
@@ -427,7 +409,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="◉  更多福利特权等待你去挖掘" />
+                        android:text="◉  更多福利特权等待你来" />
                 </RelativeLayout>
 
 

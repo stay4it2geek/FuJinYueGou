@@ -112,9 +112,6 @@
             android:name="com.act.quzhibo.ui.activity.CheckOutMoneyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.act.quzhibo.ui.activity.GetQuCoinsActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.act.quzhibo.ui.activity.PuaCoursesActivity"
             android:screenOrientation="portrait" />
         <activity

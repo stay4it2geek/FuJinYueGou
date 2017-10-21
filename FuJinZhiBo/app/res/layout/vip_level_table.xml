@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:text="0~3000        趣币"
+                android:text="0~3000        "
                 android:textColor="@color/darkorange" />
 
 
@@ -67,7 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:text="3000~5000 趣币"
+                android:text="3000~5000 "
                 android:textColor="@color/darkorange" />
 
 
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:text="5000~8000 趣币"
+                android:text="5000~8000 "
                 android:textColor="@color/darkorange" />
 
 
@@ -105,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:text="大于 8000    趣币"
+                android:text="大于 8000    "
                 android:textColor="@color/darkorange" />
 
             <TextView

@@ -14,6 +14,7 @@
             android:layout_height="match_parent"
             android:background="#eee"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
@@ -79,7 +80,7 @@
                     android:layout_toEndOf="@+id/sexAndAge"
                     android:gravity="right"
                     android:text="趣会员等级"
-                    android:textColor="@color/darkred"
+                    android:textColor="@color/red_light"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -92,112 +93,15 @@
                     android:layout_marginRight="15dp" />
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_marginTop="1dp"
-                android:layout_height="wrap_content">
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="#eee" />
-
-                <RelativeLayout
-                    android:id="@+id/checkoutMoneyLayout"
-                    android:layout_width="0dp"
-                    android:background="@color/white"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_weight="1"
-                    android:paddingBottom="5dp">
-
-                    <TextView
-                        android:id="@+id/checkoutMoney"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="7dp"
-                        android:layout_weight="1"
-                        android:textColor="#424242"
-                        android:gravity="center_horizontal"
-                        android:text="申请余额提现"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/balance"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/checkoutMoney"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="3dp"
-                        android:layout_alignParentBottom="true"
-                        android:maxLength="40"
-                        android:gravity="center_horizontal|bottom"
-                        android:text="您有4000元未提现"
-                        android:textColor="@color/darkorange"
-                        android:textSize="11sp" />
-                </RelativeLayout>
-
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:background="#eee" />
-
-                <RelativeLayout
-                    android:paddingBottom="5dp"
-                    android:id="@+id/getQuCoinsLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_weight="1"
-                    android:background="#fff">
-
-                    <TextView
-                        android:id="@+id/getCoins"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="7dp"
-                        android:layout_weight="1"
-                        android:textColor="#424242"
-                        android:gravity="center_horizontal"
-                        android:text="签到领取趣币"
-                        android:textSize="16sp"/>
-
-                    <TextView
-                        android:id="@+id/vip_coins"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/getCoins"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="3dp"
-                        android:layout_alignParentBottom="true"
-                        android:maxLength="40"
-                        android:gravity="center_horizontal|bottom"
-                        android:text="您有1232趣币"
-                        android:textColor="@color/darkorange"
-                        android:textSize="11sp" />
-                </RelativeLayout>
-
-
-            </LinearLayout>
-
-
-
-
-
             <RelativeLayout
                 android:id="@+id/getVipLayout"
-                android:layout_marginTop="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="8dp"
                 android:background="#fff">
 
                 <ImageView
-                    android:id="@+id/orderstatus"
+                    android:id="@+id/vipcenterimg"
                     android:layout_width="27dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
@@ -205,49 +109,26 @@
                     android:background="@drawable/getvip" />
 
                 <TextView
-                    android:id="@+id/orderstext"
+                    android:id="@+id/text"
                     style="@style/textStyle"
-                    android:textColor="@color/red_light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/orderstatus"
+                    android:layout_toRightOf="@+id/vipcenterimg"
                     android:paddingTop="5dp"
-                    android:text="我的会员中心" />
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/icon_main_more" />
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/makemoneyLayoout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="1dp"
-                android:background="#fff">
-
-                <ImageView
-                    android:id="@+id/referee_img"
-                    android:layout_width="28dp"
-                    android:layout_height="27dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/sharemoney" />
+                    android:text="VIP会员中心" />
 
                 <TextView
-                    android:id="@+id/refereetext"
+                    android:id="@+id/vip_coins"
                     style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/referee_img"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/text"
                     android:paddingTop="5dp"
-                    android:textColor="@color/red_light"
-                    android:text="分享能赚钱" />
+                    android:text="(0趣币)"
+                    android:textColor="@color/red_light" />
 
                 <View
                     android:layout_width="10dp"
@@ -257,6 +138,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/icon_main_more" />
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/vip_order_listlayout"
                 android:layout_width="match_parent"
@@ -273,7 +155,6 @@
                     android:background="@drawable/orderlist" />
 
                 <TextView
-                    android:id="@+id/orderstatustext"
                     style="@style/textStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -291,12 +172,124 @@
                     android:background="@drawable/icon_main_more" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/checkoutMoneyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="8dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/money"
+                    android:layout_width="27dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/sharemoney" />
+
+                <TextView
+                    android:id="@+id/monytext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/money"
+                    android:paddingTop="5dp"
+                    android:text="佣金收益" />
+                <TextView
+                    android:id="@+id/moneytext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/monytext"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/red_light"
+                    android:text="(0元)" />
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/icon_main_more" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/shareManagerLayoout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/referees_img"
+                    android:layout_width="28dp"
+                    android:layout_height="27dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/friends" />
+
+                <TextView
+                    android:id="@+id/refereeFriendtext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/referees_img"
+                    android:paddingTop="5dp"
+                    android:text="已推荐的好友" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/icon_main_more" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/makemoneyLayoout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
+
+                <ImageView
+                    android:id="@+id/referee_img"
+                    android:layout_width="28dp"
+                    android:layout_height="27dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/help" />
+
+                <TextView
+                    android:id="@+id/refereetext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/referee_img"
+                    android:paddingTop="5dp"
+                    android:text="我该怎么赚钱" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/icon_main_more" />
+            </RelativeLayout>
+
 
             <RelativeLayout
                 android:id="@+id/myfocus_person"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:background="#fff">
 
                 <ImageView
@@ -454,7 +447,7 @@
                 android:id="@+id/myVideo_download_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:background="#fff">
 
                 <ImageView
@@ -522,7 +515,7 @@
                 android:id="@+id/myPostlayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:background="#fff">
 
                 <ImageView
@@ -590,7 +583,7 @@
                 android:id="@+id/noReslayout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:background="#fff">
 
                 <ImageView
@@ -626,8 +619,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
                 android:layout_marginTop="1dp"
-                android:visibility="gone"
-                android:background="#fff">
+                android:background="#fff"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/register_img"
@@ -664,16 +657,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
                 android:layout_marginTop="1dp"
-                android:visibility="gone"
-                android:background="#fff">
+                android:background="#fff"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/loginImg"
                     android:layout_width="29dp"
                     android:layout_height="29dp"
-                    android:background="@drawable/login"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="16dp" />
+                    android:layout_marginLeft="16dp"
+                    android:background="@drawable/login" />
 
                 <TextView
                     android:id="@+id/loginTxt"
