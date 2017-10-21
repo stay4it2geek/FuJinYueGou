@@ -55,7 +55,7 @@ public class CommonCoursesAdapter extends RecyclerView.Adapter<CommonCoursesAdap
             holder.leanerCount.setVisibility(View.GONE);
             holder.selectionNum.setVisibility(View.GONE);
             holder.courseDetail.setText(Html.fromHtml(course.courseDetail));
-        }else {
+        }else {//pua
             holder.courseTag.setVisibility(View.VISIBLE);
             if (course.courseTag.equals(Constants.VIDEO_COURSE)) {
                 holder.courseTag.setText("视频");

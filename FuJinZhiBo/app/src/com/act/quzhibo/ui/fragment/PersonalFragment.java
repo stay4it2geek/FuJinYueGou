@@ -32,9 +32,7 @@ import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.bean.InterestSubPerson;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.luban_compress.Luban;
-import com.act.quzhibo.ui.activity.CheckOutMoneyActivity;
 import com.act.quzhibo.ui.activity.ClipImageActivity;
-import com.act.quzhibo.ui.activity.GetQuCoinsActivity;
 import com.act.quzhibo.ui.activity.GetVipPayActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.RegisterNormalActivity;
@@ -110,7 +108,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.loginLayout).setOnClickListener(this);
         view.findViewById(R.id.uploadImg).setOnClickListener(this);
         view.findViewById(R.id.vipLevel).setOnClickListener(this);
-        view.findViewById(R.id.get_vip).setOnClickListener(this);
+        view.findViewById(R.id.getVipLayout).setOnClickListener(this);
         view.findViewById(R.id.vip_order_listlayout).setOnClickListener(this);
         view.findViewById(R.id.who_see_me).setOnClickListener(this);
         view.findViewById(R.id.who_focus_me).setOnClickListener(this);
@@ -130,7 +128,6 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                 return true;
             }
         });
-
         promptDialog = new PromptDialog(getActivity());
         return view;
     }
@@ -141,132 +138,110 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         if (view.getId() == R.id.vipLevel) {
             startActivity(new Intent(getActivity(), VIPConisTableActivity.class));
             return;
-        } else if (view.getId() == R.id.circle_avatar) {
-            FragmentDialog.newInstance(false, "是否要替换头像", "亲，真的想要替换吗", "我要替换", "取消替换", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                @Override
-                public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-                    dialog.dismiss();
-                    uploadHeadImage();
-                }
-
-                @Override
-                public void onNegtiveClick(Dialog dialog) {
-                    dialog.dismiss();
-                }
-            }).show(getChildFragmentManager(), "");
-            return;
-
-        } else if (view.getId() == R.id.checkoutMoneyLayout) {
-            getActivity().startActivity(new Intent(getActivity(), CheckOutMoneyActivity.class));
-            return;
-        } else if (view.getId() == R.id.getQuCoinsLayout) {
-            getActivity().startActivity(new Intent(getActivity(), GetQuCoinsActivity.class));
-            return;
         } else if (view.getId() == R.id.noReslayout) {
-            getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));
+            startActivity(view, TermOfUseActivity.class);
             return;
         } else if (view.getId() == R.id.registerLayout) {
-            getActivity().startActivity(new Intent(getActivity(), RegisterNormalActivity.class));
+            startActivity(view, RegisterNormalActivity.class);
+            return;
+        } else if (view.getId() == R.id.makemoneyLayoout) {
+            startActivity(view, ShareForMoneyActivity.class);
+            return;
+        } else if (view.getId() == R.id.getVipLayout) {
+            startActivity(view, GetVipPayActivity.class);
             return;
         } else {
             if (rootUser == null) {
-                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                startActivity(view, LoginActivity.class);
                 return;
-            }
+            } else {
+                if (view.getId() == R.id.circle_avatar) {
+                    FragmentDialog.newInstance(false, "是否要替换头像", "亲，真的想要替换吗", "我要替换", "取消替换", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                        @Override
+                        public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                            dialog.dismiss();
+                            uploadHeadImage();
+                        }
 
+                        @Override
+                        public void onNegtiveClick(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    }).show(getChildFragmentManager(), "");
+
+                    return;
+                }
+
+                view.setBackgroundColor(getResources().getColor(R.color.colorbg));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.setBackgroundColor(getResources().getColor(R.color.white));
+                        switch (view.getId()) {
+                            case R.id.vip_order_listlayout:
+                                getActivity().startActivity(new Intent(getActivity(), VipOrdersActivity.class));
+                                break;
+                            case R.id.who_see_me:
+                                Intent seeIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
+                                seeIntent.putExtra("userType", Constants.SEE_ME_FLAG);
+                                getActivity().startActivity(seeIntent);
+                                break;
+                            case R.id.who_focus_me:
+                                Intent focusIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
+                                focusIntent.putExtra("userType", Constants.FOCUS_ME_FLAG);
+                                getActivity().startActivity(focusIntent);
+                                break;
+                            case R.id.myfocus_shower:
+                                getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));
+                                break;
+                            case R.id.myfocus_person:
+                                getActivity().startActivity(new Intent(getActivity(), MyFocusPersonActivity.class));
+                                break;
+                            case R.id.myVideo_download_layout:
+                                Intent videoIntent = new Intent();
+                                videoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.VIDEO_ALBUM);
+                                videoIntent.setClass(getActivity(), DownloadManagerActivity.class);
+                                getActivity().startActivity(videoIntent);
+                                break;
+                            case R.id.myIMG_download_layout:
+                                Intent photoIntent = new Intent();
+                                photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
+                                photoIntent.setClass(getActivity(), DownloadManagerActivity.class);
+                                getActivity().startActivity(photoIntent);
+                                break;
+                            case R.id.settingDetailayout:
+                                getActivity().startActivity(new Intent(getActivity(), SettingMineInfoActivity.class));
+                                break;
+                            case R.id.myPostlayout:
+                                getActivity().startActivity(new Intent(getActivity(), MyPostListActivity.class));
+                                break;
+
+                            case R.id.logout:
+                                rootUser.logOut();
+                                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }, 300);
+            }
         }
 
+
+
+    }
+
+    private <T> void startActivity(final View view, Class<T> activity) {
+        getActivity().startActivity(new Intent(getActivity(), activity));
         view.setBackgroundColor(getResources().getColor(R.color.colorbg));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 view.setBackgroundColor(getResources().getColor(R.color.white));
             }
-        }, 500);
-
-        switch (view.getId()) {
-
-            case R.id.makemoneyLayoout:
-                getActivity().startActivity(new Intent(getActivity(), ShareForMoneyActivity.class));
-                break;
-            case R.id.get_vip:
-                getActivity().startActivity(new Intent(getActivity(), GetVipPayActivity.class));
-                break;
-            case R.id.vip_order_listlayout:
-                getActivity().startActivity(new Intent(getActivity(), VipOrdersActivity.class));
-                break;
-            case R.id.who_see_me:
-                Intent seeIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
-                seeIntent.putExtra("userType",Constants.SEE_ME_FLAG);
-                getActivity().startActivity(seeIntent);
-                break;
-            case R.id.who_focus_me:
-                Intent focusIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
-                focusIntent.putExtra("userType", Constants.FOCUS_ME_FLAG);
-                getActivity().startActivity(focusIntent);
-                break;
-            case R.id.myfocus_shower:
-                getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));
-                break;
-            case R.id.myfocus_person:
-                getActivity().startActivity(new Intent(getActivity(), MyFocusPersonActivity.class));
-                break;
-            case R.id.myVideo_download_layout:
-                Intent videoIntent = new Intent();
-                videoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.VIDEO_ALBUM);
-                videoIntent.setClass(getActivity(), DownloadManagerActivity.class);
-                getActivity().startActivity(videoIntent);
-                break;
-            case R.id.myIMG_download_layout:
-                Intent photoIntent = new Intent();
-                photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
-                photoIntent.setClass(getActivity(), DownloadManagerActivity.class);
-                getActivity().startActivity(photoIntent);
-                break;
-            case R.id.settingDetailayout:
-                getActivity().startActivity(new Intent(getActivity(), SettingMineInfoActivity.class));
-                break;
-            case R.id.myPostlayout:
-                getActivity().startActivity(new Intent(getActivity(), MyPostListActivity.class));
-                break;
-            case R.id.noReslayout:
-                getActivity().startActivity(new Intent(getActivity(), TermOfUseActivity.class));
-                break;
-            case R.id.logout:
-                rootUser.logOut();
-                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    ArrayList<String> personImgList = new ArrayList<>();
-
-    private void querySeeMeData() {
-        BmobQuery<InterestSubPerson> query = new BmobQuery<>();
-        query.addWhereEqualTo("userType", "2");
-        query.setLimit(40);
-        query.order("-distance");
-        query.findObjects(new FindListener<InterestSubPerson>() {
-            @Override
-            public void done(List<InterestSubPerson> list, BmobException e) {
-                if (e == null) {
-                    for (InterestSubPerson person : list) {
-                        personImgList.add(person.absCoverPic);
-                    }
-                    HorizontialListView listView = (HorizontialListView) view.findViewById(R.id.who_see_me_list);
-                    listView.setAdapter(new PostImageAdapter(getActivity(), personImgList, Constants.ITEM_USER_INFO_IMG, false, false));
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            startActivity(new Intent(getActivity(), WhoLikeThenSeeMeActivity.class));
-                        }
-                    });
-                }
-            }
-        });
+        }, 300);
     }
 
 
@@ -359,7 +334,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             } else {
                 circleImageView.setBackgroundResource(R.drawable.man);
             }
-//            querySeeMeData();
+
         } else {
             view.findViewById(R.id.who_see_me_list).setVisibility(View.GONE);
             view.findViewById(R.id.uploadImg).setVisibility(View.VISIBLE);

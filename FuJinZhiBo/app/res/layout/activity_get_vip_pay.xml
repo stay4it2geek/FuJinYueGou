@@ -208,7 +208,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="◉  下载阅读VIP专属课程" />
+                        android:text="◉  下载阅读已购买的VIP课程" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -226,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="◉  阅读财富版块内容" />
+                        android:text="◉  阅读赚钱特定版块内容" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -244,9 +244,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="◉  查看谁对我感兴趣" />
+                        android:text="◉  查看谁看过我" />
                 </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/shuomingheight"
+                    android:background="#fff">
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/colorbg" />
+
+                    <TextView
+                        style="@style/textStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="◉  查看谁对我对我感兴趣" />
+                </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
@@ -424,6 +440,7 @@
 
     <com.act.quzhibo.custom.LoadNetView
         android:id="@+id/loadview"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/commonViewHeight" />

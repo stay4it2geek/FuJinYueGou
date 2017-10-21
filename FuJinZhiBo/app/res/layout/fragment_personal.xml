@@ -78,7 +78,7 @@
                     android:layout_marginTop="13dp"
                     android:layout_toEndOf="@+id/sexAndAge"
                     android:gravity="right"
-                    android:text=""
+                    android:text="趣会员等级"
                     android:textColor="@color/darkred"
                     android:textSize="16sp" />
 
@@ -97,9 +97,6 @@
                 android:layout_marginTop="1dp"
                 android:layout_height="wrap_content">
 
-
-
-
                 <View
                     android:layout_width="2dp"
                     android:layout_height="match_parent"
@@ -108,11 +105,11 @@
                 <RelativeLayout
                     android:id="@+id/checkoutMoneyLayout"
                     android:layout_width="0dp"
+                    android:background="@color/white"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:layout_weight="1"
-                    android:paddingBottom="5dp"
-                    android:background="#fff">
+                    android:paddingBottom="5dp">
 
                     <TextView
                         android:id="@+id/checkoutMoney"
@@ -122,7 +119,6 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="7dp"
                         android:layout_weight="1"
-                        android:background="#fff"
                         android:textColor="#424242"
                         android:gravity="center_horizontal"
                         android:text="申请余额提现"
@@ -166,7 +162,6 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginTop="7dp"
                         android:layout_weight="1"
-                        android:background="#fff"
                         android:textColor="#424242"
                         android:gravity="center_horizontal"
                         android:text="签到领取趣币"
@@ -192,44 +187,11 @@
 
 
 
+
+
             <RelativeLayout
-                android:id="@+id/makemoneyLayoout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/commonViewHeight"
+                android:id="@+id/getVipLayout"
                 android:layout_marginTop="6dp"
-                android:background="#fff">
-
-                <ImageView
-                    android:id="@+id/referee_img"
-                    android:layout_width="28dp"
-                    android:layout_height="27dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:background="@drawable/sharemoney" />
-
-                <TextView
-                    android:id="@+id/refereetext"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/referee_img"
-                    android:paddingTop="5dp"
-                    android:textColor="@color/red_light"
-                    android:text="分享推荐领佣金" />
-
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/icon_main_more" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/get_vip"
-                android:layout_marginTop="1dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/commonViewHeight"
                 android:background="#fff">
@@ -251,7 +213,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/orderstatus"
                     android:paddingTop="5dp"
-                    android:text="获取趣会员特权" />
+                    android:text="我的会员中心" />
 
                 <View
                     android:layout_width="10dp"
@@ -261,7 +223,40 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/icon_main_more" />
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/makemoneyLayoout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
 
+                <ImageView
+                    android:id="@+id/referee_img"
+                    android:layout_width="28dp"
+                    android:layout_height="27dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/sharemoney" />
+
+                <TextView
+                    android:id="@+id/refereetext"
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/referee_img"
+                    android:paddingTop="5dp"
+                    android:textColor="@color/red_light"
+                    android:text="分享能赚钱" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/icon_main_more" />
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/vip_order_listlayout"
                 android:layout_width="match_parent"
@@ -285,7 +280,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/orderslist_img"
                     android:paddingTop="5dp"
-                    android:text="已购买的清单" />
+                    android:text="已购买清单" />
 
                 <View
                     android:layout_width="10dp"
@@ -393,7 +388,7 @@
                     android:paddingTop="3dp"
                     android:text="谁来看过我" />
 
-                <com.act.quzhibo.custom.HorizontialListView
+                <TextView
                     android:id="@+id/who_see_me_list"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -437,7 +432,7 @@
                     android:paddingTop="3dp"
                     android:text="谁关注了我" />
 
-                <com.act.quzhibo.custom.HorizontialListView
+                <TextView
                     android:id="@+id/who_focus_me_list"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

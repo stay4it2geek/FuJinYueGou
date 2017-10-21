@@ -1,14 +1,18 @@
 package com.act.quzhibo.ui.activity;
 
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.custom.FragmentDialog;
 import com.act.quzhibo.custom.TitleBarView;
 import com.elbbbird.android.socialsdk.SocialSDK;
 import com.elbbbird.android.socialsdk.model.SocialShareScene;
@@ -31,14 +35,14 @@ public class ShareForMoneyActivity extends FragmentActivity {
         setContentView(R.layout.money_introduce);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        titlebar.setBarTitle("推荐有钱赚");
+        titlebar.setBarTitle("分享能赚钱");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShareForMoneyActivity.this.finish();
             }
         });
-        promptDialog=new PromptDialog(this);
+        promptDialog = new PromptDialog(this);
         final Button moneywayBtn = (Button) findViewById(R.id.moneyway_btn);
         moneywayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,14 +53,29 @@ public class ShareForMoneyActivity extends FragmentActivity {
 
         BusProvider.getInstance().register(this);
     }
+
     private SocialShareScene scene = new SocialShareScene(0, "演技派", SocialShareScene.SHARE_TYPE_WECHAT, "Android 开源社会化登录 SDK，支持微信，微博， QQ",
             "像友盟， ShareSDK 等平台也提供类似的 SDK ，之所以造轮子是因为这些平台的 SDK 内部肯定会带有数据统计功能，不想给他们共享数据。",
             "http://cdn.v2ex.co/gravatar/becb0d5c59469a34a54156caef738e90?s=73&d=retro", "http://www.v2ex.com/t/238165");
 
     private void selectShareWay() {
+        if (BmobUser.getCurrentUser(RootUser.class) == null) {
+            FragmentDialog.newInstance(false, "登录提示", "中级趣会员才能推广赚钱哦", "登录", "注册", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                @Override
+                public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                    startActivity(new Intent(ShareForMoneyActivity.this, LoginActivity.class));
+                }
+
+                @Override
+                public void onNegtiveClick(Dialog dialog) {
+                    startActivity(new Intent(ShareForMoneyActivity.this, RegisterActivity.class));
+                }
+            }).show(getSupportFragmentManager(),"");
+            return;
+        }
         promptDialog.getAlertDefaultBuilder().sheetCellPad(5).round(10);
-        if(BmobUser.getCurrentUser(RootUser.class).vipConis<3000){
-            promptDialog.showWarn("您趣币不足,不是中级趣会员以上级别",true);
+        if (BmobUser.getCurrentUser(RootUser.class).vipConis < 3000) {
+            promptDialog.showWarn("您趣币不足,不是中级趣会员以上级别", true);
             return;
         }
         promptDialog.getAlertDefaultBuilder().sheetCellPad(5).round(10);
@@ -87,7 +106,6 @@ public class ShareForMoneyActivity extends FragmentActivity {
         cancle.setTextColor(Color.parseColor("#0076ff"));
         promptDialog.showAlertSheet("", true, cancle, btnQQShare, btnQrcode);
     }
-
 
 
     @Subscribe
