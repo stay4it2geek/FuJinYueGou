@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder> {
 
     private boolean isShow = true;//是否显示编辑/完成
-    private List<ShoppingCart> shoppingCartBeanList;
+    private List<ShoppingCart> cartBeanList;
     private CheckInterface checkInterface;
     private ModifyListInterface modifyListInterface;
     private Context context;
@@ -38,7 +38,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
 
     public void setCartBeanListAndNotify(List<ShoppingCart> shoppingCartBeanList) {
-        this.shoppingCartBeanList = shoppingCartBeanList;
+        this.cartBeanList = shoppingCartBeanList;
         notifyDataSetChanged();
     }
 
@@ -51,12 +51,12 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     @Override
     public int getItemCount() {
-        return shoppingCartBeanList == null ? 0 : shoppingCartBeanList.size();
+        return cartBeanList == null ? 0 : cartBeanList.size();
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final CommonCourse course = shoppingCartBeanList.get(position).course;
+        final CommonCourse course = cartBeanList.get(position).course;
         if (course == null) {
             return;
         }
@@ -85,7 +85,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        shoppingCartBeanList.get(position).setChoosed(((CheckBox) v).isChecked());
+                        cartBeanList.get(position).setChoosed(((CheckBox) v).isChecked());
                         checkInterface.checkGroup(position, ((CheckBox) v).isChecked());//向外暴露接口
                     }
                 }
@@ -98,7 +98,12 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 modifyListInterface.childDelete(position);
             }
         });
-
+        boolean choosed = cartBeanList.get(position).isChoosed();
+        if (choosed){
+            holder.ckOneChose.setChecked(true);
+        }else{
+            holder.ckOneChose.setChecked(false);
+        }
 
         //判断是否在编辑状态下
         if (isShow) {
@@ -146,7 +151,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         @Bind(R.id.ck_chose)
         public CheckBox ckOneChose;
         @Bind(R.id.tv_item_delete)
-        public ImageView tvCommodityDelete;
+        public TextView tvCommodityDelete;
 
         public ViewHolder(View view) {
             super(view);

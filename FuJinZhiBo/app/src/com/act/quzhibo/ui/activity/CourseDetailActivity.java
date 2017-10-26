@@ -4,13 +4,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
@@ -22,8 +18,6 @@ import com.act.quzhibo.ui.fragment.CommentFragment;
 import com.act.quzhibo.ui.fragment.GoodsDetailFragment;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
-import com.act.quzhibo.widget.TitleBarView;
-import com.flyco.tablayout.CommonTabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,10 +170,14 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
 
     @OnClick(R.id.text_buynow)
     public void buyNow() {
-//        Intent intent = new Intent(CourseDetailActivity.this, BuyCourseActivity.class);
+
+        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+            //        Intent intent = new Intent(CourseDetailActivity.this, BuyCourseActivity.class);
 //        intent.putExtra("course", course);
 //        startActivity(intent);
-        checkLogin();
+        } else {
+            checkLogin();
+        }
 
     }
 
