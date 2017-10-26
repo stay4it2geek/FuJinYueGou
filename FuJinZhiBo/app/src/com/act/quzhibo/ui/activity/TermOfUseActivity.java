@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.TitleBarView;
 
 public class TermOfUseActivity extends AppCompatActivity {
     @Override

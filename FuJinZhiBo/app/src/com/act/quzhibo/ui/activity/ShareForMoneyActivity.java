@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.custom.FragmentDialog;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.FragmentDialog;
+import com.act.quzhibo.widget.TitleBarView;
 import com.elbbbird.android.socialsdk.SocialSDK;
 import com.elbbbird.android.socialsdk.model.SocialShareScene;
 import com.elbbbird.android.socialsdk.otto.BusProvider;

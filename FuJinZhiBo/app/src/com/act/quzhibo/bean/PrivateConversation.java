@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 import com.act.quzhibo.ui.activity.ChatActivity;
-import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.widget.FragmentDialog;
 
 import java.util.List;
 
@@ -21,24 +21,24 @@ import cn.bmob.newim.bean.BmobIMMessageType;
 /**
  * 私聊会话
  */
-public class PrivateConversation extends Conversation{
+public class PrivateConversation extends Conversation {
 
     private BmobIMConversation conversation;
     private BmobIMMessage lastMsg;
 
-    public PrivateConversation(BmobIMConversation conversation){
+    public PrivateConversation(BmobIMConversation conversation) {
         this.conversation = conversation;
         cType = BmobIMConversationType.setValue(conversation.getConversationType());
         cId = conversation.getConversationId();
-        if (cType == BmobIMConversationType.PRIVATE){
-            cName=conversation.getConversationTitle();
+        if (cType == BmobIMConversationType.PRIVATE) {
+            cName = conversation.getConversationTitle();
             if (TextUtils.isEmpty(cName)) cName = cId;
-        }else{
-            cName="未知会话";
+        } else {
+            cName = "未知会话";
         }
-        List<BmobIMMessage> msgs =conversation.getMessages();
-        if(msgs!=null && msgs.size()>0){
-            lastMsg =msgs.get(0);
+        List<BmobIMMessage> msgs = conversation.getMessages();
+        if (msgs != null && msgs.size() > 0) {
+            lastMsg = msgs.get(0);
         }
     }
 
@@ -49,45 +49,45 @@ public class PrivateConversation extends Conversation{
 
     @Override
     public Object getAvatar() {
-        if (cType == BmobIMConversationType.PRIVATE){
-            String avatar =  conversation.getConversationIcon();
-            if (TextUtils.isEmpty(avatar)){//头像为空，使用默认头像
+        if (cType == BmobIMConversationType.PRIVATE) {
+            String avatar = conversation.getConversationIcon();
+            if (TextUtils.isEmpty(avatar)) {//头像为空，使用默认头像
                 return R.mipmap.default_head;
-            }else{
+            } else {
                 return avatar;
             }
-        }else{
+        } else {
             return R.mipmap.default_head;
         }
     }
 
     @Override
     public String getLastMessageContent() {
-        if(lastMsg!=null){
-            String content =lastMsg.getContent();
-            if(lastMsg.getMsgType().equals(BmobIMMessageType.TEXT.getType()) || lastMsg.getMsgType().equals("agree")){
+        if (lastMsg != null) {
+            String content = lastMsg.getContent();
+            if (lastMsg.getMsgType().equals(BmobIMMessageType.TEXT.getType()) || lastMsg.getMsgType().equals("agree")) {
                 return content;
-            }else if(lastMsg.getMsgType().equals(BmobIMMessageType.IMAGE.getType())){
+            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.IMAGE.getType())) {
                 return "[图片]";
-            }else if(lastMsg.getMsgType().equals(BmobIMMessageType.VOICE.getType())){
+            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.VOICE.getType())) {
                 return "[语音]";
-            }else if(lastMsg.getMsgType().equals(BmobIMMessageType.LOCATION.getType())){
-                return"[位置]";
-            }else if(lastMsg.getMsgType().equals(BmobIMMessageType.VIDEO.getType())){
+            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.LOCATION.getType())) {
+                return "[位置]";
+            } else if (lastMsg.getMsgType().equals(BmobIMMessageType.VIDEO.getType())) {
                 return "[视频]";
-            }else{//开发者自定义的消息类型，需要自行处理
+            } else {//开发者自定义的消息类型，需要自行处理
                 return "[未知]";
             }
-        }else{//防止消息错乱
+        } else {//防止消息错乱
             return "";
         }
     }
 
     @Override
     public long getLastMessageTime() {
-        if(lastMsg!=null) {
+        if (lastMsg != null) {
             return lastMsg.getCreateTime();
-        }else{
+        } else {
             return 0;
         }
     }
@@ -100,9 +100,11 @@ public class PrivateConversation extends Conversation{
 
     @Override
     public void onClick(FragmentActivity activity) {
-        Intent intent = new Intent(activity, ChatActivity.class);
-        intent.putExtra("c", conversation);
-        activity.startActivity(intent);
+        if (conversation != null) {
+            Intent intent = new Intent(activity, ChatActivity.class);
+            intent.putExtra("c", conversation);
+            activity.startActivity(intent);
+        }
     }
 
     @Override

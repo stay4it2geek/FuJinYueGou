@@ -6,7 +6,7 @@
     android:background="#fff"
     android:id="@+id/root_view"
     android:orientation="vertical">
-    <com.act.quzhibo.custom.TitleBarView
+    <com.act.quzhibo.widget.TitleBarView
         android:visibility="gone"
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                android:textSize="16sp" />
        </LinearLayout>
 
-       <com.act.quzhibo.custom.LoadNetView
+       <com.act.quzhibo.widget.LoadNetView
            android:id="@+id/loadview"
            android:visibility="gone"
            android:layout_width="match_parent"

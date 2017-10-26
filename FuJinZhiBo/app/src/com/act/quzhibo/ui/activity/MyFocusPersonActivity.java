@@ -17,9 +17,9 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyFocusCommonPerson;
-import com.act.quzhibo.custom.FragmentDialog;
-import com.act.quzhibo.custom.LoadNetView;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.FragmentDialog;
+import com.act.quzhibo.widget.LoadNetView;
+import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;

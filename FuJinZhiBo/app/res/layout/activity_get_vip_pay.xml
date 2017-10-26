@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.act.quzhibo.custom.TitleBarView
+    <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight"
@@ -39,7 +39,7 @@
                 android:layout_marginTop="0.5dp"
                 android:orientation="vertical">
 
-                <com.act.quzhibo.custom.MyListView
+                <com.act.quzhibo.widget.MyListView
                     android:id="@+id/viplist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -433,7 +433,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/shuomingheight"
-                    android:background="#fff">
+                    android:background="#fff"
+                    android:layout_marginBottom="20dp">
 
                     <View
                         android:layout_width="match_parent"
@@ -456,7 +457,7 @@
 
     </LinearLayout>
 
-    <com.act.quzhibo.custom.LoadNetView
+    <com.act.quzhibo.widget.LoadNetView
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

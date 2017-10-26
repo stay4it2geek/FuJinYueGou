@@ -35,7 +35,7 @@ import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.Util;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.TitleBarView;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -78,7 +78,6 @@ public class ChatActivity extends FragmentActivity {
     //通知有在线消息接收
     @Subscribe
     public void onEventMain(final MessageEvent event) {
-        Log.e("---息ChatActivity---", MyApplicaition.handler.isChatting + "");
         if (MyApplicaition.handler.isChatting) {
             addMessage2Chat(event);
         }

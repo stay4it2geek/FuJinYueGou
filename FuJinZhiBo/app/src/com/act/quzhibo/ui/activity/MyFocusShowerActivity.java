@@ -21,9 +21,9 @@ import com.act.quzhibo.bean.MyFocusShower;
 import com.act.quzhibo.bean.Room;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.custom.FragmentDialog;
-import com.act.quzhibo.custom.LoadNetView;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.FragmentDialog;
+import com.act.quzhibo.widget.LoadNetView;
+import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.json.JSONException;

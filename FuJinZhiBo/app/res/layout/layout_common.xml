@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:background="#eee">
 
-    <com.act.quzhibo.custom.TitleBarView
+    <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight"
         android:visibility="gone"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true">
-    </com.act.quzhibo.custom.TitleBarView>
+    </com.act.quzhibo.widget.TitleBarView>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
 
         </LinearLayout>
 
-        <com.act.quzhibo.custom.LoadNetView
+        <com.act.quzhibo.widget.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

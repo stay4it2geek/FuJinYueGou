@@ -21,15 +21,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.act.quzhibo.BuildConfig;
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
-import com.act.quzhibo.bean.InterestSubPerson;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.luban_compress.Luban;
 import com.act.quzhibo.ui.activity.ClipImageActivity;
@@ -48,20 +45,15 @@ import com.act.quzhibo.ui.activity.VipOrdersActivity;
 import com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.FileUtil;
-import com.act.quzhibo.custom.CircleImageView;
-import com.act.quzhibo.custom.FragmentDialog;
-import com.act.quzhibo.custom.HorizontialListView;
+import com.act.quzhibo.widget.CircleImageView;
+import com.act.quzhibo.widget.FragmentDialog;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import me.leefeng.promptlibrary.PromptButton;

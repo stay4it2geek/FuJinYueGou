@@ -23,7 +23,7 @@ import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.download.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.widget.FragmentDialog;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;

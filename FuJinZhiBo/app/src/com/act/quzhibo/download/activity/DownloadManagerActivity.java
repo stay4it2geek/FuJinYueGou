@@ -13,6 +13,11 @@ import java.util.ArrayList;
 public class DownloadManagerActivity extends TabSlideDifferentBaseActivity {
 
     @Override
+    protected boolean getDetailContentViewFlag() {
+        return false;
+    }
+
+    @Override
     public boolean getIsMineActivityType() {
         return false;
     }

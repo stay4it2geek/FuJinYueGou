@@ -9,10 +9,10 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 import com.act.quzhibo.common.Config;
 import com.act.quzhibo.common.MyApplicaition;
-import com.act.quzhibo.db.NewFriend;
-import com.act.quzhibo.db.NewFriendManager;
+import com.act.quzhibo.chat.db.NewFriend;
+import com.act.quzhibo.chat.db.NewFriendManager;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
-import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.widget.FragmentDialog;
 
 
 /**

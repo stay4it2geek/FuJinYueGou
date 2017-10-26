@@ -19,24 +19,9 @@ import cn.bmob.v3.BmobUser;
 public class MineActivity extends TabSlideDifferentBaseActivity {
     ImageView message;
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        message = (ImageView) findViewById(R.id.message);
-        message.setVisibility(View.VISIBLE);
-        message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
-                if (rootUser != null) {
-                    startActivity(new Intent(MineActivity.this, MessageActivity.class));
-                }else{
-                    startActivity(new Intent(MineActivity.this, LoginActivity.class));
-
-                }
-                return;
-
-            }
-        });
+    @Override
+    protected boolean getDetailContentViewFlag() {
+        return false;
     }
 
     @Override

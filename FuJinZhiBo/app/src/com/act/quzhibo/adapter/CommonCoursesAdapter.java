@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import cn.bmob.v3.b.V;
+
 public class CommonCoursesAdapter extends RecyclerView.Adapter<CommonCoursesAdapter.MyViewHolder> {
     private String courseUiType;
     private Activity activity;
@@ -76,19 +78,14 @@ public class CommonCoursesAdapter extends RecyclerView.Adapter<CommonCoursesAdap
                 mOnItemClickListener.onItemClick(course);
             }
         });
-
+        holder.needPay.setVisibility(View.VISIBLE);
         if(course.needPay){
             holder.needPay.setText("付费");
         } else {
             holder.needPay.setText(course.freePromotion);
             holder.courseAppPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
         }
-        if(courseUiType.equals("money")){
-            holder.courseDetail.setVisibility(View.VISIBLE);
-            holder.leanerCount.setVisibility(View.GONE);
-            holder.selectionNum.setVisibility(View.GONE);
-            holder.courseDetail.setText(Html.fromHtml(course.courseDetail));
-        }
+
 
     }
 

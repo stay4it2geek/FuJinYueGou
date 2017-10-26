@@ -54,6 +54,6 @@
         android:layout_height="30dp"
         android:layout_gravity="right"
         android:layout_margin="5dp"
-        android:background="@drawable/delete"
+        android:background="@drawable/btn_delete"
         android:visibility="gone" />
 </FrameLayout>

@@ -28,10 +28,10 @@ import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.VipOrders;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.custom.FragmentDialog;
-import com.act.quzhibo.custom.LoadNetView;
-import com.act.quzhibo.custom.MyListView;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.FragmentDialog;
+import com.act.quzhibo.widget.LoadNetView;
+import com.act.quzhibo.widget.MyListView;
+import com.act.quzhibo.widget.TitleBarView;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,7 +15,7 @@ import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.widget.FragmentDialog;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 
 import java.io.File;

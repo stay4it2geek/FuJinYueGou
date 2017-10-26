@@ -6,7 +6,7 @@
     android:background="#eeeeee"
     android:orientation="vertical">
 
-    <com.act.quzhibo.custom.TitleBarView
+    <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight"
@@ -47,7 +47,7 @@
                 app:fab_title="排序" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
-        <com.act.quzhibo.custom.LoadNetView
+        <com.act.quzhibo.widget.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

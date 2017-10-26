@@ -26,7 +26,7 @@
                     android:layout_height="80dp"
                     android:layout_margin="5dp">
 
-                    <com.act.quzhibo.custom.CircleImageView
+                    <com.act.quzhibo.widget.CircleImageView
                         android:id="@+id/circle_avatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

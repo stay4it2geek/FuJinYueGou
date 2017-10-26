@@ -13,8 +13,8 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.WhoLikeMeAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.InterestSubPerson;
-import com.act.quzhibo.custom.LoadNetView;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.LoadNetView;
+import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;

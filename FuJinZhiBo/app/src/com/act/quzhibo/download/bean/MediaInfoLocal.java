@@ -3,9 +3,7 @@ package com.act.quzhibo.download.bean;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-/**
- * Created by renpingqing on 17/3/2.
- */
+
 @DatabaseTable(tableName = "MediaInfoLocal")
 public class MediaInfoLocal {
 

@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.db.NewFriendManager;
+import com.act.quzhibo.chat.db.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
@@ -21,7 +21,7 @@ import com.act.quzhibo.ui.fragment.ContactFragment;
 import com.act.quzhibo.ui.fragment.ConversationFragment;
 import com.act.quzhibo.util.IMMLeaks;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.widget.FragmentDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

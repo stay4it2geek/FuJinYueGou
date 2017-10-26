@@ -27,7 +27,7 @@ import com.act.quzhibo.ui.activity.ChatActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.widget.FragmentDialog;
 import com.github.promeg.pinyinhelper.Pinyin;
 import com.orhanobut.logger.Logger;
 

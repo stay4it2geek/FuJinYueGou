@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.act.quzhibo.custom.CircleImageView
+    <com.act.quzhibo.widget.CircleImageView
         android:id="@+id/postImg"
         android:layout_width="@dimen/avatar_size36"
         android:layout_height="@dimen/avatar_size36"
@@ -11,7 +11,7 @@
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp" />
 
-    <com.act.quzhibo.custom.CircleImageView
+    <com.act.quzhibo.widget.CircleImageView
         android:id="@+id/avatarvideo"
         android:layout_width="50dp"
         android:layout_height="50dp"

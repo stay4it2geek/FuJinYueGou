@@ -18,7 +18,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.CommonCourse;
 import com.act.quzhibo.ui.activity.MoneyCourseActivity;
 import com.act.quzhibo.ui.activity.PuaCoursesActivity;
-import com.act.quzhibo.custom.LoadNetView;
+import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;
@@ -108,8 +108,6 @@ public class CoursesCenterFragment extends Fragment {
     }
 
     private void queryCourseData(String courseCategoryId, final int actionType) {
-        loadNetView.setVisibility(View.VISIBLE);
-        loadNetView.setlayoutVisily(Constants.LOAD);
         List<BmobQuery<CommonCourse>> querise = new ArrayList<>();
         BmobQuery<CommonCourse> query = new BmobQuery<>();
         BmobQuery<CommonCourse> query3 = new BmobQuery<>();

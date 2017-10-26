@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="#eee">
 
-    <com.act.quzhibo.custom.TitleBarView
+    <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/commonViewHeight" />
@@ -45,7 +45,7 @@
                     android:layout_gravity="bottom"
                     android:background="#33000000">
 
-                    <com.act.quzhibo.custom.CircleImageView
+                    <com.act.quzhibo.widget.CircleImageView
                         android:id="@+id/userImage"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
@@ -200,7 +200,7 @@
                         android:text="图文动态" />
 
 
-                    <com.act.quzhibo.custom.HorizontialListView
+                    <com.act.quzhibo.widget.HorizontialListView
                         android:id="@+id/txt_img_listview"
                         android:layout_width="300dp"
                         android:layout_height="match_parent"
@@ -247,7 +247,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/icon_main_more" />
 
-                    <com.act.quzhibo.custom.HorizontialListView
+                    <com.act.quzhibo.widget.HorizontialListView
                         android:id="@+id/photoLibsList"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -282,7 +282,7 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/icon_main_more" />
 
-                    <com.act.quzhibo.custom.HorizontialListView
+                    <com.act.quzhibo.widget.HorizontialListView
                         android:id="@+id/videoLibsList"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -367,7 +367,7 @@
                         android:layout_centerVertical="true"
                         android:text="最近20位访客" />
 
-                    <com.act.quzhibo.custom.HorizontialListView
+                    <com.act.quzhibo.widget.HorizontialListView
                         android:id="@+id/who_see_her_imglist"
                         android:layout_width="wrap_content"
                         android:layout_height="60dp"
@@ -479,7 +479,7 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <com.act.quzhibo.custom.LoadNetView
+    <com.act.quzhibo.widget.LoadNetView
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

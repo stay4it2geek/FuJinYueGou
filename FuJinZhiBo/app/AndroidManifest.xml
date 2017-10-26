@@ -94,7 +94,12 @@
         <activity
             android:name="com.act.quzhibo.ui.activity.PostAddActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name="com.act.quzhibo.ui.activity.ShareManagerActivty"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.ShoppingCartActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ClipImageActivity"
             android:screenOrientation="portrait" />

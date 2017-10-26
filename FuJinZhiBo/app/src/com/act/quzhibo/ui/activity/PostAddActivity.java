@@ -30,7 +30,7 @@ import com.act.quzhibo.bean.RecordVideoEvent;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.luban_compress.Luban;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.TitleBarView;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/courseLayout"
     android:layout_width="match_parent"
     android:layout_height="140dp"
@@ -7,23 +8,34 @@
     android:background="@drawable/background_card"
     android:orientation="horizontal">
 
+    <CheckBox
+        android:id="@+id/ck_chose"
+        android:layout_width="40dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_vertical"
+        android:button="@drawable/check_bg"
+        android:padding="10dp"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:visibility="gone" />
 
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_margin="5dp"
-        android:layout_weight="1">
+        android:layout_weight="1.2">
 
         <ImageView
             android:id="@+id/courseImage"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             android:scaleType="fitXY" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp">
 
             <TextView
                 android:id="@+id/courseTag"
@@ -47,9 +59,9 @@
                 android:padding="2dp"
                 android:text=""
                 android:textColor="@color/red"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
         </LinearLayout>
-
     </FrameLayout>
 
     <RelativeLayout
@@ -119,13 +131,23 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/selectionNum"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="12dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/courseAppPrice"
             android:gravity="bottom"
             android:text=""
             android:textColor="@color/light_gray"
             android:textSize="15sp" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_item_delete"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/btn_delete" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -3,7 +3,7 @@ package com.act.quzhibo.bean;
 import android.text.TextUtils;
 
 import com.act.quzhibo.common.Config;
-import com.act.quzhibo.db.NewFriend;
+import com.act.quzhibo.chat.db.NewFriend;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;

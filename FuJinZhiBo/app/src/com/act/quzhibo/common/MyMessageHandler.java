@@ -7,8 +7,8 @@ import android.util.Log;
 
 import com.act.quzhibo.bean.AddFriendMessage;
 import com.act.quzhibo.bean.AgreeAddFriendMessage;
-import com.act.quzhibo.db.NewFriend;
-import com.act.quzhibo.db.NewFriendManager;
+import com.act.quzhibo.chat.db.NewFriend;
+import com.act.quzhibo.chat.db.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.model.UserModel;

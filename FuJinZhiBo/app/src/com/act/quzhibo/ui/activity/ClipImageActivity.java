@@ -11,8 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.custom.ClipViewLayout;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.ClipViewLayout;
+import com.act.quzhibo.widget.TitleBarView;
 
 import java.io.File;
 import java.io.IOException;

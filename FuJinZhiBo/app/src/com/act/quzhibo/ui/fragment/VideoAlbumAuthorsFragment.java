@@ -16,7 +16,7 @@ import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MediaAuthor;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.custom.LoadNetView;
+import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.text.ParseException;

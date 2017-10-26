@@ -21,7 +21,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewFindUtils;
-import com.act.quzhibo.custom.FragmentDialog;
+import com.act.quzhibo.widget.FragmentDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,14 +39,20 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_common_tab);
+        initView();
+
+    }
+    protected abstract  boolean getDetailContentViewFlag();
+
+    protected void initView(){
+        if(!getDetailContentViewFlag()){
+            setContentView(R.layout.activity_common_tab);
+        }
         mFragments=getFragments();
         decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
         CommonUtil.initView(getTitles(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter, getIsMineActivityType());
-
     }
-
     protected void setPage(int positon) {
         ((ViewPager) ViewFindUtils.find(decorView, R.id.viewpager)).setCurrentItem(positon);
     }
@@ -127,14 +133,14 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
-        initView();
+
     }
 
     @Override
     public void setContentView(View view, ViewGroup.LayoutParams params) {
         super.setContentView(view, params);
         ButterKnife.bind(this);
-        initView();
+
     }
 
     @Override
@@ -148,7 +154,7 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
 
     }
 
-    protected void initView() {}
+
 
     protected void runOnMain(Runnable runnable) {
         runOnUiThread(runnable);

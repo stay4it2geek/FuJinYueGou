@@ -9,8 +9,8 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyPostDetailAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyPost;
-import com.act.quzhibo.custom.LoadNetView;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.LoadNetView;
+import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 public class MyPostDetailActivity extends FragmentActivity {

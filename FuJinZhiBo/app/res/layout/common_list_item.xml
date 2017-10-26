@@ -87,6 +87,6 @@
         android:layout_gravity="right|bottom"
         android:layout_marginBottom="7dp"
         android:layout_marginRight="7dp"
-        android:background="@drawable/delete"
+        android:background="@drawable/btn_delete"
         android:visibility="gone" />
 </FrameLayout>

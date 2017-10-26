@@ -19,8 +19,8 @@ import com.act.quzhibo.adapter.MyPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyPost;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.custom.LoadNetView;
-import com.act.quzhibo.custom.TitleBarView;
+import com.act.quzhibo.widget.LoadNetView;
+import com.act.quzhibo.widget.TitleBarView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 

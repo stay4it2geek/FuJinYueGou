@@ -23,7 +23,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.lock_view.LockIndicatorView;
 import com.act.quzhibo.lock_view.LockViewGroup;
-import com.act.quzhibo.custom.SelfDialog;
+import com.act.quzhibo.widget.SelfDialog;
 
 import java.util.List;
 

@@ -20,9 +20,6 @@ import cn.woblog.android.downloader.domain.DownloadThreadInfo;
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_COMPLETED;
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_PAUSED;
 
-/**
- * Created by renpingqing on 17/3/2.
- */
 
 public class DBController implements DownloadDBController {
 
