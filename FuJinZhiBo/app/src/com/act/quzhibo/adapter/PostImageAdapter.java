@@ -31,7 +31,7 @@ public class PostImageAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<String> imgs;
 
-    public PostImageAdapter(Context context, ArrayList<String> imgs, int viewHodlerType, boolean isNeedBlur,boolean isShowVideoCover) {
+    public PostImageAdapter(Context context, ArrayList<String> imgs, int viewHodlerType, boolean isNeedBlur, boolean isShowVideoCover) {
         this.context = context;
         this.imgs = imgs;
         this.isNeedBlur = isNeedBlur;
@@ -63,7 +63,7 @@ public class PostImageAdapter extends BaseAdapter {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_post_detail_img, parent, false);
             } else {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_info_common_user_img, parent, false);
-                if(isShowVideoCover){
+                if (isShowVideoCover) {
                     convertView.findViewById(R.id.video_player_cover).setVisibility(View.VISIBLE);
                 }
             }
@@ -81,11 +81,16 @@ public class PostImageAdapter extends BaseAdapter {
                     Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(viewHolder.showImg);
                 }
             } else {
+                if (isNeedBlur) {
                     if (rootUser.vipConis < 14000) {
                         blurImage(position, viewHolder);
                     } else {
                         Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(viewHolder.showImg);
                     }
+                } else {
+                    Glide.with(context).load(imgs.get(position)).diskCacheStrategy(DiskCacheStrategy.SOURCE).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(viewHolder.showImg);
+                }
+
             }
         }
         return convertView;

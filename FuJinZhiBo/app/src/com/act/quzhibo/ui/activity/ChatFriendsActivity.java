@@ -115,7 +115,7 @@ public class ChatFriendsActivity extends FragmentActivity implements BackHandled
                     @Override
                     public void onChange(ConnectionStatus status) {
                         ToastUtil.showToast(ChatFriendsActivity.this, status.getMsg());
-                        if (!status.getMsg().equals("connecting")) {
+                        if (status.getMsg().equals("connected")) {
                             promptDialog.dismissImmediately();
                         }
                     }

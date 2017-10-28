@@ -15,6 +15,8 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
+import com.act.quzhibo.bean.MyPost;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyFocusCommonPerson;
 import com.act.quzhibo.widget.FragmentDialog;
@@ -29,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -110,8 +113,10 @@ public class MyFocusPersonActivity extends FragmentActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
     }
 
-    private void queryData(final int actionType) {BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
-        query.setLimit(10);
+    private void queryData(final int actionType) {
+        BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+        List<BmobQuery<MyFocusCommonPerson>> queries = new ArrayList<>();
+
         if (actionType == Constants.LOADMORE) {
             Date date = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -122,14 +127,19 @@ public class MyFocusPersonActivity extends FragmentActivity {
             }
             query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
         }
+
+        BmobQuery<MyFocusCommonPerson> query2 = new BmobQuery<>();
+
+        query2.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+        queries.add(query2);
+        query.and(queries);
+        query.setLimit(10);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MyFocusCommonPerson>() {
             @Override
             public void done(List<MyFocusCommonPerson> list, BmobException e) {
                 if (e == null) {
-                    if (actionType == Constants.REFRESH) {
-                        myFocusCommonPersons.clear();
-                    }
+
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                     }
@@ -152,7 +162,9 @@ public class MyFocusPersonActivity extends FragmentActivity {
             super.handleMessage(msg);
             ArrayList<MyFocusCommonPerson> showerses = (ArrayList<MyFocusCommonPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-
+                if (msg.what == Constants.REFRESH) {
+                    myFocusCommonPersons.clear();
+                }
                 if (showerses != null) {
                     myFocusCommonPersons.addAll(showerses);
                     myfocusSize = showerses.size();

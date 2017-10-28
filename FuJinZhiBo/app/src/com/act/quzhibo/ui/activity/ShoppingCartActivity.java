@@ -163,7 +163,7 @@ public class ShoppingCartActivity extends FragmentActivity implements
                             }
 
                         } else {
-                            ToastUtil.showToast(ShoppingCartActivity.this, "删除失败");
+                            ToastUtil.showToast(ShoppingCartActivity.this, "删除失败" + e.getMessage());
                         }
                     }
                 });
@@ -221,19 +221,7 @@ public class ShoppingCartActivity extends FragmentActivity implements
                         cartAdapter.notifyDataSetChanged();
                         for (int i = 0; i < list.size(); i++) {
                             BmobQuery<CommonCourse> query1 = new BmobQuery<>();
-                            query1.getObject(list.get(i).course.getObjectId(), new QueryListener<CommonCourse>() {
-                                @Override
-                                public void done(CommonCourse course, BmobException e) {
-                                    if (e == null && course != null) {
-                                        ShoppingCart cart = new ShoppingCart();
-                                        cart.user = BmobUser.getCurrentUser(RootUser.class);
-                                        cart.course = course;
-                                        cart.price = Double.parseDouble(course.courseAppPrice);
-                                        shoppingCarts.add(cart);
-                                        cartAdapter.setCartBeanListAndNotify(shoppingCarts);
-                                    }
-                                }
-                            });
+                            query1.getObject(list.get(i).course.getObjectId(), new MyQueryListener(list, i));
                         }
 
                         loadNetView.setVisibility(View.GONE);
@@ -245,6 +233,28 @@ public class ShoppingCartActivity extends FragmentActivity implements
         });
     }
 
+    class MyQueryListener extends QueryListener<CommonCourse> {
+        List<ShoppingCart> list;
+        int i;
+
+        public MyQueryListener(List<ShoppingCart> list, int i) {
+            this.list = list;
+            this.i = i;
+        }
+
+        @Override
+        public void done(CommonCourse course, BmobException e) {
+            if (e == null && course != null) {
+                ShoppingCart cart = new ShoppingCart();
+                cart.setObjectId(list.get(i).course.getObjectId());
+                cart.user = BmobUser.getCurrentUser(RootUser.class);
+                cart.course = course;
+                cart.price = Double.parseDouble(course.courseAppPrice);
+                shoppingCarts.add(cart);
+                cartAdapter.setCartBeanListAndNotify(shoppingCarts);
+            }
+        }
+    }
 
     /**
      * 遍历list集合

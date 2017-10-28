@@ -56,7 +56,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), (screenWidth / 2) - 5));
+            holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 10), (screenWidth / 2) - 5));
         holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).gender.equals("0")) {
                 Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.women).error(R.drawable.error_img).into(holder.photoImg);

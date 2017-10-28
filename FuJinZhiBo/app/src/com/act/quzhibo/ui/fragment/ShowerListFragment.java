@@ -23,6 +23,7 @@ import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.LoadNetView;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -50,6 +51,15 @@ public class ShowerListFragment extends BackHandledFragment {
         if (context instanceof ShowerListActivity) {
             onCallShowViewListner = (OnCallShowViewListner) context;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        FloatingActionsMenu menu = (FloatingActionsMenu) view.findViewById(R.id.showMenuButton);
+        menu.collapse();
+
+
     }
 
     @Override
@@ -109,21 +119,6 @@ public class ShowerListFragment extends BackHandledFragment {
             }
         });
 
-        view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collections.sort(rooms, new ComparatorValues());
-                if (adapter != null) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
-
         view.findViewById(R.id.openShow).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,6 +142,21 @@ public class ShowerListFragment extends BackHandledFragment {
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
                 getData(categoryId, "0", Constants.REFRESH);
+            }
+        });
+
+        view.findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Collections.sort(rooms, new ComparatorValues());
+                if (adapter != null) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         });
         return view;

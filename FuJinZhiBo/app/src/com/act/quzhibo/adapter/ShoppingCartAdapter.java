@@ -1,6 +1,8 @@
 package com.act.quzhibo.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -16,6 +18,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.bean.CommonCourse;
 import com.act.quzhibo.bean.ShoppingCart;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.ui.activity.CourseDetailActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -30,9 +33,9 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     private List<ShoppingCart> cartBeanList;
     private CheckInterface checkInterface;
     private ModifyListInterface modifyListInterface;
-    private Context context;
+    private Activity context;
 
-    public ShoppingCartAdapter(Context context) {
+    public ShoppingCartAdapter(Activity context) {
         this.context = context;
     }
 
@@ -90,7 +93,22 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                     }
                 }
         );
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CourseDetailActivity.class);
+                intent.putExtra("courseUiType", course.courseUiType);
+                intent.putExtra(Constants.COURSE, course);
+                context.startActivity(intent);
+            }
+        });
         //删除弹窗
         holder.tvCommodityDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,9 +117,9 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             }
         });
         boolean choosed = cartBeanList.get(position).isChoosed();
-        if (choosed){
+        if (choosed) {
             holder.ckOneChose.setChecked(true);
-        }else{
+        } else {
             holder.ckOneChose.setChecked(false);
         }
 

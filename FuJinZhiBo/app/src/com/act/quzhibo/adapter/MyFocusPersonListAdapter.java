@@ -58,7 +58,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), (screenWidth / 2) - 5));
+            holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 10), (screenWidth / 2) - 5));
             holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
             if (datas.get(position).sex.equals("2")) {
                 holder.sex.setText("女");

@@ -101,7 +101,7 @@ public class MyPostListActivity extends AppCompatActivity {
         });
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        findViewById(R.id.postMenuButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.showMenuButton).setVisibility(View.VISIBLE);
         titlebar.setBarTitle("我 的 状 态");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
@@ -135,8 +135,21 @@ public class MyPostListActivity extends AppCompatActivity {
                 startActivityForResult(intent, UPLOAD_POST);
             }
         });
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
 
-        queryData(Constants.REFRESH);
     }
 
 
@@ -275,6 +288,11 @@ public class MyPostListActivity extends AppCompatActivity {
                                         if (e == null) {
                                             myPostList.remove(postion);
                                             myPostListAdapter.notifyDataSetChanged();
+                                            if (myPostList.size() == 0) {
+                                                loadNetView.setVisibility(View.VISIBLE);
+                                                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                                                return;
+                                            }
                                         } else {
 
                                         }
@@ -298,7 +316,8 @@ public class MyPostListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.postMenuButton);
+        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.showMenuButton);
         menu.collapse();
+        queryData(Constants.REFRESH);
     }
 }

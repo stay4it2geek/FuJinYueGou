@@ -25,8 +25,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <com.act.quzhibo.widget.LoadNetView
+            android:id="@+id/loadview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff" />
+
         <com.getbase.floatingactionbutton.FloatingActionsMenu
-            android:id="@+id/postMenuButton"
+            android:id="@+id/showMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
@@ -74,36 +80,7 @@
                 app:fab_title="照片" />
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
-        <LinearLayout
-            android:id="@+id/sort"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:layout_gravity="right"
-            android:orientation="vertical"
-            android:visibility="gone">
 
-            <View
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:layout_marginRight="10dp"
-                android:background="@android:drawable/ic_menu_sort_by_size" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="日期排序"
-                android:textColor="@color/red_light"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-
-        <com.act.quzhibo.widget.LoadNetView
-            android:id="@+id/loadview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff" />
     </FrameLayout>
 
 

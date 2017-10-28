@@ -93,21 +93,6 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         getData("0", Constants.REFRESH);
-        findViewById(R.id.sort).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collections.sort(posts, new ComparatorValues());
-                if (adapter != null) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
-
 
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override

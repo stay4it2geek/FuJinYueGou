@@ -15,6 +15,8 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusShowerListAdapter;
+import com.act.quzhibo.bean.MyFocusCommonPerson;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.MyFocusShower;
@@ -36,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -119,7 +122,10 @@ public class MyFocusShowerActivity extends FragmentActivity {
 
     private void queryData(final int actionType) {
         BmobQuery<MyFocusShower> query = new BmobQuery<>();
-        query.setLimit(10);
+
+        List<BmobQuery<MyFocusShower>> queries = new ArrayList<>();
+
+
         if (actionType == Constants.LOADMORE) {
             Date date = null;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -130,14 +136,18 @@ public class MyFocusShowerActivity extends FragmentActivity {
             }
             query.addWhereLessThanOrEqualTo("updatedAt", new BmobDate(date));
         }
+
+        BmobQuery<MyFocusShower> query2 = new BmobQuery<>();
+
+        query2.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+        queries.add(query2);
+        query.and(queries);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MyFocusShower>() {
             @Override
             public void done(List<MyFocusShower> list, BmobException e) {
                 if (e == null) {
-                    if (actionType == Constants.REFRESH) {
-                        myFocusShowerses.clear();
-                    }
+
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                     }
@@ -158,7 +168,9 @@ public class MyFocusShowerActivity extends FragmentActivity {
             super.handleMessage(msg);
             ArrayList<MyFocusShower> showerses = (ArrayList<MyFocusShower>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-
+                if (msg.what == Constants.REFRESH) {
+                    myFocusShowerses.clear();
+                }
                 if (showerses != null) {
                     myFocusShowerses.addAll(showerses);
                     myfocusSize = showerses.size();

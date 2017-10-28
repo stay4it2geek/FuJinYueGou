@@ -47,6 +47,7 @@
                 app:fab_title="排序" />
 
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
         <com.act.quzhibo.widget.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"

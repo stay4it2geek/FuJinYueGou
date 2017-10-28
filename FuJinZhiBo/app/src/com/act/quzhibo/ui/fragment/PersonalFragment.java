@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -39,6 +40,7 @@ import com.act.quzhibo.ui.activity.MyFocusShowerActivity;
 import com.act.quzhibo.ui.activity.MyPostListActivity;
 import com.act.quzhibo.ui.activity.SettingMineInfoActivity;
 import com.act.quzhibo.ui.activity.ShareManagerActivty;
+import com.act.quzhibo.ui.activity.ShoppingCartActivity;
 import com.act.quzhibo.ui.activity.TermOfUseActivity;
 import com.act.quzhibo.ui.activity.VIPConisTableActivity;
 import com.act.quzhibo.ui.activity.VipOrdersActivity;
@@ -94,7 +96,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.myfocus_person).setVisibility(View.GONE);
             view.findViewById(R.id.myfocus_shower).setVisibility(View.GONE);
         }
+        view.findViewById(R.id.shopping_cart_layout).setOnClickListener(this);
         view.findViewById(R.id.circle_avatar).setOnClickListener(this);
+        view.findViewById(R.id.avaterlayout).setOnClickListener(this);
         view.findViewById(R.id.makemoneyLayoout).setOnClickListener(this);
         view.findViewById(R.id.checkoutMoneyLayout).setOnClickListener(this);
         view.findViewById(R.id.shareManagerLayoout).setOnClickListener(this);
@@ -146,13 +150,16 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
         } else if (view.getId() == R.id.shareManagerLayoout) {
             startActivity(view, ShareManagerActivty.class);
             return;
+        } else if (view.getId() == R.id.shopping_cart_layout) {
+            startActivity(view, ShoppingCartActivity.class);
+            return;
         } else {
             if (rootUser == null) {
                 startActivity(view, LoginActivity.class);
                 return;
             } else {
-                if (view.getId() == R.id.circle_avatar) {
-                    FragmentDialog.newInstance(false, "是否要替换头像", "亲，真的想要替换吗", "我要替换", "取消替换", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                if (R.id.avaterlayout==view.getId()||R.id.circle_avatar==view.getId()||R.id.uploadImg==view.getId()) {
+                    FragmentDialog.newInstance(false, "是否上传头像？", "亲，真的想要替换吗", "我要替换", "取消替换", "", "", false, new FragmentDialog.OnClickBottomListener() {
                         @Override
                         public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
                             dialog.dismiss();
@@ -165,64 +172,64 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                         }
                     }).show(getChildFragmentManager(), "");
 
-                    return;
-                }
+                } else {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.setBackgroundColor(getResources().getColor(R.color.colorbg));
+                            view.setBackgroundColor(getResources().getColor(R.color.white));
+                            switch (view.getId()) {
+                                case R.id.vip_order_listlayout:
+                                    getActivity().startActivity(new Intent(getActivity(), VipOrdersActivity.class));
+                                    break;
+                                case R.id.who_see_me:
+                                    Intent seeIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
+                                    seeIntent.putExtra("userType", Constants.SEE_ME_FLAG);
+                                    getActivity().startActivity(seeIntent);
+                                    break;
+                                case R.id.who_focus_me:
+                                    Intent focusIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
+                                    focusIntent.putExtra("userType", Constants.FOCUS_ME_FLAG);
+                                    getActivity().startActivity(focusIntent);
+                                    break;
+                                case R.id.myfocus_shower:
+                                    getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));
+                                    break;
+                                case R.id.myfocus_person:
+                                    getActivity().startActivity(new Intent(getActivity(), MyFocusPersonActivity.class));
+                                    break;
+                                case R.id.myVideo_download_layout:
+                                    Intent videoIntent = new Intent();
+                                    videoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.VIDEO_ALBUM);
+                                    videoIntent.setClass(getActivity(), DownloadManagerActivity.class);
+                                    getActivity().startActivity(videoIntent);
+                                    break;
+                                case R.id.myIMG_download_layout:
+                                    Intent photoIntent = new Intent();
+                                    photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
+                                    photoIntent.setClass(getActivity(), DownloadManagerActivity.class);
+                                    getActivity().startActivity(photoIntent);
+                                    break;
+                                case R.id.settingDetailayout:
+                                    getActivity().startActivity(new Intent(getActivity(), SettingMineInfoActivity.class));
+                                    break;
+                                case R.id.myPostlayout:
+                                    getActivity().startActivity(new Intent(getActivity(), MyPostListActivity.class));
+                                    break;
 
-                view.setBackgroundColor(getResources().getColor(R.color.colorbg));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.setBackgroundColor(getResources().getColor(R.color.white));
-                        switch (view.getId()) {
-                            case R.id.vip_order_listlayout:
-                                getActivity().startActivity(new Intent(getActivity(), VipOrdersActivity.class));
-                                break;
-                            case R.id.who_see_me:
-                                Intent seeIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
-                                seeIntent.putExtra("userType", Constants.SEE_ME_FLAG);
-                                getActivity().startActivity(seeIntent);
-                                break;
-                            case R.id.who_focus_me:
-                                Intent focusIntent = new Intent(getActivity(), WhoLikeThenSeeMeActivity.class);
-                                focusIntent.putExtra("userType", Constants.FOCUS_ME_FLAG);
-                                getActivity().startActivity(focusIntent);
-                                break;
-                            case R.id.myfocus_shower:
-                                getActivity().startActivity(new Intent(getActivity(), MyFocusShowerActivity.class));
-                                break;
-                            case R.id.myfocus_person:
-                                getActivity().startActivity(new Intent(getActivity(), MyFocusPersonActivity.class));
-                                break;
-                            case R.id.myVideo_download_layout:
-                                Intent videoIntent = new Intent();
-                                videoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.VIDEO_ALBUM);
-                                videoIntent.setClass(getActivity(), DownloadManagerActivity.class);
-                                getActivity().startActivity(videoIntent);
-                                break;
-                            case R.id.myIMG_download_layout:
-                                Intent photoIntent = new Intent();
-                                photoIntent.putExtra(Constants.DOWN_LOAD_TYPE, Constants.PHOTO_ALBUM);
-                                photoIntent.setClass(getActivity(), DownloadManagerActivity.class);
-                                getActivity().startActivity(photoIntent);
-                                break;
-                            case R.id.settingDetailayout:
-                                getActivity().startActivity(new Intent(getActivity(), SettingMineInfoActivity.class));
-                                break;
-                            case R.id.myPostlayout:
-                                getActivity().startActivity(new Intent(getActivity(), MyPostListActivity.class));
-                                break;
+                                case R.id.logout:
+                                    rootUser.logOut();
+                                    getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                                    break;
 
-                            case R.id.logout:
-                                rootUser.logOut();
-                                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
-                                break;
-
-                            default:
-                                break;
+                                default:
+                                    break;
+                            }
                         }
-                    }
-                }, 300);
+                    }, 300);
+                }
             }
+
         }
 
 
@@ -250,7 +257,7 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             view.findViewById(R.id.logout).setVisibility(View.VISIBLE);
             view.findViewById(R.id.loginLayout).setVisibility(View.GONE);
             ((TextView) view.findViewById(R.id.nickName)).setText(rootUser.getUsername() != null ? rootUser.getUsername() : "未设置昵称");
-            ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis != null && rootUser.vipConis > 0 ? "已有" + rootUser.vipConis + "趣币" : "您趣币不足");
+            ((TextView) view.findViewById(R.id.vip_coins)).setText(rootUser.vipConis != null && rootUser.vipConis > 0 ? "(已有" + rootUser.vipConis + "趣币)" : "您趣币不足");
             String sexAndAge = (TextUtils.isEmpty(rootUser.sex) ? "性别" : rootUser.sex + "性") + "/" + (TextUtils.isEmpty(rootUser.age) ? "年龄" : rootUser.age + "岁");
             ((TextView) view.findViewById(R.id.sexAndAge)).setText(sexAndAge);
             if (rootUser.vipConis != null && rootUser.vipConis > 0) {
@@ -325,9 +332,9 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
             circleImageView = (CircleImageView) view.findViewById(R.id.circle_avatar);
             if (!TextUtils.isEmpty(rootUser.photoFileUrl)) {
                 view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
-                Glide.with(getActivity()).load(rootUser.photoFileUrl).into(circleImageView);
+                Glide.with(getActivity()).load(rootUser.photoFileUrl).skipMemoryCache(true).into(circleImageView);
             } else {
-                circleImageView.setBackgroundResource(R.drawable.man);
+                circleImageView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.man));
             }
 
         } else {
@@ -470,47 +477,77 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                                         Glide.with(getActivity()).load(file.getAbsolutePath()).into(circleImageView);
                                         view.findViewById(R.id.uploadImg).setVisibility(View.GONE);
                                         final BmobFile bmobFile = new BmobFile(new File(file.getAbsolutePath()));
-                                        final BmobFile bmobOldFile = new BmobFile();
-                                        bmobOldFile.setUrl(rootUser.photoFileUrl);
-                                        bmobOldFile.delete(new UpdateListener() {
-                                            @Override
-                                            public void done(BmobException e) {
-                                                if (e == null) {
-                                                    bmobFile.uploadblock(new UploadFileListener() {
-                                                        @Override
-                                                        public void done(BmobException e) {
-                                                            if (e == null) {
-                                                                RootUser updateUser = new RootUser();
-                                                                updateUser.photoFileUrl = bmobFile.getFileUrl();
-                                                                updateUser.update(rootUser.getObjectId(), new UpdateListener() {
-                                                                    @Override
-                                                                    public void done(BmobException e) {
-                                                                        if (e == null) {
-                                                                            CommonUtil.fecth(getActivity());
-                                                                            promptDialog.showSuccess("头像上传成功", true);
-                                                                        } else {
-                                                                            promptDialog.showError("头像上传失败", true);
+                                        if(!TextUtils.isEmpty(rootUser.photoFileUrl)){
+                                            final BmobFile bmobOldFile = new BmobFile();
+                                            bmobOldFile.setUrl(rootUser.photoFileUrl);
+                                            bmobOldFile.delete(new UpdateListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        bmobFile.uploadblock(new UploadFileListener() {
+                                                            @Override
+                                                            public void done(BmobException e) {
+                                                                if (e == null) {
+                                                                    RootUser updateUser = new RootUser();
+                                                                    updateUser.photoFileUrl = bmobFile.getFileUrl();
+                                                                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                                                                        @Override
+                                                                        public void done(BmobException e) {
+                                                                            if (e == null) {
+                                                                                CommonUtil.fecth(getActivity());
+                                                                                promptDialog.showSuccess("头像上传成功", true);
+                                                                            } else {
+                                                                                promptDialog.showError("头像上传失败", true);
+                                                                            }
                                                                         }
-                                                                    }
-                                                                });
-                                                            } else {
-                                                                promptDialog.showError("头像上传失败", true);
+                                                                    });
+                                                                } else {
+                                                                    promptDialog.showError("头像上传失败", true);
+                                                                }
+                                                                promptDialog.dismiss();
                                                             }
-                                                            promptDialog.dismiss();
-                                                        }
 
-                                                        @Override
-                                                        public void onProgress(Integer value) {
+                                                            @Override
+                                                            public void onProgress(Integer value) {
 
-                                                        }
-                                                    });
-                                                } else {
-                                                    promptDialog.showError("源头像删除失败", true);
+                                                            }
+                                                        });
+                                                    } else {
+                                                        promptDialog.showError("源头像删除失败", true);
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
 
+                                        }else{
+                                            bmobFile.uploadblock(new UploadFileListener() {
+                                                @Override
+                                                public void done(BmobException e) {
+                                                    if (e == null) {
+                                                        RootUser updateUser = new RootUser();
+                                                        updateUser.photoFileUrl = bmobFile.getFileUrl();
+                                                        updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                                                            @Override
+                                                            public void done(BmobException e) {
+                                                                if (e == null) {
+                                                                    CommonUtil.fecth(getActivity());
+                                                                    promptDialog.showSuccess("头像上传成功", true);
+                                                                } else {
+                                                                    promptDialog.showError("头像上传失败", true);
+                                                                }
+                                                            }
+                                                        });
+                                                    } else {
+                                                        promptDialog.showError("头像上传失败", true);
+                                                    }
+                                                    promptDialog.dismiss();
+                                                }
 
+                                                @Override
+                                                public void onProgress(Integer value) {
+
+                                                }
+                                            });
+                                        }
                                     }
                                 }
                             });

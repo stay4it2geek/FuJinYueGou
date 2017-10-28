@@ -138,7 +138,38 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/icon_main_more" />
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/shopping_cart_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/commonViewHeight"
+                android:layout_marginTop="1dp"
+                android:background="#fff">
 
+                <ImageView
+                    android:id="@+id/shopping_cart_img"
+                    android:layout_width="28dp"
+                    android:layout_height="27dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/shopping_cart" />
+
+                <TextView
+                    style="@style/textStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/shopping_cart_img"
+                    android:paddingTop="5dp"
+                    android:text="我的购物车" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/icon_main_more" />
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/vip_order_listlayout"
                 android:layout_width="match_parent"

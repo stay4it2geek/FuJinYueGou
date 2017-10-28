@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
@@ -14,16 +15,26 @@ import com.act.quzhibo.bean.CommonCourse;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.ShoppingCart;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.event.RefreshEvent;
 import com.act.quzhibo.ui.fragment.CommentFragment;
 import com.act.quzhibo.ui.fragment.GoodsDetailFragment;
+import com.act.quzhibo.util.IMMLeaks;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMUserInfo;
+import cn.bmob.newim.core.ConnectionStatus;
+import cn.bmob.newim.listener.ConnectListener;
+import cn.bmob.newim.listener.ConnectStatusChangeListener;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -67,8 +78,39 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     protected void initView() {
         setContentView(R.layout.activity_course_detail);
         super.initView();
+        final RootUser user = BmobUser.getCurrentUser(RootUser.class);
+        //TODO 连接：3.1、登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
+        if (!TextUtils.isEmpty(user.getObjectId())) {
+            BmobIM.connect(user.getObjectId(), new ConnectListener() {
+                @Override
+                public void done(String uid, BmobException e) {
+                    if (e == null) {
+                        //TODO 连接成功后再进行修改本地用户信息的操作，并查询本地用户信息
+                        EventBus.getDefault().post(new RefreshEvent());
+                        //服务器连接成功就发送一个更新事件，同步更新会话及主页的小红点
+                        //TODO 会话：3.6、更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
+                        BmobIM.getInstance().
+                                updateUserInfo(new BmobIMUserInfo(user.getObjectId(),
+                                        user.getUsername(), user.photoFileUrl));
 
+                    } else {
+                        ToastUtil.showToast(CourseDetailActivity.this, e.getMessage());
+                    }
+                }
+            });
+
+
+            //TODO 连接：3.3、监听连接状态，可通过BmobIM.getInstance().getCurrentStatus()来获取当前的长连接状态
+            BmobIM.getInstance().setOnConnectStatusChangeListener(new ConnectStatusChangeListener() {
+                @Override
+                public void onChange(ConnectionStatus status) {
+
+
+                }
+            });
+        }
     }
+
 
     @Override
     protected void onResume() {
@@ -119,7 +161,18 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     @OnClick(R.id.service_layout)
     public void getService() {
         if (BmobUser.getCurrentUser(RootUser.class) != null) {
-            startActivity(new Intent(CourseDetailActivity.this, ChatActivity.class));
+            //TODO 会话：4.1、创建一个常态会话入口，好友聊天
+            if (!BmobIM.getInstance().getCurrentStatus().equals("connected")) {
+                BmobIMUserInfo info;
+                info = new BmobIMUserInfo("mjozUUUk", "趣视客服", "http://bmob-cdn-13639.b0.upaiyun.com/2017/10/29/aab00f0b9d9a43ebb9cadebc2d34c9ec.jpg");
+                BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+                Intent intent = new Intent(this, ChatActivity.class);
+                intent.putExtra("c", conversationEntrance);
+                startActivity(intent);
+            } else {
+                ToastUtil.showToast(CourseDetailActivity.this, "正在连接客服，请稍等。。。");
+            }
+
         } else {
             checkLogin();
         }
@@ -128,42 +181,42 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     @OnClick(R.id.text_add)
     public void addToShoppingCart() {
         if (BmobUser.getCurrentUser(RootUser.class) != null) {
-            startActivity(new Intent(CourseDetailActivity.this, ShoppingCartActivity.class));
+            for (ShoppingCart shoppingCart : shoppingCarts) {
+                if (shoppingCart.course.getObjectId().equals(course.getObjectId())) {
+                    ToastUtil.showToast(CourseDetailActivity.this, "课程已经添加在购物车了");
+                    return;
+                }
+            }
+
+
+            AnimationSet animationSet = new AnimationSet(true);
+            ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0.5f, 1, 0.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleAnimation.setDuration(1000);
+            animationSet.addAnimation(scaleAnimation);
+            CourseDetailActivity.this.courseCount.startAnimation(animationSet);
+            ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.price = Double.parseDouble(course.courseAppPrice);
+            shoppingCart.user = BmobUser.getCurrentUser(RootUser.class);
+            shoppingCart.course = (CommonCourse) getIntent().getSerializableExtra(Constants.COURSE);
+            shoppingCart.save(new SaveListener<String>() {
+                @Override
+                public void done(String s, BmobException e) {
+                    if (e == null) {
+                        count++;
+                        courseCount.setText(count + "");
+                    } else {
+                        if (e.getErrorCode() == 401) {
+                            ToastUtil.showToast(CourseDetailActivity.this, "课程已经添加在购物车了2");
+                        }
+                    }
+                }
+            });
+
+
         } else {
             checkLogin();
         }
-
-
-        for (ShoppingCart shoppingCart : shoppingCarts) {
-            if (shoppingCart.course.getObjectId().equals(course.getObjectId())) {
-                ToastUtil.showToast(CourseDetailActivity.this, "课程已经添加在购物车了");
-                return;
-            }
-        }
-        AnimationSet animationSet = new AnimationSet(true);
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0.5f, 1, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnimation.setDuration(1000);
-        animationSet.addAnimation(scaleAnimation);
-        CourseDetailActivity.this.courseCount.startAnimation(animationSet);
-        ShoppingCart shoppingCart = new ShoppingCart();
-        shoppingCart.price = Double.parseDouble(course.courseAppPrice);
-        shoppingCart.user = BmobUser.getCurrentUser(RootUser.class);
-        shoppingCart.course = (CommonCourse) getIntent().getSerializableExtra(Constants.COURSE);
-        shoppingCart.save(new SaveListener<String>() {
-            @Override
-            public void done(String s, BmobException e) {
-                if (e == null) {
-                    count++;
-                    courseCount.setText(count + "");
-                } else {
-                    if (e.getErrorCode() == 401) {
-                        ToastUtil.showToast(CourseDetailActivity.this, "课程已经添加在购物车了");
-                    }
-                }
-            }
-        });
-
 
     }
 

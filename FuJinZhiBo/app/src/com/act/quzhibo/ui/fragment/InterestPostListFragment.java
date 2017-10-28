@@ -20,6 +20,7 @@ import com.act.quzhibo.bean.InterestPostListInfoParentData;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.widget.LoadNetView;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -121,6 +122,8 @@ public class InterestPostListFragment extends BackHandledFragment {
     @Override
     public void onResume() {
         super.onResume();
+        FloatingActionsMenu menu = (FloatingActionsMenu) view.findViewById(R.id.showMenuButton);
+        menu.collapse();
     }
 
     public static  class ComparatorValues implements Comparator<InterestPost> {
