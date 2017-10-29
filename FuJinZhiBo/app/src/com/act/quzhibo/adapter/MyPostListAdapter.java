@@ -37,7 +37,8 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
 
     public interface OnMyPostRecyclerViewItemClickListener {
         void onItemClick(MyPost post);
-        void onItemDelteClick(int position,MyPost post,ImageView imageView,ArrayList<String> imgs);
+
+        void onItemDelteClick(int position, MyPost post, ImageView imageView, ArrayList<String> imgs);
     }
 
     private OnMyPostRecyclerViewItemClickListener mOnItemClickListener = null;
@@ -69,9 +70,9 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
         holder.sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex + "");
-        if (day <=1) {
-            holder.createTime.setText(hour + "小时"+min+"分钟前");
-        }   else  if (day < 30) {
+        if (day <= 1) {
+            holder.createTime.setText(hour + "小时" + min + "分钟前");
+        } else if (day < 30) {
             holder.createTime.setText(day + "天" + hour + "小时前");
         } else if (day > 30 && day < 60) {
             holder.createTime.setText("2个月前");
@@ -86,7 +87,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         if (post.images != null && post.images.size() > 0) {
             holder.imgVideolayout.setVisibility(View.GONE);
             holder.imgtotal.setVisibility(View.VISIBLE);
-            holder.imgGridview.setAdapter(new PostImageAdapter(activity, post.images, Constants.ITEM_POST_DETAIL_IMG,false,false));
+            holder.imgGridview.setAdapter(new PostImageAdapter(activity, post.images, Constants.ITEM_POST_DETAIL_IMG, false, false));
             holder.imgtotal.setText("共" + post.totalImages + "张");
         } else {
             holder.imgtotal.setVisibility(View.GONE);
@@ -122,36 +123,38 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         holder.arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnItemClickListener.onItemDelteClick(position,post,holder.arrow,post.images);
+                mOnItemClickListener.onItemDelteClick(position, post, holder.arrow, post.images);
             }
         });
         if (rootUser.photoFileUrl != null) {
-            if (rootUser.sex.equals("女")) {
-                Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                    }
+            if (!TextUtils.isEmpty(rootUser.sex)) {
+                if (rootUser.sex.equals("女")) {
+                    Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                        }
 
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        holder.photoImg.setBackgroundDrawable(errorDrawable);
-                    }
-                });
-            } else {
-                Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                    }
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            super.onLoadFailed(e, errorDrawable);
+                            holder.photoImg.setBackgroundDrawable(errorDrawable);
+                        }
+                    });
+                } else {
+                    Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
+                        }
 
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        holder.photoImg.setBackgroundDrawable(errorDrawable);
-                    }
-                });
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            super.onLoadFailed(e, errorDrawable);
+                            holder.photoImg.setBackgroundDrawable(errorDrawable);
+                        }
+                    });
+                }
             }
         }
 

@@ -88,11 +88,16 @@ public class DownloadedFragment extends BaseFragment {
             }
             if (uiDownLoadInfos != null && uiDownLoadInfos.size() > 0) {
                 downLoadListAdapter.setData(uiDownLoadInfos);
+                downLoadListAdapter.notifyAdapter();
                 loadNetView.setVisibility(View.GONE);
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
             }
+
+
+
+
             downLoadListAdapter.setOnDeleteListner(new OnDeleteListner() {
                 @Override
                 public void onDelete(DownloadInfo downloadInfo, int position, boolean needDelete) {
@@ -105,6 +110,7 @@ public class DownloadedFragment extends BaseFragment {
                     }
                     uiDownLoadInfos.remove(position);
                     downLoadListAdapter.setData(uiDownLoadInfos);
+                    downLoadListAdapter.notifyAdapter();
                     if (uiDownLoadInfos.size() == 0) {
                         loadNetView.setVisibility(View.VISIBLE);
                         loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);

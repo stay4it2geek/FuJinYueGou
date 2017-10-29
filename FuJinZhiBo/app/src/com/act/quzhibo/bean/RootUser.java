@@ -16,6 +16,8 @@ public class RootUser extends BmobUser {
     public String photoFileUrl;
     public String lastLoginTime;
     public String canDateThing;
+    public boolean hasSetting;
+
     public RootUser(){}
     public RootUser(NewFriend friend){
         setObjectId(friend.getUid());

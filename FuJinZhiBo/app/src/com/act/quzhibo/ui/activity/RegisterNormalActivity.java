@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ public class RegisterNormalActivity extends AppCompatActivity {
     private CheckBox check_agree;
     private EditText et_userNick;
     private EditText invite_code;
+    private Button btn_verify_login;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class RegisterNormalActivity extends AppCompatActivity {
         et_userNick = (EditText) findViewById(R.id.et_userNick);
         invite_code = (EditText) findViewById(R.id.invite_code);
         et_password = (EditText) findViewById(R.id.et_password);
+        btn_verify_login = (Button) findViewById(R.id.btn_verify_login);
+
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("普 通 注 册");
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -86,7 +90,16 @@ public class RegisterNormalActivity extends AppCompatActivity {
             }
         });
 
-
+        check_agree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    btn_verify_login.setEnabled(true);
+                }else{
+                    btn_verify_login.setEnabled(false);
+                }
+            }
+        });
     }
 
 

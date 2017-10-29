@@ -269,7 +269,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/referees_img"
                     android:paddingTop="5dp"
-                    android:text="已推荐的好友" />
+                    android:text="推荐管理" />
 
                 <View
                     android:layout_width="10dp"

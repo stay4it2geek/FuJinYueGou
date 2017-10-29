@@ -56,7 +56,7 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
     private boolean isSdCardExist;
     private DownloadManager downloadManager;
     private DBController dbController;
-    private ArrayList<MediaInfo> mediaInfos;
+    private ArrayList<MediaInfo> mediaInfos=new ArrayList<>();
 
 
     private long mLastShowHiddenTime;
@@ -64,22 +64,25 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
     /**
      * 获取查看图片的intent
      */
-    public static Intent newIntent(Context context, ArrayList<MediaInfo> mMediaInfos, int currentPosition) {
+    public static Intent newIntent(Context context, ArrayList<MediaInfo> mMediaInfos, int currentPosition, boolean isShowDownLoad) {
         Intent intent = new Intent(context, BGAPhotoPreviewActivity.class);
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(MEDIA_INFO_LIST, mMediaInfos);//
         intent.putExtras(bundle);
         intent.putExtra(EXTRA_CURRENT_POSITION, currentPosition);
+        intent.putExtra("isShowDownLoad", isShowDownLoad);
+
         return intent;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setNoLinearContentView(cn.bingoogolapple.photopicker.R.layout.bga_pp_activity_photo_preview);
-        mContentHvp = getViewById(cn.bingoogolapple.photopicker.R.id.hvp_photo_preview_content);
 
+        setNoLinearContentView(cn.bingoogolapple.photopicker.R.layout.bga_pp_activity_photo_preview);
+
+        mContentHvp = getViewById(cn.bingoogolapple.photopicker.R.id.hvp_photo_preview_content);
         mediaInfos = getIntent().getParcelableArrayListExtra(MEDIA_INFO_LIST);
-        if (mediaInfos.size() > 0) {
+        if (mediaInfos != null && mediaInfos.size() > 0) {
             downloadManager = DownloadService.getDownloadManager(getApplicationContext());
             isSdCardExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
             try {
@@ -105,8 +108,10 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
 
         ArrayList<String> previewImages = new ArrayList<>();
         previewImages.clear();
-        for (MediaInfo mediaInfo : mediaInfos) {
-            previewImages.add(mediaInfo.getUrl());
+        if (mediaInfos != null && mediaInfos.size() > 0) {
+            for (MediaInfo mediaInfo : mediaInfos) {
+                previewImages.add(mediaInfo.getUrl());
+            }
         }
         int currentPosition = getIntent().getIntExtra(EXTRA_CURRENT_POSITION, 0);
         mPhotoPageAdapter = new BGAPhotoPageAdapter(this, this, previewImages);
@@ -128,15 +133,18 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
 
         mTitleTv = (TextView) actionView.findViewById(cn.bingoogolapple.photopicker.R.id.tv_photo_preview_title);
         mDownloadIv = (ImageView) actionView.findViewById(cn.bingoogolapple.photopicker.R.id.iv_photo_preview_download);
-        mDownloadIv.setOnClickListener(new BGAOnNoDoubleClickListener() {
-            @Override
-            public void onNoDoubleClick(View v) {
-                if (mSavePhotoTask == null) {
-                    savePic();
+        if (getIntent().getBooleanExtra("isShowDownLoad", false)) {
+            mDownloadIv.setOnClickListener(new BGAOnNoDoubleClickListener() {
+                @Override
+                public void onNoDoubleClick(View v) {
+                    if (mSavePhotoTask == null) {
+                        savePic();
+                    }
                 }
-            }
-        });
-
+            });
+        } else {
+            mDownloadIv.setVisibility(View.GONE);
+        }
 
         renderTitleTv();
 
@@ -149,7 +157,7 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
         }
 
         if (mediaInfos.size() == 1) {
-            mTitleTv.setText("1");
+            mTitleTv.setText("1/1");
         } else {
             mTitleTv.setText((mContentHvp.getCurrentItem() + 1) + "/" + mPhotoPageAdapter.getCount());
         }
@@ -269,7 +277,6 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -311,7 +318,7 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
         @Override
         public void onDownloadSuccess() {
             mPhotoPageAdapter.notifyDataSetChanged();
-            ToastUtil.showToast(BGAPhotoPreviewActivity.this, "图片已保存在" + downloadInfo.getPath()+"文件夹");
+            ToastUtil.showToast(BGAPhotoPreviewActivity.this, "图片已保存在" + downloadInfo.getPath() + "文件夹");
         }
 
         @Override

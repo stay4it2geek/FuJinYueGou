@@ -46,7 +46,9 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
 
     @Bind(R.id.courseCount)
     TextView courseCount;
-    private CommonCourse course;
+    CommonCourse course;
+
+    ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
 
     int count = 0;
 
@@ -72,7 +74,6 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
         return mFragments;
     }
 
-    ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
 
     @Override
     protected void initView() {
@@ -139,10 +140,6 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected boolean getDetailContentViewFlag() {
@@ -162,7 +159,7 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     public void getService() {
         if (BmobUser.getCurrentUser(RootUser.class) != null) {
             //TODO 会话：4.1、创建一个常态会话入口，好友聊天
-            if (!BmobIM.getInstance().getCurrentStatus().equals("connected")) {
+            if (BmobIM.getInstance().getCurrentStatus().equals("connected")) {
                 BmobIMUserInfo info;
                 info = new BmobIMUserInfo("mjozUUUk", "趣视客服", "http://bmob-cdn-13639.b0.upaiyun.com/2017/10/29/aab00f0b9d9a43ebb9cadebc2d34c9ec.jpg");
                 BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
@@ -198,17 +195,28 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
             ShoppingCart shoppingCart = new ShoppingCart();
             shoppingCart.price = Double.parseDouble(course.courseAppPrice);
             shoppingCart.user = BmobUser.getCurrentUser(RootUser.class);
-            shoppingCart.course = (CommonCourse) getIntent().getSerializableExtra(Constants.COURSE);
+            shoppingCart.course = course;
             shoppingCart.save(new SaveListener<String>() {
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {
-                        count++;
-                        courseCount.setText(count + "");
-                    } else {
-                        if (e.getErrorCode() == 401) {
-                            ToastUtil.showToast(CourseDetailActivity.this, "课程已经添加在购物车了2");
-                        }
+                        BmobQuery<ShoppingCart> query = new BmobQuery<>();
+                        query.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
+                        query.findObjects(new FindListener<ShoppingCart>() {
+                            @Override
+                            public void done(List<ShoppingCart> list, BmobException e) {
+                                if (e == null) {
+                                    if (list != null && list.size() > 0) {
+                                        shoppingCarts.addAll(list);
+                                        courseCount.setText(list.size() + "");
+                                        count = list.size();
+                                    } else {
+                                        courseCount.setText("0");
+                                    }
+                                }
+                            }
+                        });
+
                     }
                 }
             });

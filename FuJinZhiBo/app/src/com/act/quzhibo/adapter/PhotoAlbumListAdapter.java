@@ -72,7 +72,7 @@ public class PhotoAlbumListAdapter extends RecyclerView.Adapter<PhotoAlbumListAd
             @Override
             public void onClick(View v) {
                 if (mMediaInfos.size() > 0) {
-                    activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, mMediaInfos, position));
+                    activity.startActivity(BGAPhotoPreviewActivity.newIntent(activity, mMediaInfos, position,true));
                 }
             }
         });

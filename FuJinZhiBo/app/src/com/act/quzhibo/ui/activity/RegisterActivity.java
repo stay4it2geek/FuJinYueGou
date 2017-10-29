@@ -43,8 +43,9 @@ public class RegisterActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
     private EditText et_userNick;
     private EditText invite_code;
+    private Button btn_verify_login;
 
-    class MyCountDownTimer implements Runnable{
+    class MyCountDownTimer implements Runnable {
 
         @Override
         public void run() {
@@ -89,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         invite_code = (EditText) findViewById(R.id.invite_code);
         check_agree = (CheckBox) findViewById(R.id.check_agree);
-
+        btn_verify_login = (Button) findViewById(R.id.btn_verify_login);
         et_password = (EditText) findViewById(R.id.et_password);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("手 机 注 册");
@@ -107,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                 getCode();
             }
         });
-        findViewById(R.id.btn_verify_login).setOnClickListener(new View.OnClickListener() {
+        btn_verify_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 verifyAndLogin();
@@ -117,18 +118,18 @@ public class RegisterActivity extends AppCompatActivity {
         findViewById(R.id.termofuse).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(RegisterActivity.this,TermOfUseActivity.class));
+                startActivity(new Intent(RegisterActivity.this, TermOfUseActivity.class));
             }
         });
         et_password.setSingleLine(true);
-        et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
+        et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
         ((CheckBox) findViewById(R.id.isSetPswVisi)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 } else {
-                    et_password.setInputType(TYPE_CLASS_TEXT|TYPE_TEXT_VARIATION_PASSWORD);
+                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
                 }
                 et_password.setSelection(et_password.getText().length());
 
@@ -138,11 +139,20 @@ public class RegisterActivity extends AppCompatActivity {
         findViewById(R.id.verify_fail).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               startActivity(new Intent(RegisterActivity.this,RegisterNormalActivity.class));
+                startActivity(new Intent(RegisterActivity.this, RegisterNormalActivity.class));
                 RegisterActivity.this.finish();
             }
         });
-
+        check_agree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    btn_verify_login.setEnabled(true);
+                }else{
+                    btn_verify_login.setEnabled(false);
+                }
+            }
+        });
     }
 
     private void getCode() {
@@ -224,11 +234,11 @@ public class RegisterActivity extends AppCompatActivity {
             }
         }
 
-        BmobQuery<RootUser> query=new BmobQuery<>();
+        BmobQuery<RootUser> query = new BmobQuery<>();
         query.getObject(invite_code.getText().toString().toString(), new QueryListener<RootUser>() {
             @Override
             public void done(RootUser user, BmobException e) {
-                if(user!=null){
+                if (user != null) {
                     BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
@@ -261,13 +271,11 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         }
                     });
-                }else{
-                    ToastUtil.showToast(RegisterActivity.this,"邀请码错误");
+                } else {
+                    ToastUtil.showToast(RegisterActivity.this, "邀请码错误");
                 }
             }
         });
-
-
 
 
     }

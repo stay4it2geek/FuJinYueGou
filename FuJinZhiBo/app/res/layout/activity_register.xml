@@ -171,7 +171,7 @@
                 android:inputType="text"
                 android:text=""
                 android:textColor="@color/black"
-                android:textColorHint="@color/red_light"
+                android:textColorHint="@color/red"
                 android:textSize="15sp" />
 
         </RelativeLayout>
@@ -192,7 +192,7 @@
             android:hint="请输入短信验证码"
             android:inputType="numberDecimal"
             android:paddingLeft="10dp"
-            android:textSize="14sp">
+            android:textSize="15sp">
 
             <requestFocus />
         </EditText>
@@ -216,19 +216,24 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp">
 
         <CheckBox
             android:id="@+id/check_agree"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:checked="true"
+            android:button="@drawable/check_bg"
+            android:scaleX="0.8"
+            android:paddingLeft="15dp"
+            android:text="我同意用户协议"
+            android:scaleY="0.8"
+            android:textColor="@color/commontextcolor"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:text="我同意用户协议"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
@@ -236,9 +241,9 @@
         android:id="@+id/termofuse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:text="查看用户协议"
+        android:layout_marginLeft="70dp"
         android:layout_marginTop="5dp"
+        android:text="查看用户协议"
         android:textSize="13sp" />
 
     <Button

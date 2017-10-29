@@ -226,7 +226,7 @@ public class ShoppingCartActivity extends FragmentActivity implements
 
                         loadNetView.setVisibility(View.GONE);
                     } else {
-                        loadNetView.setlayoutVisily(Constants.NO_DATA);
+                        loadNetView.setlayoutVisily(Constants.BUY_VIP);
                     }
                 }
             }
@@ -246,7 +246,7 @@ public class ShoppingCartActivity extends FragmentActivity implements
         public void done(CommonCourse course, BmobException e) {
             if (e == null && course != null) {
                 ShoppingCart cart = new ShoppingCart();
-                cart.setObjectId(list.get(i).course.getObjectId());
+                cart.setObjectId(list.get(i).getObjectId());
                 cart.user = BmobUser.getCurrentUser(RootUser.class);
                 cart.course = course;
                 cart.price = Double.parseDouble(course.courseAppPrice);

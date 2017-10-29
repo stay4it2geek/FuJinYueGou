@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
  * 商品界面
  */
 public class GoodsDetailFragment extends Fragment {
-    private static final String TAG = "GoodsDetailFragment";
     @Bind(R.id.slidingDetailsLayout)
     SlidingDetailsLayout slidingDetailsLayout;
     @Bind(R.id.tishi)

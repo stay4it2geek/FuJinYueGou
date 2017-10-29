@@ -8,15 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.MyPostListAdapter;
-import com.act.quzhibo.bean.MyPost;
+import com.act.quzhibo.adapter.MyTeamListAdapter;
+import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.widget.LoadNetView;
@@ -33,11 +29,8 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DeleteBatchListener;
 import cn.bmob.v3.listener.FindListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
 
@@ -46,12 +39,12 @@ import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
 public class ShareManagerActivty extends FragmentActivity {
 
     public static final int UPLOAD_POST = 1;
-    private ArrayList<MyPost> myPostList = new ArrayList<>();
+    private ArrayList<Promotion> myPostList = new ArrayList<>();
     private XRecyclerView recyclerView;
-    private MyPostListAdapter myPostListAdapter;
+    private MyTeamListAdapter myTeamListAdapter;
     private LoadNetView loadNetView;
     private String lastTime = "";
-    private int handlerMyPostsSize;
+    private int handlerMyteamsSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +73,7 @@ public class ShareManagerActivty extends FragmentActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (handlerMyPostsSize > 0) {
+                        if (handlerMyteamsSize > 0) {
                             queryData(Constants.LOADMORE);
                             recyclerView.loadMoreComplete();
                         } else {
@@ -104,8 +97,7 @@ public class ShareManagerActivty extends FragmentActivity {
         });
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        findViewById(R.id.showMenuButton).setVisibility(View.VISIBLE);
-        titlebar.setBarTitle("我 的 团 队");
+        titlebar.setBarTitle("我 的 推 广");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,9 +111,9 @@ public class ShareManagerActivty extends FragmentActivity {
 
 
     private void queryData(final int actionType) {
-        BmobQuery<MyPost> query = new BmobQuery<>();
-        BmobQuery<MyPost> query2 = new BmobQuery<>();
-        List<BmobQuery<MyPost>> queries = new ArrayList<>();
+        BmobQuery<Promotion> query = new BmobQuery<>();
+        BmobQuery<Promotion> query2 = new BmobQuery<>();
+        List<BmobQuery<Promotion>> queries = new ArrayList<>();
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -133,16 +125,16 @@ public class ShareManagerActivty extends FragmentActivity {
                 e.printStackTrace();
             }
         }
-        BmobQuery<MyPost> query3 = new BmobQuery<>();
+        BmobQuery<Promotion> query3 = new BmobQuery<>();
 
         query3.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
         queries.add(query3);
         query.and(queries);
         query.setLimit(10);
         query.order("-updatedAt");
-        query.findObjects(new FindListener<MyPost>() {
+        query.findObjects(new FindListener<Promotion>() {
             @Override
-            public void done(List<MyPost> list, BmobException e) {
+            public void done(List<Promotion> list, BmobException e) {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         myPostList.clear();
@@ -165,14 +157,14 @@ public class ShareManagerActivty extends FragmentActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<MyPost> myPosts = (ArrayList<MyPost>) msg.obj;
+            ArrayList<Promotion> myPosts = (ArrayList<Promotion>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
 
                 if (myPosts != null) {
                     myPostList.addAll(myPosts);
-                    handlerMyPostsSize = myPosts.size();
+                    handlerMyteamsSize = myPosts.size();
                 } else {
-                    handlerMyPostsSize = 0;
+                    handlerMyteamsSize = 0;
                 }
 
                 setAdapterView();
@@ -193,83 +185,14 @@ public class ShareManagerActivty extends FragmentActivity {
         }
     };
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == UPLOAD_POST && resultCode == RESULT_OK) {
-            MyPost myPost = (MyPost) data.getSerializableExtra(EXTRA_MOMENT);
-            myPostList.add(0, myPost);
-            setAdapterView();
-        }
-
-    }
-
     private void setAdapterView() {
-        if (myPostListAdapter == null) {
-            myPostListAdapter = new MyPostListAdapter(ShareManagerActivty.this, myPostList);
-            recyclerView.setAdapter(myPostListAdapter);
-            myPostListAdapter.setOnItemClickListener(new MyPostListAdapter.OnMyPostRecyclerViewItemClickListener() {
-                @Override
-                public void onItemClick(MyPost post) {
-                    Intent intent = new Intent();
-                    intent.putExtra(Constants.POST, post);
-                    intent.setClass(ShareManagerActivty.this, MyPostDetailActivity.class);
-                    startActivityForResult(intent, UPLOAD_POST);
-                }
-
-                @Override
-                public void onItemDelteClick(final int postion, final MyPost post, ImageView menu, final ArrayList<String> imgs) {
-                    final PopupMenu popupMenu = new PopupMenu(ShareManagerActivty.this, menu, Gravity.RIGHT);
-                    popupMenu.getMenuInflater().inflate(R.menu.post_manger_menu_list, popupMenu.getMenu());
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        public boolean onMenuItemClick(MenuItem item) {
-                            int itemId = item.getItemId();
-                            if (itemId == R.id.delete) {
-                                if (post.type.equals("2")) {
-                                    final BmobFile bmobOldFile = new BmobFile();
-                                    bmobOldFile.setUrl(post.vedioUrl + "");
-                                    bmobOldFile.delete(new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-
-                                        }
-                                    });
-                                } else if (post.type.equals("3")) {
-                                    String[] urls = imgs.toArray(new String[imgs.size()]);
-
-                                    BmobFile.deleteBatch(urls, new DeleteBatchListener() {
-
-                                        @Override
-                                        public void done(String[] failUrls, BmobException e) {
-
-                                        }
-                                    });
-                                }
-
-                                post.delete(new UpdateListener() {
-
-                                    @Override
-                                    public void done(BmobException e) {
-                                        if (e == null) {
-                                            myPostList.remove(postion);
-                                            myPostListAdapter.notifyDataSetChanged();
-                                        } else {
-
-                                        }
-                                    }
-                                });
-                            }
-                            popupMenu.dismiss();
-                            return false;
-                        }
-                    });
-                    popupMenu.show();
-                }
-
-            });
-        } else {
-            myPostListAdapter.notifyDataSetChanged();
-        }
+//        if (myTeamListAdapter == null) {
+//            myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myPostList);
+//            recyclerView.setAdapter(myTeamListAdapter);
+//
+//        } else {
+//            myTeamListAdapter.notifyDataSetChanged();
+//        }
     }
 
 

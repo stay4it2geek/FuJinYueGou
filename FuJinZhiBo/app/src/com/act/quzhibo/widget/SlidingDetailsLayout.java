@@ -8,11 +8,8 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Scroller;
 
-/**
- * Created by zcy on 16-10-14.
- */
+
 public class SlidingDetailsLayout extends ViewGroup {
-    private final static String TAG = SlidingDetailsLayout.class.getSimpleName();
     /**
      * 用于完成滚动操作的实例
      */

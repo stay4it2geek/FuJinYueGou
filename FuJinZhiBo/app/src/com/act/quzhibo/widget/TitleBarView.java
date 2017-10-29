@@ -10,11 +10,10 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 
 
-
 public class TitleBarView extends FrameLayout {
 
     private TextView barTitle;
-    private RelativeLayout backButton;
+    private RelativeLayout backbuttonLayout;
 
     public TitleBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -23,7 +22,7 @@ public class TitleBarView extends FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.title_bar_view, this);
 
         // 获取控件
-        backButton = (RelativeLayout) findViewById(R.id.backbutton);
+        backbuttonLayout = (RelativeLayout) findViewById(R.id.backbuttonLayout);
 
         barTitle = (TextView) findViewById(R.id.barTitle);
 
@@ -35,8 +34,11 @@ public class TitleBarView extends FrameLayout {
     }
 
     public void setBackButtonListener(OnClickListener listener) {
-        backButton.setOnClickListener(listener);
+        backbuttonLayout.setOnClickListener(listener);
     }
 
+    public void setBackButtonVisi(int visi) {
+        backbuttonLayout.setVisibility(visi);
+    }
 
 }

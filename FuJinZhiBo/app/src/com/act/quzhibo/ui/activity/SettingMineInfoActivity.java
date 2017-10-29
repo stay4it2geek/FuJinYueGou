@@ -102,6 +102,44 @@ public class SettingMineInfoActivity extends FragmentActivity {
             disPurpose_txt.setText(TextUtils.isEmpty(rootUser.disPurpose) ? "情感状态未设置" : "您现在是" + rootUser.disPurpose);
             datingThought_txt.setText(TextUtils.isEmpty(rootUser.datingthought) ? "交友想法未设置" : "您想要" + rootUser.datingthought);
             candateThing_txt.setText(TextUtils.isEmpty(rootUser.canDateThing) ? "是否可约未设置" : "您可以" + rootUser.canDateThing);
+
+            if (!rootUser.hasSetting) {
+                findViewById(R.id.backbuttonLayout).setVisibility(View.GONE);
+                findViewById(R.id.next).setVisibility(View.VISIBLE);
+                findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (sex_txt.getText().toString().contains("未设置")) {
+                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置性别才能查看更多画面哦，老司机才懂的！");
+                        } else if (
+                                arealocation_txt.getText().toString().contains("未设置")) {
+                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置地区才能查看更多画面哦，老司机才懂的！");
+                        } else if (
+                                age_txt.getText().toString().contains("未设置")) {
+                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置年龄才能查看更多画面哦，老司机才懂的！");
+                        } else if (
+                                disPurpose_txt.getText().toString().contains("未设置")) {
+                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置情感状态才能查看更多画面哦，老司机才懂的！");
+                        } else if (
+                                datingThought_txt.getText().toString().contains("未设置")) {
+                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置交友想法才能查看更多画面哦，老司机才懂的！");
+                        } else if (
+                                candateThing_txt.getText().toString().contains("未设置")) {
+                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置是否可约才能查看更多画面哦，老司机才懂的！");
+                        } else {
+                            updateUser.hasSetting = true;
+                            updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        finish();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
         }
 
     }
@@ -840,7 +878,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
                         }
                     });
                 }
-                
+
             }
 
             @Override
@@ -869,5 +907,34 @@ public class SettingMineInfoActivity extends FragmentActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (findViewById(R.id.next).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (sex_txt.getText().toString().contains("未设置") ||
+                            arealocation_txt.getText().toString().contains("未设置") ||
+                            age_txt.getText().toString().contains("未设置") ||
+                            disPurpose_txt.getText().toString().contains("未设置") ||
+                            datingThought_txt.getText().toString().contains("未设置") ||
+                            candateThing_txt.getText().toString().contains("未设置")) {
+                        ToastUtil.showToast(SettingMineInfoActivity.this, "设置完资料才能查看更多画面哦，老司机才懂的！");
+                    } else {
+                        updateUser.hasSetting = true;
+                        updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    finish();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+        }
     }
 }

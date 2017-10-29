@@ -2,6 +2,8 @@ package com.act.quzhibo.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,6 +54,17 @@ public class MineActivity extends TabSlideDifferentBaseActivity {
         RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
         if (rootUser != null) {
             CommonUtil.fecth(this);
+            if (!rootUser.hasSetting) {
+                startActivity(new Intent(this, SettingMineInfoActivity.class));
+            }
         }
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+    }
+
+
 }
