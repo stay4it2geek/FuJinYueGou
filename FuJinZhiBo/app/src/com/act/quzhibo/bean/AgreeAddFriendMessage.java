@@ -2,7 +2,6 @@ package com.act.quzhibo.bean;
 
 import android.text.TextUtils;
 
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -10,9 +9,6 @@ import cn.bmob.newim.bean.BmobIMExtraMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
 
 /**同意添加好友请求-仅仅只用于发送同意添加好友的消息
- * @author smile
- * @project AgreeAddFriendMessage
- * @date 2016-03-04-10:41
  * 接收到对方发送的同意添加自己为好友的请求时，需要做两个事情：1、在本地数据库中新建一个会话，因此需要设置isTransient为false,2、添加对方到自己的好友表中
  */
 public class AgreeAddFriendMessage extends BmobIMExtraMessage {
@@ -85,8 +81,6 @@ public class AgreeAddFriendMessage extends BmobIMExtraMessage {
                 agree.setMsg(m);
                 agree.setUid(uid);
                 agree.setTime(time);
-            }else{
-                Logger.i("AgreeAddFriendMessage的extra为空");
             }
         } catch (Exception e) {
             e.printStackTrace();

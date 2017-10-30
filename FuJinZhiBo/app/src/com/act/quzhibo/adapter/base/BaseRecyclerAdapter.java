@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
@@ -20,9 +19,6 @@ import java.util.TreeSet;
  * 支持添加自定义头部布局；
  * 支持扩展多种item布局；
  * 支持设置recycler view点击/长按事件
- * @param <T>
- * @author smile
- * @link https://github.com/bodismile/BaseRecyclerAdapter
  */
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerHolder> {
     /**
@@ -210,21 +206,4 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      */
     public abstract void bindView(BaseRecyclerHolder holder, T item, int position);
 
-    private Toast toast;
-    public void toast(final Object obj) {
-        try {
-            activity.runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (toast == null)
-                        toast = Toast.makeText(activity,"", Toast.LENGTH_SHORT);
-                    toast.setText(obj.toString());
-                    toast.show();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

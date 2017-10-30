@@ -52,13 +52,14 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
     private HorizontialListView listView;
     private Banner banner;
     private LoadNetView loadNetView;
-
-    MyFocusCommonPerson myFocusCommonPerson;
+    private RootUser user;
+    private MyFocusCommonPerson myFocusCommonPerson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_common_layout);
+        user=BmobUser.getCurrentUser(RootUser.class);
         initView();
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("情趣达人档案");
@@ -111,7 +112,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                     int max = 800;
                     int min = 30;
                     Random random = new Random();
-                    minute = random.nextInt(max) +  random.nextInt(min) ;
+                    minute = random.nextInt(max) + random.nextInt(min);
                     CommonUtil.saveData(this, minute, "time");
                     CommonUtil.saveData(this, Integer.parseInt(post.user.userId), "userId");
                 } else {
@@ -121,7 +122,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                 int max = 800;
                 int min = 30;
                 Random random = new Random();
-                minute = random.nextInt(max) +  random.nextInt(min) ;
+                minute = random.nextInt(max) + random.nextInt(min);
                 CommonUtil.saveData(this, minute, "time");
                 CommonUtil.saveData(this, Integer.parseInt(post.user.userId), "userId");
             }
@@ -171,11 +172,11 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user != null) {
             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
             query.setLimit(1);
             query.addWhereEqualTo("userId", post.user.userId);
-            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+            query.addWhereEqualTo("rootUser", user);
             query.addWhereEqualTo("userType", Constants.INTEREST);
             query.findObjects(new FindListener<MyFocusCommonPerson>() {
                 @Override
@@ -194,11 +195,11 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
         findViewById(R.id.focus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                if (user != null) {
                     if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("取消关注")) {
                         if (myFocusCommonPerson == null) {
                             MyFocusCommonPerson myFocusCommonPerson = new MyFocusCommonPerson();
-                            myFocusCommonPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                            myFocusCommonPerson.rootUser = user;
                             myFocusCommonPerson.username = post.user.nick;
                             myFocusCommonPerson.userId = post.user.userId;
                             myFocusCommonPerson.photoUrl = post.user.photoUrl;
@@ -209,11 +210,11 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
                                         ((TextView) findViewById(R.id.focus)).setText("取消关注");
-                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        if (user != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
                                             query.addWhereEqualTo("userId", post.user.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.addWhereEqualTo("rootUser", user);
                                             query.findObjects(new FindListener<MyFocusCommonPerson>() {
                                                 @Override
                                                 public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
@@ -238,11 +239,11 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                                 public void done(BmobException e) {
                                     if (e == null) {
                                         ((TextView) findViewById(R.id.focus)).setText("取消关注");
-                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        if (user != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
                                             query.addWhereEqualTo("userId", post.user.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.addWhereEqualTo("rootUser", user);
                                             query.findObjects(new FindListener<MyFocusCommonPerson>() {
                                                 @Override
                                                 public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
@@ -263,7 +264,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                             });
                         }
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注","","",false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", "", "", false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
 
@@ -323,7 +324,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
                         }
 
                         if (data.result.posts.size() > 0 && imgs.size() > 0) {
-                            listView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG,true,false));
+                            listView.setAdapter(new PostImageAdapter(InfoInterestPersonActivity.this, imgs, Constants.ITEM_USER_INFO_IMG, true, false));
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

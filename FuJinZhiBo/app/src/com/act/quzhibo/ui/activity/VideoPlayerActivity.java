@@ -60,22 +60,24 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
     private Room room;
     private int onlineCount = 0;
     private String photoUrl;
-    private ArrayList<InterestSubPerson> interestSubPersonArrayList = new ArrayList<>();
     public String lastTime;
     private UPMarqueeView upview1;
     private LinearLayout moreView;
-    private MyFocusShower mMyFocusShower;
+    private MyFocusShower mShower;
     private CheckBox checkBox;
-    RadioButton fullscreen;
+    private RadioButton fullscreen;
     private Random mRandom = new Random();
-    Handler handler = new Handler();
+    private Handler handler = new Handler();
     private List<String> data = new ArrayList<>();
     private List<View> views = new ArrayList<>();
-
+    private ArrayList<InterestSubPerson> persons = new ArrayList<>();
+    private RootUser user;
+    private HorizontialListView mListView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewplay);
+        user=BmobUser.getCurrentUser(RootUser.class);
         room = (Room) getIntent().getSerializableExtra("room");
         initView();
     }
@@ -99,11 +101,11 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
             public void done(List<InterestSubPerson> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
-                        interestSubPersonArrayList.clear();
+                        persons.clear();
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        interestSubPersonArrayList.addAll(list);
+                        persons.addAll(list);
                         Message message = new Message();
-                        message.obj = interestSubPersonArrayList;
+                        message.obj = persons;
                         memberHandler.sendMessage(message);
                     } else {
                         memberHandler.sendEmptyMessage(Constants.NO_MORE);
@@ -113,7 +115,6 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
         });
     }
 
-    private HorizontialListView horizontialListView;
     Handler memberHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -127,10 +128,10 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
             }
             int max = views.size();
             final ArrayList<Member> members = CommonUtil.jsonToArrayList(views.get(new Random().nextInt(max - 1)), Member.class);
-            horizontialListView = (HorizontialListView) findViewById(R.id.list);
+            mListView = (HorizontialListView) findViewById(R.id.list);
             mAdapter = new MemberAdapter(members, VideoPlayerActivity.this);
-            horizontialListView.setAdapter(mAdapter);
-            horizontialListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            mListView.setAdapter(mAdapter);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     showDialog(members.get(i));
@@ -196,17 +197,17 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
         videoView.start();
         countHandler.postDelayed(countRunnable, 10000);
         heartHandler.postDelayed(heartRunnable, 1000);
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user != null) {
             BmobQuery<MyFocusShower> query = new BmobQuery<>();
             query.setLimit(1);
             query.addWhereEqualTo("userId", room.userId);
-            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+            query.addWhereEqualTo("rootUser", user);
             query.findObjects(new FindListener<MyFocusShower>() {
                 @Override
                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                     if (e == null) {
                         if (myFocusShowers.size() >= 1) {
-                            mMyFocusShower = myFocusShowers.get(0);
+                            mShower = myFocusShowers.get(0);
                             ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
                         }
                     }
@@ -217,11 +218,11 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
         findViewById(R.id.focus_top).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                if (user != null) {
                     if (!(((TextView) findViewById(R.id.focus_top)).getText().toString().trim()).equals("取消关注")) {
-                        if (mMyFocusShower == null) {
+                        if (mShower == null) {
                             MyFocusShower myFocusShower = new MyFocusShower();
-                            myFocusShower.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                            myFocusShower.rootUser = user;
                             myFocusShower.portrait_path_1280 = photoUrl;
                             myFocusShower.nickname = room.nickname;
                             myFocusShower.roomId = room.roomId;
@@ -235,16 +236,16 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
                                     if (e == null) {
                                         ToastUtil.showToast(VideoPlayerActivity.this, "关注成功");
                                         ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
-                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        if (user != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.addWhereEqualTo("userId", room.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.addWhereEqualTo("rootUser", user);
                                             query.findObjects(new FindListener<MyFocusShower>() {
                                                 @Override
                                                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
-                                                            VideoPlayerActivity.this.mMyFocusShower = myFocusShowers.get(0);
+                                                            VideoPlayerActivity.this.mShower = myFocusShowers.get(0);
                                                             ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
                                                         }
                                                     }
@@ -258,22 +259,22 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
                                 }
                             });
                         } else {
-                            mMyFocusShower.update(mMyFocusShower.getObjectId(), new UpdateListener() {
+                            mShower.update(mShower.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
                                         ToastUtil.showToast(VideoPlayerActivity.this, "关注成功");
                                         ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
-                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        if (user != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.addWhereEqualTo("userId", room.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.addWhereEqualTo("rootUser", user);
                                             query.findObjects(new FindListener<MyFocusShower>() {
                                                 @Override
                                                 public void done(List<MyFocusShower> myFocusShowers, BmobException e) {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
-                                                            mMyFocusShower = myFocusShowers.get(0);
+                                                            mShower = myFocusShowers.get(0);
                                                             ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
                                                         }
                                                     }
@@ -297,12 +298,12 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
 
                             @Override
                             public void onNegtiveClick(Dialog dialog) {
-                                if (mMyFocusShower != null) {
-                                    mMyFocusShower.delete(mMyFocusShower.getObjectId(), new UpdateListener() {
+                                if (mShower != null) {
+                                    mShower.delete(mShower.getObjectId(), new UpdateListener() {
                                         @Override
                                         public void done(BmobException e) {
                                             if (e == null) {
-                                                mMyFocusShower = null;
+                                                mShower = null;
                                                 ((TextView) findViewById(R.id.focus_top)).setText("关注ta");
                                                 ToastUtil.showToast(VideoPlayerActivity.this, "取消关注成功");
                                             }

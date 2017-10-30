@@ -4,7 +4,6 @@ import com.act.quzhibo.bean.Friend;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.i.QueryUserListener;
 import com.act.quzhibo.i.UpdateCacheListener;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -93,8 +92,6 @@ public class UserModel extends BaseModel {
                         if (!msg.isTransient()) {
                             BmobIM.getInstance().updateConversation(conversation);
                         }
-                    } else {
-                        Logger.e(e);
                     }
                     listener.done(null);
                 }

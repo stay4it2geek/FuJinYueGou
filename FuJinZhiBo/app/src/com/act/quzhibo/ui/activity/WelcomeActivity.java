@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -237,7 +238,9 @@ public class WelcomeActivity extends ActivityManagePermission {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             plateListStr = (String) msg.obj;
-            this.postDelayed(runnable, 1000);
+            if (!TextUtils.isEmpty(plateListStr)) {
+                this.postDelayed(runnable, 1000);
+            }
         }
     };
 

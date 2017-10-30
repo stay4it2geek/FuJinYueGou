@@ -50,15 +50,13 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
     private TextView mTitleTv;
     private ImageView mDownloadIv;
     private BGAHackyViewPager mContentHvp;
-    private BGAPhotoPageAdapter mPhotoPageAdapter;
+    private BGAPhotoPageAdapter mAdapter;
     private boolean mIsHidden = false;
     private BGASavePhotoTask mSavePhotoTask;
     private boolean isSdCardExist;
     private DownloadManager downloadManager;
     private DBController dbController;
     private ArrayList<MediaInfo> mediaInfos=new ArrayList<>();
-
-
     private long mLastShowHiddenTime;
 
     /**
@@ -114,8 +112,8 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
             }
         }
         int currentPosition = getIntent().getIntExtra(EXTRA_CURRENT_POSITION, 0);
-        mPhotoPageAdapter = new BGAPhotoPageAdapter(this, this, previewImages);
-        mContentHvp.setAdapter(mPhotoPageAdapter);
+        mAdapter = new BGAPhotoPageAdapter(this, this, previewImages);
+        mContentHvp.setAdapter(mAdapter);
         mContentHvp.setCurrentItem(currentPosition);
         mToolbar.postDelayed(new Runnable() {
             @Override
@@ -152,14 +150,14 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
     }
 
     private void renderTitleTv() {
-        if (mTitleTv == null || mPhotoPageAdapter == null) {
+        if (mTitleTv == null || mAdapter == null) {
             return;
         }
 
         if (mediaInfos.size() == 1) {
             mTitleTv.setText("1/1");
         } else {
-            mTitleTv.setText((mContentHvp.getCurrentItem() + 1) + "/" + mPhotoPageAdapter.getCount());
+            mTitleTv.setText((mContentHvp.getCurrentItem() + 1) + "/" + mAdapter.getCount());
         }
     }
 
@@ -317,7 +315,7 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
 
         @Override
         public void onDownloadSuccess() {
-            mPhotoPageAdapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
             ToastUtil.showToast(BGAPhotoPreviewActivity.this, "图片已保存在" + downloadInfo.getPath() + "文件夹");
         }
 

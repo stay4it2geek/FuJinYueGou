@@ -64,12 +64,14 @@ public class ShoppingCartActivity extends FragmentActivity implements
     TextView tvEditor;
 
     ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
+    private RootUser user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shopping_cart_activity);
         ButterKnife.bind(this);
+        user=BmobUser.getCurrentUser(RootUser.class);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle("购物车");
         titlebar.setBackButtonListener(new View.OnClickListener() {
@@ -209,7 +211,7 @@ public class ShoppingCartActivity extends FragmentActivity implements
 
     private void requestShoppingCartData() {
         BmobQuery<ShoppingCart> query = new BmobQuery<>();
-        query.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
+        query.addWhereEqualTo("user", user);
         query.findObjects(new FindListener<ShoppingCart>() {
             @Override
             public void done(List<ShoppingCart> list, BmobException e) {
@@ -247,7 +249,7 @@ public class ShoppingCartActivity extends FragmentActivity implements
             if (e == null && course != null) {
                 ShoppingCart cart = new ShoppingCart();
                 cart.setObjectId(list.get(i).getObjectId());
-                cart.user = BmobUser.getCurrentUser(RootUser.class);
+                cart.user = user;
                 cart.course = course;
                 cart.price = Double.parseDouble(course.courseAppPrice);
                 shoppingCarts.add(cart);

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,6 @@ import com.act.quzhibo.ui.activity.NewFriendActivity;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.github.promeg.pinyinhelper.Pinyin;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -210,7 +208,6 @@ public class ContactFragment extends Fragment {
      */
     @Subscribe
     public void onEventAsync(RefreshEvent event) {
-        Log.e("---11111---", MyApplicaition.handler.isChatting + "");
         if (!MyApplicaition.handler.isChatting) {
             new Handler().post(new Runnable() {
                 @Override
@@ -251,7 +248,6 @@ public class ContactFragment extends Fragment {
                             adapter.bindDatas(null);
                             adapter.notifyDataSetChanged();
                             sw_refresh.setRefreshing(false);
-                            Logger.e(e);
                         }
                     }
                 }

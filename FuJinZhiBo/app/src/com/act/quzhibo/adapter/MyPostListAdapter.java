@@ -69,7 +69,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        holder.sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex + "");
+        holder.sexAndAge.setText(rootUser.sex + "");
         if (day <= 1) {
             holder.createTime.setText(hour + "小时" + min + "分钟前");
         } else if (day < 30) {

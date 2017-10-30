@@ -90,24 +90,31 @@
         </activity>
         <activity
             android:name="com.act.quzhibo.ui.activity.ChatFriendsActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.PostAddActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShareManagerActivty"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShoppingCartActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ClipImageActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.VipOrdersActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShareForMoneyActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity"
@@ -116,105 +123,134 @@
             android:theme="@style/BGAPPTheme" />
         <activity
             android:name="com.act.quzhibo.ui.activity.CheckOutMoneyActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.PuaCoursesActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShowerListActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MessageActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.download.activity.DownloadManagerActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.FullScreenActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ShowerInfoActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
 
         <activity
             android:name="com.act.quzhibo.ui.activity.WhoLikeThenSeeMeActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.act.quzhibo.ui.activity.TabMainActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.RegisterNormalActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MoneyCourseActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.SquareActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.VideoPlayerActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.TermOfUseActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MineActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.InfoNearPersonActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.IntersetPostDetailActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.act.quzhibo.ui.activity.IntersetPersonPostListActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MyFocusShowerActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.InfoInterestPersonActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ResetPasswordActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.RegisterActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.LoginActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.SettingMineInfoActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MyFocusPersonActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
 
         <activity
             android:name="com.act.quzhibo.ui.activity.NearMediaVideoListActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MyPostDetailActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.act.quzhibo.ui.activity.VIPConisTableActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:theme="@style/Theme.Holo.Dialog.CustomNoActionBar" />
         <activity
             android:name="com.act.quzhibo.ui.activity.ChatActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity
             android:name="com.act.quzhibo.ui.activity.RecordConfirmActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Holo.Dialog.CustomNoActionBar" />
         <activity
             android:name="com.act.quzhibo.ui.activity.MyPostListActivity"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.VideoPlayerActivityLanscape"
+            android:launchMode="singleInstance"
             android:screenOrientation="landscape" />
         <activity
             android:name="com.act.quzhibo.ui.activity.AudioPlayActivity"

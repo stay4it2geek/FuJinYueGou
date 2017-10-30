@@ -47,7 +47,7 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     @Bind(R.id.courseCount)
     TextView courseCount;
     CommonCourse course;
-
+    RootUser user;
     ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
 
     int count = 0;
@@ -79,9 +79,10 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     protected void initView() {
         setContentView(R.layout.activity_course_detail);
         super.initView();
-        final RootUser user = BmobUser.getCurrentUser(RootUser.class);
+        user = BmobUser.getCurrentUser(RootUser.class);
+
         //TODO 连接：3.1、登录成功、注册成功或处于登录状态重新打开应用后执行连接IM服务器的操作
-        if (!TextUtils.isEmpty(user.getObjectId())) {
+        if (user != null) {
             BmobIM.connect(user.getObjectId(), new ConnectListener() {
                 @Override
                 public void done(String uid, BmobException e) {
@@ -116,10 +117,10 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user != null) {
             BmobQuery<ShoppingCart> query = new BmobQuery<>();
             course = (CommonCourse) getIntent().getSerializableExtra(Constants.COURSE);
-            query.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
+            query.addWhereEqualTo("user", user);
             query.findObjects(new FindListener<ShoppingCart>() {
                 @Override
                 public void done(List<ShoppingCart> list, BmobException e) {
@@ -148,7 +149,7 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
 
     @OnClick(R.id.shopping_cart_layout)
     public void showShoppingCart() {
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user!= null) {
             startActivity(new Intent(CourseDetailActivity.this, ShoppingCartActivity.class));
         } else {
             checkLogin();
@@ -157,7 +158,7 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
 
     @OnClick(R.id.service_layout)
     public void getService() {
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user!= null) {
             //TODO 会话：4.1、创建一个常态会话入口，好友聊天
             if (BmobIM.getInstance().getCurrentStatus().equals("connected")) {
                 BmobIMUserInfo info;
@@ -177,7 +178,7 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
 
     @OnClick(R.id.text_add)
     public void addToShoppingCart() {
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user != null) {
             for (ShoppingCart shoppingCart : shoppingCarts) {
                 if (shoppingCart.course.getObjectId().equals(course.getObjectId())) {
                     ToastUtil.showToast(CourseDetailActivity.this, "课程已经添加在购物车了");
@@ -194,14 +195,14 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
             CourseDetailActivity.this.courseCount.startAnimation(animationSet);
             ShoppingCart shoppingCart = new ShoppingCart();
             shoppingCart.price = Double.parseDouble(course.courseAppPrice);
-            shoppingCart.user = BmobUser.getCurrentUser(RootUser.class);
+            shoppingCart.user = user;
             shoppingCart.course = course;
             shoppingCart.save(new SaveListener<String>() {
                 @Override
                 public void done(String s, BmobException e) {
                     if (e == null) {
                         BmobQuery<ShoppingCart> query = new BmobQuery<>();
-                        query.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
+                        query.addWhereEqualTo("user", user);
                         query.findObjects(new FindListener<ShoppingCart>() {
                             @Override
                             public void done(List<ShoppingCart> list, BmobException e) {
@@ -232,7 +233,7 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
     @OnClick(R.id.text_buynow)
     public void buyNow() {
 
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user != null) {
             //        Intent intent = new Intent(CourseDetailActivity.this, BuyCourseActivity.class);
 //        intent.putExtra("course", course);
 //        startActivity(intent);

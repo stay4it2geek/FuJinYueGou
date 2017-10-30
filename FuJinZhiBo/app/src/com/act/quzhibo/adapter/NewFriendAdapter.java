@@ -13,7 +13,7 @@ import com.act.quzhibo.chat.db.NewFriend;
 import com.act.quzhibo.chat.db.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.model.UserModel;
-import com.orhanobut.logger.Logger;
+import com.act.quzhibo.util.ToastUtil;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -59,8 +59,7 @@ public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
                                 holder.setEnabled(R.id.btn_aggree, false);
                             } else {
                                 holder.setEnabled(R.id.btn_aggree, true);
-                                Logger.e("添加好友失败:" + e.getMessage());
-                                toast("添加好友失败:" + e.getMessage());
+                                ToastUtil.showToast(activity,"添加好友失败:" + e.getMessage());
                             }
                         }
                     });
@@ -89,7 +88,6 @@ public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
                             //TODO 2、发送同意添加好友的消息
                             sendAgreeAddFriendMessage(add, listener);
                         } else {
-                            Logger.e(e.getMessage());
                             listener.done(null, e);
                         }
                     }
@@ -123,7 +121,6 @@ public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
                     NewFriendManager.getInstance(activity).updateNewFriend(add, Config.STATUS_VERIFIED);
                     listener.done(msg, e);
                 } else {//发送失败
-                    Logger.e(e.getMessage());
                     listener.done(msg, e);
                 }
             }

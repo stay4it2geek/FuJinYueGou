@@ -47,8 +47,6 @@ public class ChatFriendsActivity extends FragmentActivity implements BackHandled
     private BackHandledFragment mBackHandedFragment;
     private ViewPager viewPager;
 
-
-
     @Bind(R.id.btn_conversation)
     TextView btn_conversation;
     @Bind(R.id.btn_contact)
@@ -61,12 +59,12 @@ public class ChatFriendsActivity extends FragmentActivity implements BackHandled
 
     private TextView[] mTabs;
     private ConversationFragment conversationFragment;
-    ContactFragment contactFragment;
+    private ContactFragment contactFragment;
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
-    RootUser user;
-    PromptDialog promptDialog;
+    private RootUser user;
+    private PromptDialog promptDialog;
 
 
     @Override

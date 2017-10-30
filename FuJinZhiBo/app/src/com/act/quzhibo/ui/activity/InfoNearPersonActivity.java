@@ -74,32 +74,16 @@ public class InfoNearPersonActivity extends AppCompatActivity {
     private MyFocusCommonPerson mMyFocusCommonPerson;
     private File downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoPickerDownload");
     private BmobIMUserInfo info;
+    private RootUser user;
+    private ArrayList<String> photoImgs = new ArrayList<>();
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //清理导致内存泄露的资源
-        BmobIM.getInstance().clear();
-        EventBus.getDefault().unregister(this);
-    }
-
-    /**
-     * 注册自定义消息接收事件
-     *
-     * @param event
-     */
-    //TODO 消息接收：8.5、通知有自定义消息接收
-    @Subscribe
-    public void onEventMain(RefreshEvent event) {
-        findViewById(R.id.addFriend).setVisibility(View.GONE);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_common_layout);
+        user = BmobUser.getCurrentUser(RootUser.class);
         initViews();
-
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +109,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         findViewById(R.id.comment_private).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                if (user != null) {
                     if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
                         chatPrivate();
                     } else {
@@ -285,7 +269,6 @@ public class InfoNearPersonActivity extends AppCompatActivity {
     private void initAddButton() {
 
         BmobQuery<Friend> query = new BmobQuery<>();
-        RootUser user = BmobUser.getCurrentUser(RootUser.class);
         query.addWhereEqualTo("user", user);
         query.addWhereEqualTo("friendUser", currentNearInfoUser.user == null ? "123" : currentNearInfoUser.user);
         query.order("-updatedAt");
@@ -300,7 +283,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                         findViewById(R.id.addFriend).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                if (user != null) {
                                     if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
                                         sendAddFriendMessage();
                                     } else {
@@ -320,11 +303,11 @@ public class InfoNearPersonActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+        if (user != null) {
             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
             query.setLimit(1);
             query.addWhereEqualTo("userId", currentNearInfoUser.userId);
-            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+            query.addWhereEqualTo("rootUser", user);
             query.addWhereEqualTo("userType", Constants.NEAR);
             query.findObjects(new FindListener<MyFocusCommonPerson>() {
                 @Override
@@ -342,11 +325,11 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         findViewById(R.id.focus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                if (user != null) {
                     if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("取消关注")) {
                         if (mMyFocusCommonPerson == null) {
                             MyFocusCommonPerson myFcPerson = new MyFocusCommonPerson();
-                            myFcPerson.rootUser = BmobUser.getCurrentUser(RootUser.class);
+                            myFcPerson.rootUser = user;
                             myFcPerson.username = currentNearInfoUser.username;
                             myFcPerson.userId = currentNearInfoUser.userId;
                             myFcPerson.photoUrl = currentNearInfoUser.absCoverPic;
@@ -359,11 +342,11 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
                                         ((TextView) findViewById(R.id.focus)).setText("取消关注");
-                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        if (user != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
                                             query.addWhereEqualTo("userId", currentNearInfoUser.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.addWhereEqualTo("rootUser", user);
                                             query.findObjects(new FindListener<MyFocusCommonPerson>() {
                                                 @Override
                                                 public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
@@ -388,11 +371,11 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                                 public void done(BmobException e) {
                                     if (e == null) {
                                         ((TextView) findViewById(R.id.focus)).setText("取消关注");
-                                        if (BmobUser.getCurrentUser(RootUser.class) != null) {
+                                        if (user != null) {
                                             BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
                                             query.setLimit(1);
                                             query.addWhereEqualTo("userId", currentNearInfoUser.userId);
-                                            query.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
+                                            query.addWhereEqualTo("rootUser", user);
                                             query.findObjects(new FindListener<MyFocusCommonPerson>() {
                                                 @Override
                                                 public void done(List<MyFocusCommonPerson> myFcPersons, BmobException e) {
@@ -446,7 +429,6 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         });
     }
 
-    ArrayList<String> photoImgs = new ArrayList<>();
 
     private void getPhotoLibs() {
 
@@ -552,7 +534,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
             //TODO 消息：5.1、根据会话入口获取消息管理，发送好友请求
             BmobIMConversation messageManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
             AddFriendMessage msg = new AddFriendMessage();
-            RootUser currentUser = BmobUser.getCurrentUser(RootUser.class);
+            RootUser currentUser = user;
             msg.setContent("很高兴认识你，可以加个好友吗?");//给对方的一个留言信息
             //TODO 这里只是举个例子，其实可以不需要传发送者的信息过去
             Map<String, Object> map = new HashMap<>();
@@ -584,6 +566,28 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         intent.putExtra("c", conversationEntrance);
         startActivity(intent);
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //清理导致内存泄露的资源
+        BmobIM.getInstance().clear();
+        EventBus.getDefault().unregister(this);
+    }
+
+    /**
+     * 注册自定义消息接收事件
+     *
+     * @param event
+     */
+    //TODO 消息接收：8.5、通知有自定义消息接收
+    @Subscribe
+    public void onEventMain(RefreshEvent event) {
+        findViewById(R.id.addFriend).setVisibility(View.GONE);
+    }
+
+
 }
 
 

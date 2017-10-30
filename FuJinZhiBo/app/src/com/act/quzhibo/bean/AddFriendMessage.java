@@ -1,10 +1,10 @@
 package com.act.quzhibo.bean;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.act.quzhibo.common.Config;
 import com.act.quzhibo.chat.db.NewFriend;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -43,8 +43,6 @@ public class AddFriendMessage extends BmobIMExtraMessage {
                 String avatar = json.getString("avatar");
                 add.setAvatar(avatar);
                 add.setUid(json.getString("uid"));
-            } else {
-                Logger.i("AddFriendMessage的extra为空");
             }
         } catch (Exception e) {
             e.printStackTrace();

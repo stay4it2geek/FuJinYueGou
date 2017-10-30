@@ -1,6 +1,8 @@
 package com.act.quzhibo.ui.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -35,8 +36,8 @@ import com.act.quzhibo.adapter.OnRecyclerViewListener;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.Util;
+import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.TitleBarView;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,19 +70,6 @@ import cn.bmob.v3.exception.BmobException;
  * 聊天界面
  */
 public class ChatActivity extends FragmentActivity {
-
-    /**
-     * 注册消息接收事件
-     *
-     * @param event
-     */
-    //通知有在线消息接收
-    @Subscribe
-    public void onEventMain(final MessageEvent event) {
-        if (MyApplicaition.handler.isChatting) {
-            addMessage2Chat(event);
-        }
-    }
 
     @Bind(R.id.ll_chat)
     LinearLayout ll_chat;
@@ -122,12 +110,13 @@ public class ChatActivity extends FragmentActivity {
     TextView tv_voice_tips;
     @Bind(R.id.iv_record)
     ImageView iv_record;
-    private Drawable[] drawable_Anims;// 话筒动画
-    BmobRecordManager recordManager;
 
-    ChatAdapter adapter;
-    protected LinearLayoutManager layoutManager;
-    BmobIMConversation mConversationManager;
+    private Drawable[] mDrawableAnims;// 话筒动画
+    private BmobRecordManager mRecordManager;
+    private Toast mShortToast;
+    private ChatAdapter mAdapter;
+    protected LinearLayoutManager mLayoutManager;
+    private BmobIMConversation mConversationManager;
 
 
     @Override
@@ -158,10 +147,10 @@ public class ChatActivity extends FragmentActivity {
 
     private void initSwipeLayout() {
         sw_refresh.setEnabled(true);
-        layoutManager = new LinearLayoutManager(this);
-        rc_view.setLayoutManager(layoutManager);
-        adapter = new ChatAdapter(mConversationManager);
-        rc_view.setAdapter(adapter);
+        mLayoutManager = new LinearLayoutManager(this);
+        rc_view.setLayoutManager(mLayoutManager);
+        mAdapter = new ChatAdapter(mConversationManager);
+        rc_view.setAdapter(mAdapter);
         ll_chat.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -175,22 +164,32 @@ public class ChatActivity extends FragmentActivity {
         sw_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                BmobIMMessage msg = adapter.getFirstMessage();
+                BmobIMMessage msg = mAdapter.getFirstMessage();
                 queryMessages(msg);
             }
         });
         //设置RecyclerView的点击事件
-        adapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
+        mAdapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
-            public void onItemClick(int position) {
-                Logger.i("" + position);
+            public void onItemClick(final int position) {
+                FragmentDialog.newInstance(false, "是否删除这条消息？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                        mConversationManager.deleteMessage(mAdapter.getItem(position));
+                        mAdapter.remove(position);
+                    }
+
+                    @Override
+                    public void onNegtiveClick(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                }).show(getSupportFragmentManager(), "");
             }
 
             @Override
             public boolean onItemLongClick(int position) {
                 //TODO 消息：5.3、删除指定聊天消息
-                mConversationManager.deleteMessage(adapter.getItem(position));
-                adapter.remove(position);
+
                 return true;
             }
         });
@@ -254,7 +253,7 @@ public class ChatActivity extends FragmentActivity {
      * @Title: initVoiceAnimRes
      */
     private void initVoiceAnimRes() {
-        drawable_Anims = new Drawable[]{
+        mDrawableAnims = new Drawable[]{
                 getResources().getDrawable(R.mipmap.chat_icon_voice2),
                 getResources().getDrawable(R.mipmap.chat_icon_voice3),
                 getResources().getDrawable(R.mipmap.chat_icon_voice4),
@@ -264,20 +263,19 @@ public class ChatActivity extends FragmentActivity {
 
     private void initRecordManager() {
         // 语音相关管理器
-        recordManager = BmobRecordManager.getInstance(this);
+        mRecordManager = BmobRecordManager.getInstance(this);
         // 设置音量大小监听--在这里开发者可以自己实现：当剩余10秒情况下的给用户的提示，类似微信的语音那样
-        recordManager.setOnRecordChangeListener(new OnRecordChangeListener() {
+        mRecordManager.setOnRecordChangeListener(new OnRecordChangeListener() {
 
 
             @Override
             public void onVolumeChanged(int value) {
-                iv_record.setImageDrawable(drawable_Anims[value]);
+                iv_record.setImageDrawable(mDrawableAnims[value]);
 
             }
 
             @Override
             public void onTimeChanged(int recordTime, String localPath) {
-                Logger.i("voice", "已录音长度:" + recordTime);
                 if (recordTime >= BmobRecordManager.MAX_RECORD_TIME) {// 1分钟结束，发送消息
                     // 需要重置按钮
                     btn_speak.setPressed(false);
@@ -311,7 +309,7 @@ public class ChatActivity extends FragmentActivity {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     if (!Util.checkSdCard()) {
-                        ToastUtil.showToast(ChatActivity.this,"发送语音需要sdcard支持！");
+                        ToastUtil.showToast(ChatActivity.this, "发送语音需要sdcard支持！");
                         return false;
                     }
                     try {
@@ -319,7 +317,7 @@ public class ChatActivity extends FragmentActivity {
                         layout_record.setVisibility(View.VISIBLE);
                         tv_voice_tips.setText(getString(R.string.voice_cancel_tips));
                         // 开始录音
-                        recordManager.startRecording(mConversationManager.getConversationId());
+                        mRecordManager.startRecording(mConversationManager.getConversationId());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -339,13 +337,12 @@ public class ChatActivity extends FragmentActivity {
                     layout_record.setVisibility(View.INVISIBLE);
                     try {
                         if (event.getY() < 0) {// 放弃录音
-                            recordManager.cancelRecording();
-                            Logger.i("voice", "放弃发送语音");
+                            mRecordManager.cancelRecording();
                         } else {
-                            int recordTime = recordManager.stopRecording();
+                            int recordTime = mRecordManager.stopRecording();
                             if (recordTime > 1) {
                                 // 发送语音文件
-                                sendVoiceMessage(recordManager.getRecordFilePath(mConversationManager.getConversationId()), recordTime);
+                                sendVoiceMessage(mRecordManager.getRecordFilePath(mConversationManager.getConversationId()), recordTime);
                             } else {// 录音时间过短，则提示录音过短的提示
                                 layout_record.setVisibility(View.GONE);
                                 showShortToast().show();
@@ -361,7 +358,6 @@ public class ChatActivity extends FragmentActivity {
         }
     }
 
-    Toast toast;
 
     /**
      * 显示录音时间过短的Toast
@@ -370,15 +366,15 @@ public class ChatActivity extends FragmentActivity {
      * @Title: showShortToast
      */
     private Toast showShortToast() {
-        if (toast == null) {
-            toast = new Toast(this);
+        if (mShortToast == null) {
+            mShortToast = new Toast(this);
         }
         View view = LayoutInflater.from(this).inflate(
                 R.layout.include_chat_voice_short, null);
-        toast.setView(view);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        return toast;
+        mShortToast.setView(view);
+        mShortToast.setGravity(Gravity.CENTER, 0, 0);
+        mShortToast.setDuration(Toast.LENGTH_SHORT);
+        return mShortToast;
     }
 
     @OnClick(R.id.edit_msg)
@@ -498,7 +494,7 @@ public class ChatActivity extends FragmentActivity {
     private void sendMessage() {
         String text = edit_msg.getText().toString();
         if (TextUtils.isEmpty(text.trim())) {
-            ToastUtil.showToast(ChatActivity.this,"请输入内容");
+            ToastUtil.showToast(ChatActivity.this, "请输入内容");
             return;
         }
         //TODO 发送消息：6.1、发送文本消息
@@ -587,7 +583,7 @@ public class ChatActivity extends FragmentActivity {
         //TODO 自定义消息：7.1、给消息设置额外信息
         audio.setExtraMap(map);
         //设置语音文件时长：可选
-//        audio.setDuration(length);
+        audio.setDuration(length);
         mConversationManager.sendMessage(audio, listener);
     }
 
@@ -614,24 +610,23 @@ public class ChatActivity extends FragmentActivity {
         public void onProgress(int value) {
             super.onProgress(value);
             //文件类型的消息才有进度值
-            Logger.i("onProgress：" + value);
         }
 
         @Override
         public void onStart(BmobIMMessage msg) {
             super.onStart(msg);
-            adapter.addMessage(msg);
+            mAdapter.addMessage(msg);
             edit_msg.setText("");
             scrollToBottom();
         }
 
         @Override
         public void done(BmobIMMessage msg, BmobException e) {
-            adapter.notifyDataSetChanged();
+            mAdapter.notifyDataSetChanged();
             edit_msg.setText("");
             scrollToBottom();
             if (e != null) {
-                ToastUtil.showToast(ChatActivity.this,e.getMessage());
+                ToastUtil.showToast(ChatActivity.this, e.getMessage());
             }
         }
     };
@@ -649,32 +644,36 @@ public class ChatActivity extends FragmentActivity {
                 sw_refresh.setRefreshing(false);
                 if (e == null) {
                     if (null != list && list.size() > 0) {
-                        adapter.addMessages(list);
-                        layoutManager.scrollToPositionWithOffset(list.size() - 1, 0);
+                        mAdapter.addMessages(list);
+                        mLayoutManager.scrollToPositionWithOffset(list.size() - 1, 0);
                     }
                 } else {
-                    ToastUtil.showToast(ChatActivity.this,e.getMessage() + "(" + e.getErrorCode() + ")");
+                    ToastUtil.showToast(ChatActivity.this, e.getMessage() + "(" + e.getErrorCode() + ")");
                 }
             }
         });
     }
 
+    /**
+     * 隐藏软键盘
+     */
+    public void hideSoftInputView() {
+        InputMethodManager manager = ((InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE));
+        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
+            if (getCurrentFocus() != null)
+                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
     private void scrollToBottom() {
-        layoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, 0);
+        mLayoutManager.scrollToPositionWithOffset(mAdapter.getItemCount() - 1, 0);
     }
 
-
-    /**
-     * 添加消息到聊天界面中
-     *
-     * @param event
-     */
     private void addMessage2Chat(MessageEvent event) {
         BmobIMMessage msg = event.getMessage();
         if (mConversationManager != null && event != null && mConversationManager.getConversationId().equals(event.getConversation().getConversationId()) //如果是当前会话的消息
                 && !msg.isTransient()) {//并且不为暂态消息
-            if (adapter.findPosition(msg) < 0) {//如果未添加到界面中
-                adapter.addMessage(msg);
+            if (mAdapter.findPosition(msg) < 0) {//如果未添加到界面中
+                mAdapter.addMessage(msg);
                 //更新该会话下面的已读状态
                 mConversationManager.updateReceiveStatus(msg);
             }
@@ -731,8 +730,8 @@ public class ChatActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         //清理资源
-        if (recordManager != null) {
-            recordManager.clear();
+        if (mRecordManager != null) {
+            mRecordManager.clear();
         }
         MyApplicaition.handler.isChatting = false;
 
@@ -746,20 +745,19 @@ public class ChatActivity extends FragmentActivity {
     }
 
 
+
+
     /**
-     * 隐藏软键盘
+     * 注册消息接收事件
+     *
+     * @param event
      */
-    public void hideSoftInputView() {
-        InputMethodManager manager = ((InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE));
-        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
-            if (getCurrentFocus() != null)
-                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    //通知有在线消息接收
+    @Subscribe
+    public void onEventMain(final MessageEvent event) {
+        if (MyApplicaition.handler.isChatting) {
+            addMessage2Chat(event);
         }
     }
 
-    @Override
-    public void onBackPressed() {
-     super.onBackPressed();
-
-    }
 }
