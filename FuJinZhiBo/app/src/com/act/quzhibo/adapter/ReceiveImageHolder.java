@@ -12,7 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.ui.activity.ShowerInfoActivity;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -23,7 +23,6 @@ import butterknife.Bind;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * 接收到的文本类型
@@ -50,7 +49,7 @@ public class ReceiveImageHolder extends BaseViewHolder {
 
     @Override
     public void bindData(Object o) {
-        BmobIMMessage msg = (BmobIMMessage) o;
+        final BmobIMMessage msg = (BmobIMMessage) o;
         //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
         Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
             @Override
@@ -108,6 +107,7 @@ public class ReceiveImageHolder extends BaseViewHolder {
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                requestPerson(msg);
             }
         });
 

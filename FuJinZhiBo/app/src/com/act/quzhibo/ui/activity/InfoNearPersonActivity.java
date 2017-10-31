@@ -113,7 +113,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                     if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
                         chatPrivate();
                     } else {
-                        ToastUtil.showToast(InfoNearPersonActivity.this, "通讯请求中");
+                        ToastUtil.showToast(InfoNearPersonActivity.this, "网络不给力哦！");
                     }
                 } else {
                     startActivity(new Intent(InfoNearPersonActivity.this, LoginActivity.class));
@@ -136,7 +136,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                 @Override
                 public void done(RootUser dbRootUser, BmobException e) {
                     if (dbRootUser != null) {
-                        info = new BmobIMUserInfo(dbRootUser.getObjectId(), dbRootUser.getUsername(), dbRootUser.photoFileUrl);
+                        info = new BmobIMUserInfo(dbRootUser.getObjectId(),dbRootUser.getUsername(), dbRootUser.photoFileUrl);
                     }
                 }
             });
@@ -528,7 +528,6 @@ public class InfoNearPersonActivity extends AppCompatActivity {
     //TODO 好友管理：9.7、发送添加好友请求
     private void sendAddFriendMessage() {
         //TODO 会话：4.1、创建一个暂态会话入口，发送好友请求
-        Log.e("infofdofs", "dsfadsfs");
         if (info != null) {
             BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, true, null);
             //TODO 消息：5.1、根据会话入口获取消息管理，发送好友请求
@@ -561,6 +560,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
      */
     private void chatPrivate() {
         //TODO 会话：4.1、创建一个常态会话入口，好友聊天
+
         BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("c", conversationEntrance);

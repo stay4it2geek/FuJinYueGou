@@ -1,4 +1,4 @@
-package com.act.quzhibo.adapter;
+package com.act.quzhibo.i;
 
 /**为RecycleView添加点击事件
  */

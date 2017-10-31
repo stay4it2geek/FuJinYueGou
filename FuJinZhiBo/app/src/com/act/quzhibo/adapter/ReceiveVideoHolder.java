@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -18,7 +19,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 
@@ -42,10 +42,6 @@ public class ReceiveVideoHolder extends BaseViewHolder {
         this.conversation = conversation;
     }
 
-    @OnClick({R.id.iv_avatar})
-    public void onAvatarClick(View view) {
-
-    }
 
     @Override
     public void bindData(Object o) {
@@ -66,13 +62,19 @@ public class ReceiveVideoHolder extends BaseViewHolder {
 
             }
         });
+        iv_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPerson(message);
+            }
+        });
 
         String content = message.getContent();
         tv_message.setText("接收到的视频文件：" + content);
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                requestPerson(message);
             }
         });
 

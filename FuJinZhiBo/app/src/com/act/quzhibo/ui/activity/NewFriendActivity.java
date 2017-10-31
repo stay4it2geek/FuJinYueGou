@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NewFriendAdapter;
-import com.act.quzhibo.adapter.OnRecyclerViewListener;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.chat.db.NewFriend;
 import com.act.quzhibo.chat.db.NewFriendManager;

@@ -15,7 +15,7 @@ import android.view.ViewTreeObserver;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ContactAdapter;
-import com.act.quzhibo.adapter.OnRecyclerViewListener;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Friend;
 import com.act.quzhibo.common.MyApplicaition;
@@ -100,14 +100,19 @@ public class ContactFragment extends Fragment {
                 if (position == 0) {//跳转到新朋友页面
                     startActivity(new Intent(getActivity(), NewFriendActivity.class));
                 } else {
-                    Friend friend = adapter.getItem(position);
-                    RootUser user = friend.getFriendUser();
-                    BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
-                    //TODO 会话：4.1、创建一个常态会话入口，好友聊天
-                    BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
-                    Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    intent.putExtra("c", conversationEntrance);
-                    startActivity(intent);
+                    if(BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")){
+                        Friend friend = adapter.getItem(position);
+                        RootUser user = friend.getFriendUser();
+                        BmobIMUserInfo info = new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.getAvatar());
+                        //TODO 会话：4.1、创建一个常态会话入口，好友聊天
+                        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+                        Intent intent = new Intent(getActivity(), ChatActivity.class);
+                        intent.putExtra("c", conversationEntrance);
+                        startActivity(intent);
+                    }else{
+                        ToastUtil.showToast(getActivity(),"网络不给力哦！");
+                    }
+
                 }
             }
 

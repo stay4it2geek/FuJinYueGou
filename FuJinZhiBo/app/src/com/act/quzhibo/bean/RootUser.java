@@ -17,6 +17,7 @@ public class RootUser extends BmobUser {
     public String lastLoginTime;
     public String canDateThing;
     public boolean hasSetting;
+    public InterestSubPerson interestSubPerson;
 
     public RootUser(){}
     public RootUser(NewFriend friend){

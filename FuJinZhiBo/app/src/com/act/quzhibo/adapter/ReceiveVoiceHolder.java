@@ -21,14 +21,14 @@ import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 
-import com.act.quzhibo.R;
+import com.act.quzhibo.i.NewRecordPlayClickListener;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.core.BmobDownloadManager;
 import cn.bmob.newim.listener.FileDownloadListener;
 
@@ -66,7 +66,7 @@ public class ReceiveVoiceHolder extends BaseViewHolder {
 
     @Override
     public void bindData(Object o) {
-        BmobIMMessage msg = (BmobIMMessage) o;
+        final BmobIMMessage msg = (BmobIMMessage) o;
         //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
         Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
             @Override
@@ -88,7 +88,7 @@ public class ReceiveVoiceHolder extends BaseViewHolder {
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                requestPerson(msg);
             }
         });
         //显示特有属性

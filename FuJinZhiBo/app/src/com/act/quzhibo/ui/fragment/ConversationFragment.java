@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import android.view.ViewTreeObserver;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ConversationAdapter;
-import com.act.quzhibo.adapter.OnRecyclerViewListener;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Conversation;
 import com.act.quzhibo.bean.NewFriendConversation;
@@ -202,7 +201,6 @@ public class ConversationFragment extends Fragment {
      */
     @Subscribe
     public void onEventAsync(RefreshEvent event) {
-        Log.e("---RefreshEvent222---",MyApplicaition.handler.isChatting+"");
 
         //因为新增`新朋友`这种会话类型
         if (!MyApplicaition.handler.isChatting) {
@@ -223,7 +221,6 @@ public class ConversationFragment extends Fragment {
      */
     @Subscribe
     public void onEventAsync(OfflineMessageEvent event) {
-        Log.e("---OfflineEvent---",MyApplicaition.handler.isChatting+"");
         if (!MyApplicaition.handler.isChatting) {
             new Handler().post(new Runnable() {
                 @Override
@@ -243,7 +240,6 @@ public class ConversationFragment extends Fragment {
      */
     @Subscribe
     public void onEventAsync(MessageEvent event) {
-        Log.e("---MessageEvent---",MyApplicaition.handler.isChatting+"");
         if (!MyApplicaition.handler.isChatting) {
             new Handler().post(new Runnable() {
                 @Override

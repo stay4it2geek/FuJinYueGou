@@ -32,7 +32,6 @@ public class ConversationAdapter extends BaseRecyclerAdapter<Conversation> {
             String avatar=(String)obj;
             holder.setImageView(avatar,R.id.iv_recent_avatar);
         }else{
-            int defaultRes = (int)obj;
             holder.setImageView(null, R.id.iv_recent_avatar);
         }
         //会话标题

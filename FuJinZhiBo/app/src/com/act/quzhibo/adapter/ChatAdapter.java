@@ -1,8 +1,9 @@
 package com.act.quzhibo.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
+import com.act.quzhibo.i.OnRecyclerViewListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;

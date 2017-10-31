@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -95,12 +96,7 @@ public class SendLocationHolder extends BaseViewHolder {
       iv_fail_resend.setVisibility(View.GONE);
       progress_load.setVisibility(View.GONE);
     }
-    iv_avatar.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
 
-      }
-    });
 
     tv_location.setOnClickListener(new View.OnClickListener() {
       @Override

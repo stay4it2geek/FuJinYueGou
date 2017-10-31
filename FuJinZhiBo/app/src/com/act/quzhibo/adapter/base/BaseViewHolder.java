@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.act.quzhibo.adapter.OnRecyclerViewListener;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 
 import butterknife.ButterKnife;
 

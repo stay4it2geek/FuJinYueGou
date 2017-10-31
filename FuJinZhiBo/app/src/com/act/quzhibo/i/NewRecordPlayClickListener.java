@@ -1,4 +1,4 @@
-package com.act.quzhibo.adapter;
+package com.act.quzhibo.i;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;

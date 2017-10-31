@@ -31,6 +31,7 @@ dependencies {
     compile 'com.elbbbird.android:socialsdk:0.2.0@aar'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.promeg:tinypinyin:1.0.0'
+    compile 'cjt.library.wheel:camera:1.1.9'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
     compile files('libs/okhttp-3.8.1.jar')
 }

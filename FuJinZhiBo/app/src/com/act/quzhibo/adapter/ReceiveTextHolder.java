@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.i.OnRecyclerViewListener;
+import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -18,7 +20,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
 
@@ -27,75 +28,78 @@ import cn.bmob.newim.bean.BmobIMMessage;
  */
 public class ReceiveTextHolder extends BaseViewHolder {
 
-  private BmobIMConversation conversation;
-  @Bind(R.id.iv_avatar)
-  protected ImageView iv_avatar;
+    private BmobIMConversation conversation;
+    @Bind(R.id.iv_avatar)
+    protected ImageView iv_avatar;
 
-  @Bind(R.id.tv_time)
-  protected TextView tv_time;
+    @Bind(R.id.tv_time)
+    protected TextView tv_time;
 
-  @Bind(R.id.tv_message)
-  protected TextView tv_message;
+    @Bind(R.id.tv_message)
+    protected TextView tv_message;
 
-  public ReceiveTextHolder(Context context,  BmobIMConversation conversation,ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
-    super(context, root, R.layout.item_chat_received_message,onRecyclerViewListener);
-    this.conversation =conversation;
-  }
+    public ReceiveTextHolder(Context context, BmobIMConversation conversation, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
+        super(context, root, R.layout.item_chat_received_message, onRecyclerViewListener);
+        this.conversation = conversation;
+    }
 
-  @OnClick({R.id.iv_avatar})
-  public void onAvatarClick(View view) {
 
-  }
+    @Override
+    public void bindData(Object o) {
+        final BmobIMMessage msg = (BmobIMMessage) o;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+        String time = dateFormat.format(msg.getCreateTime());
+        tv_time.setText(time);
+        Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                iv_avatar.setBackgroundDrawable(new BitmapDrawable(resource));
+            }
 
-  @Override
-  public void bindData(Object o) {
-    final BmobIMMessage message = (BmobIMMessage)o;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-    String time = dateFormat.format(message.getCreateTime());
-    tv_time.setText(time);
-    Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
-      @Override
-      public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-        iv_avatar.setBackgroundDrawable(new BitmapDrawable(resource));
-      }
+            @Override
+            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                super.onLoadFailed(e, errorDrawable);
+                iv_avatar.setBackgroundDrawable(errorDrawable);
 
-      @Override
-      public void onLoadFailed(Exception e, Drawable errorDrawable) {
-        super.onLoadFailed(e, errorDrawable);
-        iv_avatar.setBackgroundDrawable(errorDrawable);
+            }
+        });
 
-      }
-    });
+        String content = msg.getContent();
+        tv_message.setText(content);
+        iv_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPerson(msg);
+            }
+        });
+        tv_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onRecyclerViewListener != null) {
+                    onRecyclerViewListener.onItemClick(getAdapterPosition());
+                }
+            }
+        });
 
-    String content =  message.getContent();
-    tv_message.setText(content);
-    iv_avatar.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
+        tv_message.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (onRecyclerViewListener != null) {
+                    onRecyclerViewListener.onItemLongClick(getAdapterPosition());
+                }
+                return true;
+            }
+        });
 
-      }
-    });
-    tv_message.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          if(onRecyclerViewListener!=null){
-            onRecyclerViewListener.onItemClick(getAdapterPosition());
-          }
-        }
-    });
+        iv_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPerson(msg);
+            }
+        });
+    }
 
-    tv_message.setOnLongClickListener(new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-          if (onRecyclerViewListener != null) {
-            onRecyclerViewListener.onItemLongClick(getAdapterPosition());
-          }
-          return true;
-        }
-    });
-  }
-
-  public void showTime(boolean isShow) {
-    tv_time.setVisibility(isShow ? View.VISIBLE : View.GONE);
-  }
+    public void showTime(boolean isShow) {
+        tv_time.setVisibility(isShow ? View.VISIBLE : View.GONE);
+    }
 }

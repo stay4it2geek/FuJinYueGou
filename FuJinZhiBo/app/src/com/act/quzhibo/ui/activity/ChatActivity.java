@@ -2,12 +2,17 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.res.Resources;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,10 +35,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.act.quzhibo.BuildConfig;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ChatAdapter;
-import com.act.quzhibo.adapter.OnRecyclerViewListener;
+import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.common.MyApplicaition;
+import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.Util;
 import com.act.quzhibo.widget.FragmentDialog;
@@ -42,6 +49,7 @@ import com.act.quzhibo.widget.TitleBarView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,7 +125,9 @@ public class ChatActivity extends FragmentActivity {
     private ChatAdapter mAdapter;
     protected LinearLayoutManager mLayoutManager;
     private BmobIMConversation mConversationManager;
-
+    private static final int REQUEST_CAPTURE = 100;
+    private static final int REQUEST_PICK = 101;
+    private File tempFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +153,8 @@ public class ChatActivity extends FragmentActivity {
         initVoiceView();
         initBottomView();
         EventBus.getDefault().register(this);
+
+
     }
 
     private void initSwipeLayout() {
@@ -439,13 +451,15 @@ public class ChatActivity extends FragmentActivity {
 
     @OnClick(R.id.tv_picture)
     public void onPictureClick(View view) {
-        sendLocalImageMessage();
+
+        //跳转到调用系统图库
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "请选择图片"), REQUEST_PICK);
     }
 
     @OnClick(R.id.tv_camera)
     public void onCameraClick(View view) {
-//        sendRemoteImageMessage();
-        sendRemoteVideoMessage();
+
     }
 
     @OnClick(R.id.tv_location)
@@ -510,20 +524,9 @@ public class ChatActivity extends FragmentActivity {
     /**
      * 发送本地图片文件
      */
-    public void sendLocalImageMessage() {
+    public void sendLocalImageMessage(String path) {
         //TODO 发送消息：6.2、发送本地图片消息
-        //正常情况下，需要调用系统的图库或拍照功能获取到图片的本地地址，开发者只需要将本地的文件地址传过去就可以发送文件类型的消息
-        BmobIMImageMessage image = new BmobIMImageMessage("/storage/emulated/0/netease/cloudmusic/网易云音乐相册/小梦大半_1371091013186741.jpg");
-        mConversationManager.sendMessage(image, listener);
-    }
-
-    /**
-     * 直接发送远程图片地址
-     */
-    public void sendRemoteImageMessage() {
-        //TODO 发送消息：6.3、发送远程图片消息
-        BmobIMImageMessage image = new BmobIMImageMessage();
-        image.setRemoteUrl("https://avatars3.githubusercontent.com/u/11643472?v=4&u=df609c8370b3ef7a567457eafd113b3ba6ba3bb6&s=400");
+        BmobIMImageMessage image = new BmobIMImageMessage(path);
         mConversationManager.sendMessage(image, listener);
     }
 
@@ -531,40 +534,12 @@ public class ChatActivity extends FragmentActivity {
     /**
      * 发送本地视频文件
      */
-    private void sendLocalVideoMessage() {
-        BmobIMVideoMessage video = new BmobIMVideoMessage("此处替换为你本地的视频文件地址");
+    private void sendLocalVideoMessage(String path) {
+        BmobIMVideoMessage video = new BmobIMVideoMessage(path);
         //TODO 发送消息：6.6、发送本地视频文件消息
         mConversationManager.sendMessage(video, listener);
     }
 
-    /**
-     * 发送远程视频文件
-     */
-    private void sendRemoteVideoMessage() {
-        //TODO 发送消息：6.7、发送本地音频文件消息
-        BmobIMVideoMessage audio = new BmobIMVideoMessage();
-        audio.setRemoteUrl("http://file.nidong.com//upload/user/20170430/14/ff8080815bbd7636015bbd79ea90000e/psd.mp4");
-        mConversationManager.sendMessage(audio, listener);
-    }
-
-    /**
-     * 发送本地文件
-     */
-    public void sendLocalFileMessage() {
-        //TODO 发送消息：6.8、发送本地文件消息
-        BmobIMFileMessage file = new BmobIMFileMessage("此处替换为你本地的文件地址");
-        mConversationManager.sendMessage(file, listener);
-    }
-
-    /**
-     * 发送远程文件
-     */
-    public void sendRemoteFileMessage() {
-        //TODO 发送消息：6.9、发送远程文件消息
-        BmobIMFileMessage file = new BmobIMFileMessage();
-        file.setRemoteUrl("此处替换为你远程的文件地址");
-        mConversationManager.sendMessage(file, listener);
-    }
 
     /**
      * 发送语音消息
@@ -664,6 +639,7 @@ public class ChatActivity extends FragmentActivity {
                 manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
     private void scrollToBottom() {
         mLayoutManager.scrollToPositionWithOffset(mAdapter.getItemCount() - 1, 0);
     }
@@ -745,8 +721,6 @@ public class ChatActivity extends FragmentActivity {
     }
 
 
-
-
     /**
      * 注册消息接收事件
      *
@@ -760,4 +734,18 @@ public class ChatActivity extends FragmentActivity {
         }
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK)
+            if (resultCode == 101 || requestCode == REQUEST_PICK) {
+                sendLocalImageMessage(data.getStringExtra("path") != null ? data.getStringExtra("path") : "");
+            }
+        if (resultCode == 102) {
+
+            sendLocalVideoMessage(data.getStringExtra("path") != null ? data.getStringExtra("path") : "");
+        }
+
+    }
 }
