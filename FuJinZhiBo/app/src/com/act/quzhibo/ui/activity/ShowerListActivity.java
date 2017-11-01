@@ -70,24 +70,15 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
     @Override
     public void onShowVideo(Room room) {
         Intent intent;
-        if (room.screenType.equals(Constants.LANSPACE)) {
-            if (room.liveType.equals(Constants.LANSPACE_IS_LIVE)) {
-                intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
-                intent.putExtra("showFullScreen",true);
-            } else {
-                intent = new Intent(ShowerListActivity.this, ShowerInfoActivity.class);
-                intent.putExtra("FromShowListActivity", true);
-                ToastUtil.showToast(ShowerListActivity.this, "该主播未直播哦");
-            }
+
+        if (room.liveStream != null) {
+            intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
+            intent.putExtra("showFullScreen", true);
         } else {
-            if (room.liveType.equals(Constants.PORTAIL_IS_LIVE)) {
-                intent = new Intent(ShowerListActivity.this, VideoPlayerActivity.class);
-                intent.putExtra("showFullScreen",false);
-            } else {
-                intent = new Intent(ShowerListActivity.this, ShowerInfoActivity.class);
-                intent.putExtra("FromShowListActivity", true);
-                ToastUtil.showToast(ShowerListActivity.this, "该主播未直播哦");
-            }
+            intent = new Intent(ShowerListActivity.this, ShowerInfoActivity.class);
+            intent.putExtra("FromShowListActivity", true);
+            ToastUtil.showToast(ShowerListActivity.this, "该主播未直播哦");
+
         }
         intent.putExtra("room", room);
         startActivity(intent);

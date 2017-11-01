@@ -92,7 +92,7 @@ public class IntersetPostDetailFragment extends BackHandledFragment {
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return true;     //截断事件的传递
+                return true;
             }
         });
         return view;

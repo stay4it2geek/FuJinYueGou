@@ -54,6 +54,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
     private LoadNetView loadNetView;
     private RootUser user;
     private MyFocusCommonPerson myFocusCommonPerson;
+    private int randomAge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
         Display display = this.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
+        TextView ageText = (TextView) findViewById(R.id.age);
 
         banner = (Banner) findViewById(R.id.banner);
         banner.setLayoutParams(new FrameLayout.LayoutParams(size.x - 10, size.x - 10));
@@ -136,6 +138,9 @@ public class InfoInterestPersonActivity extends AppCompatActivity {
             }
 
         }
+        //todo ormlite dao
+        ageText.setText(randomAge+"岁");
+
 
         int vip = Integer.parseInt(post.user.vipLevel);
         if (vip < 1) {

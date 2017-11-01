@@ -22,7 +22,7 @@
         tl:tl_indicator_width="60dp"
         tl:tl_textSelectColor="@color/commontextcolor"
         tl:tl_textUnselectColor="#8F8F8F"
-        tl:tl_textsize="18sp"
+        tl:tl_textsize="16sp"
         />
 
     <com.flyco.tablayout.CommonTabLayout
@@ -40,7 +40,7 @@
         tl:tl_indicator_width="50dp"
         tl:tl_textSelectColor="@color/commontextcolor"
         tl:tl_textUnselectColor="#8F8F8F"
-        tl:tl_textsize="18sp">
+        tl:tl_textsize="16sp">
 
     </com.flyco.tablayout.CommonTabLayout>
 

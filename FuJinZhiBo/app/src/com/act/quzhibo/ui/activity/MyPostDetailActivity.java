@@ -50,6 +50,7 @@ public class MyPostDetailActivity extends FragmentActivity {
                 MyPostDetailActivity.this.finish();
             }
         });
+        findViewById(R.id.commentLayout).setVisibility(View.GONE);
     }
 
 }

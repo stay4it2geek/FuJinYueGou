@@ -31,13 +31,15 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostListAdapter.MyViewHolder> {
     private ArrayList<InterestPost> datas;
     private Activity activity;
-   private boolean isNeedBlur;
+    private boolean isNeedBlur;
+
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
     }
@@ -48,8 +50,8 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         mOnItemClickListener = listener;
     }
 
-    public InterestPostListAdapter(Activity context, ArrayList<InterestPost> datas , boolean isNeedBlur) {
-        activity = context;
+    public InterestPostListAdapter(Activity activity, ArrayList<InterestPost> datas, boolean isNeedBlur) {
+        this.activity = activity;
         this.datas = datas;
         this.isNeedBlur = isNeedBlur;
 
@@ -72,7 +74,25 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
+         int randomAge;
+        if (CommonUtil.loadData(activity, "randomAge") > 0) {
+            if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(activity, "userId")) {
+                int age = 20;
+                Random random = new Random();
+                randomAge = random.nextInt(age) + 15;
+                CommonUtil.saveData(activity, randomAge, "randomAge");
+                CommonUtil.saveData(activity, Integer.parseInt(post.user.userId), "userId");
+            } else {
+                randomAge = CommonUtil.loadData(activity, "randomAge");
+            }
+        } else {
+            int age = 20;
+            Random random = new Random();
+            randomAge = random.nextInt(age) + 15;
+            CommonUtil.saveData(activity, randomAge, "randomAge");
+            CommonUtil.saveData(activity, Integer.parseInt(post.user.userId), "userId");
+        }
+        holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女 "+randomAge : "男 "+randomAge);
         if (day <= 1) {
             holder.createTime.setText(hour + "小时" + min + "分钟前");
         } else if (day < 30) {
@@ -123,7 +143,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         holder.viewNum.setText(datas.get(position).pageView + "");
         holder.pinglunNum.setText(datas.get(position).totalComments + "");
 
-        if(isNeedBlur){
+        if (isNeedBlur) {
             holder.pName.setVisibility(View.VISIBLE);
             holder.pName.setText(post.sName);
         }
@@ -131,7 +151,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             holder.imgGridview.setVisibility(View.VISIBLE);
             holder.imgVideolayout.setVisibility(View.GONE);
             holder.imgtotal.setVisibility(View.VISIBLE);
-            holder.imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, Constants.ITEM_POST_LIST_IMG,isNeedBlur,false));
+            holder.imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, Constants.ITEM_POST_LIST_IMG, isNeedBlur, false));
             holder.imgtotal.setText("共" + datas.get(position).totalImages + "张");
         } else {
             holder.imgVideolayout.setVisibility(View.VISIBLE);
@@ -257,10 +277,9 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         private TextView createTime;
         private TextView sexAndAge;
         private FrameLayout imgVideolayout;
-        private ImageView arrow;
+
         public MyViewHolder(View view) {
             super(view);
-            arrow = (ImageView) view.findViewById(R.id.arrow);
             pName = (TextView) view.findViewById(R.id.pName);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nick);
