@@ -269,6 +269,8 @@ public class PersonalFragment extends Fragment implements View.OnClickListener {
                     ((TextView) view.findViewById(R.id.vipLevel)).setText("特级趣会员");
                 } else if (rootUser.vipConis > 8000) {
                     ((TextView) view.findViewById(R.id.vipLevel)).setText("超级趣会员");
+                }else{
+                    ((TextView) view.findViewById(R.id.vipLevel)).setText("非趣会员");
                 }
             }
 

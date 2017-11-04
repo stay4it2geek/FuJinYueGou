@@ -235,7 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         BmobQuery<RootUser> query = new BmobQuery<>();
-        query.getObject(invite_code.getText().toString().toString(), new QueryListener<RootUser>() {
+        query.getObject(invite_code.getText().toString().trim(), new QueryListener<RootUser>() {
             @Override
             public void done(RootUser user, BmobException e) {
                 if (user != null) {

@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.adapter.MyTeamListAdapter;
 import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
@@ -29,6 +30,7 @@ import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 
 public class ShareManagerActivty extends FragmentActivity {
@@ -91,7 +93,7 @@ public class ShareManagerActivty extends FragmentActivity {
         });
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        titlebar.setBarTitle("我 的 推 广");
+        titlebar.setBarTitle("我 的 团 队");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +123,7 @@ public class ShareManagerActivty extends FragmentActivity {
         }
         BmobQuery<Promotion> query3 = new BmobQuery<>();
 
-        query3.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
+        query3.addWhereEqualTo("referralsUser", BmobUser.getCurrentUser(RootUser.class));
         queries.add(query3);
         query.and(queries);
         query.setLimit(10);
@@ -133,13 +135,24 @@ public class ShareManagerActivty extends FragmentActivity {
                     if (actionType == Constants.REFRESH) {
                         myProList.clear();
                     }
-                    if(list.size()>0){
+                    if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
+                        for (final Promotion pro : list) {
+                            BmobQuery<RootUser> user=new BmobQuery<>();
+                            user.getObject(pro.refereeUser.getObjectId(), new QueryListener<RootUser>() {
+                                @Override
+                                public void done(RootUser rootUser, BmobException e) {
+                                    if(e==null){
+                                        pro.refereeUser=rootUser;
+                                    }
+                                }
+                            });
+                        }
                     }
                     Message message = new Message();
                     message.obj = list;
                     message.what = actionType;
-                    handler.sendMessage(message);
+                    handler.sendMessageDelayed(message,2000);
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
@@ -190,11 +203,5 @@ public class ShareManagerActivty extends FragmentActivity {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.showMenuButton);
-        menu.collapse();
-    }
 
 }

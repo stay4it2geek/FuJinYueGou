@@ -71,7 +71,7 @@ public class GaoDeMapActivity extends Activity implements
             mUiSettings.setScrollGesturesEnabled(true);
             aMap.setMyLocationEnabled(true);// 可触发定位并显示当前位置
         }
-   
+
         findViewById(R.id.ikown).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

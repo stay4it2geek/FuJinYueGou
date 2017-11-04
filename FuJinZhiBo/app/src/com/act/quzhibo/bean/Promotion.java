@@ -9,9 +9,9 @@ import cn.bmob.v3.BmobUser;
 
 public class Promotion extends BmobObject{
 
-    public BmobUser referralsUser;
+    public RootUser referralsUser;
 
-    public BmobUser refereeUser;
+    public RootUser refereeUser;
 
 
 }

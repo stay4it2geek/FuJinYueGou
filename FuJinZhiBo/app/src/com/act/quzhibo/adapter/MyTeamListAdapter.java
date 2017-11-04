@@ -2,6 +2,7 @@ package com.act.quzhibo.adapter;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.Promotion;
-import com.act.quzhibo.bean.VipOrders;
+import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.widget.CircleImageView;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -18,41 +21,54 @@ public class MyTeamListAdapter extends RecyclerView.Adapter<MyTeamListAdapter.My
     ArrayList<Promotion> promotions;
     Activity mContext;
 
-    public MyTeamListAdapter(Activity context, ArrayList<Promotion>  promotions) {
+    public MyTeamListAdapter(Activity context, ArrayList<Promotion> promotions) {
         mContext = context;
         this.promotions = promotions;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_order, parent, false);//这个布局就是一个imageview用来显示图片
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_referee_user, parent, false);//这个布局就是一个imageview用来显示图片
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
+        RootUser refreeUser = promotions.get(position).refereeUser;
+        if (refreeUser == null) {
+            return;
+        }
+        holder.createTime.setText(TextUtils.isEmpty(refreeUser.getCreatedAt())?"":"加入时间:"+refreeUser.getCreatedAt());
+        holder.userNickName.setText(TextUtils.isEmpty(refreeUser.getUsername())?"":refreeUser.getUsername());
+        Glide.with(mContext).load(refreeUser.photoFileUrl).into(holder.avater);
+        if (refreeUser.vipConis != null && refreeUser.vipConis > 0) {
+            if (0 < refreeUser.vipConis && refreeUser.vipConis < 3000) {
+                holder.vipLevel.setText("初级趣会员");
+            } else if (3000 < refreeUser.vipConis && refreeUser.vipConis < 5000) {
+                holder.vipLevel.setText("中级趣会员");
+            } else if (5000 < refreeUser.vipConis && refreeUser.vipConis < 8000) {
+                holder.vipLevel.setText("特级趣会员");
+            } else if (refreeUser.vipConis > 8000) {
+                holder.vipLevel.setText("超级趣会员");
+            }else{
+                holder.vipLevel.setText("非趣会员");
+            }
+        }
 
-//        if (holder instanceof MyViewHolder) {
-//            holder.orderStatus.setText(vipOrderses.get(position).orderStatus ? "支付已完成" : "交易关闭");
-//            holder.orderDescription.setText("订单描述: " + vipOrderses.get(position).goodsDescription);
-//            holder.updatedTime.setText("下单时间:" + vipOrderses.get(position).getUpdatedAt());
-//            holder.orderPrice.setText("订单价格: ￥" + vipOrderses.get(position).orderPrice);
-//            holder.order_layout.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View view) {
-//                    mListener.onDelete(position);
-//                    return false;
-//                }
-//            });
+        holder.orderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
 
-//            holder.deleteOrder.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    mListener.onDelete(position);
-//                }
-//            });
-//        }
+        holder.refereeOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
     }
 
     @Override
@@ -61,21 +77,22 @@ public class MyTeamListAdapter extends RecyclerView.Adapter<MyTeamListAdapter.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView updatedTime;
-        TextView orderDescription;
-        TextView orderStatus;
-        TextView orderPrice;
-        RelativeLayout order_layout;
-        TextView deleteOrder;
+        RelativeLayout orderLayout;
+        TextView createTime;
+        TextView userNickName;
+        CircleImageView avater;
+        TextView vipLevel;
+        TextView refereeOrder;
 
         public MyViewHolder(View view) {
             super(view);
-            updatedTime = (TextView) view.findViewById(R.id.updatedTime);
-            orderDescription = (TextView) view.findViewById(R.id.orderDescription);
-            orderStatus = (TextView) view.findViewById(R.id.orderStatus);
-            orderPrice = (TextView) view.findViewById(R.id.orderPrice);
-            order_layout = (RelativeLayout) view.findViewById(R.id.order_layout);
-            deleteOrder = (TextView) view.findViewById(R.id.deleteOrder);
+            createTime = (TextView) view.findViewById(R.id.createTime);
+            userNickName = (TextView) view.findViewById(R.id.userNickName);
+            vipLevel = (TextView) view.findViewById(R.id.vipLevel);
+            avater = (CircleImageView) view.findViewById(R.id.avater);
+            refereeOrder = (TextView) view.findViewById(R.id.refereeOrder);
+            orderLayout = (RelativeLayout) view.findViewById(R.id.order_layout);
+
         }
     }
 }
