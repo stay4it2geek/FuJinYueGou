@@ -23,6 +23,9 @@ import com.cjt2325.cameralibrary.util.FileUtil;
 
 import java.io.File;
 
+import static com.act.quzhibo.common.Constants.TAKE_PHOTO;
+import static com.act.quzhibo.common.Constants.TAKE_VIDEO;
+
 public class CameraActivity extends AppCompatActivity {
     private JCameraView jCameraView;
 
@@ -36,7 +39,7 @@ public class CameraActivity extends AppCompatActivity {
         //设置视频保存路径
         jCameraView.setSaveVideoPath(Environment.getExternalStorageDirectory().getPath() + File.separator + "JCamera");
         jCameraView.setFeatures(JCameraView.BUTTON_STATE_BOTH);
-        jCameraView.setTip("JCameraView Tip");
+        jCameraView.setTip("轻触拍照, 长按录像");
         jCameraView.setMediaQuality(JCameraView.MEDIA_QUALITY_MIDDLE);
         jCameraView.setErrorLisenter(new ErrorListener() {
             @Override
@@ -58,22 +61,19 @@ public class CameraActivity extends AppCompatActivity {
             @Override
             public void captureSuccess(Bitmap bitmap) {
                 //获取图片bitmap
-//                Log.i("JCameraView", "bitmap = " + bitmap.getWidth());
                 String path = FileUtil.saveBitmap("JCamera", bitmap);
                 Intent intent = new Intent();
                 intent.putExtra("path", path);
-                setResult(101, intent);
+                setResult(TAKE_PHOTO, intent);
                 finish();
             }
 
             @Override
             public void recordSuccess(String url, Bitmap firstFrame) {
                 //获取视频路径
-                String path = FileUtil.saveBitmap("JCamera", firstFrame);
-                Log.i("CJT", "url = " + url + ", Bitmap = " + path);
                 Intent intent = new Intent();
-                intent.putExtra("path", path);
-                setResult(101, intent);
+                intent.putExtra("url", url);
+                setResult(TAKE_VIDEO, intent);
                 finish();
             }
         });
@@ -84,14 +84,6 @@ public class CameraActivity extends AppCompatActivity {
                 CameraActivity.this.finish();
             }
         });
-        jCameraView.setRightClickListener(new ClickListener() {
-            @Override
-            public void onClick() {
-                Toast.makeText(CameraActivity.this,"Right",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        Log.i("CJT", DeviceUtil.getDeviceModel());
     }
 
     @Override

@@ -34,6 +34,7 @@
         <LinearLayout
             android:id="@+id/layout_location"
             android:clickable="true"
+            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_5"
@@ -49,8 +50,11 @@
                 style="@style/chat_content_date_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/white" />
+                android:gravity="left"
+                android:singleLine="true"
+                android:background="@drawable/location_default"
+
+              />
         </LinearLayout>
 
         <ProgressBar

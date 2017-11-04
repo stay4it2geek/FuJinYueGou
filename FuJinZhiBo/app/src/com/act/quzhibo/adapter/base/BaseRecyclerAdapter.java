@@ -192,7 +192,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
             @Override
             public boolean onLongClick(View v) {
                 if (listener != null && v != null) {
-                    listener.onItemLongClick(position);
+                    listener.onItemLongClick(position,v);
                 }
                 return true;
             }

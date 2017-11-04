@@ -32,6 +32,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.promeg:tinypinyin:1.0.0'
     compile 'cjt.library.wheel:camera:1.1.9'
+    compile 'com.yuyh.bubble:library:1.0.0'
+    compile 'com.amap.api:location:3.3.0'
+    compile 'com.amap.api:map2d:5.2.0'
+    compile 'com.amap.api:search:5.0.0'
     compile files('libs/BmobPay_v3.1.1_170111.jar')
     compile files('libs/okhttp-3.8.1.jar')
 }

@@ -12,17 +12,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.i.OnRecyclerViewListener;
+import com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
+
+import static com.act.quzhibo.common.Constants.RECEIVE;
 
 /**
  * 接收到的文本类型
@@ -40,6 +46,7 @@ public class ReceiveImageHolder extends BaseViewHolder {
     @Bind(R.id.progress_load)
     protected ProgressBar progress_load;
     BmobIMConversation conversation;
+
 
 
     public ReceiveImageHolder(Context context, BmobIMConversation conversation, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
@@ -107,16 +114,15 @@ public class ReceiveImageHolder extends BaseViewHolder {
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPerson(msg);
+                requestPerson(message);
             }
         });
 
         iv_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemClick(getAdapterPosition());
-                }
+                onRecyclerViewListener.onItemClick(getAdapterPosition());
+
             }
         });
 
@@ -124,13 +130,14 @@ public class ReceiveImageHolder extends BaseViewHolder {
             @Override
             public boolean onLongClick(View v) {
                 if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemLongClick(getAdapterPosition());
+                    onRecyclerViewListener.onItemLongClick(getAdapterPosition(),v);
                 }
                 return true;
             }
         });
 
     }
+
 
     public void showTime(boolean isShow) {
         tv_time.setVisibility(isShow ? View.VISIBLE : View.GONE);

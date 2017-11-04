@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.v3.BmobUser;
 
 
@@ -114,7 +115,7 @@ public class NewFriendActivity extends FragmentActivity {
             }
 
             @Override
-            public boolean onItemLongClick(final int position) {
+            public boolean onItemLongClick(final int position,View view) {
 
                 FragmentDialog.newInstance(false, "是否删除会话？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
                     @Override

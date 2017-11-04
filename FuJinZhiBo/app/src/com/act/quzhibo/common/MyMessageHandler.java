@@ -38,6 +38,7 @@ import cn.bmob.v3.listener.SaveListener;
 public class MyMessageHandler extends BmobIMMessageHandler {
     public boolean isChatting;
     private Context context;
+    String tips = "";
 
     public MyMessageHandler(Context context) {
         this.context = context;
@@ -46,13 +47,13 @@ public class MyMessageHandler extends BmobIMMessageHandler {
     @Override
     public void onMessageReceive(final MessageEvent event) {
         //当接收到服务器发来的消息时，此方法被调用
-        Log.e("onMessageReceive",""+isChatting);
+        Log.e("onMessageReceive", "" + isChatting);
         executeMessage(event);
     }
 
     @Override
     public void onOfflineReceive(final OfflineMessageEvent event) {
-        Log.e("onOfflineReceive",""+isChatting);
+        Log.e("onOfflineReceive", "" + isChatting);
 
         //每次调用connect方法时会查询一次离线消息，如果有，此方法会被调用
         Map<String, List<MessageEvent>> map = event.getEventMap();
@@ -91,15 +92,17 @@ public class MyMessageHandler extends BmobIMMessageHandler {
      *
      * @param msg
      */
+
+
     private void processCustomMessage(final BmobIMMessage msg, final MessageEvent messageEvent) {
         //消息类型
         String type = msg.getMsgType();
         //发送页面刷新的广播
         if (isChatting) {
-            Log.e("messageEvent,","messageEvent");
+            Log.e("messageEvent,", "messageEvent");
             EventBus.getDefault().post(messageEvent);
-        }else{
-            Log.e("RefreshEvent,","RefreshEvent");
+        } else {
+            Log.e("RefreshEvent,", "RefreshEvent");
             EventBus.getDefault().post(new RefreshEvent());
         }
 
@@ -120,12 +123,25 @@ public class MyMessageHandler extends BmobIMMessageHandler {
         } else {
             final Intent pendingIntent = new Intent(context, ChatFriendsActivity.class);
             pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            ToastUtil.showToast(context, msg.getMsgType() + "");
 
+            if ("sound".equals(msg.getMsgType())) {
+                tips = "我给你发了一段语音";
+            } else if ("video".equals(msg.getMsgType())) {
+                tips = "我给你发了一段视频";
+            } else if ("location".equals(msg.getMsgType())) {
+                tips = "我给你发了我的位置";
+
+            } else if ("image".equals(msg.getMsgType())) {
+                tips = "我给你发了一张照片";
+            } else {
+                tips = msg.getContent();
+            }
             Glide.with(context).load(messageEvent.getFromUserInfo().getAvatar()).asBitmap().into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap largeIcon, GlideAnimation<? super Bitmap> glideAnimation) {
                     BmobNotificationManager.getInstance(context).showNotification(largeIcon,
-                            messageEvent.getFromUserInfo().getName(), msg.getContent(), messageEvent.getFromUserInfo().getName()+"发来消息", pendingIntent);
+                            messageEvent.getFromUserInfo().getName(), tips, messageEvent.getFromUserInfo().getName() + "发来消息", pendingIntent);
                 }
             });
         }

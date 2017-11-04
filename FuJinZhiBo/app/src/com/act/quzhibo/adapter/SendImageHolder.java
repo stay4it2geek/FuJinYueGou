@@ -28,6 +28,8 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.v3.exception.BmobException;
 
+import static com.act.quzhibo.common.Constants.RECEIVE;
+
 /**
  * 发送的文本类型
  */
@@ -57,9 +59,11 @@ public class SendImageHolder extends BaseViewHolder {
         this.c = c;
     }
 
+
     @Override
     public void bindData(Object o) {
-        BmobIMMessage msg = (BmobIMMessage) o;
+        final BmobIMMessage msg = (BmobIMMessage) o;
+
         //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
         final BmobIMUserInfo info = msg.getBmobIMUserInfo();
         Glide.with(context).load(info != null ? info.getAvatar() : null).asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
@@ -113,7 +117,7 @@ public class SendImageHolder extends BaseViewHolder {
             @Override
             public boolean onLongClick(View v) {
                 if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemLongClick(getAdapterPosition());
+                    onRecyclerViewListener.onItemLongClick(getAdapterPosition(),v);
                 }
                 return true;
             }

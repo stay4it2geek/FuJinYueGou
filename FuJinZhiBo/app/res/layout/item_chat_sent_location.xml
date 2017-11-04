@@ -40,11 +40,14 @@
             android:paddingRight="25dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
+             android:layout_marginLeft="20dp"
             android:layout_toLeftOf="@id/iv_avatar"
             android:background="@drawable/chat_right_qp" >
 
             <TextView
                 android:id="@+id/tv_location"
+                android:singleLine="true"
+                android:text=""
                 style="@style/chat_content_date_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

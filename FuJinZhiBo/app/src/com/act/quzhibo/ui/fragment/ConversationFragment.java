@@ -93,7 +93,7 @@ public class ConversationFragment extends Fragment {
             }
 
             @Override
-            public boolean onItemLongClick(int position) {
+            public boolean onItemLongClick(int position,View view) {
                 adapter.getItem(position).onLongClick(getActivity(),adapter,position);
 
                 return true;

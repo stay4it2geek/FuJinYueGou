@@ -22,6 +22,8 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.TabEntity;
 import com.act.quzhibo.bean.Toggle;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.services.core.LatLonPoint;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -32,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -53,8 +56,8 @@ import cn.bmob.v3.listener.FetchUserInfoListener;
 public class CommonUtil {
 
     public static void switchFragment(Fragment fragment, int layoutId, FragmentActivity activity) {
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-        transaction.add(layoutId, fragment);
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        transaction.replace(layoutId, fragment);
         transaction.addToBackStack(null);
         transaction.commitAllowingStateLoss();
     }
@@ -256,8 +259,9 @@ public class CommonUtil {
 
     public static String loadLoginData(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences("login", Context.MODE_PRIVATE);
-        return sp.getString(key,"");
+        return sp.getString(key, "");
     }
+
     public static void clearData(Context context) {
         SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -305,4 +309,41 @@ public class CommonUtil {
         return bitmap;
     }
 
+
+    /**
+     * 地图应用是否安装
+     * @return
+     */
+    public static boolean isGdMapInstalled(){
+        return isInstallPackage("com.autonavi.minimap");
+    }
+
+
+    private static boolean isInstallPackage(String packageName) {
+        return new File("/data/data/" + packageName).exists();
+    }
+
+
+    /**
+     * 获取打开高德地图应用uri
+     */
+    public static String getGdMapUri(String appName, double slat, double slon, String sname, double dlat, double dlon, String dname){
+        String uri = "androidamap://route?sourceApplication=%1$s&slat=%2$s&slon=%3$s&sname=%4$s&dlat=%5$s&dlon=%6$s&dname=%7$s&dev=0&m=0&t=2";
+        return String.format(uri, appName, slat, slon, sname, dlat, dlon, dname);
+    }
+
+
+    /**
+     * 把LatLng对象转化为LatLonPoint对象
+     */
+    public static LatLonPoint convertToLatLonPoint(LatLng latlon) {
+        return new LatLonPoint(latlon.latitude, latlon.longitude);
+    }
+
+    /**
+     * 把LatLonPoint对象转化为LatLon对象
+     */
+    public static LatLng convertToLatLng(LatLonPoint latLonPoint) {
+        return new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude());
+    }
 }

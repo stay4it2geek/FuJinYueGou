@@ -8,12 +8,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.event.ChangeEvent;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.ViewFindUtils;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.flyco.tablayout.SlidingTabLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -65,7 +69,11 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
             }
         });
         pager.setCurrentItem(0);
+        ((TextView)findViewById(R.id.title_text)).setText(getChangeText());
     }
+
+    public abstract String getChangeText();
+
 
     @Override
     public void setSelectedFragment(BackHandledFragment selectedFragment) {

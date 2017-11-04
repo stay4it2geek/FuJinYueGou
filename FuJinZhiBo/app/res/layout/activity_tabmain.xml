@@ -6,15 +6,12 @@
     android:layout_height="match_parent"
     android:background="#eeeeee">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
@@ -22,17 +19,12 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
             <!--must have android:id/tabs-->
+
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:visibility="gone" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="#aaaaaa" />
 
             <com.flyco.tablayout.CommonTabLayout
                 android:id="@+id/tabMain"
@@ -43,7 +35,12 @@
                 android:paddingTop="3dp"
                 tl:tl_textSelectColor="#565651"
                 tl:tl_textUnselectColor="#565651"
-                tl:tl_textsize="13sp" />
+                tl:tl_textsize="13sp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#aaaaaa" />
+            </com.flyco.tablayout.CommonTabLayout>
         </LinearLayout>
-    </FrameLayout>
 </TabHost>

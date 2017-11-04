@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +15,11 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.CommonCoursesAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.CommonCourse;
-import com.act.quzhibo.ui.activity.MoneyCourseActivity;
-import com.act.quzhibo.ui.activity.PuaCoursesActivity;
+import com.act.quzhibo.event.CourseEvent;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -180,7 +180,7 @@ public class CoursesCenterFragment extends Fragment {
                         courseCenterAdapter.setOnItemClickListener(new CommonCoursesAdapter.OnRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(CommonCourse course) {
-                                listner.onCallDetail(course);
+                              EventBus.getDefault().post(new CourseEvent(course));
                             }
                         });
                 } else {
@@ -201,17 +201,5 @@ public class CoursesCenterFragment extends Fragment {
         }
     };
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof PuaCoursesActivity||context instanceof MoneyCourseActivity) {
-            listner = (OnCallCourseDetailListner) context;
-        }
-    }
 
-    OnCallCourseDetailListner listner;
-
-    public interface OnCallCourseDetailListner {
-        void onCallDetail(CommonCourse commonCourse);
-    }
 }

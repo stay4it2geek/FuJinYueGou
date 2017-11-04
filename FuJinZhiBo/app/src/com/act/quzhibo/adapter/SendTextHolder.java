@@ -27,6 +27,8 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.v3.exception.BmobException;
 
+import static com.act.quzhibo.common.Constants.RECEIVE;
+
 /**
  * 发送的文本类型
  */
@@ -58,9 +60,9 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
 
     @Override
     public void bindData(Object o) {
-        final BmobIMMessage message = (BmobIMMessage) o;
+        final BmobIMMessage msg = (BmobIMMessage) o;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        final BmobIMUserInfo info = message.getBmobIMUserInfo();
+        final BmobIMUserInfo info = msg.getBmobIMUserInfo();
         Glide.with(context).load(info != null ? info.getAvatar() : null).asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
@@ -75,12 +77,12 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
             }
         });
 
-        String time = dateFormat.format(message.getCreateTime());
-        String content = message.getContent();
+        String time = dateFormat.format(msg.getCreateTime());
+        String content = msg.getContent();
         tv_message.setText(content);
         tv_time.setText(time);
 
-        final int status = message.getSendStatus();
+        final int status = msg.getSendStatus();
         if (status == BmobIMSendStatus.SEND_FAILED.getStatus()) {
             iv_fail_resend.setVisibility(View.VISIBLE);
             progress_load.setVisibility(View.GONE);
@@ -115,7 +117,7 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
             @Override
             public boolean onLongClick(View v) {
                 if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemLongClick(getAdapterPosition());
+                    onRecyclerViewListener.onItemLongClick(getAdapterPosition(),v);
                 }
                 return true;
             }
@@ -125,7 +127,7 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
         iv_fail_resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c.resendMessage(message, new MessageSendListener() {
+                c.resendMessage(msg, new MessageSendListener() {
                     @Override
                     public void onStart(BmobIMMessage msg) {
                         progress_load.setVisibility(View.VISIBLE);

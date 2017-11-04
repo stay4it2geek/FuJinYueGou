@@ -27,12 +27,12 @@ import java.util.List;
 public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
-    private String[] mTitles = {"课程", "直播", "广场", "钱袋子", "聊天", "我的"};
-    private String[] mTitlesSpecial = {"课程", "广场", "我的"};
+    private String[] mTitles = {"挖宝", "直播", "社区", "聊天", "我的"};
+    private String[] mTitlesSpecial = {"课程", "社区", "我的"};
 
-    private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.money, R.drawable.chat, R.drawable.mine};
+    private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.chat, R.drawable.mine};
 
-    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.money_s, R.drawable.chat_s, R.drawable.mine_s};
+    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s,  R.drawable.chat_s, R.drawable.mine_s};
 
     private int[] mIconUnselectIdsSpecial = {R.drawable.courses, R.drawable.money, R.drawable.mine};
     private int[] mIconSelectIdsSpecial = {R.drawable.courses_s, R.drawable.money_s, R.drawable.mine_s};
@@ -45,7 +45,6 @@ public class TabMainActivity extends TabActivity {
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_tabmain);
         tabHost = TabMainActivity.this.getTabHost();
         Intent showListIntent = new Intent(TabMainActivity.this, ShowerListActivity.class);
@@ -53,16 +52,13 @@ public class TabMainActivity extends TabActivity {
         if (CommonUtil.getToggle(this, Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
             tabHost.addTab(tabHost.newTabSpec("课程")
                     .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, PuaCoursesActivity.class)));
+                    .setContent(new Intent(TabMainActivity.this, CourseCommonActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("直播")
                     .setIndicator(null, null)
                     .setContent(showListIntent));
-            tabHost.addTab(tabHost.newTabSpec("广场")
+            tabHost.addTab(tabHost.newTabSpec("社区")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
-            tabHost.addTab(tabHost.newTabSpec("钱袋")
-                    .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, MoneyCourseActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("聊天")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, ChatFriendsActivity.class)));

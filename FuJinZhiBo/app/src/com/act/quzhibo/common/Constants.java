@@ -56,4 +56,10 @@ public class Constants {
 
     public static final boolean SEE_ME_FLAG = true;
     public static final boolean FOCUS_ME_FLAG = false;
+    public static final int TAKE_PHOTO =101 ;
+    public static final int TAKE_VIDEO =102 ;
+
+
+    public static final String RECEIVE = "RECIVE";
+    public static final int REQUEST_MAP = 99;
 }

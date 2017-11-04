@@ -66,6 +66,11 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
         return "哥哥姐姐们，再看一会呗";
     }
 
+    @Override
+    public String getChangeText() {
+        return "";
+    }
+
 
     @Override
     public void onShowVideo(Room room) {

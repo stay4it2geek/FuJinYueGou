@@ -117,7 +117,7 @@ public class ContactFragment extends Fragment {
             }
 
             @Override
-            public boolean onItemLongClick(final int position) {
+            public boolean onItemLongClick(final int position,View view) {
                 if (position == 0) {
                     return true;
                 }

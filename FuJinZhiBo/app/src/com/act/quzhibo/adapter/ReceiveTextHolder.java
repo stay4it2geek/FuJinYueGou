@@ -20,8 +20,12 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
+import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
+import cn.bmob.newim.bean.BmobIMTextMessage;
+
+import static com.act.quzhibo.common.Constants.RECEIVE;
 
 /**
  * 接收到的文本类型
@@ -43,12 +47,11 @@ public class ReceiveTextHolder extends BaseViewHolder {
         this.conversation = conversation;
     }
 
-
     @Override
     public void bindData(Object o) {
-        final BmobIMMessage msg = (BmobIMMessage) o;
+        final BmobIMMessage message = (BmobIMMessage) o;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-        String time = dateFormat.format(msg.getCreateTime());
+        String time = dateFormat.format(message.getCreateTime());
         tv_time.setText(time);
         Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
             @Override
@@ -64,12 +67,12 @@ public class ReceiveTextHolder extends BaseViewHolder {
             }
         });
 
-        String content = msg.getContent();
+        String content = message.getContent();
         tv_message.setText(content);
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPerson(msg);
+                requestPerson(message);
             }
         });
         tv_message.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +88,7 @@ public class ReceiveTextHolder extends BaseViewHolder {
             @Override
             public boolean onLongClick(View v) {
                 if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemLongClick(getAdapterPosition());
+                    onRecyclerViewListener.onItemLongClick(getAdapterPosition(),v);
                 }
                 return true;
             }
@@ -94,7 +97,7 @@ public class ReceiveTextHolder extends BaseViewHolder {
         iv_avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestPerson(msg);
+                requestPerson(message);
             }
         });
     }

@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -22,6 +23,7 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -38,18 +40,30 @@ import android.widget.Toast;
 import com.act.quzhibo.BuildConfig;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ChatAdapter;
+import com.act.quzhibo.bean.NearVideoEntity;
+import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.common.MyApplicaition;
+import com.act.quzhibo.luban_compress.Luban;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.Util;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.TitleBarView;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +86,21 @@ import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.newim.listener.MessagesQueryListener;
 import cn.bmob.newim.listener.OnRecordChangeListener;
 import cn.bmob.newim.notification.BmobNotificationManager;
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.DeleteBatchListener;
+import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
+import io.github.rockerhieu.emojicon.util.Utils;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
+import static com.act.quzhibo.common.Constants.REQUEST_MAP;
+import static com.act.quzhibo.common.Constants.TAKE_PHOTO;
+import static com.act.quzhibo.common.Constants.TAKE_VIDEO;
 
 /**
  * 聊天界面
@@ -125,9 +153,11 @@ public class ChatActivity extends FragmentActivity {
     private ChatAdapter mAdapter;
     protected LinearLayoutManager mLayoutManager;
     private BmobIMConversation mConversationManager;
-    private static final int REQUEST_CAPTURE = 100;
-    private static final int REQUEST_PICK = 101;
-    private File tempFile;
+    private static final int REQUEST_CAMERA = 1;
+    private static final int REQUEST_PICK = 2;
+    private AMapLocationClient locationClient;
+    private AMapLocationClientOption locationOption = new AMapLocationClientOption();
+    public AMapLocation amlocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,9 +183,93 @@ public class ChatActivity extends FragmentActivity {
         initVoiceView();
         initBottomView();
         EventBus.getDefault().register(this);
-
-
+        initLocation();
     }
+
+
+    private void initLocation() {
+        //初始化client
+        locationClient = new AMapLocationClient(this.getApplicationContext());
+        //设置定位参数
+        locationClient.setLocationOption(getDefaultOption());
+        // 设置定位监听
+
+
+        AMapLocationListener locationListener = new AMapLocationListener() {
+
+            @Override
+            public void onLocationChanged(AMapLocation loc) {
+                if (null != loc) {
+                    amlocation = loc;
+                }
+            }
+        };
+        locationClient.setLocationListener(locationListener);
+        startLocation();
+    }
+
+    /**
+     * 默认的定位参数
+     */
+    private AMapLocationClientOption getDefaultOption() {
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+        return mOption;
+    }
+
+
+    /**
+     * 开始定位
+     *
+     * @author hongming.wang
+     * @since 2.8.0
+     */
+    private void startLocation() {
+        //根据控件的选择，重新设置定位参数
+        // 设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 启动定位
+        locationClient.startLocation();
+    }
+
+    /**
+     * 停止定位
+     *
+     * @author hongming.wang
+     * @since 2.8.0
+     */
+    private void stopLocation() {
+        // 停止定位
+        locationClient.stopLocation();
+    }
+
+    /**
+     * 销毁定位
+     *
+     * @since 2.8.0
+     */
+    private void destroyLocation() {
+        if (null != locationClient) {
+            /**
+             * 如果AMapLocationClient是在当前Activity实例化的，
+             * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
+             */
+            locationClient.onDestroy();
+            locationClient = null;
+            locationOption = null;
+        }
+    }
+
 
     private void initSwipeLayout() {
         sw_refresh.setEnabled(true);
@@ -184,25 +298,43 @@ public class ChatActivity extends FragmentActivity {
         mAdapter.setOnRecyclerViewListener(new OnRecyclerViewListener() {
             @Override
             public void onItemClick(final int position) {
-                FragmentDialog.newInstance(false, "是否删除这条消息？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                    @Override
-                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-                        mConversationManager.deleteMessage(mAdapter.getItem(position));
-                        mAdapter.remove(position);
-                    }
+                BmobIMMessage message = mAdapter.getItem((position));
+                String type = message.getMsgType();
 
-                    @Override
-                    public void onNegtiveClick(Dialog dialog) {
-                        dialog.dismiss();
+                if (type == null) {
+                    return;
+                } else {
+                    if ("location".equals(type)) {
+                        BmobIMLocationMessage locMsg = BmobIMLocationMessage.buildFromDB(message);
+                        if (CommonUtil.isGdMapInstalled()) {
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.setData(Uri.parse(CommonUtil.getGdMapUri("高德", amlocation.getLatitude(), amlocation.getLongitude(), "我的位置", locMsg.getLatitude(), locMsg.getLongitude(), locMsg.getAddress())));
+                            intent.setPackage("com.autonavi.minimap");
+                            startActivity(intent);
+                        } else {
+                            ToastUtil.showToast(ChatActivity.this, "您没有安装高德地图应用哦");
+
+                        }
+                    } else if ("image".equals(type)) {
+                        ArrayList<MediaInfo> mMediaInfos = new ArrayList<>();
+                        MediaInfo mediaInfo = new MediaInfo("", "", "", message.getContent() + "", "", "");
+                        mMediaInfos.add(mediaInfo);
+                        if (mMediaInfos.size() > 0) {
+                            startActivity(BGAPhotoPreviewActivity.newIntent(ChatActivity.this, mMediaInfos, 0, true));
+                        }
                     }
-                }).show(getSupportFragmentManager(), "");
+                }
+
             }
 
             @Override
-            public boolean onItemLongClick(int position) {
+            public boolean onItemLongClick(final int position, View view) {
                 //TODO 消息：5.3、删除指定聊天消息
-
-                return true;
+                mConversationManager.deleteMessage(mAdapter.getItem(position));
+                mAdapter.remove(position);
+                return false;
             }
         });
     }
@@ -311,9 +443,6 @@ public class ChatActivity extends FragmentActivity {
 
     /**
      * 长按说话
-     *
-     * @author smile
-     * @date 2014-7-1 下午6:10:16
      */
     class VoiceTouchListener implements View.OnTouchListener {
         @Override
@@ -451,7 +580,6 @@ public class ChatActivity extends FragmentActivity {
 
     @OnClick(R.id.tv_picture)
     public void onPictureClick(View view) {
-
         //跳转到调用系统图库
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "请选择图片"), REQUEST_PICK);
@@ -459,12 +587,34 @@ public class ChatActivity extends FragmentActivity {
 
     @OnClick(R.id.tv_camera)
     public void onCameraClick(View view) {
-
+        startActivityForResult(new Intent(ChatActivity.this, CameraActivity.class), REQUEST_CAMERA);
     }
 
     @OnClick(R.id.tv_location)
     public void onLocationClick(View view) {
-        sendLocationMessage();
+        if (amlocation != null) {
+            FragmentDialog.newInstance(false, "使用精准位置还是模拟位置？", "记得保护自己的隐私哦", "选择模拟位置", "选择精准位置", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                @Override
+                public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                    Intent intent = new Intent(ChatActivity.this, EventsActivity.class);
+                    intent.putExtra("lng", amlocation.getLongitude());
+                    intent.putExtra("lat", amlocation.getLatitude());
+                    intent.putExtra("address", amlocation.getAddress());
+                    startActivityForResult(intent, Constants.REQUEST_MAP);
+                }
+
+                @Override
+                public void onNegtiveClick(Dialog dialog) {
+                    sendLocationMessage();
+
+                }
+            }).show(getSupportFragmentManager(),"");
+
+        } else {
+            ToastUtil.showToast(ChatActivity.this, "定位失败,请退出页面重试");
+        }
+
+
     }
 
     /**
@@ -514,10 +664,6 @@ public class ChatActivity extends FragmentActivity {
         //TODO 发送消息：6.1、发送文本消息
         BmobIMTextMessage msg = new BmobIMTextMessage();
         msg.setContent(text);
-        //可随意设置额外信息
-        Map<String, Object> map = new HashMap<>();
-        map.put("level", "1");
-        msg.setExtraMap(map);
         mConversationManager.sendMessage(msg, listener);
     }
 
@@ -526,7 +672,7 @@ public class ChatActivity extends FragmentActivity {
      */
     public void sendLocalImageMessage(String path) {
         //TODO 发送消息：6.2、发送本地图片消息
-        BmobIMImageMessage image = new BmobIMImageMessage(path);
+        BmobIMImageMessage image = new BmobIMImageMessage(new File(path));
         mConversationManager.sendMessage(image, listener);
     }
 
@@ -535,7 +681,7 @@ public class ChatActivity extends FragmentActivity {
      * 发送本地视频文件
      */
     private void sendLocalVideoMessage(String path) {
-        BmobIMVideoMessage video = new BmobIMVideoMessage(path);
+        BmobIMVideoMessage video = new BmobIMVideoMessage(new File(path));
         //TODO 发送消息：6.6、发送本地视频文件消息
         mConversationManager.sendMessage(video, listener);
     }
@@ -553,10 +699,6 @@ public class ChatActivity extends FragmentActivity {
         //TODO 发送消息：6.5、发送本地音频文件消息
         BmobIMAudioMessage audio = new BmobIMAudioMessage(local);
         //可设置额外信息-开发者设置的额外信息，需要开发者自己从extra中取出来
-        Map<String, Object> map = new HashMap<>();
-        map.put("from", "优酷");
-        //TODO 自定义消息：7.1、给消息设置额外信息
-        audio.setExtraMap(map);
         //设置语音文件时长：可选
         audio.setDuration(length);
         mConversationManager.sendMessage(audio, listener);
@@ -567,13 +709,16 @@ public class ChatActivity extends FragmentActivity {
      * 发送地理位置消息
      */
     public void sendLocationMessage() {
-        //TODO 发送消息：6.10、发送位置消息
-        //测试数据，真实数据需要从地图SDK中获取
-        BmobIMLocationMessage location = new BmobIMLocationMessage("广州番禺区", 23.5, 112.0);
-        Map<String, Object> map = new HashMap<>();
-        map.put("from", "百度地图");
-        location.setExtraMap(map);
-        mConversationManager.sendMessage(location, listener);
+
+        if (amlocation != null) {
+            BmobIMLocationMessage location = new BmobIMLocationMessage(amlocation.getAddress(), amlocation.getLatitude(), amlocation.getLongitude());
+            Map<String, Object> map = new HashMap<>();
+            map.put("from", "高德地图");
+            location.setExtraMap(map);
+            mConversationManager.sendMessage(location, listener);
+        } else {
+            ToastUtil.showToast(ChatActivity.this, "定位失败,请退出页面重试");
+        }
     }
 
     /**
@@ -622,8 +767,6 @@ public class ChatActivity extends FragmentActivity {
                         mAdapter.addMessages(list);
                         mLayoutManager.scrollToPositionWithOffset(list.size() - 1, 0);
                     }
-                } else {
-                    ToastUtil.showToast(ChatActivity.this, e.getMessage() + "(" + e.getErrorCode() + ")");
                 }
             }
         });
@@ -718,6 +861,13 @@ public class ChatActivity extends FragmentActivity {
         hideSoftInputView();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        stopLocation();
+        destroyLocation();
+
+        if (null != locationClient) {
+            locationClient.onDestroy();
+            locationClient = null;
+        }
     }
 
 
@@ -738,14 +888,90 @@ public class ChatActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK)
-            if (resultCode == 101 || requestCode == REQUEST_PICK) {
-                sendLocalImageMessage(data.getStringExtra("path") != null ? data.getStringExtra("path") : "");
-            }
-        if (resultCode == 102) {
+        if (requestCode == REQUEST_PICK) {
+            if (resultCode == RESULT_OK) {
 
-            sendLocalVideoMessage(data.getStringExtra("path") != null ? data.getStringExtra("path") : "");
+                String imgPath = FileUtil.getRealFilePathFromUri(this, data.getData());
+                Luban.get(this)
+                        .load(new File(imgPath))
+                        .putGear(Luban.THIRD_GEAR)
+                        .asObservable()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnError(new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        })
+                        .onErrorResumeNext(new Func1<Throwable, Observable<? extends File>>() {
+                            @Override
+                            public Observable<? extends File> call(Throwable throwable) {
+                                return Observable.empty();
+                            }
+                        })
+                        .subscribe(new Action1<File>() {
+                            @Override
+                            public void call(File file) {
+                                sendLocalImageMessage(file.getAbsolutePath());
+                            }
+                        });
+
+
+            }
+        } else if (requestCode == REQUEST_CAMERA) {
+            if (resultCode == TAKE_PHOTO) {
+                Luban.get(this)
+                        .load(new File(data.getStringExtra("path") != null ? data.getStringExtra("path") : ""))
+                        .putGear(Luban.THIRD_GEAR)
+                        .asObservable()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnError(new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                throwable.printStackTrace();
+                            }
+                        })
+                        .onErrorResumeNext(new Func1<Throwable, Observable<? extends File>>() {
+                            @Override
+                            public Observable<? extends File> call(Throwable throwable) {
+                                return Observable.empty();
+                            }
+                        })
+                        .subscribe(new Action1<File>() {
+                            @Override
+                            public void call(File file) {
+                                sendLocalImageMessage(file.getAbsolutePath());
+                            }
+                        });
+
+
+            } else if (resultCode == TAKE_VIDEO) {
+                sendLocalVideoMessage(data.getStringExtra("url") != null ? data.getStringExtra("url") : "");
+            }
+        } else if (requestCode == REQUEST_MAP) {
+            if (resultCode == RESULT_OK) {
+
+                String address = data.getStringExtra("address");
+                if (!TextUtils.isEmpty(address)) {
+                    BmobIMLocationMessage location = new BmobIMLocationMessage(address, data.getDoubleExtra("lat",0.0), data.getDoubleExtra("lng",0.0));
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("from", "高德地图");
+                    location.setExtraMap(map);
+                    mConversationManager.sendMessage(location, listener);
+                } else {
+                    ToastUtil.showToast(ChatActivity.this, "定位失败,请退出页面重试");
+                }
+            }
+
         }
 
     }
+
 }
+
+
+
+
+

@@ -67,7 +67,7 @@ public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder implemen
   @Override
   public boolean onLongClick(View v) {
     if(onRecyclerViewListener!=null){
-      onRecyclerViewListener.onItemLongClick(getAdapterPosition());
+      onRecyclerViewListener.onItemLongClick(getAdapterPosition(),v);
     }
     return true;
   }

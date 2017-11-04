@@ -129,7 +129,7 @@ public class ReceiveVoiceHolder extends BaseViewHolder {
             @Override
             public boolean onLongClick(View v) {
                 if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemLongClick(getAdapterPosition());
+                    onRecyclerViewListener.onItemLongClick(getAdapterPosition(),v);
                 }
                 return true;
             }
