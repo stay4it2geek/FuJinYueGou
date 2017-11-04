@@ -6,16 +6,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,7 +19,6 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -37,11 +32,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.act.quzhibo.BuildConfig;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ChatAdapter;
-import com.act.quzhibo.bean.NearVideoEntity;
-import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.i.OnRecyclerViewListener;
@@ -57,7 +49,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -73,7 +64,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
-import cn.bmob.newim.bean.BmobIMFileMessage;
 import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMLocationMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
@@ -86,12 +76,7 @@ import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.newim.listener.MessagesQueryListener;
 import cn.bmob.newim.listener.OnRecordChangeListener;
 import cn.bmob.newim.notification.BmobNotificationManager;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DeleteBatchListener;
-import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
-import io.github.rockerhieu.emojicon.util.Utils;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -101,11 +86,15 @@ import rx.schedulers.Schedulers;
 import static com.act.quzhibo.common.Constants.REQUEST_MAP;
 import static com.act.quzhibo.common.Constants.TAKE_PHOTO;
 import static com.act.quzhibo.common.Constants.TAKE_VIDEO;
-
+import com.rockerhieu.emojicon.EmojiconEditText;
+import com.rockerhieu.emojicon.EmojiconGridFragment;
+import com.rockerhieu.emojicon.EmojiconTextView;
+import com.rockerhieu.emojicon.EmojiconsFragment;
+import com.rockerhieu.emojicon.emoji.Emojicon;
 /**
  * 聊天界面
  */
-public class ChatActivity extends FragmentActivity {
+public class ChatActivity extends FragmentActivity implements EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener {
 
     @Bind(R.id.ll_chat)
     LinearLayout ll_chat;
@@ -117,7 +106,7 @@ public class ChatActivity extends FragmentActivity {
     RecyclerView rc_view;
 
     @Bind(R.id.edit_msg)
-    EditText edit_msg;
+    EmojiconEditText edit_msg;
 
     @Bind(R.id.btn_chat_add)
     Button btn_chat_add;
@@ -193,8 +182,6 @@ public class ChatActivity extends FragmentActivity {
         //设置定位参数
         locationClient.setLocationOption(getDefaultOption());
         // 设置定位监听
-
-
         AMapLocationListener locationListener = new AMapLocationListener() {
 
             @Override
@@ -300,7 +287,6 @@ public class ChatActivity extends FragmentActivity {
             public void onItemClick(final int position) {
                 BmobIMMessage message = mAdapter.getItem((position));
                 String type = message.getMsgType();
-
                 if (type == null) {
                     return;
                 } else {
@@ -316,13 +302,6 @@ public class ChatActivity extends FragmentActivity {
                         } else {
                             ToastUtil.showToast(ChatActivity.this, "您没有安装高德地图应用哦");
 
-                        }
-                    } else if ("image".equals(type)) {
-                        ArrayList<MediaInfo> mMediaInfos = new ArrayList<>();
-                        MediaInfo mediaInfo = new MediaInfo("", "", "", message.getContent() + "", "", "");
-                        mMediaInfos.add(mediaInfo);
-                        if (mMediaInfos.size() > 0) {
-                            startActivity(BGAPhotoPreviewActivity.newIntent(ChatActivity.this, mMediaInfos, 0, true));
                         }
                     }
                 }
@@ -439,6 +418,16 @@ public class ChatActivity extends FragmentActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onEmojiconClicked(Emojicon emojicon) {
+        EmojiconsFragment.input(edit_msg, emojicon);
+    }
+
+    @Override
+    public void onEmojiconBackspaceClicked(View v) {
+        EmojiconsFragment.backspace(edit_msg);
     }
 
     /**
@@ -593,10 +582,10 @@ public class ChatActivity extends FragmentActivity {
     @OnClick(R.id.tv_location)
     public void onLocationClick(View view) {
         if (amlocation != null) {
-            FragmentDialog.newInstance(false, "使用精准位置还是模拟位置？", "记得保护自己的隐私哦", "选择模拟位置", "选择精准位置", "", "", false, new FragmentDialog.OnClickBottomListener() {
+            FragmentDialog.newInstance(false, "使用精准位置还是附近位置？", "选个你的附近位置就行了", "选择附近位置", "选择当前位置", "", "", false, new FragmentDialog.OnClickBottomListener() {
                 @Override
                 public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-                    Intent intent = new Intent(ChatActivity.this, EventsActivity.class);
+                    Intent intent = new Intent(ChatActivity.this, GaoDeMapActivity.class);
                     intent.putExtra("lng", amlocation.getLongitude());
                     intent.putExtra("lat", amlocation.getLatitude());
                     intent.putExtra("address", amlocation.getAddress());
@@ -635,6 +624,10 @@ public class ChatActivity extends FragmentActivity {
             layout_emo.setVisibility(View.VISIBLE);
             layout_add.setVisibility(View.GONE);
             hideSoftInputView();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.emojicons, EmojiconsFragment.newInstance(false))
+                    .commit();
         } else {
             layout_more.setVisibility(View.GONE);
             showSoftInputView();

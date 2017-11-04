@@ -48,7 +48,7 @@ public class DownloadingFragment extends BaseFragment {
     @Override
     protected void initView() {
         super.initView();
-        recycler_view = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        recycler_view = (RecyclerView) getView().findViewById(R.id.recyclerview);
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
         loadNetView = (LoadNetView) getView().findViewById(R.id.loadview);
         try {

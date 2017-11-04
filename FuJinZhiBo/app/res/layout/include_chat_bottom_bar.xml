@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/base_comment_emo_bar">
 
@@ -9,7 +11,7 @@
     android:layout_height="wrap_content"
     android:paddingLeft="@dimen/margin_5"
     android:paddingRight="@dimen/margin_5"
-    android:minHeight="50dp"
+    android:minHeight="45dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
@@ -17,6 +19,7 @@
         android:id="@+id/btn_chat_add"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginLeft="2dp"
         android:background="@drawable/btn_chat_add_selector"
         android:gravity="center"
         android:onClick="toAction" />
@@ -25,15 +28,15 @@
         android:id="@+id/btn_chat_emo"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:visibility="gone"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="7dp"
         android:background="@drawable/btn_chat_emo_selector"
         android:gravity="center"
         android:onClick="toAction" />
 
-    <io.github.rockerhieu.emojicon.EmojiconEditText
+    <com.rockerhieu.emojicon.EmojiconEditText
         android:id="@+id/edit_msg"
         android:textSize="@dimen/text_size_medium"
+        emojicon:emojiconSize="28sp"
         android:layout_marginLeft="6dp"
         android:textColor="@color/color_1e1e1e"
         android:hint="请输入新消息"
@@ -108,14 +111,13 @@
         <LinearLayout
             android:id="@+id/layout_emo"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="150dp"
             android:orientation="vertical"
             android:visibility="gone" >
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager_emo"
+            <FrameLayout
+                android:id="@+id/emojicons"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"/>
         </LinearLayout>
 
         <include

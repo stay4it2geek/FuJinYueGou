@@ -88,6 +88,8 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }else{
+            ToastUtil.showToast(this,"数据为空");
         }
     }
 
@@ -110,6 +112,10 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
             for (MediaInfo mediaInfo : mediaInfos) {
                 previewImages.add(mediaInfo.getUrl());
             }
+            ToastUtil.showToast(this,""+previewImages.get(0));
+
+        }else{
+            ToastUtil.showToast(this,"图片数量为空");
         }
         int currentPosition = getIntent().getIntExtra(EXTRA_CURRENT_POSITION, 0);
         mAdapter = new BGAPhotoPageAdapter(this, this, previewImages);

@@ -121,7 +121,12 @@ public class ReceiveImageHolder extends BaseViewHolder {
         iv_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onRecyclerViewListener.onItemClick(getAdapterPosition());
+                ArrayList<MediaInfo> mMediaInfos = new ArrayList<>();
+                MediaInfo mediaInfo = new MediaInfo("", "", "",message.getContent().split("&").length>1? message.getContent().split("&")[1]:"", "", "");
+                mMediaInfos.add(mediaInfo);
+                if (mMediaInfos.size() > 0) {
+                    context.startActivity(BGAPhotoPreviewActivity.newIntent(context, mMediaInfos, 0, true));
+                }
 
             }
         });

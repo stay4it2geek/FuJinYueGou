@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true">
@@ -72,8 +73,9 @@
         android:paddingRight="4dp"
         android:text="" />
 
-    <io.github.rockerhieu.emojicon.EmojiconTextView
+    <com.rockerhieu.emojicon.EmojiconTextView
         android:id="@+id/re_content"
+        emojicon:emojiconSize="28sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

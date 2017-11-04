@@ -99,10 +99,8 @@ public class MyMessageHandler extends BmobIMMessageHandler {
         String type = msg.getMsgType();
         //发送页面刷新的广播
         if (isChatting) {
-            Log.e("messageEvent,", "messageEvent");
             EventBus.getDefault().post(messageEvent);
         } else {
-            Log.e("RefreshEvent,", "RefreshEvent");
             EventBus.getDefault().post(new RefreshEvent());
         }
 

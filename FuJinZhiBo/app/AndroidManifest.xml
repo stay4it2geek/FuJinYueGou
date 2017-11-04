@@ -162,7 +162,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.act.quzhibo.ui.activity.EventsActivity"
+            android:name="com.act.quzhibo.ui.activity.GaoDeMapActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"/>
         <activity

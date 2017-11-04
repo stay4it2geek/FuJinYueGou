@@ -2,24 +2,25 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <FrameLayout
+        android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
-        android:id="@+id/courseContainer"
-        android:layout_height="match_parent"
-        android:background="@color/white">
+        android:layout_height="match_parent">
 
         <com.jcodecraeer.xrecyclerview.XRecyclerView
-            android:id="@+id/recycler_view"
+            android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
     </FrameLayout>
 
+
     <com.act.quzhibo.widget.LoadNetView
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white" />
+        android:visibility="gone" />
 </FrameLayout>

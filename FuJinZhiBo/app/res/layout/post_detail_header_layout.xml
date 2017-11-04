@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -98,12 +99,13 @@
             android:textColor="#000"
             android:textSize="16sp" />
 
-        <io.github.rockerhieu.emojicon.EmojiconTextView
+        <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
             android:paddingTop="5dp"
+            emojicon:emojiconSize="28sp"
             android:textSize="15sp" />
     </RelativeLayout>
 

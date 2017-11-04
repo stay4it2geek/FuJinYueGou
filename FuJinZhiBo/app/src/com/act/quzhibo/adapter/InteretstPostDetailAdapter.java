@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.devlin_n.videoplayer.player.IjkVideoView;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -376,7 +377,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
         private TextView sexAndAge;
         private TextView nickName;
         private TextView title;
-        private io.github.rockerhieu.emojicon.EmojiconTextView content;
+        private EmojiconTextView content;
         private IjkVideoView ijkVideoView;
         private MyStandardVideoController controller;
         private BGANinePhotoLayout ninePhotoLayout;
@@ -397,7 +398,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             ijkVideoView.setVideoController(controller);
             title = (TextView) view.findViewById(R.id.title);
             ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);
-            content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.content);
+            content = (EmojiconTextView) view.findViewById(R.id.content);
         }
     }
 
@@ -407,7 +408,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
         private ImageView userImage;
         private TextView sexAndAge;
         private TextView nickName;
-        private io.github.rockerhieu.emojicon.EmojiconTextView content;
+        private EmojiconTextView content;
 
         public Item2ViewHolder(View view) {
             super(view);
@@ -416,7 +417,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             arealocation = (TextView) view.findViewById(R.id.location);
             userImage = (ImageView) view.findViewById(R.id.userImage);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
-            content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.re_content);
+            content = (EmojiconTextView) view.findViewById(R.id.re_content);
         }
 
     }

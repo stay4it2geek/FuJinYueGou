@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.devlin_n.videoplayer.player.IjkVideoView;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.io.File;
 import java.util.List;
@@ -165,7 +166,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
         private TextView sexAndAge;
         private TextView nickName;
         private TextView title;
-        private io.github.rockerhieu.emojicon.EmojiconTextView content;
+        private EmojiconTextView content;
         private BGANinePhotoLayout ninePhotoLayout;
         private IjkVideoView ijkVideoView;
         private MyStandardVideoController controller;
@@ -179,7 +180,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             nickName = (TextView) view.findViewById(R.id.nickName);
             title = (TextView) view.findViewById(R.id.title);
-            content = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.content);
+            content = (EmojiconTextView) view.findViewById(R.id.content);
             ninePhotoLayout = (BGANinePhotoLayout) view.findViewById(R.id.imglistview);
             ijkVideoView = (IjkVideoView) itemView.findViewById(R.id.video_player);
             int widthPixels = activity.getResources().getDisplayMetrics().widthPixels;

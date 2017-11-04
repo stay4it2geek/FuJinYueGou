@@ -12,20 +12,16 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.i.OnRecyclerViewListener;
-import com.act.quzhibo.util.ToastUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
-import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMTextMessage;
-
-import static com.act.quzhibo.common.Constants.RECEIVE;
 
 /**
  * 接收到的文本类型
@@ -37,7 +33,7 @@ public class ReceiveTextHolder extends BaseViewHolder {
     protected ImageView iv_avatar;
 
     @Bind(R.id.tv_time)
-    protected TextView tv_time;
+    protected EmojiconTextView tv_time;
 
     @Bind(R.id.tv_message)
     protected TextView tv_message;

@@ -41,7 +41,7 @@ public class NearFragment extends BackHandledFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_common, null, false);
-        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);

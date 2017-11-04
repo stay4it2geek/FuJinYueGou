@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_message"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -39,8 +40,9 @@
             android:textSize="@dimen/text_size_medium"
             />
 
-        <TextView
+        <com.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tv_recent_msg"
+            emojicon:emojiconSize="18sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"

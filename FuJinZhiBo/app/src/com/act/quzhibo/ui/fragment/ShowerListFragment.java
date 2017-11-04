@@ -66,7 +66,7 @@ public class ShowerListFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.showlist_fragment, null);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
-        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

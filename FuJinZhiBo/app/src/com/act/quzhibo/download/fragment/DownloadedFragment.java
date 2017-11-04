@@ -49,7 +49,7 @@ public class DownloadedFragment extends BaseFragment {
     protected void initView() {
         super.initView();
         loadNetView = (LoadNetView) getView().findViewById(R.id.loadview);
-        recycler_view = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        recycler_view = (RecyclerView) getView().findViewById(R.id.recyclerview);
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
         try {
             dbController = DBController.getInstance(getActivity().getApplicationContext());

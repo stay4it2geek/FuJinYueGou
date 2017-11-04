@@ -43,7 +43,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         View rootView = getView();
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.layout_common, null);
-            recycleview = (XRecyclerView) rootView.findViewById(R.id.recycler_view);
+            recycleview = (XRecyclerView) rootView.findViewById(R.id.recyclerview);
             recycleview.setLoadingListener(new XRecyclerView.LoadingListener() {
                 @Override
                 public void onRefresh() {

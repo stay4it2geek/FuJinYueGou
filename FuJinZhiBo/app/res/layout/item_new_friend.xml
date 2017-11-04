@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_message"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -42,11 +43,12 @@
                 android:textSize="@dimen/text_size_medium"
                 />
 
-            <TextView
+            <com.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_recent_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                emojicon:emojiconSize="18sp"
                 android:layout_marginRight="15dp"
                 android:layout_gravity="left|center"
                 style="@style/style_text_gray_small"
@@ -57,7 +59,7 @@
                 android:layout_marginBottom="@dimen/margin_10"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textSize="@dimen/ts_13" />
+                android:textSize="@dimen/textSize_14" />
 
         </LinearLayout>
 

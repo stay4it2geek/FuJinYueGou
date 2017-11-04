@@ -29,6 +29,7 @@ import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -284,7 +285,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nick);
             title = (TextView) view.findViewById(R.id.title);
-            absText = (io.github.rockerhieu.emojicon.EmojiconTextView) view.findViewById(R.id.absText);
+            absText = (EmojiconTextView) view.findViewById(R.id.absText);
             createTime = (TextView) view.findViewById(R.id.createTime);
             arealocation = (TextView) view.findViewById(R.id.location);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);

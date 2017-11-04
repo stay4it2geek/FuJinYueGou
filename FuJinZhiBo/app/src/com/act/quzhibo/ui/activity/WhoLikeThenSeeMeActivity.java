@@ -49,7 +49,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
                 WhoLikeThenSeeMeActivity.this.finish();
             }
         });
-        recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);

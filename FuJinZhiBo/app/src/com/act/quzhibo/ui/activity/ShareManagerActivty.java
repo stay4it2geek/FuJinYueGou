@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.MyTeamListAdapter;
 import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
@@ -32,14 +30,10 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
-
-
 
 public class ShareManagerActivty extends FragmentActivity {
 
-    public static final int UPLOAD_POST = 1;
-    private ArrayList<Promotion> myPostList = new ArrayList<>();
+    private ArrayList<Promotion> myProList = new ArrayList<>();
     private XRecyclerView recyclerView;
     private MyTeamListAdapter myTeamListAdapter;
     private LoadNetView loadNetView;
@@ -50,7 +44,7 @@ public class ShareManagerActivty extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common);
-        recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);
@@ -137,7 +131,7 @@ public class ShareManagerActivty extends FragmentActivity {
             public void done(List<Promotion> list, BmobException e) {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
-                        myPostList.clear();
+                        myProList.clear();
                     }
                     if(list.size()>0){
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
@@ -161,7 +155,7 @@ public class ShareManagerActivty extends FragmentActivity {
             if (msg.what != Constants.NetWorkError) {
 
                 if (myPosts != null) {
-                    myPostList.addAll(myPosts);
+                    myProList.addAll(myPosts);
                     handlerMyteamsSize = myPosts.size();
                 } else {
                     handlerMyteamsSize = 0;
@@ -172,7 +166,7 @@ public class ShareManagerActivty extends FragmentActivity {
                     recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
-                if (myPostList.size() == 0) {
+                if (myProList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
@@ -186,13 +180,13 @@ public class ShareManagerActivty extends FragmentActivity {
     };
 
     private void setAdapterView() {
-//        if (myTeamListAdapter == null) {
-//            myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myPostList);
-//            recyclerView.setAdapter(myTeamListAdapter);
-//
-//        } else {
-//            myTeamListAdapter.notifyDataSetChanged();
-//        }
+        if (myTeamListAdapter == null) {
+            myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myProList);
+            recyclerView.setAdapter(myTeamListAdapter);
+
+        } else {
+            myTeamListAdapter.notifyDataSetChanged();
+        }
     }
 
 

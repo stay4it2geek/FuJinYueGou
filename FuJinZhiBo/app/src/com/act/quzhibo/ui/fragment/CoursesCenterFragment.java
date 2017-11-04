@@ -46,11 +46,11 @@ public class CoursesCenterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        view = LayoutInflater.from(getActivity()).inflate(R.layout.layout_course, null, false);
+        view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_layout, null, false);
         if(getArguments()!=null){
             courseCategoryId=getArguments().getString(Constants.COURSE_CATOGERY_ID);
         }
-        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

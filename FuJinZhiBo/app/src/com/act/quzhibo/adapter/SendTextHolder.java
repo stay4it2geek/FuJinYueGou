@@ -16,6 +16,7 @@ import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.text.SimpleDateFormat;
 
@@ -27,7 +28,6 @@ import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.v3.exception.BmobException;
 
-import static com.act.quzhibo.common.Constants.RECEIVE;
 
 /**
  * 发送的文本类型
@@ -44,7 +44,7 @@ public class SendTextHolder extends BaseViewHolder implements View.OnClickListen
     protected TextView tv_time;
 
     @Bind(R.id.tv_message)
-    protected TextView tv_message;
+    protected EmojiconTextView tv_message;
     @Bind(R.id.tv_send_status)
     protected TextView tv_send_status;
 

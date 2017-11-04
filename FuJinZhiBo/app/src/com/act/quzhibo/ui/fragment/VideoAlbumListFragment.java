@@ -67,7 +67,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
     }
 
     private void initView() {
-        recyclerView = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

@@ -28,9 +28,9 @@
            android:background="#eee"
            android:orientation="horizontal">
 
-           <io.github.rockerhieu.emojicon.EmojiconEditText
+           <com.rockerhieu.emojicon.EmojiconEditText
                android:id="@+id/comment_et"
-               emojicon:emojiconSize="20sp"
+               emojicon:emojiconSize="28sp"
                android:layout_marginTop="5dp"
                android:textSize="@dimen/text_size_medium"
                android:layout_marginLeft="6dp"

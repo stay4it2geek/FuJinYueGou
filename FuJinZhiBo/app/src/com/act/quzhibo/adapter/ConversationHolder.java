@@ -10,6 +10,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.util.TimeUtil;
 import com.bumptech.glide.Glide;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ConversationHolder extends BaseViewHolder {
   @Bind(R.id.tv_recent_name)
   public TextView tv_recent_name;
   @Bind(R.id.tv_recent_msg)
-  public TextView tv_recent_msg;
+  public EmojiconTextView tv_recent_msg;
   @Bind(R.id.tv_recent_time)
   public TextView tv_recent_time;
   @Bind(R.id.tv_recent_unread)

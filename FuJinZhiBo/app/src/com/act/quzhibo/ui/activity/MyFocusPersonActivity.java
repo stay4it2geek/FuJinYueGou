@@ -15,7 +15,6 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
-import com.act.quzhibo.bean.MyPost;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyFocusCommonPerson;
@@ -75,7 +74,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
                 queryData(Constants.REFRESH);
             }
         });
-        recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

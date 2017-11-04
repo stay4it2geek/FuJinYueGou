@@ -47,7 +47,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.video_authors_fragment, null);
-        recyclerView = (XRecyclerView) view.findViewById(R.id.media_author_rv);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

@@ -57,7 +57,9 @@ public class CommonUtil {
 
     public static void switchFragment(Fragment fragment, int layoutId, FragmentActivity activity) {
         FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        transaction.replace(layoutId, fragment);
+        if (fragment != null && !fragment.isAdded()) {
+            transaction.add(layoutId, fragment);
+        }
         transaction.addToBackStack(null);
         transaction.commitAllowingStateLoss();
     }
@@ -312,9 +314,10 @@ public class CommonUtil {
 
     /**
      * 地图应用是否安装
+     *
      * @return
      */
-    public static boolean isGdMapInstalled(){
+    public static boolean isGdMapInstalled() {
         return isInstallPackage("com.autonavi.minimap");
     }
 
@@ -327,7 +330,7 @@ public class CommonUtil {
     /**
      * 获取打开高德地图应用uri
      */
-    public static String getGdMapUri(String appName, double slat, double slon, String sname, double dlat, double dlon, String dname){
+    public static String getGdMapUri(String appName, double slat, double slon, String sname, double dlat, double dlon, String dname) {
         String uri = "androidamap://route?sourceApplication=%1$s&slat=%2$s&slon=%3$s&sname=%4$s&dlat=%5$s&dlon=%6$s&dname=%7$s&dev=0&m=0&t=2";
         return String.format(uri, appName, slat, slon, sname, dlat, dlon, dname);
     }

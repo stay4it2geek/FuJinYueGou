@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <com.jcodecraeer.xrecyclerview.XRecyclerView
-            android:id="@+id/media_author_rv"
+            android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

@@ -3,9 +3,12 @@ package com.act.quzhibo.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
@@ -32,7 +35,7 @@ import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 
 
-public class EventsActivity extends Activity implements
+public class GaoDeMapActivity extends Activity implements
         OnMapLongClickListener, AMap.InfoWindowAdapter, OnGeocodeSearchListener, AMap.OnMapLoadedListener {
     private AMap aMap;
     private MapView mapView;
@@ -68,6 +71,16 @@ public class EventsActivity extends Activity implements
             mUiSettings.setScrollGesturesEnabled(true);
             aMap.setMyLocationEnabled(true);// 可触发定位并显示当前位置
         }
+   
+        findViewById(R.id.ikown).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animation animOut = AnimationUtils.loadAnimation(GaoDeMapActivity.this, R.anim.anim_marquee_out);
+                animOut.setDuration(300);
+                findViewById(R.id.ikown).startAnimation(animOut);
+                findViewById(R.id.ikown).setVisibility(View.GONE);
+            }
+        });
 
     }
 
@@ -80,7 +93,13 @@ public class EventsActivity extends Activity implements
         aMap.setInfoWindowAdapter(this);
         aMap.setOnMarkerClickListener(markerClickListener);
         aMap.setOnInfoWindowClickListener(listener);
-
+        aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                mLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+                getLatlon(mLatLng);
+            }
+        });
     }
 
 

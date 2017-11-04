@@ -15,7 +15,6 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusShowerListAdapter;
-import com.act.quzhibo.bean.MyFocusCommonPerson;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
@@ -68,7 +67,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
             }
         });
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-        recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

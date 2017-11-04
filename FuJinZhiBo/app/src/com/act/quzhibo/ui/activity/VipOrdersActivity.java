@@ -57,7 +57,7 @@ public class VipOrdersActivity extends FragmentActivity {
             }
         });
         titlebar.setVisibility(View.VISIBLE);
-        recyclerView = (XRecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

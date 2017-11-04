@@ -12,12 +12,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.i.OnRecyclerViewListener;
+import com.act.quzhibo.ui.activity.BGAPhotoPreviewActivity;
+import com.act.quzhibo.ui.activity.ChatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import cn.bmob.newim.bean.BmobIMConversation;
@@ -107,8 +111,11 @@ public class SendImageHolder extends BaseViewHolder {
         iv_picture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onRecyclerViewListener != null) {
-                    onRecyclerViewListener.onItemClick(getAdapterPosition());
+                ArrayList<MediaInfo> mMediaInfos = new ArrayList<>();
+                MediaInfo mediaInfo = new MediaInfo("", "", "",message.getContent().split("&").length>1? message.getContent().split("&")[0]:"", "", "");
+                mMediaInfos.add(mediaInfo);
+                if (mMediaInfos.size() > 0) {
+                    context.startActivity(BGAPhotoPreviewActivity.newIntent(context, mMediaInfos, 0, false));
                 }
             }
         });

@@ -48,8 +48,8 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.media_authors_fragment, null);
-        recyclerView = (XRecyclerView) view.findViewById(R.id.media_author_rv);
+        view = inflater.inflate(R.layout.fragment_layout, null);
+        recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
         recyclerView.setPullRefreshEnabled(true);
         recyclerView.setLoadingMoreEnabled(true);
         recyclerView.setLoadingMoreProgressStyle(R.style.Small);

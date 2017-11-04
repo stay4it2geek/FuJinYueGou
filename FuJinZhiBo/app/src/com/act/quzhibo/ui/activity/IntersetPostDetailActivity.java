@@ -22,8 +22,7 @@ import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-
-import io.github.rockerhieu.emojicon.EmojiconEditText;
+import com.rockerhieu.emojicon.EmojiconEditText;
 
 
 public class IntersetPostDetailActivity extends AppCompatActivity {

@@ -35,7 +35,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_square_interest_paltes, null, false);
-        recyclerview = (XRecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerview = (XRecyclerView) view.findViewById(R.id.recyclerview);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         view.findViewById(R.id.nearby_extran_img).setOnClickListener(new View.OnClickListener() {
             @Override
