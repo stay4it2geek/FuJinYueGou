@@ -1,6 +1,5 @@
 package com.act.quzhibo.ui.activity;
 
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,7 +16,6 @@ import com.act.quzhibo.widget.TitleBarView;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-
 
 /**
  * 头像裁剪Activity

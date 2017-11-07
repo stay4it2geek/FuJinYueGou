@@ -12,10 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.util.Constants;
-import com.act.quzhibo.util.ToastUtil;
 import com.amap.api.maps2d.AMap;
-import com.amap.api.maps2d.AMap.OnCameraChangeListener;
 import com.amap.api.maps2d.AMap.OnMapLongClickListener;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
@@ -34,17 +31,16 @@ import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 
-
 public class GaoDeMapActivity extends Activity implements
         OnMapLongClickListener, AMap.InfoWindowAdapter, OnGeocodeSearchListener, AMap.OnMapLoadedListener {
-    private AMap aMap;
-    private MapView mapView;
-    private GeocodeSearch geocoderSearch;
-    private View infoWindow;
+    AMap aMap;
+    MapView mapView;
+    GeocodeSearch geocoderSearch;
+    View infoWindow;
     LatLng mLatLng;
-    private UiSettings mUiSettings;//定义一个UiSettings对象
-    private Marker marker;
-    private String formatAddress;
+    UiSettings mUiSettings;
+    Marker marker;
+    String formatAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +51,7 @@ public class GaoDeMapActivity extends Activity implements
         init();
     }
 
-    /**
-     * 初始化AMap对象
-     */
-    private void init() {
+    void init() {
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();
@@ -87,7 +80,7 @@ public class GaoDeMapActivity extends Activity implements
     /**
      * amap添加一些事件监听器
      */
-    private void setUpMap() {
+    void setUpMap() {
         aMap.setOnMapLoadedListener(this);// 对amap添加地图加载完事件监听器
         aMap.setOnMapLongClickListener(this);// 对amap添加长按地图事件监听器
         aMap.setInfoWindowAdapter(this);
@@ -96,7 +89,7 @@ public class GaoDeMapActivity extends Activity implements
         aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                mLatLng = new LatLng(location.getLatitude(),location.getLongitude());
+                mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 getLatlon(mLatLng);
             }
         });
@@ -123,7 +116,6 @@ public class GaoDeMapActivity extends Activity implements
         @Override
         public boolean onMarkerClick(Marker marker) {
             marker.showInfoWindow();
-
             return false;
         }
     };
@@ -164,7 +156,6 @@ public class GaoDeMapActivity extends Activity implements
         mapView.onDestroy();
     }
 
-
     @Override
     public void onMapLoaded() {
         LatLng latLng = new LatLng(getIntent().getDoubleExtra("lat", 0.0), getIntent().getDoubleExtra("lng", 0.0));
@@ -172,9 +163,6 @@ public class GaoDeMapActivity extends Activity implements
         getLatlon(latLng);
     }
 
-    /**
-     * 对长按地图事件回调
-     */
     @Override
     public void onMapLongClick(LatLng point) {
         mLatLng = point;
@@ -182,9 +170,8 @@ public class GaoDeMapActivity extends Activity implements
 
     }
 
-
     /**
-     * 响应地理编码
+     * 异步查询响应地理坐标
      */
     public void getLatlon(LatLng latLng) {
         LatLonPoint latLonPoint = new LatLonPoint(latLng.latitude, latLng.longitude);
@@ -193,14 +180,11 @@ public class GaoDeMapActivity extends Activity implements
         geocoderSearch.getFromLocationAsyn(query);
     }
 
-    /**
-     * 地理编码查询回调
-     */
+
     @Override
     public void onGeocodeSearched(GeocodeResult result, int rCode) {
 
     }
-
 
     /**
      * 逆地理编码回调
@@ -217,7 +201,6 @@ public class GaoDeMapActivity extends Activity implements
                 marker = aMap.addMarker(new MarkerOptions().position(mLatLng).snippet(formatAddress)
                         .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.location))));
                 marker.showInfoWindow();
-
             }
         }
     }

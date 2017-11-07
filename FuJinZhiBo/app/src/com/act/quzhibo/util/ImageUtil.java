@@ -19,4 +19,12 @@ public class ImageUtil {
                 .into(view);
     }
 
+    public static void loadBitmapImg(Context mContext, String uri, ImageView view, int placeholder) {
+        Glide.with(mContext)
+                .load(uri)
+                .placeholder(placeholder)
+                .crossFade()
+                .into(view);
+    }
+
 }

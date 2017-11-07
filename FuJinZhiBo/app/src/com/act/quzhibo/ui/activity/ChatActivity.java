@@ -25,7 +25,6 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,14 +34,12 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ChatAdapter;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.luban_compress.Luban;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.util.Util;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.TitleBarView;
 import com.amap.api.location.AMapLocation;
@@ -54,7 +51,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +58,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMImageMessage;
@@ -88,7 +85,6 @@ import static com.act.quzhibo.common.Constants.TAKE_PHOTO;
 import static com.act.quzhibo.common.Constants.TAKE_VIDEO;
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconGridFragment;
-import com.rockerhieu.emojicon.EmojiconTextView;
 import com.rockerhieu.emojicon.EmojiconsFragment;
 import com.rockerhieu.emojicon.emoji.Emojicon;
 /**
@@ -128,7 +124,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
     @Bind(R.id.layout_emo)
     LinearLayout layout_emo;
 
-    // 语音有关
     @Bind(R.id.layout_record)
     RelativeLayout layout_record;
     @Bind(R.id.tv_voice_tips)
@@ -154,7 +149,7 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
         BmobIMConversation conversationEntrance = (BmobIMConversation) getIntent().getSerializableExtra("c");
-        //TODO 消息：5.1、根据会话入口获取消息管理，聊天页面
+        //根据会话入口获取消息管理，聊天页面
         mConversationManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         String title = mConversationManager.getConversationTitle();
@@ -217,23 +212,14 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
 
     /**
      * 开始定位
-     *
-     * @author hongming.wang
-     * @since 2.8.0
      */
     private void startLocation() {
-        //根据控件的选择，重新设置定位参数
-        // 设置定位参数
         locationClient.setLocationOption(locationOption);
-        // 启动定位
         locationClient.startLocation();
     }
 
     /**
      * 停止定位
-     *
-     * @author hongming.wang
-     * @since 2.8.0
      */
     private void stopLocation() {
         // 停止定位
@@ -242,8 +228,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
 
     /**
      * 销毁定位
-     *
-     * @since 2.8.0
      */
     private void destroyLocation() {
         if (null != locationClient) {
@@ -310,9 +294,20 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
 
             @Override
             public boolean onItemLongClick(final int position, View view) {
-                //TODO 消息：5.3、删除指定聊天消息
-                mConversationManager.deleteMessage(mAdapter.getItem(position));
-                mAdapter.remove(position);
+                //删除指定聊天消息
+                FragmentDialog.newInstance(false, "是否删除该条消息？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                    @Override
+                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                        mConversationManager.deleteMessage(mAdapter.getItem(position));
+                        mAdapter.remove(position);
+                    }
+
+                    @Override
+                    public void onNegtiveClick(Dialog dialog) {
+                        dialog.dismiss();
+
+                    }
+                }).show(getSupportFragmentManager(), "");
                 return false;
             }
         });
@@ -358,9 +353,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
 
     /**
      * 初始化语音布局
-     *
-     * @param
-     * @return void
      */
     private void initVoiceView() {
         btn_speak.setOnTouchListener(new VoiceTouchListener());
@@ -370,10 +362,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
 
     /**
      * 初始化语音动画资源
-     *
-     * @param
-     * @return void
-     * @Title: initVoiceAnimRes
      */
     private void initVoiceAnimRes() {
         mDrawableAnims = new Drawable[]{
@@ -438,7 +426,7 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    if (!Util.checkSdCard()) {
+                    if (FileUtil.checkSdCard()) {
                         ToastUtil.showToast(ChatActivity.this, "发送语音需要sdcard支持！");
                         return false;
                     }
@@ -491,9 +479,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
 
     /**
      * 显示录音时间过短的Toast
-     *
-     * @return void
-     * @Title: showShortToast
      */
     private Toast showShortToast() {
         if (mShortToast == null) {
@@ -654,7 +639,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
             ToastUtil.showToast(ChatActivity.this, "请输入内容");
             return;
         }
-        //TODO 发送消息：6.1、发送文本消息
         BmobIMTextMessage msg = new BmobIMTextMessage();
         msg.setContent(text);
         mConversationManager.sendMessage(msg, listener);
@@ -664,7 +648,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
      * 发送本地图片文件
      */
     public void sendLocalImageMessage(String path) {
-        //TODO 发送消息：6.2、发送本地图片消息
         BmobIMImageMessage image = new BmobIMImageMessage(new File(path));
         mConversationManager.sendMessage(image, listener);
     }
@@ -675,7 +658,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
      */
     private void sendLocalVideoMessage(String path) {
         BmobIMVideoMessage video = new BmobIMVideoMessage(new File(path));
-        //TODO 发送消息：6.6、发送本地视频文件消息
         mConversationManager.sendMessage(video, listener);
     }
 
@@ -689,10 +671,7 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
      * @Title: sendVoiceMessage
      */
     private void sendVoiceMessage(String local, int length) {
-        //TODO 发送消息：6.5、发送本地音频文件消息
         BmobIMAudioMessage audio = new BmobIMAudioMessage(local);
-        //可设置额外信息-开发者设置的额外信息，需要开发者自己从extra中取出来
-        //设置语音文件时长：可选
         audio.setDuration(length);
         mConversationManager.sendMessage(audio, listener);
     }
@@ -750,7 +729,7 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
      * @param msg
      */
     public void queryMessages(BmobIMMessage msg) {
-        //TODO 消息：5.2、查询指定会话的消息记录
+        //查询指定会话的消息记录
         mConversationManager.queryMessages(msg, 10, new MessagesQueryListener() {
             @Override
             public void done(List<BmobIMMessage> list, BmobException e) {
@@ -846,8 +825,7 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
             mRecordManager.clear();
         }
         MyApplicaition.handler.isChatting = false;
-
-        //TODO 消息：5.4、更新此会话的所有消息为已读状态
+        //更新此会话的所有消息为已读状态
         if (mConversationManager != null) {
             mConversationManager.updateLocalCache();
         }
@@ -864,11 +842,6 @@ public class ChatActivity extends FragmentActivity implements EmojiconGridFragme
     }
 
 
-    /**
-     * 注册消息接收事件
-     *
-     * @param event
-     */
     //通知有在线消息接收
     @Subscribe
     public void onEventMain(final MessageEvent event) {

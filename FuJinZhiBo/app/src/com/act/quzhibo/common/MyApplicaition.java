@@ -31,7 +31,7 @@ public class MyApplicaition extends Application {
         super.onCreate();
         setInstance(this);
         handler= new MyMessageHandler(this);
-        //TODO 1.8、初始化IM SDK，并注册消息接收器，只有主进程运行的时候才需要初始化
+        //初始化IM SDK，并注册消息接收器，只有主进程运行的时候才需要初始化
         if (getApplicationInfo().packageName.equals(getMyProcessName())) {
             BmobIM.init(this);
             BmobIM.registerDefaultMessageHandler(handler);

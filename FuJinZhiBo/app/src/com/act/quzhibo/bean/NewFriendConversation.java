@@ -9,16 +9,11 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 import com.act.quzhibo.common.Config;
 import com.act.quzhibo.common.MyApplicaition;
-import com.act.quzhibo.chat.db.NewFriend;
-import com.act.quzhibo.chat.db.NewFriendManager;
+import com.act.quzhibo.chat.NewFriend;
+import com.act.quzhibo.chat.NewFriendManager;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
 import com.act.quzhibo.widget.FragmentDialog;
 
-
-/**
- * 新朋友会话
- * Created by Administrator on 2016/5/25.
- */
 public class NewFriendConversation extends Conversation {
 
     NewFriend lastFriend;

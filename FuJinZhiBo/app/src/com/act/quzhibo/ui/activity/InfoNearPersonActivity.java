@@ -136,7 +136,7 @@ public class InfoNearPersonActivity extends AppCompatActivity {
                 @Override
                 public void done(RootUser dbRootUser, BmobException e) {
                     if (dbRootUser != null) {
-                        info = new BmobIMUserInfo(dbRootUser.getObjectId(),dbRootUser.getUsername(), dbRootUser.photoFileUrl);
+                        info = new BmobIMUserInfo(dbRootUser.getObjectId(), dbRootUser.getUsername(), dbRootUser.photoFileUrl);
                     }
                 }
             });
@@ -166,11 +166,13 @@ public class InfoNearPersonActivity extends AppCompatActivity {
         if (vip < 1) {
             ((TextView) findViewById(R.id.level)).setText("非会员");
         } else if (vip >= 1 && vip < 5) {
-            ((TextView) findViewById(R.id.level)).setText("初级趣会员");
+            ((TextView) findViewById(R.id.level)).setText("白银会员");
         } else if (vip >= 5 && vip < 7) {
-            ((TextView) findViewById(R.id.level)).setText("中级趣会员");
-        } else if (vip >= 7) {
-            ((TextView) findViewById(R.id.level)).setText("超级趣会员");
+            ((TextView) findViewById(R.id.level)).setText("铂金会员");
+        } else if (vip >= 7 && vip < 9) {
+            ((TextView) findViewById(R.id.level)).setText("黄金会员");
+        } else if (vip >= 9) {
+            ((TextView) findViewById(R.id.level)).setText("钻石会员");
         }
 
         int minute;

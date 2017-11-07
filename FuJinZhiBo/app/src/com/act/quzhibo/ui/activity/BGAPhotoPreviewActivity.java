@@ -21,6 +21,7 @@ import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
+import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 
@@ -53,7 +54,6 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
     private BGAPhotoPageAdapter mAdapter;
     private boolean mIsHidden = false;
     private BGASavePhotoTask mSavePhotoTask;
-    private boolean isSdCardExist;
     private DownloadManager downloadManager;
     private DBController dbController;
     private ArrayList<MediaInfo> mediaInfos=new ArrayList<>();
@@ -82,7 +82,6 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
         mediaInfos = getIntent().getParcelableArrayListExtra(MEDIA_INFO_LIST);
         if (mediaInfos != null && mediaInfos.size() > 0) {
             downloadManager = DownloadService.getDownloadManager(getApplicationContext());
-            isSdCardExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
             try {
                 dbController = DBController.getInstance(this.getApplicationContext());
             } catch (SQLException e) {
@@ -209,8 +208,7 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
         String url = mediaInfo.getUrl();
         DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
 
-        if (isSdCardExist) {
-
+        if (FileUtil.checkSdCard()) {
             if (!mSaveImgDir.exists()) {
                 mSaveImgDir.mkdirs();
             }
@@ -333,7 +331,7 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
 
     private DownloadInfo createDownload(MediaInfo mediaInfo, String url) {
         DownloadInfo downloadInfo = null;
-        if (isSdCardExist) {
+        if (FileUtil.checkSdCard()) {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.PHOTO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();

@@ -14,8 +14,8 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.NewFriendAdapter;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
-import com.act.quzhibo.chat.db.NewFriend;
-import com.act.quzhibo.chat.db.NewFriendManager;
+import com.act.quzhibo.chat.NewFriend;
+import com.act.quzhibo.chat.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.TitleBarView;
@@ -24,7 +24,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.v3.BmobUser;
 
 

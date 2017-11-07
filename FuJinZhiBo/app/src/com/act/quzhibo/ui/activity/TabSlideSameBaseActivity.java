@@ -7,17 +7,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.event.ChangeEvent;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
-import com.act.quzhibo.util.ViewFindUtils;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.flyco.tablayout.SlidingTabLayout;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -27,7 +22,6 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
     protected BackHandledFragment mBackHandedFragment;
     ArrayList<Fragment> mFragments = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +29,6 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
         mFragments.addAll(getFragments());
         initUiView();
     }
-
 
     public abstract ArrayList<String> getTabTitles();
 
@@ -48,11 +41,10 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
         if (tabTitles == null) {
             return;
         }
-        View decorView = getWindow().getDecorView();
-        ViewPager pager = ViewFindUtils.find(decorView, R.id.viewpager);
+        ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
         mAdapter = new MyPagerAdapter(getSupportFragmentManager(), tabTitles.toArray(new String[tabTitles.size()]));
         pager.setAdapter(mAdapter);
-        final SlidingTabLayout tabLayout = ViewFindUtils.find(decorView, R.id.sListLayout);
+        final SlidingTabLayout tabLayout = (SlidingTabLayout) findViewById(R.id.sListLayout);
         tabLayout.setViewPager(pager, tabTitles.toArray(new String[tabTitles.size()]), this, mFragments);
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

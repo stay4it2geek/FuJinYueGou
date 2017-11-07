@@ -43,7 +43,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
         mOnItemClickListener = listener;
     }
 
-    public MyFocusPersonListAdapter(Context context, ArrayList<MyFocusCommonPerson> datas,int screenWidth) {
+    public MyFocusPersonListAdapter(Context context, ArrayList<MyFocusCommonPerson> datas, int screenWidth) {
         mContext = context;
         this.screenWidth = screenWidth;
         this.datas = datas;
@@ -58,23 +58,16 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-            holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 10), (screenWidth / 2) - 5));
-            holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
-            if (datas.get(position).sex.equals("2")) {
-                holder.sex.setText("女");
-                Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.women).error(R.drawable.error_img).into(holder.photoImg);
-            } else {
-                holder.sex.setText("男");
-                Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.man).error(R.drawable.error_img).into(holder.photoImg);
-
-            }
-        if(datas.get(position).userType.equals(Constants.INTEREST)){
+        holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 10), (screenWidth / 2) - 5));
+        holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
+        Glide.with(mContext).load(datas.get(position).photoUrl).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(holder.photoImg);
+        if (datas.get(position).userType.equals(Constants.INTEREST)) {
             holder.locaitonDistance.setText("距离你太远了");
-        }else{
-            holder.locaitonDistance.setText("距离你"+datas.get(position).distance+"千米");
+        } else {
+            holder.locaitonDistance.setText("距离你" + datas.get(position).distance + "千米");
         }
-        holder.introduce.setText(TextUtils.isEmpty(datas.get(position).introduce)?"":datas.get(position).introduce);
-        String nick = TextUtils.isEmpty(datas.get(position).username)?"":datas.get(position).username.replaceAll("\r|\n", "");
+        holder.introduce.setText(TextUtils.isEmpty(datas.get(position).introduce) ? "" : datas.get(position).introduce);
+        String nick = TextUtils.isEmpty(datas.get(position).username) ? "" : datas.get(position).username.replaceAll("\r|\n", "");
         holder.nickName.setText(nick);
 
         holder.commonLayout.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +90,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
     public int getItemCount() {
         return datas.size();
     }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView locaitonDistance;
         private RelativeLayout commonLayout;

@@ -94,7 +94,7 @@ public class PrivateConversation extends Conversation {
 
     @Override
     public int getUnReadCount() {
-        //TODO 会话：4.3、查询指定会话下的未读消息数
+        //查询指定会话下的未读消息数
         return (int) BmobIM.getInstance().getUnReadCount(conversation.getConversationId());
     }
 

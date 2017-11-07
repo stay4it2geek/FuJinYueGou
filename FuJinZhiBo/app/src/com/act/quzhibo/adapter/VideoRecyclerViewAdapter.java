@@ -11,17 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.act.quzhibo.widget.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
-import com.act.quzhibo.download.callback.OnVideoControllerListner;
-import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
+import com.act.quzhibo.download.callback.OnVideoControllerListner;
+import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.ui.activity.FullScreenActivity;
+import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
+import com.act.quzhibo.widget.MyStandardVideoController;
 import com.bumptech.glide.Glide;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 
@@ -39,7 +40,7 @@ import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
 
 public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecyclerViewAdapter.VideoHolder> {
 
-    boolean isSdCardExist;
+
     private DownloadManager downloadManager;
     DBController dbController;
     private List<MediaInfo> videos;
@@ -48,9 +49,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     public VideoRecyclerViewAdapter(List<MediaInfo> videos, FragmentActivity context) {
         this.videos = videos;
         this.context = context;
-
         downloadManager = DownloadService.getDownloadManager(context.getApplicationContext());
-        isSdCardExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);// 判断sdcard是否存在
         try {
             dbController = DBController.getInstance(context.getApplicationContext());
         } catch (SQLException e) {
@@ -72,7 +71,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         Glide.with(context)
                 .load(videoBean.getIcon())
                 .crossFade()
-                .placeholder(android.R.color.darker_gray)
+                .placeholder(R.drawable.video)
                 .error(R.drawable.error_img).into(holder.controller.getThumb());
         holder.ijkVideoView
                 .enableCache()
@@ -139,7 +138,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     private void downLoadVideo(MediaInfo videoBean) {
         String url = videoBean.getUrl() + "";
         DownloadInfo downloadInfo = downloadManager.getDownloadById(url.hashCode());
-        if (isSdCardExist) {
+        if (FileUtil.checkSdCard()) {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();
@@ -243,7 +242,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
     private DownloadInfo createDownload(MediaInfo mediaInfo, String url) {
         DownloadInfo downloadInfo = null;
-        if (isSdCardExist) {
+        if (FileUtil.checkSdCard()) {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();

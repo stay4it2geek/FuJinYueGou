@@ -3,9 +3,9 @@ package com.act.quzhibo.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -13,14 +13,14 @@ import android.widget.EditText;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.i.OnCheckInputListner;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.util.VerifyUitl;
 import com.act.quzhibo.widget.TitleBarView;
 
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import butterknife.Bind;
+import butterknife.OnClick;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -32,90 +32,53 @@ import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 import static android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
 
 
-public class ResetPasswordActivity extends AppCompatActivity {
+public class ResetPasswordActivity extends BaseActivity {
+    @Bind(R.id.et_newpsw)
     EditText et_newpsw;
+    @Bind(R.id.et_c_newpsw)
     EditText et_c_newpsw;
+    @Bind(R.id.et_sms_code)
     EditText et_sms_code;
-    private EditText et_userPhonenumber;
+    @Bind(R.id.et_userPhonenumber)
+    EditText et_userPhonenumber;
+    @Bind(R.id.titlebar)
     TitleBarView titlebar;
+    @Bind(R.id.getCode_btn)
     Button getCode_btn;
-    public int T = 20; //倒计时时长  
-    private Handler mHandler = new Handler();
-    
-    class MyCountDownTimer implements Runnable{
 
-        @Override
-        public void run() {
-
-            //倒计时开始，循环
-            while (T > 0) {
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        getCode_btn.setClickable(false);
-                        getCode_btn.setText(T + "秒后重新开始");
-                    }
-                });
-                try {
-                    Thread.sleep(1000); //强制线程休眠1秒，就是设置倒计时的间隔时间为1秒。
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                T--;
-            }
-
-            //倒计时结束，也就是循环结束
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    getCode_btn.setClickable(true);
-                    getCode_btn.setText("点击获取验证码");
-                }
-            });
-            T = 20; //最后再恢复倒计时时长
+    @OnClick({R.id.getCode_btn, R.id.btn_verify_resetPsw})
+    void buttonOnClick(View view) {
+        switch (view.getId()) {
+            case R.id.getCode_btn:
+                getCode();
+                break;
+            case R.id.btn_verify_resetPsw:
+                verifyAndResetPsw();
+                break;
         }
     }
+
+    int T = 20;
+    Handler mHandler = new Handler();
+    Animation shakeAnimation;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resetpassword);
         CommonUtil.fecth(ResetPasswordActivity.this);
-        et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
-
-        et_newpsw = (EditText) findViewById(R.id.et_newpsw);
-        et_c_newpsw = (EditText) findViewById(R.id.et_c_newpsw);
-        et_sms_code = (EditText) findViewById(R.id.et_sms_code);
-
-        titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setBarTitle(" 重 置 密 码");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResetPasswordActivity.this.finish();
+                finish();
             }
         });
-
         setEditext(R.id.isSetPswVisiNew, et_newpsw);
         setEditext(R.id.isSetPswVisiConfirm, et_c_newpsw);
+        shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake);
 
-
-        getCode_btn = (Button) findViewById(R.id.getCode_btn);
-
-        getCode_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                getCode();
-            }
-        });
-        findViewById(R.id.btn_verify_resetPsw).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyAndResetPsw();
-            }
-        });
     }
-
 
     private void setEditext(int viewId, final EditText editText) {
         editText.setSingleLine(true);
@@ -136,92 +99,111 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     private void resetPasswordBySMSCodeBtn() {
 
-        BmobUser.getCurrentUser(RootUser.class).resetPasswordBySMSCode(et_sms_code.getText().toString().trim(), et_c_newpsw.getText().toString(), new UpdateListener() {
-
+        VerifyUitl uitl = new VerifyUitl(this, new OnCheckInputListner() {
             @Override
-            public void done(BmobException ex) {
-                if (ex == null) {
-                    CommonUtil.fecth(ResetPasswordActivity.this);
-                    ToastUtil.showToast(ResetPasswordActivity.this, "密码重置成功");
-                    ResetPasswordActivity.this.finish();
-                } else {
-                    ToastUtil.showToast(ResetPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage() + ex.getErrorCode());
-
-                }
-
+            public void onCheckInputLisner(EditText editText) {
+                editText.startAnimation(shakeAnimation);
             }
         });
+        if (uitl.verifyInputTrue(et_c_newpsw, et_sms_code, null, null, null, null, null)) {
+            BmobUser.getCurrentUser(RootUser.class).resetPasswordBySMSCode(et_sms_code.getText().toString().trim(), et_c_newpsw.getText().toString(), new UpdateListener() {
 
+                @Override
+                public void done(BmobException ex) {
+                    if (ex == null) {
+                        CommonUtil.fecth(ResetPasswordActivity.this);
+                        ToastUtil.showToast(ResetPasswordActivity.this, "密码重置成功");
+                        ResetPasswordActivity.this.finish();
+                    } else {
+                        ToastUtil.showToast(ResetPasswordActivity.this, "密码重置失败：" + "原因是：" + ex.getLocalizedMessage() + ex.getErrorCode());
+
+                    }
+
+                }
+            });
+        }
     }
 
     private void getCode() {
-        if (TextUtils.isEmpty(et_newpsw.getText()) || et_newpsw.getText().toString().equals("新密码")) {
-            ToastUtil.showToast(this, "请输入新密码");
-            return;
-        }
 
-        if (TextUtils.isEmpty(et_c_newpsw.getText()) || et_c_newpsw.getText().toString().equals("确认密码")) {
-            ToastUtil.showToast(this, "请确认新密码");
-            return;
-        }
-
-        if (et_userPhonenumber.getText().toString().equals("手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
-            ToastUtil.showToast(this, "请输入正确位数的手机号码");
-            return;
-        } else {
-            String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(et_userPhonenumber.getText().toString());
-            if (!m.find()) {
-                ToastUtil.showToast(this, "请输入国内通用的手机号码");
-                return;
+        VerifyUitl uitl = new VerifyUitl(this, new OnCheckInputListner() {
+            @Override
+            public void onCheckInputLisner(EditText editText) {
+                editText.startAnimation(shakeAnimation);
             }
+        });
+        if (uitl.verifyInputTrue(null, null, null, null, null, et_userPhonenumber, null)) {
+            new Thread(new MyCountDownTimer()).start();//开始执行
 
-        }
-        if (!et_userPhonenumber.getText().toString().equals(BmobUser.getCurrentUser(RootUser.class).getMobilePhoneNumber())) {
-            ToastUtil.showToast(this, "旧手机号不匹配");
-            return;
-        }
+            BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
+                    "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>() {
 
-        new Thread(new MyCountDownTimer()).start();//开始执行
+                        @Override
+                        public void done(Integer o, BmobException e) {
+                            if (e == null) {
+                                ToastUtil.showToast(ResetPasswordActivity.this, "短信验证码已经发送,序列号是：" + o);
+                            } else {
+                                ToastUtil.showToast(ResetPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage());
 
-        BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
-                "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>() {
-
-                    @Override
-                    public void done(Integer o, BmobException e) {
-                        if (e == null) {
-                            ToastUtil.showToast(ResetPasswordActivity.this, "短信验证码已经发送,序列号是：" + o);
-                        } else {
-                            ToastUtil.showToast(ResetPasswordActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage());
-
+                            }
                         }
-                    }
-                });
-
+                    });
+        }
     }
 
     private void verifyAndResetPsw() {
 
-        if (TextUtils.isEmpty(et_sms_code.getText()) || et_sms_code.getText().toString().equals("请输入短信验证码")) {
-            ToastUtil.showToast(this, "请输入短信验证码");
-            return;
-        }
-
-        BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString(), new UpdateListener() {
+        VerifyUitl uitl = new VerifyUitl(this, new OnCheckInputListner() {
             @Override
-            public void done(BmobException e) {
-                if (e == null) {
-                    ToastUtil.showToast(ResetPasswordActivity.this, "验证成功，正在重置密码");
-                    resetPasswordBySMSCodeBtn();
-                } else {
-                    ToastUtil.showToast(ResetPasswordActivity.this, "验证失败，原因是：" + e.getLocalizedMessage());
-
-                }
+            public void onCheckInputLisner(EditText editText) {
+                editText.startAnimation(shakeAnimation);
             }
         });
+        if (uitl.verifyInputTrue(et_c_newpsw, et_sms_code, et_newpsw, null, null, et_userPhonenumber, null)) {
+            BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString(), new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                    if (e == null) {
+                        ToastUtil.showToast(ResetPasswordActivity.this, "验证成功，正在重置密码");
+                        resetPasswordBySMSCodeBtn();
+                    } else {
+                        ToastUtil.showToast(ResetPasswordActivity.this, "验证失败");
+                    }
+                }
+            });
+        }
+    }
 
 
+    private class MyCountDownTimer implements Runnable {
+        @Override
+        public void run() {
+            //倒计时开始，循环
+            while (T > 0) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        getCode_btn.setClickable(false);
+                        getCode_btn.setText(T + "秒后重新开始");
+                    }
+                });
+                try {
+                    Thread.sleep(1000); //强制线程休眠1秒，就是设置倒计时的间隔时间为1秒。
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                T--;
+            }
+            //倒计时结束，也就是循环结束
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    getCode_btn.setClickable(true);
+                    getCode_btn.setText("点击获取验证码");
+                }
+            });
+            T = 20; //最后再恢复倒计时时长
+        }
     }
 
 

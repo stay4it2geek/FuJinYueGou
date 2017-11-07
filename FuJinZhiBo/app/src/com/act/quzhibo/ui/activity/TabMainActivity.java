@@ -15,7 +15,6 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.TabEntity;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ViewFindUtils;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -90,8 +89,7 @@ public class TabMainActivity extends TabActivity {
                 mTabEntities.add(new TabEntity(mTitlesSpecial[i], mIconSelectIdsSpecial[i], mIconUnselectIdsSpecial[i]));
             }
         }
-        mDecorView = getWindow().getDecorView();
-        mTabLayout = ViewFindUtils.find(mDecorView, R.id.tabMain);
+        mTabLayout = (CommonTabLayout) findViewById(R.id.tabMain);
         mTabLayout.setTabData(mTabEntities);
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override

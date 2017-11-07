@@ -58,13 +58,7 @@ public class NearPersonAdapter extends RecyclerView.Adapter<NearPersonAdapter.My
             }
         });
         holder.arealocation.setText("距离你" + user.distance + "千米");
-//        if (user.user != null) {
-//            if (user.user.sex.equals("2")) {
-                Glide.with(activity).load(user.absCoverPic).placeholder(R.drawable.women).error(R.drawable.error_img).into(holder.photoImg);
-//            } else {
-//                Glide.with(activity).load(user.absCoverPic).placeholder(R.drawable.man).error(R.drawable.error_img).into(holder.photoImg);
-//            }
-//        }
+        Glide.with(activity).load(user.absCoverPic).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(holder.photoImg);
     }
 
 

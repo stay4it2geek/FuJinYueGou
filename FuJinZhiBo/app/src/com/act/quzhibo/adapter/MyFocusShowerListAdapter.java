@@ -58,11 +58,7 @@ public class MyFocusShowerListAdapter extends RecyclerView.Adapter<MyFocusShower
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
             holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 10), (screenWidth / 2) - 5));
         holder.photoImg.setScaleType(ImageView.ScaleType.FIT_XY);
-            if (datas.get(position).gender.equals("0")) {
-                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.women).error(R.drawable.error_img).into(holder.photoImg);
-            } else {
-                Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.man).error(R.drawable.error_img).into(holder.photoImg);
-            }
+        Glide.with(mContext).load(datas.get(position).portrait_path_1280).placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(holder.photoImg);
         String nick = TextUtils.isEmpty(datas.get(position).nickname)?"":datas.get(position).nickname.replaceAll("\r|\n", "");
         holder.nickName.setText(nick);
         holder.commonLayout.setOnClickListener(new View.OnClickListener() {

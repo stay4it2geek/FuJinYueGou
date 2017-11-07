@@ -71,8 +71,7 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
     @Override
     public void onBindViewHolder(final Item1ViewHolder holder, final int positon) {
 
-        if (BmobUser.getCurrentUser(RootUser.class).sex.equals("女")) {
-            Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+            Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.placehoder_img).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     holder.userImage.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -85,22 +84,6 @@ public class MyPostDetailAdapter extends RecyclerView.Adapter<MyPostDetailAdapte
 
                 }
             });
-        } else {
-            Glide.with(activity).load(BmobUser.getCurrentUser(RootUser.class).photoFileUrl + "").asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    holder.userImage.setBackgroundDrawable(new BitmapDrawable(resource));
-                }
-
-                @Override
-                public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                    super.onLoadFailed(e, errorDrawable);
-                    holder.userImage.setBackgroundDrawable(errorDrawable);
-                }
-
-            });
-        }
-
         holder.sexAndAge.setText(BmobUser.getCurrentUser(RootUser.class).sex);
         long l = System.currentTimeMillis() - Long.parseLong(CommonUtil.dateToStamp(post.getCreatedAt()));
         long day = l / (24 * 60 * 60 * 1000);

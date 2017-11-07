@@ -3,6 +3,18 @@ package com.act.quzhibo.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.act.quzhibo.im.holder.AgreeHolder;
+import com.act.quzhibo.im.holder.BaseViewHolder;
+import com.act.quzhibo.im.holder.ReceiveImageHolder;
+import com.act.quzhibo.im.holder.ReceiveLocationHolder;
+import com.act.quzhibo.im.holder.ReceiveTextHolder;
+import com.act.quzhibo.im.holder.ReceiveVideoHolder;
+import com.act.quzhibo.im.holder.ReceiveVoiceHolder;
+import com.act.quzhibo.im.holder.SendImageHolder;
+import com.act.quzhibo.im.holder.SendLocationHolder;
+import com.act.quzhibo.im.holder.SendTextHolder;
+import com.act.quzhibo.im.holder.SendVideoHolder;
+import com.act.quzhibo.im.holder.SendVoiceHolder;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 
 import java.util.ArrayList;

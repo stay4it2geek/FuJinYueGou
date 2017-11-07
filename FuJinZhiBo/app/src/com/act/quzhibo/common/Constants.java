@@ -33,7 +33,6 @@ public class Constants {
     public static final int LOAD = 14;
     public static final int RELOAD = 15;
     public static final int BUY_VIP = 16;
-    public static final int REQUEST_SETTING = 17;
     public static final int NO_DOWNING_DATA = 21;
     public static final int NO_DATA = 22;
 
@@ -51,7 +50,6 @@ public class Constants {
     public static final String COURSE_CATOGERY_INFO = "courseCategoryInfo";
     public static final String MONEY_CATOGERY_INFO = "moneyCategoryInfo";
 
-    public static final String MONEY_GROUP="moneygroup";
     public static final String NEAR_USER_VIDEO = "1";
 
     public static final boolean SEE_ME_FLAG = true;

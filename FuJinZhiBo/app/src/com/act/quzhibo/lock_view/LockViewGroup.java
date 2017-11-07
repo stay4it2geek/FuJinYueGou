@@ -1,6 +1,5 @@
 package com.act.quzhibo.lock_view;
 
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -8,7 +7,6 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
@@ -20,84 +18,57 @@ import java.util.List;
  * 多个view的排列
  */
 public class LockViewGroup extends RelativeLayout {
-    //需求: 绘制时:实时显示箭头, 绘制完成后隐藏;
-    // 如果绘制完成后错误, 就用红色显示轨迹
-    /**
-     * 修改界面需要的自定义参数:
-     * mCount 行列个数
-     * mMarginRate  间距与大小的比例关系
-     * mStrokeWidthRate  画笔宽度与大小的比例关系
-     * 连接线的颜色
-     * mFingerOnColor-选中状态, mErrorColor-错误状态
-     */
-
-    private static final String TAG = "LockViewGroup";
 
     private Paint mPathPaint;   //画笔
     private Path mPath;     //路径
-
     private int mCount = 3;   // 每个边上的 LockView 的个数
-
     // 保存所有的 LockView
     private LockView[] mLockViews;  //总个数 = mCount * mCount
     // 保存用户选中的 LockView 的id
     private List<Integer> mChoose = new ArrayList<Integer>();
-
     // 宽度, 高度  (LockViewGroup 的大小)
     private int mWidth, mHeight;
-
     // 宽度, 高度  (子view--LockView 的大小)
     private int mLockViewWidth;
     // 间距 (子view--LockView 的间距)
     private int mLockViewMargin;
     // 间距与宽度的比例 (mLockViewMargin = mLockViewWidth * mLockMarginRate)
     private float mMarginRate = 0.6f;
-
     // 画笔宽度 = mLockViewWidth * mStrokeWidthRate
     private float mStrokeWidth;
     // 画笔宽度与LockView大小的比例
     private float mStrokeWidthRate = 0.02f;
-
-
     // 连接线的颜色
     private int mFingerOnColor = 0xFF2177C7;// 选中状态
     private int mErrorColor = 0xFFFF0000;// 错误状态
-
-
+    boolean isDrawing;   //down-true, up-false
     // 指引线的开始位置 x
     private int mLastPathX;
     // 指引线的开始位置 y
     private int mLastPathY;
     // 指引线的结束位置
     private Point mTmpTarget = new Point();
-
     //第一次绘制时 存储答案
     private int[] mFirstAnswer = null;
-
     // 最大尝试次数
     private int mTryTimes = 4;
-
     // 回调接口
     private OnLockListener mLockListener;
-
-    // 自定义参数设置
-    private LockViewConfig mConfig;
 
     // 构造
     public LockViewGroup(Context context) {
         super(context);
-        init(context);   //初始化
+        init(context);
     }
 
     public LockViewGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context);   //初始化
+        init(context);
     }
 
     public LockViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        // init(context, attrs, defStyleAttr); //初始化自定义属性 (可以自己扩展)
-        init(context);   //初始化
+        init(context);
     }
 
     /**
@@ -109,10 +80,6 @@ public class LockViewGroup extends RelativeLayout {
         // 1.1 初始化画笔
         mPathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPathPaint.setStyle(Paint.Style.STROKE);
-        // 设置 画笔宽度 --- 后面根据 LockView 大小和比例计算设置
-        // mPaint.setStrokeWidth(mStrokeWidth);
-        // 设置画笔颜色 --- 后面根据 LockView 状态设置不同颜色
-        // mPaint.setColor(Color.parseColor("#aaffffff"));
         mPathPaint.setStrokeCap(Paint.Cap.ROUND);
         mPathPaint.setStrokeJoin(Paint.Join.ROUND);
 
@@ -137,8 +104,6 @@ public class LockViewGroup extends RelativeLayout {
         if (mLockViews == null) {
             initmLockViews();
         }
-
-        Log.e(TAG, "onMeasure---mWidth = " + mWidth);
     }
 
     // 3. 初始化 mLockViews 及其子view
@@ -158,18 +123,14 @@ public class LockViewGroup extends RelativeLayout {
         mStrokeWidth = mLockViewWidth * mStrokeWidthRate;
         mStrokeWidth = mStrokeWidth < 2 ? 2 : mStrokeWidth;//最小值2
         mPathPaint.setStrokeWidth(mStrokeWidth);
-
-
         // 3.4 初始化每一个 LockView, 并设置其相应的界面位置
         for (int i = 0; i < mLockViews.length; i++) {
             // 初始化每个 LockView --- //参数2 设置自定义样式的config
-            mLockViews[i] = new LockView(getContext(), mConfig);
+            mLockViews[i] = new LockView(getContext());
             // 设置ID
             mLockViews[i].setId(i + 1); // 1到 mCount * mCount
-
             // 设置参数，主要是定位 LockView 间的位置
             LayoutParams params = new LayoutParams(mLockViewWidth, mLockViewWidth);
-
             // 不是每行的第一个，则设置位置为前一个的右边
             if (i % mCount != 0) {
                 params.addRule(RelativeLayout.RIGHT_OF, mLockViews[i - 1].getId());
@@ -191,16 +152,9 @@ public class LockViewGroup extends RelativeLayout {
 
             if (i % mCount == 0)// 第一列
                 leftMagin = mLockViewMargin;
-
             params.setMargins(leftMagin, topMargin, rightMargin, bottomMargin);
-
-//            mLockViews[i].setMode(LockView.Status.STATUS_NORMAL); //减少重绘
             addView(mLockViews[i], params);
         }
-
-        Log.e(TAG, "mLockViewWidth=" + mLockViewWidth
-                + ",mLockViewMargin=" + mLockViewMargin
-                + ",mStrokeWidth=" + mStrokeWidth);
     }
 
 
@@ -227,8 +181,6 @@ public class LockViewGroup extends RelativeLayout {
         return super.dispatchTouchEvent(ev);
     }
 
-
-    boolean isDrawing;   //down-true, up-false
 
     /**
      * 4. 处理手势触摸事件
@@ -482,10 +434,7 @@ public class LockViewGroup extends RelativeLayout {
     }
 
 
-    ///////*********************************************************//////
-    ///////******************** 对外部公开调用的方法 *****************//////
-    ///////*********************************************************//////
-
+    //对外部公开调用的方法
 
     /**
      * 开启震动
@@ -539,15 +488,6 @@ public class LockViewGroup extends RelativeLayout {
      */
     public void setMaxTryTimes(int tryTimes) {
         this.mTryTimes = tryTimes;
-    }
-
-    /**
-     * 外部---设置自定义参数
-     *
-     * @param config
-     */
-    public void setConfig(LockViewConfig config) {
-        this.mConfig = config;
     }
 
     /**

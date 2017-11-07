@@ -9,10 +9,10 @@ import com.act.quzhibo.adapter.base.BaseRecyclerHolder;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.AgreeAddFriendMessage;
 import com.act.quzhibo.common.Config;
-import com.act.quzhibo.chat.db.NewFriend;
-import com.act.quzhibo.chat.db.NewFriendManager;
+import com.act.quzhibo.chat.NewFriend;
+import com.act.quzhibo.chat.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.model.UserModel;
+import com.act.quzhibo.im.UserDao;
 import com.act.quzhibo.util.ToastUtil;
 
 import java.util.Collection;
@@ -80,7 +80,7 @@ public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
     private void agreeAdd(final NewFriend add, final SaveListener<Object> listener) {
         RootUser user = new RootUser();
         user.setObjectId(add.getUid());
-        UserModel.getInstance()
+        UserDao.getInstance()
                 .agreeAddFriend(user, new SaveListener<String>() {
                     @Override
                     public void done(String s, BmobException e) {

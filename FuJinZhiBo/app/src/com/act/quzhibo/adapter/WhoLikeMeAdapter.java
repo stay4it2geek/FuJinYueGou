@@ -99,9 +99,8 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         } else {
             photoUrl = user.headUrl;
         }
-//        if (user.user != null) {
-//            if (user.user.sex.equals("2")) {
-        Glide.with(activity).load(photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+
+        Glide.with(activity).load(photoUrl).asBitmap().placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                 holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -113,21 +112,6 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
                 holder.photoImg.setBackgroundDrawable(placeholder);
             }
         });
-//            } else {
-//                Glide.with(activity).load(photoUrl).asBitmap().placeholder(R.drawable.man).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-//                        holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-//                    }
-//
-//                    @Override
-//                    public void onLoadStarted(Drawable placeholder) {
-//                        super.onLoadStarted(placeholder);
-//                        holder.photoImg.setBackgroundDrawable(placeholder);
-//                    }
-//                });
-//            }
-//        }
     }
 
     @Override

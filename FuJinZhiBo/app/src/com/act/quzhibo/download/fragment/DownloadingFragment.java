@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.fragment.BaseFragment;
-import com.act.quzhibo.download.adapter.DownloadingAdapter;
+import com.act.quzhibo.download.adapter.DownloadingAdapterDowload;
 import com.act.quzhibo.download.callback.OnDeleteListner;
 import com.act.quzhibo.download.db.DBController;
 import com.act.quzhibo.download.bean.MediaInfoLocal;
@@ -34,7 +34,7 @@ import cn.woblog.android.downloader.domain.DownloadInfo;
 public class DownloadingFragment extends BaseFragment {
 
     private RecyclerView recycler_view;
-    private DownloadingAdapter downloadingAdapter;
+    private DownloadingAdapterDowload downloadingAdapter;
     private DownloadManager downloadManager;
     private List<DownloadInfo> uiDownLoadInfos = new ArrayList<>();
     private LoadNetView loadNetView;
@@ -63,7 +63,7 @@ public class DownloadingFragment extends BaseFragment {
         super.initData();
         EventBus.getDefault().register(this);
         downloadManager = DownloadService.getDownloadManager(getActivity().getApplicationContext());
-        downloadingAdapter = new DownloadingAdapter(getActivity());
+        downloadingAdapter = new DownloadingAdapterDowload(getActivity());
         recycler_view.setAdapter(downloadingAdapter);
         setData();
     }

@@ -2,7 +2,7 @@ package com.act.quzhibo.chat.db.dao;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.act.quzhibo.chat.db.NewFriend;
+import com.act.quzhibo.chat.NewFriend;
 
 import java.util.Map;
 

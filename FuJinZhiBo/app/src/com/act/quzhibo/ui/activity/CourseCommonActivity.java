@@ -15,10 +15,8 @@ import com.act.quzhibo.widget.SelfDialog;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-
 @SuppressWarnings("deprecation")
 public class CourseCommonActivity extends TabActivity {
-
 
     private TabHost tabHost;
 

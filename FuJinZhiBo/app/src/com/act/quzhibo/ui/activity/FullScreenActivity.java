@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import com.act.quzhibo.util.FileUtil;
 import com.act.quzhibo.widget.MyFullScreenController;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
@@ -30,15 +31,13 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 
 import static cn.woblog.android.downloader.domain.DownloadInfo.STATUS_WAIT;
 
-
 public class FullScreenActivity extends ActivityManagePermission {
 
-    private IjkVideoView ijkVideoView;
-    boolean isSdCardExist;
-    private DownloadManager downloadManager;
+    IjkVideoView ijkVideoView;
+    DownloadManager downloadManager;
     DBController dbController;
     MediaInfo mediaInfo;
-    private DownloadInfo downloadInfo;
+    DownloadInfo downloadInfo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,14 +46,11 @@ public class FullScreenActivity extends ActivityManagePermission {
         ijkVideoView = new IjkVideoView(this);
         setContentView(ijkVideoView);
         downloadManager = DownloadService.getDownloadManager(this.getApplicationContext());
-        isSdCardExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);// 判断sdcard是否存在
         try {
             dbController = DBController.getInstance(this.getApplicationContext());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         mediaInfo = getIntent().getParcelableExtra("videoBean");
         MediaInfoLocal myBusinessInfLocal = new MediaInfoLocal(
                 mediaInfo.getUrl().hashCode(), mediaInfo.getName(), mediaInfo.getIcon(), mediaInfo.getUrl(), mediaInfo.getType(), mediaInfo.getTitle(), mediaInfo.getLocalPath());
@@ -62,15 +58,15 @@ public class FullScreenActivity extends ActivityManagePermission {
             ToastUtil.showToast(this, "视频地址未找到，无法播放");
             return;
         }
-        MyFullScreenController myFullScreenController = new MyFullScreenController(this);
-        myFullScreenController.setIslocal(getIntent().getBooleanExtra("isLocal", false));
-        myFullScreenController.setOnVideoControllerListner(new OnVideoControllerListner() {
+        MyFullScreenController controller = new MyFullScreenController(this);
+        controller.setIslocal(getIntent().getBooleanExtra("isLocal", false));
+        controller.setOnVideoControllerListner(new OnVideoControllerListner() {
             @Override
             public void onMyVideoController(String controllerFlg) {
                 if (downloadManager.findAllDownloading().size() > 10) {
                     ToastUtil.showToast(FullScreenActivity.this, "下载任务最多10个,请稍后下载");
                     if (downloadManager.findAllDownloaded().size() > 20) {
-                        FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧","","", "确定", "取消","",false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, "已下载任务最多20个，请清除掉一些吧", "", "", "确定", "取消", "", false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(Dialog dialog, boolean needDelete) {
                                 Intent videoIntent = new Intent();
@@ -97,14 +93,14 @@ public class FullScreenActivity extends ActivityManagePermission {
                 .enableCache()
                 .setTitle(myBusinessInfLocal.getTitle())
                 .setUrl(mediaInfo.getUrl())
-                .setVideoController(myFullScreenController)
+                .setVideoController(controller)
                 .setScreenScale(IjkVideoView.SCREEN_SCALE_16_9)
                 .start();
     }
 
-    private void downLoadVideo() {
+    void downLoadVideo() {
         downloadInfo = downloadManager.getDownloadById((mediaInfo.getUrl() + "").hashCode());
-        if (isSdCardExist) {
+        if (FileUtil.checkSdCard()) {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();
@@ -132,7 +128,7 @@ public class FullScreenActivity extends ActivityManagePermission {
                     ToastUtil.showToast(FullScreenActivity.this, "您已经保存过该视频");
                 }
             } else {
-                FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "继续观看", "确认下载","","",false, new FragmentDialog.OnClickBottomListener() {
+                FragmentDialog.newInstance(false, "您是否要下载到本地？", "提示:缓冲完成后可离线观看无需下载", "继续观看", "确认下载", "", "", false, new FragmentDialog.OnClickBottomListener() {
                     @Override
                     public void onPositiveClick(Dialog dialog, boolean needDelete) {
                         dialog.dismiss();
@@ -147,7 +143,6 @@ public class FullScreenActivity extends ActivityManagePermission {
             }
         }
     }
-
 
     class MyDownloadListener implements DownloadListener {
 
@@ -188,12 +183,11 @@ public class FullScreenActivity extends ActivityManagePermission {
         @Override
         public void onDownloadFailed(DownloadException e) {
             ToastUtil.showToast(FullScreenActivity.this, "保存失败，原因是：" + e.getMessage());
-
         }
     }
 
-    private DownloadInfo createDownload(MediaInfo mediaInfo) {
-        if (isSdCardExist) {
+    DownloadInfo createDownload(MediaInfo mediaInfo) {
+        if (FileUtil.checkSdCard()) {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), Constants.VIDEO_DOWNLOAD);
             if (!file.exists()) {
                 file.mkdirs();

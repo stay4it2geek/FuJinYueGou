@@ -5,84 +5,122 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.CardBean;
-import com.act.quzhibo.bean.JsonBean;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ToastUtil;
-import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.lock_view.LockIndicatorView;
 import com.act.quzhibo.lock_view.LockViewGroup;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.FileUtil;
+import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.TitleBarView;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class SettingMineInfoActivity extends FragmentActivity {
-    private OptionsPickerView ageOptions;
-    private OptionsPickerView sexOptions;
+public class SettingMineInfoActivity extends BaseActivity {
 
-    private ArrayList<CardBean> ageItems = new ArrayList<>();
-    private TextView age_txt;
-    private TextView sex_txt;
+    OptionsPickerView ageOptions;
+    OptionsPickerView sexOptions;
+    RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
+    RootUser updateUser = new RootUser();
+    ArrayList<CardBean> ageItems = new ArrayList<>();
+    ArrayList<CardBean> sexItems = new ArrayList<>();
+    ArrayList<CardBean> candateThingiItems = new ArrayList<>();
+    ArrayList<CardBean> datingThoughtItems = new ArrayList<>();
+    ArrayList<CardBean> disPurposeItems = new ArrayList<>();
 
-    private RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
-    private RootUser updateUser = new RootUser();
+    OptionsPickerView datingThoughtOptions;
+    OptionsPickerView disPurposeOption;
+    OptionsPickerView candateThingOptions;
 
-    private TextView openSecret_txt;
-    private Switch openSecret_switch;
-    private TextView arealocation_txt;
+    @Bind(R.id.sex_rl)
+    RelativeLayout sex_rl;
+    @Bind(R.id.backbuttonLayout)
+    RelativeLayout backbuttonLayout;
+    @Bind(R.id.next)
+    TextView nextButton;
+    @Bind(R.id.age_txt)
+    TextView age_txt;
+    @Bind(R.id.openSecret_switch)
+    Switch openSecret_switch;
+    @Bind(R.id.openSecret_txt)
+    TextView openSecret_txt;
+    @Bind(R.id.sex_txt)
+    TextView sex_txt;
+    @Bind(R.id.disPurpose_txt)
+    TextView disPurpose_txt;
+    @Bind(R.id.datingThought_txt)
+    TextView datingThought_txt;
+    @Bind(R.id.candateThing_txt)
+    TextView candateThing_txt;
+    @Bind(R.id.arealocation_txt)
+    TextView arealocation_txt;
+    @Bind(R.id.secret_view)
+    LinearLayout secretView;
+    @Bind(R.id.indicator)
+    LockIndicatorView mLockIndicator;
+    @Bind(R.id.tv_tips)
+    TextView mTvTips;
+    @Bind(R.id.lockgroup)
+    LockViewGroup mLockViewGroup;
+    @Bind(R.id.titlebar)
+    TitleBarView titlebar;
+    AMapLocationClient locationClient;
+    AMapLocationClientOption locationOption = new AMapLocationClientOption();
+    AMapLocation amlocation;
 
-    private ArrayList<CardBean> sexItems = new ArrayList<>();
-    private ArrayList<JsonBean> options1Items = new ArrayList<>();
-    private ArrayList<CardBean> candateThingiItems = new ArrayList<>();
-    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
-    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
-    private ArrayList<CardBean> datingThoughtItems = new ArrayList<>();
-    private ArrayList<CardBean> disPurposeItems = new ArrayList<>();
-    private Thread thread;
-    private static final int MSG_LOAD_DATA = 0x0001;
-    private static final int MSG_LOAD_SUCCESS = 0x0002;
-    private static final int MSG_LOAD_FAILED = 0x0003;
-    private boolean isLoaded = false;
 
-    private OptionsPickerView datingThoughtOptions;
-    private OptionsPickerView disPurposeOption;
-    private TextView disPurpose_txt;
-    private TextView datingThought_txt;
-    private TextView candateThing_txt;
-    private OptionsPickerView candateThingOptions;
-
-    private LockIndicatorView mLockIndicator;
-    private LockViewGroup mLockViewGroup;
-    private TextView mTvTips;
-    private LinearLayout secretView;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setting_mine_info);
+        titlebar.setBarTitle("资 料 设 置");
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        getSexData();
+        getAgeData();
+        getDatingThoughtData();
+        getDisPurposeData();
+        getCanDatingThingData();
+        initSexOptionPicker();
+        initAgeOptionPicker();
+        initCanDatingThingOptionPicker();
+        initDatingThoughtOptionPicker();
+        initDisPurposeOptionPicker();
+        initLockLogic();
+        initLocation();
+    }
 
     @Override
     protected void onResume() {
@@ -94,106 +132,61 @@ public class SettingMineInfoActivity extends FragmentActivity {
             sex_txt.setText(TextUtils.isEmpty(rootUser.sex) ? "您的性别未设置" : "您的性别是" + rootUser.sex + "性");
             if (!TextUtils.isEmpty(rootUser.sex)) {
                 sex_txt.setTextColor(Color.LTGRAY);
-                findViewById(R.id.sex_rl).setVisibility(View.GONE);
+                sex_rl.setVisibility(View.GONE);
             }
             openSecret_txt.setText(rootUser.secretScan ? "私密访问已开启" : "私密访问未开启");
-            arealocation_txt.setText(TextUtils.isEmpty(rootUser.provinceAndcity) ? "省市区未设置" : "您的地区是" + rootUser.provinceAndcity);
             age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "您的年龄是" + rootUser.age + "岁");
             disPurpose_txt.setText(TextUtils.isEmpty(rootUser.disPurpose) ? "情感状态未设置" : "您现在是" + rootUser.disPurpose);
             datingThought_txt.setText(TextUtils.isEmpty(rootUser.datingthought) ? "交友想法未设置" : "您想要" + rootUser.datingthought);
             candateThing_txt.setText(TextUtils.isEmpty(rootUser.canDateThing) ? "是否可约未设置" : "您可以" + rootUser.canDateThing);
-
             if (!rootUser.hasSetting) {
-                findViewById(R.id.backbuttonLayout).setVisibility(View.GONE);
-                findViewById(R.id.next).setVisibility(View.VISIBLE);
-                findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+                backbuttonLayout.setVisibility(View.GONE);
+                nextButton.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
+    @OnCheckedChanged(R.id.openSecret_switch)
+    void onCheckedChanged(boolean isChecked) {
+        if (rootUser != null) {
+            mLockIndicator.setAnswer(new int[]{});
+            if (isChecked) {
+                if (!rootUser.secretScan) {
+                    mLockViewGroup.setAnswer(null);
+                    secretView.setVisibility(View.VISIBLE);
+                    secretView.setAnimation(AnimationUtils.makeInAnimation(SettingMineInfoActivity.this, true));
+                }
+            } else {
+                if (secretView.getVisibility() == View.VISIBLE) {
+                    secretView.setVisibility(View.INVISIBLE);
+                    secretView.setAnimation(AnimationUtils.makeOutAnimation(SettingMineInfoActivity.this, true));
+                }
+                updateUser.secretScan = false;
+                updateUser.secretPassword = "";
+                updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                     @Override
-                    public void onClick(View v) {
-                        if (sex_txt.getText().toString().contains("未设置")) {
-                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置性别才能查看更多画面哦，老司机才懂的！");
-                        } else if (
-                                arealocation_txt.getText().toString().contains("未设置")) {
-                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置地区才能查看更多画面哦，老司机才懂的！");
-                        } else if (
-                                age_txt.getText().toString().contains("未设置")) {
-                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置年龄才能查看更多画面哦，老司机才懂的！");
-                        } else if (
-                                disPurpose_txt.getText().toString().contains("未设置")) {
-                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置情感状态才能查看更多画面哦，老司机才懂的！");
-                        } else if (
-                                datingThought_txt.getText().toString().contains("未设置")) {
-                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置交友想法才能查看更多画面哦，老司机才懂的！");
-                        } else if (
-                                candateThing_txt.getText().toString().contains("未设置")) {
-                            ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置是否可约才能查看更多画面哦，老司机才懂的！");
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            CommonUtil.fecth(SettingMineInfoActivity.this);
+                            ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问已关闭");
+                            rootUser = BmobUser.getCurrentUser(RootUser.class);
                         } else {
-                            updateUser.hasSetting = true;
-                            updateUser.update(rootUser.getObjectId(), new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if (e == null) {
-                                        finish();
-                                    }
-                                }
-                            });
+                            if (e.getErrorCode() == 206) {
+                                tokenOutOfTime();
+                            }
                         }
                     }
                 });
             }
         }
-
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_mine_info);
-        age_txt = (TextView) findViewById(R.id.age_txt);
-        openSecret_switch = (Switch) findViewById(R.id.openSecret_switch);
-        openSecret_txt = (TextView) findViewById(R.id.openSecret_txt);
-        sex_txt = (TextView) findViewById(R.id.sex_txt);
-        disPurpose_txt = (TextView) findViewById(R.id.disPurpose_txt);
-        datingThought_txt = (TextView) findViewById(R.id.datingThought_txt);
-        candateThing_txt = (TextView) findViewById(R.id.candateThing_txt);
-        arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
-        arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
-        arealocation_txt = (TextView) findViewById(R.id.arealocation_txt);
-        secretView = (LinearLayout) findViewById(R.id.secret_view);
-
-        mLockIndicator = (LockIndicatorView) findViewById(R.id.indicator);
-
-        mTvTips = (TextView) findViewById(R.id.tv_tips);
-
-        mLockViewGroup = (LockViewGroup) findViewById(R.id.lockgroup);
-
-
-        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
-
-        initData();
-
-        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-        titlebar.setBarTitle("资 料 设 置");
-        titlebar.setBackButtonListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SettingMineInfoActivity.this.finish();
-            }
-        });
-
-        getSexData();
-        getAgeData();
-        getDatingThoughtData();
-        getDisPurposeData();
-        getCanDatingThingData();
-
-        initSexOptionPicker();
-        initAgeOptionPicker();
-        initCanDatingThingOptionPicker();
-        initDatingThoughtOptionPicker();
-        initDisPurposeOptionPicker();
-        findViewById(R.id.clear_cache_txt).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @OnClick({R.id.clear_cache_txt, R.id.modifyPSWlayout, R.id.sex_rl, R.id.disPurpose_txt,
+            R.id.datingThought_txt, R.id.candateThing_txt, R.id.next})
+    void buttonClicks(View view) {
+        switch (view.getId()) {
+            case R.id.clear_cache_txt:
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -204,119 +197,76 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     @Override
                     public void run() {
                         Glide.get(SettingMineInfoActivity.this).clearDiskCache();
-
                     }
                 }).start();
-
                 cleanInternalCache(SettingMineInfoActivity.this);
                 cleanExternalCache(SettingMineInfoActivity.this);
                 ToastUtil.showToast(SettingMineInfoActivity.this, "清除完成！");
-
-
-            }
-        });
-        findViewById(R.id.modifyPSWlayout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.modifyPSWlayout:
                 startActivity(new Intent(SettingMineInfoActivity.this, ResetPasswordActivity.class));
-            }
-        });
-        arealocation_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isLoaded) {
-                    ShowPickerView();
-                } else {
-                    ToastUtil.showToast(SettingMineInfoActivity.this, "请等待省市区数据解析完成！");
-                }
-            }
-        });
-
-        findViewById(R.id.sex_rl).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.sex_rl:
                 sexOptions.show();
-            }
-        });
-
-        disPurpose_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.disPurpose_txt:
                 disPurposeOption.show();
-            }
-        });
-
-        datingThought_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datingThoughtOptions.show();
-            }
-        });
-
-        candateThing_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.candateThing_txt:
                 candateThingOptions.show();
-            }
-        });
-        age_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.datingThought_txt:
+                datingThoughtOptions.show();
+                break;
+            case R.id.age_txt:
                 ageOptions.show();
-            }
-        });
-
-        openSecret_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (rootUser != null) {
-                    mLockIndicator.setAnswer(new int[]{});
-                    if (isChecked) {
-                        if (!rootUser.secretScan) {
-                            mLockViewGroup.setAnswer(null);
-                            secretView.setVisibility(View.VISIBLE);
-                            secretView.setAnimation(AnimationUtils.makeInAnimation(SettingMineInfoActivity.this, true));
-                        }
-                    } else {
-                        if (secretView.getVisibility() == View.VISIBLE) {
-                            secretView.setVisibility(View.INVISIBLE);
-                            secretView.setAnimation(AnimationUtils.makeOutAnimation(SettingMineInfoActivity.this, true));
-                        }
-                        updateUser.secretScan = false;
-                        updateUser.secretPassword = "";
-                        updateUser.update(rootUser.getObjectId(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    CommonUtil.fecth(SettingMineInfoActivity.this);
-                                    ToastUtil.showToast(SettingMineInfoActivity.this, "私密访问已关闭");
-                                    rootUser = BmobUser.getCurrentUser(RootUser.class);
-                                } else {
-                                    if (e.getErrorCode() == 206) {
-                                        FragmentDialog.newInstance(false, "权限确认", "缓存即将过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                                            @Override
-                                            public void onPositiveClick(Dialog dialog, boolean needDelete) {
-                                                rootUser.logOut();
-                                                dialog.dismiss();
-                                                SettingMineInfoActivity.this.finish();
-                                                startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
-                                            }
-
-                                            @Override
-                                            public void onNegtiveClick(Dialog dialog) {
-                                                dialog.dismiss();
-                                            }
-                                        }).show(getSupportFragmentManager(), "");
-                                    }
-                                }
+                break;
+            case R.id.next:
+                if (sex_txt.getText().toString().contains("未设置")) {
+                    ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置性别才能查看更多画面哦，老司机才懂的！");
+                } else if (
+                        age_txt.getText().toString().contains("未设置")) {
+                    ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置年龄才能查看更多画面哦，老司机才懂的！");
+                } else if (
+                        disPurpose_txt.getText().toString().contains("未设置")) {
+                    ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置情感状态才能查看更多画面哦，老司机才懂的！");
+                } else if (
+                        datingThought_txt.getText().toString().contains("未设置")) {
+                    ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置交友想法才能查看更多画面哦，老司机才懂的！");
+                } else if (
+                        candateThing_txt.getText().toString().contains("未设置")) {
+                    ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置是否可约才能查看更多画面哦，老司机才懂的！");
+                } else {
+                    updateUser.hasSetting = true;
+                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                finish();
                             }
-                        });
-                    }
+                        }
+                    });
                 }
+                break;
+        }
+    }
+
+
+    void tokenOutOfTime() {
+        FragmentDialog.newInstance(false, "权限确认", "缓存即将过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick(Dialog dialog, boolean needDelete) {
+                rootUser.logOut();
+                dialog.dismiss();
+                SettingMineInfoActivity.this.finish();
+                startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
             }
-        });
 
-
+            @Override
+            public void onNegtiveClick(Dialog dialog) {
+                dialog.dismiss();
+            }
+        }).show(getSupportFragmentManager(), "");
     }
 
     /**
@@ -334,8 +284,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
      * @param context
      */
     public static void cleanExternalCache(Context context) {
-        if (Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED)) {
+        if (FileUtil.checkSdCard()) {
             deleteFilesByDirectory(context.getExternalCacheDir());
         }
     }
@@ -346,7 +295,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
      *
      * @param directory
      */
-    private static void deleteFilesByDirectory(File directory) {
+    static void deleteFilesByDirectory(File directory) {
         if (directory != null && directory.exists() && directory.isDirectory()) {
             for (File item : directory.listFiles()) {
                 item.delete();
@@ -354,7 +303,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
         }
     }
 
-    private void initAgeOptionPicker() {
+    void initAgeOptionPicker() {
         ageOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
@@ -389,30 +338,32 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     });
                 }
             }
-        }).setDividerColor(Color.BLACK).setTitleText("年龄选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
-            @Override
-            public void customLayout(View v) {
-                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
-                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
-                tvSubmit.setOnClickListener(new View.OnClickListener() {
+        }).setDividerColor(Color.BLACK)
+                .setTitleText("年龄选择")
+                .setTextColorCenter(Color.BLACK)
+                .setContentTextSize(22)
+                .setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
                     @Override
-                    public void onClick(View v) {
-                        ageOptions.returnData();
-                        ageOptions.dismiss();
+                    public void customLayout(View v) {
+                        v.findViewById(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ageOptions.returnData();
+                                ageOptions.dismiss();
+                            }
+                        });
+                        v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ageOptions.dismiss();
+                            }
+                        });
                     }
-                });
-                ivCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ageOptions.dismiss();
-                    }
-                });
-            }
-        }).isDialog(true).build();
+                }).isDialog(true).build();
         ageOptions.setPicker(ageItems);
     }
 
-    private void initCanDatingThingOptionPicker() {
+    void initCanDatingThingOptionPicker() {
         candateThingOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
@@ -447,30 +398,33 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     });
                 }
             }
-        }).setDividerColor(Color.BLACK).setTitleText("年龄选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
-            @Override
-            public void customLayout(View v) {
-                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
-                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
-                tvSubmit.setOnClickListener(new View.OnClickListener() {
+        }).setDividerColor(Color.BLACK)
+                .setTitleText("年龄选择")
+                .setTextColorCenter(Color.BLACK)
+                .setContentTextSize(22)
+                .setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
                     @Override
-                    public void onClick(View v) {
-                        candateThingOptions.returnData();
-                        candateThingOptions.dismiss();
+                    public void customLayout(View v) {
+
+                        v.findViewById(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                candateThingOptions.returnData();
+                                candateThingOptions.dismiss();
+                            }
+                        });
+                        v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                candateThingOptions.dismiss();
+                            }
+                        });
                     }
-                });
-                ivCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        candateThingOptions.dismiss();
-                    }
-                });
-            }
-        }).isDialog(true).build();
+                }).isDialog(true).build();
         candateThingOptions.setPicker(candateThingiItems);
     }
 
-    private void initSexOptionPicker() {
+    void initSexOptionPicker() {
         sexOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
@@ -483,56 +437,45 @@ public class SettingMineInfoActivity extends FragmentActivity {
                         public void done(BmobException e) {
                             if (e == null) {
                                 sex_txt.setTextColor(Color.LTGRAY);
-                                findViewById(R.id.sex_rl).setVisibility(View.GONE);
+                                sex_rl.setVisibility(View.GONE);
                                 CommonUtil.fecth(SettingMineInfoActivity.this);
                                 ToastUtil.showToast(SettingMineInfoActivity.this, rootUser.sex + "性更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存即将过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                                        @Override
-                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
-                                            rootUser.logOut();
-                                            dialog.dismiss();
-                                            SettingMineInfoActivity.this.finish();
-                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
-                                        }
-
-                                        @Override
-                                        public void onNegtiveClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show(getSupportFragmentManager(), "");
+                                    tokenOutOfTime();
                                 }
                             }
                         }
                     });
                 }
             }
-        }).setDividerColor(Color.BLACK).setTitleText("性别选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
-            @Override
-            public void customLayout(View v) {
-                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
-                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
-                tvSubmit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sexOptions.returnData();
-                        sexOptions.dismiss();
-                    }
-                });
-                ivCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sexOptions.dismiss();
-                    }
-                });
-            }
-        }).isDialog(true).build();
+        }).setDividerColor(Color.BLACK)
+                .setTitleText("性别选择")
+                .setTextColorCenter(Color.BLACK)
+                .setContentTextSize(22).
+                        setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
+                            @Override
+                            public void customLayout(View v) {
+                                v.findViewById(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        sexOptions.returnData();
+                                        sexOptions.dismiss();
+                                    }
+                                });
+                                v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        sexOptions.dismiss();
+                                    }
+                                });
+                            }
+                        }).isDialog(true).build();
         sexOptions.setPicker(sexItems);
     }
 
 
-    private void initDatingThoughtOptionPicker() {
+    void initDatingThoughtOptionPicker() {
         datingThoughtOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
@@ -547,51 +490,40 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "交友想法更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存即将过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                                        @Override
-                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
-                                            rootUser.logOut();
-                                            dialog.dismiss();
-                                            SettingMineInfoActivity.this.finish();
-                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
-                                        }
-
-                                        @Override
-                                        public void onNegtiveClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show(getSupportFragmentManager(), "");
+                                    tokenOutOfTime();
                                 }
                             }
                         }
                     });
                 }
             }
-        }).setDividerColor(Color.BLACK).setTitleText("交友想法选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
-            @Override
-            public void customLayout(View v) {
-                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
-                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
-                tvSubmit.setOnClickListener(new View.OnClickListener() {
+        }).setDividerColor(Color.BLACK)
+                .setTitleText("交友想法选择")
+                .setTextColorCenter(Color.BLACK)
+                .setContentTextSize(22)
+                .setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
                     @Override
-                    public void onClick(View v) {
-                        datingThoughtOptions.returnData();
-                        datingThoughtOptions.dismiss();
+                    public void customLayout(View v) {
+                        v.findViewById(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                datingThoughtOptions.returnData();
+                                datingThoughtOptions.dismiss();
+                            }
+                        });
+                        v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                datingThoughtOptions.dismiss();
+                            }
+                        });
                     }
-                });
-                ivCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        datingThoughtOptions.dismiss();
-                    }
-                });
-            }
-        }).isDialog(true).build();
+                }).isDialog(true).build();
         datingThoughtOptions.setPicker(datingThoughtItems);
     }
 
 
-    private void initDisPurposeOptionPicker() {
+    void initDisPurposeOptionPicker() {
         disPurposeOption = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
@@ -606,51 +538,41 @@ public class SettingMineInfoActivity extends FragmentActivity {
                                 ToastUtil.showToast(SettingMineInfoActivity.this, "情感状态更新成功");
                             } else {
                                 if (e.getErrorCode() == 206) {
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存即将过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                                        @Override
-                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
-                                            rootUser.logOut();
-                                            dialog.dismiss();
-                                            SettingMineInfoActivity.this.finish();
-                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
-                                        }
-
-                                        @Override
-                                        public void onNegtiveClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show(getSupportFragmentManager(), "");
+                                    tokenOutOfTime();
                                 }
                             }
                         }
                     });
                 }
             }
-        }).setDividerColor(Color.BLACK).setTitleText("情感状态选择").setTextColorCenter(Color.BLACK).setContentTextSize(22).setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
-            @Override
-            public void customLayout(View v) {
-                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
-                TextView ivCancel = (TextView) v.findViewById(R.id.tv_cancel);
-                tvSubmit.setOnClickListener(new View.OnClickListener() {
+        }).setDividerColor(Color.BLACK)
+                .setTitleText("情感状态选择")
+                .setTextColorCenter(Color.BLACK)
+                .setContentTextSize(22)
+                .setLayoutRes(R.layout.pickerview_custom_options, new CustomListener() {
                     @Override
-                    public void onClick(View v) {
-                        disPurposeOption.returnData();
-                        disPurposeOption.dismiss();
+                    public void customLayout(View v) {
+
+                        v.findViewById(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                disPurposeOption.returnData();
+                                disPurposeOption.dismiss();
+                            }
+                        });
+                        v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                disPurposeOption.dismiss();
+                            }
+                        });
                     }
-                });
-                ivCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        disPurposeOption.dismiss();
-                    }
-                });
-            }
-        }).isDialog(true).build();
+                }).isDialog(true).build();
         disPurposeOption.setPicker(disPurposeItems);//添加数据
     }
 
 
-    private void getDisPurposeData() {
+    void getDisPurposeData() {
         disPurposeItems.add(new CardBean("已经离异了"));
         disPurposeItems.add(new CardBean("已经结婚了"));
         disPurposeItems.add(new CardBean("刚刚交往中"));
@@ -660,7 +582,7 @@ public class SettingMineInfoActivity extends FragmentActivity {
     }
 
 
-    private void getDatingThoughtData() {
+    void getDatingThoughtData() {
         datingThoughtItems.add(new CardBean("找异性闺蜜"));
         datingThoughtItems.add(new CardBean("认真婚恋"));
         datingThoughtItems.add(new CardBean("极易兴奋"));
@@ -670,148 +592,27 @@ public class SettingMineInfoActivity extends FragmentActivity {
         datingThoughtItems.add(new CardBean("其他"));
     }
 
-    private void getCanDatingThingData() {
+    void getCanDatingThingData() {
 
         candateThingiItems.add(new CardBean("见面一起做爱做的事"));
         candateThingiItems.add(new CardBean("先在软件里聊天试试"));
         candateThingiItems.add(new CardBean("不想理任何人"));
-
     }
 
 
-    private void getAgeData() {
+    void getAgeData() {
         for (int index = 1; index <= 100; index++) {
             ageItems.add(new CardBean("" + index));
         }
     }
 
-    private void getSexData() {
-
+    void getSexData() {
         sexItems.add(new CardBean("男"));
         sexItems.add(new CardBean("女"));
     }
 
-    private Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_LOAD_DATA:
-                    if (thread == null) {
-                        thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                initJsonData();
-                            }
-                        });
-                        thread.start();
-                    }
-                    break;
-                case MSG_LOAD_SUCCESS:
-                    isLoaded = true;
-                    break;
-                case MSG_LOAD_FAILED:
-                    ToastUtil.showToast(SettingMineInfoActivity.this, "省市区数据解析失败，请稍候重试");
-
-                    break;
-            }
-        }
-    };
-
-
-    private void ShowPickerView() {
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                String text = options1Items.get(options1).getPickerViewText() +
-                        options2Items.get(options1).get(options2) +
-                        options3Items.get(options1).get(options2).get(options3);
-                arealocation_txt.setText("您的地区是" + text);
-                if (rootUser != null) {
-                    updateUser.provinceAndcity = text;
-                    updateUser.update(rootUser.getObjectId(), new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            if (e == null) {
-                                ToastUtil.showToast(SettingMineInfoActivity.this, "省市区信息更新成功");
-                            } else {
-                                if (e.getErrorCode() == 206) {
-                                    SettingMineInfoActivity.this.finish();
-                                    FragmentDialog.newInstance(false, "权限确认", "缓存已过期，请退出重新登录后修改", "去登录", "取消修改", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                                        @Override
-                                        public void onPositiveClick(Dialog dialog, boolean needDelete) {
-                                            rootUser.logOut();
-                                            dialog.dismiss();
-                                            startActivity(new Intent(SettingMineInfoActivity.this, LoginActivity.class));
-                                        }
-
-                                        @Override
-                                        public void onNegtiveClick(Dialog dialog) {
-                                            dialog.dismiss();
-                                        }
-                                    }).show(getSupportFragmentManager(), "");
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        }).setTitleText("城市选择").setDividerColor(Color.BLACK).setTextColorCenter(Color.BLACK).setContentTextSize(22).build();
-        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
-        pvOptions.show();
-    }
-
-    private void initJsonData() {
-        String JsonData = new GetJsonDataUtil().getJson(this, "province.json");//获取assets目录下的json文件数据
-        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
-        options1Items = jsonBean;
-        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
-            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
-            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
-
-            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
-                String CityName = jsonBean.get(i).getCityList().get(c).getName();
-                CityList.add(CityName);//添加城市
-                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
-                //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
-                if (jsonBean.get(i).getCityList().get(c).getArea() == null
-                        || jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
-                    City_AreaList.add("");
-                } else {
-                    for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
-                        String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
-                        City_AreaList.add(AreaName);//添加该城市所有地区数据
-                    }
-                }
-                Province_AreaList.add(City_AreaList);//添加该省所有地区数据
-            }
-            options2Items.add(CityList);
-            options3Items.add(Province_AreaList);
-        }
-        mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
-    }
-
-    public ArrayList<JsonBean> parseData(String result) {
-        ArrayList<JsonBean> detail = new ArrayList<>();
-        try {
-            JSONArray data = new JSONArray(result);
-            Gson gson = new Gson();
-            for (int i = 0; i < data.length(); i++) {
-                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
-                detail.add(entity);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
-        }
-        return detail;
-    }
-
-
-    private void initData() {
-
-
+    void initLockLogic() {
         mLockViewGroup.setMaxTryTimes(5);
-
         mLockViewGroup.setOnLockListener(new LockViewGroup.OnLockListener() {
 
             @Override
@@ -894,11 +695,8 @@ public class SettingMineInfoActivity extends FragmentActivity {
                     ToastUtil.showToast(getApplicationContext(), "设置失败");
                     finish();
                 }
-
-                // 左右移动动画
                 Animation shakeAnimation = AnimationUtils.loadAnimation(SettingMineInfoActivity.this, R.anim.shake);
                 mTvTips.startAnimation(shakeAnimation);
-
             }
 
             @Override
@@ -911,12 +709,11 @@ public class SettingMineInfoActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        if (findViewById(R.id.next).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+        if (nextButton.getVisibility() == View.VISIBLE) {
+            nextButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (sex_txt.getText().toString().contains("未设置") ||
-                            arealocation_txt.getText().toString().contains("未设置") ||
                             age_txt.getText().toString().contains("未设置") ||
                             disPurpose_txt.getText().toString().contains("未设置") ||
                             datingThought_txt.getText().toString().contains("未设置") ||
@@ -936,5 +733,86 @@ public class SettingMineInfoActivity extends FragmentActivity {
                 }
             });
         }
+    }
+
+    private void initLocation() {
+        locationClient = new AMapLocationClient(this.getApplicationContext());
+        locationClient.setLocationOption(getDefaultOption());
+
+        AMapLocationListener locationListener = new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation loc) {
+                if (null != loc) {
+                    amlocation = loc;
+                    arealocation_txt.setText(amlocation.getProvince() + amlocation.getCity() + amlocation.getDistrict() + amlocation.getStreet());
+                }
+            }
+        };
+        locationClient.setLocationListener(locationListener);
+        startLocation();
+    }
+
+    /**
+     * 默认的定位参数
+     */
+    private AMapLocationClientOption getDefaultOption() {
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+        return mOption;
+    }
+
+
+    /**
+     * 开始定位
+     */
+    private void startLocation() {
+        locationClient.setLocationOption(locationOption);
+        locationClient.startLocation();
+    }
+
+    /**
+     * 停止定位
+     */
+    private void stopLocation() {
+        locationClient.stopLocation();
+    }
+
+    /**
+     * 销毁定位
+     */
+    private void destroyLocation() {
+        if (null != locationClient) {
+            /**
+             * 如果AMapLocationClient是在当前Activity实例化的，
+             * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
+             */
+            locationClient.onDestroy();
+            locationClient = null;
+            locationOption = null;
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopLocation();
+        destroyLocation();
+
+        if (null != locationClient) {
+            locationClient.onDestroy();
+            locationClient = null;
+        }
+
     }
 }

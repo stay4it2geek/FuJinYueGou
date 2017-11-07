@@ -59,24 +59,8 @@ public class LockView extends View {
     private int mFingerOnColor = 0xFF2177C7;
     private int mErrorColor = 0xFFFF0000;
 
-    public LockView(Context context, LockViewConfig config) {
+    public LockView(Context context) {
         super(context);
-        //一些颜色
-        if (config != null) {
-            if (config.getNormalColor() != -1)
-                this.mNormalColor = config.getNormalColor();
-            if (config.getFingerOnColor() != -1)
-                this.mFingerOnColor = config.getFingerOnColor();
-            if (config.getErrorColor() != -1)
-                this.mErrorColor = config.getErrorColor();
-
-            if (config.getRadiusRate() != -1)
-                this.mRadiusRate = config.getRadiusRate();
-            if (config.getArrowRate() != -1)
-                this.mArrowRate = config.getArrowRate();
-            if (config.getStrokeWidth() != -1)
-                this.mStrokeWidth = config.getStrokeWidth();
-        }
 
         //描边宽度 --- //最小值 2
         this.mStrokeWidth = this.mStrokeWidth < 2 ? 2 : this.mStrokeWidth;

@@ -107,8 +107,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             }
         }
         if (holder instanceof Item1ViewHolder) {
-            if (post.user.sex.equals("2")) {
-                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -126,26 +125,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     }
                 });
-            } else {
-                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().error(R.drawable.error_img).placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
-                    }
 
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(errorDrawable);
-
-                    }
-                });
-            }
 
             ((Item1ViewHolder) holder).userImage.setOnClickListener(new View.OnClickListener() {
                 @Override

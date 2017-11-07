@@ -18,11 +18,6 @@ public class DownloadManagerActivity extends TabSlideDifferentBaseActivity {
     }
 
     @Override
-    public boolean getIsMineActivityType() {
-        return false;
-    }
-
-    @Override
     protected boolean isNeedShowBackDialog() {
         return false;
     }

@@ -196,7 +196,6 @@ public class GetVipPayActivity extends FragmentActivity {
         });
         showDialog("正在生成订单，请您稍候...");
         BP.pay(mGoodsDescription, mGoodsDescription, 0.01, true, new PListener() {
-
             // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
             @Override
             public void unknow() {

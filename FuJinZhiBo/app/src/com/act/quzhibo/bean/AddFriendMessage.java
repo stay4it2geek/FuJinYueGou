@@ -1,10 +1,9 @@
 package com.act.quzhibo.bean;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.act.quzhibo.common.Config;
-import com.act.quzhibo.chat.db.NewFriend;
+import com.act.quzhibo.chat.NewFriend;
 
 import org.json.JSONObject;
 

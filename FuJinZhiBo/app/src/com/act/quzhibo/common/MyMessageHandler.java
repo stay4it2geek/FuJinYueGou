@@ -7,11 +7,11 @@ import android.util.Log;
 
 import com.act.quzhibo.bean.AddFriendMessage;
 import com.act.quzhibo.bean.AgreeAddFriendMessage;
-import com.act.quzhibo.chat.db.NewFriend;
-import com.act.quzhibo.chat.db.NewFriendManager;
+import com.act.quzhibo.chat.NewFriend;
+import com.act.quzhibo.chat.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
-import com.act.quzhibo.model.UserModel;
+import com.act.quzhibo.im.UserDao;
 import com.act.quzhibo.i.UpdateCacheListener;
 import com.act.quzhibo.ui.activity.ChatFriendsActivity;
 import com.act.quzhibo.util.ToastUtil;
@@ -77,7 +77,7 @@ public class MyMessageHandler extends BmobIMMessageHandler {
      */
     private void executeMessage(final MessageEvent event) {
         //检测用户信息是否需要更新
-        UserModel.getInstance().updateUserInfo(event, new UpdateCacheListener() {
+        UserDao.getInstance().updateUserInfo(event, new UpdateCacheListener() {
             @Override
             public void done(BmobException e) {
                 BmobIMMessage msg = event.getMessage();
@@ -189,7 +189,7 @@ public class MyMessageHandler extends BmobIMMessageHandler {
     private void addFriend(String uid) {
         RootUser user = new RootUser();
         user.setObjectId(uid);
-        UserModel.getInstance()
+        UserDao.getInstance()
                 .agreeAddFriend(user, new SaveListener<String>() {
                     @Override
                     public void done(String s, BmobException e) {

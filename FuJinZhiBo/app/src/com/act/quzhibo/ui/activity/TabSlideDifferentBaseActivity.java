@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.act.quzhibo.R;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ViewFindUtils;
 import com.act.quzhibo.widget.FragmentDialog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,7 +31,6 @@ import butterknife.ButterKnife;
 
 public abstract class TabSlideDifferentBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface {
     protected MyPagerAdapter mAdapter;
-    protected View decorView;
     private BackHandledFragment mBackHandedFragment;
     ArrayList<Fragment> mFragments = new ArrayList<>();
 
@@ -49,12 +47,11 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
             setContentView(R.layout.activity_common_tab);
         }
         mFragments=getFragments();
-        decorView = getWindow().getDecorView();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(), decorView, (ViewPager) ViewFindUtils.find(decorView, R.id.viewpager), mAdapter, getIsMineActivityType());
+        CommonUtil.initView(getTitles(), getWindow().getDecorView(),(ViewPager)findViewById(R.id.viewpager), mAdapter);
     }
     protected void setPage(int positon) {
-        ((ViewPager) ViewFindUtils.find(decorView, R.id.viewpager)).setCurrentItem(positon);
+        ((ViewPager) findViewById(R.id.viewpager)).setCurrentItem(positon);
     }
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
@@ -110,7 +107,6 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
         }
     }
 
-    public abstract boolean getIsMineActivityType();
 
     protected abstract boolean isNeedShowBackDialog();
 
@@ -133,15 +129,8 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
-
     }
 
-    @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        super.setContentView(view, params);
-        ButterKnife.bind(this);
-
-    }
 
     @Override
     protected void onDestroy() {
@@ -149,35 +138,7 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
         ButterKnife.unbind(this);
     }
 
-    @Subscribe
-    public void onEvent(Boolean empty){
 
-    }
-
-
-
-    protected void runOnMain(Runnable runnable) {
-        runOnUiThread(runnable);
-    }
-
-    protected final static String NULL = "";
-    private Toast toast;
-    public void toast(final Object obj) {
-        try {
-            runOnMain(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (toast == null)
-                        toast = Toast.makeText(TabSlideDifferentBaseActivity.this, NULL, Toast.LENGTH_SHORT);
-                    toast.setText(obj.toString());
-                    toast.show();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void startActivity(Class<? extends Activity> target, Bundle bundle, boolean finish) {
         Intent intent = new Intent();
@@ -196,24 +157,4 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
             return null;
     }
 
-    /**
-     * 隐藏软键盘
-     */
-    public void hideSoftInputView() {
-        InputMethodManager manager = ((InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE));
-        if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
-            if (getCurrentFocus() != null)
-                manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
-    /**隐藏软键盘-一般是EditText.getWindowToken()
-     * @param token
-     */
-    public void hideSoftInput(IBinder token) {
-        if (token != null) {
-            InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
 }

@@ -4,22 +4,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.i.OnCheckInputListner;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.util.VerifyUitl;
 import com.act.quzhibo.widget.TitleBarView;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
+import butterknife.Bind;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobSMS;
 import cn.bmob.v3.exception.BmobException;
@@ -31,21 +34,169 @@ import static android.text.InputType.TYPE_CLASS_TEXT;
 import static android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 import static android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD;
 
+public class RegisterActivity extends BaseActivity {
 
-public class RegisterActivity extends AppCompatActivity {
+    @Bind(R.id.et_userPhonenumber)
+    EditText et_userPhonenumber;
+    @Bind(R.id.et_sms_code)
+    EditText et_sms_code;
+    @Bind(R.id.et_password)
+    EditText et_password;
+    @Bind(R.id.invite_code)
+    EditText et_invite_code;
+    @Bind(R.id.check_agree)
+    CheckBox check_agree;
+    @Bind(R.id.getCode_btn)
+    Button getCode_btn;
+    @Bind(R.id.et_userNick)
+    EditText et_userNick;
+    @Bind(R.id.btn_verify_login)
+    Button btn_verify_login;
+    @Bind(R.id.titlebar)
+    TitleBarView titlebar;
 
-    private EditText et_userPhonenumber;
-    private EditText et_sms_code;
-    private EditText et_password;
-    private CheckBox check_agree;
-    private Button getCode_btn;
-    public int T = 20; //倒计时时长
-    private Handler mHandler = new Handler();
-    private EditText et_userNick;
-    private EditText invite_code;
-    private Button btn_verify_login;
+    int T = 20;
+    Handler mHandler = new Handler();
+    private Animation shakeAnimation;
 
-    class MyCountDownTimer implements Runnable {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        titlebar.setBarTitle("手 机 注 册");
+        et_password.setSingleLine(true);
+        et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
+        titlebar.setBackButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake);
+
+    }
+
+    @OnClick(R.id.verify_fail)
+    void verifyFail() {
+        startActivity(new Intent(RegisterActivity.this, RegisterNormalActivity.class));
+        RegisterActivity.this.finish();
+    }
+
+
+    @OnClick(R.id.getCode_btn)
+    void getSmsCode() {
+
+        VerifyUitl uitl = new VerifyUitl(this, new OnCheckInputListner() {
+            @Override
+            public void onCheckInputLisner(EditText editText) {
+                editText.startAnimation(shakeAnimation);
+            }
+        });
+        if (uitl.verifyInputTrue(null, et_sms_code, null, null, null, et_userPhonenumber, null)) {
+            new Thread(new MyCountDownTimer()).start();//开始执行
+
+            BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
+                    "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>() {
+                        @Override
+                        public void done(Integer o, BmobException e) {
+                            if (e == null) {
+                                ToastUtil.showToast(RegisterActivity.this, "短信验证码已经发送,序列号是：" + o);
+                            } else {
+                                ToastUtil.showToast(RegisterActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage());
+
+                            }
+                        }
+                    });
+        }
+    }
+
+    @OnCheckedChanged(R.id.isSetPswVisi)
+    void onSetPswVisi(boolean isChecked) {
+        if (isChecked) {
+            et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        } else {
+            et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
+        }
+        et_password.setSelection(et_password.getText().length());
+    }
+
+    @OnCheckedChanged(R.id.check_agree)
+    void onCheckAgree(boolean isChecked) {
+        if (isChecked) {
+            btn_verify_login.setEnabled(true);
+        } else {
+            btn_verify_login.setEnabled(false);
+        }
+    }
+
+    @OnClick(R.id.termofuse)
+    void startActivity() {
+        startActivity(new Intent(RegisterActivity.this, TermOfUseActivity.class));
+    }
+
+    @OnClick(R.id.btn_verify_login)
+    void verifyAndLogin() {
+
+        if (!check_agree.isChecked()) {
+            ToastUtil.showToast(this, "请先同意用户协议");
+            return;
+        }
+
+
+        VerifyUitl uitl = new VerifyUitl(this, new OnCheckInputListner() {
+            @Override
+            public void onCheckInputLisner(EditText editText) {
+                editText.startAnimation(shakeAnimation);
+            }
+        });
+        if (uitl.verifyInputTrue(null, et_sms_code, null, et_invite_code, et_userNick, et_userPhonenumber, et_password)) {
+            BmobQuery<RootUser> query = new BmobQuery<>();
+            query.getObject(et_invite_code.getText().toString().trim(), new QueryListener<RootUser>() {
+                @Override
+                public void done(RootUser user, BmobException e) {
+                    if (user != null) {
+                        BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    RootUser rootUser = new RootUser();
+                                    rootUser.setUsername(et_userNick.getText().toString());
+                                    rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+                                    rootUser.setMobilePhoneNumberVerified(true);
+                                    ToastUtil.showToast(RegisterActivity.this, "验证成功，自动注册登录中......");
+                                    rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new LogInListener<RootUser>() {
+
+                                        @Override
+                                        public void done(RootUser user, BmobException e) {
+                                            if (user != null) {
+                                                CommonUtil.fecth(RegisterActivity.this);
+                                                ToastUtil.showToast(RegisterActivity.this, "登录成功");
+                                                RegisterActivity.this.finish();
+                                            } else {
+                                                findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
+                                                ToastUtil.showToast(RegisterActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
+
+                                            }
+                                        }
+
+                                    });
+                                } else {
+                                    findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
+                                    ToastUtil.showToast(RegisterActivity.this, "验证失败，原因是：" + e.getLocalizedMessage());
+
+                                }
+                            }
+                        });
+                    } else {
+                        ToastUtil.showToast(RegisterActivity.this, "邀请码错误");
+                    }
+                }
+            });
+        }
+    }
+
+
+    private class MyCountDownTimer implements Runnable {
 
         @Override
         public void run() {
@@ -78,207 +229,5 @@ public class RegisterActivity extends AppCompatActivity {
             T = 20; //最后再恢复倒计时时长
         }
     }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-
-        et_userPhonenumber = (EditText) findViewById(R.id.et_userPhonenumber);
-        et_userNick = (EditText) findViewById(R.id.et_userNick);
-        et_sms_code = (EditText) findViewById(R.id.et_sms_code);
-
-        invite_code = (EditText) findViewById(R.id.invite_code);
-        check_agree = (CheckBox) findViewById(R.id.check_agree);
-        btn_verify_login = (Button) findViewById(R.id.btn_verify_login);
-        et_password = (EditText) findViewById(R.id.et_password);
-        TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
-        titlebar.setBarTitle("手 机 注 册");
-        titlebar.setBackButtonListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RegisterActivity.this.finish();
-            }
-        });
-        getCode_btn = (Button) findViewById(R.id.getCode_btn);
-        getCode_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                getCode();
-            }
-        });
-        btn_verify_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyAndLogin();
-            }
-        });
-
-        findViewById(R.id.termofuse).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, TermOfUseActivity.class));
-            }
-        });
-        et_password.setSingleLine(true);
-        et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
-        ((CheckBox) findViewById(R.id.isSetPswVisi)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                } else {
-                    et_password.setInputType(TYPE_CLASS_TEXT | TYPE_TEXT_VARIATION_PASSWORD);
-                }
-                et_password.setSelection(et_password.getText().length());
-
-            }
-        });
-
-        findViewById(R.id.verify_fail).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(RegisterActivity.this, RegisterNormalActivity.class));
-                RegisterActivity.this.finish();
-            }
-        });
-        check_agree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    btn_verify_login.setEnabled(true);
-                }else{
-                    btn_verify_login.setEnabled(false);
-                }
-            }
-        });
-    }
-
-    private void getCode() {
-        if (et_userNick.getText().toString().equals("用户名") || et_userNick.getText().toString().equals("") || et_userNick.getText().length() > 20) {
-            ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
-            return;
-        } else {
-            String regex = "^[0-9a-zA_Z]+$";
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(et_userNick.getText().toString());
-            if (!m.find()) {
-                ToastUtil.showToast(this, "用户名必须是少于20个字符的英文字母或者数字的组合");
-                return;
-            }
-        }
-        if (et_userPhonenumber.getText().toString().equals("手机号") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
-            ToastUtil.showToast(this, "请输入正确位数的手机号码");
-            return;
-        } else {
-            String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(et_userPhonenumber.getText().toString());
-            if (!m.find()) {
-                ToastUtil.showToast(this, "请输入国内通用的手机号码");
-                return;
-            }
-        }
-        if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
-            ToastUtil.showToast(this, "请输入密码");
-            return;
-        }
-        if (invite_code.getText().toString().equals("邀请码,务必要填") || et_password.getText().toString().equals("")) {
-            ToastUtil.showToast(this, "请输入邀请码");
-            return;
-        }
-        if (et_password.getText().toString().equals("密码") || et_password.getText().toString().equals("")) {
-            ToastUtil.showToast(this, "请输入密码");
-            return;
-        }
-
-        new Thread(new MyCountDownTimer()).start();//开始执行
-
-        BmobSMS.requestSMSCode(et_userPhonenumber.getText().toString(),
-                "您的验证码是`%smscode%`，有效期为`%ttl%`分钟。您正在使用`%appname%`的验证码。【比目科技】", new QueryListener<Integer>() {
-
-                    @Override
-                    public void done(Integer o, BmobException e) {
-                        if (e == null) {
-                            ToastUtil.showToast(RegisterActivity.this, "短信验证码已经发送,序列号是：" + o);
-                        } else {
-                            ToastUtil.showToast(RegisterActivity.this, "短信验证码发送失败，原因是" + e.getLocalizedMessage());
-
-                        }
-                    }
-                });
-
-
-    }
-
-    private void verifyAndLogin() {
-        if (!check_agree.isChecked()) {
-            ToastUtil.showToast(this, "请先同意用户协议");
-            return;
-        }
-        if (et_sms_code.getText().toString().equals("请输入短信验证码") || et_sms_code.getText().toString().equals("")) {
-            ToastUtil.showToast(this, "请输入短信验证码");
-            return;
-        }
-        if (et_userPhonenumber.getText().toString().equals("请输入手机号码") || et_userPhonenumber.getText().toString().equals("") || et_userPhonenumber.getText().length() > 11) {
-            ToastUtil.showToast(this, "请输入正确位数的手机号码");
-            return;
-        } else {
-            String regex = "^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))||(17[4|7])|(18[0,5-9]))\\d{8}$";
-            Pattern p = Pattern.compile(regex);
-            Matcher m = p.matcher(et_userPhonenumber.getText().toString());
-            if (!m.find()) {
-                ToastUtil.showToast(this, "请输入国内通用的手机号码");
-                return;
-            }
-        }
-
-        BmobQuery<RootUser> query = new BmobQuery<>();
-        query.getObject(invite_code.getText().toString().trim(), new QueryListener<RootUser>() {
-            @Override
-            public void done(RootUser user, BmobException e) {
-                if (user != null) {
-                    BmobSMS.verifySmsCode(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            if (e == null) {
-                                RootUser rootUser = new RootUser();
-                                rootUser.setUsername(et_userNick.getText().toString());
-                                rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
-                                rootUser.setMobilePhoneNumberVerified(true);
-                                ToastUtil.showToast(RegisterActivity.this, "验证成功，自动注册登录中......");
-                                rootUser.signOrLoginByMobilePhone(et_userPhonenumber.getText().toString(), et_sms_code.getText().toString().trim(), new LogInListener<RootUser>() {
-
-                                    @Override
-                                    public void done(RootUser user, BmobException e) {
-                                        if (user != null) {
-                                            CommonUtil.fecth(RegisterActivity.this);
-                                            ToastUtil.showToast(RegisterActivity.this, "登录成功");
-                                            RegisterActivity.this.finish();
-                                        } else {
-                                            findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
-                                            ToastUtil.showToast(RegisterActivity.this, "登录失败，原因是：" + e.getLocalizedMessage());
-
-                                        }
-                                    }
-
-                                });
-                            } else {
-                                findViewById(R.id.verify_fail).setVisibility(View.VISIBLE);
-                                ToastUtil.showToast(RegisterActivity.this, "验证失败，原因是：" + e.getLocalizedMessage());
-
-                            }
-                        }
-                    });
-                } else {
-                    ToastUtil.showToast(RegisterActivity.this, "邀请码错误");
-                }
-            }
-        });
-
-
-    }
-
 
 }

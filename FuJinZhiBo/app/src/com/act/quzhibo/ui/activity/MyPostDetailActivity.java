@@ -25,7 +25,6 @@ public class MyPostDetailActivity extends FragmentActivity {
         setContentView(R.layout.interest_post_detail_layout);
         recyclerview = (XRecyclerView) findViewById(R.id.postRecyleview);
         findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
-        recyclerview.setHasFixedSize(true);
         recyclerview.setPullRefreshEnabled(false);
         recyclerview.setLoadingMoreEnabled(false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

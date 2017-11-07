@@ -1,6 +1,6 @@
 package com.act.quzhibo.bean;
 
-import com.act.quzhibo.chat.db.NewFriend;
+import com.act.quzhibo.chat.NewFriend;
 
 import cn.bmob.v3.BmobUser;
 

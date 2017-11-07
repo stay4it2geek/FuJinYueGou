@@ -21,7 +21,7 @@ import com.act.quzhibo.bean.Friend;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.event.RefreshEvent;
-import com.act.quzhibo.model.UserModel;
+import com.act.quzhibo.im.UserDao;
 import com.act.quzhibo.ui.activity.ChatActivity;
 import com.act.quzhibo.ui.activity.LoginActivity;
 import com.act.quzhibo.ui.activity.NewFriendActivity;
@@ -124,7 +124,7 @@ public class ContactFragment extends Fragment {
                 FragmentDialog.newInstance(false, "是否删除好友？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
                     @Override
                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-                        UserModel.getInstance().deleteFriend(adapter.getItem(position),
+                        UserDao.getInstance().deleteFriend(adapter.getItem(position),
                                 new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
@@ -228,7 +228,7 @@ public class ContactFragment extends Fragment {
      */
     public void query() {
         //TODO 【好友管理】获取好友列表
-        UserModel.getInstance().queryFriends(
+        UserDao.getInstance().queryFriends(
 
                 new FindListener<Friend>() {
                     @Override

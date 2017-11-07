@@ -9,18 +9,10 @@ import com.act.quzhibo.ui.fragment.VideoAlbumAuthorsFragment;
 
 import java.util.ArrayList;
 
-/**
- * 广场
- */
 public class SquareActivity extends TabSlideDifferentBaseActivity implements InterestPlatesFragment.OnNearByListner {
 
     @Override
     protected boolean getDetailContentViewFlag() {
-        return false;
-    }
-
-    @Override
-    public boolean getIsMineActivityType() {
         return false;
     }
 

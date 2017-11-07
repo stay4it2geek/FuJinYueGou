@@ -8,7 +8,7 @@ import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
 import com.act.quzhibo.adapter.base.BaseRecyclerHolder;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Friend;
-import com.act.quzhibo.chat.db.NewFriendManager;
+import com.act.quzhibo.chat.NewFriendManager;
 import com.act.quzhibo.bean.RootUser;
 
 import java.util.Collection;

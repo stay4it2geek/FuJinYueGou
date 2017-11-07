@@ -128,9 +128,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
             }
         });
         if (rootUser.photoFileUrl != null) {
-            if (!TextUtils.isEmpty(rootUser.sex)) {
-                if (rootUser.sex.equals("女")) {
-                    Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
+                    Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.placehoder_img).into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                             holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -142,21 +140,7 @@ public class MyPostListAdapter extends RecyclerView.Adapter<MyPostListAdapter.My
                             holder.photoImg.setBackgroundDrawable(errorDrawable);
                         }
                     });
-                } else {
-                    Glide.with(activity).load(rootUser.photoFileUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                        }
 
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            super.onLoadFailed(e, errorDrawable);
-                            holder.photoImg.setBackgroundDrawable(errorDrawable);
-                        }
-                    });
-                }
-            }
         }
 
         holder.areaLocation.setText(rootUser.provinceAndcity + "");

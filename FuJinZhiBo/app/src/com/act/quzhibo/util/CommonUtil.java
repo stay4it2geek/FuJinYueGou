@@ -137,21 +137,17 @@ public class CommonUtil {
         return arrayList;
     }
 
-    public static void initView(String[] mTitles, View decorView, final ViewPager viewPager, FragmentPagerAdapter mAdapter, boolean activityType) {
-        final CommonTabLayout commonTabLayout;
+    public static void initView(String[] mTitles, View view, final ViewPager viewPager, FragmentPagerAdapter mAdapter) {
+        final CommonTabLayout layout;
         viewPager.setAdapter(mAdapter);
-        if (activityType) {
-            commonTabLayout = ViewFindUtils.find(decorView, R.id.layout_mine);
-        } else {
-            commonTabLayout = ViewFindUtils.find(decorView, R.id.layout);
-        }
-        commonTabLayout.setVisibility(View.VISIBLE);
+        layout = (CommonTabLayout) view.findViewById(R.id.layout);
+        layout.setVisibility(View.VISIBLE);
         ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
         for (int i = 0; i < mTitles.length; i++) {
             mTabEntities.add(new TabEntity(mTitles[i], 0, 0));
         }
-        commonTabLayout.setTabData(mTabEntities);
-        commonTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
+        layout.setTabData(mTabEntities);
+        layout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
                 viewPager.setCurrentItem(position);
@@ -168,7 +164,7 @@ public class CommonUtil {
 
             @Override
             public void onPageSelected(int position) {
-                commonTabLayout.setCurrentTab(position);
+                layout.setCurrentTab(position);
             }
 
             @Override
@@ -187,7 +183,7 @@ public class CommonUtil {
 
         String res = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = null;
+        Date date ;
         try {
             date = simpleDateFormat.parse(s);
             long ts = date.getTime();
@@ -198,46 +194,7 @@ public class CommonUtil {
         return res;
     }
 
-    public static String getDateTransforTamp(Long timeTamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String sd = sdf.format(new Date(timeTamp));
-        return sd;
-    }
 
-    /**
-     * 获取第某前天的时间
-     */
-    public static String getDataString(int num) {
-        Date dNow = new Date();   //当前时间
-        Date dBefore;
-        Calendar calendar = Calendar.getInstance(); //得到日历
-        calendar.setTime(dNow);//把当前时间赋给日历
-        calendar.add(Calendar.DAY_OF_MONTH, -num);  //设置为前n天
-        dBefore = calendar.getTime();   //得到前第n天的时间
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
-        String defaultStartDate = sdf.format(dBefore);    //格式化前n天
-        String defaultEndDate = sdf.format(dNow); //格式化当前时间
-        return defaultStartDate;
-    }
-
-    public static String getJson(String fileName, Context context) {
-        //将json数据变成字符串
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            //获取assets资源管理器
-            AssetManager assetManager = context.getAssets();
-            //通过管理器打开文件并读取
-            BufferedReader bf = new BufferedReader(new InputStreamReader(
-                    assetManager.open(fileName)));
-            String line;
-            while ((line = bf.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return stringBuilder.toString();
-    }
 
     public static void saveData(Context context, int value, String key) {
         SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
@@ -277,7 +234,7 @@ public class CommonUtil {
                 if (e == null) {
                     ToastUtil.showToast(activity, "同步成功");
                 } else {
-                    ToastUtil.showToast(activity, "同步失败,原因是：" + e.getLocalizedMessage());
+                    ToastUtil.showToast(activity, "同步失败");
                 }
             }
         });
@@ -295,9 +252,7 @@ public class CommonUtil {
             }
             bitmap = retriever.getFrameAtTime();
         } catch (IllegalArgumentException ex) {
-            // Assume this is a corrupt video file
         } catch (RuntimeException ex) {
-            // Assume this is a corrupt video file.
         } finally {
             try {
                 retriever.release();
@@ -335,18 +290,4 @@ public class CommonUtil {
         return String.format(uri, appName, slat, slon, sname, dlat, dlon, dname);
     }
 
-
-    /**
-     * 把LatLng对象转化为LatLonPoint对象
-     */
-    public static LatLonPoint convertToLatLonPoint(LatLng latlon) {
-        return new LatLonPoint(latlon.latitude, latlon.longitude);
-    }
-
-    /**
-     * 把LatLonPoint对象转化为LatLon对象
-     */
-    public static LatLng convertToLatLng(LatLonPoint latLonPoint) {
-        return new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude());
-    }
 }
