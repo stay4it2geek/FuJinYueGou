@@ -17,10 +17,13 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPlates;
 import com.act.quzhibo.bean.InterestPlatesParentData;
+import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -123,5 +126,6 @@ public class InterestPlatesFragment extends BackHandledFragment {
     public boolean onBackPressed() {
         return false;
     }
+
 
 }

@@ -7,6 +7,8 @@ import com.act.quzhibo.ui.fragment.NearFragment;
 import com.act.quzhibo.ui.fragment.PhotoAlbumAuthorsFragment;
 import com.act.quzhibo.ui.fragment.VideoAlbumAuthorsFragment;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 
 public class SquareActivity extends TabSlideDifferentBaseActivity implements InterestPlatesFragment.OnNearByListner {
@@ -23,7 +25,7 @@ public class SquareActivity extends TabSlideDifferentBaseActivity implements Int
 
     @Override
     protected String[] getTitles() {
-        return new String[]{"qing", "jin","专辑", "视频"};
+        return new String[]{"qing", "jin", "专辑", "视频"};
     }
 
     @Override
@@ -50,5 +52,6 @@ public class SquareActivity extends TabSlideDifferentBaseActivity implements Int
     public void onNear() {
         setPage(1);
     }
+
 
 }

@@ -1,6 +1,7 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,11 +20,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.act.quzhibo.AgeBaseHelper;
+import com.act.quzhibo.AgeDao;
+import com.act.quzhibo.UserAge;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.InterestParentPerson;
 import com.act.quzhibo.bean.InterestPost;
+import com.act.quzhibo.im.holder.AgreeHolder;
 import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
@@ -37,30 +42,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostListAdapter.MyViewHolder> {
-    private ArrayList<InterestPost> datas;
-    private Activity activity;
-    private boolean isNeedBlur;
+    ArrayList<InterestPost> datas;
+    Context context;
+    boolean isNeedBlur;
+    boolean isNeedAge;
 
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
     }
 
-    private OnInterestPostRecyclerViewItemClickListener mOnItemClickListener = null;
+    OnInterestPostRecyclerViewItemClickListener mOnItemClickListener = null;
 
     public void setOnItemClickListener(OnInterestPostRecyclerViewItemClickListener listener) {
         mOnItemClickListener = listener;
     }
 
-    public InterestPostListAdapter(Activity activity, ArrayList<InterestPost> datas, boolean isNeedBlur) {
-        this.activity = activity;
+    public InterestPostListAdapter(Context context, ArrayList<InterestPost> datas, boolean isNeedBlur) {
+        this.context = context;
         this.datas = datas;
         this.isNeedBlur = isNeedBlur;
-
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.interest_post_list_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.interest_post_list_item, parent, false);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
@@ -75,33 +80,25 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-         int randomAge;
-        if (CommonUtil.loadData(activity, "randomAge") > 0) {
-            if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(activity, "userId")) {
-                int age = 20;
-                Random random = new Random();
-                randomAge = random.nextInt(age) + 15;
-                CommonUtil.saveData(activity, randomAge, "randomAge");
-                CommonUtil.saveData(activity, Integer.parseInt(post.user.userId), "userId");
-            } else {
-                randomAge = CommonUtil.loadData(activity, "randomAge");
-            }
+        String randomAge;
+        Random random = new Random();
+        randomAge = (random.nextInt(5) + 18) + "";
+        AgeDao ageDao = new AgeDao(context);
+        UserAge userAge = new UserAge();
+        if (ageDao.query(post.user.userId) != null) {
+            randomAge = ageDao.query(post.user.userId).getUserAge();
         } else {
-            int age = 20;
-            Random random = new Random();
-            randomAge = random.nextInt(age) + 15;
-            CommonUtil.saveData(activity, randomAge, "randomAge");
-            CommonUtil.saveData(activity, Integer.parseInt(post.user.userId), "userId");
+            userAge.setUserAge(randomAge);
+            userAge.setUserId(post.user.userId);
+            ageDao.add(userAge);
         }
-        holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女 "+randomAge : "男 "+randomAge);
+        holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女 " + randomAge : "男 " + randomAge);
         if (day <= 1) {
             holder.createTime.setText(hour + "小时" + min + "分钟前");
         } else if (day < 30) {
             holder.createTime.setText(day + "天" + hour + "小时前");
-        } else if (day > 30 && day < 60) {
-            holder.createTime.setText("2个月前");
-        } else if (day > 90) {
-            holder.createTime.setText("3个月前");
+        } else if (day > 30) {
+            holder.createTime.setText("1个月前");
         }
         holder.title.setText(datas.get(position).title + "");
         new AsyncTask<Void, Void, String>() {
@@ -128,7 +125,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                         Drawable drawable = null;
                         if (!TextUtils.isEmpty(source) && !source.equals("null")) {
                             int id = Integer.parseInt(source);
-                            drawable = activity.getResources().getDrawable(id);
+                            drawable = context.getResources().getDrawable(id);
                             if (drawable != null) {
                                 drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
                                         drawable.getIntrinsicHeight());
@@ -152,7 +149,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             holder.imgGridview.setVisibility(View.VISIBLE);
             holder.imgVideolayout.setVisibility(View.GONE);
             holder.imgtotal.setVisibility(View.VISIBLE);
-            holder.imgGridview.setAdapter(new PostImageAdapter(activity, datas.get(position).images, Constants.ITEM_POST_LIST_IMG, isNeedBlur, false));
+            holder.imgGridview.setAdapter(new PostImageAdapter(context, datas.get(position).images, Constants.ITEM_POST_LIST_IMG, isNeedBlur, false));
             holder.imgtotal.setText("共" + datas.get(position).totalImages + "张");
         } else {
             holder.imgVideolayout.setVisibility(View.VISIBLE);
@@ -197,12 +194,12 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra(Constants.POST, post);
-                intent.setClass(activity, InfoInterestPersonActivity.class);
-                activity.startActivity(intent);
+                intent.setClass(context, InfoInterestPersonActivity.class);
+                context.startActivity(intent);
             }
         });
         if (post.user.sex.equals("2")) {
-            Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+            Glide.with(context).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -222,7 +219,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                 }
             });
         } else {
-            Glide.with(activity).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+            Glide.with(context).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -263,21 +260,21 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView pName;
-        private GridView imgGridview;
-        private TextView viewNum;
-        private TextView pinglunNum;
-        private TextView nickName;
-        private TextView title;
-        private ImageView photoImg;
-        private RelativeLayout postlayout;
-        private TextView absText;
-        private TextView imgtotal;
-        private ImageView imgVideo;
-        private TextView arealocation;
-        private TextView createTime;
-        private TextView sexAndAge;
-        private FrameLayout imgVideolayout;
+        TextView pName;
+        GridView imgGridview;
+        TextView viewNum;
+        TextView pinglunNum;
+        TextView nickName;
+        TextView title;
+        ImageView photoImg;
+        RelativeLayout postlayout;
+        TextView absText;
+        TextView imgtotal;
+        ImageView imgVideo;
+        TextView arealocation;
+        TextView createTime;
+        TextView sexAndAge;
+        FrameLayout imgVideolayout;
 
         public MyViewHolder(View view) {
             super(view);

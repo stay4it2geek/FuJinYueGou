@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.act.quzhibo.AgeDao;
+import com.act.quzhibo.UserAge;
 import com.act.quzhibo.widget.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -107,24 +109,24 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             }
         }
         if (holder instanceof Item1ViewHolder) {
-                Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
-                    }
+            Glide.with(activity).load(data.detail.user.photoUrl).asBitmap().placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(new BitmapDrawable(resource));
+                }
 
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        super.onLoadStarted(placeholder);
-                    }
+                @Override
+                public void onLoadStarted(Drawable placeholder) {
+                    super.onLoadStarted(placeholder);
+                }
 
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(errorDrawable);
+                @Override
+                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                    super.onLoadFailed(e, errorDrawable);
+                    ((Item1ViewHolder) holder).userImage.setBackgroundDrawable(errorDrawable);
 
-                    }
-                });
+                }
+            });
 
 
             ((Item1ViewHolder) holder).userImage.setOnClickListener(new View.OnClickListener() {
@@ -149,11 +151,10 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
                 ((Item1ViewHolder) holder).createTime.setText(hour + "小时前" + min + "分钟前");
             } else if (day < 30) {
                 ((Item1ViewHolder) holder).createTime.setText(day + "天" + hour + "小时前");
-            } else if (day > 30 && day < 60) {
-                ((Item1ViewHolder) holder).createTime.setText("2个月前");
-            } else if (day > 90) {
+            } else if (day > 30) {
                 ((Item1ViewHolder) holder).createTime.setText("3个月前");
             }
+
             String nick = data.detail.user.nick.replaceAll("\r|\n", "");
             ((Item1ViewHolder) holder).nickName.setText(nick);
             ((Item1ViewHolder) holder).title.setText(data.detail.title);
@@ -277,18 +278,20 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
             if (commentDetail.user.sex != null) {
-                ((Item2ViewHolder) holder).sexAndAge.setText(commentDetail.user.sex.equals("2") ? "女" : "男");
+                AgeDao ageDao = new AgeDao(activity);
+                String randomAge = ageDao.query(post.user.userId) != null ? ageDao.query(post.user.userId).getUserAge() : "";
+                ((Item2ViewHolder) holder).sexAndAge.setText(commentDetail.user.sex.equals("2") ? "女 " + randomAge : "男 " + randomAge);
             }
 
             ((Item2ViewHolder) holder).nickName.setText(commentDetail.user.nick);
             if (day <= 1) {
-               ((Item2ViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
+                ((Item2ViewHolder) holder).createTime.setText(hour + "小时" + min + "分钟前");
             } else if (day < 30) {
-               ((Item2ViewHolder) holder).createTime.setText(day + "天" + hour + "小时前");
+                ((Item2ViewHolder) holder).createTime.setText(day + "天" + hour + "小时前");
             } else if (day > 30 && day < 60) {
-               ((Item2ViewHolder) holder).createTime.setText("2个月前");
+                ((Item2ViewHolder) holder).createTime.setText("2个月前");
             } else if (day > 90) {
-               ((Item2ViewHolder) holder).createTime.setText("3个月前");
+                ((Item2ViewHolder) holder).createTime.setText("3个月前");
             }
             new AsyncTask<Void, Void, String>() {
                 @Override

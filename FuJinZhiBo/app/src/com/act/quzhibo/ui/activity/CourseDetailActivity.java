@@ -20,7 +20,6 @@ import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,6 @@ import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMConversation;
 import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.newim.core.ConnectionStatus;
-import cn.bmob.newim.event.MessageEvent;
 import cn.bmob.newim.listener.ConnectListener;
 import cn.bmob.newim.listener.ConnectStatusChangeListener;
 import cn.bmob.v3.BmobQuery;
@@ -236,10 +234,6 @@ public class CourseDetailActivity extends TabSlideDifferentBaseActivity {
         }).show(getSupportFragmentManager(), "");
 
         return;
-    }
-
-    @Subscribe
-    public void onEventMain(final MessageEvent event) {
     }
 
 }

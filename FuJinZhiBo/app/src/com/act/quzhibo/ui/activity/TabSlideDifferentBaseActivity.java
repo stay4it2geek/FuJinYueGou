@@ -113,23 +113,7 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
     protected abstract String[] getTitles();
 
     protected abstract ArrayList<Fragment> getFragments();
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
 
-    @Override
-    protected void onStop() {
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        ButterKnife.bind(this);
-    }
 
 
     @Override

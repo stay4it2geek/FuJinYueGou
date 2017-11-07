@@ -28,13 +28,13 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class InterestPostListFragment extends BackHandledFragment {
-    private XRecyclerView recyclerView;
-    private ArrayList<InterestPost> posts = new ArrayList<>();
-    private int interestPostSize;
-    private InterestPostListAdapter adapter;
-    private View view;
-    private String pid;
-    private LoadNetView loadNetView;
+    XRecyclerView recyclerView;
+    ArrayList<InterestPost> posts = new ArrayList<>();
+    int interestPostSize;
+    InterestPostListAdapter adapter;
+    View view;
+    String pid;
+    LoadNetView loadNetView;
 
     @Nullable
     @Override
@@ -126,7 +126,7 @@ public class InterestPostListFragment extends BackHandledFragment {
         menu.collapse();
     }
 
-    public static  class ComparatorValues implements Comparator<InterestPost> {
+    public static class ComparatorValues implements Comparator<InterestPost> {
         @Override
         public int compare(InterestPost post1, InterestPost post2) {
             long m1 = Long.parseLong(post1.ctime != null ? post1.ctime : "0l");
@@ -142,7 +142,7 @@ public class InterestPostListFragment extends BackHandledFragment {
         }
     }
 
-    private String ctime;
+    String ctime;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -164,7 +164,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                     ctime = data.result.get(interestPostSize - 1).ctime;
                 }
                 if (adapter == null) {
-                    adapter = new InterestPostListAdapter(getActivity(), posts,false);
+                    adapter = new InterestPostListAdapter(getActivity(), posts, false);
                     adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(InterestPost post) {
@@ -181,7 +181,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                 }
                 loadNetView.setVisibility(View.GONE);
 
-                if(msg.what==Constants.LOADMORE){
+                if (msg.what == Constants.LOADMORE) {
                     recyclerView.setNoMore(true);
                 }
                 if (posts.size() == 0) {
@@ -204,7 +204,7 @@ public class InterestPostListFragment extends BackHandledFragment {
             return;
         }
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
-        OkHttpClientManager.parseRequest(getActivity(), url, handler,what);
+        OkHttpClientManager.parseRequest(getActivity(), url, handler, what);
 
     }
 
