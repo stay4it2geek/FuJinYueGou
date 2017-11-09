@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -30,8 +31,10 @@ import com.act.quzhibo.download.activity.DownloadManagerActivity;
 import com.act.quzhibo.luban_compress.Luban;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.FileUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.CircleImageView;
 import com.act.quzhibo.widget.FragmentDialog;
+import com.act.quzhibo.widget.SelfDialog;
 import com.act.quzhibo.widget.TitleBarView;
 import com.bumptech.glide.Glide;
 
@@ -101,6 +104,43 @@ public class MineActivity extends BaseActivity {
     TextView uploadImgText;
 
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            final SelfDialog selfDialog = new SelfDialog(MineActivity.this, false);
+            selfDialog.setTitle("客官再看一会儿呗");
+            selfDialog.setMessage("还是留下来再看看吧");
+            selfDialog.setYesOnclickListener("再欣赏下", new SelfDialog.onYesOnclickListener() {
+                @Override
+                public void onYesClick() {
+                    selfDialog.dismiss();
+
+                }
+            });
+            selfDialog.setNoOnclickListener("有事要忙", new SelfDialog.onNoOnclickListener() {
+                @Override
+                public void onNoClick() {
+                    RootUser user = new RootUser();
+                    if (user != null) {
+                        user.lastLoginTime = System.currentTimeMillis() + "";
+                        user.update(BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    selfDialog.dismiss();
+                                    ToastUtil.showToast(MineActivity.this, "退出时间" + System.currentTimeMillis());
+                                    finish();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            selfDialog.show();
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
@@ -138,10 +178,10 @@ public class MineActivity extends BaseActivity {
         } else if (view.getId() == R.id.shopping_cart_layout) {
             startActivity(view, ShoppingCartActivity.class);
             return;
-        } else if (R.id.avaterlayout == view.getId()||
-                   R.id.circleAvatar == view.getId() ||
-                  R.id.uploadImgText == view.getId()) {
-               startActivity(new Intent(MineActivity.this, LoginActivity.class));
+        } else if (R.id.avaterlayout == view.getId() ||
+                R.id.circleAvatar == view.getId() ||
+                R.id.uploadImgText == view.getId()) {
+            startActivity(new Intent(MineActivity.this, LoginActivity.class));
             return;
         } else {
             if (rootUser == null) {
@@ -400,7 +440,6 @@ public class MineActivity extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "请选择图片"), REQUEST_PICK);
     }
-
 
 
     @Override

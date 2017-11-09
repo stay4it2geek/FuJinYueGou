@@ -9,20 +9,18 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-public class AgeBaseHelper extends OrmLiteSqliteOpenHelper {
-    private static final String DB_NAME = "age_data.db";
-    private static final int DB_VERSION = 1;
+public class VirtualBaseHelper extends OrmLiteSqliteOpenHelper {
 
-    private static AgeBaseHelper instance;
+    private static VirtualBaseHelper instance;
 
-    private AgeBaseHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+    private VirtualBaseHelper(Context context) {
+        super(context, "virtual_data.db", null, 1);
     }
-    public static AgeBaseHelper getInstance(Context context){
+    public static VirtualBaseHelper getInstance(Context context){
         if(instance == null){
-            synchronized (AgeBaseHelper.class){
+            synchronized (VirtualBaseHelper.class){
                 if(instance == null){
-                    instance = new AgeBaseHelper(context.getApplicationContext());
+                    instance = new VirtualBaseHelper(context.getApplicationContext());
                 }
             }
         }
@@ -32,7 +30,7 @@ public class AgeBaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, UserAge.class);
+            TableUtils.createTable(connectionSource, VirtualDataUser.class);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (java.sql.SQLException e) {
@@ -43,7 +41,7 @@ public class AgeBaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
         try {
-            TableUtils.dropTable(connectionSource,UserAge.class,true);
+            TableUtils.dropTable(connectionSource,VirtualDataUser.class,true);
             onCreate(sqLiteDatabase,connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();

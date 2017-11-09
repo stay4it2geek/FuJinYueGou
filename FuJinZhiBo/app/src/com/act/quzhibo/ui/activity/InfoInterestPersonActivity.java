@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
@@ -15,17 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.VirtualDataUser;
+import com.act.quzhibo.VirtualUserDao;
 import com.act.quzhibo.adapter.PostImageAdapter;
+import com.act.quzhibo.bean.InterestPost;
+import com.act.quzhibo.bean.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.bean.InterstPostListInfoResult;
+import com.act.quzhibo.bean.MyFocusCommonPerson;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.common.OkHttpClientManager;
-import com.act.quzhibo.bean.MyFocusCommonPerson;
-import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.util.GlideImageLoader;
-import com.act.quzhibo.bean.InterestPost;
-import com.act.quzhibo.bean.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.CircleImageView;
 import com.act.quzhibo.widget.FragmentDialog;
@@ -55,7 +56,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
     TitleBarView titlebar;
     @Bind(R.id.loadview)
     LoadNetView loadNetView;
-    @Bind(R.id.age)
+    @Bind(R.id.sexAndage)
     TextView ageText;
     @Bind(R.id.banner)
     Banner banner;
@@ -73,7 +74,6 @@ public class InfoInterestPersonActivity extends BaseActivity {
     CircleImageView userImage;
     @Bind(R.id.level_img)
     ImageView level_img;
-
     @Bind(R.id.online_time)
     TextView online_time;
     @Bind(R.id.nickName)
@@ -85,7 +85,6 @@ public class InfoInterestPersonActivity extends BaseActivity {
     InterestPost post;
     RootUser user;
     MyFocusCommonPerson person;
-    int randomAge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +92,6 @@ public class InfoInterestPersonActivity extends BaseActivity {
         setContentView(R.layout.activity_info_common_layout);
         user = BmobUser.getCurrentUser(RootUser.class);
         initView();
-
-
     }
 
     void initView() {
@@ -129,46 +126,21 @@ public class InfoInterestPersonActivity extends BaseActivity {
                 urls.add(post.user.photoUrl);
             }
             if (post.user.sex.equals("2")) {
-                setUserAvater(urls, R.drawable.women, MyApplicaition.maleKeySrc);
+                setUserAvater(urls, MyApplicaition.maleKeySrc);
             } else {
-
-                setUserAvater(urls, R.drawable.man, MyApplicaition.maleKeySrc);
+                setUserAvater(urls, MyApplicaition.maleKeySrc);
             }
 
-            int minute;
-            if (CommonUtil.loadData(this, "time") > 0) {
-                if (Integer.parseInt(post.user.userId) != CommonUtil.loadData(this, "userId")) {
-                    int max = 800;
-                    int min = 30;
-                    Random random = new Random();
-                    minute = random.nextInt(max) + random.nextInt(min);
-                    CommonUtil.saveData(this, minute, "time");
-                    CommonUtil.saveData(this, Integer.parseInt(post.user.userId), "userId");
-                } else {
-                    minute = CommonUtil.loadData(this, "time");
-                }
-            } else {
-                int max = 800;
-                int min = 30;
-                Random random = new Random();
-                minute = random.nextInt(max) + random.nextInt(min);
-                CommonUtil.saveData(this, minute, "time");
-                CommonUtil.saveData(this, Integer.parseInt(post.user.userId), "userId");
-            }
 
-            if (minute != 0) {
-                if (minute % 60 == 0) {
-                    online_time.setText(minute / 60 + "小时前在线");
-                } else {
-                    online_time.setText((minute - (minute % 60)) / 60 + "小时" + minute % 60 + "分前在线");
-                }
-            }
         }
+        initOnlineTime();
+        getTextAndImageData();
+        initOther();
 
-        //todo ormlite dao
-        ageText.setText(randomAge + "岁");
 
+    }
 
+    void initOther() {
         int vip = Integer.parseInt(post.user.vipLevel);
         if (vip < 1) {
             level.setText("非会员");
@@ -192,9 +164,48 @@ public class InfoInterestPersonActivity extends BaseActivity {
         disMariState.setText(post.user.disMariState);
         String nick = post.user.nick.replaceAll("\r|\n", "");
         nickName.setText(nick);
+    }
 
-        getTextAndImageData();
+    void initOnlineTime() {
+        VirtualUserDao dao = VirtualUserDao.getInstance(this);
 
+        Random random = new Random();
+        int minMinu = 30;
+        int maxSeeMinu = 1000;
+        int maxMinu = 900;
+        int onlineTimeMinu = random.nextInt(maxMinu) + random.nextInt(minMinu);
+        String randomAge = (random.nextInt(10) + 20) + "";
+        int seeTimeMinu = random.nextInt(maxSeeMinu) + random.nextInt(minMinu);
+
+        VirtualDataUser dataUser = dao.query(post.user.userId);
+
+        if (dataUser != null) {
+            randomAge = dataUser.userAge != null ? dataUser.userAge : "";
+            if (!dataUser.onlineTime.equals("0")) {
+                onlineTimeMinu = !TextUtils.isEmpty(dataUser.onlineTime) ? Integer.parseInt(dataUser.onlineTime) : 0;
+            } else {
+                dataUser.onlineTime = onlineTimeMinu + "";
+                dao.update(dataUser);
+            }
+
+
+        } else {
+            VirtualDataUser user_ = new VirtualDataUser();
+            user_.userAge = randomAge;
+            user_.userId = post.user.userId;
+            user_.onlineTime = onlineTimeMinu + "";
+            user_.seeMeTime = seeTimeMinu + "";
+            dao.add(user_);
+        }
+
+        if (onlineTimeMinu != 0) {
+            if (onlineTimeMinu % 60 == 0) {
+                online_time.setText(onlineTimeMinu / 60 + "小时前在线");
+            } else {
+                online_time.setText((onlineTimeMinu - (onlineTimeMinu % 60)) / 60 + "小时" + onlineTimeMinu % 60 + "分前在线");
+            }
+        }
+        ageText.setText(randomAge);
     }
 
     @OnClick({})
@@ -203,13 +214,105 @@ public class InfoInterestPersonActivity extends BaseActivity {
             case R.id.talk_accese:
                 startActivity(new Intent(this, GetVipPayActivity.class));
                 break;
-        }
-    }
+            case R.id.focus:
+                if (user != null) {
+                    if (!(focus.getText().toString().trim()).equals(getResources().getString(R.string.cancelFocus))) {
+                        if (person == null) {
+                            MyFocusCommonPerson person = new MyFocusCommonPerson();
+                            person.rootUser = user;
+                            person.username = post.user.nick;
+                            person.userId = post.user.userId;
+                            person.photoUrl = post.user.photoUrl;
+                            person.sex = post.user.sex;
+                            person.userType = Constants.INTEREST;
+                            person.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String objectId, BmobException e) {
+                                    if (e == null) {
+                                        focus.setText(getResources().getString(R.string.cancelFocus));
+                                        if (user != null) {
+                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+                                            query.setLimit(1);
+                                            query.addWhereEqualTo("userId", post.user.userId);
+                                            query.addWhereEqualTo("rootUser", user);
+                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                                                @Override
+                                                public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
+                                                    if (e == null) {
+                                                        if (myFocusCommonPersons.size() >= 1) {
+                                                            InfoInterestPersonActivity.this.person = myFocusCommonPersons.get(0);
+                                                            focus.setText(getResources().getString(R.string.cancelFocus));
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, getResources().getString(R.string.focusOk));
+                                    } else {
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, getResources().getString(R.string.focusFail));
+                                    }
+                                }
+                            });
+                        } else {
+                            person.update(person.getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        focus.setText(getResources().getString(R.string.cancelFocus));
+                                        if (user != null) {
+                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
+                                            query.setLimit(1);
+                                            query.addWhereEqualTo("userId", post.user.userId);
+                                            query.addWhereEqualTo("rootUser", user);
+                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
+                                                @Override
+                                                public void done(List<MyFocusCommonPerson> persons, BmobException e) {
+                                                    if (e == null) {
+                                                        if (persons.size() >= 1) {
+                                                            person = persons.get(0);
+                                                            focus.setText(getResources().getString(R.string.cancelFocus));
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, getResources().getString(R.string.focusOk));
+                                    } else {
+                                        ToastUtil.showToast(InfoInterestPersonActivity.this, getResources().getString(R.string.focusFail));
+                                    }
+                                }
+                            });
+                        }
+                    } else {
+                        FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), getResources().getString(R.string.keepFocus), getResources().getString(R.string.cancelFocus), "", "", false, new FragmentDialog.OnClickBottomListener() {
+                            @Override
+                            public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
+                                dialog.dismiss();
+                            }
 
-     void setUserAvater(ArrayList<String> urls, int resource, LinkedHashMap<String, Integer> keySrc) {
-        level_img.setImageDrawable(getResources().getDrawable(keySrc.get(post.user.vipLevel)));
-        banner.setImages(urls).setImageLoader(new GlideImageLoader(resource)).start();
-        Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(resource).error(R.drawable.error_img).into(userImage);
+                            @Override
+                            public void onNegtiveClick(Dialog dialog) {
+                                if (person != null) {
+                                    person.delete(person.getObjectId(), new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if (e == null) {
+                                                focus.setText(getResources().getString(R.string.focusTa));
+                                                person = null;
+                                                ToastUtil.showToast(InfoInterestPersonActivity.this, getResources().getString(R.string.cancelFocusOk));
+                                            }
+                                        }
+                                    });
+                                }
+                                dialog.dismiss();
+                            }
+                        }).show(getSupportFragmentManager(), "");
+                    }
+                } else {
+                    startActivity(new Intent(InfoInterestPersonActivity.this, LoginActivity.class));
+                }
+                break;
+        }
     }
 
     @Override
@@ -227,116 +330,18 @@ public class InfoInterestPersonActivity extends BaseActivity {
                     if (e == null) {
                         if (myFocusCommonPersons.size() >= 1) {
                             person = myFocusCommonPersons.get(0);
-                            focus.setText("取消关注");
+                            focus.setText(getResources().getString(R.string.cancelFocus));
                         }
                     }
                 }
             });
         }
+    }
 
-
-        findViewById(R.id.focus).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (user != null) {
-                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("取消关注")) {
-                        if (person == null) {
-                            MyFocusCommonPerson person = new MyFocusCommonPerson();
-                            person.rootUser = user;
-                            person.username = post.user.nick;
-                            person.userId = post.user.userId;
-                            person.photoUrl = post.user.photoUrl;
-                            person.sex = post.user.sex;
-                            person.userType = Constants.INTEREST;
-                            person.save(new SaveListener<String>() {
-                                @Override
-                                public void done(String objectId, BmobException e) {
-                                    if (e == null) {
-                                        focus.setText("取消关注");
-                                        if (user != null) {
-                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
-                                            query.setLimit(1);
-                                            query.addWhereEqualTo("userId", post.user.userId);
-                                            query.addWhereEqualTo("rootUser", user);
-                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
-                                                @Override
-                                                public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
-                                                    if (e == null) {
-                                                        if (myFocusCommonPersons.size() >= 1) {
-                                                            InfoInterestPersonActivity.this.person = myFocusCommonPersons.get(0);
-                                                            focus.setText("取消关注");
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注成功");
-                                    } else {
-                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注失败");
-                                    }
-                                }
-                            });
-                        } else {
-                            person.update(person.getObjectId(), new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if (e == null) {
-                                        focus.setText("取消关注");
-                                        if (user != null) {
-                                            BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
-                                            query.setLimit(1);
-                                            query.addWhereEqualTo("userId", post.user.userId);
-                                            query.addWhereEqualTo("rootUser", user);
-                                            query.findObjects(new FindListener<MyFocusCommonPerson>() {
-                                                @Override
-                                                public void done(List<MyFocusCommonPerson> myFocusCommonPersons, BmobException e) {
-                                                    if (e == null) {
-                                                        if (myFocusCommonPersons.size() >= 1) {
-                                                            InfoInterestPersonActivity.this.person = myFocusCommonPersons.get(0);
-                                                            focus.setText("取消关注");
-                                                        }
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注成功");
-                                    } else {
-                                        ToastUtil.showToast(InfoInterestPersonActivity.this, "关注失败");
-                                    }
-                                }
-                            });
-                        }
-                    } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", "", "", false, new FragmentDialog.OnClickBottomListener() {
-                            @Override
-                            public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
-
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void onNegtiveClick(Dialog dialog) {
-                                if (person != null) {
-                                    person.delete(person.getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                focus.setText("关注ta");
-                                                person = null;
-                                                ToastUtil.showToast(InfoInterestPersonActivity.this, "取消关注成功");
-                                            }
-                                        }
-                                    });
-                                }
-                                dialog.dismiss();
-                            }
-                        }).show(getSupportFragmentManager(), "");
-                    }
-                } else {
-                    startActivity(new Intent(InfoInterestPersonActivity.this, LoginActivity.class));
-                }
-            }
-        });
+    void setUserAvater(ArrayList<String> urls, LinkedHashMap<String, Integer> keySrc) {
+        level_img.setImageDrawable(getResources().getDrawable(keySrc.get(post.user.vipLevel)));
+        banner.setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.placehoder_img)).start();
+        Glide.with(this).load(post.user.photoUrl).asBitmap().placeholder(R.drawable.placehoder_img).error(R.drawable.error_img).into(userImage);
     }
 
 
@@ -351,7 +356,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
             super.handleMessage(msg);
             InterestPostListInfoPersonParentData data =
                     CommonUtil.parseJsonWithGson((String) msg.obj, InterestPostListInfoPersonParentData.class);
-            InterstPostListInfoResult result = null;
+            InterstPostListInfoResult result;
             if (data != null) {
                 result = data.result;
             } else {

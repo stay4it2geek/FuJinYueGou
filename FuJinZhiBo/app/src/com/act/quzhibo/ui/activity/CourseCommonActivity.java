@@ -3,17 +3,24 @@ package com.act.quzhibo.ui.activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TabHost;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.event.ChangeEvent;
 import com.act.quzhibo.event.CourseEvent;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.SelfDialog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 @SuppressWarnings("deprecation")
 public class CourseCommonActivity extends TabActivity {
@@ -42,33 +49,43 @@ public class CourseCommonActivity extends TabActivity {
         EventBus.getDefault().unregister(this);
     }
 
-
     @Override
-    public void onBackPressed() {
-        final SelfDialog selfDialog = new SelfDialog(CourseCommonActivity.this, false);
-        selfDialog.setTitle("客官再看一会儿呗");
-        selfDialog.setMessage("还是留下来再看看吧");
-        selfDialog.setYesOnclickListener("再欣赏下", new SelfDialog.onYesOnclickListener() {
-            @Override
-            public void onYesClick() {
-                selfDialog.dismiss();
-            }
-        });
-        selfDialog.setNoOnclickListener("有事要忙", new SelfDialog.onNoOnclickListener() {
-            @Override
-            public void onNoClick() {
-                selfDialog.dismiss();
-                finish();
-            }
-        });
-        selfDialog.show();
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            final SelfDialog selfDialog = new SelfDialog(CourseCommonActivity.this, false);
+            selfDialog.setTitle("客官再看一会儿呗");
+            selfDialog.setMessage("还是留下来再看看吧");
+            selfDialog.setYesOnclickListener("再欣赏下", new SelfDialog.onYesOnclickListener() {
+                @Override
+                public void onYesClick() {
+                    selfDialog.dismiss();
+
+                }
+            });
+            selfDialog.setNoOnclickListener("有事要忙", new SelfDialog.onNoOnclickListener() {
+                @Override
+                public void onNoClick() {
+                    RootUser user = new RootUser();
+                    if (user != null) {
+                        user.lastLoginTime = System.currentTimeMillis() + "";
+                        user.update( BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    selfDialog.dismiss();
+                                    ToastUtil.showToast(CourseCommonActivity.this, "退出时间" + System.currentTimeMillis());
+                                    finish();
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+            selfDialog.show();
+        }
+        return super.dispatchKeyEvent(event);
     }
 
-    /**
-     * 注册消息接收事件
-     *
-     * @param event
-     */
     @Subscribe
     public void onEventMain(ChangeEvent event) {
         if ("pua".equals(event.type)) {

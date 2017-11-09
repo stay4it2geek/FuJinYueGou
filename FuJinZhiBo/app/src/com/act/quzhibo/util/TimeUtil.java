@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class TimeUtil {
 
-    public static String seconds2HH_mm_ss(long seconds) {
+    public static long seconds2HH_mm_ss(long seconds) {
         long h = 0;
         long m = 0;
         long s = 0;
@@ -29,12 +29,11 @@ public class TimeUtil {
                 s = seconds % 60;
             }
         }
-        String dh = h < 10 ? "0" + h : h + "";
-        String dm = m < 10 ? "0" + m : m + "";
-        String ds = s < 10 ? "0" + s : s + "";
-        return dh + ":" + dm + ":" + ds;
+//        String dh = h < 10 ? "0" + h : h ;
+//        String dm = m < 10 ? "0" + m : m + "";
+//        String ds = s < 10 ? "0" + s : s + "";
+        return h;
     }
-
 
 
     public final static String FORMAT_TIME = "HH:mm";
@@ -56,12 +55,13 @@ public class TimeUtil {
             return null;
         }
     }
+
     public static String dateToString(Date date, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         return formatter.format(date);
     }
 
-    public static String getChatTime(boolean hasYear,long timesamp) {
+    public static String getChatTime(boolean hasYear, long timesamp) {
         long clearTime = timesamp;
         String result;
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
@@ -80,15 +80,15 @@ public class TimeUtil {
                 result = "前天 " + getHourAndMin(clearTime);
                 break;
             default:
-                result = getTime(hasYear,clearTime);
+                result = getTime(hasYear, clearTime);
                 break;
         }
         return result;
     }
 
-    public static String getTime(boolean hasYear,long time) {
-        String pattern=FORMAT_DATE_TIME;
-        if(!hasYear){
+    public static String getTime(boolean hasYear, long time) {
+        String pattern = FORMAT_DATE_TIME;
+        if (!hasYear) {
             pattern = FORMAT_MONTH_DAY_TIME;
         }
         SimpleDateFormat format = new SimpleDateFormat(pattern);

@@ -38,8 +38,7 @@
         android:background="@drawable/bg_round_yellow"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:text=""
-        android:textColor="#000"
+        android:textColor="@color/textColor"
         android:textSize="14sp" />
 
     <TextView
@@ -58,7 +57,7 @@
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/createTime"
+        android:id="@+id/seeMeTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/nick"

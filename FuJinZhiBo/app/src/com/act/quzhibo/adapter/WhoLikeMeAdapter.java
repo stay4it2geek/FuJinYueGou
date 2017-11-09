@@ -15,11 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.VirtualDataUser;
+import com.act.quzhibo.VirtualUserDao;
 import com.act.quzhibo.bean.InterestSubPerson;
+import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.ui.activity.InfoNearPersonActivity;
 import com.act.quzhibo.ui.activity.IntersetPersonPostListActivity;
-import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -48,37 +49,50 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         final InterestSubPerson user = datas.get(position);
         holder.nickName.setText(user.username);
         holder.disMariState.setText(user.disMariState);
-        int minute;
-        if (CommonUtil.loadData(activity, "see_time") > 0) {
-            if (Integer.parseInt(user.userId) != CommonUtil.loadData(activity, "see_userId ")) {
-                int max = 800;
-                int min = 30;
-                Random random = new Random();
-                minute = random.nextInt(max) + random.nextInt(min);
-                CommonUtil.saveData(activity, minute, "see_time");
-                CommonUtil.saveData(activity, Integer.parseInt(user.userId), "see_userId");
-            } else {
-                minute = CommonUtil.loadData(activity, "see_time");
-            }
+
+        Random random = new Random();
+        int minMinu = 30;
+        int maxSeeMinu = 1000;
+        int maxOnlineMinu = 900;
+        int seeTimeMinu = random.nextInt(maxSeeMinu) + random.nextInt(minMinu);
+        int onlineTimeMinu = random.nextInt(maxOnlineMinu) + random.nextInt(minMinu);
+
+        String randomAge = (random.nextInt(10) + 20) + "";
+
+        VirtualUserDao dao = VirtualUserDao.getInstance(activity);
+        VirtualDataUser dataUser = dao.query(user.userId);
+
+        if (dataUser != null) {
+            randomAge = dataUser.userAge != null ? dataUser.userAge : "";
+            seeTimeMinu = !TextUtils.isEmpty(dataUser.onlineTime) ? Integer.parseInt(dataUser.onlineTime) : 0;
+            onlineTimeMinu = !TextUtils.isEmpty(dataUser.onlineTime) ? Integer.parseInt(dataUser.onlineTime) : 0;
+
         } else {
-            int max = 800;
-            int min = 30;
-            Random random = new Random();
-            minute = random.nextInt(max) + random.nextInt(min);
-            CommonUtil.saveData(activity, minute, "see_time");
-            CommonUtil.saveData(activity, Integer.parseInt(user.userId), "see_userId");
+            VirtualDataUser user_ = new VirtualDataUser();
+            user_.userAge = randomAge;
+            user_.userId = user.userId;
+            user_.onlineTime = onlineTimeMinu+"";
+            user_.seeMeTime = seeTimeMinu + "";
+            dao.add(user_);
         }
-        if (minute != 0) {
-            if (minute % 60 == 0) {
-                holder.createTime.setText(minute / 60 + "小时前看过你");
+        if (seeTimeMinu != 0) {
+            if (seeTimeMinu % 60 == 0) {
+                holder.seeMeTime.setText(seeTimeMinu / 60 + "小时前看过你");
             } else {
-                holder.createTime.setText((minute - (minute % 60)) / 60 + "小时" + minute % 60 + "分钟前看过你");
+                holder.seeMeTime.setText((seeTimeMinu - (seeTimeMinu % 60)) / 60 + "小时" + seeTimeMinu % 60 + "分钟前看过你");
             }
         }
-        holder.arealocation.setText("  距离你" + datas.get(position).distance + "公里");
+
         if (datas.get(position).user != null && !TextUtils.isEmpty(datas.get(position).user.sex)) {
-            holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女" : "男");
+            holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
+        }else{
+            holder.sexAndAge.setText(randomAge + "岁");
+
+
         }
+
+
+        holder.arealocation.setText("  距离你" + datas.get(position).distance + "公里");
         holder.who_see_me_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +107,8 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
                 activity.startActivity(intent);
             }
         });
+
+
         String photoUrl = "";
         if (user.photoUrl != null) {
             photoUrl = user.photoUrl;
@@ -123,7 +139,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         private TextView nickName;
         private ImageView photoImg;
         private TextView arealocation;
-        private TextView createTime;
+        private TextView seeMeTime;
         private TextView sexAndAge;
         private TextView disMariState;
         private RelativeLayout who_see_me_layout;
@@ -132,7 +148,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
             super(view);
             photoImg = (ImageView) view.findViewById(R.id.photoImg);
             nickName = (TextView) view.findViewById(R.id.nick);
-            createTime = (TextView) view.findViewById(R.id.createTime);
+            seeMeTime = (TextView) view.findViewById(R.id.seeMeTime);
             arealocation = (TextView) view.findViewById(R.id.location);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
             disMariState = (TextView) view.findViewById(R.id.disMariState);

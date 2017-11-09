@@ -7,20 +7,28 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.TabHost;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.VirtualUserDao;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.TabEntity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 @SuppressWarnings("ALL")
 public class TabMainActivity extends TabActivity {
@@ -131,9 +139,9 @@ public class TabMainActivity extends TabActivity {
         super.onResume();
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        CommonUtil.clearData(this);
     }
 }

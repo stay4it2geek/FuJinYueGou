@@ -10,11 +10,17 @@ import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.flyco.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 
 public abstract class TabSlideSameBaseActivity extends FragmentActivity implements BackHandledFragment.BackHandledInterface {
 
@@ -61,7 +67,7 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
             }
         });
         pager.setCurrentItem(0);
-        ((TextView)findViewById(R.id.title_text)).setText(getChangeText());
+        ((TextView) findViewById(R.id.title_text)).setText(getChangeText());
     }
 
     public abstract String getChangeText();
@@ -77,16 +83,29 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
         if (mBackHandedFragment == null || !mBackHandedFragment.onBackPressed()) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    FragmentDialog.newInstance(false, getDialogTitle(), "真的要离开人家吗？", "继续浏览", "有事要忙","","",false, new FragmentDialog.OnClickBottomListener() {
+                    FragmentDialog.newInstance(false, getDialogTitle(), "真的要离开人家吗？", "继续浏览", "有事要忙", "", "", false, new FragmentDialog.OnClickBottomListener() {
                         @Override
                         public void onPositiveClick(Dialog dialog, boolean needDelete) {
                             dialog.dismiss();
                         }
 
                         @Override
-                        public void onNegtiveClick(Dialog dialog) {
-                            dialog.dismiss();
-                            finish();
+                        public void onNegtiveClick(final Dialog dialog) {
+                            RootUser user = new RootUser();
+                            if (user != null) {
+                                user.lastLoginTime = System.currentTimeMillis() + "";
+                                user.update( BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
+                                    @Override
+                                    public void done(BmobException e) {
+                                        if (e == null) {
+                                            dialog.dismiss();
+                                            finish();
+                                            ToastUtil.showToast(TabSlideSameBaseActivity.this, "退出时间" + System.currentTimeMillis());
+                                        }
+                                    }
+                                });
+                            }
+
                         }
                     }).show(getSupportFragmentManager(), "");
                 } else {

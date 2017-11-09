@@ -1,6 +1,5 @@
 package com.act.quzhibo.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,15 +19,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.act.quzhibo.AgeBaseHelper;
-import com.act.quzhibo.AgeDao;
-import com.act.quzhibo.UserAge;
-import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.VirtualDataUser;
+import com.act.quzhibo.VirtualUserDao;
 import com.act.quzhibo.bean.InterestParentPerson;
 import com.act.quzhibo.bean.InterestPost;
-import com.act.quzhibo.im.holder.AgreeHolder;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.bumptech.glide.Glide;
@@ -45,7 +42,6 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
     ArrayList<InterestPost> datas;
     Context context;
     boolean isNeedBlur;
-    boolean isNeedAge;
 
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
@@ -76,23 +72,34 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
         final InterestPost post = datas.get(position);
         String nick = user.nick.replaceAll("\r|\n", "");
         holder.nickName.setText(nick);
+
+
         long l = System.currentTimeMillis() - Long.parseLong(datas.get(position).ctime);
         long day = l / (24 * 60 * 60 * 1000);
         long hour = (l / (60 * 60 * 1000) - day * 24);
         long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        String randomAge;
+
         Random random = new Random();
-        randomAge = (random.nextInt(5) + 18) + "";
-        AgeDao ageDao = new AgeDao(context);
-        UserAge userAge = new UserAge();
-        if (ageDao.query(post.user.userId) != null) {
-            randomAge = ageDao.query(post.user.userId).getUserAge();
+        String randomAge = (random.nextInt(10) + 20) + "";
+        VirtualUserDao dao = VirtualUserDao.getInstance(context);
+
+        int maxMinu = 800;
+        int minMinu = 30;
+
+        VirtualDataUser dataUser = dao.query(post.user.userId);
+        if (dataUser != null) {
+            randomAge = dataUser.userAge != null ? dataUser.userAge : "";
         } else {
-            userAge.setUserAge(randomAge);
-            userAge.setUserId(post.user.userId);
-            ageDao.add(userAge);
+            VirtualDataUser user_ = new VirtualDataUser();
+            user_.userAge = randomAge;
+            user_.userId = post.user.userId;
+            user_.onlineTime = (random.nextInt(maxMinu) + random.nextInt(minMinu)) + "";
+            user_.seeMeTime = "0";
+            dao.add(user_);
         }
-        holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女 " + randomAge : "男 " + randomAge);
+
+        holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
+
         if (day <= 1) {
             holder.createTime.setText(hour + "小时" + min + "分钟前");
         } else if (day < 30) {

@@ -1,14 +1,9 @@
 package com.act.quzhibo.ui.activity;
 
-import android.app.Activity;
-
-import java.io.IOException;
-
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,28 +12,27 @@ import android.widget.SeekBar;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 
+import java.io.IOException;
 
-public class AudioPlayActivity extends Activity implements OnClickListener, SeekBar.OnSeekBarChangeListener {
-    private MediaPlayer mMediaPlayer = null;//媒体播放器
-    private AudioManager mAudioManager = null;//声音管理器
-    private Button mPlayButton = null;
-    private Button mPauseButton = null;
-    private Button mStopButton = null;
-    private SeekBar mSoundSeekBar = null;
-    private int maxStreamVolume;//最大音量
-    private int currentStreamVolume;//当前音量
+import butterknife.OnTouch;
+
+
+public class AudioPlayActivity extends BaseActivity implements OnClickListener, SeekBar.OnSeekBarChangeListener {
+    MediaPlayer mMediaPlayer = null;//媒体播放器
+    AudioManager mAudioManager = null;//声音管理器
+    Button mPlayButton = null;
+    Button mPauseButton = null;
+    Button mStopButton = null;
+    SeekBar mSoundSeekBar = null;
+    int maxStreamVolume;//最大音量
+    int currentStreamVolume;//当前音量
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.audioplayer);
-        findViewById(R.id.audio_layout).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        String uri=getIntent().getStringExtra(Constants.AUDIO);
+
+        String uri = getIntent().getStringExtra(Constants.AUDIO);
         mMediaPlayer = MediaPlayer.create(this, Uri.parse(uri));//加载res/raw的happyis.mp3文件
         mAudioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
         mPlayButton = (Button) findViewById(R.id.Play);
@@ -54,6 +48,8 @@ public class AudioPlayActivity extends Activity implements OnClickListener, Seek
         mSoundSeekBar.setProgress(currentStreamVolume);
         mSoundSeekBar.setOnSeekBarChangeListener(this);
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -82,31 +78,28 @@ public class AudioPlayActivity extends Activity implements OnClickListener, Seek
         }
     }
 
-    //进度条变化
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress,
                                   boolean fromUser) {
-        // TODO Auto-generated method stub
-        System.out.println("progress:" + String.valueOf(progress));
         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, AudioManager.FLAG_PLAY_SOUND);
     }
 
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
+
 
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        // TODO Auto-generated method stub
+
 
     }
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
-        if(mMediaPlayer != null) {
+        if (mMediaPlayer != null) {
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.stop();
             }
@@ -119,8 +112,7 @@ public class AudioPlayActivity extends Activity implements OnClickListener, Seek
 
     @Override
     public void onBackPressed() {
-        // TODO Auto-generated method stub
-        if(mMediaPlayer != null) {
+        if (mMediaPlayer != null) {
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.stop();
             }

@@ -11,7 +11,7 @@ public class ToastUtil {
         if (cacheToast != null) {
             cacheToast.cancel();
         }
-        cacheToast = Toast.makeText(context.getApplicationContext(), msg, Toast.LENGTH_LONG);
+        cacheToast = Toast.makeText(context.getApplicationContext(), msg, Toast.LENGTH_SHORT);
         cacheToast.show();
     }
 }

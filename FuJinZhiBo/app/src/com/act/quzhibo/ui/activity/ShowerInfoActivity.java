@@ -93,7 +93,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                     if (e == null) {
                         if (myFocusShowers.size() >= 1) {
                             mMyFocusShower = myFocusShowers.get(0);
-                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
+                            ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
                         }
                     }
                 }
@@ -105,7 +105,7 @@ public class ShowerInfoActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals("取消关注")) {
+                    if (!(((TextView) findViewById(R.id.focus)).getText().toString().trim()).equals(getResources().getString(R.string.cancelFocus))) {
 
                         if (mMyFocusShower == null) {
                             MyFocusShower myFocusShower = new MyFocusShower();
@@ -128,7 +128,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
+                                        ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
                                         EventBus.getDefault().post(new FocusChangeEvent(true));
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
@@ -141,15 +141,15 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
                                                             ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
                                                         }
                                                     }
                                                 }
                                             });
                                         }
-                                        ToastUtil.showToast(ShowerInfoActivity.this, "关注成功");
+                                        ToastUtil.showToast(ShowerInfoActivity.this, getResources().getString(R.string.focusOk));
                                     } else {
-                                        ToastUtil.showToast(ShowerInfoActivity.this, "关注失败");
+                                        ToastUtil.showToast(ShowerInfoActivity.this, getResources().getString(R.string.focusFail));
                                     }
                                 }
                             });
@@ -158,7 +158,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        ((TextView) findViewById(R.id.focus)).setText("取消关注");
+                                        ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.setLimit(1);
@@ -170,22 +170,22 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
                                                             ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
-                                                            ((TextView) findViewById(R.id.focus)).setText("取消关注");
+                                                            ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
                                                         }
                                                     }
                                                 }
                                             });
                                         }
-                                        ToastUtil.showToast(ShowerInfoActivity.this, "关注成功");
+                                        ToastUtil.showToast(ShowerInfoActivity.this, getResources().getString(R.string.focusOk));
                                     } else {
-                                        ToastUtil.showToast(ShowerInfoActivity.this, "关注失败");
+                                        ToastUtil.showToast(ShowerInfoActivity.this, getResources().getString(R.string.focusFail));
                                     }
                                 }
                             });
                         }
 
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注","","",false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), getResources().getString(R.string.keepFocus), getResources().getString(R.string.cancelFocus),"","",false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
                                 dialog.dismiss();
@@ -199,8 +199,8 @@ public class ShowerInfoActivity extends FragmentActivity {
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 mMyFocusShower = null;
-                                                ((TextView) findViewById(R.id.focus)).setText("关注ta");
-                                                ToastUtil.showToast(ShowerInfoActivity.this, "取消关注成功");
+                                                ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.focusTa));
+                                                ToastUtil.showToast(ShowerInfoActivity.this, getResources().getString(R.string.cancelFocusOk));
                                                 EventBus.getDefault().post(new FocusChangeEvent(false));
                                             }
 

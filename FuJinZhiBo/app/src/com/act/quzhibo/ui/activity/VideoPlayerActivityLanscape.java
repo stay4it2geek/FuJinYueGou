@@ -207,7 +207,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                     if (e == null) {
                         if (myFocusShowers.size() >= 1) {
                             mMyFocusShower = myFocusShowers.get(0);
-                            ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
+                            ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
                         }
                     }
                 }
@@ -218,7 +218,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
             @Override
             public void onClick(final View view) {
                 if (BmobUser.getCurrentUser(RootUser.class) != null) {
-                    if (!(((TextView) findViewById(R.id.focus_top)).getText().toString().trim()).equals("取消关注")) {
+                    if (!(((TextView) findViewById(R.id.focus_top)).getText().toString().trim()).equals(getResources().getString(R.string.cancelFocus))) {
                         if (mMyFocusShower == null) {
                             MyFocusShower myFocusShower = new MyFocusShower();
                             myFocusShower.rootUser = BmobUser.getCurrentUser(RootUser.class);
@@ -233,8 +233,8 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                                 @Override
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
-                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, "关注成功");
-                                        ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
+                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, getResources().getString(R.string.focusOk));
+                                        ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.addWhereEqualTo("userId", room.userId);
@@ -245,7 +245,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
                                                             VideoPlayerActivityLanscape.this.mMyFocusShower = myFocusShowers.get(0);
-                                                            ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
+                                                            ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
                                                         }
                                                     }
 
@@ -253,7 +253,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                                             });
                                         }
                                     } else {
-                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, "关注失败");
+                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, getResources().getString(R.string.focusFail));
                                     }
                                 }
                             });
@@ -262,8 +262,8 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, "关注成功");
-                                        ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
+                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, getResources().getString(R.string.focusOk));
+                                        ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.addWhereEqualTo("userId", room.userId);
@@ -274,7 +274,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                                                     if (e == null) {
                                                         if (myFocusShowers.size() >= 1) {
                                                             mMyFocusShower = myFocusShowers.get(0);
-                                                            ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
+                                                            ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
                                                         }
                                                     }
 
@@ -282,14 +282,14 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                                             });
                                         }
                                     } else {
-                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, "关注失败");
+                                        ToastUtil.showToast(VideoPlayerActivityLanscape.this, getResources().getString(R.string.focusFail));
                                     }
                                 }
                             });
                         }
 
                     } else {
-                        FragmentDialog.newInstance(false, "是否取消关注", "真的要取消关注人家吗", "继续关注", "取消关注", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                        FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), getResources().getString(R.string.keepFocus), getResources().getString(R.string.cancelFocus), "", "", false, new FragmentDialog.OnClickBottomListener() {
                             @Override
                             public void onPositiveClick(final Dialog dialog, boolean deleteFileSource) {
                                 dialog.dismiss();
@@ -303,8 +303,8 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                                         public void done(BmobException e) {
                                             if (e == null) {
                                                 mMyFocusShower = null;
-                                                ((TextView) findViewById(R.id.focus_top)).setText("关注ta");
-                                                ToastUtil.showToast(VideoPlayerActivityLanscape.this, "取消关注成功");
+                                                ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.focusTa));
+                                                ToastUtil.showToast(VideoPlayerActivityLanscape.this, getResources().getString(R.string.cancelFocusOk));
                                             }
 
                                         }
@@ -337,9 +337,9 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
     public void onEventMainThread(FocusChangeEvent event) {
 
         if (event.focus) {
-            ((TextView) findViewById(R.id.focus_top)).setText("取消关注");
+            ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
         } else {
-            ((TextView) findViewById(R.id.focus_top)).setText("关注ta");
+            ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.focusTa));
 
         }
     }

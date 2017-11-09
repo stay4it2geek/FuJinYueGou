@@ -111,7 +111,7 @@ public class SendVoiceHolder extends BaseViewHolder {
             tv_voice_length.setVisibility(View.VISIBLE);
         }
 
-        iv_voice.setOnClickListener(new NewRecordPlayClickListener(getContext(), message, iv_voice));
+        iv_voice.setOnClickListener(new NewRecordPlayClickListener(getContext(), message, iv_voice,false));
 
         iv_voice.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

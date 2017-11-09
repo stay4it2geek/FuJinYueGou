@@ -108,7 +108,7 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
             introduce = (TextView) view.findViewById(R.id.introduce);
             locaitonDistance = (TextView) view.findViewById(R.id.location);
             nickName = (TextView) view.findViewById(R.id.nickName);
-            sex = (TextView) view.findViewById(R.id.sex);
+            sex = (TextView) view.findViewById(R.id.sexAngAge);
             delete.setVisibility(View.VISIBLE);
 
         }

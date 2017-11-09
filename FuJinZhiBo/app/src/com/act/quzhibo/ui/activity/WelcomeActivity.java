@@ -16,14 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.common.OkHttpClientManager;
+import com.act.quzhibo.VirtualUserDao;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.Toggle;
-import com.act.quzhibo.util.CommonUtil;
-import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.lock_view.LockIndicatorView;
 import com.act.quzhibo.lock_view.LockViewGroup;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.SelfDialog;
 
 import java.util.List;
@@ -38,12 +39,32 @@ import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
 public class WelcomeActivity extends ActivityManagePermission {
 
-    private String plateListStr;
+    String plateListStr;
     RootUser user;
-    private LockIndicatorView mLockIndicator;
-    private LockViewGroup mLockViewGroup;
-    private TextView mTvTips;
-    private LinearLayout secretView;
+    LockIndicatorView mLockIndicator;
+    LockViewGroup mLockViewGroup;
+    TextView mTvTips;
+    LinearLayout secretView;
+    Runnable runnable = new Runnable() {
+        public void run() {
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
+            Intent intent = new Intent();
+            intent.setClass(WelcomeActivity.this, TabMainActivity.class);
+            intent.putExtra(Constants.TAB_PLATE_LIST, plateListStr);
+            startActivity(intent);
+            finish();
+        }
+    };
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            plateListStr = (String) msg.obj;
+            if (!TextUtils.isEmpty(plateListStr)) {
+                this.postDelayed(runnable, 1000);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +79,24 @@ public class WelcomeActivity extends ActivityManagePermission {
         mLockViewGroup = (LockViewGroup) findViewById(R.id.lockgroup);
 
         grantPermission();
-
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RootUser user = BmobUser.getCurrentUser(RootUser.class);
+        if (user != null) {
+            CommonUtil.fecth(this);
+            long l = System.currentTimeMillis() - Long.parseLong(user.lastLoginTime);
+            long day = l / (24 * 60 * 60 * 1000);
+            long hour = (l / (60 * 60 * 1000) - day * 24);
+            if (hour <12) {
+                VirtualUserDao.getInstance(this).updateOnlineTime2Space();
+            }
+        }
+    }
 
-    private void initData() {
+    void initData() {
 
         String[] passWords = user.secretPassword.split(";");
         int[] nums = new int[passWords.length];
@@ -71,10 +105,7 @@ public class WelcomeActivity extends ActivityManagePermission {
         }
 
         mLockViewGroup.setAnswer(nums);
-
-        // 设置尝试次数
         mLockViewGroup.setMaxTryTimes(5);
-
         mLockViewGroup.setOnLockListener(new LockViewGroup.OnLockListener() {
 
             @Override
@@ -134,7 +165,7 @@ public class WelcomeActivity extends ActivityManagePermission {
 
     }
 
-    private void grantPermission() {
+    void grantPermission() {
         final SelfDialog selfDialog = new SelfDialog(WelcomeActivity.this, false);
         askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_RECORD_AUDIO, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
@@ -185,7 +216,7 @@ public class WelcomeActivity extends ActivityManagePermission {
         });
     }
 
-    private void doRequest() {
+    void doRequest() {
 
         user = BmobUser.getCurrentUser(RootUser.class);
         if (user != null) {
@@ -203,7 +234,7 @@ public class WelcomeActivity extends ActivityManagePermission {
         }
     }
 
-    private void request() {
+    void request() {
         BmobQuery<Toggle> query = new BmobQuery<>();
         query.findObjects(new FindListener<Toggle>() {
             @Override
@@ -228,33 +259,10 @@ public class WelcomeActivity extends ActivityManagePermission {
         });
     }
 
-    private void getPlateList() {
+    void getPlateList() {
         String url = CommonUtil.getToggle(this, "tabCatagory").getToggleObject();
         OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
     }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            plateListStr = (String) msg.obj;
-            if (!TextUtils.isEmpty(plateListStr)) {
-                this.postDelayed(runnable, 1000);
-            }
-        }
-    };
-
-
-    Runnable runnable = new Runnable() {
-        public void run() {
-            findViewById(R.id.progressBar).setVisibility(View.GONE);
-            Intent intent = new Intent();
-            intent.setClass(WelcomeActivity.this, TabMainActivity.class);
-            intent.putExtra(Constants.TAB_PLATE_LIST, plateListStr);
-            startActivity(intent);
-            finish();
-        }
-    };
 
 
 }

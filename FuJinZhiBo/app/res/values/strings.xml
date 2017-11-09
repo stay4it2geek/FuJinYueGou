@@ -90,5 +90,13 @@
     <string name="title_activity_user_info">UserInfoActivity</string>
     <string name="shop_title">购物车(%s)</string>
     <string name="count_money">结算:￥%s</string>
+    <string name="cancelFocus">取消关注</string>
+    <string name="focusOk">关注成功</string>
+    <string name="focusFail">关注失败</string>
+    <string name="isCancelFocus">是否取消关注</string>
+    <string name="reallyCancelFocus">真的要取消关注人家吗</string>
+    <string name="keepFocus">继续关注</string>
+    <string name="cancelFocusOk">取消关注成功</string>
+    <string name="focusTa">关注ta</string>
 </resources>
 

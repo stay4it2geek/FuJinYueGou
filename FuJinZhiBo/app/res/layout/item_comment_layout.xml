@@ -36,8 +36,7 @@
         android:background="@drawable/bg_round_yellow"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:text=""
-        android:textColor="#fff"
+        android:textColor="@color/textColor"
         android:textSize="14sp" />
 
     <TextView

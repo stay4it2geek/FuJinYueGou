@@ -38,6 +38,7 @@ import cn.bmob.newim.listener.ConnectStatusChangeListener;
 import cn.bmob.newim.notification.BmobNotificationManager;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
 import me.leefeng.promptlibrary.PromptDialog;
 
 
@@ -239,9 +240,23 @@ public class ChatFriendsActivity extends FragmentActivity implements BackHandled
                     }
 
                     @Override
-                    public void onNegtiveClick(Dialog dialog) {
-                        dialog.dismiss();
-                        ChatFriendsActivity.this.finish();
+                    public void onNegtiveClick(final Dialog dialog) {
+
+                        RootUser user = BmobUser.getCurrentUser(RootUser.class);
+                        if (user != null) {
+                            user.lastLoginTime = System.currentTimeMillis() + "";
+                            user.update(user.getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if (e == null) {
+                                        dialog.dismiss();
+                                        finish();
+                                        ToastUtil.showToast(ChatFriendsActivity.this, "退出时间" + System.currentTimeMillis());
+                                    }
+                                }
+                            });
+                        }
+
                     }
                 }).show(getSupportFragmentManager(), "");
             }
