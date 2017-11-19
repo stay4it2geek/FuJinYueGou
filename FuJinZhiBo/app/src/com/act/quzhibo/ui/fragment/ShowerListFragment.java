@@ -210,8 +210,6 @@ public class ShowerListFragment extends BackHandledFragment {
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
                 }
-
-
             } else {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);

@@ -8,14 +8,5 @@ public class ShoppingCart extends BmobObject {
     public RootUser user;
 
     public CommonCourse course;
-
-    public boolean isChoosed;
-
-    public boolean isChoosed() {
-        return isChoosed;
-    }
-
-    public void setChoosed(boolean choosed) {
-        isChoosed = choosed;
-    }
+    public String courseAppPrice;
 }

@@ -13,11 +13,14 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.bean.ShoppingCart;
+import com.act.quzhibo.i.OnReturnTotalListner;
 import com.act.quzhibo.ui.activity.CourseOrdersActivity;
 import com.act.quzhibo.widget.CircleImageView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;

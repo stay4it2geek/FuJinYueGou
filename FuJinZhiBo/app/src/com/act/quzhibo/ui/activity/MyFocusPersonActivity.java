@@ -210,9 +210,6 @@ public class MyFocusPersonActivity extends FragmentActivity {
                     adapter.notifyDataSetChanged();
                 }
 
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
-                }
                 loadNetView.setVisibility(View.GONE);
                 if (persons.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);

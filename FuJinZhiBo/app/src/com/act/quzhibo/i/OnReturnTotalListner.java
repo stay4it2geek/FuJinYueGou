@@ -1,8 +1,8 @@
 package com.act.quzhibo.i;
 
-/**
- * Created by asus-pc on 2017/11/19.
- */
+import cn.bmob.v3.BmobObject;
 
 public interface OnReturnTotalListner {
+    void onReturnPrice(int size,int index,BmobObject o);
+
 }

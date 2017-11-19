@@ -205,9 +205,6 @@ public class MyFocusShowerActivity extends FragmentActivity {
                     adapter.notifyDataSetChanged();
                 }
 
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
-                }
                 loadNetView.setVisibility(View.GONE);
                 if (showers.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);

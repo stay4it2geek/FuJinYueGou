@@ -76,7 +76,7 @@ public class CoursesOrderAdapter extends RecyclerView.Adapter<CoursesOrderAdapte
                     holder.courseAppPrice.setText("¥" + course.courseAppPrice);
                     holder.courseMarketPrice.setText("¥" + course.courseMarketPrice);
                     holder.courseMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
-                    Glide.with(activity).load(course.courseImage.getUrl()).placeholder(R.drawable.placehoder_img).into(holder.courseImage);
+                    Glide.with(activity).load(course.courseImage.getFileUrl()).placeholder(R.drawable.placehoder_img).into(holder.courseImage);
                     holder.deleteOrder.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

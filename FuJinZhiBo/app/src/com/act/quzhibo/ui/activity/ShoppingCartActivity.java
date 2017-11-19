@@ -6,21 +6,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ShoppingCartAdapter;
-import com.act.quzhibo.bean.CommonCourse;
-import com.act.quzhibo.bean.MyPost;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.ShoppingCart;
 import com.act.quzhibo.common.Constants;
-import com.act.quzhibo.event.CartEvent;
 import com.act.quzhibo.event.ChangeEvent;
-import com.act.quzhibo.event.CourseEvent;
 import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.i.OnReturnTotalListner;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.FragmentDialog;
@@ -29,7 +27,6 @@ import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +36,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
@@ -46,9 +44,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class ShoppingCartActivity extends BaseActivity implements
-        ShoppingCartAdapter.CheckInterface,
-        ShoppingCartAdapter.ModifyListInterface {
+public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAdapter.ModifyListListner {
 
     ShoppingCartAdapter cartAdapter;
     boolean flag = false;
@@ -57,8 +53,6 @@ public class ShoppingCartActivity extends BaseActivity implements
 
     @Bind(R.id.recyclerview)
     XRecyclerView mRecyclerview;
-    @Bind(R.id.cbSelectAll)
-    CheckBox ckAll;
     @Bind(R.id.tv_show_price)
     TextView tvShowPrice;
     @Bind(R.id.tv_settlement)
@@ -68,6 +62,7 @@ public class ShoppingCartActivity extends BaseActivity implements
     @Bind(R.id.tvEditor)
     TextView tvEditor;
     ArrayList<ShoppingCart> shoppingCarts = new ArrayList<>();
+
     RootUser user;
     private int handlerCartsSize;
     String lastTime = "";
@@ -119,55 +114,11 @@ public class ShoppingCartActivity extends BaseActivity implements
         }
     }
 
-    @OnClick(R.id.cbSelectAll)
-    public void selectAll() {
-        selectCartAll();
-    }
-
-    private void selectCartAll() {
-        cartAdapter.setCartData(shoppingCarts);
-        if (shoppingCarts.size() != 0) {
-            if (ckAll.isChecked()) {
-                for (int i = 0; i < shoppingCarts.size(); i++) {
-                    shoppingCarts.get(i).setChoosed(true);
-                }
-                cartAdapter.notifyDataSetChanged();
-            } else {
-                for (int i = 0; i < shoppingCarts.size(); i++) {
-                    shoppingCarts.get(i).setChoosed(false);
-                }
-                cartAdapter.notifyDataSetChanged();
-            }
-        }
-        statistics();
-    }
-
     @OnClick(R.id.tv_settlement)
     public void settlement() {
         settlementOrder();
     }
 
-    /**
-     * 单选
-     *
-     * @param position  组元素位置
-     * @param isChecked 组元素选中与否
-     */
-    @Override
-    public void checkGroup(int position, boolean isChecked, String price) {
-        if (cartAdapter != null) {
-            cartAdapter.setCartData(shoppingCarts);
-            shoppingCarts.get(position).setChoosed(isChecked);
-            if (isAllCheck()) {
-                ckAll.setChecked(true);
-            } else {
-                ckAll.setChecked(false);
-            }
-            cartAdapter.notifyDataSetChanged();
-
-            statistics();
-        }
-    }
 
     @Override
     public void childDelete(final int position) {
@@ -186,7 +137,7 @@ public class ShoppingCartActivity extends BaseActivity implements
                             shoppingCarts.remove(position);
                             cartAdapter.setCartData(shoppingCarts);
                             cartAdapter.notifyDataSetChanged();
-                            statistics();
+                            statistics(shoppingCarts);
                             if (shoppingCarts.size() == 0) {
                                 loadNetView.setVisibility(View.VISIBLE);
                                 loadNetView.setlayoutVisily(Constants.BUY_VIP);
@@ -250,7 +201,7 @@ public class ShoppingCartActivity extends BaseActivity implements
             }
         });
     }
-
+    int cartsSize;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -263,19 +214,40 @@ public class ShoppingCartActivity extends BaseActivity implements
                 } else {
                     handlerCartsSize = 0;
                 }
+              cartsSize=shoppingCarts.size();
                 if (cartAdapter == null) {
                     cartAdapter = new ShoppingCartAdapter(ShoppingCartActivity.this);
+                    cartAdapter.setModifyListListner(ShoppingCartActivity.this);
+                    if(cartAdapter!=null){
+                        cartAdapter.setReturnPriceListner(new OnReturnTotalListner() {
+                            @Override
+                            public void onReturnPrice(int size,int index, BmobObject o) {
+                                shoppingCarts.remove(index);
+                                shoppingCarts.add(index,(ShoppingCart)o);
+                                if(size==cartsSize){
+                                    cartAdapter.setCartData(shoppingCarts);
+                                    cartAdapter.notifyDataSetChanged();
+                                }
+                                statistics(shoppingCarts);
+                            }
+                        });
+                    }
                     cartAdapter.setCartData(shoppingCarts);
                     mRecyclerview.setAdapter(cartAdapter);
-                    cartAdapter.setCheckInterface(ShoppingCartActivity.this);
-                    cartAdapter.setModifyListInterface(ShoppingCartActivity.this);
                 } else {
+                    cartAdapter.setCartData(shoppingCarts);
                     cartAdapter.notifyDataSetChanged();
                 }
+
                 if (msg.what == Constants.LOADMORE) {
                     mRecyclerview.setNoMore(true);
                 }
-                loadNetView.setVisibility(View.GONE);
+               handler.postDelayed(new Runnable() {
+                   @Override
+                   public void run() {
+                       loadNetView.setVisibility(View.GONE);
+                   }
+               },1500);
                 if (shoppingCarts.size() == 0) {
                     tvEditor.setText("编辑");
                     cartAdapter.isCanbeEdite(true);
@@ -290,30 +262,19 @@ public class ShoppingCartActivity extends BaseActivity implements
         }
     };
 
-
-    boolean isAllCheck() {
-        for (ShoppingCart group : shoppingCarts) {
-            if (!group.isChoosed())
-                return false;
-        }
-        return true;
-    }
-
     /**
      * 统计操作
      * 1.先清空全局计数器
      * 2.遍历所有子元素，只要是被选中状态的，就进行相关的计算操作
      * 3.给底部的textView进行数据填充
      */
-    public void statistics() {
+    public void statistics(List<ShoppingCart> shoppingCarts) {
         totalCount = 0;
         totalPrice = 0.00;
         for (int i = 0; i < shoppingCarts.size(); i++) {
             ShoppingCart cart = shoppingCarts.get(i);
-            if (cart.isChoosed()) {
                 totalCount++;
-                totalPrice += cart.course == null ? 0.00 : Double.parseDouble(cart.course.courseAppPrice);
-            }
+                totalPrice += TextUtils.isEmpty(cart.courseAppPrice)? 0.00 : Double.parseDouble(cart.courseAppPrice);
         }
         tvShowPrice.setText("合计:" + totalPrice);
         tvSettlement.setText("结算(" + totalCount + ")");
@@ -324,31 +285,16 @@ public class ShoppingCartActivity extends BaseActivity implements
      */
     void settlementOrder() {
         if (totalCount == 0) {
-            FragmentDialog.newInstance(false, "您没有勾选任何商品哦！", "请至少勾选一种商品", "帮我勾选", "", "", "", true, new FragmentDialog.OnClickBottomListener() {
-                @Override
-                public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-                    ckAll.setChecked(false);
-                    ckAll.performClick();
-                }
-
-                @Override
-                public void onNegtiveClick(Dialog dialog) {
-                    dialog.dismiss();
-                }
-            }).show(getSupportFragmentManager(), "");
             return;
         }
         //选中的需要提交的商品清单
         for (ShoppingCart bean : shoppingCarts) {
-            boolean choosed = bean.isChoosed();
-            if (choosed) {
 //                String shoppingName = bean.getShoppingName();
 //                int count = bean.getCount();
 //                double price = bean.getPrice();
 //                int size = bean.getDressSize();
 //                String attribute = bean.getAttribute();
 //                int id = bean.getId();
-            }
         }
         ToastUtil.showToast(this, "总价：" + totalPrice);
 

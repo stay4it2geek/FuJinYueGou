@@ -69,40 +69,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
 
      void initView() {
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-//        recyclerView.setPullRefreshEnabled(true);
-//        recyclerView.setLoadingMoreEnabled(true);
-//        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-//        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-//            @Override
-//            public void onRefresh() {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        recyclerView.setNoMore(false);
-//                        recyclerView.setLoadingMoreEnabled(true);
-//                        recyclerView.refreshComplete();
-//                    }
-//                }, 1000);
-//            }
-//
-//            @Override
-//            public void onLoadMore() {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (handlerMediaInfoSize > 0) {
-//                            recyclerView.loadMoreComplete();
-//
-//                        } else {
-//                            recyclerView.setNoMore(true);
-//                        }
-//                    }
-//                }, 1000);
-//            }
-//        });
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-//        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        recyclerView.setLayoutManager(gridLayoutManager);
 
          ViewDataUtil.setLayManager(handlerMediaInfoSize, new OnQueryDataListner() {
              @Override
@@ -193,7 +159,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     medias.addAll(mediaInfos);
                 } else {
                     handlerMediaInfoSize = 0;
-
                 }
 
                 if (mInfoListAdapter == null) {
@@ -214,10 +179,6 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                     });
                 } else {
                     mInfoListAdapter.notifyDataSetChanged();
-                }
-
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
                 if (medias.size() == 0) {

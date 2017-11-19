@@ -50,42 +50,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.video_authors_fragment, null);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-//        recyclerView.setPullRefreshEnabled(true);
-//        recyclerView.setLoadingMoreEnabled(true);
-//        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-//        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-//            @Override
-//            public void onRefresh() {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        recyclerView.setNoMore(false);
-//                        recyclerView.setLoadingMoreEnabled(true);
-//                        queryData(Constants.REFRESH);
-//                        recyclerView.refreshComplete();
-//                    }
-//                }, 1000);
-//            }
-//
-//            @Override
-//            public void onLoadMore() {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (handlerMediaAuthorSize > 0) {
-//                            queryData(Constants.LOADMORE);
-//                            recyclerView.loadMoreComplete();
-//                        } else {
-//                            recyclerView.setNoMore(true);
-//                        }
-//                    }
-//                }, 1000);
-//            }
-//        });
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-//        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        recyclerView.setLayoutManager(gridLayoutManager);
-
         ViewDataUtil.setLayManager(handlerMediaAuthorSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
@@ -201,10 +165,6 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                     });
                 } else {
                     mediaAuthorListAdapter.notifyDataSetChanged();
-                }
-
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
                 if (medias.size() == 0) {

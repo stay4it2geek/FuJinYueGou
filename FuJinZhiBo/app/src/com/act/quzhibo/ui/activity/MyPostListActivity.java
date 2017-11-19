@@ -221,9 +221,6 @@ public class MyPostListActivity extends AppCompatActivity {
                 }
 
                 setAdapterView();
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
-                }
                 loadNetView.setVisibility(View.GONE);
                 if (myPostList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);

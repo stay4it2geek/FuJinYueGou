@@ -13,8 +13,10 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyTeamListAdapter;
 import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.bean.ShoppingCart;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.i.OnReturnTotalListner;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
@@ -118,45 +121,52 @@ public class ShareManagerActivty extends FragmentActivity {
 
                     if (list != null && list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
-                       setAdapterView(actionType, list);
                     }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
                 } else {
-                    setAdapterView(Constants.NetWorkError, null);
+                    handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });
     }
 
-    void setAdapterView(int what, List<Promotion> promotions) {
-        if (what != Constants.NetWorkError) {
-            if (myProList != null) {
-                myProList.addAll(promotions);
-                handlerMyteamsSize = promotions.size();
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            ArrayList<Promotion> promotions = (ArrayList<Promotion>) msg.obj;
+            if (msg.what != Constants.NetWorkError) {
+                if (myProList != null) {
+                    myProList.addAll(promotions);
+                    handlerMyteamsSize = promotions.size();
+                } else {
+                    handlerMyteamsSize = 0;
+                }
+                if (myTeamListAdapter == null) {
+                    myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myProList);
+                    recyclerView.setAdapter(myTeamListAdapter);
+                } else {
+                    myTeamListAdapter.notifyDataSetChanged();
+                }
+                loadNetView.setVisibility(View.GONE);
+                if (myProList.size() == 0) {
+                    loadNetView.setVisibility(View.VISIBLE);
+                    loadNetView.setlayoutVisily(Constants.NO_DATA);
+                    return;
+                }
             } else {
-                handlerMyteamsSize = 0;
-            }
-            if (myTeamListAdapter == null) {
-                myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myProList);
-                recyclerView.setAdapter(myTeamListAdapter);
-
-            } else {
-                myTeamListAdapter.notifyDataSetChanged();
-            }
-            if (what == Constants.LOADMORE) {
-                recyclerView.setNoMore(true);
-            }
-            loadNetView.setVisibility(View.GONE);
-            if (myProList.size() == 0) {
                 loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NO_DATA);
-                return;
-            }
-        } else {
-            loadNetView.setVisibility(View.VISIBLE);
-            loadNetView.setlayoutVisily(Constants.RELOAD);
-        }
+                loadNetView.setlayoutVisily(Constants.RELOAD);
 
-    }
+            }
+
+
+        }
+    };
+
 }
 
 

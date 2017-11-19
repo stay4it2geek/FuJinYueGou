@@ -46,37 +46,6 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.layout_common, null);
             recycleview = (XRecyclerView) rootView.findViewById(R.id.recyclerview);
-//            recycleview.setLoadingListener(new XRecyclerView.LoadingListener() {
-//                @Override
-//                public void onRefresh() {
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            recycleview.setNoMore(false);
-//                            recycleview.setLoadingMoreEnabled(true);
-//                            getPhotoListData(Constants.REFRESH);
-//                            recycleview.refreshComplete();
-//                        }
-//                    }, 1000);
-//                }
-//
-//                @Override
-//                public void onLoadMore() {
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (handlerMediaInfoSize > 0) {
-//                                getPhotoListData(Constants.LOADMORE);
-//                                recycleview.loadMoreComplete();
-//                            } else {
-//                                recycleview.setNoMore(true);
-//                            }
-//                        }
-//                    }, 1000);
-//                }
-//            });
-//            recycleview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
             ViewDataUtil.setLayManager(handlerMediaInfoSize, new OnQueryDataListner() {
                 @Override
                 public void onRefresh() {
@@ -186,10 +155,6 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                     mInfoListAdapter.notifyDataSetChanged();
                 }
                 loadNetView.setVisibility(View.GONE);
-
-                if(msg.what==Constants.LOADMORE){
-                    recycleview.setNoMore(true);
-                }
                 if (medias.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
