@@ -15,6 +15,8 @@ import com.act.quzhibo.adapter.PhotoAlbumListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.bean.MediaAuthor;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -31,12 +33,12 @@ import cn.bmob.v3.listener.FindListener;
 
 public class PhotoAlbumListFragment extends BackHandledFragment {
 
-    private ArrayList<MediaInfo> medias = new ArrayList<>();
-    private PhotoAlbumListAdapter mInfoListAdapter;
-    private XRecyclerView recycleview;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private int handlerMediaInfoSize;
+     ArrayList<MediaInfo> medias = new ArrayList<>();
+     PhotoAlbumListAdapter mInfoListAdapter;
+     XRecyclerView recycleview;
+     LoadNetView loadNetView;
+     String lastTime = "";
+     int handlerMediaInfoSize;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,36 +46,49 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.layout_common, null);
             recycleview = (XRecyclerView) rootView.findViewById(R.id.recyclerview);
-            recycleview.setLoadingListener(new XRecyclerView.LoadingListener() {
+//            recycleview.setLoadingListener(new XRecyclerView.LoadingListener() {
+//                @Override
+//                public void onRefresh() {
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            recycleview.setNoMore(false);
+//                            recycleview.setLoadingMoreEnabled(true);
+//                            getPhotoListData(Constants.REFRESH);
+//                            recycleview.refreshComplete();
+//                        }
+//                    }, 1000);
+//                }
+//
+//                @Override
+//                public void onLoadMore() {
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (handlerMediaInfoSize > 0) {
+//                                getPhotoListData(Constants.LOADMORE);
+//                                recycleview.loadMoreComplete();
+//                            } else {
+//                                recycleview.setNoMore(true);
+//                            }
+//                        }
+//                    }, 1000);
+//                }
+//            });
+//            recycleview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+            ViewDataUtil.setLayManager(handlerMediaInfoSize, new OnQueryDataListner() {
                 @Override
                 public void onRefresh() {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            recycleview.setNoMore(false);
-                            recycleview.setLoadingMoreEnabled(true);
-                            getPhotoListData(Constants.REFRESH);
-                            recycleview.refreshComplete();
-                        }
-                    }, 1000);
+                    getPhotoListData(Constants.REFRESH);
                 }
 
                 @Override
                 public void onLoadMore() {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (handlerMediaInfoSize > 0) {
-                                getPhotoListData(Constants.LOADMORE);
-                                recycleview.loadMoreComplete();
-                            } else {
-                                recycleview.setNoMore(true);
-                            }
-                        }
-                    }, 1000);
+                    getPhotoListData(Constants.LOADMORE);
                 }
-            });
-            recycleview.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            },getActivity(), recycleview, 2, true, true);
+
             loadNetView = (LoadNetView) rootView.findViewById(R.id.loadview);
             loadNetView.setReloadButtonListener(new View.OnClickListener() {
                 @Override
@@ -102,7 +117,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         return rootView;
     }
 
-    private void getPhotoListData(final int actionType) {
+     void getPhotoListData(final int actionType) {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
         List<BmobQuery<MediaInfo>> queries = new ArrayList<>();
@@ -133,6 +148,9 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         medias.clear();
+                       if(mInfoListAdapter!=null){
+                           mInfoListAdapter.notifyDataSetChanged();
+                       }
                     }
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();

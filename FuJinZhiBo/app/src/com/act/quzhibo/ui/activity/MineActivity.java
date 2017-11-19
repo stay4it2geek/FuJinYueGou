@@ -66,8 +66,6 @@ public class MineActivity extends BaseActivity {
     File tempFile;
     RootUser rootUser;
     PromptDialog promptDialog;
-    @Bind(R.id.titlebar)
-    TitleBarView titleBar;
     @Bind(R.id.myfocus_shower)
     RelativeLayout myfocus_shower;
     @Bind(R.id.myfocus_person)
@@ -102,51 +100,52 @@ public class MineActivity extends BaseActivity {
     CircleImageView circleAvatar;
     @Bind(R.id.uploadImgText)
     TextView uploadImgText;
+    SelfDialog selfDialog;
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            final SelfDialog selfDialog = new SelfDialog(MineActivity.this, false);
-            selfDialog.setTitle("客官再看一会儿呗");
-            selfDialog.setMessage("还是留下来再看看吧");
-            selfDialog.setYesOnclickListener("再欣赏下", new SelfDialog.onYesOnclickListener() {
-                @Override
-                public void onYesClick() {
-                    selfDialog.dismiss();
-
-                }
-            });
-            selfDialog.setNoOnclickListener("有事要忙", new SelfDialog.onNoOnclickListener() {
-                @Override
-                public void onNoClick() {
-                    RootUser user = new RootUser();
-                    if (user != null) {
-                        user.lastLoginTime = System.currentTimeMillis() + "";
-                        user.update(BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    selfDialog.dismiss();
-                                    ToastUtil.showToast(MineActivity.this, "退出时间" + System.currentTimeMillis());
-                                    finish();
-                                }
-                            }
-                        });
-                    }
-                }
-            });
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !selfDialog.isShowing()) {
             selfDialog.show();
         }
-        return super.dispatchKeyEvent(event);
+        return true;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
-        titleBar.setBackButtonVisi(View.GONE);
         promptDialog = new PromptDialog(MineActivity.this);
+        selfDialog = new SelfDialog(MineActivity.this, false);
+        selfDialog.setTitle("客官再看一会儿呗");
+        selfDialog.setMessage("还是留下来再看看吧");
+        selfDialog.setYesOnclickListener("再欣赏下", new SelfDialog.onYesOnclickListener() {
+            @Override
+            public void onYesClick() {
+                selfDialog.dismiss();
 
+            }
+        });
+        selfDialog.setNoOnclickListener("有事要忙", new SelfDialog.onNoOnclickListener() {
+            @Override
+            public void onNoClick() {
+                RootUser user = new RootUser();
+                if (user != null) {
+                    user.lastLoginTime = System.currentTimeMillis() + "";
+                    user.update(BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                selfDialog.dismiss();
+                                ToastUtil.showToast(MineActivity.this, "退出时间" + System.currentTimeMillis());
+                                finish();
+                            }
+                        }
+                    });
+                }else {
+                    finish();
+                }
+            }
+        });
     }
 
     @OnClick({R.id.shopping_cart_layout, R.id.circleAvatar, R.id.avaterlayout,
@@ -171,12 +170,6 @@ public class MineActivity extends BaseActivity {
             return;
         } else if (view.getId() == R.id.getVipLayout) {
             startActivity(view, GetVipPayActivity.class);
-            return;
-        } else if (view.getId() == R.id.shareManagerLayoout) {
-            startActivity(view, ShareManagerActivty.class);
-            return;
-        } else if (view.getId() == R.id.shopping_cart_layout) {
-            startActivity(view, ShoppingCartActivity.class);
             return;
         } else if (R.id.avaterlayout == view.getId() ||
                 R.id.circleAvatar == view.getId() ||
@@ -212,8 +205,17 @@ public class MineActivity extends BaseActivity {
                             view.setBackgroundColor(getResources().getColor(R.color.colorbg));
                             view.setBackgroundColor(getResources().getColor(R.color.white));
                             switch (view.getId()) {
+                                case R.id.shopping_cart_layout:
+                                    startActivity(view, ShoppingCartActivity.class);
+                                    break;
+                                case R.id.shareManagerLayoout:
+                                    startActivity(view, ShareManagerActivty.class);
+                                    break;
                                 case R.id.vip_order_listlayout:
-                                    startActivity(new Intent(MineActivity.this, VipOrdersActivity.class));
+                                    Intent intent=new Intent(MineActivity.this,CourseOrdersActivity.class);
+                                    intent.putExtra("user",rootUser);
+                                    intent.putExtra("isTeamType",false);
+                                    startActivity(intent);
                                     break;
                                 case R.id.who_see_me:
                                     Intent seeIntent = new Intent(MineActivity.this, WhoLikeThenSeeMeActivity.class);
@@ -297,7 +299,7 @@ public class MineActivity extends BaseActivity {
                 } else if (3000 < rootUser.vipConis && rootUser.vipConis < 5000) {
                     vipLevel.setText("铂金会员");
                 } else if (5000 < rootUser.vipConis && rootUser.vipConis < 8000) {
-                    vipLevel.setText("黄金金会员");
+                    vipLevel.setText("黄金会员");
                 } else if (rootUser.vipConis > 8000) {
                     vipLevel.setText("钻石会员");
                 } else {

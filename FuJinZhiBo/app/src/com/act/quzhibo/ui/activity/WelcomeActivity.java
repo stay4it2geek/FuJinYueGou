@@ -235,28 +235,28 @@ public class WelcomeActivity extends ActivityManagePermission {
     }
 
     void request() {
-        BmobQuery<Toggle> query = new BmobQuery<>();
-        query.findObjects(new FindListener<Toggle>() {
-            @Override
-            public void done(List<Toggle> Toggles, BmobException bmobException) {
-                if (bmobException == null) {
-                    SharedPreferences mySharedPreferences = getSharedPreferences(Constants.SAVE, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor edit = mySharedPreferences.edit();
-                    String liststr = CommonUtil.SceneList2String(Toggles);
-                    edit.putString(Constants.TOGGLES, liststr);
-                    edit.commit();
+//        BmobQuery<Toggle> query = new BmobQuery<>();
+//        query.findObjects(new FindListener<Toggle>() {
+//            @Override
+//            public void done(List<Toggle> Toggles, BmobException bmobException) {
+//                if (bmobException == null) {
+//                    SharedPreferences mySharedPreferences = getSharedPreferences(Constants.SAVE, Context.MODE_PRIVATE);
+//                    SharedPreferences.Editor edit = mySharedPreferences.edit();
+//                    String liststr = CommonUtil.SceneList2String(Toggles);
+//                    edit.putString(Constants.TOGGLES, liststr);
+//                    edit.commit();
                     getPlateList();
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.showToast(getApplicationContext(), "网络异常,正在重试");
-                        }
-                    });
-                    request();
-                }
-            }
-        });
+//                } else {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            ToastUtil.showToast(getApplicationContext(), "网络异常,正在重试");
+//                        }
+//                    });
+//                    request();
+//                }
+//            }
+//        });
     }
 
     void getPlateList() {

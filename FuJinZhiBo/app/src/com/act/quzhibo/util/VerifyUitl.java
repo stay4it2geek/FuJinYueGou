@@ -22,9 +22,7 @@ public class VerifyUitl {
     public VerifyUitl(Context context, OnCheckInputListner listner) {
         this.context = context;
         this.listner = listner;
-
     }
-
 
     public boolean verifyInputTrue(EditText et_c_newpsw,
                                    EditText et_sms_code,

@@ -29,13 +29,13 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class NearFragment extends BackHandledFragment {
-    private ArrayList<InterestSubPerson> nearPersonList = new ArrayList<>();
-    private NearPersonAdapter nearPersonAdapter;
-    private XRecyclerView recyclerView;
-    private LoadNetView loadNetView;
-    private int nearPersonSizeHandler;
+     ArrayList<InterestSubPerson> nearPersonList = new ArrayList<>();
+     NearPersonAdapter nearPersonAdapter;
+     XRecyclerView recyclerView;
+     LoadNetView loadNetView;
+     int nearPersonSizeHandler;
     public String lastTime;
-    private View view;
+     View view;
 
     @Nullable
     @Override
@@ -97,7 +97,7 @@ public class NearFragment extends BackHandledFragment {
         return view;
     }
 
-    private void queryData(final int actionType) {
+     void queryData(final int actionType) {
         List<BmobQuery<InterestSubPerson>> queries = new ArrayList<>();
         BmobQuery<InterestSubPerson> query = new BmobQuery<>();
         BmobQuery<InterestSubPerson> query3 = new BmobQuery<>();
@@ -125,7 +125,9 @@ public class NearFragment extends BackHandledFragment {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         nearPersonList.clear();
-                    }
+                        if(nearPersonAdapter!=null){
+                            nearPersonAdapter.notifyDataSetChanged();
+                        }                    }
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                     }

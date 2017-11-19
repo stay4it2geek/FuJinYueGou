@@ -11,7 +11,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.NewFriendAdapter;
+import com.act.quzhibo.adapter.NewFriendAdapterChat;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.chat.NewFriend;
@@ -38,9 +38,9 @@ public class NewFriendActivity extends FragmentActivity {
     RecyclerView rc_view;
     @Bind(R.id.sw_refresh)
     SwipeRefreshLayout sw_refresh;
-    NewFriendAdapter adapter;
+    NewFriendAdapterChat adapter;
     LinearLayoutManager layoutManager;
-    private IMutlipleItem<NewFriend> mutlipleItem;
+    IMutlipleItem<NewFriend> mutlipleItem;
 
 
     @Override
@@ -53,7 +53,6 @@ public class NewFriendActivity extends FragmentActivity {
             findViewById(R.id.sw_refresh).setVisibility(View.VISIBLE);
         }
         findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
-
         //单一布局
         mutlipleItem = new IMutlipleItem<NewFriend>() {
 
@@ -82,7 +81,7 @@ public class NewFriendActivity extends FragmentActivity {
                 NewFriendActivity.this.finish();
             }
         });
-        adapter = new NewFriendAdapter(this, mutlipleItem, null);
+        adapter = new NewFriendAdapterChat(this, mutlipleItem, null);
         rc_view.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(this);
         rc_view.setLayoutManager(layoutManager);

@@ -209,7 +209,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="点击获取验证码 "
-            android:textColor="@drawable/textcolor_selector"
             android:textSize="14sp" />
 
     </RelativeLayout>
@@ -257,7 +256,6 @@
         android:button="@null"
         android:gravity="center"
         android:text="验   证"
-        android:textColor="@drawable/textcolor_selector"
         android:textSize="18sp" />
 
     <TextView

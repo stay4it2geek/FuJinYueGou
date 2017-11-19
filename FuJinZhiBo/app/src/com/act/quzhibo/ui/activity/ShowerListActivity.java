@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class ShowerListActivity extends TabSlideSameBaseActivity implements ShowerListFragment.OnCallShowViewListner {
 
-    private PlateList plates;
+     PlateList plates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

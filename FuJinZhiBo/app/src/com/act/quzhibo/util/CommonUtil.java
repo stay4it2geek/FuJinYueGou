@@ -8,12 +8,16 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.View;
 
@@ -22,6 +26,8 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.TabEntity;
 import com.act.quzhibo.bean.Toggle;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.ui.activity.ShoppingCartActivity;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.services.core.LatLonPoint;
 import com.flyco.tablayout.CommonTabLayout;
@@ -30,6 +36,7 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -54,15 +61,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FetchUserInfoListener;
 
 public class CommonUtil {
-
-    public static void switchFragment(Fragment fragment, int layoutId, FragmentActivity activity) {
-        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        if (fragment != null && !fragment.isAdded()) {
-            transaction.add(layoutId, fragment);
-        }
-        transaction.addToBackStack(null);
-        transaction.commitAllowingStateLoss();
-    }
 
     public static String SceneList2String(List SceneList) {
         String SceneListString = "";
@@ -137,43 +135,6 @@ public class CommonUtil {
         return arrayList;
     }
 
-    public static void initView(String[] mTitles, View view, final ViewPager viewPager, FragmentPagerAdapter mAdapter) {
-        final CommonTabLayout layout;
-        viewPager.setAdapter(mAdapter);
-        layout = (CommonTabLayout) view.findViewById(R.id.layout);
-        layout.setVisibility(View.VISIBLE);
-        ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
-        for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i], 0, 0));
-        }
-        layout.setTabData(mTabEntities);
-        layout.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
-            public void onTabSelect(int position) {
-                viewPager.setCurrentItem(position);
-            }
-
-            @Override
-            public void onTabReselect(int position) {
-            }
-        });
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                layout.setCurrentTab(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
-        viewPager.setOffscreenPageLimit(mTabEntities.size());
-        viewPager.setCurrentItem(0);
-    }
 
 
     /*
@@ -183,7 +144,7 @@ public class CommonUtil {
 
         String res = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date ;
+        Date date;
         try {
             date = simpleDateFormat.parse(s);
             long ts = date.getTime();
@@ -192,20 +153,6 @@ public class CommonUtil {
             e.printStackTrace();
         }
         return res;
-    }
-
-
-
-    public static void saveData(Context context, int value, String key) {
-        SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(key, value);
-        editor.commit();
-    }
-
-    public static int loadData(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
-        return sp.getInt(key, 0);
     }
 
     public static void saveLoginData(Context context, String account, String passWord) {
@@ -219,12 +166,6 @@ public class CommonUtil {
     public static String loadLoginData(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences("login", Context.MODE_PRIVATE);
         return sp.getString(key, "");
-    }
-
-    public static void clearData(Context context) {
-        SharedPreferences sp = context.getSharedPreferences("config", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.clear().commit();
     }
 
     public static void fecth(final Activity activity) {

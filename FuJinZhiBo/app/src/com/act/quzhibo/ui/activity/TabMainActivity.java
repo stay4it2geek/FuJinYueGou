@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -17,11 +18,15 @@ import com.act.quzhibo.VirtualUserDao;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.TabEntity;
+import com.act.quzhibo.event.ChangeEvent;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.flyco.tablayout.CommonTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,7 @@ public class TabMainActivity extends TabActivity {
 
     private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.chat, R.drawable.mine};
 
-    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s,  R.drawable.chat_s, R.drawable.mine_s};
+    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.chat_s, R.drawable.mine_s};
 
     private int[] mIconUnselectIdsSpecial = {R.drawable.courses, R.drawable.money, R.drawable.mine};
     private int[] mIconSelectIdsSpecial = {R.drawable.courses_s, R.drawable.money_s, R.drawable.mine_s};
@@ -84,6 +89,8 @@ public class TabMainActivity extends TabActivity {
                     .setContent(new Intent(TabMainActivity.this, MineActivity.class)));
         }
         SetIndexButton();
+        EventBus.getDefault().register(this);
+        mTabLayout.setCurrentTab(0);
         tabHost.setCurrentTab(0);
     }
 
@@ -110,6 +117,7 @@ public class TabMainActivity extends TabActivity {
             public void onTabReselect(int position) {
             }
         });
+
     }
 
     private boolean checkPublishPermission() {
@@ -134,14 +142,18 @@ public class TabMainActivity extends TabActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    @Subscribe
+    public void onEventMain(ChangeEvent event) {
+        if ("buy".equals(event.type)) {
+            tabHost.setCurrentTab(0);
+            mTabLayout.setCurrentTab(0);
+        }
 
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

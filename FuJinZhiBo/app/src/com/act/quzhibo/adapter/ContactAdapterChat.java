@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
+import com.act.quzhibo.adapter.base.BaseChatRecyclerAdapter;
 import com.act.quzhibo.adapter.base.BaseRecyclerHolder;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Friend;
@@ -17,12 +17,12 @@ import java.util.Collection;
 /**联系人
  * 一种简洁的Adapter实现方式，可用于多种Item布局的recycleView实现，不用再写ViewHolder啦
  */
-public class ContactAdapter extends BaseRecyclerAdapter<Friend> {
+public class ContactAdapterChat extends BaseChatRecyclerAdapter<Friend> {
 
     public static final int TYPE_NEW_FRIEND = 0;
     public static final int TYPE_ITEM = 1;
 
-    public ContactAdapter(Activity activity, IMutlipleItem<Friend> items, Collection<Friend> datas) {
+    public ContactAdapterChat(Activity activity, IMutlipleItem<Friend> items, Collection<Friend> datas) {
         super(activity,items,datas);
     }
 

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.act.quzhibo.R;
@@ -37,11 +36,8 @@ public class LoginActivity extends BaseActivity {
     EditText et_password;
     @Bind(R.id.titlebar)
     TitleBarView titlebar;
-
     PromptDialog promptDialog;
-
     Animation shakeAnimation;
-
 
     @Override
     protected void onResume() {

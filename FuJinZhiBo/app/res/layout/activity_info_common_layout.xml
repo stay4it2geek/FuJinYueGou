@@ -453,7 +453,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/comment_private"
+            android:id="@+id/chat_private"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -495,6 +495,5 @@
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="45dp"
-        android:background="#fff" />
+        android:layout_marginTop="45dp"/>
 </FrameLayout>

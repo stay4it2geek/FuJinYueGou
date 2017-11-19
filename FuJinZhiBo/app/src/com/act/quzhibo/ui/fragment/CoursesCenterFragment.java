@@ -16,6 +16,9 @@ import com.act.quzhibo.adapter.CommonCoursesAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.CommonCourse;
 import com.act.quzhibo.event.CourseEvent;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -33,13 +36,13 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
 public class CoursesCenterFragment extends Fragment {
-    private XRecyclerView recyclerView;
-    private CommonCoursesAdapter courseCenterAdapter;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private ArrayList<CommonCourse> commonCourseList = new ArrayList<>();
-    private int handlerCourseSize;
-    private View view;
+    XRecyclerView recyclerView;
+    CommonCoursesAdapter courseCenterAdapter;
+    LoadNetView loadNetView;
+    String lastTime = "";
+    ArrayList<CommonCourse> commonCourseList = new ArrayList<>();
+    int handlerCourseSize;
+    View view;
     String courseCategoryId = "";
 
     @Nullable
@@ -47,45 +50,22 @@ public class CoursesCenterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_layout, null, false);
-        if(getArguments()!=null){
-            courseCategoryId=getArguments().getString(Constants.COURSE_CATOGERY_ID);
+        if (getArguments() != null) {
+            courseCategoryId = getArguments().getString(Constants.COURSE_CATOGERY_ID);
         }
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(handlerCourseSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryCourseData(courseCategoryId, Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryCourseData(courseCategoryId, Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerCourseSize > 0) {
-                            queryCourseData(courseCategoryId, Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                queryCourseData(courseCategoryId, Constants.LOADMORE);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        },getActivity(), recyclerView, 1, true, true);
+
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -94,9 +74,6 @@ public class CoursesCenterFragment extends Fragment {
                 queryCourseData(courseCategoryId, Constants.REFRESH);
             }
         });
-        queryCourseData(courseCategoryId, Constants.REFRESH);
-
-
         loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,10 +81,12 @@ public class CoursesCenterFragment extends Fragment {
                 queryCourseData(courseCategoryId, Constants.REFRESH);
             }
         });
+
+        queryCourseData(courseCategoryId, Constants.REFRESH);
         return view;
     }
 
-    private void queryCourseData(String courseCategoryId, final int actionType) {
+    void queryCourseData(String courseCategoryId, final int actionType) {
         List<BmobQuery<CommonCourse>> querise = new ArrayList<>();
         BmobQuery<CommonCourse> query = new BmobQuery<>();
         BmobQuery<CommonCourse> query3 = new BmobQuery<>();
@@ -169,20 +148,20 @@ public class CoursesCenterFragment extends Fragment {
                     handlerCourseSize = commonCourses.size();
                 } else {
                     handlerCourseSize = 0;
-                    if(msg.what==Constants.LOADMORE){
+                    if (msg.what == Constants.LOADMORE) {
                         recyclerView.setNoMore(true);
                     }
                 }
 
                 if (courseCenterAdapter == null) {
-                        courseCenterAdapter = new CommonCoursesAdapter(getActivity(), commonCourseList,getArguments().getString("courseUiType"));
-                        recyclerView.setAdapter(courseCenterAdapter);
-                        courseCenterAdapter.setOnItemClickListener(new CommonCoursesAdapter.OnRecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(CommonCourse course) {
-                              EventBus.getDefault().post(new CourseEvent(course));
-                            }
-                        });
+                    courseCenterAdapter = new CommonCoursesAdapter(getActivity(), commonCourseList, getArguments().getString("courseUiType"));
+                    recyclerView.setAdapter(courseCenterAdapter);
+                    courseCenterAdapter.setOnItemClickListener(new CommonCoursesAdapter.OnRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(CommonCourse course) {
+                            EventBus.getDefault().post(new CourseEvent(course));
+                        }
+                    });
                 } else {
                     courseCenterAdapter.notifyDataSetChanged();
 

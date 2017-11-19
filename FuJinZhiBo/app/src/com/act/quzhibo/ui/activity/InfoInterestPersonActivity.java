@@ -43,6 +43,9 @@ import java.util.Random;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.bmob.newim.BmobIM;
+import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMUserInfo;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
@@ -85,6 +88,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
     InterestPost post;
     RootUser user;
     MyFocusCommonPerson person;
+    BmobIMUserInfo info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +140,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
         initOnlineTime();
         getTextAndImageData();
         initOther();
-
-
+        info = new BmobIMUserInfo(post.user.userId, post.user.nick, post.user.photoUrl);
     }
 
     void initOther() {
@@ -208,7 +211,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
         ageText.setText(randomAge);
     }
 
-    @OnClick({})
+    @OnClick({R.id.addFriend,R.id.talk_accese,R.id.focus,R.id.chat_private})
     void buttonClicks(View view) {
         switch (view.getId()) {
             case R.id.talk_accese:
@@ -312,6 +315,12 @@ public class InfoInterestPersonActivity extends BaseActivity {
                     startActivity(new Intent(InfoInterestPersonActivity.this, LoginActivity.class));
                 }
                 break;
+            case R.id.chat_private:
+                chatPrivate();
+                break;
+            case R.id.addFriend:
+                ToastUtil.showToast(this, "好友请求发送成功，等待验证");
+                break;
         }
     }
 
@@ -336,6 +345,17 @@ public class InfoInterestPersonActivity extends BaseActivity {
                 }
             });
         }
+    }
+
+
+    /**
+     * 与陌生人私聊
+     */
+    void chatPrivate() {
+        BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, null);
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("c", conversationEntrance);
+        startActivity(intent);
     }
 
     void setUserAvater(ArrayList<String> urls, LinkedHashMap<String, Integer> keySrc) {

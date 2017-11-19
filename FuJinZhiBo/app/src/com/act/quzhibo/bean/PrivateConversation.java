@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
+import com.act.quzhibo.adapter.base.BaseChatRecyclerAdapter;
 import com.act.quzhibo.ui.activity.ChatActivity;
 import com.act.quzhibo.widget.FragmentDialog;
 
@@ -108,7 +108,7 @@ public class PrivateConversation extends Conversation {
     }
 
     @Override
-    public void onLongClick(final FragmentActivity activity, final BaseRecyclerAdapter adapter, final int position) {
+    public void onLongClick(final FragmentActivity activity, final BaseChatRecyclerAdapter adapter, final int position) {
         FragmentDialog.newInstance(false, "是否删除？", "删除后不可恢复", "确定", "取消", "", "", false, new FragmentDialog.OnClickBottomListener() {
             @Override
             public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {

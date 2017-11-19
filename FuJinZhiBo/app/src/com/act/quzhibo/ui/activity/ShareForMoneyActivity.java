@@ -26,7 +26,7 @@ import me.leefeng.promptlibrary.PromptDialog;
 
 public class ShareForMoneyActivity extends FragmentActivity {
 
-    private PromptDialog promptDialog;
+     PromptDialog promptDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

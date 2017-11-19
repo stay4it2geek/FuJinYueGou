@@ -1,6 +1,7 @@
 package com.act.quzhibo.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,17 +13,22 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.ui.activity.CourseOrdersActivity;
 import com.act.quzhibo.widget.CircleImageView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
+
 public class MyTeamListAdapter extends RecyclerView.Adapter<MyTeamListAdapter.MyViewHolder> {
     ArrayList<Promotion> promotions;
     Activity mContext;
 
-    public MyTeamListAdapter(Activity context, ArrayList<Promotion> promotions) {
-        mContext = context;
+    public MyTeamListAdapter(Activity  activity, ArrayList<Promotion> promotions) {
+        mContext = activity;
         this.promotions = promotions;
     }
 
@@ -34,40 +40,47 @@ public class MyTeamListAdapter extends RecyclerView.Adapter<MyTeamListAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
-        RootUser refreeUser = promotions.get(position).refereeUser;
-        if (refreeUser == null) {
-            return;
-        }
-        holder.createTime.setText(TextUtils.isEmpty(refreeUser.getCreatedAt())?"":"加入时间:"+refreeUser.getCreatedAt());
-        holder.userNickName.setText(TextUtils.isEmpty(refreeUser.getUsername())?"":refreeUser.getUsername());
-        Glide.with(mContext).load(refreeUser.photoFileUrl).into(holder.avater);
-        if (refreeUser.vipConis != null && refreeUser.vipConis > 0) {
-            if (0 < refreeUser.vipConis && refreeUser.vipConis < 3000) {
-                holder.vipLevel.setText("初级趣会员");
-            } else if (3000 < refreeUser.vipConis && refreeUser.vipConis < 5000) {
-                holder.vipLevel.setText("中级趣会员");
-            } else if (5000 < refreeUser.vipConis && refreeUser.vipConis < 8000) {
-                holder.vipLevel.setText("特级趣会员");
-            } else if (refreeUser.vipConis > 8000) {
-                holder.vipLevel.setText("超级趣会员");
-            }else{
-                holder.vipLevel.setText("非趣会员");
-            }
-        }
-
-        holder.orderLayout.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        final RootUser refereeUser = promotions.get(position).refereeUser;
+        BmobQuery<RootUser> user = new BmobQuery<>();
+        user.getObject(refereeUser.getObjectId(), new QueryListener<RootUser>() {
             @Override
-            public void onClick(View view) {
+            public void done(final RootUser refereeUser, BmobException e) {
+                if (e == null) {
+                    if (refereeUser == null) {
+                        return;
+                    }
+                    holder.createTime.setText(TextUtils.isEmpty(refereeUser.getCreatedAt())?"":"加入时间:"+refereeUser.getCreatedAt());
+                    holder.userNickName.setText(TextUtils.isEmpty(refereeUser.getUsername())?"":refereeUser.getUsername());
+                    Glide.with(mContext).load(refereeUser.photoFileUrl).into(holder.avater);
+                    if (refereeUser.vipConis != null && refereeUser.vipConis > 0) {
+                        if (0 < refereeUser.vipConis && refereeUser.vipConis < 3000) {
+                            holder.vipLevel.setText("白银会员");
+                        } else if (3000 < refereeUser.vipConis && refereeUser.vipConis < 5000) {
+                            holder.vipLevel.setText("铂金会员");
+                        } else if (5000 < refereeUser.vipConis && refereeUser.vipConis < 8000) {
+                            holder.vipLevel.setText("黄金会员");
+                        } else if (refereeUser.vipConis > 8000) {
+                            holder.vipLevel.setText("钻石会员");
+                        }else{
+                            holder.vipLevel.setText("非会员");
+                        }
+                    }
+
+                    holder.refereeOrder.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent=new Intent(mContext,CourseOrdersActivity.class);
+                            intent.putExtra("user",refereeUser);
+                            intent.putExtra("isTeamType",true);
+                            mContext.startActivity(intent);
+                        }
+                    });
+
+                }
             }
         });
 
-        holder.refereeOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
     }
 

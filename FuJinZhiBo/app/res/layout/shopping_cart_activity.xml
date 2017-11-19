@@ -25,7 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/commonViewHeight"
-                android:cacheColorHint="@null"
                 android:scrollbars="vertical" />
             <LinearLayout
                 android:id="@+id/rl_bottom"
@@ -34,52 +33,61 @@
                 android:layout_alignParentBottom="true"
                 android:background="@color/white">
 
-
                 <CheckBox
                     android:id="@+id/cbSelectAll"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
                     android:button="@drawable/check_bg"
-                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:scaleX="0.8"
                     android:scaleY="0.8"
+                    android:textSize="15sp"
                     android:text="全选"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_show_price"
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:textSize="15sp"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="合计:0.00"
                     android:textColor="#ff5000" />
-                <TextView
-                    android:id="@+id/tv_settlement"
-                    android:layout_width="100dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
+                <RelativeLayout
+                    android:layout_width="110dp"
                     android:background="#ff5000"
-                    android:gravity="center"
-                    android:text="结算(0)"
-                    android:textColor="@color/white" />
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/alipay"
+                        android:layout_centerVertical="true"
+                        android:layout_width="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/alipay"
+                        android:layout_height="20dp" />
+                    <TextView
+                        android:layout_toRightOf="@+id/alipay"
+                        android:id="@+id/tv_settlement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="结算(0)"
+                        android:textSize="15sp"
+                        android:textColor="@color/white" />
 
-
-
+                </RelativeLayout>
             </LinearLayout>
-
         </RelativeLayout>
 
         <com.act.quzhibo.widget.LoadNetView
             android:id="@+id/loadview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
+            android:layout_height="match_parent" />
     </FrameLayout>
 
 </RelativeLayout>

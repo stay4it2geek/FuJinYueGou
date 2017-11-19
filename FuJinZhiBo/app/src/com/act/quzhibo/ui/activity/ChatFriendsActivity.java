@@ -255,6 +255,8 @@ public class ChatFriendsActivity extends FragmentActivity implements BackHandled
                                     }
                                 }
                             });
+                        }else {
+                            finish();
                         }
 
                     }

@@ -60,7 +60,8 @@ public class InterestPlatesListAdapter extends RecyclerView.Adapter<InterestPlat
 
     @Override
     public int getItemCount() {
-        return datas.size();
+        return datas == null ? 0 : datas.size();
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

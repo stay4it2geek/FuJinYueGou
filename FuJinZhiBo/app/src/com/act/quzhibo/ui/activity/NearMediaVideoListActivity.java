@@ -20,9 +20,9 @@ import permission.auron.com.marshmallowpermissionhelper.ActivityManagePermission
 
 public class NearMediaVideoListActivity extends ActivityManagePermission {
 
-    private IjkVideoView ijkVideoView;
+     IjkVideoView ijkVideoView;
     NearVideoEntity videoEntity;
-    private MyStandardVideoController controller;
+     MyStandardVideoController controller;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

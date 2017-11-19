@@ -15,7 +15,9 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MediaAuthor;
+import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -35,54 +37,68 @@ import static com.act.quzhibo.common.Constants.VIDEO_ALBUM;
 
 public class VideoAlbumAuthorsFragment extends BackHandledFragment {
 
-    private View view;
-    private XRecyclerView recyclerView;
-    private MediaAuthorListAdapter mediaAuthorListAdapter;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private ArrayList<MediaAuthor> medias = new ArrayList<>();
-    private int handlerMediaAuthorSize;
+    View view;
+    XRecyclerView recyclerView;
+    MediaAuthorListAdapter mediaAuthorListAdapter;
+    LoadNetView loadNetView;
+    String lastTime = "";
+    ArrayList<MediaAuthor> medias = new ArrayList<>();
+    int handlerMediaAuthorSize;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.video_authors_fragment, null);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//        recyclerView.setPullRefreshEnabled(true);
+//        recyclerView.setLoadingMoreEnabled(true);
+//        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
+//        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//            @Override
+//            public void onRefresh() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        recyclerView.setNoMore(false);
+//                        recyclerView.setLoadingMoreEnabled(true);
+//                        queryData(Constants.REFRESH);
+//                        recyclerView.refreshComplete();
+//                    }
+//                }, 1000);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (handlerMediaAuthorSize > 0) {
+//                            queryData(Constants.LOADMORE);
+//                            recyclerView.loadMoreComplete();
+//                        } else {
+//                            recyclerView.setNoMore(true);
+//                        }
+//                    }
+//                }, 1000);
+//            }
+//        });
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+//        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerView.setLayoutManager(gridLayoutManager);
+
+        ViewDataUtil.setLayManager(handlerMediaAuthorSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryData(Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerMediaAuthorSize > 0) {
-                            queryData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                queryData(Constants.LOADMORE);
+
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        }, getActivity(), recyclerView, 2, true, true);
+
         queryData(Constants.REFRESH);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
@@ -115,7 +131,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     }
 
 
-    private void queryData(final int actionType) {
+    void queryData(final int actionType) {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
         List<BmobQuery<MediaAuthor>> queries = new ArrayList<>();
@@ -180,14 +196,14 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("author", mediaAuthor);
                             videoAlbumListFragment.setArguments(bundle);
-                            CommonUtil.switchFragment(videoAlbumListFragment, R.id._videolayoutContainer, getActivity());
+                            ViewDataUtil.switchFragment(videoAlbumListFragment, R.id._videolayoutContainer, getActivity());
                         }
                     });
                 } else {
                     mediaAuthorListAdapter.notifyDataSetChanged();
                 }
 
-                if(msg.what==Constants.LOADMORE){
+                if (msg.what == Constants.LOADMORE) {
                     recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);

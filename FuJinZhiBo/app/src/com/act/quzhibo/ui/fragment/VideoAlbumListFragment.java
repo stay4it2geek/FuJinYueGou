@@ -16,6 +16,8 @@ import com.act.quzhibo.adapter.VideoRecyclerViewAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.bean.MediaInfo;
 import com.act.quzhibo.bean.MediaAuthor;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.devlin_n.videoplayer.player.IjkVideoView;
 import com.devlin_n.videoplayer.player.VideoViewManager;
@@ -32,15 +34,14 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-
 public class VideoAlbumListFragment extends BackHandledFragment {
-    private View view;
-    private LoadNetView loadNetView;
-    private XRecyclerView recyclerView;
-    private String lastTime = "";
-    private int handlerMediaInfoSize;
-    private ArrayList<MediaInfo> medias = new ArrayList<>();
-    private VideoRecyclerViewAdapter mInfoListAdapter;
+     View view;
+     LoadNetView loadNetView;
+     XRecyclerView recyclerView;
+     String lastTime = "";
+     int handlerMediaInfoSize;
+     ArrayList<MediaInfo> medias = new ArrayList<>();
+     VideoRecyclerViewAdapter mInfoListAdapter;
 
     @Nullable
     @Override
@@ -66,44 +67,54 @@ public class VideoAlbumListFragment extends BackHandledFragment {
         return view;
     }
 
-    private void initView() {
+     void initView() {
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
+//        recyclerView.setPullRefreshEnabled(true);
+//        recyclerView.setLoadingMoreEnabled(true);
+//        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
+//        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//            @Override
+//            public void onRefresh() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        recyclerView.setNoMore(false);
+//                        recyclerView.setLoadingMoreEnabled(true);
+//                        recyclerView.refreshComplete();
+//                    }
+//                }, 1000);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (handlerMediaInfoSize > 0) {
+//                            recyclerView.loadMoreComplete();
+//
+//                        } else {
+//                            recyclerView.setNoMore(true);
+//                        }
+//                    }
+//                }, 1000);
+//            }
+//        });
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
+//        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerView.setLayoutManager(gridLayoutManager);
+
+         ViewDataUtil.setLayManager(handlerMediaInfoSize, new OnQueryDataListner() {
+             @Override
+             public void onRefresh() {
                         initMediaVideoListData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
-            }
+             }
 
-            @Override
-            public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerMediaInfoSize > 0) {
+             @Override
+             public void onLoadMore() {
                             initMediaVideoListData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
-            }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+             }
+         },getActivity(), recyclerView, 1, true, true);
         initMediaVideoListData(Constants.REFRESH);
     }
 
@@ -123,7 +134,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
         return false;
     }
 
-    private void initMediaVideoListData(final int actionType) {
+     void initMediaVideoListData(final int actionType) {
         BmobQuery<MediaInfo> query = new BmobQuery<>();
         BmobQuery<MediaInfo> query2 = new BmobQuery<>();
         List<BmobQuery<MediaInfo>> queries = new ArrayList<>();
@@ -153,6 +164,9 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         medias.clear();
+                        if(mInfoListAdapter!=null){
+                            mInfoListAdapter.notifyDataSetChanged();
+                        }
                     }
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();

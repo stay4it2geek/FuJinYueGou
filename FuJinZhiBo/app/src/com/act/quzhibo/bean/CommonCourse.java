@@ -21,5 +21,8 @@ public class CommonCourse extends BmobObject implements Serializable {
     public boolean needPay;
     public String courseUiType;
     public String freePromotion;
+    public String downloadUrl;
+    public String downloadPsw;
+    public String profitPercent;
 
 }

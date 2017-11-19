@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.ConversationAdapter;
+import com.act.quzhibo.adapter.ConversationAdapterChat;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Conversation;
@@ -48,7 +48,7 @@ public class ConversationFragment extends Fragment {
     RecyclerView rc_view;
     @Bind(R.id.sw_refresh)
     SwipeRefreshLayout sw_refresh;
-    ConversationAdapter adapter;
+    ConversationAdapterChat adapter;
     LinearLayoutManager layoutManager;
     private IMutlipleItem<Conversation> mutlipleItem;
     private View rootView;
@@ -124,7 +124,7 @@ public class ConversationFragment extends Fragment {
                     return list.size();
                 }
             };
-            adapter = new ConversationAdapter(getActivity(), mutlipleItem, null);
+            adapter = new ConversationAdapterChat(getActivity(), mutlipleItem, null);
             rc_view.setAdapter(adapter);
             layoutManager = new LinearLayoutManager(getActivity());
             rc_view.setLayoutManager(layoutManager);

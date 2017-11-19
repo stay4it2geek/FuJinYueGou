@@ -16,7 +16,9 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MediaAuthorListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MediaAuthor;
+import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -37,54 +39,65 @@ import static com.act.quzhibo.common.Constants.PHOTO_ALBUM;
 
 
 public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
-    private View view;
-    private XRecyclerView recyclerView;
-    private MediaAuthorListAdapter mediaAuthorListAdapter;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private ArrayList<MediaAuthor> mediaAuthors = new ArrayList<>();
-    private int handlerMediaAuthorSize;
+     View view;
+     XRecyclerView recyclerView;
+     MediaAuthorListAdapter mediaAuthorListAdapter;
+     LoadNetView loadNetView;
+     String lastTime = "";
+     ArrayList<MediaAuthor> mediaAuthors = new ArrayList<>();
+     int handlerMediaAuthorSize;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_layout, null);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//        recyclerView.setPullRefreshEnabled(true);
+//        recyclerView.setLoadingMoreEnabled(true);
+//        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
+//        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//            @Override
+//            public void onRefresh() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        recyclerView.setNoMore(false);
+//                        recyclerView.setLoadingMoreEnabled(true);
+//
+//                        recyclerView.refreshComplete();
+//                    }
+//                }, 1000);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (handlerMediaAuthorSize > 0) {
+//                            recyclerView.loadMoreComplete();
+//                        } else {
+//                            recyclerView.setNoMore(true);
+//                        }
+//                    }
+//                }, 1000);
+//            }
+//        });
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+//        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        recyclerView.setLayoutManager(gridLayoutManager);
+        ViewDataUtil.setLayManager(handlerMediaAuthorSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryData(Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerMediaAuthorSize > 0) {
                             queryData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        },getActivity(), recyclerView, 1, true, true);
+
         queryData(Constants.REFRESH);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
@@ -126,7 +139,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
     }
 
 
-    private void queryData(final int actionType) {
+     void queryData(final int actionType) {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
         List<BmobQuery<MediaAuthor>> queries = new ArrayList<>();
@@ -154,6 +167,9 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
                             mediaAuthors.clear();
+                            if(mediaAuthorListAdapter!=null){
+                                mediaAuthorListAdapter.notifyDataSetChanged();
+                            }
                         }
                         if (list.size() > 0) {
                             lastTime = list.get(list.size() - 1).getUpdatedAt();
@@ -211,7 +227,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("author", mediaAuthor);
                                 photoAlbumListFragment.setArguments(bundle);
-                                CommonUtil.switchFragment(photoAlbumListFragment, R.id.layoutContainer, getActivity());
+                                ViewDataUtil.switchFragment(photoAlbumListFragment, R.id.layoutContainer, getActivity());
                             }
                         });
                     } else {

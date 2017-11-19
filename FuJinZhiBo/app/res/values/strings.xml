@@ -98,5 +98,8 @@
     <string name="keepFocus">继续关注</string>
     <string name="cancelFocusOk">取消关注成功</string>
     <string name="focusTa">关注ta</string>
+    <string name="ifChecked">是否删除该订单？</string>
+    <string name="deleteCanNotRecover">删除后不可恢复哦</string>
+    <string name="cancel">取消</string>
 </resources>
 

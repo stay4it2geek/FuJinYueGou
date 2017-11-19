@@ -94,10 +94,6 @@ public class DownloadedFragment extends BaseFragment {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.NO_DOWN_DATA);
             }
-
-
-
-
             downLoadListAdapter.setOnDeleteListner(new OnDeleteListner() {
                 @Override
                 public void onDelete(DownloadInfo downloadInfo, int position, boolean needDelete) {

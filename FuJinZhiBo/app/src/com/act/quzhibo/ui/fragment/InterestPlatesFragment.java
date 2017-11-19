@@ -18,8 +18,10 @@ import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPlates;
 import com.act.quzhibo.bean.InterestPlatesParentData;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
+import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -28,10 +30,10 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 
 public class InterestPlatesFragment extends BackHandledFragment {
-    private XRecyclerView recyclerview;
-    private ArrayList<InterestPlates> interestPlates = new ArrayList<>();
-    private InterestPlatesListAdapter adapter;
-    private LoadNetView loadNetView;
+     XRecyclerView recyclerview;
+     ArrayList<InterestPlates> interestPlates = new ArrayList<>();
+     InterestPlatesListAdapter adapter;
+     LoadNetView loadNetView;
 
     @Nullable
     @Override
@@ -46,11 +48,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 callback.onNear();
             }
         });
-        recyclerview.setPullRefreshEnabled(false);
-        recyclerview.setLoadingMoreEnabled(false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerview.setLayoutManager(linearLayoutManager);
+        ViewDataUtil.setLayManager(0, null,getContext(),recyclerview,1,false,false);
 
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -84,7 +82,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
         void onNear();
     }
 
-    private void getData() {
+     void getData() {
         String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_TAB).getToggleObject();
         OkHttpClientManager.parseRequest(getActivity(), url, handler, Constants.REFRESH);
 
@@ -107,12 +105,9 @@ public class InterestPlatesFragment extends BackHandledFragment {
                     @Override
                     public void onItemClick(View view, int position, String pid) {
                         ((SquareActivity) getActivity()).setPid(pid);
-                        CommonUtil.switchFragment(new InterestPostListFragment(), R.id.square_interest_plates_layout, getActivity());
+                        ViewDataUtil.switchFragment(new InterestPostListFragment(), R.id.square_interest_plates_layout, getActivity());
                     }
                 });
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                recyclerview.setLayoutManager(linearLayoutManager);
                 recyclerview.setAdapter(adapter);
                 loadNetView.setVisibility(View.GONE);
             } else {

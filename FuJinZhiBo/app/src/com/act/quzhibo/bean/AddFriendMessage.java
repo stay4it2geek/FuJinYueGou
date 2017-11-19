@@ -9,10 +9,7 @@ import org.json.JSONObject;
 
 import cn.bmob.newim.bean.BmobIMExtraMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
-
-/**
- * 添加好友请求
- */
+//添加好友请求
 public class AddFriendMessage extends BmobIMExtraMessage {
 
 

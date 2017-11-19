@@ -70,7 +70,6 @@ import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-
 public class InfoNearPersonActivity extends BaseActivity {
 
     File downloadDir = new File(Environment.getExternalStorageDirectory(), "PhotoScanDownload");
@@ -117,7 +116,6 @@ public class InfoNearPersonActivity extends BaseActivity {
     @Bind(R.id.isCanDate)
     TextView isCanDate;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,13 +128,16 @@ public class InfoNearPersonActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.talk_accese, R.id.comment_private, R.id.focus})
+    @OnClick({R.id.talk_accese, R.id.chat_private, R.id.addFriend, R.id.focus})
     void buttonCliks(View view) {
         switch (view.getId()) {
+            case R.id.addFriend:
+                sendAddFriendMessage();
+                break;
             case R.id.talk_accese:
                 startActivity(new Intent(InfoNearPersonActivity.this, GetVipPayActivity.class));
                 break;
-            case R.id.comment_private:
+            case R.id.chat_private:
                 if (user != null) {
                     if (BmobIM.getInstance().getCurrentStatus().getMsg().equals("connected")) {
                         chatPrivate();
@@ -566,10 +567,8 @@ public class InfoNearPersonActivity extends BaseActivity {
      * 发送添加好友的请求
      */
     void sendAddFriendMessage() {
-
         if (info != null) {
             BmobIMConversation conversationEntrance = BmobIM.getInstance().startPrivateConversation(info, true, null);
-
             BmobIMConversation messageManager = BmobIMConversation.obtain(BmobIMClient.getInstance(), conversationEntrance);
             AddFriendMessage msg = new AddFriendMessage();
             RootUser currentUser = user;

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
+import com.act.quzhibo.adapter.base.BaseChatRecyclerAdapter;
 import com.act.quzhibo.adapter.base.BaseRecyclerHolder;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Conversation;
@@ -15,9 +15,9 @@ import java.util.Collection;
 /**
  * 使用进一步封装的Conversation
  */
-public class ConversationAdapter extends BaseRecyclerAdapter<Conversation> {
+public class ConversationAdapterChat extends BaseChatRecyclerAdapter<Conversation> {
 
-    public ConversationAdapter(Activity activity, IMutlipleItem<Conversation> items, Collection<Conversation> datas) {
+    public ConversationAdapterChat(Activity activity, IMutlipleItem<Conversation> items, Collection<Conversation> datas) {
         super(activity,items,datas);
     }
 

@@ -31,19 +31,19 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class ShowerListFragment extends BackHandledFragment {
-    private String categoryId;
-    private OnCallShowViewListner onCallShowViewListner;
-    private XRecyclerView recyclerView;
-    private ArrayList<Room> rooms = new ArrayList<>();
-    private int roomTotal = 0;
-    private int mCurrentCounter = 0;
-    private int mLastRequstRoomListSize;
-    private RoomListAdapter adapter;
-    private int page;
-    private String offset;
-    private String categoryTitle;
-    private View view;
-    private LoadNetView loadNetView;
+     String categoryId;
+     OnCallShowViewListner onCallShowViewListner;
+     XRecyclerView recyclerView;
+     ArrayList<Room> rooms = new ArrayList<>();
+     int roomTotal = 0;
+     int mCurrentCounter = 0;
+     int mLastRequstRoomListSize;
+     RoomListAdapter adapter;
+     int page;
+     String offset;
+     String categoryTitle;
+     View view;
+     LoadNetView loadNetView;
 
     @Override
     public void onAttach(Context context) {

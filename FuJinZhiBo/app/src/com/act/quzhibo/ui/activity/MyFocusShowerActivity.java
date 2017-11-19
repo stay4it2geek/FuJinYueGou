@@ -20,8 +20,10 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.MyFocusShower;
 import com.act.quzhibo.bean.Room;
+import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
@@ -45,12 +47,12 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class MyFocusShowerActivity extends FragmentActivity {
 
-    private XRecyclerView recyclerView;
-    private MyFocusShowerListAdapter myFocusShowerListAdapter;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private ArrayList<MyFocusShower> myFocusShowerses = new ArrayList<>();
-    private int myfocusSize;
+     XRecyclerView recyclerView;
+     MyFocusShowerListAdapter adapter;
+     LoadNetView loadNetView;
+     String lastTime = "";
+     ArrayList<MyFocusShower> showers = new ArrayList<>();
+     int myfocusSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,41 +69,17 @@ public class MyFocusShowerActivity extends FragmentActivity {
         });
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(myfocusSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryData(Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (myfocusSize > 0) {
-                            queryData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                queryData(Constants.LOADMORE);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MyFocusShowerActivity.this, 2);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        },this,recyclerView,2,true,true);
         loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +96,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
         });
     }
 
-    private void queryData(final int actionType) {
+     void queryData(final int actionType) {
         BmobQuery<MyFocusShower> query = new BmobQuery<>();
 
         List<BmobQuery<MyFocusShower>> queries = new ArrayList<>();
@@ -145,6 +123,10 @@ public class MyFocusShowerActivity extends FragmentActivity {
             @Override
             public void done(List<MyFocusShower> list, BmobException e) {
                 if (e == null) {
+                    if (actionType == Constants.REFRESH) {
+                        showers.clear();
+                        adapter.notifyDataSetChanged();
+                    }
 
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
@@ -166,31 +148,29 @@ public class MyFocusShowerActivity extends FragmentActivity {
             super.handleMessage(msg);
             ArrayList<MyFocusShower> showerses = (ArrayList<MyFocusShower>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what == Constants.REFRESH) {
-                    myFocusShowerses.clear();
-                }
+
                 if (showerses != null) {
-                    myFocusShowerses.addAll(showerses);
+                    showers.addAll(showerses);
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
                 }
 
-                if (myFocusShowerListAdapter == null) {
+                if (adapter == null) {
                     Display display = MyFocusShowerActivity.this.getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
                     int screenWidth = size.x;
-                    myFocusShowerListAdapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, myFocusShowerses, screenWidth);
-                    recyclerView.setAdapter(myFocusShowerListAdapter);
-                    myFocusShowerListAdapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
+                    adapter = new MyFocusShowerListAdapter(MyFocusShowerActivity.this, showers, screenWidth);
+                    recyclerView.setAdapter(adapter);
+                    adapter.setOnItemClickListener(new MyFocusShowerListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position, final MyFocusShower myFocusShower) {
                             requestInfo(myFocusShower.userId);
                         }
                     });
-                    if (myFocusShowerListAdapter != null) {
-                        myFocusShowerListAdapter.setDeleteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
+                    if (adapter != null) {
+                        adapter.setDeleteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
                                 FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), "取消", "确定","","",false, new FragmentDialog.OnClickBottomListener() {
@@ -201,13 +181,13 @@ public class MyFocusShowerActivity extends FragmentActivity {
 
                                     @Override
                                     public void onNegtiveClick(Dialog dialog) {
-                                        myFocusShowerses.get(position).delete(myFocusShowerses.get(position).getObjectId(), new UpdateListener() {
+                                        showers.get(position).delete(showers.get(position).getObjectId(), new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e == null) {
-                                                    myFocusShowerses.remove(position);
-                                                    myFocusShowerListAdapter.notifyDataSetChanged();
-                                                    if (myFocusShowerses.size() == 0) {
+                                                    showers.remove(position);
+                                                    adapter.notifyDataSetChanged();
+                                                    if (showers.size() == 0) {
                                                         loadNetView.setVisibility(View.VISIBLE);
                                                         loadNetView.setlayoutVisily(Constants.NO_DATA);
                                                         return;
@@ -222,14 +202,14 @@ public class MyFocusShowerActivity extends FragmentActivity {
                         });
                     }
                 } else {
-                    myFocusShowerListAdapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 }
 
                 if (msg.what == Constants.LOADMORE) {
                     recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
-                if (myFocusShowerses.size() == 0) {
+                if (showers.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
@@ -291,7 +271,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
     };
 
 
-    private void requestInfo(String showerId) {
+     void requestInfo(String showerId) {
         String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", showerId);
         OkHttpClientManager.parseRequest(this, url, infoHandler, Constants.REFRESH);
     }

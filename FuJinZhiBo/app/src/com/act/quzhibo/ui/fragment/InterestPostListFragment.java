@@ -17,8 +17,10 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.bean.InterestPostListInfoParentData;
+import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -44,41 +46,18 @@ public class InterestPostListFragment extends BackHandledFragment {
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         pid = ((SquareActivity) getActivity()).getPid();
         recyclerView = (XRecyclerView) view.findViewById(R.id.interest_post_list);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(interestPostSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        getData(pid, "0", Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                getData(pid, "0", Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (interestPostSize > 0) {
-                            getData(pid, ctime, Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                getData(pid, ctime, Constants.LOADMORE);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        }, getActivity(), recyclerView, 1, true, true);
+
         getData(pid, "0", Constants.REFRESH);
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -172,7 +151,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                             Bundle bundle = new Bundle();
                             bundle.putSerializable(Constants.POST, post);
                             fragment.setArguments(bundle);
-                            CommonUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
+                            ViewDataUtil.switchFragment(fragment, R.id.square_interest_plates_layout, getActivity());
                         }
                     });
                     recyclerView.setAdapter(adapter);

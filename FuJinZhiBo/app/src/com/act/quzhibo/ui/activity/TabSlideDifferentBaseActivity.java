@@ -9,12 +9,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.ui.fragment.BackHandledFragment;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-
     }
 
     protected abstract boolean getDetailContentViewFlag();
@@ -44,7 +45,7 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
         }
         mFragments = getFragments();
         mAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        CommonUtil.initView(getTitles(), getWindow().getDecorView(), (ViewPager) findViewById(R.id.viewpager), mAdapter);
+        ViewDataUtil.initView(getTitles(), getWindow().getDecorView(), (ViewPager) findViewById(R.id.viewpager), mAdapter);
     }
 
     protected void setPage(int positon) {
@@ -94,16 +95,20 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
                             RootUser user = new RootUser();
                             if (user != null) {
                                 user.lastLoginTime = System.currentTimeMillis() + "";
-                                user.update( BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
+                                user.update(BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
                                     @Override
                                     public void done(BmobException e) {
                                         if (e == null) {
                                             dialog.dismiss();
                                             finish();
                                             ToastUtil.showToast(TabSlideDifferentBaseActivity.this, "退出时间" + System.currentTimeMillis());
+                                        }else {
+                                            finish();
                                         }
                                     }
                                 });
+                            }else {
+                                finish();
                             }
 
                         }
@@ -123,14 +128,6 @@ public abstract class TabSlideDifferentBaseActivity extends FragmentActivity imp
     protected abstract String[] getTitles();
 
     protected abstract ArrayList<Fragment> getFragments();
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-    }
-
 
     public void startActivity(Class<? extends Activity> target, Bundle bundle, boolean finish) {
         Intent intent = new Intent();

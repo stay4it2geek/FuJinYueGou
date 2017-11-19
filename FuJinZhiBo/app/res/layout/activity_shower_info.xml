@@ -169,6 +169,5 @@
         android:id="@+id/loadview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/commonViewHeight"
-        android:background="@color/white" />
+        android:layout_marginTop="@dimen/commonViewHeight" />
 </FrameLayout>

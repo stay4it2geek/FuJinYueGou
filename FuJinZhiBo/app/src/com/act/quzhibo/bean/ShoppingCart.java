@@ -11,8 +11,6 @@ public class ShoppingCart extends BmobObject {
 
     public boolean isChoosed;
 
-    public Double price;
-
     public boolean isChoosed() {
         return isChoosed;
     }

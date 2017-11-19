@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.ContactAdapter;
+import com.act.quzhibo.adapter.ContactAdapterChat;
 import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.Friend;
@@ -54,7 +54,7 @@ public class ContactFragment extends Fragment {
     RecyclerView rc_view;
     @Bind(R.id.sw_refresh)
     SwipeRefreshLayout sw_refresh;
-    ContactAdapter adapter;
+    ContactAdapterChat adapter;
     LinearLayoutManager layoutManager;
     private IMutlipleItem<Friend> mutlipleItem;
     private View rootView;
@@ -162,15 +162,15 @@ public class ContactFragment extends Fragment {
                 @Override
                 public int getItemViewType(int postion, Friend friend) {
                     if (postion == 0) {
-                        return ContactAdapter.TYPE_NEW_FRIEND;
+                        return ContactAdapterChat.TYPE_NEW_FRIEND;
                     } else {
-                        return ContactAdapter.TYPE_ITEM;
+                        return ContactAdapterChat.TYPE_ITEM;
                     }
                 }
 
                 @Override
                 public int getItemLayoutId(int viewtype) {
-                    if (viewtype == ContactAdapter.TYPE_NEW_FRIEND) {
+                    if (viewtype == ContactAdapterChat.TYPE_NEW_FRIEND) {
                         return R.layout.header_new_friend;
                     } else {
                         return R.layout.item_contact;
@@ -183,7 +183,7 @@ public class ContactFragment extends Fragment {
                 }
             };
 
-            adapter = new ContactAdapter(getActivity(), mutlipleItem, null);
+            adapter = new ContactAdapterChat(getActivity(), mutlipleItem, null);
             rc_view.setAdapter(adapter);
             layoutManager = new LinearLayoutManager(getActivity());
             rc_view.setLayoutManager(layoutManager);

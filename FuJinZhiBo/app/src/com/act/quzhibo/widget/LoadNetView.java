@@ -11,29 +11,22 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
-
-/**
- * Created by weiminglin on 17/7/30.
- */
-
 public class LoadNetView extends LinearLayout {
 
-    private final LinearLayout photoalbum_layout;
-    private LinearLayout vipNulllayout;
-    private TextView noDownloadedDataText;
-    private TextView noDownloadingDataText;
-    private Button reloadbutton;
-    private Button buybutton;
-    private LinearLayout loadlayout;
-    private LinearLayout noDataText;
-    private LinearLayout reloadlayout;
-    private LinearLayout video_album_layout;
-    private Button loadDataButton;
+     LinearLayout photoalbum_layout;
+     LinearLayout vipNulllayout;
+     TextView noDownloadedDataText;
+     TextView noDownloadingDataText;
+     Button reloadbutton;
+     Button buybutton;
+     LinearLayout loadlayout;
+     LinearLayout noDataText;
+     LinearLayout reloadlayout;
+     LinearLayout video_album_layout;
+     Button loadDataButton;
 
     public LoadNetView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        // 加载布局
         LayoutInflater.from(context).inflate(R.layout.load_net_view, this);
         noDownloadedDataText = (TextView) findViewById(R.id.noDownloadedDataText);
         reloadlayout = (LinearLayout) findViewById(R.id.reloadlayout);

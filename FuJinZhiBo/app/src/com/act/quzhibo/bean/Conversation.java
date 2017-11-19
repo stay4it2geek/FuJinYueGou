@@ -2,7 +2,7 @@ package com.act.quzhibo.bean;
 
 import android.support.v4.app.FragmentActivity;
 
-import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
+import com.act.quzhibo.adapter.base.BaseChatRecyclerAdapter;
 
 import java.io.Serializable;
 
@@ -63,7 +63,7 @@ public abstract class Conversation implements Serializable,Comparable {
      * 长按事件
      * @param context
      */
-    abstract public void onLongClick(FragmentActivity context,BaseRecyclerAdapter adapter,int position);
+    abstract public void onLongClick(FragmentActivity context, BaseChatRecyclerAdapter adapter, int position);
 
     public String getcName() {
         return cName;

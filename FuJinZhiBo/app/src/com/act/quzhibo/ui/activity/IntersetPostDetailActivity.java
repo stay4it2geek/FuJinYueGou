@@ -26,12 +26,12 @@ import com.rockerhieu.emojicon.EmojiconEditText;
 
 
 public class IntersetPostDetailActivity extends AppCompatActivity {
-    private InteretstPostDetailAdapter adapter;
-    private XRecyclerView recyclerview;
-    private InterestPost post;
-    private LoadNetView loadNetView;
-    private EmojiconEditText commentET;
-    private TextView commentBtn;
+     InteretstPostDetailAdapter adapter;
+     XRecyclerView recyclerview;
+     InterestPost post;
+     LoadNetView loadNetView;
+     EmojiconEditText commentET;
+     TextView commentBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,8 @@ public class IntersetPostDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 IntersetPostDetailActivity.this.finish();
             }
-        });findViewById(R.id.commentBtn);
+        });
+
         commentET = (EmojiconEditText) findViewById(R.id.comment_et);
         commentBtn = (TextView)findViewById(R.id.commentBtn);
         commentBtn.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +94,7 @@ public class IntersetPostDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void getData() {
+     void getData() {
         String url = CommonUtil.getToggle(this, Constants.POST).getToggleObject().replace(Constants.POST, post.postId);
         OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
     }

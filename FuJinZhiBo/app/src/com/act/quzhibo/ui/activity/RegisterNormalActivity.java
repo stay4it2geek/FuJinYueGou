@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.i.OnCheckInputListner;
 import com.act.quzhibo.util.CommonUtil;
@@ -74,7 +75,7 @@ public class RegisterNormalActivity extends BaseActivity {
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                finish();
             }
         });
         shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.shake);
@@ -126,22 +127,31 @@ public class RegisterNormalActivity extends BaseActivity {
             }
         });
         if (uitl.verifyInputTrue(null, null, null, et_invite_code, et_userNick, et_userPhonenumber, et_password)) {
-            BmobQuery<RootUser> query = new BmobQuery<>();
-            query.getObject(et_invite_code.getText().toString().trim(), new QueryListener<RootUser>() {
+            BmobQuery<RootUser> referralsUserQuery = new BmobQuery<>();
+            referralsUserQuery.getObject(et_invite_code.getText().toString().trim(), new QueryListener<RootUser>() {
                 @Override
-                public void done(RootUser user, BmobException e) {
-                    if (user != null) {
-                        RootUser rootUser = new RootUser();
-                        rootUser.setUsername(et_userPhonenumber.getText().toString());
-                        rootUser.setPassword(et_password.getText().toString());
-                        rootUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
-                        rootUser.setUsername(et_userNick.getText().toString());
-                        rootUser.signUp(new SaveListener<RootUser>() {
+                public void done(final RootUser referralsUserQuery, BmobException e) {
+                    if (referralsUserQuery != null) {
+                        final RootUser refereeUser = new RootUser();
+                        refereeUser.setUsername(et_userPhonenumber.getText().toString());
+                        refereeUser.setPassword(et_password.getText().toString());
+                        refereeUser.setMobilePhoneNumber(et_userPhonenumber.getText().toString());
+                        refereeUser.setUsername(et_userNick.getText().toString());
+                        refereeUser.signUp(new SaveListener<RootUser>() {
                             @Override
-                            public void done(RootUser user, BmobException e) {
+                            public void done(RootUser refereeUser, BmobException e) {
                                 if (e == null) {
                                     ToastUtil.showToast(RegisterNormalActivity.this, "注册成功");
-                                    if (user != null) {
+                                    if (refereeUser != null) {
+//                                        Promotion  promotion =new Promotion();
+//                                        promotion.refereeUser=refereeUser;
+//                                        promotion.referralsUser=refereeUser;
+//                                        promotion.save(new SaveListener<String>() {
+//                                            @Override
+//                                            public void done(String s, BmobException e) {
+//
+//                                            }
+//                                        })
                                         ToastUtil.showToast(RegisterNormalActivity.this, "登录成功");
                                         CommonUtil.fecth(RegisterNormalActivity.this);
                                         finish();

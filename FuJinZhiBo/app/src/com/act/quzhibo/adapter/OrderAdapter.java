@@ -9,12 +9,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.bean.VipOrders;
+import com.act.quzhibo.bean.Orders;
 
 import java.util.ArrayList;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
-    ArrayList<VipOrders> vipOrderses;
+    ArrayList<Orders> Orderses;
     Activity mContext;
     private OnDeleteListener mListener = null;
 
@@ -26,9 +26,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
         mListener = listener;
     }
 
-    public OrderAdapter(Activity context, ArrayList<VipOrders> vipOrderses) {
+    public OrderAdapter(Activity context, ArrayList<Orders> Orderses) {
         mContext = context;
-        this.vipOrderses = vipOrderses;
+        this.Orderses = Orderses;
     }
 
     @Override
@@ -42,10 +42,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         if (holder instanceof MyViewHolder) {
-            holder.orderStatus.setText(vipOrderses.get(position).orderStatus ? "支付已完成" : "交易关闭");
-            holder.orderDescription.setText("订单描述: " + vipOrderses.get(position).goodsDescription);
-            holder.updatedTime.setText("下单时间:" + vipOrderses.get(position).getUpdatedAt());
-            holder.orderPrice.setText("订单价格: ￥" + vipOrderses.get(position).orderPrice);
+            holder.orderStatus.setText(Orderses.get(position).orderStatus ? "支付已完成" : "交易关闭");
+//            holder.orderDescription.setText("订单描述: " + Orderses.get(position).goodsDescription);
+//            holder.updatedTime.setText("下单时间:" + Orderses.get(position).getUpdatedAt());
+//            holder.orderPrice.setText("订单价格: ￥" + Orderses.get(position).orderPrice);
             holder.order_layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
@@ -64,7 +64,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return vipOrderses.size();
+        return Orderses.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

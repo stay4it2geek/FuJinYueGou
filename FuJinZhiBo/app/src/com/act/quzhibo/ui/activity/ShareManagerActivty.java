@@ -14,6 +14,9 @@ import com.act.quzhibo.adapter.MyTeamListAdapter;
 import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -35,53 +38,30 @@ import cn.bmob.v3.listener.QueryListener;
 
 public class ShareManagerActivty extends FragmentActivity {
 
-    private ArrayList<Promotion> myProList = new ArrayList<>();
-    private XRecyclerView recyclerView;
-    private MyTeamListAdapter myTeamListAdapter;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private int handlerMyteamsSize;
+    ArrayList<Promotion> myProList = new ArrayList<>();
+
+    XRecyclerView recyclerView;
+    MyTeamListAdapter myTeamListAdapter;
+    LoadNetView loadNetView;
+    String lastTime = "";
+    int handlerMyteamsSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(handlerMyteamsSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryData(Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerMyteamsSize > 0) {
-                            queryData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                queryData(Constants.LOADMORE);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        }, this, recyclerView, 1, true, true);
 
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
@@ -100,13 +80,11 @@ public class ShareManagerActivty extends FragmentActivity {
                 ShareManagerActivty.this.finish();
             }
         });
-
-
         queryData(Constants.REFRESH);
     }
 
 
-    private void queryData(final int actionType) {
+    void queryData(final int actionType) {
         BmobQuery<Promotion> query = new BmobQuery<>();
         BmobQuery<Promotion> query2 = new BmobQuery<>();
         List<BmobQuery<Promotion>> queries = new ArrayList<>();
@@ -122,7 +100,6 @@ public class ShareManagerActivty extends FragmentActivity {
             }
         }
         BmobQuery<Promotion> query3 = new BmobQuery<>();
-
         query3.addWhereEqualTo("referralsUser", BmobUser.getCurrentUser(RootUser.class));
         queries.add(query3);
         query.and(queries);
@@ -130,78 +107,57 @@ public class ShareManagerActivty extends FragmentActivity {
         query.order("-updatedAt");
         query.findObjects(new FindListener<Promotion>() {
             @Override
-            public void done(List<Promotion> list, BmobException e) {
+            public void done(final List<Promotion> list, BmobException e) {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         myProList.clear();
-                    }
-                    if (list.size() > 0) {
-                        lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        for (final Promotion pro : list) {
-                            BmobQuery<RootUser> user=new BmobQuery<>();
-                            user.getObject(pro.refereeUser.getObjectId(), new QueryListener<RootUser>() {
-                                @Override
-                                public void done(RootUser rootUser, BmobException e) {
-                                    if(e==null){
-                                        pro.refereeUser=rootUser;
-                                    }
-                                }
-                            });
+                        if (myTeamListAdapter != null) {
+                            myTeamListAdapter.notifyDataSetChanged();
                         }
                     }
-                    Message message = new Message();
-                    message.obj = list;
-                    message.what = actionType;
-                    handler.sendMessageDelayed(message,2000);
+
+                    if (list != null && list.size() > 0) {
+                        lastTime = list.get(list.size() - 1).getUpdatedAt();
+                       setAdapterView(actionType, list);
+                    }
                 } else {
-                    handler.sendEmptyMessage(Constants.NetWorkError);
+                    setAdapterView(Constants.NetWorkError, null);
                 }
             }
         });
     }
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            ArrayList<Promotion> myPosts = (ArrayList<Promotion>) msg.obj;
-            if (msg.what != Constants.NetWorkError) {
-
-                if (myPosts != null) {
-                    myProList.addAll(myPosts);
-                    handlerMyteamsSize = myPosts.size();
-                } else {
-                    handlerMyteamsSize = 0;
-                }
-
-                setAdapterView();
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
-                }
-                loadNetView.setVisibility(View.GONE);
-                if (myProList.size() == 0) {
-                    loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.NO_DATA);
-                    return;
-                }
+    void setAdapterView(int what, List<Promotion> promotions) {
+        if (what != Constants.NetWorkError) {
+            if (myProList != null) {
+                myProList.addAll(promotions);
+                handlerMyteamsSize = promotions.size();
             } else {
-                loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.RELOAD);
+                handlerMyteamsSize = 0;
             }
+            if (myTeamListAdapter == null) {
+                myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myProList);
+                recyclerView.setAdapter(myTeamListAdapter);
 
-        }
-    };
-
-    private void setAdapterView() {
-        if (myTeamListAdapter == null) {
-            myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myProList);
-            recyclerView.setAdapter(myTeamListAdapter);
-
+            } else {
+                myTeamListAdapter.notifyDataSetChanged();
+            }
+            if (what == Constants.LOADMORE) {
+                recyclerView.setNoMore(true);
+            }
+            loadNetView.setVisibility(View.GONE);
+            if (myProList.size() == 0) {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                return;
+            }
         } else {
-            myTeamListAdapter.notifyDataSetChanged();
+            loadNetView.setVisibility(View.VISIBLE);
+            loadNetView.setlayoutVisily(Constants.RELOAD);
         }
+
     }
-
-
-
 }
+
+
+

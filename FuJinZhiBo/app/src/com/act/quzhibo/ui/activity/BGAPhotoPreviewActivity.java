@@ -111,8 +111,6 @@ public class BGAPhotoPreviewActivity extends BGAPPToolbarActivity implements Pho
             for (MediaInfo mediaInfo : mediaInfos) {
                 previewImages.add(mediaInfo.getUrl());
             }
-            ToastUtil.showToast(this,""+previewImages.get(0));
-
         }else{
             ToastUtil.showToast(this,"图片数量为空");
         }

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.adapter.base.BaseRecyclerAdapter;
+import com.act.quzhibo.adapter.base.BaseChatRecyclerAdapter;
 import com.act.quzhibo.adapter.base.BaseRecyclerHolder;
 import com.act.quzhibo.i.IMutlipleItem;
 import com.act.quzhibo.bean.AgreeAddFriendMessage;
@@ -31,9 +31,9 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
 
-public class NewFriendAdapter extends BaseRecyclerAdapter<NewFriend> {
+public class NewFriendAdapterChat extends BaseChatRecyclerAdapter<NewFriend> {
 
-    public NewFriendAdapter(Activity activity, IMutlipleItem<NewFriend> items, Collection<NewFriend> datas) {
+    public NewFriendAdapterChat(Activity activity, IMutlipleItem<NewFriend> items, Collection<NewFriend> datas) {
         super(activity, items, datas);
     }
 

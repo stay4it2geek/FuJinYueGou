@@ -17,7 +17,9 @@ import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.bean.InterestPostListInfoPersonParentData;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
@@ -32,13 +34,13 @@ import cn.bmob.v3.BmobUser;
 
 public class IntersetPersonPostListActivity extends FragmentActivity {
 
-    private XRecyclerView recyclerView;
-    private ArrayList<InterestPost> posts = new ArrayList<>();
-    private int interestPostSize;
-    private InterestPostListAdapter adapter;
-    private String userId;
-    private String ctime = "0";
-    private LoadNetView loadNetView;
+     XRecyclerView recyclerView;
+     ArrayList<InterestPost> posts = new ArrayList<>();
+     int interestPostSize;
+     InterestPostListAdapter adapter;
+     String userId;
+     String ctime = "0";
+     LoadNetView loadNetView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,42 +59,22 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
         recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(interestPostSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        getData("0", Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                getData("0", Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (interestPostSize > 0) {
-                            getData(ctime, Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                getData(ctime, Constants.LOADMORE);
+
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        },this,recyclerView,1,true,true);
+
+
         getData("0", Constants.REFRESH);
+
 
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -181,29 +163,9 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                 loadNetView.setVisibility(View.VISIBLE);
                 loadNetView.setlayoutVisily(Constants.RELOAD);
             }
-
-
         }
     };
 
-
-    public static final class ComparatorValues implements Comparator<InterestPost> {
-
-        @Override
-        public int compare(InterestPost post1, InterestPost post2) {
-            long m1 = Long.parseLong(post1.ctime != null ? post1.ctime : "0l");
-            long m2 = Long.parseLong(post2.ctime != null ? post2.ctime : "0l");
-            int result = 0;
-            if (m1 > m2) {
-                result = -1;
-            }
-            if (m1 < m2) {
-                result = 1;
-            }
-            return result;
-        }
-
-    }
 
     public void getData(String ctime,int what) {
         if (userId == null) {

@@ -19,21 +19,23 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.bean.InterestPostDetailParentData;
+import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.rockerhieu.emojicon.EmojiconEditText;
 
 
 public class IntersetPostDetailFragment extends BackHandledFragment {
-    private InteretstPostDetailAdapter adapter;
-    private XRecyclerView recyclerview;
-    private InterestPost post;
-    private View view;
-    private LoadNetView loadNetView;
-    private EmojiconEditText commentET;
-    private TextView commentBtn;
+     InteretstPostDetailAdapter adapter;
+     XRecyclerView recyclerview;
+     InterestPost post;
+     View view;
+     LoadNetView loadNetView;
+     EmojiconEditText commentET;
+     TextView commentBtn;
 
 
     @Nullable
@@ -42,12 +44,7 @@ public class IntersetPostDetailFragment extends BackHandledFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.interest_post_detail_layout, null, false);
         recyclerview = (XRecyclerView) view.findViewById(R.id.postRecyleview);
-        recyclerview.setHasFixedSize(true);
-        recyclerview.setPullRefreshEnabled(false);
-        recyclerview.setLoadingMoreEnabled(false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerview.setLayoutManager(linearLayoutManager);
+        ViewDataUtil.setLayManager(0, null, getActivity(), recyclerview, 1, false, false);
         if (getArguments() != null) {
             post = (InterestPost) getArguments().getSerializable(Constants.POST);
         }
@@ -98,7 +95,7 @@ public class IntersetPostDetailFragment extends BackHandledFragment {
     }
 
 
-    private void getData() {
+     void getData() {
         String url = CommonUtil.getToggle(getActivity(), Constants.POST).getToggleObject().replace(Constants.POST, post.postId);
         OkHttpClientManager.parseRequest(getActivity(), url, handler, Constants.REFRESH);
     }

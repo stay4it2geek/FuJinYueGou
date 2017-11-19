@@ -15,8 +15,11 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.OrderAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.bean.VipOrders;
+import com.act.quzhibo.bean.Orders;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
@@ -37,12 +40,14 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class VipOrdersActivity extends FragmentActivity {
 
-    private XRecyclerView recyclerView;
-    private OrderAdapter orderAdapter;
-    private LoadNetView loadNetView;
-    private ArrayList<VipOrders> vipOrderSList = new ArrayList<>();
-    private String lastTime = "";
-    private int handlerOrderSize;
+    XRecyclerView recyclerView;
+    OrderAdapter orderAdapter;
+    LoadNetView loadNetView;
+    ArrayList<Orders> OrdersList = new ArrayList<>();
+    String lastTime = "";
+    int handlerOrderSize;
+    RootUser user;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,47 +58,24 @@ public class VipOrdersActivity extends FragmentActivity {
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VipOrdersActivity.this.finish();
+               finish();
             }
         });
         titlebar.setVisibility(View.VISIBLE);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(handlerOrderSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryDatas(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryDatas(Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerOrderSize > 0) {
-                            queryDatas(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
-            }
-        });
+                queryDatas(Constants.LOADMORE);
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+            }
+        }, this, recyclerView, 1, true, true);
+
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,19 +86,20 @@ public class VipOrdersActivity extends FragmentActivity {
         loadNetView.setBuyButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(VipOrdersActivity.this,GetVipPayActivity.class));
+                startActivity(new Intent(VipOrdersActivity.this, GetVipPayActivity.class));
             }
         });
+        user = (RootUser) getIntent().getSerializableExtra("user");
         queryRootUserData();
     }
 
-    private void queryRootUserData() {
-        BmobQuery<VipOrders> query = new BmobQuery<>();
-        query.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
+    void queryRootUserData() {
+        BmobQuery<Orders> query = new BmobQuery<>();
+        query.addWhereEqualTo("user", user);
         query.order("-updatedAt");
-        query.findObjects(new FindListener<VipOrders>() {
+        query.findObjects(new FindListener<Orders>() {
             @Override
-            public void done(List<VipOrders> list, BmobException e) {
+            public void done(List<Orders> list, BmobException e) {
                 if (e == null) {
                     if (list.size() > 0) {
                         queryDatas(Constants.REFRESH);
@@ -131,10 +114,10 @@ public class VipOrdersActivity extends FragmentActivity {
     }
 
 
-    private void queryDatas(final int actionType) {
-        BmobQuery<VipOrders> query = new BmobQuery<>();
-        BmobQuery<VipOrders> query2 = new BmobQuery<>();
-        List<BmobQuery<VipOrders>> queries = new ArrayList<>();
+    void queryDatas(final int actionType) {
+        BmobQuery<Orders> query = new BmobQuery<>();
+        BmobQuery<Orders> query2 = new BmobQuery<>();
+        List<BmobQuery<Orders>> queries = new ArrayList<>();
         query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             Date date;
@@ -147,17 +130,20 @@ public class VipOrdersActivity extends FragmentActivity {
                 e.printStackTrace();
             }
         }
-        BmobQuery<VipOrders> query3 = new BmobQuery<>();
+        BmobQuery<Orders> query3 = new BmobQuery<>();
         query3.addWhereEqualTo("user", BmobUser.getCurrentUser(RootUser.class));
         queries.add(query3);
         query.and(queries);
         query.order("-updatedAt");
-        query.findObjects(new FindListener<VipOrders>() {
+        query.findObjects(new FindListener<Orders>() {
             @Override
-            public void done(List<VipOrders> list, BmobException e) {
+            public void done(List<Orders> list, BmobException e) {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
-                        vipOrderSList.clear();
+                        OrdersList.clear();
+                        if(orderAdapter!=null){
+                            orderAdapter.notifyDataSetChanged();
+                        }
                     }
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
@@ -185,61 +171,61 @@ public class VipOrdersActivity extends FragmentActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            ArrayList<VipOrders> vipOrderses = (ArrayList<VipOrders>) msg.obj;
+            ArrayList<Orders> Orderses = (ArrayList<Orders>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (vipOrderses != null) {
-                    vipOrderSList.addAll(vipOrderses);
-                    handlerOrderSize = vipOrderses.size();
+                if (Orderses != null) {
+                    OrdersList.addAll(Orderses);
+                    handlerOrderSize = Orderses.size();
                 } else {
                     handlerOrderSize = 0;
                 }
-
                 if (orderAdapter == null) {
-                    orderAdapter = new OrderAdapter(VipOrdersActivity.this, vipOrderSList);
+                    orderAdapter = new OrderAdapter(VipOrdersActivity.this, OrdersList);
                     recyclerView.setAdapter(orderAdapter);
-                    orderAdapter.setDeleteListener(new OrderAdapter.OnDeleteListener() {
-                        @Override
-                        public void onDelete(final int position) {
-                            FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus),getResources().getString(R.string.keepFocus), getResources().getString(R.string.cancelFocus),"","",false, new FragmentDialog.OnClickBottomListener() {
-                                @Override
-                                public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
-                                    dialog.dismiss();
-                                }
+                    if (user == BmobUser.getCurrentUser(RootUser.class)) {
+                        orderAdapter.setDeleteListener(new OrderAdapter.OnDeleteListener() {
+                            @Override
+                            public void onDelete(final int position) {
+                                FragmentDialog.newInstance(false, getResources().getString(R.string.ifChecked), getResources().getString(R.string.deleteCanNotRecover), getResources().getString(R.string.cancel), getResources().getString(R.string.main__delete), "", "", false, new FragmentDialog.OnClickBottomListener() {
+                                    @Override
+                                    public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                                        dialog.dismiss();
+                                    }
 
-                                @Override
-                                public void onNegtiveClick(Dialog dialog) {
+                                    @Override
+                                    public void onNegtiveClick(Dialog dialog) {
 
-                                    vipOrderSList.get(position).delete(vipOrderSList.get(position).getObjectId(), new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e == null) {
-                                                vipOrderSList.remove(position);
-                                                orderAdapter.notifyDataSetChanged();
-                                                if (vipOrderSList.size() == 0) {
-                                                    loadNetView.setVisibility(View.VISIBLE);
-                                                    loadNetView.setlayoutVisily(Constants.BUY_VIP);
-                                                    return;
+                                        OrdersList.get(position).delete(OrdersList.get(position).getObjectId(), new UpdateListener() {
+                                            @Override
+                                            public void done(BmobException e) {
+                                                if (e == null) {
+                                                    OrdersList.remove(position);
+                                                    orderAdapter.notifyDataSetChanged();
+                                                    if (OrdersList.size() == 0) {
+                                                        loadNetView.setVisibility(View.VISIBLE);
+                                                        loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                                                        return;
+                                                    }
+
+                                                } else {
+                                                    ToastUtil.showToast(VipOrdersActivity.this, "删除失败");
                                                 }
-
-                                            }else{
-                                                ToastUtil.showToast(VipOrdersActivity.this,"删除失败");
                                             }
-                                        }
-                                    });
-                                    dialog.dismiss();
-                                }
-                            }).show(getSupportFragmentManager(), "");
-
-                        }
-                    });
+                                        });
+                                        dialog.dismiss();
+                                    }
+                                }).show(getSupportFragmentManager(), "");
+                            }
+                        });
+                    }
                 } else {
                     orderAdapter.notifyDataSetChanged();
                 }
-                if(msg.what==Constants.LOADMORE){
+                if (msg.what == Constants.LOADMORE) {
                     recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
-                if (vipOrderSList.size() == 0) {
+                if (OrdersList.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.BUY_VIP);
                     return;

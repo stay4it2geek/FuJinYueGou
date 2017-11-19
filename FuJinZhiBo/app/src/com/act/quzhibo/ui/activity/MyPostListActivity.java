@@ -19,6 +19,9 @@ import com.act.quzhibo.adapter.MyPostListAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyPost;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -43,53 +46,58 @@ import static com.act.quzhibo.ui.activity.PostAddActivity.EXTRA_MOMENT;
 
 public class MyPostListActivity extends AppCompatActivity {
     public static final int UPLOAD_POST = 1;
-    private ArrayList<MyPost> myPostList = new ArrayList<>();
-    private XRecyclerView recyclerView;
-    private MyPostListAdapter myPostListAdapter;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private int handlerMyPostsSize;
+    ArrayList<MyPost> myPostList = new ArrayList<>();
+    XRecyclerView recyclerView;
+    MyPostListAdapter myPostListAdapter;
+    LoadNetView loadNetView;
+    String lastTime = "";
+    int handlerMyPostsSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//
+//        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+//            @Override
+//            public void onRefresh() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        recyclerView.setNoMore(false);
+//                        recyclerView.setLoadingMoreEnabled(true);
+//                        recyclerView.refreshComplete();
+//                    }
+//                }, 1000);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (handlerMyPostsSize > 0) {
+//                            recyclerView.loadMoreComplete();
+//                        } else {
+//                            recyclerView.setNoMore(true);
+//                        }
+//                    }
+//                }, 1000);
+//            }
+//        });
+
+        ViewDataUtil.setLayManager(handlerMyPostsSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryData(Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerMyPostsSize > 0) {
-                            queryData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                queryData(Constants.LOADMORE);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        },this,recyclerView,1,true,true);
 
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
@@ -153,7 +161,7 @@ public class MyPostListActivity extends AppCompatActivity {
     }
 
 
-    private void queryData(final int actionType) {
+    void queryData(final int actionType) {
         BmobQuery<MyPost> query = new BmobQuery<>();
         BmobQuery<MyPost> query2 = new BmobQuery<>();
         List<BmobQuery<MyPost>> queries = new ArrayList<>();
@@ -181,8 +189,10 @@ public class MyPostListActivity extends AppCompatActivity {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         myPostList.clear();
-                    }
-                    if(list.size()>0){
+                       myPostListAdapter.notifyDataSetChanged();
+                        }
+
+                    if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
                     }
                     Message message = new Message();
@@ -239,7 +249,7 @@ public class MyPostListActivity extends AppCompatActivity {
 
     }
 
-    private void setAdapterView() {
+    void setAdapterView() {
         if (myPostListAdapter == null) {
             myPostListAdapter = new MyPostListAdapter(MyPostListActivity.this, myPostList);
             recyclerView.setAdapter(myPostListAdapter);

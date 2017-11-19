@@ -18,6 +18,9 @@ import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyFocusCommonPerson;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
@@ -39,12 +42,12 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class MyFocusPersonActivity extends FragmentActivity {
 
-    private XRecyclerView recyclerView;
-    private MyFocusPersonListAdapter myFocusPersonListAdapter;
-    private LoadNetView loadNetView;
-    private String lastTime = "";
-    private ArrayList<MyFocusCommonPerson> myFocusCommonPersons = new ArrayList<>();
-    private int myfocusSize;
+    XRecyclerView recyclerView;
+    MyFocusPersonListAdapter adapter;
+    LoadNetView loadNetView;
+    String lastTime = "";
+    ArrayList<MyFocusCommonPerson> persons = new ArrayList<>();
+    int myfocusSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,44 +78,21 @@ public class MyFocusPersonActivity extends FragmentActivity {
             }
         });
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(myfocusSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryData(Constants.REFRESH);
+
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (myfocusSize > 0) {
-                            queryData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                queryData(Constants.LOADMORE);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(MyFocusPersonActivity.this, 2);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        },this,recyclerView,2,true,true);
     }
 
-    private void queryData(final int actionType) {
+    void queryData(final int actionType) {
         BmobQuery<MyFocusCommonPerson> query = new BmobQuery<>();
         List<BmobQuery<MyFocusCommonPerson>> queries = new ArrayList<>();
 
@@ -162,24 +142,24 @@ public class MyFocusPersonActivity extends FragmentActivity {
             ArrayList<MyFocusCommonPerson> showerses = (ArrayList<MyFocusCommonPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
                 if (msg.what == Constants.REFRESH) {
-                    myFocusCommonPersons.clear();
+                    persons.clear();
                 }
                 if (showerses != null) {
-                    myFocusCommonPersons.addAll(showerses);
+                    persons.addAll(showerses);
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
 
                 }
 
-                if (myFocusPersonListAdapter == null) {
+                if (adapter == null) {
                     Display display = MyFocusPersonActivity.this.getWindowManager().getDefaultDisplay();
                     Point size = new Point();
                     display.getSize(size);
                     int screenWidth = size.x;
-                    myFocusPersonListAdapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, myFocusCommonPersons,screenWidth);
-                    recyclerView.setAdapter(myFocusPersonListAdapter);
-                    myFocusPersonListAdapter.setOnItemClickListener(new MyFocusPersonListAdapter.OnRecyclerViewItemClickListener() {
+                    adapter = new MyFocusPersonListAdapter(MyFocusPersonActivity.this, persons, screenWidth);
+                    recyclerView.setAdapter(adapter);
+                    adapter.setOnItemClickListener(new MyFocusPersonListAdapter.OnRecyclerViewItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position, final MyFocusCommonPerson myFocusCommonPerson) {
                             Intent intent = new Intent();
@@ -194,11 +174,11 @@ public class MyFocusPersonActivity extends FragmentActivity {
 //                            startActivity(intent);
                         }
                     });
-                    if (myFocusPersonListAdapter != null) {
-                        myFocusPersonListAdapter.setDeleteListener(new MyFocusPersonListAdapter.OnDeleteListener() {
+                    if (adapter != null) {
+                        adapter.setDeleteListener(new MyFocusPersonListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
-                                FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), getResources().getString(R.string.keepFocus), getResources().getString(R.string.cancelFocus),"","",false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), getResources().getString(R.string.keepFocus), getResources().getString(R.string.cancelFocus), "", "", false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
                                         dialog.dismiss();
@@ -206,13 +186,13 @@ public class MyFocusPersonActivity extends FragmentActivity {
 
                                     @Override
                                     public void onNegtiveClick(Dialog dialog) {
-                                        myFocusCommonPersons.get(position).delete(myFocusCommonPersons.get(position).getObjectId(), new UpdateListener() {
+                                        persons.get(position).delete(persons.get(position).getObjectId(), new UpdateListener() {
                                             @Override
                                             public void done(BmobException e) {
                                                 if (e == null) {
-                                                    myFocusCommonPersons.remove(position);
-                                                    myFocusPersonListAdapter.notifyDataSetChanged();
-                                                    if (myFocusCommonPersons.size() == 0) {
+                                                    persons.remove(position);
+                                                    adapter.notifyDataSetChanged();
+                                                    if (persons.size() == 0) {
                                                         loadNetView.setVisibility(View.VISIBLE);
                                                         loadNetView.setlayoutVisily(Constants.NO_DATA);
                                                         return;
@@ -227,14 +207,14 @@ public class MyFocusPersonActivity extends FragmentActivity {
                         });
                     }
                 } else {
-                    myFocusPersonListAdapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 }
 
-                if(msg.what==Constants.LOADMORE){
+                if (msg.what == Constants.LOADMORE) {
                     recyclerView.setNoMore(true);
                 }
                 loadNetView.setVisibility(View.GONE);
-                if (myFocusCommonPersons.size() == 0) {
+                if (persons.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);
                     return;
@@ -249,6 +229,6 @@ public class MyFocusPersonActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-       queryData(Constants.REFRESH);
+        queryData(Constants.REFRESH);
     }
 }

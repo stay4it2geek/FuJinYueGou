@@ -13,6 +13,9 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.WhoLikeMeAdapter;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.InterestSubPerson;
+import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.util.CommonUtil;
+import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -51,41 +54,18 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
         });
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-        recyclerView.setPullRefreshEnabled(true);
-        recyclerView.setLoadingMoreEnabled(true);
-        recyclerView.setLoadingMoreProgressStyle(R.style.Small);
-        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        ViewDataUtil.setLayManager(handlerLiekThenSeeMeSize, new OnQueryDataListner() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        recyclerView.setNoMore(false);
-                        recyclerView.setLoadingMoreEnabled(true);
-                        queryData(Constants.REFRESH);
-                        recyclerView.refreshComplete();
-                    }
-                }, 1000);
+                queryData(Constants.REFRESH);
+
             }
 
             @Override
             public void onLoadMore() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (handlerLiekThenSeeMeSize > 0) {
-                            queryData(Constants.LOADMORE);
-                            recyclerView.loadMoreComplete();
-                        } else {
-                            recyclerView.setNoMore(true);
-                        }
-                    }
-                }, 1000);
+                queryData(Constants.LOADMORE);
             }
-        });
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
-        gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        },this,recyclerView,1,true,true);
         queryData(Constants.REFRESH);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -135,6 +115,9 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         interestPersonList.clear();
+                        if(whoLikeMeAdapter!=null){
+                            whoLikeMeAdapter.notifyDataSetChanged();
+                        }
                     }
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();

@@ -20,7 +20,7 @@ import java.util.TreeSet;
  * 支持扩展多种item布局；
  * 支持设置recycler view点击/长按事件
  */
-public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerHolder> {
+public abstract class BaseChatRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerHolder> {
     /**
      * 默认布局
      */
@@ -50,7 +50,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * @param items
      * @param datas
      */
-    public BaseRecyclerAdapter(Activity activity, IMutlipleItem<T> items, Collection<T> datas) {
+    public BaseChatRecyclerAdapter(Activity activity, IMutlipleItem<T> items, Collection<T> datas) {
         this.activity = activity;
         this.items = items;
         this.lists = datas == null ? new ArrayList<T>() : new ArrayList<>(new TreeSet(datas));
@@ -61,7 +61,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
      * @param datas
      * @return
      */
-    public BaseRecyclerAdapter<T> bindDatas(Collection<T> datas) {
+    public BaseChatRecyclerAdapter<T> bindDatas(Collection<T> datas) {
         this.lists = datas == null ? new ArrayList<T>() : new ArrayList<T>(datas);
         notifyDataSetChanged();
         return this;

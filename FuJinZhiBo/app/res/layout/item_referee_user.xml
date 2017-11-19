@@ -67,5 +67,4 @@
         android:text="查看他的订单"
         android:textColor="#fff" />
 
-
 </RelativeLayout>

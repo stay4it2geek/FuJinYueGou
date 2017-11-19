@@ -24,8 +24,8 @@ import cn.bmob.v3.listener.UpdateListener;
 
 @SuppressWarnings("deprecation")
 public class CourseCommonActivity extends TabActivity {
-
-    private TabHost tabHost;
+    TabHost tabHost;
+    SelfDialog selfDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,39 @@ public class CourseCommonActivity extends TabActivity {
                 .setContent(new Intent(CourseCommonActivity.this, MoneyCourseActivity.class)));
         tabHost.setCurrentTab(0);
         EventBus.getDefault().register(this);
+        selfDialog = new SelfDialog(CourseCommonActivity.this, false);
+        selfDialog.setTitle("客官再看一会儿呗");
+        selfDialog.setMessage("还是留下来再看看吧");
+        selfDialog.setYesOnclickListener("再欣赏下", new SelfDialog.onYesOnclickListener() {
+            @Override
+            public void onYesClick() {
+                selfDialog.dismiss();
+
+            }
+        });
+        selfDialog.setNoOnclickListener("有事要忙", new SelfDialog.onNoOnclickListener() {
+            @Override
+            public void onNoClick() {
+                RootUser user = new RootUser();
+                if (user != null) {
+                    user.lastLoginTime = System.currentTimeMillis() + "";
+                    user.update(BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                selfDialog.dismiss();
+                                ToastUtil.showToast(CourseCommonActivity.this, "退出时间" + System.currentTimeMillis());
+                                finish();
+                            }else {
+                                finish();
+                            }
+                        }
+                    });
+                }else {
+                    finish();
+                }
+            }
+        });
     }
 
     @Override
@@ -51,39 +84,10 @@ public class CourseCommonActivity extends TabActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            final SelfDialog selfDialog = new SelfDialog(CourseCommonActivity.this, false);
-            selfDialog.setTitle("客官再看一会儿呗");
-            selfDialog.setMessage("还是留下来再看看吧");
-            selfDialog.setYesOnclickListener("再欣赏下", new SelfDialog.onYesOnclickListener() {
-                @Override
-                public void onYesClick() {
-                    selfDialog.dismiss();
-
-                }
-            });
-            selfDialog.setNoOnclickListener("有事要忙", new SelfDialog.onNoOnclickListener() {
-                @Override
-                public void onNoClick() {
-                    RootUser user = new RootUser();
-                    if (user != null) {
-                        user.lastLoginTime = System.currentTimeMillis() + "";
-                        user.update( BmobUser.getCurrentUser(RootUser.class).getObjectId(), new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if (e == null) {
-                                    selfDialog.dismiss();
-                                    ToastUtil.showToast(CourseCommonActivity.this, "退出时间" + System.currentTimeMillis());
-                                    finish();
-                                }
-                            }
-                        });
-                    }
-                }
-            });
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && !selfDialog.isShowing()) {
             selfDialog.show();
         }
-        return super.dispatchKeyEvent(event);
+        return true;
     }
 
     @Subscribe
@@ -92,9 +96,7 @@ public class CourseCommonActivity extends TabActivity {
             tabHost.setCurrentTab(1);
         } else {
             tabHost.setCurrentTab(0);
-
         }
-
     }
 
     @Subscribe

@@ -25,7 +25,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.PayConis;
 import com.act.quzhibo.bean.RootUser;
-import com.act.quzhibo.bean.VipOrders;
+import com.act.quzhibo.bean.Orders;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.widget.FragmentDialog;
@@ -47,16 +47,16 @@ import cn.bmob.v3.listener.UpdateListener;
 
 
 public class GetVipPayActivity extends FragmentActivity {
-    private ProgressDialog dialog;
-    private String mGoodsDescription;
+     ProgressDialog dialog;
+     String mGoodsDescription;
     ArrayList<PayConis> payConisList = new ArrayList<>();
-    private double mPayMoney = 0.01;
-    private TextView userSelectText;
-    private VipOrders vipOrders;
-    private MyListView listView;
-    private MyAdapter mAdapter;
+     double mPayMoney = 0.01;
+     TextView userSelectText;
+     Orders Orders;
+     MyListView listView;
+     MyAdapter mAdapter;
     boolean hasShow;
-    private LoadNetView loadNetView;
+     LoadNetView loadNetView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class GetVipPayActivity extends FragmentActivity {
                 GetVipPayActivity.this.finish();
             }
         });
-        vipOrders = new VipOrders();
+        Orders = new Orders();
         listView = (MyListView) findViewById(R.id.viplist);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -144,7 +144,7 @@ public class GetVipPayActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (vipOrders.orderStatus && !hasShow) {
+        if (Orders.orderStatus && !hasShow) {
             hideDialog();
             FragmentDialog.newInstance(false, "尊敬的用户您好,您" + mGoodsDescription + "已支付成功!","", "我知道了!","","","",true, new FragmentDialog.OnClickBottomListener() {
                 @Override
@@ -165,7 +165,7 @@ public class GetVipPayActivity extends FragmentActivity {
     RootUser rootUser = BmobUser.getCurrentUser(RootUser.class);
     RootUser updateUser = new RootUser();
 
-    private void alipay() {
+     void alipay() {
         if (rootUser == null) {
             ToastUtil.showToast(GetVipPayActivity.this, "您还没有登录或注册哦!");
             startActivity(new Intent(GetVipPayActivity.this, LoginActivity.class));
@@ -207,8 +207,8 @@ public class GetVipPayActivity extends FragmentActivity {
             @Override
             public void succeed() {
                 hideDialog();
-                vipOrders.orderStatus = true;
-                vipOrders.update(vipOrders.getObjectId(), new UpdateListener() {
+                Orders.orderStatus = true;
+                Orders.update(Orders.getObjectId(), new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
@@ -239,10 +239,10 @@ public class GetVipPayActivity extends FragmentActivity {
             // 无论成功与否,返回订单号
             @Override
             public void orderId(String orderId) {
-                vipOrders.orderId = orderId;
-                vipOrders.orderPrice = mPayMoney + "";
-                vipOrders.goodsDescription = mGoodsDescription;
-                vipOrders.save(new SaveListener<String>() {
+                Orders.orderId = orderId;
+//                Orders.orderPrice = mPayMoney + "";
+//                Orders.goodsDescription = mGoodsDescription;
+                Orders.save(new SaveListener<String>() {
                     @Override
                     public void done(String objectId, BmobException e) {
                         if (e == null) {
@@ -257,7 +257,7 @@ public class GetVipPayActivity extends FragmentActivity {
             // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
             @Override
             public void fail(int code, final String reason) {
-                vipOrders.delete(vipOrders.getObjectId(), new UpdateListener() {
+                Orders.delete(Orders.getObjectId(), new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
                         if (e == null) {
@@ -292,7 +292,7 @@ public class GetVipPayActivity extends FragmentActivity {
             }
     }
 
-    private boolean checkPackageInstalled(String packageName, String browserUrl) {
+     boolean checkPackageInstalled(String packageName, String browserUrl) {
         try {
             // 检查是否有支付宝客户端
             getPackageManager().getPackageInfo(packageName, 0);
@@ -317,7 +317,7 @@ public class GetVipPayActivity extends FragmentActivity {
     }
 
 
-    private void queryData() {
+     void queryData() {
         final BmobQuery<PayConis> query = new BmobQuery<>();
         query.order("-payConisCount");
         query.findObjects(new FindListener<PayConis>() {
@@ -342,7 +342,7 @@ public class GetVipPayActivity extends FragmentActivity {
         });
     }
 
-    private Integer mPayConisCount;
+     Integer mPayConisCount;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -354,7 +354,7 @@ public class GetVipPayActivity extends FragmentActivity {
             }
             if (mAdapter == null) {
                 listView.setAdapter(mAdapter = new MyAdapter(GetVipPayActivity.this, payConises));
-                vipOrders.user = BmobUser.getCurrentUser(RootUser.class);
+                Orders.user = BmobUser.getCurrentUser(RootUser.class);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, final int position, long l) {
