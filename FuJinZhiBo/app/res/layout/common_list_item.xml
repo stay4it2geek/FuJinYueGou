@@ -74,7 +74,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="45dp"
                 android:paddingLeft="5dp"
-                android:textColor="#EA99"
+                android:textColor="@color/white"
+                android:background="@drawable/button_common_selector"
                 android:textSize="10sp" />
         </RelativeLayout>
     </RelativeLayout>

@@ -136,6 +136,7 @@ public class CourseDetailActivity extends BaseActivity {
                 int h = View.MeasureSpec.makeMeasureSpec(0,
                         View.MeasureSpec.UNSPECIFIED);
                 //重新测量
+                if(webview!=null)
                 webview.measure(w, h);
             }
         });

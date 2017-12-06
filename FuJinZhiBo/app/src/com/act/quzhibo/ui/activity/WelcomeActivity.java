@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -70,6 +71,7 @@ public class WelcomeActivity extends ActivityManagePermission {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         secretView = (LinearLayout) findViewById(R.id.secret_view);
 
         mLockIndicator = (LockIndicatorView) findViewById(R.id.indicator);
@@ -79,6 +81,7 @@ public class WelcomeActivity extends ActivityManagePermission {
         mLockViewGroup = (LockViewGroup) findViewById(R.id.lockgroup);
 
         grantPermission();
+
     }
 
     @Override
@@ -90,7 +93,7 @@ public class WelcomeActivity extends ActivityManagePermission {
             long l = System.currentTimeMillis() - Long.parseLong(user.lastLoginTime);
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
-            if (hour <12) {
+            if (hour > 8) {
                 VirtualUserDao.getInstance(this).updateOnlineTime2Space();
             }
         }
@@ -170,7 +173,27 @@ public class WelcomeActivity extends ActivityManagePermission {
         askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_RECORD_AUDIO, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
             public void permissionGranted() {
-                doRequest();
+                ToastUtil.showToast(WelcomeActivity.this, "DDDD");
+                BmobQuery<Toggle> query = new BmobQuery<>();
+                query.addWhereEqualTo("objectKey", "doNewQueryTimeStamp");
+                query.findObjects(new FindListener<Toggle>() {
+                    @Override
+                    public void done(List<Toggle> list, BmobException e) {
+                        if (e == null && list.size() > 0) {
+                            ToastUtil.showToast(WelcomeActivity.this, "list");
+                            if (TextUtils.isEmpty((CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp") != null ? CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp").getToggleObject() : ""))) {
+                                doRequest(true);
+                            } else {
+                                if (list.get(0).getToggleObject().equals(CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp"))) {
+                                    doRequest(false);
+                                } else {
+                                    doRequest(true);
+                                }
+                            }
+                        }
+                    }
+                });
+
             }
 
             @Override
@@ -216,8 +239,10 @@ public class WelcomeActivity extends ActivityManagePermission {
         });
     }
 
-    void doRequest() {
+    boolean isUpdate;
 
+    void doRequest(boolean isUpdate) {
+        this.isUpdate = isUpdate;
         user = BmobUser.getCurrentUser(RootUser.class);
         if (user != null) {
             CommonUtil.fecth(this);
@@ -235,31 +260,48 @@ public class WelcomeActivity extends ActivityManagePermission {
     }
 
     void request() {
-//        BmobQuery<Toggle> query = new BmobQuery<>();
-//        query.findObjects(new FindListener<Toggle>() {
-//            @Override
-//            public void done(List<Toggle> Toggles, BmobException bmobException) {
-//                if (bmobException == null) {
-//                    SharedPreferences mySharedPreferences = getSharedPreferences(Constants.SAVE, Context.MODE_PRIVATE);
-//                    SharedPreferences.Editor edit = mySharedPreferences.edit();
-//                    String liststr = CommonUtil.SceneList2String(Toggles);
-//                    edit.putString(Constants.TOGGLES, liststr);
-//                    edit.commit();
-                    getPlateList();
-//                } else {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            ToastUtil.showToast(getApplicationContext(), "网络异常,正在重试");
-//                        }
-//                    });
-//                    request();
-//                }
-//            }
-//        });
+        if (TextUtils.isEmpty(CommonUtil.getToggle(this, "tabCatagory") != null ? CommonUtil.getToggle(this, "tabCatagory").getToggleObject() : "")) {
+            ToastUtil.showToast(this, "BmobQuery");
+            doBmonQuery();
+        } else {
+            ToastUtil.showToast(this, "Bmob"+isUpdate);
+            if (isUpdate) {
+                doBmonQuery();
+            } else {
+                ToastUtil.showToast(this, "getShowPlateList"+isUpdate);
+
+                getShowPlateList();
+
+            }
+        }
     }
 
-    void getPlateList() {
+    private void doBmonQuery() {
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> Toggles, BmobException bmobException) {
+                if (bmobException == null) {
+                    SharedPreferences mySharedPreferences = getSharedPreferences(Constants.SAVE, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor edit = mySharedPreferences.edit();
+                    String liststr = CommonUtil.SceneList2String(Toggles);
+                    edit.putString(Constants.TOGGLES, liststr);
+                    edit.commit();
+                    getShowPlateList();
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtil.showToast(getApplicationContext(), "网络异常,正在重试");
+                        }
+                    });
+                    request();
+                }
+            }
+        });
+    }
+
+    void getShowPlateList() {
         String url = CommonUtil.getToggle(this, "tabCatagory").getToggleObject();
         OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
     }

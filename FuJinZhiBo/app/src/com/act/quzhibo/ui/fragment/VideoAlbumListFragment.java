@@ -63,6 +63,13 @@ public class VideoAlbumListFragment extends BackHandledFragment {
                 initMediaVideoListData(Constants.REFRESH);
             }
         });
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                initMediaVideoListData(Constants.REFRESH);
+            }
+        });
         initView();
         return view;
     }
@@ -70,7 +77,7 @@ public class VideoAlbumListFragment extends BackHandledFragment {
      void initView() {
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
 
-         ViewDataUtil.setLayManager(handlerMediaInfoSize, new OnQueryDataListner() {
+         ViewDataUtil.setLayManager(new OnQueryDataListner() {
              @Override
              public void onRefresh() {
                         initMediaVideoListData(Constants.REFRESH);
@@ -78,7 +85,12 @@ public class VideoAlbumListFragment extends BackHandledFragment {
 
              @Override
              public void onLoadMore() {
-                            initMediaVideoListData(Constants.LOADMORE);
+                 if (handlerMediaInfoSize > 0) {
+                     initMediaVideoListData(Constants.LOADMORE);
+                     recyclerView.loadMoreComplete();
+                 } else {
+                     recyclerView.setNoMore(true);
+                 }
              }
          },getActivity(), recyclerView, 1, true, true);
         initMediaVideoListData(Constants.REFRESH);
@@ -154,11 +166,14 @@ public class VideoAlbumListFragment extends BackHandledFragment {
             super.handleMessage(msg);
             ArrayList<MediaInfo> mediaInfos = (ArrayList<MediaInfo>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (mediaInfos != null) {
+                if (mediaInfos != null && mediaInfos.size()>0)  {
                     handlerMediaInfoSize = mediaInfos.size();
                     medias.addAll(mediaInfos);
                 } else {
                     handlerMediaInfoSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
 
                 if (mInfoListAdapter == null) {

@@ -227,7 +227,11 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
                             myFocusShower.roomId = room.roomId;
                             myFocusShower.userId = room.userId;
                             myFocusShower.gender = room.gender;
-                            myFocusShower.liveStream = room.liveStream;
+                            if(room.liveStream!=null){
+                                myFocusShower.liveStream = room.liveStream;
+                            }else{
+                                myFocusShower.liveStream  = "http://pull.kktv8.com/livekktv/" + room.roomId + ".flv";
+                            }
                             myFocusShower.city = room.city;
                             myFocusShower.save(new SaveListener<String>() {
                                 @Override
@@ -336,7 +340,7 @@ public class VideoPlayerActivityLanscape extends FragmentActivity implements Vie
     @Subscribe
     public void onEventMainThread(FocusChangeEvent event) {
 
-        if (event.focus) {
+        if (event.focus && event.type.equals("show")) {
             ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
         } else {
             ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.focusTa));

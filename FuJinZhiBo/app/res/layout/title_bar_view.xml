@@ -2,21 +2,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navigationbar"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/commonViewHeight"
-    android:background="@color/background_color">
+    android:layout_height="@dimen/titleBarViewHeight">
 
     <TextView
         android:id="@+id/barTitle"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/titleBarViewHeight"
         android:layout_gravity="center_horizontal"
-        android:background="#f6dd3e"
+        android:background="@drawable/color_bg"
         android:gravity="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:singleLine="true"
         android:text=""
-        android:textColor="@color/commontextcolor"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 
     <RelativeLayout
@@ -36,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
+            android:textColor="@color/white"
             android:text="返回" />
     </RelativeLayout>
 
@@ -47,15 +47,7 @@
         android:layout_marginRight="15dp"
         android:padding="10dp"
         android:text="编辑"
+        android:textColor="@color/white"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/shopping_cart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="15dp"
-        android:padding="10dp"
-        android:visibility="gone"
-        android:text="购物车" />
 </FrameLayout>

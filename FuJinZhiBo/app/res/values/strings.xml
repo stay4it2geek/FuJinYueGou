@@ -2,72 +2,14 @@
 <resources>
     <string name="app_name">情趣社区购</string>
 
-    <string name="action_tab_media_preview_text">media preview</string>
-    <string name="action_tab_media_download_text">media download</string>
-    <string name="media_preview_url_is_empty_note">media url is empty!</string>
-    <string name="media_preview_add_download">add download:</string>
-    <string name="media_download_play_mp4">Play mp4 media</string>
-    <string name="media_download_play_flv">Play flv media</string>
-    <string name="can_not_download">Can not download, please delete the file</string>
-    <string name="getting_resource">Getting resource</string>
-    <string name="retrying_connect_resource">Retrying connect resource</string>
-    <string name="connected_resource">Connected resource</string>
-    <string name="waiting">Waiting</string>
-    <string name="paused">Paused</string>
-    <string name="downloading">Downloading</string>
-    <string name="download_error">Download error</string>
-    <string name="download_completed">Download completed</string>
-    <string name="file_not_exist">File not exist</string>
-    <string name="can_not_download2">Can not download,please delete the file:</string>
-    <string name="re_download"> re-download</string>
-    <string name="start_download">Start/Continue download:</string>
-    <string name="whether_re_download">File not exist,whether re-download</string>
-    <string name="re_download2">re-download</string>
-    <string name="paused_download">Paused download:</string>
-    <string name="dialog_btn_cancel">Cancel</string>
-    <string name="dialog_btn_confirm">Confirm</string>
-    <string name="media_download_not_start">Not start</string>
-
-    <string name="check_network">(Check network)</string>
-    <string name="url_illegal">(Url illegal)</string>
-    <string name="network_timeout">(Network timeout)</string>
-    <string name="storage_space_is_full">(Storage space is full)</string>
-    <string name="storage_space_can_not_write">(Storage space can not write)</string>
-    <string name="file_not_detect">(File not detect)</string>
-    <string name="http_bad_response_code">(错误的网络返回码)</string>
-    <string name="http_file_not_exist">(网络文件不存在)</string>
-    <string name="save_file_not_exist">(保存的文件不存在)</string>
-
-    <string name="btn_pause">暂停</string>
-    <string name="btn_start_or_continue">开始/继续</string>
-    <string name="btn_delete">删除</string>
-
-    <string name="media_center__media_cache_delete_confirm">是否删除 %d 条？</string>
-
-    <string name="main__delete_succeed">删除成功</string>
-    <string name="deleting">删除中</string>
-    <string name="main__delete">删除</string>
-    <string name="main__failed">失败</string>
-    <string name="progress">,进度:</string>
-    <string name="failed2">(失败:</string>
-    <string name="skip_and_total_delete_division">)/</string>
-    <string name="need_delete">需要删除</string>
-    <string name="delete_finish">删除完成,成功:</string>
-    <string name="failed3">,失败:</string>
-    <string name="delete_failed">删除失败!</string>
-
-    <string name="common__get_data_failed">获取数据失败!</string>
     <string name="main_tab_recent">会话</string>
-    <string name="main_tab_contact">联系人</string>
-    <string name="mian_tab_set">设置</string>
-
+    <string name="main_tab_contact">好友</string>
     <string name="add_avator">头像</string>
     <string name="add_nick">昵称</string>
     <string name="add_name">账号</string>
     <string name="agree">接受</string>
     <string name="new_friend">新朋友</string>
 
-    <string name="chat">陌生人聊天</string>
     <string name="add_friend">添加好友</string>
 
     <string name="set_notify">接收新消息通知</string>
@@ -86,10 +28,6 @@
     <string name="voice_seconds_tips">还可以说%1$s秒</string>
     <string name="voice_short_tips">录音时间太短</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_user_info">UserInfoActivity</string>
-    <string name="shop_title">购物车(%s)</string>
-    <string name="count_money">结算:￥%s</string>
     <string name="cancelFocus">取消关注</string>
     <string name="focusOk">关注成功</string>
     <string name="focusFail">关注失败</string>

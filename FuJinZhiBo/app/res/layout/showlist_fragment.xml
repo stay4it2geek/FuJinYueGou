@@ -29,8 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            app:fab_colorNormal="@color/commonColor"
-            app:fab_colorPressed="@color/lightorange"
+            app:fab_colorNormal="@color/tag_blue"
+            app:fab_colorPressed="@color/blue"
             app:fab_icon="@android:drawable/ic_menu_sort_by_size"
             app:fab_size="mini"
             app:fab_title="排序" />
@@ -40,8 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"
-            app:fab_colorNormal="@color/commonColor"
-            app:fab_colorPressed="@color/lightorange"
+            app:fab_colorNormal="@color/tag_blue"
+            app:fab_colorPressed="@color/blue"
             app:fab_icon="@drawable/focus_shower"
             app:fab_size="mini"
             app:fab_title="直播" />

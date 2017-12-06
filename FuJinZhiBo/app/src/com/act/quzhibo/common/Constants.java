@@ -41,10 +41,7 @@ public class Constants {
 
     public static final String INTEREST ="1" ;
     public static final String NEAR ="2" ;
-    public static final String LANSPACE = "1";
     public static final String VIDEO_COURSE = "1";
-    public static final String LANSPACE_IS_LIVE = "1";
-    public static final String PORTAIL_IS_LIVE = "2";
     public static final String COURSE = "course";
     public static final String COURSE_CATOGERY_ID = "course_category_id";
     public static final String COURSE_CATOGERY_INFO = "courseCategoryInfo";

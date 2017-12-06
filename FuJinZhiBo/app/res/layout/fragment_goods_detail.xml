@@ -6,12 +6,12 @@
     <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight" />
+        android:layout_height="wrap_content" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout"
-        android:layout_marginBottom="@dimen/commonViewHeight">
+        android:layout_below="@+id/titlebar"
+        android:layout_marginBottom="@dimen/titleBarViewHeight">
 
         <com.act.quzhibo.widget.SlidingDetailsLayout
             android:id="@+id/slidingDetailsLayout"
@@ -46,7 +46,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/courseBannerLayout"
                         android:layout_margin="10dp"
-                        android:text="fdsafdsfadsfdsfadsfadsfdasfdsfadsfadsfdsfadsfadsfdasfdasfdsfdsfdsafadsfadsfadsfdsafdasfadsfdsafdsafdsfdsfdsfadsfdsfadsfdsafdsfdsf" />
+                        android:text="" />
 
                     <RelativeLayout
 
@@ -124,7 +124,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
@@ -232,7 +232,7 @@
                 android:gravity="center"
                 android:orientation="vertical"
                 android:text="立即购买"
-                android:textColor="@android:color/white"
+                android:textColor="@color/white"
                 android:textSize="15sp" />
         </LinearLayout>
 

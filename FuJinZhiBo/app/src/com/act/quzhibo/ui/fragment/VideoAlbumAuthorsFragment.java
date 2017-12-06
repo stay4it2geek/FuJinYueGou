@@ -50,7 +50,7 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.video_authors_fragment, null);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        ViewDataUtil.setLayManager(handlerMediaAuthorSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryData(Constants.REFRESH);
@@ -58,8 +58,12 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
 
             @Override
             public void onLoadMore() {
-                queryData(Constants.LOADMORE);
-
+                if (handlerMediaAuthorSize > 0) {
+                    queryData(Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
         }, getActivity(), recyclerView, 2, true, true);
 
@@ -143,11 +147,14 @@ public class VideoAlbumAuthorsFragment extends BackHandledFragment {
             super.handleMessage(msg);
             ArrayList<MediaAuthor> mediaAuthor = (ArrayList<MediaAuthor>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (mediaAuthor != null) {
+                if (mediaAuthor != null && mediaAuthor.size() > 0) {
                     handlerMediaAuthorSize = mediaAuthor.size();
                     medias.addAll(mediaAuthor);
                 } else {
                     handlerMediaAuthorSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
 
                 if (mediaAuthorListAdapter == null) {

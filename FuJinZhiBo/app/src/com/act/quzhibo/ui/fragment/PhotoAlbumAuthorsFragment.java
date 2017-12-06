@@ -39,20 +39,20 @@ import static com.act.quzhibo.common.Constants.PHOTO_ALBUM;
 
 
 public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
-     View view;
-     XRecyclerView recyclerView;
-     MediaAuthorListAdapter mediaAuthorListAdapter;
-     LoadNetView loadNetView;
-     String lastTime = "";
-     ArrayList<MediaAuthor> mediaAuthors = new ArrayList<>();
-     int handlerMediaAuthorSize;
+    View view;
+    XRecyclerView recyclerView;
+    MediaAuthorListAdapter mediaAuthorListAdapter;
+    LoadNetView loadNetView;
+    String lastTime = "";
+    ArrayList<MediaAuthor> mediaAuthors = new ArrayList<>();
+    int handlerMediaAuthorSize;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_layout, null);
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        ViewDataUtil.setLayManager(handlerMediaAuthorSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryData(Constants.REFRESH);
@@ -60,9 +60,14 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
 
             @Override
             public void onLoadMore() {
-                            queryData(Constants.LOADMORE);
+                if (handlerMediaAuthorSize > 0) {
+                    queryData(Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
-        },getActivity(), recyclerView, 1, true, true);
+        }, getActivity(), recyclerView, 1, true, true);
 
         queryData(Constants.REFRESH);
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
@@ -74,7 +79,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
             }
         });
 
-        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
@@ -105,7 +110,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
     }
 
 
-     void queryData(final int actionType) {
+    void queryData(final int actionType) {
         BmobQuery<MediaAuthor> query = new BmobQuery<>();
         BmobQuery<MediaAuthor> query2 = new BmobQuery<>();
         List<BmobQuery<MediaAuthor>> queries = new ArrayList<>();
@@ -133,7 +138,7 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
                     if (list.size() > 0) {
                         if (actionType == Constants.REFRESH) {
                             mediaAuthors.clear();
-                            if(mediaAuthorListAdapter!=null){
+                            if (mediaAuthorListAdapter != null) {
                                 mediaAuthorListAdapter.notifyDataSetChanged();
                             }
                         }
@@ -175,37 +180,40 @@ public class PhotoAlbumAuthorsFragment extends BackHandledFragment {
             super.handleMessage(msg);
             ArrayList<MediaAuthor> mediaAuthor = (ArrayList<MediaAuthor>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (mediaAuthor != null) {
+                if (mediaAuthor != null && mediaAuthor.size() > 0) {
                     handlerMediaAuthorSize = mediaAuthor.size();
                     mediaAuthors.addAll(mediaAuthor);
                 } else {
                     handlerMediaAuthorSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 Collections.sort(mediaAuthors, new ComparatorValues());
 
-                    if (mediaAuthorListAdapter == null) {
-                        mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthors);
-                        recyclerView.setAdapter(mediaAuthorListAdapter);
-                        mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
-                            @Override
-                            public void onItemClick(MediaAuthor mediaAuthor) {
-                                PhotoAlbumListFragment photoAlbumListFragment = new PhotoAlbumListFragment();
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("author", mediaAuthor);
-                                photoAlbumListFragment.setArguments(bundle);
-                                ViewDataUtil.switchFragment(photoAlbumListFragment, R.id.layoutContainer, getActivity());
-                            }
-                        });
-                    } else {
-                        mediaAuthorListAdapter.notifyDataSetChanged();
-                    }
+                if (mediaAuthorListAdapter == null) {
+                    mediaAuthorListAdapter = new MediaAuthorListAdapter(getActivity(), mediaAuthors);
+                    recyclerView.setAdapter(mediaAuthorListAdapter);
+                    mediaAuthorListAdapter.setOnItemClickListener(new MediaAuthorListAdapter.OnMediaRecyclerViewItemClickListener() {
+                        @Override
+                        public void onItemClick(MediaAuthor mediaAuthor) {
+                            PhotoAlbumListFragment photoAlbumListFragment = new PhotoAlbumListFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("author", mediaAuthor);
+                            photoAlbumListFragment.setArguments(bundle);
+                            ViewDataUtil.switchFragment(photoAlbumListFragment, R.id.layoutContainer, getActivity());
+                        }
+                    });
+                } else {
+                    mediaAuthorListAdapter.notifyDataSetChanged();
                 }
-                loadNetView.setVisibility(View.GONE);
-                if (handlerMediaAuthorSize == 0) {
-                    loadNetView.setVisibility(View.VISIBLE);
-                    loadNetView.setlayoutVisily(Constants.NO_DATA);
-                    return;
-                }
+            }
+            loadNetView.setVisibility(View.GONE);
+            if (handlerMediaAuthorSize == 0) {
+                loadNetView.setVisibility(View.VISIBLE);
+                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                return;
+            }
 
         }
     };

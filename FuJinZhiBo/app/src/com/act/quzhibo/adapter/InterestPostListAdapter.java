@@ -42,6 +42,11 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
     ArrayList<InterestPost> datas;
     Context context;
     boolean isNeedBlur;
+    int personIndex;
+
+    public void setPersonIndex(int personIndex) {
+        this.personIndex = personIndex;
+    }
 
     public interface OnInterestPostRecyclerViewItemClickListener {
         void onItemClick(InterestPost post);
@@ -201,11 +206,12 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra(Constants.POST, post);
+                intent.putExtra("FocusPersonIndex",personIndex);
                 intent.setClass(context, InfoInterestPersonActivity.class);
                 context.startActivity(intent);
             }
         });
-        if (post.user.sex.equals("2")) {
+        if (post.user.sex.equals("女")) {
             Glide.with(context).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {

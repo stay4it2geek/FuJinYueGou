@@ -7,7 +7,7 @@
     <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/yellowshape"
+        android:background="@drawable/grayshape"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -111,6 +111,7 @@
         android:button="@null"
         android:gravity="center"
         android:text="登  录"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 
 

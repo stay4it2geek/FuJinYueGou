@@ -24,5 +24,6 @@ public class CommonCourse extends BmobObject implements Serializable {
     public String downloadUrl;
     public String downloadPsw;
     public String profitPercent;
+    public String   promotionMoney;
 
 }

@@ -26,7 +26,7 @@ public class MyPostDetailActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.interest_post_detail_layout);
         recyclerView = (XRecyclerView) findViewById(R.id.postRecyleview);
-        ViewDataUtil.setLayManager(0,null,this,recyclerView,1,false,false);
+        ViewDataUtil.setLayManager(null,this,recyclerView,1,false,false);
         findViewById(R.id.titlebar).setVisibility(View.VISIBLE);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setVisibility(View.VISIBLE);

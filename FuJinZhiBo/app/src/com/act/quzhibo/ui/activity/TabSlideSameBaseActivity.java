@@ -101,9 +101,13 @@ public abstract class TabSlideSameBaseActivity extends FragmentActivity implemen
                                             dialog.dismiss();
                                             finish();
                                             ToastUtil.showToast(TabSlideSameBaseActivity.this, "退出时间" + System.currentTimeMillis());
+                                        }else{
+                                            finish();
                                         }
                                     }
                                 });
+                            }else{
+                                finish();
                             }
 
                         }

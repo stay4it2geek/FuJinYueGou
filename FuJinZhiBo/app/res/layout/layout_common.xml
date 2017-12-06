@@ -8,11 +8,10 @@
     <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
-    </com.act.quzhibo.widget.TitleBarView>
+        android:layout_alignParentTop="true"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -37,9 +36,9 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"
             android:visibility="gone"
-            app:fab_addButtonColorNormal="@color/commonColor"
-            app:fab_addButtonColorPressed="@color/lightorange"
-            app:fab_addButtonPlusIconColor="@color/darkorange"
+            app:fab_addButtonColorNormal="@color/tag_blue"
+            app:fab_addButtonColorPressed="@color/blue"
+            app:fab_addButtonPlusIconColor="#fe4060"
             app:fab_addButtonSize="mini"
             app:fab_expandDirection="up"
             app:fab_labelStyle="@style/menu_labels_style"
@@ -50,8 +49,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                app:fab_colorNormal="@color/commonColor"
-                app:fab_colorPressed="@color/lightorange"
+                app:fab_colorNormal="@color/tag_blue"
+                app:fab_colorPressed="@color/blue"
                 app:fab_icon="@drawable/text"
                 app:fab_size="mini"
                 app:fab_title="文本" />
@@ -61,8 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                app:fab_colorNormal="@color/commonColor"
-                app:fab_colorPressed="@color/lightorange"
+                app:fab_colorNormal="@color/tag_blue"
+                app:fab_colorPressed="@color/blue"
                 app:fab_icon="@android:drawable/presence_video_busy"
                 app:fab_size="mini"
                 app:fab_title="视频" />
@@ -72,8 +71,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                app:fab_colorNormal="@color/commonColor"
-                app:fab_colorPressed="@color/lightorange"
+                app:fab_colorNormal="@color/tag_blue"
+                app:fab_colorPressed="@color/blue"
                 app:fab_icon="@drawable/ic_camera"
                 app:fab_size="mini"
                 app:fab_title="照片" />

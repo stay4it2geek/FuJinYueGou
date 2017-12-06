@@ -37,7 +37,7 @@ public class ReceiveLocationHolder extends BaseViewHolder {
     @Bind(R.id.tv_location)
     protected TextView tv_location;
     private BmobIMConversation conversation;
-    private BmobIMMessage message;
+     BmobIMMessage message;
 
     public ReceiveLocationHolder(Context context, BmobIMConversation conversation, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
         super(context, root, R.layout.item_chat_received_location, onRecyclerViewListener);
@@ -49,7 +49,7 @@ public class ReceiveLocationHolder extends BaseViewHolder {
     public void bindData(Object o) {
         final BmobIMMessage msg = (BmobIMMessage) o;
         //用户信息的获取必须在buildFromDB之前，否则会报错'Entity is detached from DAO context'
-        message = msg;
+        this.message = msg;
         Glide.with(context).load(!TextUtils.isEmpty(conversation.getConversationIcon()) ? conversation.getConversationIcon() : "").asBitmap().error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {

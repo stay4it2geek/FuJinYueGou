@@ -2,23 +2,27 @@ package com.act.quzhibo.ui.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.ShoppingCartAdapter;
+import com.act.quzhibo.bean.CommonCourse;
+import com.act.quzhibo.bean.MyPost;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.ShoppingCart;
 import com.act.quzhibo.common.Constants;
+import com.act.quzhibo.event.CartEvent;
 import com.act.quzhibo.event.ChangeEvent;
+import com.act.quzhibo.event.CourseEvent;
 import com.act.quzhibo.i.OnQueryDataListner;
-import com.act.quzhibo.i.OnReturnTotalListner;
 import com.act.quzhibo.util.ToastUtil;
 import com.act.quzhibo.util.ViewDataUtil;
 import com.act.quzhibo.widget.FragmentDialog;
@@ -27,6 +31,8 @@ import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.util.AsyncExecutor;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,23 +42,29 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
+import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SQLQueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
-public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAdapter.ModifyListListner {
+public class ShoppingCartActivity extends BaseActivity implements
+        ShoppingCartAdapter.CheckInterface,
+        ShoppingCartAdapter.ModifyListInterface {
 
     ShoppingCartAdapter cartAdapter;
     boolean flag = false;
     double totalPrice = 0.00;// 购买的商品总价
     int totalCount = 0;// 购买的商品总数量
-
+    int index = 0;
     @Bind(R.id.recyclerview)
     XRecyclerView mRecyclerview;
+    @Bind(R.id.cbSelectAll)
+    CheckBox ckAll;
     @Bind(R.id.tv_show_price)
     TextView tvShowPrice;
     @Bind(R.id.tv_settlement)
@@ -66,6 +78,7 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
     RootUser user;
     private int handlerCartsSize;
     String lastTime = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,18 +92,23 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
                 ShoppingCartActivity.this.finish();
             }
         });
-        ViewDataUtil.setLayManager(handlerCartsSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
+                index = 0;
                 requestShoppingCartData(Constants.REFRESH);
             }
 
             @Override
             public void onLoadMore() {
-                requestShoppingCartData(Constants.LOADMORE);
+                if (handlerCartsSize > 0) {
+                    requestShoppingCartData(Constants.LOADMORE);
+                    mRecyclerview.loadMoreComplete();
+                } else {
+                    mRecyclerview.setNoMore(true);
+                }
             }
         }, this, mRecyclerview, 1, true, true);
-        tvEditor.setVisibility(View.VISIBLE);
         loadNetView.setBuyButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,19 +117,56 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
                 EventBus.getDefault().post(new ChangeEvent("buy"));
             }
         });
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                requestShoppingCartData(Constants.REFRESH);
+            }
+        });
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                requestShoppingCartData(Constants.REFRESH);
+            }
+        });
         requestShoppingCartData(Constants.REFRESH);
     }
 
     @OnClick(R.id.tvEditor)
     public void updateEditStatus() {
         flag = !flag;
-        if (flag) {
-            tvEditor.setText("完成");
-            cartAdapter.isCanbeEdite(false);
-        } else {
-            tvEditor.setText("编辑");
-            cartAdapter.isCanbeEdite(true);
+        if (cartAdapter != null) {
+            if (flag) {
+                tvEditor.setText("完成");
+                cartAdapter.isCanbeEdite(false);
+            } else {
+                tvEditor.setText("编辑");
+                cartAdapter.isCanbeEdite(true);
+            }
         }
+    }
+
+    @OnClick(R.id.cbSelectAll)
+    public void selectAll() {
+        selectCartAll();
+    }
+
+    private void selectCartAll() {
+        if (shoppingCarts.size() != 0) {
+            if (ckAll.isChecked()) {
+                for (int i = 0; i < shoppingCarts.size(); i++) {
+                    shoppingCarts.get(i).setChoosed(true);
+                }
+            } else {
+                for (int i = 0; i < shoppingCarts.size(); i++) {
+                    shoppingCarts.get(i).setChoosed(false);
+                }
+            }
+            cartAdapter.notifyDataSetChanged();
+        }
+        statistics();
     }
 
     @OnClick(R.id.tv_settlement)
@@ -119,6 +174,25 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
         settlementOrder();
     }
 
+    /**
+     * 单选
+     *
+     * @param position  组元素位置
+     * @param isChecked 组元素选中与否
+     */
+    @Override
+    public void checkGroup(int position, boolean isChecked, String price) {
+        if (cartAdapter != null) {
+            shoppingCarts.get(position).setChoosed(isChecked);
+            if (isAllCheck()) {
+                ckAll.setChecked(true);
+            } else {
+                ckAll.setChecked(false);
+            }
+            cartAdapter.notifyDataSetChanged();
+            statistics();
+        }
+    }
 
     @Override
     public void childDelete(final int position) {
@@ -135,9 +209,8 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
                     public void done(BmobException e) {
                         if (e == null) {
                             shoppingCarts.remove(position);
-                            cartAdapter.setCartData(shoppingCarts);
                             cartAdapter.notifyDataSetChanged();
-                            statistics(shoppingCarts);
+                            statistics();
                             if (shoppingCarts.size() == 0) {
                                 loadNetView.setVisibility(View.VISIBLE);
                                 loadNetView.setlayoutVisily(Constants.BUY_VIP);
@@ -174,6 +247,7 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
         query.and(queries);
         query.setLimit(10);
         query.order("-updatedAt");
+        query.include("course");
         query.findObjects(new FindListener<ShoppingCart>() {
             @Override
             public void done(List<ShoppingCart> list, BmobException e) {
@@ -186,71 +260,58 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
                     }
                     if (list != null && list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
-                        Message message = new Message();
-                        message.obj = list;
-                        message.what = actionType;
-                        handler.sendMessage(message);
-                    } else {
-                        tvEditor.setText("编辑");
-                        cartAdapter.isCanbeEdite(true);
-                        loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                        if (cartAdapter != null) {
+                            cartAdapter.isCanbeEdite(true);
+                        }
                     }
+                    Message message = new Message();
+                    message.obj = list;
+                    message.what = actionType;
+                    handler.sendMessage(message);
                 } else {
                     handler.sendEmptyMessage(Constants.NetWorkError);
                 }
             }
         });
     }
-    int cartsSize;
+
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             ArrayList<ShoppingCart> carts = (ArrayList<ShoppingCart>) msg.obj;
+
             if (msg.what != Constants.NetWorkError) {
-                if (shoppingCarts != null) {
+                if (carts != null && carts.size() > 0) {
+                    Log.e("carts", carts.size() + "");
                     shoppingCarts.addAll(carts);
                     handlerCartsSize = carts.size();
                 } else {
                     handlerCartsSize = 0;
-                }
-              cartsSize=shoppingCarts.size();
-                if (cartAdapter == null) {
-                    cartAdapter = new ShoppingCartAdapter(ShoppingCartActivity.this);
-                    cartAdapter.setModifyListListner(ShoppingCartActivity.this);
-                    if(cartAdapter!=null){
-                        cartAdapter.setReturnPriceListner(new OnReturnTotalListner() {
-                            @Override
-                            public void onReturnPrice(int size,int index, BmobObject o) {
-                                shoppingCarts.remove(index);
-                                shoppingCarts.add(index,(ShoppingCart)o);
-                                if(size==cartsSize){
-                                    cartAdapter.setCartData(shoppingCarts);
-                                    cartAdapter.notifyDataSetChanged();
-                                }
-                                statistics(shoppingCarts);
-                            }
-                        });
+                    if (msg.what == Constants.LOADMORE) {
+                        mRecyclerview.setNoMore(true);
                     }
-                    cartAdapter.setCartData(shoppingCarts);
+                }
+                if (cartAdapter == null) {
+                    cartAdapter = new ShoppingCartAdapter(ShoppingCartActivity.this, shoppingCarts);
                     mRecyclerview.setAdapter(cartAdapter);
-                } else {
-                    cartAdapter.setCartData(shoppingCarts);
-                    cartAdapter.notifyDataSetChanged();
-                }
+                    tvEditor.setText("编辑");
+                    cartAdapter.setCheckInterface(ShoppingCartActivity.this);
+                    cartAdapter.setModifyListInterface(ShoppingCartActivity.this);
+                    loadNetView.setVisibility(View.GONE);
+                    tvEditor.setVisibility(View.VISIBLE);
 
-                if (msg.what == Constants.LOADMORE) {
-                    mRecyclerview.setNoMore(true);
+                } else {
+                    cartAdapter.notifyDataSetChanged();
+                    if (ckAll.isChecked()) {
+                        selectCartAll();
+                    }
                 }
-               handler.postDelayed(new Runnable() {
-                   @Override
-                   public void run() {
-                       loadNetView.setVisibility(View.GONE);
-                   }
-               },1500);
                 if (shoppingCarts.size() == 0) {
                     tvEditor.setText("编辑");
-                    cartAdapter.isCanbeEdite(true);
+                    if (cartAdapter != null) {
+                        cartAdapter.isCanbeEdite(true);
+                    }
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.BUY_VIP);
                     return;
@@ -262,19 +323,30 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
         }
     };
 
+
+    boolean isAllCheck() {
+        for (ShoppingCart group : shoppingCarts) {
+            if (!group.isChoosed())
+                return false;
+        }
+        return true;
+    }
+
     /**
      * 统计操作
      * 1.先清空全局计数器
      * 2.遍历所有子元素，只要是被选中状态的，就进行相关的计算操作
      * 3.给底部的textView进行数据填充
      */
-    public void statistics(List<ShoppingCart> shoppingCarts) {
+    public void statistics() {
         totalCount = 0;
         totalPrice = 0.00;
         for (int i = 0; i < shoppingCarts.size(); i++) {
             ShoppingCart cart = shoppingCarts.get(i);
+            if (cart.isChoosed()) {
                 totalCount++;
-                totalPrice += TextUtils.isEmpty(cart.courseAppPrice)? 0.00 : Double.parseDouble(cart.courseAppPrice);
+                totalPrice += cart.course == null ? 0.00 : Double.parseDouble(cart.course.courseAppPrice);
+            }
         }
         tvShowPrice.setText("合计:" + totalPrice);
         tvSettlement.setText("结算(" + totalCount + ")");
@@ -285,16 +357,31 @@ public class ShoppingCartActivity extends BaseActivity implements ShoppingCartAd
      */
     void settlementOrder() {
         if (totalCount == 0) {
+            FragmentDialog.newInstance(false, "您没有勾选任何商品哦！", "请至少勾选一种商品", "帮我勾选", "", "", "", true, new FragmentDialog.OnClickBottomListener() {
+                @Override
+                public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                    ckAll.setChecked(false);
+                    ckAll.performClick();
+                }
+
+                @Override
+                public void onNegtiveClick(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            }).show(getSupportFragmentManager(), "");
             return;
         }
         //选中的需要提交的商品清单
         for (ShoppingCart bean : shoppingCarts) {
+            boolean choosed = bean.isChoosed();
+            if (choosed) {
 //                String shoppingName = bean.getShoppingName();
 //                int count = bean.getCount();
 //                double price = bean.getPrice();
 //                int size = bean.getDressSize();
 //                String attribute = bean.getAttribute();
 //                int id = bean.getId();
+            }
         }
         ToastUtil.showToast(this, "总价：" + totalPrice);
 

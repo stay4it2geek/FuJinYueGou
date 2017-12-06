@@ -15,6 +15,7 @@
     <color name="middlegray">#E3E3E3</color>
     <color name="white">#fff</color>
     <color name="orange_white">#FED1AA</color>
+    <color name="REDD">#FF3030</color>
     <color name="gray">#D9D9D9</color>
     <color name="darkgray">#9E9E9E</color>
     <color name="black">#3e3e39</color>
@@ -36,6 +37,8 @@
     <color name="color_bottom_text_press">#4f9ef6</color>
     <color name="text_gray">#969696</color>
     <color name="msg_chat_bg">#eceff4</color>
+
+    <color name="tag_blue">#7ff3d8</color>
 
     <color name="theme_bg_color">#f0f2f5</color>
     <color name="c_f98800">#ed4e23</color>

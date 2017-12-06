@@ -89,6 +89,7 @@ public class NewFriendActivity extends FragmentActivity {
         //批量更新未读未认证的消息为已读状态
         NewFriendManager.getInstance(this).updateBatchStatus();
         setListener();
+
     }
 
     private void setListener() {

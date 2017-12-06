@@ -53,11 +53,11 @@ public class SettingMineInfoActivity extends BaseActivity {
     ArrayList<CardBean> ageItems = new ArrayList<>();
     ArrayList<CardBean> sexItems = new ArrayList<>();
     ArrayList<CardBean> candateThingiItems = new ArrayList<>();
-    ArrayList<CardBean> datingThoughtItems = new ArrayList<>();
     ArrayList<CardBean> disPurposeItems = new ArrayList<>();
+    ArrayList<CardBean> disMariStateItems = new ArrayList<>();
 
-    OptionsPickerView datingThoughtOptions;
-    OptionsPickerView disPurposeOption;
+    OptionsPickerView disPurposeOptions;
+    OptionsPickerView disMariStateOption;
     OptionsPickerView candateThingOptions;
 
     @Bind(R.id.sex_rl)
@@ -74,10 +74,10 @@ public class SettingMineInfoActivity extends BaseActivity {
     TextView openSecret_txt;
     @Bind(R.id.sex_txt)
     TextView sex_txt;
+    @Bind(R.id.disMariState_txt)
+    TextView disMariState_txt;
     @Bind(R.id.disPurpose_txt)
     TextView disPurpose_txt;
-    @Bind(R.id.datingThought_txt)
-    TextView datingThought_txt;
     @Bind(R.id.candateThing_txt)
     TextView candateThing_txt;
     @Bind(R.id.arealocation_txt)
@@ -110,14 +110,14 @@ public class SettingMineInfoActivity extends BaseActivity {
         });
         getSexData();
         getAgeData();
-        getDatingThoughtData();
-        getDisPurposeData();
+        getdisPurposeData();
+        getdisMariStateData();
         getCanDatingThingData();
         initSexOptionPicker();
         initAgeOptionPicker();
         initCanDatingThingOptionPicker();
-        initDatingThoughtOptionPicker();
-        initDisPurposeOptionPicker();
+        initdisPurposeOptionPicker();
+        initdisMariStateOptionPicker();
         initLockLogic();
         initLocation();
     }
@@ -136,8 +136,8 @@ public class SettingMineInfoActivity extends BaseActivity {
             }
             openSecret_txt.setText(rootUser.secretScan ? "私密访问已开启" : "私密访问未开启");
             age_txt.setText(TextUtils.isEmpty(rootUser.age) ? "年龄未设置" : "您的年龄是" + rootUser.age + "岁");
-            disPurpose_txt.setText(TextUtils.isEmpty(rootUser.disPurpose) ? "情感状态未设置" : "您现在是" + rootUser.disPurpose);
-            datingThought_txt.setText(TextUtils.isEmpty(rootUser.datingthought) ? "交友想法未设置" : "您想要" + rootUser.datingthought);
+            disMariState_txt.setText(TextUtils.isEmpty(rootUser.disMariState) ? "情感状态未设置" : "您现在是" + rootUser.disMariState);
+            disPurpose_txt.setText(TextUtils.isEmpty(rootUser.disPurpose) ? "交友想法未设置" : "您想要" + rootUser.disPurpose);
             candateThing_txt.setText(TextUtils.isEmpty(rootUser.canDateThing) ? "是否可约未设置" : "您可以" + rootUser.canDateThing);
             if (!rootUser.hasSetting) {
                 backbuttonLayout.setVisibility(View.GONE);
@@ -182,8 +182,8 @@ public class SettingMineInfoActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.clear_cache_txt, R.id.modifyPSWlayout, R.id.sex_rl, R.id.disPurpose_txt,
-            R.id.datingThought_txt, R.id.candateThing_txt, R.id.next})
+    @OnClick({R.id.clear_cache_txt, R.id.modifyPSWlayout, R.id.sex_rl, R.id.disMariState_txt,
+            R.id.disPurpose_txt, R.id.candateThing_txt, R.id.next})
     void buttonClicks(View view) {
         switch (view.getId()) {
             case R.id.clear_cache_txt:
@@ -209,14 +209,14 @@ public class SettingMineInfoActivity extends BaseActivity {
             case R.id.sex_rl:
                 sexOptions.show();
                 break;
-            case R.id.disPurpose_txt:
-                disPurposeOption.show();
+            case R.id.disMariState_txt:
+                disMariStateOption.show();
                 break;
             case R.id.candateThing_txt:
                 candateThingOptions.show();
                 break;
-            case R.id.datingThought_txt:
-                datingThoughtOptions.show();
+            case R.id.disPurpose_txt:
+                disPurposeOptions.show();
                 break;
             case R.id.age_txt:
                 ageOptions.show();
@@ -228,10 +228,10 @@ public class SettingMineInfoActivity extends BaseActivity {
                         age_txt.getText().toString().contains("未设置")) {
                     ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置年龄才能查看更多画面哦，老司机才懂的！");
                 } else if (
-                        disPurpose_txt.getText().toString().contains("未设置")) {
+                        disMariState_txt.getText().toString().contains("未设置")) {
                     ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置情感状态才能查看更多画面哦，老司机才懂的！");
                 } else if (
-                        datingThought_txt.getText().toString().contains("未设置")) {
+                        disPurpose_txt.getText().toString().contains("未设置")) {
                     ToastUtil.showToast(SettingMineInfoActivity.this, "必须设置交友想法才能查看更多画面哦，老司机才懂的！");
                 } else if (
                         candateThing_txt.getText().toString().contains("未设置")) {
@@ -475,13 +475,13 @@ public class SettingMineInfoActivity extends BaseActivity {
     }
 
 
-    void initDatingThoughtOptionPicker() {
-        datingThoughtOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+    void initdisPurposeOptionPicker() {
+        disPurposeOptions = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                datingThought_txt.setText("交友想法是" + datingThoughtItems.get(options1).getPickerViewText());
+                disPurpose_txt.setText("交友想法是" + disPurposeItems.get(options1).getPickerViewText());
                 if (rootUser != null) {
-                    updateUser.datingthought = datingThoughtItems.get(options1).getPickerViewText() + "";
+                    updateUser.disPurpose = disPurposeItems.get(options1).getPickerViewText() + "";
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
@@ -507,29 +507,29 @@ public class SettingMineInfoActivity extends BaseActivity {
                         v.findViewById(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                datingThoughtOptions.returnData();
-                                datingThoughtOptions.dismiss();
+                                disPurposeOptions.returnData();
+                                disPurposeOptions.dismiss();
                             }
                         });
                         v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                datingThoughtOptions.dismiss();
+                                disPurposeOptions.dismiss();
                             }
                         });
                     }
                 }).isDialog(true).build();
-        datingThoughtOptions.setPicker(datingThoughtItems);
+        disPurposeOptions.setPicker(disPurposeItems);
     }
 
 
-    void initDisPurposeOptionPicker() {
-        disPurposeOption = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
+    void initdisMariStateOptionPicker() {
+        disMariStateOption = new OptionsPickerView.Builder(this, new OptionsPickerView.OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                disPurpose_txt.setText("您的状态是" + disPurposeItems.get(options1).getPickerViewText());
+                disMariState_txt.setText("您的状态是" + disMariStateItems.get(options1).getPickerViewText());
                 if (rootUser != null) {
-                    updateUser.disPurpose = disPurposeItems.get(options1).getPickerViewText() + "";
+                    updateUser.disMariState = disMariStateItems.get(options1).getPickerViewText() + "";
                     updateUser.update(rootUser.getObjectId(), new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
@@ -556,40 +556,40 @@ public class SettingMineInfoActivity extends BaseActivity {
                         v.findViewById(R.id.tv_finish).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                disPurposeOption.returnData();
-                                disPurposeOption.dismiss();
+                                disMariStateOption.returnData();
+                                disMariStateOption.dismiss();
                             }
                         });
                         v.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                disPurposeOption.dismiss();
+                                disMariStateOption.dismiss();
                             }
                         });
                     }
                 }).isDialog(true).build();
-        disPurposeOption.setPicker(disPurposeItems);//添加数据
+        disMariStateOption.setPicker(disMariStateItems);//添加数据
     }
 
 
-    void getDisPurposeData() {
-        disPurposeItems.add(new CardBean("已经离异了"));
-        disPurposeItems.add(new CardBean("已经结婚了"));
-        disPurposeItems.add(new CardBean("刚刚交往中"));
-        disPurposeItems.add(new CardBean("正在分手期"));
-        disPurposeItems.add(new CardBean("正在热恋期"));
-        disPurposeItems.add(new CardBean("未婚单身狗"));
+    void getdisMariStateData() {
+        disMariStateItems.add(new CardBean("已经离异了"));
+        disMariStateItems.add(new CardBean("已经结婚了"));
+        disMariStateItems.add(new CardBean("刚刚交往中"));
+        disMariStateItems.add(new CardBean("正在分手期"));
+        disMariStateItems.add(new CardBean("正在热恋期"));
+        disMariStateItems.add(new CardBean("未婚单身狗"));
     }
 
 
-    void getDatingThoughtData() {
-        datingThoughtItems.add(new CardBean("找异性闺蜜"));
-        datingThoughtItems.add(new CardBean("认真婚恋"));
-        datingThoughtItems.add(new CardBean("极易兴奋"));
-        datingThoughtItems.add(new CardBean("来者不拒"));
-        datingThoughtItems.add(new CardBean("长期交往"));
-        datingThoughtItems.add(new CardBean("短期交往"));
-        datingThoughtItems.add(new CardBean("其他"));
+    void getdisPurposeData() {
+        disPurposeItems.add(new CardBean("找异性闺蜜"));
+        disPurposeItems.add(new CardBean("认真婚恋"));
+        disPurposeItems.add(new CardBean("极易兴奋"));
+        disPurposeItems.add(new CardBean("来者不拒"));
+        disPurposeItems.add(new CardBean("长期交往"));
+        disPurposeItems.add(new CardBean("短期交往"));
+        disPurposeItems.add(new CardBean("其他"));
     }
 
     void getCanDatingThingData() {
@@ -715,8 +715,8 @@ public class SettingMineInfoActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (sex_txt.getText().toString().contains("未设置") ||
                             age_txt.getText().toString().contains("未设置") ||
+                            disMariState_txt.getText().toString().contains("未设置") ||
                             disPurpose_txt.getText().toString().contains("未设置") ||
-                            datingThought_txt.getText().toString().contains("未设置") ||
                             candateThing_txt.getText().toString().contains("未设置")) {
                         ToastUtil.showToast(SettingMineInfoActivity.this, "设置完资料才能查看更多画面哦，老司机才懂的！");
                     } else {

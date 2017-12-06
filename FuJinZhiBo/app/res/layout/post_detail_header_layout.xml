@@ -39,10 +39,10 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="12dp"
             android:layout_toRightOf="@+id/nickName"
-            android:background="@drawable/bg_round_yellow"
+            android:textColor="@color/black"
+            android:background="@drawable/bg_round_blue"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:textColor="@color/textColor"
             android:textSize="14sp" />
 
         <TextView
@@ -75,8 +75,9 @@
             android:layout_below="@+id/sexAndAge"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
+            android:textColor="@color/white"
             android:layout_toRightOf="@+id/imageView"
-            android:background="@drawable/bg_round_yellow"
+            android:background="@drawable/button_common_selector"
             android:text="" />
 
 

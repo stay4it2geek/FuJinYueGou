@@ -68,7 +68,7 @@ public class CourseOrdersActivity extends BaseActivity {
         });
         titlebar.setVisibility(View.VISIBLE);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        ViewDataUtil.setLayManager(handlerOrderSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryRootUserData(Constants.REFRESH);
@@ -76,10 +76,21 @@ public class CourseOrdersActivity extends BaseActivity {
 
             @Override
             public void onLoadMore() {
-                queryRootUserData(Constants.LOADMORE);
+                if (handlerOrderSize > 0) {
+                    queryRootUserData(Constants.LOADMORE);
+                   recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
         }, this, recyclerView, 1, true, true);
-
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryRootUserData(Constants.REFRESH);
+            }
+        });
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +121,7 @@ public class CourseOrdersActivity extends BaseActivity {
                     if (list.size() > 0) {
                         queryDatas(type);
                     } else {
-                        loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                        loadNetView.setlayoutVisily(Constants.NO_DATA);
                     }
                 } else {
                     setAdapterView(Constants.NetWorkError, null);
@@ -124,7 +135,6 @@ public class CourseOrdersActivity extends BaseActivity {
         BmobQuery<Orders> query = new BmobQuery<>();
         BmobQuery<Orders> query2 = new BmobQuery<>();
         List<BmobQuery<Orders>> queries = new ArrayList<>();
-        query2.setLimit(10);
         if (actionType == Constants.LOADMORE) {
             Date date;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -141,7 +151,8 @@ public class CourseOrdersActivity extends BaseActivity {
         queries.add(query3);
         query.and(queries);
         query.order("-updatedAt");
-
+        query.include("course");
+        query.setLimit(10);
         query.findObjects(new FindListener<Orders>() {
             @Override
             public void done(final List<Orders> list, BmobException e) {
@@ -166,19 +177,19 @@ public class CourseOrdersActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (orderAdapter != null) {
-            queryRootUserData(Constants.REFRESH);
-        }
     }
 
 
     void setAdapterView(int what, List<Orders> orderses) {
         if (what != Constants.NetWorkError) {
-            if (orderses != null) {
+            if (orderses != null  && orderses.size()>0) {
                 orderList.addAll(orderses);
                 handlerOrderSize = orderses.size();
             } else {
                 handlerOrderSize = 0;
+                if (what == Constants.LOADMORE) {
+                    recyclerView.setNoMore(true);
+                }
             }
             if (orderAdapter == null) {
                 orderAdapter = new CoursesOrderAdapter(getIntent().getBooleanExtra("isTeamType", false), CourseOrdersActivity.this);
@@ -205,7 +216,7 @@ public class CourseOrdersActivity extends BaseActivity {
                                                 orderAdapter.notifyDataSetChanged();
                                                 if (orderList.size() == 0) {
                                                     loadNetView.setVisibility(View.VISIBLE);
-                                                    loadNetView.setlayoutVisily(Constants.BUY_VIP);
+                                                    loadNetView.setlayoutVisily(Constants.NO_DATA);
                                                     return;
                                                 }
 
@@ -254,13 +265,11 @@ public class CourseOrdersActivity extends BaseActivity {
             } else {
                 orderAdapter.notifyDataSetChanged();
             }
-            if (what == Constants.LOADMORE) {
-                recyclerView.setNoMore(true);
-            }
+
             loadNetView.setVisibility(View.GONE);
             if (orderList.size() == 0) {
                 loadNetView.setVisibility(View.VISIBLE);
-                loadNetView.setlayoutVisily(Constants.NO_DATA);
+                loadNetView.setlayoutVisily(Constants.BUY_VIP);
                 return;
             }
         } else {

@@ -147,7 +147,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             VirtualUserDao dao = VirtualUserDao.getInstance(activity);
             if (dao.query(post.user.userId) != null) {
                 String randomAge = dao.query(post.user.userId) != null ? dao.query(post.user.userId).userAge : "";
-                ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女" + randomAge + "岁" : "男" + randomAge + "岁");
+                ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("女") ? "女" + randomAge + "岁" : "男" + randomAge + "岁");
             }
 
             if (day <= 1) {
@@ -238,7 +238,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
                 return;
             }
             final InterestPostPageCommentDetail commentDetail = data.comments.get(position - 1);
-            if (commentDetail.user.sex.equals("2")) {
+            if (commentDetail.user.sex.equals("女")) {
                 ((Item2ViewHolder) holder).userImage.setTag(commentDetail.user.photoUrl);
                 Glide.with(activity).load(commentDetail.user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -270,7 +270,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
                         user.seeMeTime="";
                         dao.add(user);
                     }
-                    ((Item2ViewHolder) holder).sexAndAge.setText(commentDetail.user.sex.equals("2") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
+                    ((Item2ViewHolder) holder).sexAndAge.setText(commentDetail.user.sex.equals("女") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
                 }
 
                 ((Item2ViewHolder) holder).nickName.setText(commentDetail.user.nick);

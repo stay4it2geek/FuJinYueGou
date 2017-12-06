@@ -9,7 +9,7 @@
     <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight" />
+        android:layout_height="wrap_content" />
 
 
     <com.act.quzhibo.widget.ClipViewLayout
@@ -25,12 +25,12 @@
     <RelativeLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="#1C1C1C">
+        android:layout_height="45dp">
 
         <TextView
             android:id="@+id/btn_cancel"
             android:layout_width="80dp"
+            android:layout_margin="5dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -42,7 +42,7 @@
             android:paddingRight="0dp"
             android:paddingStart="15dp"
             android:text="  取消"
-            android:textColor="#000"
+            android:textColor="#fff"
             android:textSize="16sp" />
 
         <TextView
@@ -56,10 +56,11 @@
             android:gravity="center_vertical|end"
             android:paddingEnd="15dp"
             android:paddingLeft="0dp"
+            android:layout_margin="5dp"
             android:paddingRight="15dp"
             android:paddingStart="0dp"
             android:text="选取  "
-            android:textColor="#000"
+            android:textColor="#fff"
             android:textSize="16sp" />
     </RelativeLayout>
 

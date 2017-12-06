@@ -42,7 +42,7 @@
             android:paddingBottom="5dp"
              android:layout_marginLeft="20dp"
             android:layout_toLeftOf="@id/iv_avatar"
-            android:background="@drawable/chat_right_qp" >
+            android:background="@drawable/right" >
 
             <TextView
                 android:id="@+id/tv_location"

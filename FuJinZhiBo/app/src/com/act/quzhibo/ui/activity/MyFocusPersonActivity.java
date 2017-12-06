@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 
@@ -18,6 +19,7 @@ import com.act.quzhibo.adapter.MyFocusPersonListAdapter;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyFocusCommonPerson;
+import com.act.quzhibo.download.event.FocusChangeEvent;
 import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewDataUtil;
@@ -25,6 +27,9 @@ import com.act.quzhibo.widget.FragmentDialog;
 import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -78,7 +83,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
             }
         });
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        ViewDataUtil.setLayManager(myfocusSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryData(Constants.REFRESH);
@@ -87,9 +92,16 @@ public class MyFocusPersonActivity extends FragmentActivity {
 
             @Override
             public void onLoadMore() {
-                queryData(Constants.LOADMORE);
+                if (myfocusSize > 0) {
+                    queryData(Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
         },this,recyclerView,2,true,true);
+        queryData(Constants.REFRESH);
+        EventBus.getDefault().register(this);
     }
 
     void queryData(final int actionType) {
@@ -118,6 +130,12 @@ public class MyFocusPersonActivity extends FragmentActivity {
             @Override
             public void done(List<MyFocusCommonPerson> list, BmobException e) {
                 if (e == null) {
+                    if (actionType == Constants.REFRESH) {
+                        persons.clear();
+                    }
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
 
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
@@ -141,14 +159,15 @@ public class MyFocusPersonActivity extends FragmentActivity {
             super.handleMessage(msg);
             ArrayList<MyFocusCommonPerson> showerses = (ArrayList<MyFocusCommonPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (msg.what == Constants.REFRESH) {
-                    persons.clear();
-                }
-                if (showerses != null) {
+
+                if (showerses != null && showerses.size()>0) {
                     persons.addAll(showerses);
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
 
                 }
 
@@ -166,6 +185,7 @@ public class MyFocusPersonActivity extends FragmentActivity {
                             intent.putExtra(Constants.COMMON_USER_ID, myFocusCommonPerson.userId);
                             if (myFocusCommonPerson.userType.equals(Constants.INTEREST)) {
                                 intent.setClass(MyFocusPersonActivity.this, IntersetPersonPostListActivity.class);
+                                intent.putExtra("FocusPersonIndex",position);
                                 startActivity(intent);
                             } else {
 //                                intent.setClass(MyFocusPersonActivity.this, NearPersonPostListActivity.class);
@@ -224,8 +244,22 @@ public class MyFocusPersonActivity extends FragmentActivity {
     };
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        queryData(Constants.REFRESH);
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+
+    }
+
+    @Subscribe
+    public void onEventMainThread(FocusChangeEvent event) {
+        Log.e("---person---",event.type+"ttttt"+event.position+"[[[["+event.focus);
+
+        if (event.type.equals("person") && !event.focus ) {
+            Log.e("---person---","ffdgfdgfd");
+            persons.remove(event.position);
+            adapter.notifyDataSetChanged();
+        }else{
+            Log.e("---person---",event.type+"uuu"+event.position);
+        }
     }
 }

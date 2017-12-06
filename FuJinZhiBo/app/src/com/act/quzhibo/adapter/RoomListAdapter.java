@@ -54,8 +54,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
             holder.photoImg.setLayoutParams(new FrameLayout.LayoutParams((screenWidth / 2 - 20), (screenWidth / 2) - 5));
-            if (Integer.parseInt(datas.get(position).onlineCount) > 1 && datas.get(position).liveType != null && (datas.get(position).liveType.equals(Constants.LANSPACE_IS_LIVE)
-                    || datas.get(position).liveType.equals(Constants.PORTAIL_IS_LIVE))) {
+            if (datas.get(position).liveStream != null &&Integer.parseInt(datas.get(position).onlineCount) > 1 ) {
                 holder.onlineCount.setVisibility(View.VISIBLE);
                 holder.isRelax.setVisibility(View.GONE);
                 holder.onlineCount.setText(datas.get(position).onlineCount + "人");

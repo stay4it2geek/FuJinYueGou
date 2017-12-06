@@ -4,6 +4,7 @@ package com.act.quzhibo.adapter;
 import android.app.Activity;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,44 +65,35 @@ public class CoursesOrderAdapter extends RecyclerView.Adapter<CoursesOrderAdapte
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        BmobQuery<CommonCourse> query = new BmobQuery<>();
-        query.getObject(list.get(position).course.getObjectId(), new QueryListener<CommonCourse>() {
+        final CommonCourse course = list.get(position).course;
+        holder.courseName.setText(course.courseName);
+        holder.orderStatus.setText(list.get(position).orderStatus.equals("1") ? "支付已完成" : "交易关闭");
+        holder.courseAppPrice.setText("¥" + course.courseAppPrice);
+        holder.courseMarketPrice.setText("¥" + course.courseMarketPrice);
+        holder.courseMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
+        Glide.with(activity).load(course.courseImage.getFileUrl()).placeholder(R.drawable.placehoder_img).into(holder.courseImage);
+        holder.deleteOrder.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void done(final CommonCourse course, BmobException e) {
-                if(e==null){
-                    if (course == null) {
-                        return;
-                    }
-                    holder.courseName.setText(course.courseName);
-                    holder.courseAppPrice.setText("¥" + course.courseAppPrice);
-                    holder.courseMarketPrice.setText("¥" + course.courseMarketPrice);
-                    holder.courseMarketPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);  // 设置中划线并加清晰
-                    Glide.with(activity).load(course.courseImage.getFileUrl()).placeholder(R.drawable.placehoder_img).into(holder.courseImage);
-                    holder.deleteOrder.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mListener.onDelete(course);
-                        }
-                    });
-                    holder.save2File.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mListener.onSave2File(course);
-                        }
-                    });
-                    holder.copypsw.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mListener.onCopyPsw(course);
-                        }
-                    });
-                    holder.copyurl.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mListener.onCopyUrl(course);
-                        }
-                    });
-                }
+            public void onClick(View view) {
+                mListener.onDelete(course);
+            }
+        });
+        holder.save2File.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onSave2File(course);
+            }
+        });
+        holder.copypsw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onCopyPsw(course);
+            }
+        });
+        holder.copyurl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onCopyUrl(course);
             }
         });
 
@@ -109,10 +101,15 @@ public class CoursesOrderAdapter extends RecyclerView.Adapter<CoursesOrderAdapte
             holder.rl_bottom.setVisibility(View.GONE);
             holder.downloadUrl.setVisibility(View.GONE);
             holder.downloadPsw.setVisibility(View.GONE);
+            holder.promotionPercent.setText(TextUtils.isEmpty(course.profitPercent)?"":"分成比例："+course.profitPercent+"%");
+            holder.promotionMoney.setText(TextUtils.isEmpty(course.promotionMoney)?"":"分成金额：￥"+course.promotionMoney);
         } else {
             holder.rl_bottom.setVisibility(View.VISIBLE);
             holder.promotionPercent.setVisibility(View.GONE);
             holder.promotionMoney.setVisibility(View.GONE);
+            holder.downloadUrl.setText(TextUtils.isEmpty(course.downloadUrl)?"":"提取网址："+course.downloadUrl);
+            holder.downloadPsw.setText(TextUtils.isEmpty(course.downloadUrl)?"":"提取密码："+course.downloadPsw);
+
         }
 
     }
@@ -139,9 +136,12 @@ public class CoursesOrderAdapter extends RecyclerView.Adapter<CoursesOrderAdapte
         TextView copypsw;
         TextView save2File;
         TextView promotionMoney;
+        TextView orderStatus;
 
         public MyViewHolder(View view) {
             super(view);
+            orderStatus = (TextView) view.findViewById(R.id.orderStatus);
+
             downloadUrl = (TextView) view.findViewById(R.id.downloadUrl);
             downloadPsw = (TextView) view.findViewById(R.id.downloadPsw);
             courseName = (TextView) view.findViewById(R.id.courseName);

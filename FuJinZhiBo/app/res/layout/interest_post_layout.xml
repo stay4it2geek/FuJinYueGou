@@ -9,7 +9,7 @@
     <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"
+        android:layout_height="wrap_content"
         android:visibility="gone" />
 
     <FrameLayout
@@ -27,9 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="5dp"
-            app:fab_addButtonColorNormal="@color/commonColor"
-            app:fab_addButtonColorPressed="@color/lightorange"
-            app:fab_addButtonPlusIconColor="@color/darkorange"
+            app:fab_addButtonColorNormal="@color/blue"
+            app:fab_addButtonColorPressed="#fe4060"
+            app:fab_addButtonPlusIconColor="@color/tag_blue"
             app:fab_addButtonSize="mini"
             app:fab_expandDirection="up"
             app:fab_labelStyle="@style/menu_labels_style"
@@ -40,8 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                app:fab_colorNormal="@color/commonColor"
-                app:fab_colorPressed="@color/lightorange"
+                app:fab_colorNormal="@color/tag_blue"
+                app:fab_colorPressed="@color/blue"
                 app:fab_icon="@android:drawable/ic_menu_sort_by_size"
                 app:fab_size="mini"
                 app:fab_title="排序" />

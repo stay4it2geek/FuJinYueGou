@@ -119,6 +119,7 @@ public class NearFragment extends BackHandledFragment {
         query3.and(queries);
         query3.setLimit(10);
         query3.order("-distance");
+         query3.include("user");
         query3.findObjects(new FindListener<InterestSubPerson>() {
             @Override
             public void done(List<InterestSubPerson> list, BmobException e) {
@@ -153,10 +154,11 @@ public class NearFragment extends BackHandledFragment {
                     nearPersonList.addAll(personList);
                 } else {
                     nearPersonSizeHandler = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
-                }
+
                 if (nearPersonAdapter == null) {
                     nearPersonAdapter = new NearPersonAdapter(getActivity(), nearPersonList);
                     recyclerView.setAdapter(nearPersonAdapter);

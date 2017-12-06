@@ -14,7 +14,7 @@
         <com.act.quzhibo.widget.TitleBarView
             android:id="@+id/titlebar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/commonViewHeight"
+            android:layout_height="wrap_content"
             android:visibility="gone" />
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -44,16 +44,18 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="您还没有登录哦"
-            android:textColor="@color/red_light"
             android:textSize="18sp" />
 
         <Button
             android:id="@+id/goToLogin"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/commonViewHeight"
+            android:layout_height="@dimen/titleBarViewHeight"
             android:layout_below="@+id/tips"
-            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:textColor="@color/white"
             android:background="@drawable/button_common_selector"
             android:text="去登录" />
     </RelativeLayout>

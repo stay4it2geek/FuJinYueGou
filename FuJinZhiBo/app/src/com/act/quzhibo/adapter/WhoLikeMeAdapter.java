@@ -48,7 +48,8 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
     public void onBindViewHolder(final WhoLikeMeAdapter.MyViewHolder holder, final int position) {
         final InterestSubPerson user = datas.get(position);
         holder.nickName.setText(user.username);
-        holder.disMariState.setText(user.disMariState);
+
+        holder.disMariState.setText(user.user==null?"":user.user.disMariState);
 
         Random random = new Random();
         int minMinu = 30;
@@ -84,7 +85,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         }
 
         if (datas.get(position).user != null && !TextUtils.isEmpty(datas.get(position).user.sex)) {
-            holder.sexAndAge.setText(datas.get(position).user.sex.equals("2") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
+            holder.sexAndAge.setText(datas.get(position).user.sex.equals("女") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
         }else{
             holder.sexAndAge.setText(randomAge + "岁");
 

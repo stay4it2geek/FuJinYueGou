@@ -58,36 +58,7 @@ public class MyPostListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-//
-//        recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
-//            @Override
-//            public void onRefresh() {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        recyclerView.setNoMore(false);
-//                        recyclerView.setLoadingMoreEnabled(true);
-//                        recyclerView.refreshComplete();
-//                    }
-//                }, 1000);
-//            }
-//
-//            @Override
-//            public void onLoadMore() {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (handlerMyPostsSize > 0) {
-//                            recyclerView.loadMoreComplete();
-//                        } else {
-//                            recyclerView.setNoMore(true);
-//                        }
-//                    }
-//                }, 1000);
-//            }
-//        });
-
-        ViewDataUtil.setLayManager(handlerMyPostsSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryData(Constants.REFRESH);
@@ -95,9 +66,14 @@ public class MyPostListActivity extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                queryData(Constants.LOADMORE);
+                if (handlerMyPostsSize > 0) {
+                    queryData(Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
-        },this,recyclerView,1,true,true);
+        }, this, recyclerView, 1, true, true);
 
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
@@ -189,8 +165,10 @@ public class MyPostListActivity extends AppCompatActivity {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         myPostList.clear();
-                       myPostListAdapter.notifyDataSetChanged();
+                        if (myPostListAdapter != null) {
+                            myPostListAdapter.notifyDataSetChanged();
                         }
+                    }
 
                     if (list.size() > 0) {
                         lastTime = list.get(list.size() - 1).getUpdatedAt();
@@ -213,11 +191,14 @@ public class MyPostListActivity extends AppCompatActivity {
             ArrayList<MyPost> myPosts = (ArrayList<MyPost>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
 
-                if (myPosts != null) {
+                if (myPosts != null&& myPosts.size()>0) {
                     myPostList.addAll(myPosts);
                     handlerMyPostsSize = myPosts.size();
                 } else {
                     handlerMyPostsSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
 
                 setAdapterView();

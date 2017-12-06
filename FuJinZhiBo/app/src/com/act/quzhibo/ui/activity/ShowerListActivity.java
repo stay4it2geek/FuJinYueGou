@@ -30,9 +30,9 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
         if (plates == null) {
             return new ArrayList<>();
         }
+        String hideShowPlates =CommonUtil.getToggle(this, "hideShowPlates").getToggleObject();
         for (PlateCatagory plateCatagory : plates.plateList) {
-            if (plateCatagory.titleName.contains("VR") || plateCatagory.titleName.contains("游戏") ||
-                    plateCatagory.titleName.contains("电台")||plateCatagory.titleName.contains("交友") || plateCatagory.titleName.contains("非遗")) {
+            if (hideShowPlates.contains(plateCatagory.titleName)) {
                 continue;
             } else {
                 tabTitles.add(plateCatagory.titleName);
@@ -44,10 +44,9 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
     @Override
     public ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> mFragments = new ArrayList<>();
-
+        String hideShowPlates = CommonUtil.getToggle(this, "hideShowPlates").getToggleObject();
         for (PlateCatagory plateCatagory : plates.plateList) {
-            if (plateCatagory.titleName.contains("VR") || plateCatagory.titleName.contains("游戏") ||
-                    plateCatagory.titleName.contains("电台")|| plateCatagory.titleName.contains("交友") || plateCatagory.titleName.contains("非遗")) {
+            if (hideShowPlates.contains(plateCatagory.titleName)) {
                 continue;
             } else {
                 ShowerListFragment fragment = new ShowerListFragment();

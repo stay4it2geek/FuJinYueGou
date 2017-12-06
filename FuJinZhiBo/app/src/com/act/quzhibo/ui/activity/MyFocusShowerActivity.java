@@ -10,8 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.Display;
 import android.view.View;
+import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusShowerListAdapter;
@@ -20,6 +22,7 @@ import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.MyFocusShower;
 import com.act.quzhibo.bean.Room;
+import com.act.quzhibo.download.event.FocusChangeEvent;
 import com.act.quzhibo.i.OnQueryDataListner;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ToastUtil;
@@ -29,6 +32,8 @@ import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,12 +52,12 @@ import cn.bmob.v3.listener.UpdateListener;
 
 public class MyFocusShowerActivity extends FragmentActivity {
 
-     XRecyclerView recyclerView;
-     MyFocusShowerListAdapter adapter;
-     LoadNetView loadNetView;
-     String lastTime = "";
-     ArrayList<MyFocusShower> showers = new ArrayList<>();
-     int myfocusSize;
+    XRecyclerView recyclerView;
+    MyFocusShowerListAdapter adapter;
+    LoadNetView loadNetView;
+    String lastTime = "";
+    ArrayList<MyFocusShower> showers = new ArrayList<>();
+    int myfocusSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
         });
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        ViewDataUtil.setLayManager(myfocusSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryData(Constants.REFRESH);
@@ -77,10 +82,15 @@ public class MyFocusShowerActivity extends FragmentActivity {
 
             @Override
             public void onLoadMore() {
-                queryData(Constants.LOADMORE);
+                if (myfocusSize > 0) {
+                    queryData(Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
-        },this,recyclerView,2,true,true);
-        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+        }, this, recyclerView, 2, true, true);
+        loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);
@@ -94,9 +104,12 @@ public class MyFocusShowerActivity extends FragmentActivity {
                 queryData(Constants.REFRESH);
             }
         });
+        queryData(Constants.REFRESH);
+        EventBus.getDefault().register(this);
+
     }
 
-     void queryData(final int actionType) {
+    void queryData(final int actionType) {
         BmobQuery<MyFocusShower> query = new BmobQuery<>();
 
         List<BmobQuery<MyFocusShower>> queries = new ArrayList<>();
@@ -118,6 +131,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
         query2.addWhereEqualTo("rootUser", BmobUser.getCurrentUser(RootUser.class));
         queries.add(query2);
         query.and(queries);
+        query.setLimit(10);
         query.order("-updatedAt");
         query.findObjects(new FindListener<MyFocusShower>() {
             @Override
@@ -125,7 +139,9 @@ public class MyFocusShowerActivity extends FragmentActivity {
                 if (e == null) {
                     if (actionType == Constants.REFRESH) {
                         showers.clear();
-                        adapter.notifyDataSetChanged();
+                        if (adapter != null) {
+                            adapter.notifyDataSetChanged();
+                        }
                     }
 
                     if (list.size() > 0) {
@@ -149,11 +165,14 @@ public class MyFocusShowerActivity extends FragmentActivity {
             ArrayList<MyFocusShower> showerses = (ArrayList<MyFocusShower>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
 
-                if (showerses != null) {
+                if (showerses != null && showerses.size() > 0) {
                     showers.addAll(showerses);
                     myfocusSize = showerses.size();
                 } else {
                     myfocusSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
 
                 if (adapter == null) {
@@ -173,7 +192,7 @@ public class MyFocusShowerActivity extends FragmentActivity {
                         adapter.setDeleteListener(new MyFocusShowerListAdapter.OnDeleteListener() {
                             @Override
                             public void onDelete(final int position) {
-                                FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), "取消", "确定","","",false, new FragmentDialog.OnClickBottomListener() {
+                                FragmentDialog.newInstance(false, getResources().getString(R.string.isCancelFocus), getResources().getString(R.string.reallyCancelFocus), "取消", "确定", "", "", false, new FragmentDialog.OnClickBottomListener() {
                                     @Override
                                     public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
                                         dialog.dismiss();
@@ -221,9 +240,21 @@ public class MyFocusShowerActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        queryData(Constants.REFRESH);
+    }
+    @Subscribe
+    public void onEventMainThread(FocusChangeEvent event) {
+        if (event.type.equals("show") && !event.focus ) {
+            showers.remove(event.position);
+            adapter.notifyDataSetChanged();
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+
+    }
     Handler infoHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -231,44 +262,36 @@ public class MyFocusShowerActivity extends FragmentActivity {
             try {
                 JSONObject jsonObject = new JSONObject((String) msg.obj);
                 Room room = new Room();
-                room.screenType = jsonObject.getString("screenType");
-                room.roomId = jsonObject.getString("roomId");
-                room.nickname = jsonObject.getString("nickname");
-                room.userId = jsonObject.getString("userId");
-                room.gender = jsonObject.getString("gender");
-                room.liveStream = "http://pull.kktv8.com/livekktv/" + jsonObject.getString("roomId") + ".flv";
-                room.city = jsonObject.getString("city");
-                room.liveType = jsonObject.getString("liveType");
-                room.nickname = jsonObject.getString("nickname");
-                room.gender = jsonObject.getString("gender");
-                room.onlineCount = jsonObject.getString("onlineCount");
-                room.portrait_path_1280 = jsonObject.getString("portrait_path_1280");
+                room.screenType = jsonObject.isNull("screenType") ? "" : jsonObject.getString("screenType");
+                room.roomId = jsonObject.isNull("roomId") ? "" : jsonObject.getString("roomId");
+                room.nickname = jsonObject.isNull("nickname") ? "" : jsonObject.getString("nickname");
+                room.userId = jsonObject.isNull("userId") ? "" : jsonObject.getString("userId");
+                room.gender = jsonObject.isNull("gender") ? "" : jsonObject.getString("gender");
+                room.liveStream  = "http://pull.kktv8.com/livekktv/" + room.roomId + ".flv";
+                room.city = jsonObject.isNull("city") ? "" : jsonObject.getString("city");
+                room.liveType = jsonObject.isNull("liveType") ? "" : jsonObject.getString("liveType");
+                room.nickname = jsonObject.isNull("nickname") ? "" : jsonObject.getString("nickname");
+                room.onlineCount = jsonObject.isNull("onlineCount") ? "" : jsonObject.getString("onlineCount");
+                room.portrait_path_1280 = jsonObject.isNull("portrait_path_1280") ? "" : jsonObject.getString("portrait_path_1280");
                 Intent intent;
-                if (room.screenType.equals(Constants.LANSPACE)) {
-                    if (room.liveType.equals(Constants.LANSPACE_IS_LIVE)) {
-                        intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
-                    } else {
-                        intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
-                        ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");
-                    }
+                if (!TextUtils.isEmpty(room.liveStream) && !TextUtils.isEmpty(room.onlineCount) && Integer.parseInt(room.onlineCount) > 10 ) {
+                    intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
+                    intent.putExtra("showFullScreen", true);
                 } else {
-                    if (room.liveType.equals(Constants.PORTAIL_IS_LIVE)) {
-                        intent = new Intent(MyFocusShowerActivity.this, VideoPlayerActivity.class);
-                    } else {
-                        intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
-                        ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");
-                    }
+                    intent = new Intent(MyFocusShowerActivity.this, ShowerInfoActivity.class);
+                    intent.putExtra("showPosition",0);
+                    ToastUtil.showToast(MyFocusShowerActivity.this, "该主播未直播哦");
                 }
                 intent.putExtra("room", room);
                 startActivity(intent);
             } catch (JSONException e) {
-                e.printStackTrace();
+                ToastUtil.showToast(MyFocusShowerActivity.this, "主播信息加载异常，请稍后重试!");
             }
         }
     };
 
 
-     void requestInfo(String showerId) {
+    void requestInfo(String showerId) {
         String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", showerId);
         OkHttpClientManager.parseRequest(this, url, infoHandler, Constants.REFRESH);
     }

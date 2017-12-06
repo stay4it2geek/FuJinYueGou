@@ -18,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 
@@ -107,12 +108,15 @@ public class CommonUtil {
 
 
     public static Toggle getToggle(Activity activity, String ToggleKey) {
+
         SharedPreferences sharedPreferences = activity.getSharedPreferences(Constants.SAVE, Context.MODE_PRIVATE);
-        String liststr = sharedPreferences.getString(Constants.TOGGLES, "defValue");
-        List<Toggle> Toggles = CommonUtil.String2SceneList(liststr);
-        for (Toggle toggle : Toggles) {
-            if (toggle.getObjectKey().equals(ToggleKey)) {
-                return toggle;
+        String liststr = sharedPreferences.getString(Constants.TOGGLES, "");
+        if (!TextUtils.isEmpty(liststr)) {
+            List<Toggle> Toggles = CommonUtil.String2SceneList(liststr);
+            for (Toggle toggle : Toggles) {
+                if (toggle.getObjectKey().equals(ToggleKey)) {
+                    return toggle;
+                }
             }
         }
         return null;
@@ -134,7 +138,6 @@ public class CommonUtil {
         }
         return arrayList;
     }
-
 
 
     /*

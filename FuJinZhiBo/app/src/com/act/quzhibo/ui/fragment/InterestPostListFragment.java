@@ -46,7 +46,7 @@ public class InterestPostListFragment extends BackHandledFragment {
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         pid = ((SquareActivity) getActivity()).getPid();
         recyclerView = (XRecyclerView) view.findViewById(R.id.interest_post_list);
-        ViewDataUtil.setLayManager(interestPostSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 getData(pid, "0", Constants.REFRESH);
@@ -54,7 +54,12 @@ public class InterestPostListFragment extends BackHandledFragment {
 
             @Override
             public void onLoadMore() {
-                getData(pid, ctime, Constants.LOADMORE);
+                if (interestPostSize > 0) {
+                    getData(pid, ctime, Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
         }, getActivity(), recyclerView, 1, true, true);
 
@@ -132,11 +137,14 @@ public class InterestPostListFragment extends BackHandledFragment {
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
                 }
-                if (data.result != null) {
+                if (data.result != null&& data.result.size()>0) {
                     interestPostSize = data.result.size();
                     posts.addAll(data.result);
                 } else {
                     interestPostSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
 
                 if (interestPostSize > 0) {
@@ -159,10 +167,6 @@ public class InterestPostListFragment extends BackHandledFragment {
                     adapter.notifyDataSetChanged();
                 }
                 loadNetView.setVisibility(View.GONE);
-
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
-                }
                 if (posts.size() == 0) {
                     loadNetView.setVisibility(View.VISIBLE);
                     loadNetView.setlayoutVisily(Constants.NO_DATA);

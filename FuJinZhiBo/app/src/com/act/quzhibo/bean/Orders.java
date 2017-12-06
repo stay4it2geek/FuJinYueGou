@@ -6,7 +6,7 @@ import cn.bmob.v3.datatype.BmobFile;
 
 public class Orders extends CommonCourse implements Serializable {
     public RootUser user;
-    public boolean orderStatus;
+    public String orderStatus;
     public String orderId;
     public  CommonCourse course;
 

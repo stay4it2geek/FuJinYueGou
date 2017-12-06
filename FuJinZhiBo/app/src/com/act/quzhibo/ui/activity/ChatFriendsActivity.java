@@ -194,8 +194,6 @@ public class ChatFriendsActivity extends FragmentActivity implements BackHandled
                             //更新用户资料，用于在会话页面、聊天页面以及个人信息页面显示
                             BmobIM.getInstance().updateUserInfo(new BmobIMUserInfo(user.getObjectId(), user.getUsername(), user.photoFileUrl));
 
-                        } else {
-                            ToastUtil.showToast(ChatFriendsActivity.this, e.getMessage());
                         }
                     }
                 });

@@ -74,8 +74,6 @@ public class MineActivity extends BaseActivity {
     RelativeLayout who_see_me;
     @Bind(R.id.myPostlayout)
     RelativeLayout myPostlayout;
-    @Bind(R.id.noReslayout)
-    RelativeLayout noReslayout;
     @Bind(R.id.myIMG_download_layout)
     RelativeLayout myIMG_download_layout;
     @Bind(R.id.myVideo_download_layout)
@@ -141,7 +139,7 @@ public class MineActivity extends BaseActivity {
                             }
                         }
                     });
-                }else {
+                } else {
                     finish();
                 }
             }
@@ -153,14 +151,11 @@ public class MineActivity extends BaseActivity {
             R.id.loginLayout, R.id.uploadImgText, R.id.vipLevel, R.id.getVipLayout,
             R.id.vip_order_listlayout, R.id.who_see_me, R.id.who_focus_me,
             R.id.myfocus_person, R.id.myfocus_shower, R.id.settingDetailayout,
-            R.id.noReslayout, R.id.myVideo_download_layout, R.id.myIMG_download_layout,
+            R.id.myVideo_download_layout, R.id.myIMG_download_layout,
             R.id.myPostlayout, R.id.logout, R.id.registerLayout})
     public void buttonClicks(final View view) {
         if (view.getId() == R.id.vipLevel) {
             startActivity(view, VIPConisTableActivity.class);
-            return;
-        } else if (view.getId() == R.id.noReslayout) {
-            startActivity(view, TermOfUseActivity.class);
             return;
         } else if (view.getId() == R.id.registerLayout) {
             startActivity(view, RegisterNormalActivity.class);
@@ -212,9 +207,9 @@ public class MineActivity extends BaseActivity {
                                     startActivity(view, ShareManagerActivty.class);
                                     break;
                                 case R.id.vip_order_listlayout:
-                                    Intent intent=new Intent(MineActivity.this,CourseOrdersActivity.class);
-                                    intent.putExtra("user",rootUser);
-                                    intent.putExtra("isTeamType",false);
+                                    Intent intent = new Intent(MineActivity.this, CourseOrdersActivity.class);
+                                    intent.putExtra("user", rootUser);
+                                    intent.putExtra("isTeamType", false);
                                     startActivity(intent);
                                     break;
                                 case R.id.who_see_me:

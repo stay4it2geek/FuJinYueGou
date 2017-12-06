@@ -46,7 +46,7 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.layout_common, null);
             recycleview = (XRecyclerView) rootView.findViewById(R.id.recyclerview);
-            ViewDataUtil.setLayManager(handlerMediaInfoSize, new OnQueryDataListner() {
+            ViewDataUtil.setLayManager(new OnQueryDataListner() {
                 @Override
                 public void onRefresh() {
                     getPhotoListData(Constants.REFRESH);
@@ -54,7 +54,13 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
 
                 @Override
                 public void onLoadMore() {
-                    getPhotoListData(Constants.LOADMORE);
+                    if (handlerMediaInfoSize > 0) {
+                        getPhotoListData(Constants.LOADMORE);
+                        recycleview.loadMoreComplete();
+                    } else {
+                        recycleview.setNoMore(true);
+
+                    }
                 }
             },getActivity(), recycleview, 2, true, true);
 
@@ -141,11 +147,14 @@ public class PhotoAlbumListFragment extends BackHandledFragment {
             super.handleMessage(msg);
             ArrayList<MediaInfo> mediaInfos = (ArrayList<MediaInfo>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (mediaInfos != null ||mediaInfos.size()>0) {
+                if (mediaInfos != null && mediaInfos.size()>0) {
                     handlerMediaInfoSize = mediaInfos.size();
                     medias.addAll(mediaInfos);
                 } else {
                     handlerMediaInfoSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recycleview.setNoMore(true);
+                    }
                 }
 
                 if (mInfoListAdapter == null) {

@@ -11,35 +11,34 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="#f6dd3e"
+        android:background="@drawable/color_bg"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:visibility="gone"
-        tl:tl_indicator_color="@color/commontextcolor"
+        tl:tl_indicator_color="@color/white"
         tl:tl_indicator_margin_left="2dp"
         tl:tl_indicator_margin_right="2dp"
         tl:tl_indicator_style="NORMAL"
         tl:tl_indicator_width="60dp"
-        tl:tl_textSelectColor="@color/commontextcolor"
-        tl:tl_textUnselectColor="#8F8F8F"
-        tl:tl_textsize="16sp"
-        />
+        tl:tl_textSelectColor="@color/white"
+        tl:tl_textUnselectColor="@color/darkgray"
+        tl:tl_textsize="16sp" />
 
     <com.flyco.tablayout.CommonTabLayout
         android:id="@+id/layout_mine"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="#f6dd3e"
+        android:background="@drawable/color_bg"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:visibility="gone"
-        tl:tl_indicator_color="#f6dd3e"
+        tl:tl_indicator_color="@color/white"
         tl:tl_indicator_margin_left="2dp"
         tl:tl_indicator_margin_right="2dp"
         tl:tl_indicator_style="NORMAL"
         tl:tl_indicator_width="50dp"
-        tl:tl_textSelectColor="@color/commontextcolor"
-        tl:tl_textUnselectColor="#8F8F8F"
+        tl:tl_textSelectColor="@color/white"
+        tl:tl_textUnselectColor="@color/darkgray"
         tl:tl_textsize="16sp">
 
     </com.flyco.tablayout.CommonTabLayout>
@@ -49,6 +48,5 @@
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 
 </LinearLayout>

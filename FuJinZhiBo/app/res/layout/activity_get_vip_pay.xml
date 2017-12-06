@@ -7,8 +7,7 @@
     <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight"
-        android:textStyle="normal" />
+        android:layout_height="wrap_content" />
 
 
     <LinearLayout
@@ -25,10 +24,15 @@
             android:background="#afedae"
             android:gravity="center"
             android:singleLine="true"
-            android:text="下单后请及时支付哦!未支付订单将自动删除!"
+            android:text="下单后请及时支付哦!未支付订单超时将自动删除!"
             android:textColor="@color/red"
             android:textSize="14sp" />
 
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray" />
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -39,19 +43,6 @@
                 android:layout_marginTop="0.5dp"
                 android:orientation="vertical">
 
-                <com.act.quzhibo.widget.MyListView
-                    android:id="@+id/viplist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:divider="@color/gray"
-                    android:dividerHeight="0.5dp"
-                    android:scrollbars="none" />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/gray" />
 
 
                 <RelativeLayout
@@ -59,29 +50,9 @@
                     android:layout_height="35dp"
                     android:paddingLeft="15dp">
 
-                    <TextView
-                        android:id="@+id/userSelect"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:gravity="center_vertical"
-                        android:text="您想要的是:"
-                        android:textColor="@color/commontextcolor"
-                        android:textSize="16sp" />
 
-                    <TextView
-                        android:id="@+id/userSelectText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/userSelect"
-                        android:gravity="center_vertical"
-                        android:text=""
-                        android:textColor="@color/red"
-                        android:textSize="17sp" />
 
                 </RelativeLayout>
-
-
                 <RelativeLayout
                     android:id="@+id/alipay"
                     android:layout_width="match_parent"
@@ -106,7 +77,7 @@
                         android:layout_toRightOf="@+id/zhifubao"
                         android:background="@drawable/bg_circle_orange"
                         android:gravity="center_vertical"
-                        android:text="使用支付宝快捷安全支付"
+                        android:text="支付宝支付购买课程成为VIP会员"
                         android:textColor="#fff"
                         android:textSize="17sp" />
                 </RelativeLayout>
@@ -457,10 +428,4 @@
 
     </LinearLayout>
 
-    <com.act.quzhibo.widget.LoadNetView
-        android:id="@+id/loadview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/commonViewHeight"
-        android:visibility="gone" />
 </FrameLayout>

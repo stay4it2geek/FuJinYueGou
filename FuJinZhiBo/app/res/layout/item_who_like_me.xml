@@ -35,7 +35,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="13dp"
         android:layout_toRightOf="@+id/nick"
-        android:background="@drawable/bg_round_yellow"
+        android:background="@drawable/bg_round_blue"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:textColor="@color/textColor"
@@ -48,12 +48,13 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="13dp"
-        android:layout_toRightOf="@+id/sexAndAge"
-        android:background="@drawable/bg_round_yellow"
+        android:layout_below="@+id/sexAndAge"
+        android:background="@drawable/bg_round_blue"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
+        android:layout_alignLeft="@+id/nick"
         android:text=""
-        android:textColor="#000"
+        android:textColor="@color/black"
         android:textSize="14sp" />
 
     <TextView

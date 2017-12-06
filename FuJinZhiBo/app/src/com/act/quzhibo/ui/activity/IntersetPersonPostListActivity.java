@@ -59,7 +59,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         userId = getIntent().getStringExtra(Constants.COMMON_USER_ID);
         recyclerView = (XRecyclerView) findViewById(R.id.interest_post_list);
-        ViewDataUtil.setLayManager(interestPostSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 getData("0", Constants.REFRESH);
@@ -67,7 +67,12 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
 
             @Override
             public void onLoadMore() {
-                getData(ctime, Constants.LOADMORE);
+                if (interestPostSize > 0) {
+                    getData(ctime, Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
 
             }
         },this,recyclerView,1,true,true);
@@ -108,6 +113,7 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                     posts.addAll(data.result.posts);
                     if (adapter == null) {
                         adapter = new InterestPostListAdapter(IntersetPersonPostListActivity.this, posts,true);
+                        adapter.setPersonIndex(getIntent().getIntExtra("FocusPersonIndex",0));
                         adapter.setOnItemClickListener(new InterestPostListAdapter.OnInterestPostRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(InterestPost post) {
@@ -155,9 +161,6 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
                     recyclerView.setNoMore(true);
                 }
 
-                if (msg.what == Constants.LOADMORE) {
-                    recyclerView.setNoMore(true);
-                }
                 loadNetView.setVisibility(View.GONE);
             } else {
                 loadNetView.setVisibility(View.VISIBLE);

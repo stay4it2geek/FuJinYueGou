@@ -320,16 +320,15 @@ public class InfoNearPersonActivity extends BaseActivity {
         }
 
         soundLen.setText(nearInfoUser.soundLen == null ? "" : nearInfoUser.soundLen + "秒");
-        disPurpose.setText(nearInfoUser.disPurpose == null ? "" : nearInfoUser.disPurpose);
-        disMariState.setText(nearInfoUser.disMariState == null ? "" : nearInfoUser.disMariState);
+        disPurpose.setText(nearInfoUser.user.disPurpose == null ? "" : nearInfoUser.disPurpose);
+        disMariState.setText(nearInfoUser.user.disMariState == null ? "" : nearInfoUser.disMariState);
         nickName.setText(nearInfoUser.username == null ? "" : nearInfoUser.username);
 
-        if (nearInfoUser.sex != null) {
-            if (nearInfoUser.sex.equals("2")) {
-                level_img.setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(nearInfoUser.vipLevel)));
-
+        if (nearInfoUser.user.sex != null) {
+            if (nearInfoUser.user.sex.equals("女")||nearInfoUser.user.sex.equals("2")) {
+                level_img.setImageDrawable(getResources().getDrawable(MyApplicaition.femaleKeySrc.get(nearInfoUser.vipType)));
             } else {
-                level_img.setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(nearInfoUser.vipLevel)));
+                level_img.setImageDrawable(getResources().getDrawable(MyApplicaition.maleKeySrc.get(nearInfoUser.vipType)));
             }
         }
     }
@@ -362,6 +361,7 @@ public class InfoNearPersonActivity extends BaseActivity {
 
         }
     }
+
 
 
     void initOnlineAndAge() {
@@ -404,8 +404,8 @@ public class InfoNearPersonActivity extends BaseActivity {
             }
         }
 
-        if (nearInfoUser.sex != null) {
-            sexAndAge.setText(nearInfoUser.sex.equals("2") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
+        if (nearInfoUser.user.sex != null) {
+            sexAndAge.setText(nearInfoUser.user.sex.equals("女") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
         } else {
             sexAndAge.setText(randomAge + "岁");
         }

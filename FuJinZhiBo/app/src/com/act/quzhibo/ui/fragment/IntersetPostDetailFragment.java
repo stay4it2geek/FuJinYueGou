@@ -44,7 +44,7 @@ public class IntersetPostDetailFragment extends BackHandledFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         view = LayoutInflater.from(getActivity()).inflate(R.layout.interest_post_detail_layout, null, false);
         recyclerview = (XRecyclerView) view.findViewById(R.id.postRecyleview);
-        ViewDataUtil.setLayManager(0, null, getActivity(), recyclerview, 1, false, false);
+        ViewDataUtil.setLayManager(null, getActivity(), recyclerview, 1, false, false);
         if (getArguments() != null) {
             post = (InterestPost) getArguments().getSerializable(Constants.POST);
         }
@@ -57,6 +57,13 @@ public class IntersetPostDetailFragment extends BackHandledFragment {
         });
         loadNetView = (LoadNetView) view.findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                getData();
+            }
+        });
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadNetView.setlayoutVisily(Constants.LOAD);

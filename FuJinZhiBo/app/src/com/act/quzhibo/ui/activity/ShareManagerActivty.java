@@ -54,7 +54,7 @@ public class ShareManagerActivty extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_common);
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
-        ViewDataUtil.setLayManager(handlerMyteamsSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryData(Constants.REFRESH);
@@ -62,7 +62,12 @@ public class ShareManagerActivty extends FragmentActivity {
 
             @Override
             public void onLoadMore() {
-                queryData(Constants.LOADMORE);
+                if (handlerMyteamsSize > 0) {
+                    queryData(Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
         }, this, recyclerView, 1, true, true);
 
@@ -76,7 +81,7 @@ public class ShareManagerActivty extends FragmentActivity {
         });
         TitleBarView titlebar = (TitleBarView) findViewById(R.id.titlebar);
         titlebar.setVisibility(View.VISIBLE);
-        titlebar.setBarTitle("我 的 团 队");
+        titlebar.setBarTitle("我 的 推 荐");
         titlebar.setBackButtonListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,8 +89,14 @@ public class ShareManagerActivty extends FragmentActivity {
             }
         });
         queryData(Constants.REFRESH);
+        loadNetView.setLoadButtonListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNetView.setlayoutVisily(Constants.LOAD);
+                queryData(Constants.REFRESH);
+            }
+        });
     }
-
 
     void queryData(final int actionType) {
         BmobQuery<Promotion> query = new BmobQuery<>();
@@ -108,6 +119,7 @@ public class ShareManagerActivty extends FragmentActivity {
         query.and(queries);
         query.setLimit(10);
         query.order("-updatedAt");
+        query.include("refereeUser");
         query.findObjects(new FindListener<Promotion>() {
             @Override
             public void done(final List<Promotion> list, BmobException e) {
@@ -139,11 +151,14 @@ public class ShareManagerActivty extends FragmentActivity {
             super.handleMessage(msg);
             ArrayList<Promotion> promotions = (ArrayList<Promotion>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (myProList != null) {
+                if (promotions != null&& promotions.size()>0) {
                     myProList.addAll(promotions);
                     handlerMyteamsSize = promotions.size();
                 } else {
                     handlerMyteamsSize = 0;
+                    if (msg.what == Constants.LOADMORE) {
+                        recyclerView.setNoMore(true);
+                    }
                 }
                 if (myTeamListAdapter == null) {
                     myTeamListAdapter = new MyTeamListAdapter(ShareManagerActivty.this, myProList);

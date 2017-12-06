@@ -1,11 +1,14 @@
 package com.act.quzhibo.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MemberAdapter;
@@ -55,6 +59,7 @@ import cn.bmob.v3.listener.UpdateListener;
 import tyrantgit.widget.HeartLayout;
 
 public class VideoPlayerActivity extends FragmentActivity implements View.OnClickListener {
+    private static final int OVERLAY_PERMISSION_REQ_CODE = 900;
     private IjkVideoView videoView;
     private MemberAdapter mAdapter;
     private HeartLayout heartLayout;
@@ -74,11 +79,12 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
     private ArrayList<InterestSubPerson> persons = new ArrayList<>();
     private RootUser user;
     private HorizontialListView mListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewplay);
-        user=BmobUser.getCurrentUser(RootUser.class);
+        user = BmobUser.getCurrentUser(RootUser.class);
         room = (Room) getIntent().getSerializableExtra("room");
         initView();
     }
@@ -229,7 +235,11 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
                             myFocusShower.roomId = room.roomId;
                             myFocusShower.userId = room.userId;
                             myFocusShower.gender = room.gender;
-                            myFocusShower.liveStream = room.liveStream;
+                            if (room.liveStream != null) {
+                                myFocusShower.liveStream = room.liveStream;
+                            } else {
+                                myFocusShower.liveStream = "http://pull.kktv8.com/livekktv/" + room.roomId + ".flv";
+                            }
                             myFocusShower.city = room.city;
                             myFocusShower.save(new SaveListener<String>() {
                                 @Override
@@ -338,7 +348,7 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
     @Subscribe
     public void onEventMainThread(FocusChangeEvent event) {
 
-        if (event.focus) {
+        if (event.focus && event.type.equals("show")) {
             ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.cancelFocus));
         } else {
             ((TextView) findViewById(R.id.focus_top)).setText(getResources().getString(R.string.focusTa));
@@ -349,8 +359,20 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (R.id.close == v.getId()) {
-            videoView.stopPlayback();
-            finish();
+            FragmentDialog.newInstance(false, "是否开启小窗口播放", "               开小窗，边听边玩!  \n同意一次“在其他应用上显示”即可", "立即开启", "不看了", "", "", false, new FragmentDialog.OnClickBottomListener() {
+                @Override
+                public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                    askForPermission();
+                }
+
+                @Override
+                public void onNegtiveClick(Dialog dialog) {
+                    dialog.dismiss();
+                    videoView.stopPlayback();
+                    finish();
+                }
+            }).show(getSupportFragmentManager(), "");
+
         } else if (R.id.addherat == v.getId()) {
             heartLayout.post(new Runnable() {
                 @Override
@@ -406,7 +428,7 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
 
         videoView = (IjkVideoView) findViewById(R.id.video);
         fullscreen = (RadioButton) findViewById(R.id.fullscreen);
-        if(getIntent().getBooleanExtra("showFullScreen",false)){
+        if (getIntent().getBooleanExtra("showFullScreen", false)) {
             findViewById(R.id.fullScreen).setVisibility(View.VISIBLE);
         }
         fullscreen.setOnClickListener(new View.OnClickListener() {
@@ -414,12 +436,12 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
             public void onClick(View v) {
                 Intent intent = new Intent(VideoPlayerActivity.this, VideoPlayerActivityLanscape.class);
                 intent.putExtra("room", room);
-                intent.putExtra("showFullScreen",true);
+                intent.putExtra("showFullScreen", true);
                 startActivity(intent);
             }
         });
         fullscreen.setChecked(true);
-        Log.e("srtar",room.liveStream+"");
+        videoView.stopFloatWindow();
         videoView
                 .addToPlayerManager()
                 .setUrl(room.liveStream).setScreenScale(IjkVideoView.SCREEN_SCALE_DEFAULT)
@@ -530,9 +552,47 @@ public class VideoPlayerActivity extends FragmentActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        videoView.stopPlayback();
-        finish();
+        FragmentDialog.newInstance(false, "是否开启小窗口播放", "               开小窗，边听边玩!  \n同意一次“在其他应用上显示”即可", "立即开启", "不看了", "", "", false, new FragmentDialog.OnClickBottomListener() {
+            @Override
+            public void onPositiveClick(Dialog dialog, boolean deleteFileSource) {
+                askForPermission();
+            }
+
+            @Override
+            public void onNegtiveClick(Dialog dialog) {
+                dialog.dismiss();
+                videoView.stopPlayback();
+                finish();
+            }
+        }).show(getSupportFragmentManager(), "");
     }
 
+    /**
+     * 请求用户给予悬浮窗的权限
+     */
+    @SuppressLint("NewApi")
+    public void askForPermission() {
+        if (!Settings.canDrawOverlays(this)) {
+            ToastUtil.showToast(VideoPlayerActivity.this, "当前无悬浮窗权限，请授权！");
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
+        } else {
+            videoView.startFloatWindow();
+        }
+    }
+
+
+    @SuppressLint("NewApi")
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == OVERLAY_PERMISSION_REQ_CODE) {
+            if (!Settings.canDrawOverlays(this)) {
+                ToastUtil.showToast(VideoPlayerActivity.this, "权限授予失败，无法开启悬浮窗");
+            } else {
+                ToastUtil.showToast(VideoPlayerActivity.this, "权限授予成功！");
+                videoView.startFloatWindow();
+            }
+
+        }
+    }
 }

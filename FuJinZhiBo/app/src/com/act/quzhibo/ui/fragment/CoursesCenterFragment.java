@@ -54,7 +54,7 @@ public class CoursesCenterFragment extends Fragment {
             courseCategoryId = getArguments().getString(Constants.COURSE_CATOGERY_ID);
         }
         recyclerView = (XRecyclerView) view.findViewById(R.id.recyclerview);
-        ViewDataUtil.setLayManager(handlerCourseSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryCourseData(courseCategoryId, Constants.REFRESH);
@@ -62,7 +62,12 @@ public class CoursesCenterFragment extends Fragment {
 
             @Override
             public void onLoadMore() {
-                queryCourseData(courseCategoryId, Constants.LOADMORE);
+                if (handlerCourseSize > 0) {
+                    queryCourseData(courseCategoryId, Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
         },getActivity(), recyclerView, 1, true, true);
 
@@ -143,7 +148,7 @@ public class CoursesCenterFragment extends Fragment {
             super.handleMessage(msg);
             ArrayList<CommonCourse> commonCourses = (ArrayList<CommonCourse>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (commonCourses != null) {
+                if (commonCourses != null&& commonCourses.size()>0)   {
                     commonCourseList.addAll(commonCourses);
                     handlerCourseSize = commonCourses.size();
                 } else {

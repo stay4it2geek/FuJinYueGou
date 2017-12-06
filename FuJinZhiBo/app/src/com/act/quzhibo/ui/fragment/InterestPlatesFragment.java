@@ -48,7 +48,7 @@ public class InterestPlatesFragment extends BackHandledFragment {
                 callback.onNear();
             }
         });
-        ViewDataUtil.setLayManager(0, null,getContext(),recyclerview,1,false,false);
+        ViewDataUtil.setLayManager( null,getContext(),recyclerview,1,false,false);
 
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override

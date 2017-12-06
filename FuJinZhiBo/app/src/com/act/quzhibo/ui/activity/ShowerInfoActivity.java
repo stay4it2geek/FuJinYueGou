@@ -114,7 +114,11 @@ public class ShowerInfoActivity extends FragmentActivity {
                             myFocusShower.roomId = room.roomId;
                             myFocusShower.userId = room.userId;
                             myFocusShower.gender = room.gender;
-                            myFocusShower.liveStream = room.liveStream;
+                            if(room.liveStream!=null){
+                                myFocusShower.liveStream = room.liveStream;
+                            }else{
+                                myFocusShower.liveStream  = "http://pull.kktv8.com/livekktv/" + room.roomId + ".flv";
+                            }
                             myFocusShower.city = room.city;
                             if (getIntent().getBooleanExtra("FromChatFragment", false)) {
                                 myFocusShower.portrait_path_1280 = getIntent().getStringExtra("photoUrl");
@@ -129,7 +133,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                 public void done(String objectId, BmobException e) {
                                     if (e == null) {
                                         ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
-                                        EventBus.getDefault().post(new FocusChangeEvent(true));
+                                        EventBus.getDefault().post(new FocusChangeEvent(true,getIntent().getIntExtra("showPosition",0),"show"));
                                         if (BmobUser.getCurrentUser(RootUser.class) != null) {
                                             BmobQuery<MyFocusShower> query = new BmobQuery<>();
                                             query.setLimit(1);
@@ -142,6 +146,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                         if (myFocusShowers.size() >= 1) {
                                                             ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
                                                             ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
+                                                            EventBus.getDefault().post(new FocusChangeEvent(true,getIntent().getIntExtra("showPosition",0),"show"));
                                                         }
                                                     }
                                                 }
@@ -171,6 +176,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                         if (myFocusShowers.size() >= 1) {
                                                             ShowerInfoActivity.this.mMyFocusShower = myFocusShowers.get(0);
                                                             ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.cancelFocus));
+                                                            EventBus.getDefault().post(new FocusChangeEvent(true,getIntent().getIntExtra("showPosition",0),"show"));
                                                         }
                                                     }
                                                 }
@@ -201,7 +207,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                                                 mMyFocusShower = null;
                                                 ((TextView) findViewById(R.id.focus)).setText(getResources().getString(R.string.focusTa));
                                                 ToastUtil.showToast(ShowerInfoActivity.this, getResources().getString(R.string.cancelFocusOk));
-                                                EventBus.getDefault().post(new FocusChangeEvent(false));
+                                                EventBus.getDefault().post(new FocusChangeEvent(false,getIntent().getIntExtra("showPosition",0),"show"));
                                             }
 
                                         }

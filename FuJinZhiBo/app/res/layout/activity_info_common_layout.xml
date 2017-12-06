@@ -7,7 +7,7 @@
     <com.act.quzhibo.widget.TitleBarView
         android:id="@+id/titlebar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/commonViewHeight" />
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -130,13 +130,13 @@
                         android:layout_alignStart="@+id/nickName"
                         android:layout_below="@+id/nickName"
                         android:layout_marginBottom="5dp"
-                        android:background="@drawable/bg_round_yellow"
+                        android:background="@drawable/button_common_selector"
                         android:paddingBottom="2dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
+                        android:paddingLeft="7dp"
+                        android:paddingRight="7dp"
                         android:paddingTop="2dp"
                         android:text=""
-                        android:textColor="#fff"
+                        android:textColor="@color/white"
                         android:textSize="15sp" />
 
                     <ImageView
@@ -428,7 +428,7 @@
     <LinearLayout
         android:id="@+id/focuslayout"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="40dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="2dp"
         android:orientation="horizontal">
@@ -449,7 +449,7 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:text="加ta好友"
-            android:textColor="#000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -468,7 +468,7 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:text="私聊ta"
-            android:textColor="#000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
 
         <TextView
@@ -487,7 +487,7 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:text="关注ta"
-            android:textColor="#000"
+            android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>
 

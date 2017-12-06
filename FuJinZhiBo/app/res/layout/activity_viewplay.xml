@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
     android:orientation="vertical">
 
     <com.devlin_n.videoplayer.player.IjkVideoView
@@ -114,7 +113,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:text="关注ta"
-                        android:textColor="#000"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
                 </LinearLayout>
 

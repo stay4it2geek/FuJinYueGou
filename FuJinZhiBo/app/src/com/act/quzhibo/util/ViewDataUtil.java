@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
 
 import com.act.quzhibo.R;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 public class ViewDataUtil {
 
-    public static void setLayManager(final int dataSize, final OnQueryDataListner listner, Context context, final XRecyclerView rv, int count, boolean refresh, boolean loadmore) {
+    public static void setLayManager(final OnQueryDataListner listner, Context context, final XRecyclerView rv, int count, boolean refresh, boolean loadmore) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, count);
         gridLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(gridLayoutManager);
@@ -50,12 +51,8 @@ public class ViewDataUtil {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (dataSize > 0) {
                             listner.onLoadMore();
-                            rv.loadMoreComplete();
-                        } else {
-                            rv.setNoMore(true);
-                        }
+
                     }
                 }, 1000);
             }

@@ -30,7 +30,7 @@ public class MyTeamListAdapter extends RecyclerView.Adapter<MyTeamListAdapter.My
     ArrayList<Promotion> promotions;
     Activity mContext;
 
-    public MyTeamListAdapter(Activity  activity, ArrayList<Promotion> promotions) {
+    public MyTeamListAdapter(Activity activity, ArrayList<Promotion> promotions) {
         mContext = activity;
         this.promotions = promotions;
     }
@@ -45,46 +45,32 @@ public class MyTeamListAdapter extends RecyclerView.Adapter<MyTeamListAdapter.My
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final RootUser refereeUser = promotions.get(position).refereeUser;
-        BmobQuery<RootUser> user = new BmobQuery<>();
-        user.getObject(refereeUser.getObjectId(), new QueryListener<RootUser>() {
+        holder.createTime.setText(TextUtils.isEmpty(refereeUser.getCreatedAt()) ? "" : "加入时间:" + refereeUser.getCreatedAt());
+        holder.userNickName.setText(TextUtils.isEmpty(refereeUser.getUsername()) ? "" : refereeUser.getUsername());
+        Glide.with(mContext).load(refereeUser.photoFileUrl).into(holder.avater);
+        if (refereeUser.vipConis != null && refereeUser.vipConis > 0) {
+            if (0 < refereeUser.vipConis && refereeUser.vipConis < 3000) {
+                holder.vipLevel.setText("白银会员");
+            } else if (3000 < refereeUser.vipConis && refereeUser.vipConis < 5000) {
+                holder.vipLevel.setText("铂金会员");
+            } else if (5000 < refereeUser.vipConis && refereeUser.vipConis < 8000) {
+                holder.vipLevel.setText("黄金会员");
+            } else if (refereeUser.vipConis > 8000) {
+                holder.vipLevel.setText("钻石会员");
+            } else {
+                holder.vipLevel.setText("非会员");
+            }
+        }
+
+        holder.refereeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void done(final RootUser refereeUser, BmobException e) {
-                if (e == null) {
-                    if (refereeUser == null) {
-                        return;
-                    }
-                    holder.createTime.setText(TextUtils.isEmpty(refereeUser.getCreatedAt())?"":"加入时间:"+refereeUser.getCreatedAt());
-                    holder.userNickName.setText(TextUtils.isEmpty(refereeUser.getUsername())?"":refereeUser.getUsername());
-                    Glide.with(mContext).load(refereeUser.photoFileUrl).into(holder.avater);
-                    if (refereeUser.vipConis != null && refereeUser.vipConis > 0) {
-                        if (0 < refereeUser.vipConis && refereeUser.vipConis < 3000) {
-                            holder.vipLevel.setText("白银会员");
-                        } else if (3000 < refereeUser.vipConis && refereeUser.vipConis < 5000) {
-                            holder.vipLevel.setText("铂金会员");
-                        } else if (5000 < refereeUser.vipConis && refereeUser.vipConis < 8000) {
-                            holder.vipLevel.setText("黄金会员");
-                        } else if (refereeUser.vipConis > 8000) {
-                            holder.vipLevel.setText("钻石会员");
-                        }else{
-                            holder.vipLevel.setText("非会员");
-                        }
-                    }
-
-                    holder.refereeOrder.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent=new Intent(mContext,CourseOrdersActivity.class);
-                            intent.putExtra("user",refereeUser);
-                            intent.putExtra("isTeamType",true);
-                            mContext.startActivity(intent);
-                        }
-                    });
-
-                }
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, CourseOrdersActivity.class);
+                intent.putExtra("user", refereeUser);
+                intent.putExtra("isTeamType", true);
+                mContext.startActivity(intent);
             }
         });
-
-
     }
 
     @Override

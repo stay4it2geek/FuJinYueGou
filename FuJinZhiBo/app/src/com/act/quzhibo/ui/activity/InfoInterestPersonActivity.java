@@ -25,6 +25,7 @@ import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.MyApplicaition;
 import com.act.quzhibo.common.OkHttpClientManager;
+import com.act.quzhibo.download.event.FocusChangeEvent;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.GlideImageLoader;
 import com.act.quzhibo.util.ToastUtil;
@@ -35,6 +36,8 @@ import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.Banner;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -130,7 +133,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
                 urls.add(post.user.photoUrl);
             }
             if (post.user.sex.equals("2")) {
-                setUserAvater(urls, MyApplicaition.maleKeySrc);
+                setUserAvater(urls, MyApplicaition.femaleKeySrc);
             } else {
                 setUserAvater(urls, MyApplicaition.maleKeySrc);
             }
@@ -303,6 +306,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
                                                 focus.setText(getResources().getString(R.string.focusTa));
                                                 person = null;
                                                 ToastUtil.showToast(InfoInterestPersonActivity.this, getResources().getString(R.string.cancelFocusOk));
+                                                EventBus.getDefault().post(new FocusChangeEvent(false,getIntent().getIntExtra("FocusPersonIndex",0),"person"));
                                             }
                                         }
                                     });

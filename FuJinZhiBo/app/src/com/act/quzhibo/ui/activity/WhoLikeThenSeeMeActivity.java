@@ -54,7 +54,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
         });
         recyclerView = (XRecyclerView) findViewById(R.id.recyclerview);
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
-        ViewDataUtil.setLayManager(handlerLiekThenSeeMeSize, new OnQueryDataListner() {
+        ViewDataUtil.setLayManager(new OnQueryDataListner() {
             @Override
             public void onRefresh() {
                 queryData(Constants.REFRESH);
@@ -63,7 +63,12 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
 
             @Override
             public void onLoadMore() {
-                queryData(Constants.LOADMORE);
+                if (handlerLiekThenSeeMeSize > 0) {
+                    queryData(Constants.LOADMORE);
+                    recyclerView.loadMoreComplete();
+                } else {
+                    recyclerView.setNoMore(true);
+                }
             }
         },this,recyclerView,1,true,true);
         queryData(Constants.REFRESH);
@@ -109,6 +114,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
         query3.and(queries);
         query3.setLimit(10);
         query3.order("-distance");
+        query3.include("user");
         query3.findObjects(new FindListener<InterestSubPerson>() {
             @Override
             public void done(List<InterestSubPerson> list, BmobException e) {
@@ -140,7 +146,7 @@ public class WhoLikeThenSeeMeActivity extends FragmentActivity {
             super.handleMessage(msg);
             ArrayList<InterestSubPerson> interestSubPersonsn = (ArrayList<InterestSubPerson>) msg.obj;
             if (msg.what != Constants.NetWorkError) {
-                if (interestSubPersonsn != null) {
+                if (interestSubPersonsn != null&& interestSubPersonsn.size()>0)  {
                     interestPersonList.addAll(interestSubPersonsn);
                     handlerLiekThenSeeMeSize = interestSubPersonsn.size();
                 } else {
