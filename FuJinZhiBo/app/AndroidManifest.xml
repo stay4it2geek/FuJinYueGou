@@ -85,6 +85,9 @@
             android:name="com.act.quzhibo.ui.activity.CameraActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.act.quzhibo.ui.activity.CommisionActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.NewFriendActivity"
             android:screenOrientation="portrait" />
         <activity

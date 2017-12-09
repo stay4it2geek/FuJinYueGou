@@ -44,10 +44,10 @@ public class TabMainActivity extends TabActivity {
 
     private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.chat, R.drawable.mine};
 
-    private int[] mIconSelectIds = {R.drawable.courses_ss, R.drawable.show_ss, R.drawable.square_ss, R.drawable.chat_ss, R.drawable.mine_ss};
+    private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.chat_s, R.drawable.mine_s};
 
     private int[] mIconUnselectIdsSpecial = {R.drawable.courses, R.drawable.money, R.drawable.mine};
-    private int[] mIconSelectIdsSpecial = {R.drawable.courses_ss, R.drawable.money_ss, R.drawable.mine_ss};
+    private int[] mIconSelectIdsSpecial = {R.drawable.courses_s, R.drawable.money_s, R.drawable.mine_s};
 
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;

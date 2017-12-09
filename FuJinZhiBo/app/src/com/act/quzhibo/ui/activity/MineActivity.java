@@ -225,6 +225,9 @@ public class MineActivity extends BaseActivity {
                                 case R.id.myfocus_shower:
                                     startActivity(new Intent(MineActivity.this, MyFocusShowerActivity.class));
                                     break;
+                                case R.id.checkoutMoneyLayout:
+                                    startActivity(new Intent(MineActivity.this, CommisionActivity.class));
+                                    break;
                                 case R.id.myfocus_person:
                                     startActivity(new Intent(MineActivity.this, MyFocusPersonActivity.class));
                                     break;

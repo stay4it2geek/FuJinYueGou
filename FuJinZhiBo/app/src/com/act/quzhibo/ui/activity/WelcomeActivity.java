@@ -181,7 +181,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                     public void done(List<Toggle> list, BmobException e) {
                         ToastUtil.showToast(WelcomeActivity.this, "list");
                         if (e == null && list.size() > 0) {
-                            if (CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp").getToggleObject() == null) {
+                            if (CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp")== null) {
                                 doRequest(true);
                             } else {
                                 for (Toggle toggle : list) {
@@ -196,6 +196,8 @@ public class WelcomeActivity extends ActivityManagePermission {
                                     }
                                 }
                             }
+                        }else{
+                           Log.e( "list",e.getLocalizedMessage());
                         }
                     }
                 });
@@ -266,10 +268,8 @@ public class WelcomeActivity extends ActivityManagePermission {
     }
 
     void request() {
-        if (TextUtils.isEmpty(CommonUtil.getToggle(this, "tabCatagory") != null ? CommonUtil.getToggle(this, "tabCatagory").getToggleObject() : "")) {
-            ToastUtil.showToast(this, "BmobQuery");
-            doBmonQuery();
-        } else {
+        ToastUtil.showToast(this, "request");
+
             ToastUtil.showToast(this, "Bmob"+isUpdate);
             if (isUpdate) {
                 doBmonQuery();
@@ -278,7 +278,6 @@ public class WelcomeActivity extends ActivityManagePermission {
                 getShowPlateList();
 
             }
-        }
     }
 
     private void doBmonQuery() {
