@@ -28,7 +28,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/margin_5"
-           android:src="@drawable/layerlist_circle_mask_conversation"
+            android:src="@drawable/layerlist_circle_mask_conversation"
             android:scaleType="fitXY" />
 
         <ImageView
@@ -45,7 +45,7 @@
             android:layout_marginLeft="@dimen/margin_5"
             android:layout_toRightOf="@id/iv_avatar"
             android:adjustViewBounds="true"
-            android:background="@drawable/chat_left_qp"
+            android:background="@drawable/left"
             android:scaleType="fitCenter" />
         
         <ProgressBar

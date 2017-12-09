@@ -208,6 +208,7 @@
             android:gravity="center"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:textColor="@color/white"
             android:text="点击获取验证码 "
             android:textSize="14sp" />
 
@@ -256,6 +257,7 @@
         android:button="@null"
         android:gravity="center"
         android:text="验   证"
+        android:textColor="@color/white"
         android:textSize="18sp" />
 
     <TextView

@@ -27,10 +27,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|left"
-            android:background="@drawable/bg_round_blue"
+            android:background="@drawable/bg_round_red"
             android:padding="2dp"
             android:text=""
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="14sp" />
     </FrameLayout>
 

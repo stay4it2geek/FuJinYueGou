@@ -20,6 +20,7 @@ import com.act.quzhibo.ui.activity.NearMediaVideoListActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.text.SimpleDateFormat;
 
@@ -42,7 +43,7 @@ public class ReceiveVideoHolder extends BaseViewHolder {
     @Bind(R.id.video_recive_cover)
     protected FrameLayout video_recive_cover;
     @Bind(R.id.tv_message)
-    protected TextView tv_message;
+    protected EmojiconTextView tv_message;
     private BmobIMConversation conversation;
 
     public ReceiveVideoHolder(Context context, BmobIMConversation conversation, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {

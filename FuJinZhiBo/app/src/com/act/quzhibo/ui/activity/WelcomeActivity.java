@@ -179,15 +179,21 @@ public class WelcomeActivity extends ActivityManagePermission {
                 query.findObjects(new FindListener<Toggle>() {
                     @Override
                     public void done(List<Toggle> list, BmobException e) {
+                        ToastUtil.showToast(WelcomeActivity.this, "list");
                         if (e == null && list.size() > 0) {
-                            ToastUtil.showToast(WelcomeActivity.this, "list");
-                            if (TextUtils.isEmpty((CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp") != null ? CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp").getToggleObject() : ""))) {
+                            if (CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp").getToggleObject() == null) {
                                 doRequest(true);
                             } else {
-                                if (list.get(0).getToggleObject().equals(CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp"))) {
-                                    doRequest(false);
-                                } else {
-                                    doRequest(true);
+                                for (Toggle toggle : list) {
+                                    if (toggle.getObjectKey().equals("doNewQueryTimeStamp")) {
+                                        if (toggle.getToggleObject().equals(CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp").getToggleObject())) {
+                                            doRequest(false);
+                                            break;
+                                        } else {
+                                            doRequest(true);
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -269,7 +275,6 @@ public class WelcomeActivity extends ActivityManagePermission {
                 doBmonQuery();
             } else {
                 ToastUtil.showToast(this, "getShowPlateList"+isUpdate);
-
                 getShowPlateList();
 
             }

@@ -80,6 +80,8 @@ public class SettingMineInfoActivity extends BaseActivity {
     TextView disPurpose_txt;
     @Bind(R.id.candateThing_txt)
     TextView candateThing_txt;
+    @Bind(R.id.arealocation_rl)
+    TextView arealocation_rl;
     @Bind(R.id.arealocation_txt)
     TextView arealocation_txt;
     @Bind(R.id.secret_view)
@@ -743,6 +745,7 @@ public class SettingMineInfoActivity extends BaseActivity {
             @Override
             public void onLocationChanged(AMapLocation loc) {
                 if (null != loc) {
+                    arealocation_rl.setVisibility(View.VISIBLE);
                     amlocation = loc;
                     arealocation_txt.setText(amlocation.getProvince() + amlocation.getCity() + amlocation.getDistrict() + amlocation.getStreet());
                 }

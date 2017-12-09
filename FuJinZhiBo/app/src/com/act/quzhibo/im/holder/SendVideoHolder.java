@@ -21,6 +21,7 @@ import com.act.quzhibo.i.OnRecyclerViewListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -49,7 +50,7 @@ public class SendVideoHolder extends BaseViewHolder implements View.OnClickListe
     @Bind(R.id.tv_time)
     protected TextView tv_time;
     @Bind(R.id.tv_message)
-    protected TextView tv_message;
+    protected EmojiconTextView tv_message;
     @Bind(R.id.video_send_cover)
     protected FrameLayout video_send_cover;
     @Bind(R.id.tv_send_status)

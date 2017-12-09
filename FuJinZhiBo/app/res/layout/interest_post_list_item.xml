@@ -45,10 +45,10 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="13dp"
             android:layout_toRightOf="@+id/nick"
-            android:background="@drawable/bg_round_blue"
+            android:background="@drawable/bg_round_red"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="14sp" />
 
         <TextView
@@ -79,9 +79,9 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="12dp"
             android:layout_toRightOf="@+id/imageView"
-            android:background="@drawable/bg_round_blue"
+            android:background="@drawable/bg_round_red"
             android:paddingLeft="4dp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:paddingRight="4dp"
             android:textSize="12sp" />
 
@@ -103,7 +103,8 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="13dp"
             android:text=""
-            android:background="@drawable/bg_round_yellow"
+            android:textColor="@color/white"
+            android:background="@drawable/bg_round_red"
             android:textSize="12sp" />
     </RelativeLayout>
 
@@ -197,8 +198,8 @@
                 android:layout_gravity="bottom|right"
                 android:layout_marginBottom="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@color/red_light"
-                android:textColor="#fff" />
+                android:background="@drawable/bg_round_red"
+                android:textColor="@color/white" />
         </FrameLayout>
 
         <RelativeLayout

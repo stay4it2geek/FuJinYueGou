@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -33,10 +34,10 @@ public class ReceiveTextHolder extends BaseViewHolder {
     protected ImageView iv_avatar;
 
     @Bind(R.id.tv_time)
-    protected EmojiconTextView tv_time;
+    protected TextView tv_time;
 
     @Bind(R.id.tv_message)
-    protected TextView tv_message;
+    protected EmojiconTextView tv_message;
 
     public ReceiveTextHolder(Context context, BmobIMConversation conversation, ViewGroup root, OnRecyclerViewListener onRecyclerViewListener) {
         super(context, root, R.layout.item_chat_received_message, onRecyclerViewListener);
@@ -59,7 +60,6 @@ public class ReceiveTextHolder extends BaseViewHolder {
             public void onLoadFailed(Exception e, Drawable errorDrawable) {
                 super.onLoadFailed(e, errorDrawable);
                 iv_avatar.setBackgroundDrawable(errorDrawable);
-
             }
         });
 

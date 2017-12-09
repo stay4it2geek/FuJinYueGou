@@ -31,16 +31,9 @@
             android:scaleType="fitXY"
             android:src="@drawable/layerlist_circle_mask_conversation" />
 
-        <RelativeLayout
-            android:id="@+id/message_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/iv_avatar"
-            android:layout_toRightOf="@id/iv_avatar">
-
-
             <com.rockerhieu.emojicon.EmojiconTextView
                 android:id="@+id/tv_message"
+                android:layout_toRightOf="@+id/iv_avatar"
                 emojicon:emojiconSize="28sp"
                 style="@style/style_text_black"
                 android:layout_width="wrap_content"
@@ -57,30 +50,25 @@
                 android:paddingRight="@dimen/margin_30"
                 android:paddingTop="@dimen/margin_8" />
 
+        <FrameLayout
+            android:id="@+id/video_recive_cover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/left"
+            android:visibility="gone">
 
-            <FrameLayout
-                android:id="@+id/video_recive_cover"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/left"
-                android:visibility="gone">
+            <ImageView
+                android:id="@+id/video_recive"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="5dp" />
 
-                <ImageView
-                    android:id="@+id/video_recive"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_margin="5dp" />
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:background="@drawable/video_paly_cover" />
-            </FrameLayout>
-
-
-        </RelativeLayout>
-
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@drawable/video_paly_cover" />
+        </FrameLayout>
     </RelativeLayout>
 
 </LinearLayout>

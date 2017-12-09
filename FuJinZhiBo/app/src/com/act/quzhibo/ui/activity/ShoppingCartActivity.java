@@ -298,7 +298,12 @@ public class ShoppingCartActivity extends BaseActivity implements
                     tvEditor.setText("编辑");
                     cartAdapter.setCheckInterface(ShoppingCartActivity.this);
                     cartAdapter.setModifyListInterface(ShoppingCartActivity.this);
-                    loadNetView.setVisibility(View.GONE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadNetView.setVisibility(View.GONE);
+                    }
+                },2000);
                     tvEditor.setVisibility(View.VISIBLE);
 
                 } else {

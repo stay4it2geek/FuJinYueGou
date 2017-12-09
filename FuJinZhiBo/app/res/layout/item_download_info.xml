@@ -50,6 +50,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:visibility="gone"
+                android:textColor="@color/white"
                 android:background="@drawable/button_common_selector"
                 android:text="删除" />
 
