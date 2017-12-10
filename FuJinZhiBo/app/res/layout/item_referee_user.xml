@@ -10,6 +10,7 @@
     <com.act.quzhibo.widget.CircleImageView
         android:id="@+id/avater"
         android:layout_width="70dp"
+        android:background="@mipmap/default_head"
         android:layout_height="70dp"
         android:layout_margin="5dp" />
 

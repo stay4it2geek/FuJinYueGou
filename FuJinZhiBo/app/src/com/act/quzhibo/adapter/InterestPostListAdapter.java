@@ -211,28 +211,8 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
                 context.startActivity(intent);
             }
         });
-        if (post.user.sex.equals("女")) {
-            Glide.with(context).load(user.photoUrl).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                    holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
-                }
 
-                @Override
-                public void onLoadStarted(Drawable placeholder) {
-                    super.onLoadStarted(placeholder);
-                    holder.photoImg.setBackgroundDrawable(placeholder);
-                }
-
-                @Override
-                public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                    super.onLoadFailed(e, errorDrawable);
-                    holder.photoImg.setBackgroundDrawable(errorDrawable);
-
-                }
-            });
-        } else {
-            Glide.with(context).load(user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+            Glide.with(context).load(user.photoUrl).asBitmap().placeholder(R.mipmap.default_head).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                     holder.photoImg.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -250,7 +230,7 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
 
                 }
             });
-        }
+
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {

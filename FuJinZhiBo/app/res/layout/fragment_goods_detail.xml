@@ -165,7 +165,7 @@
                     android:layout_height="19dp"
                     android:layout_gravity="right|top"
                     android:layout_margin="3dp"
-                    android:background="@mipmap/msg_tips"
+                    android:background="@drawable/bg_circle_red"
                     android:gravity="center"
                     android:text="0"
                     android:textColor="@color/white"

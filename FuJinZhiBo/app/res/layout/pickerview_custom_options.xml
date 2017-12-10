@@ -40,7 +40,7 @@
         android:id="@+id/optionspicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_round_black30"
+        android:background="@drawable/bg_round_gray30"
         android:orientation="horizontal">
 
         <com.bigkoo.pickerview.lib.WheelView

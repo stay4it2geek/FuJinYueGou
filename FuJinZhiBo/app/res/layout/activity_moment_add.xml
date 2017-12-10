@@ -114,6 +114,7 @@
                 android:layout_marginRight="15dp"
                 android:background="@drawable/button_common_selector"
                 android:padding="8dp"
+                android:textColor="@color/white"
                 android:text="选择状态版块"
                 android:textSize="15sp" />
         </LinearLayout>

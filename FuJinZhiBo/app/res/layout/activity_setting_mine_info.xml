@@ -47,13 +47,15 @@
                         android:paddingTop="3dp"
                         android:text="是否开启私密模式" />
 
-                    <Switch
+                    <CheckBox
+                        android:background="@drawable/checkbox_common_selector"
                         android:id="@+id/openSecret_switch"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_gravity="right"
+                        android:button="@null"
                         android:layout_marginRight="10dp" />
                 </RelativeLayout>
 
@@ -274,21 +276,23 @@
                         android:layout_marginRight="10dp"
                         android:background="@drawable/spinner" />
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:background="@drawable/button_common_selector"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:text="我已设置资料,点击这里关闭页面"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
             </LinearLayout>
         </ScrollView>
 
-        <TextView
-            android:id="@+id/next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="40dp"
-            android:background="@drawable/button_common_selector"
-            android:padding="10dp"
-            android:text="我已设置资料,点击这里关闭页面"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            android:visibility="gone" />
+
 
         <LinearLayout
             android:id="@+id/secret_view"

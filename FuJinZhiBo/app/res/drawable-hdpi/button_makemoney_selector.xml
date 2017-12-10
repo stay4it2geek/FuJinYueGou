@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/bg_circle_yellowdark" />
-    <item android:drawable="@drawable/bg_circle_yellow" android:state_pressed="true" />
+    <item android:drawable="@drawable/bg_circle_redpink" android:state_pressed="true" />
 
 </selector>

@@ -31,7 +31,7 @@
                         android:id="@+id/circleAvatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/man" />
+                        android:background="@mipmap/default_head" />
 
                     <TextView
                         android:id="@+id/uploadImgText"
@@ -240,8 +240,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/monytext"
                     android:paddingTop="5dp"
-                    android:text="(0元)"
-                    android:textColor="@color/red_light" />
+                    android:text=""
+                    android:textColor="@color/darkorange" />
 
                 <View
                     android:layout_width="10dp"

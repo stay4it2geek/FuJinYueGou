@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
@@ -69,7 +70,7 @@ public class SettingMineInfoActivity extends BaseActivity {
     @Bind(R.id.age_txt)
     TextView age_txt;
     @Bind(R.id.openSecret_switch)
-    Switch openSecret_switch;
+    CheckBox openSecret_switch;
     @Bind(R.id.openSecret_txt)
     TextView openSecret_txt;
     @Bind(R.id.sex_txt)
@@ -81,7 +82,7 @@ public class SettingMineInfoActivity extends BaseActivity {
     @Bind(R.id.candateThing_txt)
     TextView candateThing_txt;
     @Bind(R.id.arealocation_rl)
-    TextView arealocation_rl;
+    RelativeLayout arealocation_rl;
     @Bind(R.id.arealocation_txt)
     TextView arealocation_txt;
     @Bind(R.id.secret_view)

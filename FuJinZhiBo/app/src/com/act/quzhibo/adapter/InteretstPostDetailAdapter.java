@@ -277,7 +277,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
 
 
 
-                Glide.with(activity).load(commentDetail.user.photoUrl).asBitmap().placeholder(R.drawable.man).into(new SimpleTarget<Bitmap>() {
+                Glide.with(activity).load(commentDetail.user.photoUrl).asBitmap().placeholder(R.mipmap.default_head).into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         ((Item2ViewHolder) holder).userImage.setBackground(new BitmapDrawable(resource));

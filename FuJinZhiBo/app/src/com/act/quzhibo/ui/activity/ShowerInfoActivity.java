@@ -69,6 +69,12 @@ public class ShowerInfoActivity extends FragmentActivity {
                 ShowerInfoActivity.this.finish();
             }
         });
+        findViewById(R.id.chat_private).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtil.showToast(ShowerInfoActivity.this,"weikaifa");
+            }
+        });
         loadNetView = (LoadNetView) findViewById(R.id.loadview);
         loadNetView.setReloadButtonListener(new View.OnClickListener() {
             @Override
@@ -266,8 +272,7 @@ public class ShowerInfoActivity extends FragmentActivity {
                         }
                         final ImageView showerAvatar = (ImageView) findViewById(R.id.userImage);
 
-                        if (gender.equals("0")) {
-                            Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.women).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
+                            Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.mipmap.default_head).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                                     showerAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
@@ -278,25 +283,11 @@ public class ShowerInfoActivity extends FragmentActivity {
                                     super.onLoadStarted(placeholder);
                                 }
                             });
-                            ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.women)).start();
-                        } else {
-                            Glide.with(ShowerInfoActivity.this).load(portrait_img).asBitmap().placeholder(R.drawable.man).error(R.drawable.error_img).into(new SimpleTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                    showerAvatar.setBackgroundDrawable(new BitmapDrawable(resource));
-                                }
-
-                                @Override
-                                public void onLoadStarted(Drawable placeholder) {
-                                    super.onLoadStarted(placeholder);
-                                }
-                            });
-                            ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.drawable.man)).start();
-
+                            ((Banner) findViewById(R.id.banner)).setImages(urls).setImageLoader(new GlideImageLoader(R.mipmap.default_head)).start();
                         }
 
                         loadNetView.setVisibility(View.GONE);
-                    }
+
 
                 } catch (JSONException e) {
 

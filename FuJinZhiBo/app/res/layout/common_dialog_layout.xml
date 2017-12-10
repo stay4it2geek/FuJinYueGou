@@ -18,6 +18,7 @@
             android:layout_width="50dp"
             android:visibility="gone"
             android:id="@+id/userImage"
+            android:background="@mipmap/default_head"
             android:layout_gravity="center_horizontal"
             android:layout_height="50dp" />
 

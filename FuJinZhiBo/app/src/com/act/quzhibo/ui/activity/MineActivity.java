@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.BuildConfig;
 import com.act.quzhibo.R;
+import com.act.quzhibo.bean.Promotion;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.download.activity.DownloadManagerActivity;
@@ -39,12 +41,20 @@ import com.act.quzhibo.widget.TitleBarView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import me.leefeng.promptlibrary.PromptButton;
@@ -98,7 +108,11 @@ public class MineActivity extends BaseActivity {
     CircleImageView circleAvatar;
     @Bind(R.id.uploadImgText)
     TextView uploadImgText;
+    @Bind(R.id.moneytext)
+    TextView moneytext;
+
     SelfDialog selfDialog;
+    double commisionMoney = 0.0;
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -112,6 +126,7 @@ public class MineActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal);
+
         promptDialog = new PromptDialog(MineActivity.this);
         selfDialog = new SelfDialog(MineActivity.this, false);
         selfDialog.setTitle("客官再看一会儿呗");
@@ -165,11 +180,6 @@ public class MineActivity extends BaseActivity {
             return;
         } else if (view.getId() == R.id.getVipLayout) {
             startActivity(view, GetVipPayActivity.class);
-            return;
-        } else if (R.id.avaterlayout == view.getId() ||
-                R.id.circleAvatar == view.getId() ||
-                R.id.uploadImgText == view.getId()) {
-            startActivity(new Intent(MineActivity.this, LoginActivity.class));
             return;
         } else {
             if (rootUser == null) {
@@ -226,7 +236,9 @@ public class MineActivity extends BaseActivity {
                                     startActivity(new Intent(MineActivity.this, MyFocusShowerActivity.class));
                                     break;
                                 case R.id.checkoutMoneyLayout:
-                                    startActivity(new Intent(MineActivity.this, CommisionActivity.class));
+                                    Intent commisionIntent = new Intent(MineActivity.this, CommisionActivity.class);
+                                    commisionIntent.putExtra("proMoneyTotal", commisionMoney);
+                                    startActivity(commisionIntent);
                                     break;
                                 case R.id.myfocus_person:
                                     startActivity(new Intent(MineActivity.this, MyFocusPersonActivity.class));
@@ -283,6 +295,7 @@ public class MineActivity extends BaseActivity {
         super.onResume();
         rootUser = BmobUser.getCurrentUser(RootUser.class);
         if (rootUser != null) {
+            requestPromotionData();
             CommonUtil.fecth(MineActivity.this);
             registerLayout.setVisibility(View.GONE);
             logout.setVisibility(View.VISIBLE);
@@ -365,7 +378,7 @@ public class MineActivity extends BaseActivity {
                 uploadImgText.setVisibility(View.GONE);
                 Glide.with(MineActivity.this).load(rootUser.photoFileUrl).skipMemoryCache(true).into(circleAvatar);
             } else {
-                circleAvatar.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.man));
+                circleAvatar.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.default_head));
             }
         } else {
             uploadImgText.setVisibility(View.VISIBLE);
@@ -575,4 +588,24 @@ public class MineActivity extends BaseActivity {
         }
         startActivityForResult(intent, REQUEST_CAPTURE);
     }
+
+    public void requestPromotionData() {
+        commisionMoney = 0.0;
+        BmobQuery<Promotion> query = new BmobQuery<>();
+        query.addWhereEqualTo("referralsUser", BmobUser.getCurrentUser(RootUser.class));
+        query.order("-updatedAt");
+        query.findObjects(new FindListener<Promotion>() {
+            @Override
+            public void done(final List<Promotion> list, BmobException e) {
+                if (e == null) {
+                    for (Promotion promotion : list) {
+                        commisionMoney += Double.parseDouble(promotion.refereeMoneyTotal);
+                    }
+                    moneytext.setText("(" + commisionMoney + ")");
+                } else {
+                }
+            }
+        });
+    }
+
 }
