@@ -590,7 +590,7 @@ public class MineActivity extends BaseActivity {
     }
 
     public void requestPromotionData() {
-        commisionMoney = 0.0;
+
         BmobQuery<Promotion> query = new BmobQuery<>();
         query.addWhereEqualTo("referralsUser", BmobUser.getCurrentUser(RootUser.class));
         query.order("-updatedAt");
@@ -598,11 +598,11 @@ public class MineActivity extends BaseActivity {
             @Override
             public void done(final List<Promotion> list, BmobException e) {
                 if (e == null) {
+                    commisionMoney = 0.0;
                     for (Promotion promotion : list) {
                         commisionMoney += Double.parseDouble(promotion.refereeMoneyTotal);
                     }
                     moneytext.setText("(" + commisionMoney + ")");
-                } else {
                 }
             }
         });
