@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InteretstPostDetailAdapter;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPost;
@@ -23,6 +24,12 @@ import com.act.quzhibo.widget.LoadNetView;
 import com.act.quzhibo.widget.TitleBarView;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.rockerhieu.emojicon.EmojiconEditText;
+
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 
 public class IntersetPostDetailActivity extends AppCompatActivity {
@@ -95,8 +102,20 @@ public class IntersetPostDetailActivity extends AppCompatActivity {
     }
 
      void getData() {
-        String url = CommonUtil.getToggle(this, Constants.POST).getToggleObject().replace(Constants.POST, post.postId);
-        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
+         BmobQuery<Toggle> query = new BmobQuery<>();
+         query.findObjects(new FindListener<Toggle>() {
+             @Override
+             public void done(List<Toggle> toggles, BmobException e) {
+                 if (e == null && toggles.size() > 0) {
+
+                     String url = toggles.get(0).interestPostDetail.replace(Constants.POST_ID, post.postId);
+                     OkHttpClientManager.parseRequest(IntersetPostDetailActivity.this, url, handler, Constants.REFRESH);
+                 }else{
+                     handler.sendEmptyMessage(Constants.NetWorkError);
+                 }
+             }
+         });
+
     }
 
     Handler handler = new Handler() {

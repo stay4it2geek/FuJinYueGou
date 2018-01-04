@@ -15,8 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.VirtualDataUser;
-import com.act.quzhibo.VirtualUserDao;
+import com.act.quzhibo.data_db.VirtualUserInfo;
+import com.act.quzhibo.data_db.VirtualUserInfoDao;
 import com.act.quzhibo.bean.InterestSubPerson;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.ui.activity.InfoNearPersonActivity;
@@ -48,9 +48,6 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
     public void onBindViewHolder(final WhoLikeMeAdapter.MyViewHolder holder, final int position) {
         final InterestSubPerson user = datas.get(position);
         holder.nickName.setText(user.username);
-
-        holder.disMariState.setText(user.user==null?"":user.user.disMariState);
-
         Random random = new Random();
         int minMinu = 30;
         int maxSeeMinu = 1000;
@@ -60,8 +57,8 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
 
         String randomAge = (random.nextInt(10) + 20) + "";
 
-        VirtualUserDao dao = VirtualUserDao.getInstance(activity);
-        VirtualDataUser dataUser = dao.query(user.userId);
+        VirtualUserInfoDao dao = VirtualUserInfoDao.getInstance(activity);
+        VirtualUserInfo dataUser = dao.query(user.userId);
 
         if (dataUser != null) {
             randomAge = dataUser.userAge != null ? dataUser.userAge : "";
@@ -69,7 +66,7 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
             onlineTimeMinu = !TextUtils.isEmpty(dataUser.onlineTime) ? Integer.parseInt(dataUser.onlineTime) : 0;
 
         } else {
-            VirtualDataUser user_ = new VirtualDataUser();
+            VirtualUserInfo user_ = new VirtualUserInfo();
             user_.userAge = randomAge;
             user_.userId = user.userId;
             user_.onlineTime = onlineTimeMinu+"";
@@ -85,11 +82,11 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         }
 
         if (datas.get(position).user != null && !TextUtils.isEmpty(datas.get(position).user.sex)) {
+            holder.sexAndAge.setVisibility(View.VISIBLE);
             holder.sexAndAge.setText(datas.get(position).user.sex.equals("女") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
         }else{
+            holder.sexAndAge.setVisibility(View.VISIBLE);
             holder.sexAndAge.setText(randomAge + "岁");
-
-
         }
 
 
@@ -142,7 +139,6 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
         private TextView arealocation;
         private TextView seeMeTime;
         private TextView sexAndAge;
-        private TextView disMariState;
         private RelativeLayout who_see_me_layout;
 
         public MyViewHolder(View view) {
@@ -152,7 +148,6 @@ public class WhoLikeMeAdapter extends RecyclerView.Adapter<WhoLikeMeAdapter.MyVi
             seeMeTime = (TextView) view.findViewById(R.id.seeMeTime);
             arealocation = (TextView) view.findViewById(R.id.location);
             sexAndAge = (TextView) view.findViewById(R.id.sexAndAge);
-            disMariState = (TextView) view.findViewById(R.id.disMariState);
             who_see_me_layout = (RelativeLayout) view.findViewById(R.id.who_see_me_layout);
             arealocation.setVisibility(View.VISIBLE);
         }

@@ -14,13 +14,16 @@ import com.act.quzhibo.util.ToastUtil;
 
 import java.util.ArrayList;
 
+import static com.act.quzhibo.common.Constants.HIDE_TAB_VIEW;
+import static com.act.quzhibo.common.Constants.TAB_PLATE_LIST;
+
 public class ShowerListActivity extends TabSlideSameBaseActivity implements ShowerListFragment.OnCallShowViewListner {
 
      PlateList plates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        plates = CommonUtil.parseJsonWithGson(getIntent().getStringExtra(Constants.TAB_PLATE_LIST), PlateList.class);
+        plates = CommonUtil.parseJsonWithGson(getIntent().getStringExtra(TAB_PLATE_LIST), PlateList.class);
         super.onCreate(savedInstanceState);
     }
 
@@ -30,8 +33,8 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
         if (plates == null) {
             return new ArrayList<>();
         }
-        String hideShowPlates =CommonUtil.getToggle(this, "hideShowPlates").getToggleObject();
-        for (PlateCatagory plateCatagory : plates.plateList) {
+        String hideShowPlates =CommonUtil.getInitData(this,Constants.HIDE_SHOW_PLATES);
+            for (PlateCatagory plateCatagory : plates.plateList) {
             if (hideShowPlates.contains(plateCatagory.titleName)) {
                 continue;
             } else {
@@ -44,7 +47,7 @@ public class ShowerListActivity extends TabSlideSameBaseActivity implements Show
     @Override
     public ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> mFragments = new ArrayList<>();
-        String hideShowPlates = CommonUtil.getToggle(this, "hideShowPlates").getToggleObject();
+        String hideShowPlates =CommonUtil.getInitData(this,Constants.HIDE_SHOW_PLATES);
         for (PlateCatagory plateCatagory : plates.plateList) {
             if (hideShowPlates.contains(plateCatagory.titleName)) {
                 continue;

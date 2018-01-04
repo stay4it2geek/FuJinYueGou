@@ -20,8 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.VirtualDataUser;
-import com.act.quzhibo.VirtualUserDao;
+import com.act.quzhibo.data_db.VirtualUserInfo;
+import com.act.quzhibo.data_db.VirtualUserInfoDao;
 import com.act.quzhibo.bean.InterestParentPerson;
 import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.common.Constants;
@@ -86,16 +86,16 @@ public class InterestPostListAdapter extends RecyclerView.Adapter<InterestPostLi
 
         Random random = new Random();
         String randomAge = (random.nextInt(10) + 20) + "";
-        VirtualUserDao dao = VirtualUserDao.getInstance(context);
+        VirtualUserInfoDao dao = VirtualUserInfoDao.getInstance(context);
 
         int maxMinu = 800;
         int minMinu = 30;
 
-        VirtualDataUser dataUser = dao.query(post.user.userId);
+        VirtualUserInfo dataUser = dao.query(post.user.userId);
         if (dataUser != null) {
             randomAge = dataUser.userAge != null ? dataUser.userAge : "";
         } else {
-            VirtualDataUser user_ = new VirtualDataUser();
+            VirtualUserInfo user_ = new VirtualUserInfo();
             user_.userAge = randomAge;
             user_.userId = post.user.userId;
             user_.onlineTime = (random.nextInt(maxMinu) + random.nextInt(minMinu)) + "";

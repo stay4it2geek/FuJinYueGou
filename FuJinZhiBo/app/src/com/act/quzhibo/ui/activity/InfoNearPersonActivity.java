@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.VirtualDataUser;
-import com.act.quzhibo.VirtualUserDao;
+import com.act.quzhibo.data_db.VirtualUserInfo;
+import com.act.quzhibo.data_db.VirtualUserInfoDao;
 import com.act.quzhibo.adapter.NearSeeHer20Adapter;
 import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.bean.AddFriendMessage;
@@ -320,8 +320,8 @@ public class InfoNearPersonActivity extends BaseActivity {
         }
 
         soundLen.setText(nearInfoUser.soundLen == null ? "" : nearInfoUser.soundLen + "秒");
-        disPurpose.setText(nearInfoUser.user.disPurpose == null ? "" : nearInfoUser.disPurpose);
-        disMariState.setText(nearInfoUser.user.disMariState == null ? "" : nearInfoUser.disMariState);
+        disPurpose.setText(nearInfoUser.user.disPurpose == null ? "" : nearInfoUser.user.disPurpose);
+        disMariState.setText(nearInfoUser.user.disMariState == null ? "" : nearInfoUser.user.disMariState);
         nickName.setText(nearInfoUser.username == null ? "" : nearInfoUser.username);
 
         if (nearInfoUser.user.sex != null) {
@@ -375,8 +375,8 @@ public class InfoNearPersonActivity extends BaseActivity {
         int onlineTimeMinu = random.nextInt(maxLineMinu) + random.nextInt(minMinu);
         String randomAge = (random.nextInt(10) + 20) + "";
         int seeTimeMinu = random.nextInt(maxMinu) + random.nextInt(minMinu);
-        VirtualUserDao dao = VirtualUserDao.getInstance(this);
-        VirtualDataUser dataUser = dao.query(nearInfoUser.userId);
+        VirtualUserInfoDao dao = VirtualUserInfoDao.getInstance(this);
+        VirtualUserInfo dataUser = dao.query(nearInfoUser.userId);
 
         if (dataUser != null) {
             randomAge = dataUser.userAge != null ? dataUser.userAge : "";
@@ -388,7 +388,7 @@ public class InfoNearPersonActivity extends BaseActivity {
             }
 //            seeTimeMinu = !TextUtils.isEmpty(dataUser.seeMeTime) ? Integer.parseInt(dataUser.seeMeTime) : 0;
         } else {
-            VirtualDataUser user_ = new VirtualDataUser();
+            VirtualUserInfo user_ = new VirtualUserInfo();
             user_.userAge = randomAge;
             user_.userId = nearInfoUser.userId;
             user_.onlineTime = onlineTimeMinu + "";

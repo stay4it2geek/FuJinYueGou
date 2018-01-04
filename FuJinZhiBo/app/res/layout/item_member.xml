@@ -7,7 +7,6 @@
         android:id="@+id/postImg"
         android:layout_width="@dimen/avatar_size36"
         android:layout_height="@dimen/avatar_size36"
-        android:background="@mipmap/default_head"
         android:layout_centerInParent="true"
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp" />
@@ -16,7 +15,6 @@
         android:id="@+id/avatarvideo"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@mipmap/default_head"
         android:layout_centerInParent="true"
         android:layout_marginLeft="1dp"
         android:layout_marginRight="1dp"

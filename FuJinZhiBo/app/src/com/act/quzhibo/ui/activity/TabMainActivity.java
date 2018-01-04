@@ -14,8 +14,6 @@ import android.view.Window;
 import android.widget.TabHost;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.VirtualUserDao;
-import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.TabEntity;
 import com.act.quzhibo.event.ChangeEvent;
@@ -31,23 +29,21 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
+import static com.act.quzhibo.common.Constants.HIDE_TAB_VIEW;
 
 @SuppressWarnings("ALL")
 public class TabMainActivity extends TabActivity {
     private TabHost tabHost;
     private View mDecorView;
-    private String[] mTitles = {"挖宝", "直播", "社区", "聊天", "我的"};
-    private String[] mTitlesSpecial = {"课程", "社区", "我的"};
+    private String[] mTitles = {"有料", "直播", "社区", "聊天", "我的"};
+    private String[] mTitlesSpecial = {"有料", "我的"};
 
     private int[] mIconUnselectIds = {R.drawable.courses, R.drawable.show, R.drawable.square, R.drawable.chat, R.drawable.mine};
 
     private int[] mIconSelectIds = {R.drawable.courses_s, R.drawable.show_s, R.drawable.square_s, R.drawable.chat_s, R.drawable.mine_s};
 
-    private int[] mIconUnselectIdsSpecial = {R.drawable.courses, R.drawable.money, R.drawable.mine};
-    private int[] mIconSelectIdsSpecial = {R.drawable.courses_s, R.drawable.money_s, R.drawable.mine_s};
+    private int[] mIconUnselectIdsSpecial = {R.drawable.courses, R.drawable.mine};
+    private int[] mIconSelectIdsSpecial = {R.drawable.courses_s, R.drawable.mine_s};
 
     private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
     private CommonTabLayout mTabLayout;
@@ -61,8 +57,8 @@ public class TabMainActivity extends TabActivity {
         tabHost = TabMainActivity.this.getTabHost();
         Intent showListIntent = new Intent(TabMainActivity.this, ShowerListActivity.class);
         showListIntent.putExtra(Constants.TAB_PLATE_LIST, getIntent().getStringExtra(Constants.TAB_PLATE_LIST));
-        if (CommonUtil.getToggle(this, Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
-            tabHost.addTab(tabHost.newTabSpec("课程")
+        if (CommonUtil.getInitData(this,HIDE_TAB_VIEW).equals("false")) {
+            tabHost.addTab(tabHost.newTabSpec("有料")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, CourseCommonActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("直播")
@@ -78,10 +74,7 @@ public class TabMainActivity extends TabActivity {
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, MineActivity.class)));
         } else {
-            tabHost.addTab(tabHost.newTabSpec("课堂")
-                    .setIndicator(null, null)
-                    .setContent(new Intent(TabMainActivity.this, PuaCoursesActivity.class)));
-            tabHost.addTab(tabHost.newTabSpec("广场")
+            tabHost.addTab(tabHost.newTabSpec("有料")
                     .setIndicator(null, null)
                     .setContent(new Intent(TabMainActivity.this, SquareActivity.class)));
             tabHost.addTab(tabHost.newTabSpec("我的")
@@ -95,7 +88,7 @@ public class TabMainActivity extends TabActivity {
     }
 
     public void SetIndexButton() {
-        if (CommonUtil.getToggle(this, Constants.SQUARE_AND_MONEY).getIsOpen().equals("true")) {
+        if (CommonUtil.getInitData(this,HIDE_TAB_VIEW).equals("false")) {
             for (int i = 0; i < mTitles.length; i++) {
                 mTabEntities.add(new TabEntity(mTitles[i], mIconSelectIds[i], mIconUnselectIds[i]));
             }

@@ -17,8 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.act.quzhibo.VirtualUserDao;
-import com.act.quzhibo.VirtualDataUser;
+import com.act.quzhibo.data_db.VirtualUserInfoDao;
+import com.act.quzhibo.data_db.VirtualUserInfo;
 import com.act.quzhibo.widget.MyStandardVideoController;
 import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
@@ -144,10 +144,10 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
             long hour = (l / (60 * 60 * 1000) - day * 24);
             long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
 
-            VirtualUserDao dao = VirtualUserDao.getInstance(activity);
+            VirtualUserInfoDao dao = VirtualUserInfoDao.getInstance(activity);
             if (dao.query(post.user.userId) != null) {
                 String randomAge = dao.query(post.user.userId) != null ? dao.query(post.user.userId).userAge : "";
-                ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("女") ? "女" + randomAge + "岁" : "男" + randomAge + "岁");
+                ((Item1ViewHolder) holder).sexAndAge.setText(data.detail.user.sex.equals("2") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
             }
 
             if (day <= 1) {
@@ -238,7 +238,7 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
                 return;
             }
             final InterestPostPageCommentDetail commentDetail = data.comments.get(position - 1);
-            if (commentDetail.user.sex.equals("女")) {
+            if (commentDetail.user.sex.equals("2")) {
                 ((Item2ViewHolder) holder).userImage.setTag(commentDetail.user.photoUrl);
                 Glide.with(activity).load(commentDetail.user.photoUrl).asBitmap().placeholder(R.drawable.women).into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -258,19 +258,19 @@ public class InteretstPostDetailAdapter extends RecyclerView.Adapter<RecyclerVie
                 Random random = new Random();
                 String randomAge = (random.nextInt(15) + 20) + "";
                 if (commentDetail.user.sex != null) {
-                    VirtualUserDao dao = VirtualUserDao.getInstance(activity);
-                    VirtualDataUser virtualDataUser = dao.query(commentDetail.user.userId);
-                    if (virtualDataUser != null) {
-                        randomAge = virtualDataUser.userAge;
+                    VirtualUserInfoDao dao = VirtualUserInfoDao.getInstance(activity);
+                    VirtualUserInfo virtualUserInfo = dao.query(commentDetail.user.userId);
+                    if (virtualUserInfo != null) {
+                        randomAge = virtualUserInfo.userAge;
                     } else {
-                        VirtualDataUser user=new VirtualDataUser();
+                        VirtualUserInfo user=new VirtualUserInfo();
                         user.userAge=randomAge;
                         user.userId=commentDetail.user.userId;
                         user.onlineTime="";
                         user.seeMeTime="";
                         dao.add(user);
                     }
-                    ((Item2ViewHolder) holder).sexAndAge.setText(commentDetail.user.sex.equals("女") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
+                    ((Item2ViewHolder) holder).sexAndAge.setText(commentDetail.user.sex.equals("2") ? "女 " + randomAge + "岁" : "男 " + randomAge + "岁");
                 }
 
                 ((Item2ViewHolder) holder).nickName.setText(commentDetail.user.nick);

@@ -99,15 +99,6 @@ public class RegisterNormalActivity extends BaseActivity {
         et_password.setSelection(et_password.getText().length());
     }
 
-    @OnCheckedChanged(R.id.check_agree)
-    void onCheckAgree(boolean isChecked) {
-        if (isChecked) {
-            btn_verify_login.setEnabled(true);
-        } else {
-            btn_verify_login.setEnabled(false);
-        }
-    }
-
     @OnClick(R.id.termofuse)
     void startActivity() {
         startActivity(new Intent(RegisterNormalActivity.this, TermOfUseActivity.class));

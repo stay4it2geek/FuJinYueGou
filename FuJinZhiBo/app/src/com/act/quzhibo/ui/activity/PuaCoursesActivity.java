@@ -20,7 +20,7 @@ public class PuaCoursesActivity extends TabSlideSameBaseActivity {
     ArrayList<CourseCategoryInfo> categoryInfos=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        String info = CommonUtil.getToggle(this, Constants.COURSE_CATOGERY_INFO).getToggleObject().toString();
+        String info =  CommonUtil.getInitData(this,Constants.PUA_COURSE_INFO);
         categoryInfos.addAll(CommonUtil.jsonToArrayList(info, CourseCategoryInfo.class));
         super.onCreate(savedInstanceState);
         findViewById(R.id.course_tab).setVisibility(View.VISIBLE);

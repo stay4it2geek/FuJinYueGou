@@ -1,4 +1,4 @@
-package com.act.quzhibo;
+package com.act.quzhibo.data_db;
 
 
 import android.content.Context;
@@ -9,18 +9,18 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-public class VirtualBaseHelper extends OrmLiteSqliteOpenHelper {
+public class DbHelper extends OrmLiteSqliteOpenHelper {
 
-    private static VirtualBaseHelper instance;
+    private static DbHelper instance;
 
-    private VirtualBaseHelper(Context context) {
-        super(context, "virtual_data.db", null, 1);
+    private DbHelper(Context context) {
+        super(context, "configData.db", null, 1);
     }
-    public static VirtualBaseHelper getInstance(Context context){
+    public static DbHelper getInstance(Context context){
         if(instance == null){
-            synchronized (VirtualBaseHelper.class){
+            synchronized (DbHelper.class){
                 if(instance == null){
-                    instance = new VirtualBaseHelper(context.getApplicationContext());
+                    instance = new DbHelper(context.getApplicationContext());
                 }
             }
         }
@@ -30,7 +30,8 @@ public class VirtualBaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
-            TableUtils.createTable(connectionSource, VirtualDataUser.class);
+            TableUtils.createTable(connectionSource, VirtualUserInfo.class);
+            TableUtils.createTable(connectionSource, ConfigToggleData.class);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (java.sql.SQLException e) {
@@ -41,7 +42,8 @@ public class VirtualBaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
         try {
-            TableUtils.dropTable(connectionSource,VirtualDataUser.class,true);
+            TableUtils.dropTable(connectionSource,VirtualUserInfo.class,true);
+            TableUtils.dropTable(connectionSource,ConfigToggleData.class,true);
             onCreate(sqLiteDatabase,connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();

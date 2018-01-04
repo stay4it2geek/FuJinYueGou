@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.RoomListAdapter;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.Room;
 import com.act.quzhibo.bean.RoomParentList;
+import com.act.quzhibo.ui.activity.InfoInterestPersonActivity;
 import com.act.quzhibo.ui.activity.ShowerListActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.widget.FragmentDialog;
@@ -29,6 +31,11 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class ShowerListFragment extends BackHandledFragment {
      String categoryId;
@@ -237,9 +244,20 @@ public class ShowerListFragment extends BackHandledFragment {
         }
     }
 
-    public void getData(String categoryId, String startPage, int what) {
-        String url = CommonUtil.getToggle(getActivity(), Constants.COMMON_TAB_DETAIL).getToggleObject().replace("CATEID", categoryId).replace("NUM", String.valueOf(startPage)).replace("OFFSET", offset);
-        OkHttpClientManager.parseRequest(getActivity(), url, handler, what);
+    public void getData(final String categoryId, final String startPage, final int what) {
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> toggles, BmobException e) {
+                if (e == null && toggles.size() > 0) {
+                    String url = toggles.get(0).commonTabDetail.replace("CATEID", categoryId).replace("NUM", String.valueOf(startPage)).replace("OFFSET", offset);
+                    OkHttpClientManager.parseRequest(getActivity(), url, handler, what);
+                }else{
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+                }
+            }
+        });
+
     }
 
 

@@ -15,6 +15,7 @@ import com.act.quzhibo.R;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.bean.MyFocusCommonPerson;
 import com.bumptech.glide.Glide;
+import com.mabeijianxi.smallvideorecord2.StringUtils;
 
 import java.util.ArrayList;
 
@@ -84,6 +85,9 @@ public class MyFocusPersonListAdapter extends RecyclerView.Adapter<MyFocusPerson
 
             }
         });
+       if(StringUtils.isNotEmpty(datas.get(position).sex)){
+            holder.sex.setText(datas.get(position).sex.equals("2")? "女" :"男");
+        }
     }
 
     @Override

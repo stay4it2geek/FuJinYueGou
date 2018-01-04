@@ -170,7 +170,7 @@ public class MineActivity extends BaseActivity {
             R.id.myPostlayout, R.id.logout, R.id.registerLayout})
     public void buttonClicks(final View view) {
         if (view.getId() == R.id.vipLevel) {
-            startActivity(view, VIPConisTableActivity.class);
+            startActivity(new Intent(MineActivity.this, VIPConisTableActivity.class));
             return;
         } else if (view.getId() == R.id.registerLayout) {
             startActivity(view, RegisterNormalActivity.class);
@@ -183,7 +183,13 @@ public class MineActivity extends BaseActivity {
             return;
         } else {
             if (rootUser == null) {
-                startActivity(view, LoginActivity.class);
+                if (R.id.avaterlayout == view.getId() ||
+                        R.id.circleAvatar == view.getId() ||
+                        R.id.uploadImgText == view.getId()) {
+                    startActivity(new Intent(MineActivity.this, LoginActivity.class));
+                }else{
+                    startActivity(view, LoginActivity.class);
+                }
                 return;
             } else {
                 if (R.id.avaterlayout == view.getId() ||
@@ -203,7 +209,7 @@ public class MineActivity extends BaseActivity {
                                 }
                             }).show(getSupportFragmentManager(), "");
 
-                } else {
+                 } else {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

@@ -51,7 +51,7 @@
                 android:padding="4dp"
                 app:fab_colorNormal="#fe4060"
                 app:fab_colorPressed="#ff6060"
-                app:fab_icon="@drawable/text"
+                app:fab_icon="@drawable/register"
                 app:fab_size="mini"
                 app:fab_title="文本" />
 

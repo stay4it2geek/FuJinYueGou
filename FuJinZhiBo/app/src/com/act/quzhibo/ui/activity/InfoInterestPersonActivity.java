@@ -14,8 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.VirtualDataUser;
-import com.act.quzhibo.VirtualUserDao;
+import com.act.quzhibo.bean.Toggle;
+import com.act.quzhibo.data_db.VirtualUserInfo;
+import com.act.quzhibo.data_db.VirtualUserInfoDao;
 import com.act.quzhibo.adapter.PostImageAdapter;
 import com.act.quzhibo.bean.InterestPost;
 import com.act.quzhibo.bean.InterestPostListInfoPersonParentData;
@@ -173,7 +174,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
     }
 
     void initOnlineTime() {
-        VirtualUserDao dao = VirtualUserDao.getInstance(this);
+        VirtualUserInfoDao dao = VirtualUserInfoDao.getInstance(this);
 
         Random random = new Random();
         int minMinu = 30;
@@ -183,7 +184,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
         String randomAge = (random.nextInt(10) + 20) + "";
         int seeTimeMinu = random.nextInt(maxSeeMinu) + random.nextInt(minMinu);
 
-        VirtualDataUser dataUser = dao.query(post.user.userId);
+        VirtualUserInfo dataUser = dao.query(post.user.userId);
 
         if (dataUser != null) {
             randomAge = dataUser.userAge != null ? dataUser.userAge : "";
@@ -196,7 +197,7 @@ public class InfoInterestPersonActivity extends BaseActivity {
 
 
         } else {
-            VirtualDataUser user_ = new VirtualDataUser();
+            VirtualUserInfo user_ = new VirtualUserInfo();
             user_.userAge = randomAge;
             user_.userId = post.user.userId;
             user_.onlineTime = onlineTimeMinu + "";
@@ -351,7 +352,6 @@ public class InfoInterestPersonActivity extends BaseActivity {
         }
     }
 
-
     /**
      * 与陌生人私聊
      */
@@ -370,8 +370,19 @@ public class InfoInterestPersonActivity extends BaseActivity {
 
 
     void getTextAndImageData() {
-        String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", post.user.userId).replace("CTIME", "0");
-        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> toggles, BmobException e) {
+                if (e == null && toggles.size() > 0) {
+                    String url = toggles.get(0).interestPersonPostLs.replace("USERID", post.user.userId).replace("CTIME", "0");
+                    OkHttpClientManager.parseRequest(InfoInterestPersonActivity.this, url, handler, Constants.REFRESH);
+                }else{
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+                }
+            }
+        });
+
     }
 
     Handler handler = new Handler() {

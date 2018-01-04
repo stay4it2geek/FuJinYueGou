@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPost;
@@ -28,8 +29,12 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 
 public class IntersetPersonPostListActivity extends FragmentActivity {
@@ -170,13 +175,23 @@ public class IntersetPersonPostListActivity extends FragmentActivity {
     };
 
 
-    public void getData(String ctime,int what) {
+    public void getData(final String ctime, final int what) {
         if (userId == null) {
             handler.sendEmptyMessage(Constants.NetWorkError);
             return;
         }
-        String url = CommonUtil.getToggle(this, Constants.TEXT_IMG_POST).getToggleObject().replace("USERID", userId).replace("CTIME", ctime);
-        OkHttpClientManager.parseRequest(this, url, handler, what);
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> toggles, BmobException e) {
+                if (e == null && toggles.size() > 0) {
+                    String url = toggles.get(0).interestPersonPostLs.replace("USERID", userId).replace("CTIME", ctime);
+                    OkHttpClientManager.parseRequest(IntersetPersonPostListActivity.this, url, handler, what);
+                }else{
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+                }
+            }
+        });
     }
 
 }

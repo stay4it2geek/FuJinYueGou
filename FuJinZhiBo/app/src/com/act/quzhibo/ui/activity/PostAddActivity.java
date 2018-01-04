@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.CardBean;
@@ -46,9 +47,11 @@ import java.util.List;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerActivity;
 import cn.bingoogolapple.photopicker.activity.BGAPhotoPickerPreviewActivity;
 import cn.bingoogolapple.photopicker.widget.BGASortableNinePhotoLayout;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UploadBatchListener;
 import me.leefeng.promptlibrary.PromptButton;
@@ -125,8 +128,19 @@ public class PostAddActivity extends ActivityManagePermission implements BGASort
     private ArrayList<CardBean> interestPlatesItems = new ArrayList<>();
 
     private void getInterestPlatesData() {
-        String url = CommonUtil.getToggle(this, Constants.SQUARE_INTERES_TAB).getToggleObject();
-        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> toggles, BmobException e) {
+                if (e == null && toggles.size() > 0) {
+                    String url =toggles.get(0).squareInterestTab;
+                    OkHttpClientManager.parseRequest(PostAddActivity.this, url, handler, Constants.REFRESH);
+                }else{
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+                }
+            }
+        });
+
     }
 
     Handler handler = new Handler() {

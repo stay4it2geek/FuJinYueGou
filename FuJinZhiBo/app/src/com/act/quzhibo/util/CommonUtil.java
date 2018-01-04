@@ -63,64 +63,6 @@ import cn.bmob.v3.listener.FetchUserInfoListener;
 
 public class CommonUtil {
 
-    public static String SceneList2String(List SceneList) {
-        String SceneListString = "";
-        try { // 实例化一个ByteArrayOutputStream对象，用来装载压缩后的字节文件。
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            // 然后将得到的字符数据装载到ObjectOutputStream
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-                    byteArrayOutputStream);
-            // writeObject 方法负责写入特定类的对象的状态，以便相应的 readObject 方法可以还原它
-            objectOutputStream.writeObject(SceneList);
-            // 最后，用Base64.encode将字节文件转换成Base64编码保存在String中
-            SceneListString = new String(Base64.encode(
-                    byteArrayOutputStream.toByteArray(), Base64.DEFAULT));
-            // 关闭objectOutputStream
-            objectOutputStream.close();
-        } catch (StreamCorruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return SceneListString;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List String2SceneList(String SceneListString) {
-        byte[] mobileBytes = Base64.decode(SceneListString.getBytes(), Base64.DEFAULT);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(mobileBytes);
-        ObjectInputStream objectInputStream;
-        List<Toggle> SceneList = null;
-        try {
-            objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            SceneList = null;
-            SceneList = (List) objectInputStream.readObject();
-            objectInputStream.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (StreamCorruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return SceneList;
-    }
-
-
-    public static Toggle getToggle(Activity activity, String ToggleKey) {
-
-        SharedPreferences sharedPreferences = activity.getSharedPreferences(Constants.SAVE, Context.MODE_PRIVATE);
-        String liststr = sharedPreferences.getString(Constants.TOGGLES, "");
-        if (!TextUtils.isEmpty(liststr)) {
-            List<Toggle> Toggles = CommonUtil.String2SceneList(liststr);
-            for (Toggle toggle : Toggles) {
-                if (toggle.getObjectKey().equals(ToggleKey)) {
-                    return toggle;
-                }
-            }
-        }
-        return null;
-    }
 
     public static <T> T parseJsonWithGson(String jsonData, Class<T> type) {
         Gson gson = new Gson();
@@ -170,6 +112,19 @@ public class CommonUtil {
         SharedPreferences sp = context.getSharedPreferences("login", Context.MODE_PRIVATE);
         return sp.getString(key, "");
     }
+
+    public static void saveInitData(Context context, String key, String value) {
+        SharedPreferences sp = context.getSharedPreferences("commonSp", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static String getInitData(Context context, String key) {
+        SharedPreferences sp = context.getSharedPreferences("commonSp", Context.MODE_PRIVATE);
+        return sp.getString(key, "");
+    }
+
 
     public static void fecth(final Activity activity) {
         BmobUser.fetchUserInfo(new FetchUserInfoListener<RootUser>() {

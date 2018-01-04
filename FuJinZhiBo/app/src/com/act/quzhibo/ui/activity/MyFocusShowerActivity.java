@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.MyFocusShowerListAdapter;
 import com.act.quzhibo.bean.RootUser;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.MyFocusShower;
@@ -49,6 +50,8 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
+
+import static com.act.quzhibo.R.drawable.post;
 
 public class MyFocusShowerActivity extends FragmentActivity {
 
@@ -291,9 +294,21 @@ public class MyFocusShowerActivity extends FragmentActivity {
     };
 
 
-    void requestInfo(String showerId) {
-        String url = CommonUtil.getToggle(MyFocusShowerActivity.this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", showerId);
-        OkHttpClientManager.parseRequest(this, url, infoHandler, Constants.REFRESH);
+    void requestInfo(final String showerId) {
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> toggles, BmobException e) {
+                if (e == null && toggles.size() > 0) {
+                    String url = toggles.get(0).showerInfo.replace("USERID", showerId);
+                    OkHttpClientManager.parseRequest(MyFocusShowerActivity.this, url, infoHandler, Constants.REFRESH);
+
+                }else{
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+                }
+            }
+        });
+
     }
 
 

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.act.quzhibo.R;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.download.event.FocusChangeEvent;
@@ -230,9 +231,20 @@ public class ShowerInfoActivity extends FragmentActivity {
         });
     }
 
-    public void getData(String userId) {
-        String url = CommonUtil.getToggle(this, Constants.SHOWER_INFO).getToggleObject().replace("USERID", userId);
-        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
+    public void getData(final String userId) {
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> toggles, BmobException e) {
+                if (e == null && toggles.size() > 0) {
+                    String url = toggles.get(0).showerInfo.replace("USERID", userId);
+                    OkHttpClientManager.parseRequest(ShowerInfoActivity.this, url, handler, Constants.REFRESH);
+                }else{
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+                }
+            }
+        });
+
 
     }
 

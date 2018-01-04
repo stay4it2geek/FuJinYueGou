@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPostListAdapter;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPost;
@@ -28,6 +29,11 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class InterestPostListFragment extends BackHandledFragment {
     XRecyclerView recyclerView;
@@ -137,7 +143,7 @@ public class InterestPostListFragment extends BackHandledFragment {
                 if (msg.what == Constants.REFRESH) {
                     posts.clear();
                 }
-                if (data.result != null&& data.result.size()>0) {
+                if (data.result != null && data.result.size() > 0) {
                     interestPostSize = data.result.size();
                     posts.addAll(data.result);
                 } else {
@@ -181,14 +187,24 @@ public class InterestPostListFragment extends BackHandledFragment {
         }
     };
 
-    public void getData(String pid, String htime, int what) {
+    public void getData(final String pid, final String htime, final int what) {
         if (pid == null) {
             handler.sendEmptyMessage(Constants.NetWorkError);
             return;
         }
-        String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_POST).getToggleObject().replace("PID", pid).replace("HTIME", htime);
-        OkHttpClientManager.parseRequest(getActivity(), url, handler, what);
-
+        BmobQuery<Toggle> query = new BmobQuery<>();
+        query.findObjects(new FindListener<Toggle>() {
+            @Override
+            public void done(List<Toggle> toggles, BmobException e) {
+                if (e == null && toggles.size() > 0) {
+                    String url = toggles.get(0).squareInterestPost.replace("PID", pid).replace("HTIME", htime);
+                    ;
+                    OkHttpClientManager.parseRequest(getActivity(), url, handler, what);
+                } else {
+                    handler.sendEmptyMessage(Constants.NetWorkError);
+                }
+            }
+        });
     }
 
     @Override

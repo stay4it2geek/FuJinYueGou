@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 
 import com.act.quzhibo.R;
 import com.act.quzhibo.adapter.InterestPlatesListAdapter;
+import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
 import com.act.quzhibo.common.OkHttpClientManager;
 import com.act.quzhibo.bean.InterestPlates;
 import com.act.quzhibo.bean.InterestPlatesParentData;
 import com.act.quzhibo.download.event.DownloadStatusChanged;
 import com.act.quzhibo.i.OnQueryDataListner;
+import com.act.quzhibo.ui.activity.PostAddActivity;
 import com.act.quzhibo.ui.activity.SquareActivity;
 import com.act.quzhibo.util.CommonUtil;
 import com.act.quzhibo.util.ViewDataUtil;
@@ -28,6 +30,11 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 public class InterestPlatesFragment extends BackHandledFragment {
      XRecyclerView recyclerview;
@@ -83,8 +90,18 @@ public class InterestPlatesFragment extends BackHandledFragment {
     }
 
      void getData() {
-        String url = CommonUtil.getToggle(getActivity(), Constants.SQUARE_INTERES_TAB).getToggleObject();
-        OkHttpClientManager.parseRequest(getActivity(), url, handler, Constants.REFRESH);
+         BmobQuery<Toggle> query = new BmobQuery<>();
+         query.findObjects(new FindListener<Toggle>() {
+             @Override
+             public void done(List<Toggle> toggles, BmobException e) {
+                 if (e == null && toggles.size() > 0) {
+                     String url =toggles.get(0).squareInterestTab;
+                     OkHttpClientManager.parseRequest(getActivity(), url, handler, Constants.REFRESH);
+                 }else{
+                     handler.sendEmptyMessage(Constants.NetWorkError);
+                 }
+             }
+         });
 
     }
 

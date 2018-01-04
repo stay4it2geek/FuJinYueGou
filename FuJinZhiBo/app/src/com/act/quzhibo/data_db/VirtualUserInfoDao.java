@@ -1,27 +1,26 @@
-package com.act.quzhibo;
+package com.act.quzhibo.data_db;
 
 import android.content.Context;
 import android.database.SQLException;
-import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.DeleteBuilder;
 
 import java.util.List;
 
-public class VirtualUserDao {
+public class VirtualUserInfoDao {
 
     Context context;
-    Dao<VirtualDataUser, String> dao;
+    Dao<VirtualUserInfo, String> dao;
 
-    private static VirtualUserDao instance;
+    private static VirtualUserInfoDao instance;
 
-    private VirtualUserDao(Context context) {
+    private VirtualUserInfoDao(Context context) {
         super();
         this.context = context;
-        VirtualBaseHelper mHelper = VirtualBaseHelper.getInstance(context);
+        DbHelper mHelper = DbHelper.getInstance(context);
         try {
-            dao = mHelper.getDao(VirtualDataUser.class);
+            dao = mHelper.getDao(VirtualUserInfo.class);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (java.sql.SQLException e) {
@@ -30,11 +29,11 @@ public class VirtualUserDao {
     }
 
 
-    public static VirtualUserDao getInstance(Context context) {
+    public static VirtualUserInfoDao getInstance(Context context) {
         if (instance == null) {
-            synchronized (VirtualBaseHelper.class) {
+            synchronized (DbHelper.class) {
                 if (instance == null) {
-                    instance = new VirtualUserDao(context.getApplicationContext());
+                    instance = new VirtualUserInfoDao(context.getApplicationContext());
                 }
             }
         }
@@ -42,7 +41,7 @@ public class VirtualUserDao {
     }
 
 
-    public int add(VirtualDataUser user) {
+    public int add(VirtualUserInfo user) {
         try {
             return dao.create(user);
         } catch (SQLException e) {
@@ -53,7 +52,7 @@ public class VirtualUserDao {
         return -1;
     }
 
-    public VirtualDataUser query(String userId) {
+    public VirtualUserInfo query(String userId) {
         try {
             return dao.queryBuilder().where().eq("userId", userId).queryForFirst();
         } catch (java.sql.SQLException e) {
@@ -62,7 +61,7 @@ public class VirtualUserDao {
         return null;
     }
 
-    public int update(VirtualDataUser user) {
+    public int update(VirtualUserInfo user) {
         try {
             return dao.update(user);
         } catch (SQLException e) {
@@ -75,10 +74,10 @@ public class VirtualUserDao {
 
     public void delete() {
         try {
-            List<VirtualDataUser> users = dao.queryForAll();
+            List<VirtualUserInfo> users = dao.queryForAll();
             if (users.size() > 0) {
-                DeleteBuilder<VirtualDataUser, String> deleteBuilder = dao.deleteBuilder();
-                for (VirtualDataUser useAge : users) {
+                DeleteBuilder<VirtualUserInfo, String> deleteBuilder = dao.deleteBuilder();
+                for (VirtualUserInfo useAge : users) {
                     deleteBuilder.where().eq("userId", useAge.userId);
                     deleteBuilder.delete();
                 }
@@ -93,13 +92,11 @@ public class VirtualUserDao {
 
     public void updateOnlineTime2Space() {
         try {
-            List<VirtualDataUser> users = dao.queryForAll();
+            List<VirtualUserInfo> users = dao.queryForAll();
             if (users.size() > 0) {
-                for (VirtualDataUser user : users) {
+                for (VirtualUserInfo user : users) {
                     user.onlineTime = "";
-                    dao.update(user);
-                    Log.e("time",user.onlineTime+"pp");
-                }
+                    dao.update(user);}
             }
         } catch (SQLException e) {
             e.printStackTrace();

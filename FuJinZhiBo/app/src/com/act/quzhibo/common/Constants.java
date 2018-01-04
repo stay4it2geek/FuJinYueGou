@@ -10,7 +10,7 @@ public class Constants {
     public static final String SQUARE_INTERES_TAB = "squareInterestTab";
     public static final String SQUARE_INTERES_POST= "squareInterestPost";
 
-    public static final String TEXT_IMG_POST = "text_img_post";
+    public static final String TEXT_IMG_POST = "interestPostList";
     public static final String SHOWER_INFO = "showerInfo";
     public static final String NEAR_USER = "near_user";
     public static final String AUDIO = "AUDIO";
@@ -57,4 +57,12 @@ public class Constants {
 
     public static final String RECEIVE = "RECIVE";
     public static final int REQUEST_MAP = 99;
+
+    public static final String HIDE_TAB_VIEW = "hideTabView";
+    public static final String VERSION_UPDATE = "versionUpate";
+    public static final String HIDE_SHOW_PLATES = "hideShowPlates";
+    public static final String TOGGLE = "toggle";
+    public static final String PUA_COURSE_INFO = "puaCourseCatogry";
+    public static final String MONEY_COURSE_INFO = "moneyCourseCatogry";
+    public static final String POST_ID = "POST_ID";
 }

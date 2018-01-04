@@ -35,8 +35,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="30dp"
+            android:text="返回"
             android:textColor="@color/white"
-            android:text="返回" />
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <TextView
@@ -48,6 +49,7 @@
         android:padding="10dp"
         android:text="编辑"
         android:textColor="@color/white"
+        android:textSize="14sp"
         android:visibility="gone" />
 
 </FrameLayout>

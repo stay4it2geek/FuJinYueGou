@@ -1,14 +1,11 @@
 package com.act.quzhibo.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.act.quzhibo.R;
-import com.act.quzhibo.VirtualUserDao;
+import com.act.quzhibo.data_db.VirtualUserInfoDao;
 import com.act.quzhibo.bean.RootUser;
 import com.act.quzhibo.bean.Toggle;
 import com.act.quzhibo.common.Constants;
@@ -40,49 +37,26 @@ import permission.auron.com.marshmallowpermissionhelper.PermissionUtils;
 
 public class WelcomeActivity extends ActivityManagePermission {
 
-    String plateListStr;
     RootUser user;
     LockIndicatorView mLockIndicator;
     LockViewGroup mLockViewGroup;
     TextView mTvTips;
     LinearLayout secretView;
-    Runnable runnable = new Runnable() {
-        public void run() {
-            findViewById(R.id.progressBar).setVisibility(View.GONE);
-            Intent intent = new Intent();
-            intent.setClass(WelcomeActivity.this, TabMainActivity.class);
-            intent.putExtra(Constants.TAB_PLATE_LIST, plateListStr);
-            startActivity(intent);
-            finish();
-        }
-    };
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            plateListStr = (String) msg.obj;
-            if (!TextUtils.isEmpty(plateListStr)) {
-                this.postDelayed(runnable, 1000);
-            }
-        }
-    };
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
         findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
         secretView = (LinearLayout) findViewById(R.id.secret_view);
-
         mLockIndicator = (LockIndicatorView) findViewById(R.id.indicator);
-
         mTvTips = (TextView) findViewById(R.id.tv_tips);
-
         mLockViewGroup = (LockViewGroup) findViewById(R.id.lockgroup);
-
         grantPermission();
-
     }
+
 
     @Override
     protected void onResume() {
@@ -94,19 +68,39 @@ public class WelcomeActivity extends ActivityManagePermission {
             long day = l / (24 * 60 * 60 * 1000);
             long hour = (l / (60 * 60 * 1000) - day * 24);
             if (hour > 8) {
-                VirtualUserDao.getInstance(this).updateOnlineTime2Space();
+                VirtualUserInfoDao.getInstance(this).updateOnlineTime2Space();
             }
         }
     }
 
-    void initData() {
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            final String showTabList = (String) msg.obj;
+            if (!TextUtils.isEmpty(showTabList)) {
+                this.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        findViewById(R.id.progressBar).setVisibility(View.GONE);
+                        Intent intent = new Intent();
+                        intent.setClass(WelcomeActivity.this, TabMainActivity.class);
+                        intent.putExtra(Constants.TAB_PLATE_LIST, showTabList);
+                        startActivity(intent);
+                        finish();
+                    }
+                }, 2000);
+            }
+        }
+    };
+
+    void initData() {
         String[] passWords = user.secretPassword.split(";");
         int[] nums = new int[passWords.length];
         for (int i = 0; i < passWords.length; i++) {
             nums[i] = Integer.parseInt(passWords[i]);
         }
-
         mLockViewGroup.setAnswer(nums);
         mLockViewGroup.setMaxTryTimes(5);
         mLockViewGroup.setOnLockListener(new LockViewGroup.OnLockListener() {
@@ -118,7 +112,6 @@ public class WelcomeActivity extends ActivityManagePermission {
             @Override
             public void onLess4Points() {
                 mLockViewGroup.clear2ResetDelay(1200L); //清除错误
-
                 mTvTips.setTextColor(Color.RED);
                 mTvTips.setText("至少连接4个点 , 请重新输入");
             }
@@ -127,7 +120,6 @@ public class WelcomeActivity extends ActivityManagePermission {
             public void onSaveFirstAnswer(int[] answer) {
                 mTvTips.setTextColor(Color.GRAY);
                 mTvTips.setText("再次绘制 , 确认解锁图案");
-                // 设置给指示器view
                 mLockIndicator.setAnswer(answer);
             }
 
@@ -137,7 +129,7 @@ public class WelcomeActivity extends ActivityManagePermission {
                 mTvTips.setText("验证成功");
                 secretView.setVisibility(View.GONE);
                 secretView.setAnimation(AnimationUtils.makeOutAnimation(WelcomeActivity.this, true));
-                request();
+                OkHttpClientManager.parseRequest(WelcomeActivity.this, url, handler, Constants.REFRESH);
             }
 
             @Override
@@ -153,11 +145,8 @@ public class WelcomeActivity extends ActivityManagePermission {
                     ToastUtil.showToast(getApplicationContext(), "设置失败");
                     finish();
                 }
-
-                // 左右移动动画
                 Animation shakeAnimation = AnimationUtils.loadAnimation(WelcomeActivity.this, R.anim.shake);
                 mTvTips.startAnimation(shakeAnimation);
-
             }
 
             @Override
@@ -169,35 +158,24 @@ public class WelcomeActivity extends ActivityManagePermission {
     }
 
     void grantPermission() {
+
         final SelfDialog selfDialog = new SelfDialog(WelcomeActivity.this, false);
         askCompactPermissions(new String[]{PermissionUtils.Manifest_CAMERA, PermissionUtils.Manifest_RECORD_AUDIO, PermissionUtils.Manifest_ACCESS_COARSE_LOCATION, PermissionUtils.Manifest_ACCESS_FINE_LOCATION, PermissionUtils.Manifest_WRITE_EXTERNAL_STORAGE}, new PermissionResult() {
             @Override
             public void permissionGranted() {
-                ToastUtil.showToast(WelcomeActivity.this, "DDDD");
                 BmobQuery<Toggle> query = new BmobQuery<>();
-                query.addWhereEqualTo("objectKey", "doNewQueryTimeStamp");
                 query.findObjects(new FindListener<Toggle>() {
                     @Override
                     public void done(List<Toggle> list, BmobException e) {
-                        ToastUtil.showToast(WelcomeActivity.this, "list");
                         if (e == null && list.size() > 0) {
-                            if (CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp")== null) {
-                                doRequest(true);
-                            } else {
-                                for (Toggle toggle : list) {
-                                    if (toggle.getObjectKey().equals("doNewQueryTimeStamp")) {
-                                        if (toggle.getToggleObject().equals(CommonUtil.getToggle(WelcomeActivity.this, "doNewQueryTimeStamp").getToggleObject())) {
-                                            doRequest(false);
-                                            break;
-                                        } else {
-                                            doRequest(true);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }else{
-                           Log.e( "list",e.getLocalizedMessage());
+                            url = list.get(0).showTabCatagory;
+                            CommonUtil.saveInitData(WelcomeActivity.this,Constants.PUA_COURSE_INFO,list.get(0).puaCourseCatogry);
+                            CommonUtil.saveInitData(WelcomeActivity.this,Constants.MONEY_COURSE_INFO,list.get(0).moneyCourseCatogry);
+                            CommonUtil.saveInitData(WelcomeActivity.this,Constants.HIDE_TAB_VIEW,list.get(0).hideTabView);
+                            CommonUtil.saveInitData(WelcomeActivity.this,Constants.HIDE_SHOW_PLATES,list.get(0).hideShowPlates);
+                            doRequest();
+                        } else {
+                            grantPermission();
                         }
                     }
                 });
@@ -247,10 +225,7 @@ public class WelcomeActivity extends ActivityManagePermission {
         });
     }
 
-    boolean isUpdate;
-
-    void doRequest(boolean isUpdate) {
-        this.isUpdate = isUpdate;
+    void doRequest() {
         user = BmobUser.getCurrentUser(RootUser.class);
         if (user != null) {
             CommonUtil.fecth(this);
@@ -259,55 +234,12 @@ public class WelcomeActivity extends ActivityManagePermission {
                 initData();
             } else {
                 secretView.setVisibility(View.GONE);
-                request();
+                OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
             }
         } else {
             secretView.setVisibility(View.GONE);
-            request();
+            OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
         }
-    }
-
-    void request() {
-        ToastUtil.showToast(this, "request");
-
-            ToastUtil.showToast(this, "Bmob"+isUpdate);
-            if (isUpdate) {
-                doBmonQuery();
-            } else {
-                ToastUtil.showToast(this, "getShowPlateList"+isUpdate);
-                getShowPlateList();
-
-            }
-    }
-
-    private void doBmonQuery() {
-        BmobQuery<Toggle> query = new BmobQuery<>();
-        query.findObjects(new FindListener<Toggle>() {
-            @Override
-            public void done(List<Toggle> Toggles, BmobException bmobException) {
-                if (bmobException == null) {
-                    SharedPreferences mySharedPreferences = getSharedPreferences(Constants.SAVE, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor edit = mySharedPreferences.edit();
-                    String liststr = CommonUtil.SceneList2String(Toggles);
-                    edit.putString(Constants.TOGGLES, liststr);
-                    edit.commit();
-                    getShowPlateList();
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ToastUtil.showToast(getApplicationContext(), "网络异常,正在重试");
-                        }
-                    });
-                    request();
-                }
-            }
-        });
-    }
-
-    void getShowPlateList() {
-        String url = CommonUtil.getToggle(this, "tabCatagory").getToggleObject();
-        OkHttpClientManager.parseRequest(this, url, handler, Constants.REFRESH);
     }
 
 
