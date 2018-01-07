@@ -85,6 +85,12 @@
             android:name="com.act.quzhibo.ui.activity.CameraActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.act.quzhibo.ui.activity.CheckoutExplainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.act.quzhibo.ui.activity.CheckOutMoneyActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.act.quzhibo.ui.activity.CommisionActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -132,10 +138,6 @@
             android:screenOrientation="portrait"
             android:launchMode="singleInstance"
             android:theme="@style/BGAPPTheme" />
-        <activity
-            android:name="com.act.quzhibo.ui.activity.CheckOutMoneyActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait" />
         <activity
             android:name="com.act.quzhibo.ui.activity.PuaCoursesActivity"
             android:launchMode="singleInstance"

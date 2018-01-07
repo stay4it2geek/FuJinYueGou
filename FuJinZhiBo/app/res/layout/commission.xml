@@ -36,7 +36,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
 
                 <LinearLayout
@@ -45,36 +45,37 @@
                     android:layout_height="120dp">
 
                     <RelativeLayout
-                        android:layout_marginLeft="20dp"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="1">
+
                         <TextView
                             android:id="@+id/coinsCount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="45dp"
-                            android:text="0"
                             android:gravity="center"
+                            android:text="0"
                             android:textColor="@color/darkorange"
                             android:textSize="25sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="星 钻"
-                            android:textSize="15sp"
-                            android:gravity="center_horizontal"
                             android:layout_alignParentBottom="true"
-                             />
+                            android:gravity="center_horizontal"
+                            android:text="星 钻"
+                            android:textSize="15sp" />
 
 
                     </RelativeLayout>
+
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:layout_height="wrap_content">
+                        android:layout_weight="1">
 
 
                         <TextView
@@ -82,9 +83,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="45dp"
-                            android:text="0.0"
-                            android:maxLength="10"
                             android:gravity="center_horizontal"
+                            android:maxLength="10"
+                            android:text="0.0"
                             android:textColor="@color/darkorange"
                             android:textSize="25sp" />
 
@@ -92,13 +93,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="收 益"
-                            android:textSize="15sp"
-                            android:gravity="center_horizontal"
                             android:layout_alignParentBottom="true"
-                             />
+                            android:gravity="center_horizontal"
+                            android:text="收 益"
+                            android:textSize="15sp" />
                     </RelativeLayout>
-
 
 
                 </LinearLayout>
@@ -118,7 +117,7 @@
                     android:textSize="16sp" />
 
                 <Button
-                    android:id="@+id/change"
+                    android:id="@+id/checkoutExplain"
                     android:layout_width="300dp"
                     android:layout_height="@dimen/titleBarViewHeight"
                     android:layout_below="@+id/checkout"
@@ -126,32 +125,15 @@
                     android:layout_marginTop="40dp"
                     android:background="@drawable/button_common_selector"
                     android:gravity="center"
-                    android:text="兑 换"
+                    android:text="提现说明"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
-
-                <TextView
-                    android:id="@+id/checkoutexplain"
-                    android:layout_below="@+id/change"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_marginTop="20dp"
-                    android:text="提现说明"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:textColor="@color/darkorange"
-                    android:layout_height="50dp" />
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/checkoutExplain" />
 
-                <TextView
-                    android:id="@+id/changeexplain"
-                    android:layout_below="@+id/checkoutexplain"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:text="兑换说明"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:textColor="@color/darkorange"
-                    android:layout_height="50dp" />
             </RelativeLayout>
 
         </LinearLayout>

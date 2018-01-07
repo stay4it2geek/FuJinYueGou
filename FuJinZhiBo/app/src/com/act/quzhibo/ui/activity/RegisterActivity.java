@@ -136,13 +136,7 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.btn_verify_login)
     void verifyAndLogin() {
-
-        if (!check_agree.isChecked()) {
-            ToastUtil.showToast(this, "请先同意用户协议");
-            return;
-        }
-
-
+        
         VerifyUitl uitl = new VerifyUitl(this, new OnCheckInputListner() {
             @Override
             public void onCheckInputLisner(EditText editText) {
@@ -206,7 +200,7 @@ public class RegisterActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        getCode_btn.setClickable(false);
+                        getCode_btn.setEnabled(false);
                         getCode_btn.setText(T + "秒后重新开始");
                     }
                 });
@@ -222,7 +216,7 @@ public class RegisterActivity extends BaseActivity {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    getCode_btn.setClickable(true);
+                    getCode_btn.setEnabled(true);
                     getCode_btn.setText("点击获取验证码");
                 }
             });

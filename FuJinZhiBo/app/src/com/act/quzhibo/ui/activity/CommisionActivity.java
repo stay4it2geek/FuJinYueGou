@@ -1,5 +1,6 @@
 package com.act.quzhibo.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -29,6 +30,7 @@ public class CommisionActivity extends FragmentActivity {
     public TextView commission_total;
     @Bind(R.id.titlebar)
     public TitleBarView titlebar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +45,21 @@ public class CommisionActivity extends FragmentActivity {
         });
         RootUser user = BmobUser.getCurrentUser(RootUser.class);
         Glide.with(this).load(user.photoFileUrl).error(R.drawable.error_img).into(circleImageView);
-        commission_total.setText(getIntent().getDoubleExtra("proMoneyTotal",0.0)+"");
-        coinsCount.setText((user.vipConis==0 || user.vipConis == null)?"0":user.vipConis+"");
+        commission_total.setText(getIntent().getDoubleExtra("proMoneyTotal", 0.0) + "");
+        coinsCount.setText((user.vipConis == 0 || user.vipConis == null) ? "0" : user.vipConis + "");
     }
 
-    @OnClick({R.id.checkout, R.id.change})
+    @OnClick({R.id.checkout,R.id.checkoutExplain,})
     public void btnClicks(View view) {
 
+        switch (view.getId()) {
+            case R.id.checkout:
+                startActivity(new Intent(this, CheckOutMoneyActivity.class));
+                break;
+            case R.id.checkoutExplain:
+                startActivity(new Intent(this, CheckoutExplainActivity.class));
+                break;
+
+        }
     }
 }
